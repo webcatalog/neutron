@@ -1,0 +1,37 @@
+name: macOS
+
+on:
+  push:
+    branches:
+      - master
+      - next
+    tags:
+      - "v*.*.*"
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v1
+      with:
+        fetch-depth: 1
+        submodules: false
+    - name: Set up Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+    - run: yarn
+    - run: yarn lint
+    - run: brew install p7zip
+    - run: yarn dist
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        draft: true
+        files: |
+          template-darwin-x64.json
+          template-darwin-x64.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -2,6 +2,7 @@
   "name": "Juli",
   "description": "AppView template for WebCatalog",
   "version": "8.14.1",
+  "minimumWebCatalogVersion": "21.0.0",
   "engines": {
     "node": ">=12.0.0 <13.0.0"
   },
@@ -14,8 +15,8 @@
     "lint:fix": "eslint ./public ./src --ext js --fix",
     "start": "react-scripts start",
     "electron-dev": "concurrently \"cross-env BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\" -k",
-    "dist": "yarn build && node dist.js",
-    "test": "mocha ./tests"
+    "prepare-zip": "7z a -mm=Deflate -mx=9 -r template.zip . -xr0@template.xr0 -xr@template.xr",
+    "dist": "yarn build && yarn install --production --ignore-scripts --prefer-offline && yarn prepare-zip && yarn && node dist.js"
   },
   "repository": "https://github.com/atomery/webcatalog",
   "author": "Quang Lam <quang.lam2807@gmail.com>",
@@ -58,6 +59,7 @@
     "eslint-plugin-jsx-a11y": "6.2.3",
     "eslint-plugin-react": "7.19.0",
     "eslint-plugin-react-hooks": "2.5.1",
+    "hasha": "5.2.0",
     "prop-types": "15.7.2",
     "react": "16.13.1",
     "react-ace": "8.1.0",

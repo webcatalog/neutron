@@ -51,6 +51,7 @@ dist
 _src
 
 /build
-/template/build
-
-snapcraft_login
+template.json
+template.zip
+template-*.json
+template-*.zip
