@@ -212,7 +212,7 @@ const addView = (browserWindow, workspace) => {
       shell.openExternal(nextUrl);
     }
 
-    adjustUserAgentByUrl(e.sender.webContents, url);
+    adjustUserAgentByUrl(e.sender.webContents, nextUrl);
   });
 
   view.webContents.on('did-start-loading', () => {
