@@ -18,6 +18,7 @@ import WorkspaceSelector from './workspace-selector';
 import FindInPage from './find-in-page';
 import NavigationBar from './navigation-bar';
 import FakeTitleBar from './fake-title-bar';
+import DraggableRegion from './draggable-region';
 
 import {
   requestCreateWorkspace,
@@ -171,6 +172,7 @@ const Main = ({
   return (
     <div className={classes.outerRoot}>
       {showTitleBar && (<FakeTitleBar />)}
+      {<DraggableRegion />}
       <div className={classes.root}>
         {sidebar && (
           <div className={classes.sidebarRoot}>
