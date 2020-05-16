@@ -141,7 +141,15 @@ function createMenu() {
         {
           label: 'Actual Size',
           accelerator: 'CmdOrCtrl+0',
-          click: () => {
+          click: (menuItem, browserWindow) => {
+            // if item is called in popup window
+            // open menu bar in the popup window instead
+            if (browserWindow && browserWindow.isPopup) {
+              const contents = browserWindow.webContents;
+              contents.zoomFactor = 1;
+              return;
+            }
+
             const win = mainWindow.get();
 
             if (win != null) {
@@ -153,7 +161,15 @@ function createMenu() {
         {
           label: 'Zoom In',
           accelerator: 'CmdOrCtrl+=',
-          click: () => {
+          click: (menuItem, browserWindow) => {
+            // if item is called in popup window
+            // open menu bar in the popup window instead
+            if (browserWindow && browserWindow.isPopup) {
+              const contents = browserWindow.webContents;
+              contents.zoomFactor += 0.1;
+              return;
+            }
+
             const win = mainWindow.get();
 
             if (win != null) {
@@ -165,7 +181,15 @@ function createMenu() {
         {
           label: 'Zoom Out',
           accelerator: 'CmdOrCtrl+-',
-          click: () => {
+          click: (menuItem, browserWindow) => {
+            // if item is called in popup window
+            // open menu bar in the popup window instead
+            if (browserWindow && browserWindow.isPopup) {
+              const contents = browserWindow.webContents;
+              contents.zoomFactor -= 0.1;
+              return;
+            }
+
             const win = mainWindow.get();
 
             if (win != null) {
