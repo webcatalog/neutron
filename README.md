@@ -4,7 +4,7 @@
 |---|---|---|
 |[![GitHub Actions macOS Build Status](https://github.com/atomery/juli/workflows/macOS/badge.svg)](https://github.com/atomery/juli/actions?query=workflow%3AmacOS)|[![GitHub Actions Linux Build Status](https://github.com/atomery/juli/workflows/Linux/badge.svg)](https://github.com/atomery/juli/actions?query=workflow%3ALinux)|[![GitHub Actions Windows Build Status](https://github.com/atomery/juli/workflows/Windows/badge.svg)](https://github.com/atomery/juli/actions?query=workflow%3AWindows)|
 
-[WebCatalog](https://webcatalogapp.com) downloads and uses this template Electron app (aka Juli) under the hood to generate Electron-based apps locally.
+[WebCatalog](https://webcatalogapp.com) downloads and uses this Electron app template (aka Juli) under the hood to generate Electron-based apps locally.
 
 ---
 
