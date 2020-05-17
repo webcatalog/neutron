@@ -205,7 +205,7 @@ const addView = (browserWindow, workspace) => {
   view.webContents.on('will-navigate', (e, nextUrl) => {
     // open external links in browser
     // https://github.com/atomery/webcatalog/issues/849#issuecomment-629587264
-    const appUrl = getWorkspace(workspace.id).homeUrl;
+    const appUrl = getWorkspace(workspace.id).homeUrl || appJson.url;
     const currentUrl = e.sender.getURL();
     if (!isInternalUrl(nextUrl, [appUrl, currentUrl])) {
       e.preventDefault();
