@@ -1,5 +1,6 @@
 const { dialog } = require('electron');
 const semver = require('semver');
+const xmlParser = require('fast-xml-parser');
 
 const packageJson = require('../../package.json');
 const mainWindow = require('../windows/main');
@@ -7,40 +8,26 @@ const appJson = require('../app.json');
 
 const customizedFetch = require('./customized-fetch');
 
-// GitHub API has rate limit & node-fetch doesn't support caching out-of-the-box
-// Use caching and conditional request to ensure it's under limit
-// See https://developer.github.com/v3/#conditional-requests
-// Most responses return an ETag header.
-// Many responses also return a Last-Modified header.
-// You can use the values of these headers to make subsequent
-// requests to those resources using the If-None-Match
-// and If-Modified-Since headers, respectively.
-// If the resource has not changed, the server will return a 304 Not Modified.
-let cachedResponse = null;
 const checkForUpdates = (silent) => {
   console.log('Checking for updates...'); // eslint-disable-line no-console
-  const opts = {};
-  if (cachedResponse) {
-    opts.headers = {
-      'If-None-Match': cachedResponse.etag,
-    };
-  }
-  customizedFetch('https://api.github.com/repos/atomery/juli/releases/latest', opts)
-    .then((res) => {
-      if (res.status === 304) {
-        return cachedResponse.json;
+  // avoid using GitHub API as it has rate limit (60 requests per hour)
+  customizedFetch('https://github.com/atomery/juli/releases.atom')
+    .then((res) => res.text())
+    .then((xmlData) => {
+      const releases = xmlParser.parse(xmlData).feed.entry;
+
+      // find stable version
+      for (let i = 0; i < releases.length; i += 1) {
+        const release = releases[i];
+        const tagName = release.id.split('/').pop();
+        const version = tagName.substring(1);
+        if (!semver.prerelease(version)) {
+          return version;
+        }
       }
 
-      return res.json()
-        .then((json) => {
-          cachedResponse = {
-            etag: res.headers.get('etag'),
-            json,
-          };
-          return cachedResponse.json;
-        });
+      return Promise.reject(new Error('Server returns no valid updates.'));
     })
-    .then((release) => release.tag_name.substring(1))
     .then((latestVersion) => {
       if (semver.gt(latestVersion, packageJson.version)) {
         dialog.showMessageBox(mainWindow.get(), {
