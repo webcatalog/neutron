@@ -2,6 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
+import SimpleBar from 'simplebar-react';
+import 'simplebar/dist/simplebar.min.css';
+
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 
@@ -158,6 +161,18 @@ const SortableItem = sortableElement(({ value }) => {
 
 const SortableContainer = sortableContainer(({ children }) => <div>{children}</div>);
 
+const SidebarContainer = ({ className, children }) => {
+  // use native scroll bar on macOS
+  if (window.process.platform === 'darwin') {
+    return <div className={className}>{children}</div>;
+  }
+  return <SimpleBar className={className}>{children}</SimpleBar>;
+};
+SidebarContainer.propTypes = {
+  className: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
+};
+
 const Main = ({
   classes,
   didFailLoad,
@@ -178,7 +193,7 @@ const Main = ({
       {<DraggableRegion />}
       <div className={classes.root}>
         {sidebar && (
-          <div className={classes.sidebarRoot}>
+          <SidebarContainer className={classes.sidebarRoot}>
             <div className={classNames(classes.sidebarTop,
               (isFullScreen || showTitleBar || window.mode === 'menubar') && classes.sidebarTopFullScreen)}
             >
@@ -215,7 +230,7 @@ const Main = ({
               )}
             </div>
             )}
-          </div>
+          </SidebarContainer>
         )}
         <div className={classes.contentRoot}>
           {navigationBar && <NavigationBar />}
