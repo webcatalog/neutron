@@ -51,11 +51,14 @@ const styles = (theme) => ({
     flexDirection: 'column',
     height: '100vh',
     width: '100vw',
+    overflow: 'hidden',
   },
   root: {
     display: 'flex',
     flexDirection: 'row',
     flex: 1,
+    height: '100%',
+    width: '100%',
   },
   sidebarRoot: {
     height: '100%',
