@@ -66,7 +66,7 @@ const defaultPreferences = {
   spellcheckLanguages: ['en-US'],
   swipeToNavigate: true,
   themeSource: 'system',
-  titleBar: false,
+  titleBar: true,
   unreadCountBadge: true,
   useHardwareAcceleration: true,
 };
