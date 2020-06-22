@@ -661,7 +661,6 @@ const setActiveView = (browserWindow, id) => {
     // https://github.com/atomery/webcatalog/issues/398
     view.webContents.focus();
 
-
     sendToAllWindows('update-address', view.webContents.getURL(), false);
     sendToAllWindows('update-is-loading', view.webContents.isLoading());
     sendToAllWindows('update-did-fail-load', Boolean(didFailLoad[id]));

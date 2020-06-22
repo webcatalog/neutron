@@ -129,7 +129,6 @@ const DialogPauseNotifications = (props) => {
     remote.getCurrentWindow().close();
   };
 
-
   const renderList = () => {
     if (shouldPauseNotifications) {
       return (

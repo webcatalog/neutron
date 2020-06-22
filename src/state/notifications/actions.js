@@ -8,7 +8,6 @@ export const updateShowDateTimePicker = (showDateTimePicker) => ({
   showDateTimePicker,
 });
 
-
 export const updatePauseNotificationsInfo = (pauseNotificationsInfo) => ({
   type: UPDATE_PAUSE_NOTIFICATIONS_INFO,
   pauseNotificationsInfo,

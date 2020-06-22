@@ -1,4 +1,3 @@
-
 import { UPDATE_CUSTOM_USER_AGENT_FORM, DIALOG_CUSTOM_USER_AGENT_INIT } from '../../constants/actions';
 import {
   getPreference,

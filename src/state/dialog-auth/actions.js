@@ -1,4 +1,3 @@
-
 import { UPDATE_AUTH_FORM } from '../../constants/actions';
 
 import { requestValidateAuthIdentity } from '../../senders';

@@ -622,7 +622,6 @@ const Preferences = ({
           </List>
         </Paper>
 
-
         <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.notifications.ref}>
           Notifications
         </Typography>
