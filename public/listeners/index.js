@@ -262,7 +262,6 @@ const loadListeners = () => {
     createMenu();
   });
 
-
   ipcMain.on('request-open-url-in-workspace', (e, url, id) => {
     if (id) {
       // if id is defined, switch to that workspace
@@ -409,7 +408,6 @@ const loadListeners = () => {
         sendToAllWindows(id, null);
       });
   });
-
 
   // Native Theme
   ipcMain.on('get-should-use-dark-colors', (e) => {

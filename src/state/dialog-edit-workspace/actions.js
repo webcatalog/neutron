@@ -1,4 +1,3 @@
-
 import {
   DIALOG_EDIT_WORKSPACE_INIT,
   UPDATE_EDIT_WORKSPACE_FORM,
@@ -80,7 +79,6 @@ export const getIconFromInternet = (forceOverwrite) => (dispatch, getState) => {
       return null;
     }).catch(console.log); // eslint-disable-line no-console
 };
-
 
 export const updateForm = (changes) => (dispatch) => dispatch({
   type: UPDATE_EDIT_WORKSPACE_FORM,

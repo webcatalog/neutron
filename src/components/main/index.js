@@ -35,7 +35,6 @@ import {
   requestWakeUpWorkspace,
 } from '../../senders';
 
-
 // https://github.com/sindresorhus/array-move/blob/master/index.js
 const arrayMove = (array, from, to) => {
   const newArray = array.slice();

@@ -1,4 +1,3 @@
-
 import { UPDATE_CODE_INJECTION_FORM, DIALOG_CODE_INJECTION_INIT } from '../../constants/actions';
 import { requestSetPreference, requestShowRequireRestartDialog } from '../../senders';
 

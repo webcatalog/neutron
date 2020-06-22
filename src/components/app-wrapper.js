@@ -48,7 +48,6 @@ const AppWrapper = ({ children, shouldUseDarkColors }) => {
   );
 };
 
-
 AppWrapper.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.element),
