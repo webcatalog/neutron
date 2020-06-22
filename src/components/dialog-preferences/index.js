@@ -2,7 +2,6 @@ import React, { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import semver from 'semver';
 
-import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -40,8 +39,6 @@ import getMailtoUrl from '../../helpers/get-mailto-url';
 
 import StatedMenu from '../shared/stated-menu';
 
-import { updateIsDefaultMailClient, updateIsDefaultWebBrowser } from '../../state/general/actions';
-
 import {
   requestCheckForUpdates,
   requestClearBrowsingData,
@@ -66,6 +63,9 @@ import hunspellLanguagesMap from '../../constants/hunspell-languages';
 import webcatalogLogo from '../../images/webcatalog-logo.svg';
 import translatiumLogo from '../../images/translatium-logo.svg';
 import singleboxLogo from '../../images/singlebox-logo.svg';
+
+import ListItemDefaultMailClient from './list-item-default-mail-client';
+import ListItemDefaultBrowser from './list-item-default-browser';
 
 const styles = (theme) => ({
   root: {
@@ -165,12 +165,8 @@ const Preferences = ({
   hibernateUnusedWorkspacesAtLaunch,
   hideMenuBar,
   ignoreCertificateErrors,
-  isDefaultMailClient,
-  isDefaultWebBrowser,
   jsCodeInjection,
   navigationBar,
-  onUpdateIsDefaultMailClient,
-  onUpdateIsDefaultWebBrowser,
   openAtLogin,
   pauseNotificationsBySchedule,
   pauseNotificationsByScheduleFrom,
@@ -937,55 +933,14 @@ const Preferences = ({
         </Typography>
         <Paper elevation={0} className={classes.paper}>
           <List disablePadding dense>
-            {(hasMailWorkspace || isDefaultMailClient) && (
+            <ListItemDefaultBrowser />
+            <Divider />
+            {(hasMailWorkspace) && (
               <>
-                {isDefaultMailClient ? (
-                  <ListItem>
-                    <ListItemText secondary={`${appJson.name} is your default email client.`} />
-                  </ListItem>
-                ) : (
-                  <ListItem>
-                    <ListItemText primary="Default email client" secondary={`Make ${appJson.name} the default email client.`} />
-                    <Button
-                      variant="outlined"
-                      size="small"
-                      color="default"
-                      className={classes.button}
-                      onClick={() => {
-                        remote.app.setAsDefaultProtocolClient('mailto');
-                        onUpdateIsDefaultMailClient(remote.app.isDefaultProtocolClient('mailto'));
-                      }}
-                    >
-                      Make default
-                    </Button>
-                  </ListItem>
-                )}
+                <ListItemDefaultMailClient />
                 <Divider />
               </>
             )}
-            {isDefaultWebBrowser ? (
-              <ListItem>
-                <ListItemText secondary={`${appJson.name} is your default web browser.`} />
-              </ListItem>
-            ) : (
-              <ListItem>
-                <ListItemText primary="Default web browser" secondary={`Make ${appJson.name} the default web browser.`} />
-                <Button
-                  variant="outlined"
-                  size="small"
-                  color="default"
-                  className={classes.button}
-                  onClick={() => {
-                    remote.app.setAsDefaultProtocolClient('http');
-                    remote.app.setAsDefaultProtocolClient('https');
-                    onUpdateIsDefaultWebBrowser(remote.app.isDefaultProtocolClient('http'));
-                  }}
-                >
-                  Make default
-                </Button>
-              </ListItem>
-            )}
-            <Divider />
             {window.process.platform !== 'linux' && (
               <StatedMenu
                 id="openAtLogin"
@@ -1237,12 +1192,8 @@ Preferences.propTypes = {
   hibernateUnusedWorkspacesAtLaunch: PropTypes.bool.isRequired,
   hideMenuBar: PropTypes.bool.isRequired,
   ignoreCertificateErrors: PropTypes.bool.isRequired,
-  isDefaultMailClient: PropTypes.bool.isRequired,
-  isDefaultWebBrowser: PropTypes.bool.isRequired,
   jsCodeInjection: PropTypes.string,
   navigationBar: PropTypes.bool.isRequired,
-  onUpdateIsDefaultMailClient: PropTypes.func.isRequired,
-  onUpdateIsDefaultWebBrowser: PropTypes.func.isRequired,
   openAtLogin: PropTypes.oneOf(['yes', 'yes-hidden', 'no']).isRequired,
   pauseNotificationsBySchedule: PropTypes.bool.isRequired,
   pauseNotificationsByScheduleFrom: PropTypes.string.isRequired,
@@ -1299,14 +1250,9 @@ const mapStateToProps = (state) => ({
   useHardwareAcceleration: state.preferences.useHardwareAcceleration,
 });
 
-const actionCreators = {
-  updateIsDefaultMailClient,
-  updateIsDefaultWebBrowser,
-};
-
 export default connectComponent(
   Preferences,
   mapStateToProps,
-  actionCreators,
+  null,
   styles,
 );
