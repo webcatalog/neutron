@@ -4,11 +4,9 @@ import {
   UPDATE_ADDRESS_BAR_INFO,
   UPDATE_CAN_GO_BACK,
   UPDATE_CAN_GO_FORWARD,
-  UPDATE_DID_FAIL_LOAD,
   UPDATE_IS_DEFAULT_MAIL_CLIENT,
   UPDATE_IS_DEFAULT_WEB_BROWSER,
   UPDATE_IS_FULL_SCREEN,
-  UPDATE_IS_LOADING,
   UPDATE_SHOULD_USE_DARK_COLORS,
   UPDATE_TITLE,
 } from '../../constants/actions';
@@ -61,20 +59,6 @@ const shouldUseDarkColors = (state = getShouldUseDarkColors(), action) => {
   }
 };
 
-const isLoading = (state = true, action) => {
-  switch (action.type) {
-    case UPDATE_IS_LOADING: return action.isLoading;
-    default: return state;
-  }
-};
-
-const didFailLoad = (state = false, action) => {
-  switch (action.type) {
-    case UPDATE_DID_FAIL_LOAD: return action.didFailLoad;
-    default: return state;
-  }
-};
-
 const address = (state = null, action) => {
   switch (action.type) {
     case UPDATE_ADDRESS_BAR_INFO: return action.address;
@@ -101,11 +85,9 @@ export default combineReducers({
   addressEdited,
   canGoBack,
   canGoForward,
-  didFailLoad,
   isDefaultMailClient,
   isDefaultWebBrowser,
   isFullScreen,
-  isLoading,
   shouldUseDarkColors,
   title,
 });
