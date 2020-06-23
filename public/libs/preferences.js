@@ -93,6 +93,13 @@ const getPreference = (name) => {
   return cachedPreferences[name];
 };
 
+const isPreferenceUnset = (name) => {
+  if (settings.get(`preferences.${v}.${name}`)) {
+    return false;
+  }
+  return true;
+};
+
 const setPreference = (name, value) => {
   sendToAllWindows('set-preference', name, value);
   cachedPreferences[name] = value;
@@ -124,6 +131,7 @@ const resetPreferences = () => {
 module.exports = {
   getPreference,
   getPreferences,
+  isPreferenceUnset,
   resetPreferences,
   setPreference,
 };

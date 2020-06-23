@@ -1,4 +1,4 @@
-const { session } = require('electron');
+const { session, ipcMain } = require('electron');
 
 const {
   countWorkspaces,
@@ -22,14 +22,24 @@ const {
   setViewsNotificationsPref,
 } = require('./views');
 
+const { isPreferenceUnset } = require('./preferences');
+
 const mainWindow = require('../windows/main');
 
-const createWorkspaceView = () => {
+// isRecreate: whether workspace is created to replace another workspace
+const createWorkspaceView = (isRecreate = false) => {
   const newWorkspace = createWorkspace();
   setActiveWorkspace(newWorkspace.id);
 
   addView(mainWindow.get(), getWorkspace(newWorkspace.id));
   setActiveView(mainWindow.get(), newWorkspace.id);
+
+  // if user add workspace for the first time
+  // show sidebar
+  if (!isRecreate && isPreferenceUnset('sidebar')) {
+    ipcMain.emit('request-set-preference', null, 'sidebar', true);
+    ipcMain.emit('request-realign-active-workspace');
+  }
 };
 
 const setWorkspaceView = (id, opts) => {
@@ -74,7 +84,7 @@ const setActiveWorkspaceView = (id) => {
 
 const removeWorkspaceView = (id) => {
   if (countWorkspaces() === 1) {
-    createWorkspaceView();
+    createWorkspaceView(true);
   } else if (getWorkspace(id).active) {
     setActiveWorkspaceView(getPreviousWorkspace(id).id);
   }
