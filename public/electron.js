@@ -229,6 +229,9 @@ if (!gotTheLock) {
 
     whenTrulyReady()
       .then(() => {
+        // focus on window
+        mainWindow.show();
+
         const workspaces = Object.values(getWorkspaces());
 
         if (workspaces.length < 1) return null;
