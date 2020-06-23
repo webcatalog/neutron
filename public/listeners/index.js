@@ -30,6 +30,11 @@ const {
 } = require('../libs/workspaces');
 
 const {
+  getWorkspaceMeta,
+  getWorkspaceMetas,
+} = require('../libs/workspace-metas');
+
+const {
   clearBrowsingData,
   createWorkspaceView,
   hibernateWorkspaceView,
@@ -203,6 +208,15 @@ const loadListeners = () => {
 
   ipcMain.on('request-update-pause-notifications-info', () => {
     updatePauseNotificationsInfo();
+  });
+
+  // Workspace Metas
+  ipcMain.on('get-workspace-meta', (e, id) => {
+    e.returnValue = getWorkspaceMeta(id);
+  });
+
+  ipcMain.on('get-workspace-metas', (e) => {
+    e.returnValue = getWorkspaceMetas();
   });
 
   // Workspaces

@@ -18,6 +18,7 @@ import notifications from './notifications/reducers';
 import preferences from './preferences/reducers';
 import systemPreferences from './system-preferences/reducers';
 import workspaces from './workspaces/reducers';
+import workspaceMetas from './workspace-metas/reducers';
 
 import loadListeners from '../listeners';
 
@@ -35,6 +36,7 @@ const rootReducer = combineReducers({
   preferences,
   systemPreferences,
   workspaces,
+  workspaceMetas,
 });
 
 const configureStore = (initialState) => createStore(

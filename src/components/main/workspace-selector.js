@@ -142,9 +142,13 @@ WorkspaceSelector.propTypes = {
   transparentBackground: PropTypes.bool,
 };
 
+const mapStateToProps = (state, ownProps) => ({
+  badgeCount: state.workspaceMetas[ownProps.id] ? state.workspaceMetas[ownProps.id].badgeCount : 0,
+});
+
 export default connectComponent(
   WorkspaceSelector,
-  null,
+  mapStateToProps,
   null,
   styles,
 );

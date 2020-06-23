@@ -110,7 +110,7 @@ const styles = (theme) => ({
 const SortableItem = sortableElement(({ value }) => {
   const { workspace, index } = value;
   const {
-    active, id, name, badgeCount, picturePath, hibernated, transparentBackground,
+    active, id, name, picturePath, hibernated, transparentBackground,
   } = workspace;
   return (
     <WorkspaceSelector
@@ -118,7 +118,6 @@ const SortableItem = sortableElement(({ value }) => {
       id={id}
       key={id}
       name={name}
-      badgeCount={badgeCount}
       picturePath={picturePath}
       transparentBackground={transparentBackground}
       order={index}
