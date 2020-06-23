@@ -298,8 +298,19 @@ function createMenu() {
       submenu: [
         { role: 'minimize' },
         { role: 'close' },
-        { role: 'minimize' },
-        { role: 'zoom' },
+        // role: 'zoom' is only supported on macOS
+        process.platform === 'darwin' ? {
+          role: 'zoom',
+        } : {
+          label: 'Zoom',
+          click: () => {
+            const win = mainWindow.get();
+
+            if (win != null) {
+              win.maximize();
+            }
+          },
+        },
         { type: 'separator' },
         { role: 'front' },
         { type: 'separator' },
