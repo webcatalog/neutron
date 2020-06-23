@@ -54,6 +54,10 @@ export const requestSetWorkspacePicture = (id, picturePath) => ipcRenderer.send(
 export const requestShowCustomUserAgentWindow = () => ipcRenderer.send('request-show-custom-user-agent-window');
 export const requestWakeUpWorkspace = (id) => ipcRenderer.send('request-wake-up-workspace', id);
 
+// Workspace Meta
+export const getWorkspaceMeta = (id) => ipcRenderer.sendSync('get-workspace-meta', id);
+export const getWorkspaceMetas = () => ipcRenderer.sendSync('get-workspace-metas');
+
 // Find In Page
 export const requestFindInPage = (text, forward) => ipcRenderer.send('request-find-in-page', text, forward);
 export const requestStopFindInPage = (close) => ipcRenderer.send('request-stop-find-in-page', close);
