@@ -40,7 +40,7 @@ const ListItemDefaultBrowser = () => {
 
       setIsDefault(window.require('electron').remote.app.isDefaultProtocolClient('http'));
     },
-    [isWindows10],
+    [isWindows10, appJson.id],
   );
 
   // recheck every 1 minutes
