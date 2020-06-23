@@ -62,3 +62,4 @@ thumbs.db
 yarn.lock
 node_modules/.bin
 node_modules/.cache
+node_modules/image-q/demo

@@ -1,8 +1,8 @@
 {
   "name": "Juli",
   "description": "AppView template for WebCatalog",
-  "version": "8.17.0",
-  "minimumWebCatalogVersion": "21.0.0",
+  "version": "8.18.0",
+  "minimumWebCatalogVersion": "22.0.0",
   "engines": {
     "node": ">=12.0.0 <13.0.0"
   },
