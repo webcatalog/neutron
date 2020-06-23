@@ -19,6 +19,7 @@ const {
 } = require('./workspaces');
 const {
   setWorkspaceMeta,
+  getWorkspaceMeta,
   getWorkspaceMetas,
 } = require('./workspace-metas');
 
@@ -27,7 +28,6 @@ const getViewBounds = require('./get-view-bounds');
 const customizedFetch = require('./customized-fetch');
 
 const views = {};
-const didFailLoad = {};
 let shouldMuteAudio;
 let shouldPauseNotifications;
 
@@ -234,8 +234,7 @@ const addView = (browserWindow, workspace) => {
     if (!workspaceObj) return;
 
     if (workspaceObj.active) {
-      if (didFailLoad[workspace.id]) {
-        didFailLoad[workspace.id] = false;
+      if (getWorkspaceMeta(workspace.id).didFailLoad) {
         // show browserView again when reloading after error
         // see did-fail-load event
         if (browserWindow && !browserWindow.isDestroyed()) { // fix https://github.com/atomery/singlebox/issues/228
@@ -243,11 +242,12 @@ const addView = (browserWindow, workspace) => {
           view.setBounds(getViewBounds(contentSize));
         }
       }
-      sendToAllWindows('update-did-fail-load', false);
-      sendToAllWindows('update-is-loading', true);
-    } else {
-      didFailLoad[workspace.id] = false;
     }
+
+    setWorkspaceMeta(workspace.id, {
+      didFailLoad: null,
+      isLoading: true,
+    });
   });
 
   view.webContents.on('did-stop-loading', () => {
@@ -258,7 +258,6 @@ const addView = (browserWindow, workspace) => {
     if (!workspaceObj) return;
 
     if (workspaceObj.active) {
-      sendToAllWindows('update-is-loading', false);
       sendToAllWindows('update-address', view.webContents.getURL(), false);
     }
 
@@ -287,7 +286,10 @@ const addView = (browserWindow, workspace) => {
     if (!workspaceObj) return;
 
     if (isMainFrame && errorCode < 0 && errorCode !== -3) {
-      didFailLoad[workspace.id] = true;
+      setWorkspaceMeta(workspace.id, {
+        didFailLoad: errorDesc,
+        isLoading: false,
+      });
       if (workspaceObj.active) {
         sendToAllWindows('update-loading', false);
         if (browserWindow && !browserWindow.isDestroyed()) { // fix https://github.com/atomery/singlebox/issues/228
@@ -642,15 +644,12 @@ const setActiveView = (browserWindow, id) => {
 
   if (views[id] == null) {
     addView(browserWindow, getWorkspace(id));
-
-    sendToAllWindows('update-is-loading', views[id].webContents.isLoading());
-    sendToAllWindows('update-did-fail-load', false);
   } else {
     const view = views[id];
     browserWindow.setBrowserView(view);
 
     const contentSize = browserWindow.getContentSize();
-    if (didFailLoad[id]) {
+    if (getWorkspaceMeta(id).didFailLoad) {
       view.setBounds(
         getViewBounds(contentSize, false, 0, 0),
       ); // hide browserView to show error message
@@ -667,8 +666,6 @@ const setActiveView = (browserWindow, id) => {
     view.webContents.focus();
 
     sendToAllWindows('update-address', view.webContents.getURL(), false);
-    sendToAllWindows('update-is-loading', view.webContents.isLoading());
-    sendToAllWindows('update-did-fail-load', Boolean(didFailLoad[id]));
     sendToAllWindows('update-title', view.webContents.getTitle());
   }
 };
@@ -728,8 +725,9 @@ const reloadViewsDarkReader = () => {
 };
 
 const reloadViewsWebContentsIfDidFailLoad = () => {
-  Object.keys(didFailLoad).forEach((id) => {
-    if (!didFailLoad[id]) return;
+  const metas = getWorkspaceMetas();
+  Object.keys(metas).forEach((id) => {
+    if (!metas[id].didFailLoad) return;
 
     const view = views[id];
     if (view != null) {
