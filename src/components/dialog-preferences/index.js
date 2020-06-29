@@ -60,9 +60,9 @@ import {
 
 import hunspellLanguagesMap from '../../constants/hunspell-languages';
 
-import webcatalogLogo from '../../images/webcatalog-logo.svg';
-import translatiumLogo from '../../images/translatium-logo.svg';
-import singleboxLogo from '../../images/singlebox-logo.svg';
+import webcatalogIconPng from '../../images/webcatalog-icon.png';
+import translatiumIconPng from '../../images/translatium-icon.png';
+import singleboxIconPng from '../../images/singlebox-icon.png';
 
 import ListItemDefaultMailClient from './list-item-default-mail-client';
 import ListItemDefaultBrowser from './list-item-default-browser';
@@ -101,9 +101,6 @@ const styles = (theme) => ({
     maxWidth: 500,
     float: 'right',
   },
-  logo: {
-    height: 28,
-  },
   link: {
     cursor: 'pointer',
     fontWeight: 500,
@@ -125,6 +122,28 @@ const styles = (theme) => ({
   },
   sliderMarkLabel: {
     fontSize: '0.75rem',
+  },
+  listItemPromotion: {
+    paddingLeft: theme.spacing(1),
+  },
+  promotionBlock: {
+    display: 'flex',
+    flex: 1,
+  },
+  promotionLeft: {
+    height: 64,
+    width: 64,
+  },
+  promotionRight: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: theme.spacing(1.5),
+  },
+  appTitle: {},
+  appIcon: {
+    height: 64,
   },
 });
 
@@ -1110,27 +1129,72 @@ const Preferences = ({
         </Typography>
         <Paper elevation={0} className={classes.paper}>
           <List disablePadding dense>
-            <ListItem button onClick={() => requestOpenInBrowser('https://webcatalogapp.com?utm_source=webcatalog_app')}>
-              <ListItemText
-                primary={(<img src={webcatalogLogo} alt="WebCatalog" className={classes.logo} />)}
-                secondary="Run Web Apps like Real Apps"
-              />
+            <ListItem
+              button
+              onClick={() => requestOpenInBrowser('https://webcatalogapp.com?utm_source=singlebox_app')}
+              className={classes.listItemPromotion}
+            >
+              <div className={classes.promotionBlock}>
+                <div className={classes.promotionLeft}>
+                  <img src={webcatalogIconPng} alt="WebCatalog" className={classes.appIcon} />
+                </div>
+                <div className={classes.promotionRight}>
+                  <div>
+                    <Typography variant="body1" className={classes.appTitle}>
+                      WebCatalog
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      Run Web Apps like Real Apps
+                    </Typography>
+                  </div>
+                </div>
+              </div>
               <ChevronRightIcon color="action" />
             </ListItem>
             <Divider />
-            <ListItem button onClick={() => requestOpenInBrowser('https://singleboxapp.com?utm_source=webcatalog_app')}>
-              <ListItemText
-                primary={(<img src={singleboxLogo} alt="Singlebox" className={classes.logo} />)}
-                secondary="All Your Apps in One Single Window"
-              />
+            <ListItem
+              button
+              onClick={() => requestOpenInBrowser('https://singleboxapp.com?utm_source=singlebox_app')}
+              className={classes.listItemPromotion}
+            >
+              <div className={classes.promotionBlock}>
+                <div className={classes.promotionLeft}>
+                  <img src={singleboxIconPng} alt="Singlebox" className={classes.appIcon} />
+                </div>
+                <div className={classes.promotionRight}>
+                  <div>
+                    <Typography variant="body1" className={classes.appTitle}>
+                      Singlebox
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      All Your Apps in One Single Window
+                    </Typography>
+                  </div>
+                </div>
+              </div>
               <ChevronRightIcon color="action" />
             </ListItem>
             <Divider />
-            <ListItem button onClick={() => requestOpenInBrowser('https://translatiumapp.com?utm_source=webcatalog_app')}>
-              <ListItemText
-                primary={(<img src={translatiumLogo} alt="Translatium" className={classes.logo} />)}
-                secondary="Translate Any Languages like a Pro"
-              />
+            <ListItem
+              button
+              onClick={() => requestOpenInBrowser('https://translatiumapp.com?utm_source=singlebox_app')}
+              className={classes.listItemPromotion}
+            >
+              <div className={classes.promotionBlock}>
+                <div className={classes.promotionLeft}>
+                  <img src={translatiumIconPng} alt="Translatium" className={classes.appIcon} />
+                </div>
+                <div className={classes.promotionRight}>
+                  <div>
+                    <Typography variant="body1" className={classes.appTitle}>
+                      Translatium
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      Translate Any Languages like a Pro
+                    </Typography>
+                  </div>
+                </div>
+              </div>
               <ChevronRightIcon color="action" />
             </ListItem>
           </List>

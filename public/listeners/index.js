@@ -183,7 +183,7 @@ const loadListeners = () => {
     dialog.showMessageBox(preferencesWindow.get() || mainWindow.get(), {
       type: 'question',
       buttons: ['Restart Now', 'Later'],
-      message: 'You need to restart the app for this change to take affect.',
+      message: 'You need to restart the app for this change to take effect.',
       cancelId: 1,
     }).then(({ response }) => {
       if (response === 0) {
