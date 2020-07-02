@@ -1,6 +1,5 @@
 const { dialog } = require('electron');
 const semver = require('semver');
-const xmlParser = require('fast-xml-parser');
 
 const packageJson = require('../../package.json');
 const mainWindow = require('../windows/main');
