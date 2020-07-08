@@ -8,6 +8,7 @@ const {
 const appJson = require('../app.json');
 
 const aboutWindow = require('../windows/about');
+const addWorkspaceWindow = require('../windows/add-workspace');
 const editWorkspaceWindow = require('../windows/edit-workspace');
 const goToUrlWindow = require('../windows/go-to-url');
 const mainWindow = require('../windows/main');
@@ -470,11 +471,15 @@ function createMenu() {
     },
     { type: 'separator' },
     {
-      label: 'Add Workspace',
+      label: `Add ${appJson.name} Workspace`,
       click: () => {
         createWorkspaceView();
         createMenu();
       },
+    },
+    {
+      label: 'Add Custom Workspace',
+      click: () => addWorkspaceWindow.show(),
     },
   );
 

@@ -5,6 +5,7 @@ import {
 } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 
+import dialogAddWorkspace from './dialog-add-workspace/reducers';
 import dialogAuth from './dialog-auth/reducers';
 import dialogCodeInjection from './dialog-code-injection/reducers';
 import dialogCustomUserAgent from './dialog-custom-user-agent/reducers';
@@ -23,6 +24,7 @@ import workspaceMetas from './workspace-metas/reducers';
 import loadListeners from '../listeners';
 
 const rootReducer = combineReducers({
+  dialogAddWorkspace,
   dialogAuth,
   dialogCodeInjection,
   dialogCustomUserAgent,

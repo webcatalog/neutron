@@ -10,6 +10,7 @@ const {
   removeWorkspace,
   setActiveWorkspace,
   setWorkspace,
+  setWorkspacePicture,
   setWorkspaces,
 } = require('./workspaces');
 
@@ -27,12 +28,16 @@ const { isPreferenceUnset } = require('./preferences');
 const mainWindow = require('../windows/main');
 
 // isRecreate: whether workspace is created to replace another workspace
-const createWorkspaceView = (isRecreate = false) => {
-  const newWorkspace = createWorkspace();
+const createWorkspaceView = (isRecreate = false, name, homeUrl, picture, transparentBackground) => {
+  const newWorkspace = createWorkspace(name, homeUrl, picture, transparentBackground);
   setActiveWorkspace(newWorkspace.id);
 
   addView(mainWindow.get(), getWorkspace(newWorkspace.id));
   setActiveView(mainWindow.get(), newWorkspace.id);
+
+  if (picture) {
+    setWorkspacePicture(newWorkspace.id, picture);
+  }
 
   // if user add workspace for the first time
   // show sidebar

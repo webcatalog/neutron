@@ -31,6 +31,7 @@ import {
   requestRemoveWorkspace,
   requestSetActiveWorkspace,
   requestSetWorkspaces,
+  requestShowAddWorkspaceWindow,
   requestShowEditWorkspaceWindow,
   requestShowNotificationsWindow,
   requestShowPreferencesWindow,
@@ -189,6 +190,24 @@ const Main = ({
   const workspacesList = getWorkspacesAsList(workspaces);
   const showTitleBar = window.process.platform === 'darwin' && titleBar;
 
+  const handleAddWorkspace = () => {
+    const { remote } = window.require('electron');
+    const appJson = remote.getGlobal('appJson');
+    const template = [
+      {
+        label: `Add ${appJson.name} Workspace`,
+        click: () => requestCreateWorkspace(),
+      },
+      {
+        label: 'Add Custom Workspace',
+        click: () => requestShowAddWorkspaceWindow(),
+      },
+    ];
+
+    const menu = remote.Menu.buildFromTemplate(template);
+    menu.popup(remote.getCurrentWindow());
+  };
+
   return (
     <div className={classes.outerRoot}>
       {showTitleBar && (<FakeTitleBar />)}
@@ -218,7 +237,14 @@ const Main = ({
                   <SortableItem key={`item-${workspace.id}`} index={i} value={{ index: i, workspace }} />
                 ))}
               </SortableContainer>
-              <WorkspaceSelector id="add" onClick={requestCreateWorkspace} />
+              <WorkspaceSelector
+                id="add"
+                onClick={handleAddWorkspace}
+                onContextMenu={(e) => {
+                  e.preventDefault();
+                  handleAddWorkspace();
+                }}
+              />
             </div>
             {!navigationBar && (
             <div className={classes.end}>
