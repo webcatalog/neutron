@@ -63,6 +63,7 @@ const getWebsiteIconUrlAsync = require('../libs/get-website-icon-url-async');
 const getViewBounds = require('../libs/get-view-bounds');
 
 const aboutWindow = require('../windows/about');
+const addWorkspaceWindow = require('../windows/add-workspace');
 const codeInjectionWindow = require('../windows/code-injection');
 const customUserAgentWindow = require('../windows/custom-user-agent');
 const displayMediaWindow = require('../windows/display-media');
@@ -167,6 +168,10 @@ const loadListeners = () => {
     editWorkspaceWindow.show(id);
   });
 
+  ipcMain.on('request-show-add-workspace-window', () => {
+    addWorkspaceWindow.show();
+  });
+
   ipcMain.on('request-show-notifications-window', () => {
     notificationsWindow.show();
   });
@@ -230,13 +235,13 @@ const loadListeners = () => {
     e.returnValue = workspaces;
   });
 
-  ipcMain.on('request-create-workspace', () => {
+  ipcMain.on('request-create-workspace', (e, name, homeUrl, picture, transparentBackground) => {
     if (!global.appJson.registered) {
       const workspaces = getWorkspaces();
       if (Object.keys(workspaces).length > 1) {
         dialog.showMessageBox(mainWindow.get(), {
           type: 'info',
-          message: 'You are currently running a trial version of WebCatalog which only lets you add up to two workspaces per app. To remove the trial limitations, please purchase a perpetual license key ($14.99) from our store.',
+          message: 'You are currently running a trial version of WebCatalog which only lets you add up to two workspaces per app. To remove the trial limitations, please purchase a perpetual license key ($19.99) from our store.',
           buttons: ['OK', 'Visit Store...'],
           cancelId: 0,
           defaultId: 0,
@@ -251,7 +256,12 @@ const loadListeners = () => {
       }
     }
 
-    createWorkspaceView();
+    // if name & homeUrl is defined, create custom workspace
+    if (name && homeUrl) {
+      createWorkspaceView(false, name, homeUrl, picture, transparentBackground);
+    } else { // if not create normal workspace
+      createWorkspaceView();
+    }
     createMenu();
   });
 

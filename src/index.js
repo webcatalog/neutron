@@ -18,6 +18,7 @@ import AppWrapper from './components/app-wrapper';
 import getWorkspacesAsList from './helpers/get-workspaces-as-list';
 
 const DialogAbout = React.lazy(() => import('./components/dialog-about'));
+const DialogAddWorkspace = React.lazy(() => import('./components/dialog-add-workspace'));
 const DialogAuth = React.lazy(() => import('./components/dialog-auth'));
 const DialogCodeInjection = React.lazy(() => import('./components/dialog-code-injection'));
 const DialogCustomUserAgent = React.lazy(() => import('./components/dialog-custom-user-agent'));
@@ -34,6 +35,7 @@ const Main = React.lazy(() => import('./components/main'));
 const App = () => {
   switch (window.mode) {
     case 'about': return <DialogAbout />;
+    case 'add-workspace': return <DialogAddWorkspace />;
     case 'auth': return <DialogAuth />;
     case 'code-injection': return <DialogCodeInjection />;
     case 'custom-user-agent': return <DialogCustomUserAgent />;
@@ -96,6 +98,8 @@ const runApp = () => {
       } else if (window.mode === 'spellcheck-languages') {
         store.dispatch(initDialogSpellcheckLanguages());
         document.title = 'Spell Checking Languages';
+      } else if (window.mode === 'add-workspace') {
+        document.title = 'Add Custom Workspace';
       } else {
         document.title = remote.getGlobal('appJson').name;
       }

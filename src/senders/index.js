@@ -13,6 +13,7 @@ export const requestQuit = () => ipcRenderer.send('request-quit');
 export const requestCheckForUpdates = () => ipcRenderer.send('request-check-for-updates');
 
 export const requestShowAboutWindow = () => ipcRenderer.send('request-show-about-window');
+export const requestShowAddWorkspaceWindow = () => ipcRenderer.send('request-show-add-workspace-window');
 export const requestShowPreferencesWindow = (scrollTo) => ipcRenderer.send('request-show-preferences-window', scrollTo);
 export const requestShowEditWorkspaceWindow = (id) => ipcRenderer.send('request-show-edit-workspace-window', id);
 export const requestShowCodeInjectionWindow = (type) => ipcRenderer.send('request-show-code-injection-window', type);
@@ -41,7 +42,7 @@ export const requestSetSystemPreference = (name, value) => ipcRenderer.send('req
 export const getWorkspace = (id) => ipcRenderer.sendSync('get-workspace', id);
 export const getWorkspaces = () => ipcRenderer.sendSync('get-workspaces');
 export const requestClearBrowsingData = () => ipcRenderer.send('request-clear-browsing-data');
-export const requestCreateWorkspace = () => ipcRenderer.send('request-create-workspace');
+export const requestCreateWorkspace = (name, homeUrl, picture, transparentBackground) => ipcRenderer.send('request-create-workspace', name, homeUrl, picture, transparentBackground);
 export const requestHibernateWorkspace = (id) => ipcRenderer.send('request-hibernate-workspace', id);
 export const requestOpenUrlInWorkspace = (url, id) => ipcRenderer.send('request-open-url-in-workspace', url, id);
 export const requestRealignActiveWorkspace = () => ipcRenderer.send('request-realign-active-workspace');
