@@ -61,7 +61,7 @@ const defaultPreferences = {
   proxyType: 'none',
   rememberLastPageVisited: false,
   shareWorkspaceBrowsingData: false,
-  sidebar: Boolean(MAILTO_URLS[extractHostname(appJson.url)]),
+  sidebar: !appJson.url || Boolean(MAILTO_URLS[extractHostname(appJson.url)]),
   spellcheck: true,
   spellcheckLanguages: ['en-US'],
   swipeToNavigate: true,
