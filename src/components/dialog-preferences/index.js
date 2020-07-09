@@ -34,8 +34,6 @@ import WidgetsIcon from '@material-ui/icons/Widgets';
 import { TimePicker } from '@material-ui/pickers';
 
 import connectComponent from '../../helpers/connect-component';
-import getWorkspacesAsList from '../../helpers/get-workspaces-as-list';
-import getMailtoUrl from '../../helpers/get-mailto-url';
 
 import StatedMenu from '../shared/stated-menu';
 
@@ -159,12 +157,6 @@ const getOpenAtLoginString = (openAtLogin) => {
   return 'No';
 };
 
-const hasMailWorkspaceFunc = (workspaces) => {
-  const workspacesList = getWorkspacesAsList(workspaces);
-  return Boolean(workspacesList
-    .find((workspace) => Boolean(getMailtoUrl(workspace.homeUrl || window.require('electron').remote.getGlobal('appJson').url))));
-};
-
 const Preferences = ({
   allowNodeInJsCodeInjection,
   askForDownloadPath,
@@ -180,7 +172,6 @@ const Preferences = ({
   darkReaderGrayscale,
   darkReaderSepia,
   downloadPath,
-  hasMailWorkspace,
   hibernateUnusedWorkspacesAtLaunch,
   hideMenuBar,
   ignoreCertificateErrors,
@@ -954,12 +945,8 @@ const Preferences = ({
           <List disablePadding dense>
             <ListItemDefaultBrowser />
             <Divider />
-            {(hasMailWorkspace) && (
-              <>
-                <ListItemDefaultMailClient />
-                <Divider />
-              </>
-            )}
+            <ListItemDefaultMailClient />
+            <Divider />
             {window.process.platform !== 'linux' && (
               <StatedMenu
                 id="openAtLogin"
@@ -1252,7 +1239,6 @@ Preferences.propTypes = {
   darkReaderGrayscale: PropTypes.number.isRequired,
   darkReaderSepia: PropTypes.number.isRequired,
   downloadPath: PropTypes.string.isRequired,
-  hasMailWorkspace: PropTypes.bool.isRequired,
   hibernateUnusedWorkspacesAtLaunch: PropTypes.bool.isRequired,
   hideMenuBar: PropTypes.bool.isRequired,
   ignoreCertificateErrors: PropTypes.bool.isRequired,
@@ -1289,7 +1275,6 @@ const mapStateToProps = (state) => ({
   darkReaderGrayscale: state.preferences.darkReaderGrayscale,
   darkReaderSepia: state.preferences.darkReaderSepia,
   downloadPath: state.preferences.downloadPath,
-  hasMailWorkspace: hasMailWorkspaceFunc(state.workspaces),
   hibernateUnusedWorkspacesAtLaunch: state.preferences.hibernateUnusedWorkspacesAtLaunch,
   hideMenuBar: state.preferences.hideMenuBar,
   ignoreCertificateErrors: state.preferences.ignoreCertificateErrors,

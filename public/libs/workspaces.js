@@ -10,6 +10,8 @@ const tmp = require('tmp');
 const sendToAllWindows = require('./send-to-all-windows');
 const downloadAsync = require('./download-async');
 
+const appJson = require('../app.json');
+
 const v = '43';
 
 let workspaces;
@@ -20,13 +22,15 @@ const getWorkspaces = () => {
   if (workspaces) return workspaces;
 
   const defaultWorkspaces = {};
-  const initialWorkspaceId = uuidv1();
-  defaultWorkspaces[initialWorkspaceId] = {
-    id: initialWorkspaceId,
-    name: '',
-    order: 0,
-    active: true,
-  };
+  if (appJson.url) {
+    const initialWorkspaceId = uuidv1();
+    defaultWorkspaces[initialWorkspaceId] = {
+      id: initialWorkspaceId,
+      name: '',
+      order: 0,
+      active: true,
+    };
+  }
 
   const storedWorkspaces = settings.get(`workspaces.${v}`, defaultWorkspaces);
   // keep workspace objects in memory
@@ -101,6 +105,7 @@ const createWorkspace = (name, homeUrl, transparentBackground) => {
   };
 
   workspaces[newId] = newWorkspace;
+
   sendToAllWindows('set-workspace', newId, newWorkspace);
   settings.set(`workspaces.${v}.${newId}`, newWorkspace);
 
@@ -111,11 +116,15 @@ const getActiveWorkspace = () => Object.values(workspaces).find((workspace) => w
 
 const setActiveWorkspace = (id) => {
   // deactive the current one
-  const currentActiveWorkspace = { ...getActiveWorkspace() };
-  currentActiveWorkspace.active = false;
-  workspaces[currentActiveWorkspace.id] = currentActiveWorkspace;
-  sendToAllWindows('set-workspace', currentActiveWorkspace.id, currentActiveWorkspace);
-  settings.set(`workspaces.${v}.${currentActiveWorkspace.id}`, currentActiveWorkspace);
+  let currentActiveWorkspace = getActiveWorkspace();
+  if (currentActiveWorkspace) {
+    if (currentActiveWorkspace.id === id) return;
+    currentActiveWorkspace = { ...currentActiveWorkspace };
+    currentActiveWorkspace.active = false;
+    workspaces[currentActiveWorkspace.id] = currentActiveWorkspace;
+    sendToAllWindows('set-workspace', currentActiveWorkspace.id, currentActiveWorkspace);
+    settings.set(`workspaces.${v}.${currentActiveWorkspace.id}`, currentActiveWorkspace);
+  }
 
   // active new one
   const newActiveWorkspace = { ...workspaces[id] };

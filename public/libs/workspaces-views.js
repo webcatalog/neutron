@@ -28,7 +28,7 @@ const { isPreferenceUnset } = require('./preferences');
 const mainWindow = require('../windows/main');
 
 // isRecreate: whether workspace is created to replace another workspace
-const createWorkspaceView = (isRecreate = false, name, homeUrl, picture, transparentBackground) => {
+const createWorkspaceView = (name, homeUrl, picture, transparentBackground) => {
   const newWorkspace = createWorkspace(name, homeUrl, picture, transparentBackground);
   setActiveWorkspace(newWorkspace.id);
 
@@ -41,7 +41,7 @@ const createWorkspaceView = (isRecreate = false, name, homeUrl, picture, transpa
 
   // if user add workspace for the first time
   // show sidebar
-  if (!isRecreate && isPreferenceUnset('sidebar')) {
+  if (isPreferenceUnset('sidebar')) {
     ipcMain.emit('request-set-preference', null, 'sidebar', true);
     ipcMain.emit('request-realign-active-workspace');
   }
@@ -89,8 +89,10 @@ const setActiveWorkspaceView = (id) => {
 
 const removeWorkspaceView = (id) => {
   if (countWorkspaces() === 1) {
-    createWorkspaceView(true);
-  } else if (getWorkspace(id).active) {
+    mainWindow.get().setBrowserView(null);
+  }
+
+  if (getWorkspace(id).active && countWorkspaces() > 1) {
     setActiveWorkspaceView(getPreviousWorkspace(id).id);
   }
 

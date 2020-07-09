@@ -19,6 +19,9 @@ import { sortableContainer, sortableElement } from 'react-sortable-hoc';
 import connectComponent from '../../helpers/connect-component';
 import getWorkspacesAsList from '../../helpers/get-workspaces-as-list';
 
+import arrowWhite from '../../images/arrow-white.png';
+import arrowBlack from '../../images/arrow-black.png';
+
 import WorkspaceSelector from './workspace-selector';
 import FindInPage from './find-in-page';
 import NavigationBar from './navigation-bar';
@@ -97,6 +100,47 @@ const styles = (theme) => ({
     display: 'flex',
     flexDirection: 'column',
     width: '100%',
+  },
+  arrow: {
+    height: 202,
+    width: 150,
+    position: 'absolute',
+    top: 50,
+    left: 72,
+    backgroundImage: `url('${theme.palette.type === 'dark' ? arrowWhite : arrowBlack}')`,
+    backgroundSize: '150px 202px',
+  },
+  avatar: {
+    fontFamily: theme.typography.fontFamily,
+    display: 'inline-block',
+    height: 32,
+    width: 32,
+    background: theme.palette.type === 'dark' ? theme.palette.common.white : theme.palette.common.black,
+    borderRadius: 4,
+    color: theme.palette.getContrastText(theme.palette.type === 'dark' ? theme.palette.common.white : theme.palette.common.black),
+    lineHeight: '32px',
+    textAlign: 'center',
+    fontWeight: 500,
+    textTransform: 'uppercase',
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    border: theme.palette.type === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)',
+  },
+  inlineBlock: {
+    display: 'inline-block',
+    fontSize: '18px',
+    color: theme.palette.type === 'dark' ? theme.palette.common.white : theme.palette.common.black,
+  },
+  tip: {
+    position: 'absolute',
+    top: 112,
+    left: 180,
+    fontFamily: theme.typography.fontFamily,
+    userSelect: 'none',
+  },
+  tip2: {
+    fontFamily: theme.typography.fontFamily,
+    userSelect: 'none',
   },
   grabbing: {
     cursor: 'grabbing !important',
@@ -193,6 +237,12 @@ const Main = ({
   const handleAddWorkspace = () => {
     const { remote } = window.require('electron');
     const appJson = remote.getGlobal('appJson');
+
+    if (!appJson.url) {
+      requestShowAddWorkspaceWindow();
+      return;
+    }
+
     const template = [
       {
         label: `Add ${appJson.name} Workspace`,
@@ -294,6 +344,30 @@ const Main = ({
               <CircularProgress
                 size={24}
               />
+            )}
+            {Object.keys(workspaces).length < 1 && (
+              <div>
+                {sidebar ? (
+                  <>
+                    <div alt="Arrow" className={classes.arrow} />
+                    <div className={classes.tip}>
+                      <span className={classes.inlineBlock}>Click</span>
+                      <div className={classes.avatar}>
+                        +
+                      </div>
+                      <span className={classes.inlineBlock}>to get started!</span>
+                    </div>
+                  </>
+                ) : (
+                  <div className={classes.tip2}>
+                    <span className={classes.inlineBlock}>
+                      <span>Click </span>
+                      <strong>Workspaces &gt; Add Workspace</strong>
+                      <span> to get started!</span>
+                    </span>
+                  </div>
+                )}
+              </div>
             )}
           </div>
         </div>

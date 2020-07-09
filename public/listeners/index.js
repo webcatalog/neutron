@@ -258,7 +258,7 @@ const loadListeners = () => {
 
     // if name & homeUrl is defined, create custom workspace
     if (name && homeUrl) {
-      createWorkspaceView(false, name, homeUrl, picture, transparentBackground);
+      createWorkspaceView(name, homeUrl, picture, transparentBackground);
     } else { // if not create normal workspace
       createWorkspaceView();
     }
@@ -284,7 +284,9 @@ const loadListeners = () => {
     global.navigationBar = navigationBar;
 
     const activeWorkspace = getActiveWorkspace();
-    setActiveWorkspaceView(activeWorkspace.id);
+    if (activeWorkspace) {
+      setActiveWorkspaceView(activeWorkspace.id);
+    }
     createMenu();
   });
 

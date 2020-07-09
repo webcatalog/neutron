@@ -38,6 +38,9 @@ const {
 } = require('./updater');
 
 function createMenu() {
+  const workspaces = getWorkspaces();
+  const hasWorkspaces = Object.keys(workspaces).length > 0;
+
   const template = [
     {
       label: 'Edit',
@@ -68,6 +71,7 @@ function createMenu() {
               view.setBounds(getViewBounds(contentSize, true));
             }
           },
+          enabled: hasWorkspaces,
         },
         {
           label: 'Find Next',
@@ -76,6 +80,7 @@ function createMenu() {
             const win = mainWindow.get();
             win.send('request-back-find-in-page', true);
           },
+          enabled: hasWorkspaces,
         },
         {
           label: 'Find Previous',
@@ -84,6 +89,7 @@ function createMenu() {
             const win = mainWindow.get();
             win.send('request-back-find-in-page', false);
           },
+          enabled: hasWorkspaces,
         },
       ],
     },
@@ -158,6 +164,7 @@ function createMenu() {
               contents.zoomFactor = 1;
             }
           },
+          enabled: hasWorkspaces,
         },
         {
           label: 'Zoom In',
@@ -178,6 +185,7 @@ function createMenu() {
               contents.zoomFactor += 0.1;
             }
           },
+          enabled: hasWorkspaces,
         },
         {
           label: 'Zoom Out',
@@ -198,6 +206,7 @@ function createMenu() {
               contents.zoomFactor -= 0.1;
             }
           },
+          enabled: hasWorkspaces,
         },
         { type: 'separator' },
         {
@@ -217,6 +226,7 @@ function createMenu() {
               win.getBrowserView().webContents.reload();
             }
           },
+          enabled: hasWorkspaces,
         },
         { type: 'separator' },
         {
@@ -232,6 +242,7 @@ function createMenu() {
           label: 'Home',
           accelerator: 'Shift+CmdOrCtrl+H',
           click: () => ipcMain.emit('request-go-home'),
+          enabled: hasWorkspaces,
         },
         {
           label: 'Back',
@@ -245,6 +256,7 @@ function createMenu() {
             }
             ipcMain.emit('request-go-back');
           },
+          enabled: hasWorkspaces,
         },
         {
           label: 'Forward',
@@ -258,6 +270,7 @@ function createMenu() {
             }
             ipcMain.emit('request-go-forward');
           },
+          enabled: hasWorkspaces,
         },
         { type: 'separator' },
         {
@@ -279,6 +292,7 @@ function createMenu() {
               clipboard.writeText(url);
             }
           },
+          enabled: hasWorkspaces,
         },
         { type: 'separator' },
         {
@@ -287,6 +301,7 @@ function createMenu() {
           click: () => {
             goToUrlWindow.show();
           },
+          enabled: hasWorkspaces,
         },
       ],
     },
@@ -443,6 +458,7 @@ function createMenu() {
         createMenu();
       },
       accelerator: 'CmdOrCtrl+Shift+]',
+      enabled: hasWorkspaces,
     },
     {
       label: 'Select Previous Workspace',
@@ -453,6 +469,7 @@ function createMenu() {
         createMenu();
       },
       accelerator: 'CmdOrCtrl+Shift+[',
+      enabled: hasWorkspaces,
     },
     { type: 'separator' },
     {
@@ -461,6 +478,7 @@ function createMenu() {
         const activeWorkspace = getActiveWorkspace();
         editWorkspaceWindow.show(activeWorkspace.id);
       },
+      enabled: hasWorkspaces,
     },
     {
       label: 'Remove Current Workspace',
@@ -468,6 +486,7 @@ function createMenu() {
         const activeWorkspace = getActiveWorkspace();
         ipcMain.emit('request-remove-workspace', null, activeWorkspace.id);
       },
+      enabled: hasWorkspaces,
     },
     { type: 'separator' },
     {
@@ -476,6 +495,7 @@ function createMenu() {
         createWorkspaceView();
         createMenu();
       },
+      visible: Boolean(appJson.url),
     },
     {
       label: 'Add Custom Workspace',

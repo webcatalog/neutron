@@ -98,22 +98,23 @@ const NavigationBar = ({
   onUpdateAddressBarInfo,
   shouldPauseNotifications,
   hasTrafficLights,
+  hasWorkspaces,
 }) => {
   const [addressInputClicked, setAddressInputClicked] = useState(false);
 
   return (
     <div className={classNames(classes.root, hasTrafficLights && classes.rootWithTrafficLights)}>
       <div className={classes.left}>
-        <IconButton aria-label="Go back" className={classes.iconButton} disabled={!canGoBack} onClick={requestGoBack}>
+        <IconButton aria-label="Go back" className={classes.iconButton} disabled={!hasWorkspaces || !canGoBack} onClick={requestGoBack}>
           <ArrowBackIcon className={classes.icon} />
         </IconButton>
-        <IconButton aria-label="Go forward" className={classes.iconButton} disabled={!canGoForward} onClick={requestGoForward}>
+        <IconButton aria-label="Go forward" className={classes.iconButton} disabled={!hasWorkspaces || !canGoForward} onClick={requestGoForward}>
           <ArrowForwardIcon className={classes.icon} />
         </IconButton>
-        <IconButton aria-label="Reload" className={classes.iconButton} onClick={requestReload}>
+        <IconButton aria-label="Reload" className={classes.iconButton} onClick={requestReload} disabled={!hasWorkspaces}>
           <RefreshIcon className={classes.icon} />
         </IconButton>
-        <IconButton aria-label="Go home" className={classes.iconButton} onClick={requestGoHome}>
+        <IconButton aria-label="Go home" className={classes.iconButton} onClick={requestGoHome} disabled={!hasWorkspaces}>
           <HomeIcon className={classes.icon} />
         </IconButton>
       </div>
@@ -122,8 +123,9 @@ const NavigationBar = ({
           classes={{ root: classes.addressBarRoot, input: classes.addressBarInput }}
           placeholder="Search Google or type a URL"
           type="text"
-          value={address}
-          endAdornment={addressEdited && address && (
+          value={hasWorkspaces ? address : ''}
+          disabled={!hasWorkspaces}
+          endAdornment={addressEdited && address && hasWorkspaces && (
             <IconButton
               aria-label="Go"
               className={classes.goButton}
@@ -184,6 +186,7 @@ NavigationBar.propTypes = {
   canGoForward: PropTypes.bool.isRequired,
   classes: PropTypes.object.isRequired,
   hasTrafficLights: PropTypes.bool.isRequired,
+  hasWorkspaces: PropTypes.bool.isRequired,
   onUpdateAddressBarInfo: PropTypes.func.isRequired,
   shouldPauseNotifications: PropTypes.bool.isRequired,
 };
@@ -195,6 +198,7 @@ const mapStateToProps = (state) => ({
   canGoForward: state.general.canGoForward,
   shouldPauseNotifications: state.notifications.pauseNotificationsInfo !== null,
   hasTrafficLights: window.process.platform === 'darwin' && !state.preferences.titleBar && !state.preferences.sidebar,
+  hasWorkspaces: Object.keys(state.workspaces).length > 0,
 });
 
 const actionCreators = {
