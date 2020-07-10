@@ -1,7 +1,7 @@
 {
   "name": "Juli",
   "description": "AppView template for WebCatalog",
-  "version": "8.20.0",
+  "version": "8.21.0-beta",
   "minimumWebCatalogVersion": "22.0.0",
   "engines": {
     "node": ">=12.0.0 <13.0.0"
@@ -21,7 +21,7 @@
   "repository": "https://github.com/atomery/webcatalog",
   "author": "Quang Lam <quang.lam2807@gmail.com>",
   "dependencies": {
-    "@cliqz/adblocker-electron": "1.16.0",
+    "@cliqz/adblocker-electron": "1.16.1",
     "cheerio": "1.0.0-rc.3",
     "darkreader": "4.9.14",
     "electron": "8.4.0",
@@ -76,7 +76,7 @@
     "simplebar": "5.2.1",
     "simplebar-react": "2.2.1",
     "typeface-roboto": "0.0.75",
-    "wait-on": "5.0.1"
+    "wait-on": "5.0.3"
   },
   "homepage": "./",
   "private": true,
