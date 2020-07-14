@@ -35,17 +35,30 @@ const styles = (theme) => ({
     opacity: 1,
   },
   avatar: {
-    height: 32,
-    width: 32,
+    height: 36,
+    width: 36,
     background: theme.palette.common.white,
     borderRadius: 4,
     color: theme.palette.getContrastText(theme.palette.common.white),
-    lineHeight: '32px',
+    lineHeight: '36px',
     textAlign: 'center',
     fontWeight: 500,
     textTransform: 'uppercase',
     border: theme.palette.type === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)',
     overflow: 'hidden',
+  },
+  avatarLarge: {
+    height: 44,
+    width: 44,
+    lineHeight: '44px',
+  },
+  avatarPicture: {
+    height: 36,
+    width: 36,
+  },
+  avatarPictureLarge: {
+    height: 44,
+    width: 44,
   },
   textAvatar: {
     background: theme.palette.type === 'dark' ? theme.palette.common.white : theme.palette.common.black,
@@ -55,10 +68,6 @@ const styles = (theme) => ({
     background: 'transparent',
     border: 'none',
     color: theme.palette.text.primary,
-  },
-  avatarPicture: {
-    height: 32,
-    width: 32,
   },
   shortcutText: {
     marginTop: 2,
@@ -84,6 +93,7 @@ const WorkspaceSelector = ({
   onContextMenu,
   order,
   picturePath,
+  sidebarShortcutHints,
   transparentBackground,
 }) => (
   <div
@@ -102,16 +112,25 @@ const WorkspaceSelector = ({
       <div
         className={classNames(
           classes.avatar,
+          !sidebarShortcutHints && classes.avatarLarge,
           (id === 'add' || !picturePath) && classes.textAvatar,
           transparentBackground && classes.transparentAvatar,
         )}
       >
         {picturePath ? (
-          <img alt="Icon" className={classes.avatarPicture} src={`file://${picturePath}`} draggable={false} />
+          <img
+            alt="Icon"
+            className={classNames(
+              classes.avatarPicture,
+              !sidebarShortcutHints && classes.avatarPictureLarge,
+            )}
+            src={`file://${picturePath}`}
+            draggable={false}
+          />
         ) : getAvatarText(id, name, order)}
       </div>
     </Badge>
-    {(id === 'add' || order < 9) && (
+    {sidebarShortcutHints && (id === 'add' || order < 9) && (
       <p className={classes.shortcutText}>{id === 'add' ? 'Add' : `${window.process.platform === 'darwin' ? '⌘' : 'Ctrl'} + ${order + 1}`}</p>
     )}
   </div>
@@ -139,11 +158,13 @@ WorkspaceSelector.propTypes = {
   onContextMenu: PropTypes.func,
   order: PropTypes.number,
   picturePath: PropTypes.string,
+  sidebarShortcutHints: PropTypes.bool.isRequired,
   transparentBackground: PropTypes.bool,
 };
 
 const mapStateToProps = (state, ownProps) => ({
   badgeCount: state.workspaceMetas[ownProps.id] ? state.workspaceMetas[ownProps.id].badgeCount : 0,
+  sidebarShortcutHints: state.preferences.sidebarShortcutHints,
 });
 
 export default connectComponent(

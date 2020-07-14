@@ -62,6 +62,7 @@ const defaultPreferences = {
   rememberLastPageVisited: false,
   shareWorkspaceBrowsingData: false,
   sidebar: !appJson.url || Boolean(MAILTO_URLS[extractHostname(appJson.url)]),
+  sidebarShortcutHints: true,
   spellcheck: true,
   spellcheckLanguages: ['en-US'],
   swipeToNavigate: true,
