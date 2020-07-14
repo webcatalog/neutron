@@ -27,9 +27,13 @@ const { isPreferenceUnset } = require('./preferences');
 
 const mainWindow = require('../windows/main');
 
+const sendToAllWindows = require('./send-to-all-windows');
+
+const appJson = require('../app.json');
+
 // isRecreate: whether workspace is created to replace another workspace
 const createWorkspaceView = (name, homeUrl, picture, transparentBackground) => {
-  const newWorkspace = createWorkspace(name, homeUrl, picture, transparentBackground);
+  const newWorkspace = createWorkspace(name, homeUrl, transparentBackground);
   setActiveWorkspace(newWorkspace.id);
 
   addView(mainWindow.get(), getWorkspace(newWorkspace.id));
@@ -88,11 +92,15 @@ const setActiveWorkspaceView = (id) => {
 };
 
 const removeWorkspaceView = (id) => {
+  // if there's only one workspace left, clear all
   if (countWorkspaces() === 1) {
-    mainWindow.get().setBrowserView(null);
-  }
-
-  if (getWorkspace(id).active && countWorkspaces() > 1) {
+    const win = mainWindow.get();
+    if (win) {
+      win.setBrowserView(null);
+      win.setTitle(appJson.name);
+      sendToAllWindows('update-title', '');
+    }
+  } else if (countWorkspaces() > 1 && getWorkspace(id).active) {
     setActiveWorkspaceView(getPreviousWorkspace(id).id);
   }
 
