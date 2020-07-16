@@ -112,7 +112,10 @@ const createWorkspace = (name, homeUrl, transparentBackground) => {
   return newWorkspace;
 };
 
-const getActiveWorkspace = () => Object.values(workspaces).find((workspace) => workspace.active);
+const getActiveWorkspace = () => {
+  if (!workspaces) return null;
+  return Object.values(workspaces).find((workspace) => workspace.active);
+};
 
 const setActiveWorkspace = (id) => {
   // deactive the current one
