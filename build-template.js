@@ -1,8 +1,10 @@
 /* eslint-disable no-console */
 const path = require('path');
 const fs = require('fs-extra');
-const packager = require('electron-packager');
 const tmp = require('tmp');
+const builder = require('electron-builder');
+
+const { Arch, Platform } = builder;
 
 const appName = 'Juli';
 const DIST_PATH = path.join(__dirname, 'dist');
@@ -11,16 +13,33 @@ const TEMPLATE_PATH = path.join(DIST_PATH, 'template');
 
 const getDotAppPath = () => {
   if (process.platform === 'darwin') {
-    return path.join(APP_PATH, `${appName}-darwin-x64`, `${appName}.app`);
+    return path.join(APP_PATH, 'mac', `${appName}.app`);
   }
   if (process.platform === 'linux') {
-    return path.join(APP_PATH, `${appName}-linux-x64`);
+    return path.join(APP_PATH, 'linux-unpacked');
   }
   if (process.platform === 'win32') {
-    return path.join(APP_PATH, `${appName}-win32-x64`);
+    return path.join(APP_PATH, 'win-unpacked');
   }
   throw Error('Unsupported platform');
 };
+
+let targets;
+switch (process.platform) {
+  case 'darwin': {
+    targets = Platform.MAC.createTarget(['dir']);
+    break;
+  }
+  case 'win32': {
+    targets = Platform.WINDOWS.createTarget(['dir'], Arch.x64);
+    break;
+  }
+  default:
+  case 'linux': {
+    targets = Platform.LINUX.createTarget(['dir'], Arch.x64);
+    break;
+  }
+}
 
 Promise.resolve()
   .then(() => fs.remove(DIST_PATH))
@@ -28,100 +47,32 @@ Promise.resolve()
   .then(() => {
     console.log('Creating Juli app at', APP_PATH);
 
-    const asarUnpackedFiles = ['app.json', 'icon.png', 'icon.ico', 'package.json'];
-
     const opts = {
-      name: appName,
-      appBundleId: 'com.webcatalog.juli',
-      platform: process.platform,
-      dir: path.resolve(__dirname),
-      out: APP_PATH,
-      overwrite: true,
-      prune: true,
-      osxSign: false,
-      darwinDarkModeSupport: true,
-      tmpdir: false,
-      ignore: [
-        '.*\\.cc$',
-        '.*\\.cpp$',
-        '.*\\.csproj$',
-        '.*\\.cxx$',
-        '.*\\.h$',
-        '.*\\.hprof$',
-        '.*\\.hxx$',
-        '.*\\.iml$',
-        '.*\\.map$',
-        '.*\\.md$',
-        '.*\\.mm$',
-        '.*\\.o$',
-        '.*\\.orig$',
-        '.*\\.pyc$',
-        '.*\\.pyo$',
-        '.*\\.rbc$',
-        '.*\\.sln$',
-        '.*\\.sublime-workspace$',
-        '.*\\.swp$',
-        '.*\\.ts$',
-        '.*\\.txt$',
-        '.*\\.xproj$',
-        '.*\\.yml$',
-        '\\.DS_Store$',
-        '\\._.*$',
-        '\\.babelrc$',
-        '\\.editorconfig$',
-        '\\.eslintrc$',
-        '\\.flowconfig$',
-        '\\.git$',
-        '\\.gitattributes$',
-        '\\.github$',
-        '\\.gitignore$',
-        '\\.hg$',
-        '\\.idea$',
-        '\\.jshintrc$',
-        '\\.npmignore$',
-        '\\.nyc_output$',
-        '\\.svn$',
-        '\\.vs$',
-        '\\.yarn-integrity$',
-        '\\.yarn-metadata\\.json',
-        'CVS',
-        'LICENSE',
-        'RCS',
-        'README',
-        'README\\..*',
-        'SCCS',
-        '__pycache__',
-        '__tests__',
-        'example',
-        'examples',
-        'license',
-        'npm-debug\\.log',
-        'patches',
-        'powered-test',
-        'readme',
-        'readme\\..*',
-        'test',
-        'tests',
-        'thumbs\\.db',
-        'yarn\\.lock',
-        'node_modules/\\.bin',
-        'node_modules/\\.cache',
-        'node_modules/image-q/demo',
-
-        '^/dist',
-        '^/patches',
-        '^/public',
-        '^/src',
-        '^/template.*\\.json',
-        '^/template.*\\.zip',
-        'docs',
-      ],
-      asar: {
-        unpack: `{${asarUnpackedFiles.join(',')}}`,
+      targets,
+      config: {
+        directories: {
+          output: APP_PATH,
+        },
+        productName: appName,
+        appId: 'com.webcatalog.juli',
+        files: [
+          '!docs/**/*',
+          '!template/**/*',
+          '!patches/**/*',
+          '!template*.zip',
+          '!template*.json',
+          // heavy demo files
+          '!node_modules/image-q/demo/**/*',
+          // other files
+          '!**/*/*.ts',
+          '!**/*/*.map',
+          '!**/*/.DS_Store',
+        ],
+        asarUnpack: ['app.json', 'icon.png', 'icon.ico', 'package.json'],
       },
     };
 
-    return packager(opts);
+    return builder.build(opts);
   })
   .then(() => {
     // copy all neccessary to unpacked folder
