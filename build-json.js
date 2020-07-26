@@ -5,9 +5,9 @@ const hasha = require('hasha');
 
 const packageJson = require('./package.json');
 
-const name = `template-${process.platform}-x64.zip`;
-const TEMPLATE_ZIP_PATH = path.resolve(__dirname, name);
-const TEMPLATE_JSON_PATH = path.resolve(__dirname, `template-${process.platform}-x64.json`);
+const zipFileName = `template-${process.platform}-x64.zip`;
+const TEMPLATE_ZIP_PATH = path.join(__dirname, zipFileName);
+const TEMPLATE_JSON_PATH = path.join(__dirname, `template-${process.platform}-x64.json`);
 
 Promise.resolve()
   .then(() => {
@@ -26,8 +26,8 @@ Promise.resolve()
       version,
       minimumWebCatalogVersion,
       sha256,
-      name,
-      downloadUrl: `https://github.com/atomery/juli/releases/download/v${version}/${name}`,
+      zipFileName,
+      downloadUrl: `https://github.com/atomery/juli/releases/download/v${version}/${zipFileName}`,
     });
   })
   .then(() => {
