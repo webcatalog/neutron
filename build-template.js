@@ -68,7 +68,14 @@ Promise.resolve()
           '!**/*/*.map',
           '!**/*/.DS_Store',
         ],
-        asarUnpack: ['app.json', 'icon.png', 'icon.ico', 'package.json'],
+        asarUnpack: [
+          'build/app.json',
+          'build/icon.png',
+          'build/icon.ico',
+          'build/menubar-icon.png',
+          'build/menubar-icon@2x.png',
+          'package.json',
+        ],
       },
     };
 
@@ -95,8 +102,24 @@ Promise.resolve()
         path.join(TEMPLATE_PATH, 'app.asar.unpacked'),
       ),
       fs.copy(
-        path.join(__dirname, 'node_modules', 'electron'),
-        path.join(TEMPLATE_PATH, 'node_modules', 'electron'),
+        path.join(__dirname, 'node_modules', 'electron', 'dist'),
+        path.join(TEMPLATE_PATH, 'node_modules', 'electron', 'dist'),
+      ),
+      fs.copy(
+        path.join(__dirname, 'node_modules', 'electron', 'package.json'),
+        path.join(TEMPLATE_PATH, 'node_modules', 'electron', 'package.json'),
+      ),
+      fs.copy(
+        path.join(__dirname, 'node_modules', 'electron', 'index.js'),
+        path.join(TEMPLATE_PATH, 'node_modules', 'electron', 'index.js'),
+      ),
+      fs.copy(
+        path.join(__dirname, 'node_modules', 'electron', 'path.txt'),
+        path.join(TEMPLATE_PATH, 'node_modules', 'electron', 'path.txt'),
+      ),
+      fs.copy(
+        path.join(__dirname, 'node_modules', 'electron', 'LICENSE'),
+        path.join(TEMPLATE_PATH, 'node_modules', 'electron', 'LICENSE'),
       ),
     ];
 
