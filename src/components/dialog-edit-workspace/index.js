@@ -177,6 +177,7 @@ const EditWorkspace = ({
           <Button
             variant="outlined"
             size="small"
+            disabled={downloadingIcon}
             onClick={() => {
               const opts = {
                 properties: ['openFile'],
@@ -203,7 +204,7 @@ const EditWorkspace = ({
             variant="outlined"
             size="small"
             className={classes.buttonBot}
-            disabled={Boolean(homeUrlError || downloadingIcon)}
+            disabled={Boolean(homeUrl || homeUrlError || downloadingIcon)}
             onClick={() => onGetIconFromInternet(true)}
           >
             {downloadingIcon ? 'Downloading Icon from the Internet...' : 'Download Icon from the Internet'}
@@ -213,7 +214,7 @@ const EditWorkspace = ({
             size="small"
             className={classes.buttonBot}
             onClick={() => onUpdateForm({ picturePath: null, internetIcon: null })}
-            disabled={!(picturePath || internetIcon)}
+            disabled={!(picturePath || internetIcon) || downloadingIcon}
           >
             Reset to Default
           </Button>

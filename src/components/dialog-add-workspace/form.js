@@ -169,6 +169,7 @@ const AddWorkspaceCustom = ({
           <Button
             variant="outlined"
             size="small"
+            disabled={downloadingIcon}
             onClick={() => {
               const { remote } = window.require('electron');
               const opts = {
@@ -195,7 +196,7 @@ const AddWorkspaceCustom = ({
             size="small"
             className={classes.buttonBot}
             disabled={!homeUrl || homeUrlError || downloadingIcon}
-            onClick={() => onGetIconFromInternet(true)}
+            onClick={() => onGetIconFromInternet()}
           >
             {downloadingIcon ? 'Downloading Icon...' : 'Download Icon from the Internet'}
           </Button>
@@ -205,7 +206,7 @@ const AddWorkspaceCustom = ({
             size="small"
             className={classes.buttonBot}
             onClick={() => onUpdateForm({ picturePath: null, internetIcon: null })}
-            disabled={!(picturePath || internetIcon)}
+            disabled={!(picturePath || internetIcon) || downloadingIcon}
           >
             Reset to Default
           </Button>
