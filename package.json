@@ -1,7 +1,7 @@
 {
   "name": "Juli",
   "description": "AppView template for WebCatalog",
-  "version": "8.22.2",
+  "version": "9.0.0-alpha",
   "minimumWebCatalogVersion": "23.0.0",
   "engines": {
     "node": ">=12.0.0 <13.0.0"
@@ -16,7 +16,7 @@
     "start": "react-scripts start",
     "electron-dev": "concurrently \"cross-env BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\" -k",
     "build-json": "node build-json.js",
-    "build-template": "CSC_IDENTITY_AUTO_DISCOVERY=false node build-template.js",
+    "build-template": "cross-env CSC_IDENTITY_AUTO_DISCOVERY=false node build-template.js",
     "build-zip": "7z a -mm=Deflate -mx=9 -r dist/template.zip dist/template/.",
     "dist": "yarn build && yarn build-template && yarn build-zip && yarn build-json"
   },
