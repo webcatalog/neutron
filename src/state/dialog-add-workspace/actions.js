@@ -119,9 +119,9 @@ export const getWebsiteIconUrlAsync = (url) => new Promise((resolve, reject) => 
   }
 });
 
-export const getIconFromInternet = (forceOverwrite) => (dispatch, getState) => {
-  const { form: { picturePath, homeUrl, homeUrlError } } = getState().dialogAddWorkspace;
-  if ((!forceOverwrite && picturePath) || !homeUrl || homeUrlError) return;
+export const getIconFromInternet = () => (dispatch, getState) => {
+  const { form: { homeUrl, homeUrlError } } = getState().dialogAddWorkspace;
+  if (!homeUrl || homeUrlError) return;
 
   dispatch({
     type: ADD_WORKSPACE_UPDATE_DOWNLOADING_ICON,
@@ -133,7 +133,6 @@ export const getIconFromInternet = (forceOverwrite) => (dispatch, getState) => {
       const { form } = getState().dialogAddWorkspace;
       if (form.homeUrl === homeUrl) {
         const changes = { internetIcon: iconUrl || form.internetIcon };
-        if (forceOverwrite) changes.picturePath = null;
         dispatch(({
           type: ADD_WORKSPACE_UPDATE_FORM,
           changes,
@@ -144,7 +143,7 @@ export const getIconFromInternet = (forceOverwrite) => (dispatch, getState) => {
         });
       }
 
-      if (forceOverwrite && !iconUrl) {
+      if (!iconUrl) {
         const { remote } = window.require('electron');
         return remote.dialog.showMessageBox(remote.getCurrentWindow(), {
           message: 'Unable to find a suitable icon from the Internet.',
@@ -158,22 +157,10 @@ export const getIconFromInternet = (forceOverwrite) => (dispatch, getState) => {
     }).catch(console.log); // eslint-disable-line no-console
 };
 
-let timeout2;
-export const updateForm = (changes) => (dispatch, getState) => {
-  const oldHomeUrl = getState().dialogAddWorkspace.form.homeUrl;
-
-  dispatch({
-    type: ADD_WORKSPACE_UPDATE_FORM,
-    changes: validate(changes, getValidationRules()),
-  });
-
-  clearTimeout(timeout2);
-  if (getState().dialogAddWorkspace.form.homeUrl === oldHomeUrl) return; // url didn't change
-  if (changes.internetIcon === null) return; // user explictly want to get rid of icon
-  timeout2 = setTimeout(() => {
-    dispatch(getIconFromInternet());
-  }, 300);
-};
+export const updateForm = (changes) => ({
+  type: ADD_WORKSPACE_UPDATE_FORM,
+  changes: validate(changes, getValidationRules()),
+});
 
 export const save = () => (dispatch, getState) => {
   const { form } = getState().dialogAddWorkspace;
