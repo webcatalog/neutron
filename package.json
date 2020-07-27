@@ -2,7 +2,7 @@
   "name": "Juli",
   "description": "AppView template for WebCatalog",
   "version": "8.22.2",
-  "minimumWebCatalogVersion": "22.0.0",
+  "minimumWebCatalogVersion": "23.0.0",
   "engines": {
     "node": ">=12.0.0 <13.0.0"
   },
@@ -57,7 +57,7 @@
     "cross-env": "7.0.2",
     "date-fns": "2.15.0",
     "electron": "8.4.1",
-    "electron-builder": "22.7.0",
+    "electron-builder": "22.8.0",
     "eslint": "6.8.0",
     "eslint-config-airbnb": "18.2.0",
     "eslint-plugin-import": "2.22.0",

@@ -6,14 +6,15 @@ const hasha = require('hasha');
 const packageJson = require('./package.json');
 
 const zipFileName = `template-${process.platform}-x64.zip`;
-const TEMPLATE_ZIP_PATH = path.join(__dirname, zipFileName);
-const TEMPLATE_JSON_PATH = path.join(__dirname, `template-${process.platform}-x64.json`);
+const DIST_PATH = path.join(__dirname, 'dist');
+const TEMPLATE_ZIP_PATH = path.join(DIST_PATH, zipFileName);
+const TEMPLATE_JSON_PATH = path.join(DIST_PATH, `template-${process.platform}-x64.json`);
 
 Promise.resolve()
   .then(() => {
     if (!fs.existsSync(TEMPLATE_ZIP_PATH)) {
       console.log(`Preparing ${TEMPLATE_ZIP_PATH}...`);
-      return fs.move(path.resolve(__dirname, 'template.zip'), TEMPLATE_ZIP_PATH);
+      return fs.move(path.resolve(DIST_PATH, 'template.zip'), TEMPLATE_ZIP_PATH);
     }
     return null;
   })
