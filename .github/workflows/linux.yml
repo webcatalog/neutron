@@ -46,7 +46,7 @@ jobs:
       with:
         draft: true
         files: |
-          template-linux-x64.json
-          template-linux-x64.zip
+          dist/template-linux-x64.json
+          dist/template-linux-x64.zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -43,7 +43,7 @@ jobs:
       with:
         draft: true
         files: |
-          template-darwin-x64.json
-          template-darwin-x64.zip
+          dist/template-darwin-x64.json
+          dist/template-darwin-x64.zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
