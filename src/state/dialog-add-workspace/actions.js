@@ -100,7 +100,7 @@ const getValidationRules = () => ({
   homeUrl: {
     fieldName: 'Home URL',
     required: true,
-    url: true,
+    lessStrictUrl: true,
   },
 });
 
