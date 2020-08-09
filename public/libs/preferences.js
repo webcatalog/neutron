@@ -30,6 +30,7 @@ const v = '2018.2';
 
 const defaultPreferences = {
   allowNodeInJsCodeInjection: false,
+  allowPrerelease: false,
   askForDownloadPath: true,
   attachToMenubar: false,
   autoCheckForUpdates: true,

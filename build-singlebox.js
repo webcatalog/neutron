@@ -81,6 +81,13 @@ const opts = {
       ...filesToBeReplaced.map((fileName) => path.join('build', fileName)),
       'package.json',
     ],
+    publish: [
+      {
+        provider: 'github',
+        owner: 'atomery',
+        repo: 'singlebox',
+      },
+    ],
     protocols: [
       {
         name: 'HTTPS Protocol',
@@ -116,7 +123,11 @@ const opts = {
           provider: 'snapStore',
           channels: [semver.prerelease(packageJson.version) ? 'edge' : 'stable'],
         },
-        'github',
+        {
+          provider: 'github',
+          owner: 'atomery',
+          repo: 'singlebox',
+        },
       ],
     },
     afterPack: (context) => {

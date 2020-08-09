@@ -18,6 +18,7 @@ import {
 import {
   updatePauseNotificationsInfo,
 } from '../state/notifications/actions';
+import { updateUpdater } from '../state/updater/actions';
 
 import {
   getShouldUseDarkColors,
@@ -111,6 +112,10 @@ const loadListeners = (store) => {
 
   ipcRenderer.on('is-fullscreen-updated', (e, val) => {
     store.dispatch(updateIsFullScreen(val));
+  });
+
+  ipcRenderer.on('update-updater', (e, updaterObj) => {
+    store.dispatch(updateUpdater(updaterObj));
   });
 };
 

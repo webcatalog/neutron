@@ -1,8 +1,8 @@
 const { ipcRenderer } = window.require('electron');
 
 export const requestOpenInBrowser = (url) => ipcRenderer.send('request-open-in-browser', url);
-
 export const requestLoadUrl = (url, id) => ipcRenderer.send('request-load-url', url, id);
+export const requestShowMessageBox = (message, type) => ipcRenderer.send('request-show-message-box', message, type);
 
 export const requestGoHome = () => ipcRenderer.send('request-go-home');
 export const requestGoBack = () => ipcRenderer.send('request-go-back');
@@ -14,10 +14,11 @@ export const requestCheckForUpdates = () => ipcRenderer.send('request-check-for-
 
 export const requestShowAboutWindow = () => ipcRenderer.send('request-show-about-window');
 export const requestShowAddWorkspaceWindow = () => ipcRenderer.send('request-show-add-workspace-window');
-export const requestShowPreferencesWindow = (scrollTo) => ipcRenderer.send('request-show-preferences-window', scrollTo);
-export const requestShowEditWorkspaceWindow = (id) => ipcRenderer.send('request-show-edit-workspace-window', id);
 export const requestShowCodeInjectionWindow = (type) => ipcRenderer.send('request-show-code-injection-window', type);
+export const requestShowEditWorkspaceWindow = (id) => ipcRenderer.send('request-show-edit-workspace-window', id);
+export const requestShowLicenseRegistrationWindow = () => ipcRenderer.send('request-show-license-registration-window');
 export const requestShowNotificationsWindow = () => ipcRenderer.send('request-show-notifications-window');
+export const requestShowPreferencesWindow = (scrollTo) => ipcRenderer.send('request-show-preferences-window', scrollTo);
 export const requestShowProxyWindow = () => ipcRenderer.send('request-show-proxy-window');
 export const requestShowSpellcheckLanguagesWindow = () => ipcRenderer.send('request-show-spellcheck-languages-window');
 

@@ -11,11 +11,14 @@ const aboutWindow = require('../windows/about');
 const addWorkspaceWindow = require('../windows/add-workspace');
 const editWorkspaceWindow = require('../windows/edit-workspace');
 const goToUrlWindow = require('../windows/go-to-url');
+const licenseRegistrationWindow = require('../windows/license-registration');
 const mainWindow = require('../windows/main');
 const notificationsWindow = require('../windows/notifications');
 const preferencesWindow = require('../windows/preferences');
 
 const getViewBounds = require('./get-view-bounds');
+const formatBytes = require('./format-bytes');
+const { getPreference } = require('./preferences');
 
 const {
   getWorkspaces,
@@ -33,11 +36,11 @@ const {
   getView,
 } = require('./views');
 
-const fetchUpdater = require('./fetch-updater');
-
 function createMenu() {
   const workspaces = getWorkspaces();
   const hasWorkspaces = Object.keys(workspaces).length > 0;
+  const registered = getPreference('registered');
+  const updaterEnabled = process.env.SNAP == null && !process.mas && !process.windowsStore;
 
   const template = [
     {
@@ -349,6 +352,25 @@ function createMenu() {
     },
   ];
 
+  const updaterMenuItem = {
+    label: 'Check for Updates...',
+    click: () => ipcMain.emit('request-check-for-updates'),
+    visible: updaterEnabled,
+  };
+  if (global.updaterObj && global.updaterObj.status === 'update-downloaded') {
+    updaterMenuItem.label = 'Restart to Apply Updates...';
+  } else if (global.updaterObj && global.updaterObj.status === 'update-available') {
+    updaterMenuItem.label = 'Downloading Updates...';
+    updaterMenuItem.enabled = false;
+  } else if (global.updaterObj && global.updaterObj.status === 'download-progress') {
+    const { transferred, total, bytesPerSecond } = global.updaterObj.info;
+    updaterMenuItem.label = `Downloading Updates (${formatBytes(transferred)}/${formatBytes(total)} at ${formatBytes(bytesPerSecond)}/s)...`;
+    updaterMenuItem.enabled = false;
+  } else if (global.updaterObj && global.updaterObj.status === 'checking-for-update') {
+    updaterMenuItem.label = 'Checking for Updates...';
+    updaterMenuItem.enabled = false;
+  }
+
   if (process.platform === 'darwin') {
     template.unshift({
       label: appJson.name,
@@ -359,10 +381,20 @@ function createMenu() {
         },
         { type: 'separator' },
         {
-          label: 'Check for Updates...',
-          click: () => fetchUpdater.checkForUpdates(),
+          label: registered ? 'Registered' : 'Registration...',
+          enabled: !registered,
+          click: registered ? null : () => licenseRegistrationWindow.show(),
+          visible: appJson.id === 'singlebox',
         },
-        { type: 'separator' },
+        {
+          type: 'separator',
+          visible: appJson.id === 'singlebox',
+        },
+        updaterMenuItem,
+        {
+          type: 'separator',
+          visible: updaterEnabled,
+        },
         {
           label: 'Preferences...',
           accelerator: 'CmdOrCtrl+,',
@@ -398,11 +430,22 @@ function createMenu() {
           label: 'About',
           click: () => aboutWindow.show(),
         },
-        {
-          label: 'Check for Updates...',
-          click: () => fetchUpdater.checkForUpdates(),
-        },
         { type: 'separator' },
+        {
+          label: registered ? 'Registered' : 'Registration...',
+          enabled: !registered,
+          click: registered ? null : () => licenseRegistrationWindow.show(),
+          visible: appJson.id === 'singlebox',
+        },
+        {
+          type: 'separator',
+          visible: appJson.id === 'singlebox',
+        },
+        updaterMenuItem,
+        {
+          type: 'separator',
+          visible: updaterEnabled,
+        },
         {
           label: 'Preferences...',
           accelerator: 'CmdOrCtrl+,',
