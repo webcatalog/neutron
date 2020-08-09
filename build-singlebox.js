@@ -146,6 +146,12 @@ const opts = {
           return Promise.all(p);
         })
         .then(() => {
+          const packageJsonPath = path.join(asarUnpackedDirPath, 'package.json');
+          const packageJsonContent = fs.readJSONSync(packageJsonPath);
+          packageJsonContent.name = 'Singlebox';
+          return fs.writeJSON(packageJsonPath, packageJsonContent);
+        })
+        .then(() => {
           console.log('Configured Singlebox successfully.');
         });
     },
