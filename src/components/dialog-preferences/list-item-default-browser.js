@@ -15,6 +15,7 @@ const ListItemDefaultBrowser = () => {
   const { remote } = window.require('electron');
   const appJson = remote.getGlobal('appJson');
   const [isDefault, setIsDefault] = useState(false);
+  const appId = appJson.id === 'singlebox' ? 'Singlebox' : `webcatalog-${appJson.id}`;
 
   const isWindows10 = window.process.platform === 'win32' && semver.gt(window.require('electron').remote.require('os').release(), '10.0.0');
 
@@ -28,7 +29,7 @@ const ListItemDefaultBrowser = () => {
         const userChoicePath = `HKCU\\SOFTWARE\\Microsoft\\Windows\\Shell\\Associations\\URLAssociations\\${protocolName}\\UserChoice`;
         window.require('electron').remote.require('regedit').list([userChoicePath], (err, result) => {
           try {
-            setIsDefault(!err && result[userChoicePath].values.ProgId.value === `webcatalog-${appJson.id}`);
+            setIsDefault(!err && result[userChoicePath].values.ProgId.value === appId);
           } catch (tryErr) {
             // eslint-disable-next-line no-console
             console.log(tryErr);
@@ -40,7 +41,7 @@ const ListItemDefaultBrowser = () => {
 
       setIsDefault(window.require('electron').remote.app.isDefaultProtocolClient('http'));
     },
-    [isWindows10, appJson.id],
+    [isWindows10, appId],
   );
 
   // recheck every 1 minutes

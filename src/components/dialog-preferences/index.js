@@ -61,6 +61,7 @@ import hunspellLanguagesMap from '../../constants/hunspell-languages';
 import webcatalogIconPng from '../../images/webcatalog-icon.png';
 import translatiumIconPng from '../../images/translatium-icon.png';
 import singleboxIconPng from '../../images/singlebox-icon.png';
+import switchbarIconPng from '../../images/switchbar-icon.png';
 
 import ListItemDefaultMailClient from './list-item-default-mail-client';
 import ListItemDefaultBrowser from './list-item-default-browser';
@@ -1244,6 +1245,29 @@ const Preferences = ({
                     </Typography>
                     <Typography variant="body2" color="textSecondary">
                       All Your Apps in One Single Window
+                    </Typography>
+                  </div>
+                </div>
+              </div>
+              <ChevronRightIcon color="action" />
+            </ListItem>
+            <Divider />
+            <ListItem
+              button
+              onClick={() => requestOpenInBrowser('https://atomery.com/switchbar?utm_source=webcatalog_app')}
+              className={classes.listItemPromotion}
+            >
+              <div className={classes.promotionBlock}>
+                <div className={classes.promotionLeft}>
+                  <img src={switchbarIconPng} alt="Switchbar" className={classes.appIcon} />
+                </div>
+                <div className={classes.promotionRight}>
+                  <div>
+                    <Typography variant="body1" className={classes.appTitle}>
+                      Switchbar
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      Open Every Link in the Right App
                     </Typography>
                   </div>
                 </div>
