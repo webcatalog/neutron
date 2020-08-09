@@ -58,7 +58,7 @@ const {
 
 const createMenu = require('../libs/create-menu');
 const sendToAllWindows = require('../libs/send-to-all-windows');
-const { checkForUpdates } = require('../libs/updater');
+const fetchUpdater = require('../libs/fetch-updater');
 const getWebsiteIconUrlAsync = require('../libs/get-website-icon-url-async');
 const getViewBounds = require('../libs/get-view-bounds');
 
@@ -412,7 +412,7 @@ const loadListeners = () => {
   });
 
   ipcMain.on('request-check-for-updates', () => {
-    checkForUpdates();
+    fetchUpdater.checkForUpdates();
   });
 
   ipcMain.on('request-show-display-media-window', (e) => {

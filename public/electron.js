@@ -17,7 +17,7 @@ const openUrlWithWindow = require('./windows/open-url-with');
 
 const createMenu = require('./libs/create-menu');
 const { addView, reloadViewsDarkReader } = require('./libs/views');
-const { checkForUpdates } = require('./libs/updater');
+const fetchUpdater = require('./libs/fetch-updater');
 const { setPreference, getPreference, getPreferences } = require('./libs/preferences');
 const { getWorkspaces, setWorkspace } = require('./libs/workspaces');
 const sendToAllWindows = require('./libs/send-to-all-windows');
@@ -45,6 +45,8 @@ if (!gotTheLock) {
   // eslint-disable-next-line
   app.quit();
 } else {
+  app.setName(appJson.name);
+
   // make sure "Settings" file exists
   // if not, ignore this chunk of code
   // as using electron-settings before app.on('ready') and "Settings" is created
@@ -193,7 +195,7 @@ if (!gotTheLock) {
       const updateInterval = 7 * 24 * 60 * 60 * 1000; // one week
       const now = Date.now();
       if (now - lastCheckForUpdates > updateInterval) {
-        checkForUpdates(true);
+        fetchUpdater.checkForUpdates(true);
         setPreference('lastCheckForUpdates', now);
       }
     }

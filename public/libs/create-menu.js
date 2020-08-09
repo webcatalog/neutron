@@ -33,9 +33,7 @@ const {
   getView,
 } = require('./views');
 
-const {
-  checkForUpdates,
-} = require('./updater');
+const fetchUpdater = require('./fetch-updater');
 
 function createMenu() {
   const workspaces = getWorkspaces();
@@ -362,7 +360,7 @@ function createMenu() {
         { type: 'separator' },
         {
           label: 'Check for Updates...',
-          click: () => checkForUpdates(),
+          click: () => fetchUpdater.checkForUpdates(),
         },
         { type: 'separator' },
         {
@@ -402,7 +400,7 @@ function createMenu() {
         },
         {
           label: 'Check for Updates...',
-          click: () => checkForUpdates(),
+          click: () => fetchUpdater.checkForUpdates(),
         },
         { type: 'separator' },
         {

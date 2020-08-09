@@ -71,7 +71,6 @@ Promise.resolve()
         asarUnpack: [
           'build/app.json',
           'build/icon.png',
-          'build/icon.ico',
           'build/menubar-icon.png',
           'build/menubar-icon@2x.png',
           'package.json',
