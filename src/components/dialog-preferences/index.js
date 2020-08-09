@@ -1207,7 +1207,7 @@ const Preferences = ({
           <List disablePadding dense>
             <ListItem
               button
-              onClick={() => requestOpenInBrowser('https://webcatalogapp.com?utm_source=singlebox_app')}
+              onClick={() => requestOpenInBrowser('https://atomery.com/webcataog?utm_source=singlebox_app')}
               className={classes.listItemPromotion}
             >
               <div className={classes.promotionBlock}>
@@ -1230,7 +1230,7 @@ const Preferences = ({
             <Divider />
             <ListItem
               button
-              onClick={() => requestOpenInBrowser('https://singleboxapp.com?utm_source=singlebox_app')}
+              onClick={() => requestOpenInBrowser('https://atomery.com/singlebox?utm_source=singlebox_app')}
               className={classes.listItemPromotion}
             >
               <div className={classes.promotionBlock}>
@@ -1253,7 +1253,7 @@ const Preferences = ({
             <Divider />
             <ListItem
               button
-              onClick={() => requestOpenInBrowser('https://translatiumapp.com?utm_source=singlebox_app')}
+              onClick={() => requestOpenInBrowser('https://atomery.com/translatium?utm_source=singlebox_app')}
               className={classes.listItemPromotion}
             >
               <div className={classes.promotionBlock}>
@@ -1286,16 +1286,33 @@ const Preferences = ({
               <ChevronRightIcon color="action" />
             </ListItem>
             <Divider />
-            <ListItem button onClick={() => requestOpenInBrowser('https://webcatalogapp.com?utm_source=webcatalog_app')}>
-              <ListItemText primary="WebCatalog Website" />
-              <ChevronRightIcon color="action" />
-            </ListItem>
-            <Divider />
-            <ListItem button onClick={() => requestOpenInBrowser('https://atomery.com/support?app=webcatalog&utm_source=webcatalog_app')}>
-              <ListItemText primary="WebCatalog Support" />
-              <ChevronRightIcon color="action" />
-            </ListItem>
-            <Divider />
+            {appJson.id === 'singlebox' ? (
+              <>
+                <ListItem button onClick={() => requestOpenInBrowser('https://atomery.com/singlebox?utm_source=singlebox_app')}>
+                  <ListItemText primary="Website" />
+                  <ChevronRightIcon color="action" />
+                </ListItem>
+                <Divider />
+                <ListItem button onClick={() => requestOpenInBrowser('https://atomery.com/support?app=singlebox&utm_source=singlebox_app')}>
+                  <ListItemText primary="Support" />
+                  <ChevronRightIcon color="action" />
+                </ListItem>
+                <Divider />
+              </>
+            ) : (
+              <>
+                <ListItem button onClick={() => requestOpenInBrowser('https://atomery.com/webcataog?utm_source=webcatalog_app')}>
+                  <ListItemText primary="WebCatalog Website" />
+                  <ChevronRightIcon color="action" />
+                </ListItem>
+                <Divider />
+                <ListItem button onClick={() => requestOpenInBrowser('https://atomery.com/support?app=webcatalog&utm_source=webcatalog_app')}>
+                  <ListItemText primary="WebCatalog Support" />
+                  <ChevronRightIcon color="action" />
+                </ListItem>
+                <Divider />
+              </>
+            )}
             <ListItem button onClick={requestQuit}>
               <ListItemText primary="Quit" />
               <ChevronRightIcon color="action" />

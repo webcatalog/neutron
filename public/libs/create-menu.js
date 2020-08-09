@@ -339,14 +339,35 @@ function createMenu() {
     },
     {
       role: 'help',
-      submenu: [
+      submenu: appJson.id === 'singlebox' ? [
+        {
+          label: 'Singlebox Support',
+          click: () => shell.openExternal('https://atomery.com/support?app=singlebox'),
+        },
+        {
+          label: 'Report a Bug via GitHub...',
+          click: () => shell.openExternal('https://github.com/atomery/singlebox/issues'),
+        },
+        {
+          label: 'Request a New Feature via GitHub...',
+          click: () => shell.openExternal('https://github.com/atomery/singlebox/issues/new?template=feature.md&title=feature%3A+'),
+        },
+        {
+          label: 'Submit New App to Catalog...',
+          click: () => shell.openExternal('https://github.com/atomery/catalog/issues'),
+        },
+        {
+          label: 'Learn More...',
+          click: () => shell.openExternal('https://atomery.com/singlebox'),
+        },
+      ] : [
         {
           label: 'WebCatalog Support',
-          click: () => shell.openExternal('https://webcatalogapp.com/support'),
+          click: () => shell.openExternal('https://atomery.com/webcataog/support'),
         },
         {
           label: 'WebCatalog Website',
-          click: () => shell.openExternal('https://webcatalogapp.com'),
+          click: () => shell.openExternal('https://atomery.com/webcataog'),
         },
       ],
     },

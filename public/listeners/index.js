@@ -252,7 +252,8 @@ const loadListeners = () => {
   });
 
   ipcMain.on('request-create-workspace', (e, name, homeUrl, picture, transparentBackground) => {
-    if (!global.appJson.registered) {
+    const registered = appJson.id === 'singlebox' ? !global.appJson.registered : getPreference('registered');
+    if (!registered) {
       const workspaces = getWorkspaces();
       if (Object.keys(workspaces).length > 1) {
         if (appJson.id === 'singlebox') {
