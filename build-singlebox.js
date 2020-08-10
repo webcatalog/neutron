@@ -58,6 +58,11 @@ switch (process.platform) {
 
 const filesToBeReplaced = fs.readdirSync(path.join(__dirname, 'build-resources-singlebox', 'build'));
 
+const packageJsonPath = path.join(__dirname, 'package.json');
+const packageJsonContent = fs.readJSONSync(packageJsonPath);
+packageJsonContent.name = 'Singlebox';
+fs.writeJSONSync(packageJsonPath, packageJsonContent, { spaces: '  ' });
+
 const opts = {
   targets,
   config: {
@@ -77,10 +82,7 @@ const opts = {
       '!**/*/*.map',
       '!**/*/.DS_Store',
     ],
-    asarUnpack: [
-      ...filesToBeReplaced.map((fileName) => path.join('build', fileName)),
-      'package.json',
-    ],
+    asarUnpack: filesToBeReplaced.map((fileName) => path.join('build', fileName)),
     publish: [
       {
         provider: 'github',
@@ -144,12 +146,6 @@ const opts = {
             path.join(asarUnpackedDirPath, 'build', fileName),
           ));
           return Promise.all(p);
-        })
-        .then(() => {
-          const packageJsonPath = path.join(asarUnpackedDirPath, 'package.json');
-          const packageJsonContent = fs.readJSONSync(packageJsonPath);
-          packageJsonContent.name = 'Singlebox';
-          return fs.writeJSON(packageJsonPath, packageJsonContent);
         })
         .then(() => {
           console.log('Configured Singlebox successfully.');
