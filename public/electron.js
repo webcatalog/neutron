@@ -20,7 +20,7 @@ const createMenu = require('./libs/create-menu');
 const { addView, reloadViewsDarkReader } = require('./libs/views');
 const fetchUpdater = require('./libs/fetch-updater');
 require('./libs/squirrel-updater');
-const { setPreference, getPreference, getPreferences } = require('./libs/preferences');
+const { getPreference, getPreferences } = require('./libs/preferences');
 const { getWorkspaces, setWorkspace } = require('./libs/workspaces');
 const sendToAllWindows = require('./libs/send-to-all-windows');
 const extractHostname = require('./libs/extract-hostname');
@@ -201,13 +201,7 @@ if (!gotTheLock) {
             ipcMain.emit('request-check-for-updates', null, true);
           });
       } else {
-        const lastCheckForUpdates = getPreference('lastCheckForUpdates');
-        const updateInterval = 7 * 24 * 60 * 60 * 1000; // one week
-        const now = Date.now();
-        if (now - lastCheckForUpdates > updateInterval) {
-          fetchUpdater.checkForUpdates(true);
-          setPreference('lastCheckForUpdates', now);
-        }
+        fetchUpdater.checkForUpdates(true);
       }
     }
   });

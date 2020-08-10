@@ -17,7 +17,12 @@ const checkForUpdates = (silent) => {
     .then((res) => res.json())
     .then((data) => data.version)
     .then((latestVersion) => {
-      if (semver.gt(latestVersion, packageJson.version)) {
+      // in silent mode, only show popup, if there's a major update
+      const hasNewUpdate = silent
+        ? semver.major(latestVersion) > semver.major(packageJson.version)
+        : semver.gt(latestVersion, packageJson.version);
+
+      if (hasNewUpdate) {
         dialog.showMessageBox(mainWindow.get(), {
           type: 'info',
           message: `An update (${appJson.name} ${latestVersion}) is available. Open WebCatalog to update this app.`,
