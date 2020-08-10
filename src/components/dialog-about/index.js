@@ -71,7 +71,7 @@ const About = (props) => {
           variant="body2"
           className={classes.version}
         >
-          {`Version v${appVersion}. Powered by WebCatalog.`}
+          {appJson.id === 'singlebox' ? `Version v${appVersion}` : `Version v${appVersion}. Powered by WebCatalog.`}
         </Typography>
         <div className={classes.versionSmallContainer}>
           {versions.map(({ name, version }) => (
@@ -84,17 +84,35 @@ const About = (props) => {
           ))}
         </div>
 
-        <Button
-          onClick={() => requestOpenInBrowser('https://webcatalogapp.com?utm_source=webcatalog_app')}
-        >
-          WebCatalog Website
-        </Button>
-        <br />
-        <Button
-          onClick={() => requestOpenInBrowser('https://atomery.com/support?app=webcatalog&utm_source=webcatalog_app')}
-        >
-          WebCatalog Support
-        </Button>
+        {appJson.id === 'singlebox' ? (
+          <>
+            <Button
+              onClick={() => requestOpenInBrowser('https://atomery.com/singlebox?utm_source=singlebox_app')}
+            >
+              Website
+            </Button>
+            <br />
+            <Button
+              onClick={() => requestOpenInBrowser('https://atomery.com/support?app=singlebox&utm_source=singlebox_app')}
+            >
+              Support
+            </Button>
+          </>
+        ) : (
+          <>
+            <Button
+              onClick={() => requestOpenInBrowser('https://atomery.com/webcataog?utm_source=webcatalog_app')}
+            >
+              WebCatalog Website
+            </Button>
+            <br />
+            <Button
+              onClick={() => requestOpenInBrowser('https://atomery.com/support?app=webcatalog&utm_source=webcatalog_app')}
+            >
+              WebCatalog Support
+            </Button>
+          </>
+        )}
 
         <Typography variant="body2" className={classes.madeBy}>
           <span>Made with </span>

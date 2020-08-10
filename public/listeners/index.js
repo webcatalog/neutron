@@ -7,6 +7,7 @@ const {
   nativeTheme,
   shell,
 } = require('electron');
+const { autoUpdater } = require('electron-updater');
 
 const {
   getPreference,
@@ -58,7 +59,7 @@ const {
 
 const createMenu = require('../libs/create-menu');
 const sendToAllWindows = require('../libs/send-to-all-windows');
-const { checkForUpdates } = require('../libs/updater');
+const fetchUpdater = require('../libs/fetch-updater');
 const getWebsiteIconUrlAsync = require('../libs/get-website-icon-url-async');
 const getViewBounds = require('../libs/get-view-bounds');
 
@@ -68,6 +69,7 @@ const codeInjectionWindow = require('../windows/code-injection');
 const customUserAgentWindow = require('../windows/custom-user-agent');
 const displayMediaWindow = require('../windows/display-media');
 const editWorkspaceWindow = require('../windows/edit-workspace');
+const licenseRegistrationWindow = require('../windows/license-registration');
 const mainWindow = require('../windows/main');
 const notificationsWindow = require('../windows/notifications');
 const preferencesWindow = require('../windows/preferences');
@@ -79,6 +81,16 @@ const appJson = require('../app.json');
 const loadListeners = () => {
   ipcMain.on('request-open-in-browser', (e, url) => {
     shell.openExternal(url);
+  });
+
+  ipcMain.on('request-show-message-box', (e, message, type) => {
+    dialog.showMessageBox(mainWindow.get(), {
+      type: type || 'error',
+      message,
+      buttons: ['OK'],
+      cancelId: 0,
+      defaultId: 0,
+    }).catch(console.log); // eslint-disable-line
   });
 
   // Find In Page
@@ -172,6 +184,10 @@ const loadListeners = () => {
     addWorkspaceWindow.show();
   });
 
+  ipcMain.on('request-show-license-registration-window', () => {
+    licenseRegistrationWindow.show();
+  });
+
   ipcMain.on('request-show-notifications-window', () => {
     notificationsWindow.show();
   });
@@ -236,9 +252,15 @@ const loadListeners = () => {
   });
 
   ipcMain.on('request-create-workspace', (e, name, homeUrl, picture, transparentBackground) => {
-    if (!global.appJson.registered) {
+    const registered = appJson.id === 'singlebox' ? !global.appJson.registered : getPreference('registered');
+    if (!registered) {
       const workspaces = getWorkspaces();
       if (Object.keys(workspaces).length > 1) {
+        if (appJson.id === 'singlebox') {
+          licenseRegistrationWindow.show();
+          return;
+        }
+
         dialog.showMessageBox(mainWindow.get(), {
           type: 'info',
           message: 'You are currently running a trial version of WebCatalog which only lets you add up to two workspaces per app. To remove the trial limitations, please purchase a perpetual license key ($19.99) from our store.',
@@ -411,8 +433,50 @@ const loadListeners = () => {
     }
   });
 
-  ipcMain.on('request-check-for-updates', () => {
-    checkForUpdates();
+  ipcMain.on('request-check-for-updates', (e, isSilent) => {
+    if (appJson.squirrel) {
+      // https://github.com/electron-userland/electron-builder/issues/4028
+      if (!autoUpdater.isUpdaterActive()) return;
+
+      // https://github.com/atomery/webcatalog/issues/634
+      // https://github.com/electron-userland/electron-builder/issues/4046
+      // disable updater if user is using AppImageLauncher
+      if (process.platform === 'linux' && process.env.DESKTOPINTEGRATION === 'AppImageLauncher') {
+        dialog.showMessageBox(mainWindow.get(), {
+          type: 'error',
+          message: 'Updater is incompatible with AppImageLauncher. Please uninstall AppImageLauncher or download new updates manually from our website.',
+          buttons: ['Learn More', 'Go to Website', 'OK'],
+          cancelId: 2,
+          defaultId: 2,
+        }).then(({ response }) => {
+          if (response === 0) {
+            shell.openExternal('https://github.com/electron-userland/electron-builder/issues/4046');
+          } else if (response === 1) {
+            shell.openExternal('https://atomery.com/singlebox/');
+          }
+        }).catch(console.log); // eslint-disable-line
+        return;
+      }
+
+      // restart & apply updates
+      if (global.updaterObj && global.updaterObj.status === 'update-downloaded') {
+        setImmediate(() => {
+          app.removeAllListeners('window-all-closed');
+          if (mainWindow.get() != null) {
+            mainWindow.get().forceClose = true;
+            mainWindow.get().close();
+          }
+          autoUpdater.quitAndInstall(false);
+        });
+      }
+
+      // check for updates
+      global.updateSilent = Boolean(isSilent);
+      autoUpdater.checkForUpdates();
+      return;
+    }
+
+    fetchUpdater.checkForUpdates();
   });
 
   ipcMain.on('request-show-display-media-window', (e) => {

@@ -11,6 +11,7 @@ import dialogCodeInjection from './dialog-code-injection/reducers';
 import dialogCustomUserAgent from './dialog-custom-user-agent/reducers';
 import dialogEditWorkspace from './dialog-edit-workspace/reducers';
 import dialogGoToUrl from './dialog-go-to-url/reducers';
+import dialogLicenseRegistration from './dialog-license-registration/reducers';
 import dialogProxy from './dialog-proxy/reducers';
 import dialogSpellcheckLanguages from './dialog-spellcheck-languages/reducers';
 import findInPage from './find-in-page/reducers';
@@ -18,8 +19,9 @@ import general from './general/reducers';
 import notifications from './notifications/reducers';
 import preferences from './preferences/reducers';
 import systemPreferences from './system-preferences/reducers';
-import workspaces from './workspaces/reducers';
+import updater from './updater/reducers';
 import workspaceMetas from './workspace-metas/reducers';
+import workspaces from './workspaces/reducers';
 
 import loadListeners from '../listeners';
 
@@ -30,6 +32,7 @@ const rootReducer = combineReducers({
   dialogCustomUserAgent,
   dialogEditWorkspace,
   dialogGoToUrl,
+  dialogLicenseRegistration,
   dialogProxy,
   dialogSpellcheckLanguages,
   findInPage,
@@ -37,8 +40,9 @@ const rootReducer = combineReducers({
   notifications,
   preferences,
   systemPreferences,
-  workspaces,
+  updater,
   workspaceMetas,
+  workspaces,
 });
 
 const configureStore = (initialState) => createStore(

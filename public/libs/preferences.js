@@ -30,6 +30,7 @@ const v = '2018.2';
 
 const defaultPreferences = {
   allowNodeInJsCodeInjection: false,
+  allowPrerelease: false,
   askForDownloadPath: true,
   attachToMenubar: false,
   autoCheckForUpdates: true,
@@ -59,6 +60,7 @@ const defaultPreferences = {
   proxyPacScript: '',
   proxyRules: '',
   proxyType: 'none',
+  registered: false,
   rememberLastPageVisited: false,
   shareWorkspaceBrowsingData: false,
   sidebar: !appJson.url || Boolean(MAILTO_URLS[extractHostname(appJson.url)]),
@@ -104,6 +106,10 @@ const setPreference = (name, value) => {
 
   if (name.startsWith('darkReader')) {
     ipcMain.emit('request-reload-views-dark-reader');
+  }
+
+  if (name === 'registered') {
+    ipcMain.emit('create-menu');
   }
 
   if (name.startsWith('pauseNotifications')) {

@@ -2,5 +2,6 @@
     "id": "gmail",
     "name": "Gmail",
     "url": "https://gmail.com",
-    "registered": true
+    "registered": true,
+    "squirrel": false
 }

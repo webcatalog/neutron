@@ -61,6 +61,7 @@ import hunspellLanguagesMap from '../../constants/hunspell-languages';
 import webcatalogIconPng from '../../images/webcatalog-icon.png';
 import translatiumIconPng from '../../images/translatium-icon.png';
 import singleboxIconPng from '../../images/singlebox-icon.png';
+import switchbarIconPng from '../../images/switchbar-icon.png';
 
 import ListItemDefaultMailClient from './list-item-default-mail-client';
 import ListItemDefaultBrowser from './list-item-default-browser';
@@ -157,8 +158,42 @@ const getOpenAtLoginString = (openAtLogin) => {
   return 'No';
 };
 
+const formatBytes = (bytes, decimals = 2) => {
+  if (bytes === 0) return '0 Bytes';
+
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+  return `${parseFloat((bytes / k ** i).toFixed(dm))} ${sizes[i]}`;
+};
+
+const getUpdaterDesc = (status, info) => {
+  if (status === 'download-progress') {
+    if (info != null) {
+      const { transferred, total, bytesPerSecond } = info;
+      return `Downloading updates (${formatBytes(transferred)}/${formatBytes(total)} at ${formatBytes(bytesPerSecond)}/s)...`;
+    }
+    return 'Downloading updates...';
+  }
+  if (status === 'checking-for-update') {
+    return 'Checking for updates...';
+  }
+  if (status === 'update-available') {
+    return 'Downloading updates...';
+  }
+  if (status === 'update-downloaded') {
+    if (info && info.version) return `A new version (${info.version}) has been downloaded.`;
+    return 'A new version has been downloaded.';
+  }
+  return null;
+};
+
 const Preferences = ({
   allowNodeInJsCodeInjection,
+  allowPrerelease,
   askForDownloadPath,
   attachToMenubar,
   autoCheckForUpdates,
@@ -192,6 +227,8 @@ const Preferences = ({
   themeSource,
   titleBar,
   unreadCountBadge,
+  updaterInfo,
+  updaterStatus,
   useHardwareAcceleration,
 }) => {
   const { remote } = window.require('electron');
@@ -1090,15 +1127,51 @@ const Preferences = ({
         </Typography>
         <Paper elevation={0} className={classes.paper}>
           <List disablePadding dense>
-            <ListItem
-              button
-              onClick={requestCheckForUpdates}
-            >
-              <ListItemText
-                primary="Check for Updates"
-              />
-              <ChevronRightIcon color="action" />
-            </ListItem>
+            {appJson.squirrel ? (
+              <>
+                <ListItem
+                  button
+                  onClick={() => requestCheckForUpdates(false)}
+                  disabled={updaterStatus === 'checking-for-update'
+                    || updaterStatus === 'download-progress'
+                    || updaterStatus === 'download-progress'
+                    || updaterStatus === 'update-available'}
+                >
+                  <ListItemText
+                    primary={updaterStatus === 'update-downloaded' ? 'Restart to Apply Updates' : 'Check for Updates'}
+                    secondary={getUpdaterDesc(updaterStatus, updaterInfo)}
+                  />
+                  <ChevronRightIcon color="action" />
+                </ListItem>
+                <Divider />
+                <ListItem>
+                  <ListItemText
+                    primary="Receive pre-release updates"
+                  />
+                  <ListItemSecondaryAction>
+                    <Switch
+                      edge="end"
+                      color="primary"
+                      checked={allowPrerelease}
+                      onChange={(e) => {
+                        requestSetPreference('allowPrerelease', e.target.checked);
+                        requestShowRequireRestartDialog();
+                      }}
+                    />
+                  </ListItemSecondaryAction>
+                </ListItem>
+              </>
+            ) : (
+              <ListItem
+                button
+                onClick={requestCheckForUpdates}
+              >
+                <ListItemText
+                  primary="Check for Updates"
+                />
+                <ChevronRightIcon color="action" />
+              </ListItem>
+            )}
             <Divider />
             <ListItem>
               <ListItemText primary="Check for updates automatically" />
@@ -1135,7 +1208,7 @@ const Preferences = ({
           <List disablePadding dense>
             <ListItem
               button
-              onClick={() => requestOpenInBrowser('https://webcatalogapp.com?utm_source=singlebox_app')}
+              onClick={() => requestOpenInBrowser('https://atomery.com/webcataog?utm_source=singlebox_app')}
               className={classes.listItemPromotion}
             >
               <div className={classes.promotionBlock}>
@@ -1158,7 +1231,7 @@ const Preferences = ({
             <Divider />
             <ListItem
               button
-              onClick={() => requestOpenInBrowser('https://singleboxapp.com?utm_source=singlebox_app')}
+              onClick={() => requestOpenInBrowser('https://atomery.com/singlebox?utm_source=singlebox_app')}
               className={classes.listItemPromotion}
             >
               <div className={classes.promotionBlock}>
@@ -1181,7 +1254,30 @@ const Preferences = ({
             <Divider />
             <ListItem
               button
-              onClick={() => requestOpenInBrowser('https://translatiumapp.com?utm_source=singlebox_app')}
+              onClick={() => requestOpenInBrowser('https://atomery.com/switchbar?utm_source=webcatalog_app')}
+              className={classes.listItemPromotion}
+            >
+              <div className={classes.promotionBlock}>
+                <div className={classes.promotionLeft}>
+                  <img src={switchbarIconPng} alt="Switchbar" className={classes.appIcon} />
+                </div>
+                <div className={classes.promotionRight}>
+                  <div>
+                    <Typography variant="body1" className={classes.appTitle}>
+                      Switchbar
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      Open Every Link in the Right App
+                    </Typography>
+                  </div>
+                </div>
+              </div>
+              <ChevronRightIcon color="action" />
+            </ListItem>
+            <Divider />
+            <ListItem
+              button
+              onClick={() => requestOpenInBrowser('https://atomery.com/translatium?utm_source=singlebox_app')}
               className={classes.listItemPromotion}
             >
               <div className={classes.promotionBlock}>
@@ -1214,16 +1310,33 @@ const Preferences = ({
               <ChevronRightIcon color="action" />
             </ListItem>
             <Divider />
-            <ListItem button onClick={() => requestOpenInBrowser('https://webcatalogapp.com?utm_source=webcatalog_app')}>
-              <ListItemText primary="WebCatalog Website" />
-              <ChevronRightIcon color="action" />
-            </ListItem>
-            <Divider />
-            <ListItem button onClick={() => requestOpenInBrowser('https://atomery.com/support?app=webcatalog&utm_source=webcatalog_app')}>
-              <ListItemText primary="WebCatalog Support" />
-              <ChevronRightIcon color="action" />
-            </ListItem>
-            <Divider />
+            {appJson.id === 'singlebox' ? (
+              <>
+                <ListItem button onClick={() => requestOpenInBrowser('https://atomery.com/singlebox?utm_source=singlebox_app')}>
+                  <ListItemText primary="Website" />
+                  <ChevronRightIcon color="action" />
+                </ListItem>
+                <Divider />
+                <ListItem button onClick={() => requestOpenInBrowser('https://atomery.com/support?app=singlebox&utm_source=singlebox_app')}>
+                  <ListItemText primary="Support" />
+                  <ChevronRightIcon color="action" />
+                </ListItem>
+                <Divider />
+              </>
+            ) : (
+              <>
+                <ListItem button onClick={() => requestOpenInBrowser('https://atomery.com/webcataog?utm_source=webcatalog_app')}>
+                  <ListItemText primary="WebCatalog Website" />
+                  <ChevronRightIcon color="action" />
+                </ListItem>
+                <Divider />
+                <ListItem button onClick={() => requestOpenInBrowser('https://atomery.com/support?app=webcatalog&utm_source=webcatalog_app')}>
+                  <ListItemText primary="WebCatalog Support" />
+                  <ChevronRightIcon color="action" />
+                </ListItem>
+                <Divider />
+              </>
+            )}
             <ListItem button onClick={requestQuit}>
               <ListItemText primary="Quit" />
               <ChevronRightIcon color="action" />
@@ -1239,10 +1352,13 @@ Preferences.defaultProps = {
   cssCodeInjection: null,
   customUserAgent: null,
   jsCodeInjection: null,
+  updaterInfo: null,
+  updaterStatus: null,
 };
 
 Preferences.propTypes = {
   allowNodeInJsCodeInjection: PropTypes.bool.isRequired,
+  allowPrerelease: PropTypes.bool.isRequired,
   askForDownloadPath: PropTypes.bool.isRequired,
   attachToMenubar: PropTypes.bool.isRequired,
   autoCheckForUpdates: PropTypes.bool.isRequired,
@@ -1276,11 +1392,14 @@ Preferences.propTypes = {
   themeSource: PropTypes.string.isRequired,
   titleBar: PropTypes.bool.isRequired,
   unreadCountBadge: PropTypes.bool.isRequired,
+  updaterInfo: PropTypes.object,
+  updaterStatus: PropTypes.string,
   useHardwareAcceleration: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   allowNodeInJsCodeInjection: state.preferences.allowNodeInJsCodeInjection,
+  allowPrerelease: state.preferences.allowPrerelease,
   askForDownloadPath: state.preferences.askForDownloadPath,
   attachToMenubar: state.preferences.attachToMenubar,
   autoCheckForUpdates: state.preferences.autoCheckForUpdates,
@@ -1315,6 +1434,8 @@ const mapStateToProps = (state) => ({
   themeSource: state.preferences.themeSource,
   titleBar: state.preferences.titleBar,
   unreadCountBadge: state.preferences.unreadCountBadge,
+  updaterInfo: state.updater.info,
+  updaterStatus: state.updater.status,
   useHardwareAcceleration: state.preferences.useHardwareAcceleration,
 });
 
