@@ -2,7 +2,6 @@ const { dialog } = require('electron');
 const semver = require('semver');
 
 const packageJson = require('../../package.json');
-const mainWindow = require('../windows/main');
 const appJson = require('../app.json');
 
 const customizedFetch = require('./customized-fetch');
@@ -23,7 +22,7 @@ const checkForUpdates = (silent) => {
         : semver.gt(latestVersion, packageJson.version);
 
       if (hasNewUpdate) {
-        dialog.showMessageBox(mainWindow.get(), {
+        dialog.showMessageBox({
           type: 'info',
           message: `An update (${appJson.name} ${latestVersion}) is available. Open WebCatalog to update this app.`,
           buttons: ['OK'],
@@ -31,7 +30,7 @@ const checkForUpdates = (silent) => {
           defaultId: 0,
         }).catch(console.log); // eslint-disable-line
       } else if (!silent) {
-        dialog.showMessageBox(mainWindow.get(), {
+        dialog.showMessageBox({
           type: 'info',
           message: `${appJson.name} is up-to-date.`,
           buttons: ['OK'],
@@ -42,7 +41,7 @@ const checkForUpdates = (silent) => {
     })
     .catch(() => {
       if (!silent) {
-        dialog.showMessageBox(mainWindow.get(), {
+        dialog.showMessageBox({
           type: 'error',
           message: 'Failed to check for updates. Please check your Internet connection.',
           buttons: ['OK'],
