@@ -2,7 +2,6 @@
 const {
   app,
   ipcMain,
-  protocol,
   session,
   nativeTheme,
 } = require('electron');
@@ -79,12 +78,6 @@ if (!gotTheLock) {
       });
     });
   };
-
-  protocol.registerSchemesAsPrivileged([
-    { scheme: 'http', privileges: { standard: true } },
-    { scheme: 'https', privileges: { standard: true } },
-    { scheme: 'mailto', privileges: { standard: true } },
-  ]);
 
   loadListeners();
 
