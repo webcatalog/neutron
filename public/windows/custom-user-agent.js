@@ -18,6 +18,7 @@ const create = () => {
     fullscreenable: false,
     autoHideMenuBar: false,
     webPreferences: {
+      enableRemoteModule: true,
       nodeIntegration: true,
       preload: path.join(__dirname, '..', 'preload', 'custom-user-agent.js'),
     },

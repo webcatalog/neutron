@@ -21,6 +21,7 @@ const create = (id) => {
     fullscreenable: false,
     autoHideMenuBar: false,
     webPreferences: {
+      enableRemoteModule: true,
       nodeIntegration: true,
       preload: path.join(__dirname, '..', 'preload', 'auth.js'),
     },
