@@ -171,12 +171,27 @@ if (!gotTheLock) {
 
     const {
       allowPrerelease,
-      autoCheckForUpdates,
       attachToMenubar,
+      autoCheckForUpdates,
+      customUserAgent,
+      navigationBar,
       sidebar,
       titleBar,
-      navigationBar,
     } = getPreferences();
+
+    if (customUserAgent) {
+      app.userAgentFallback = customUserAgent;
+    } else {
+      // Hide Electron from UA to improve compatibility
+      // https://github.com/atomery/webcatalog/issues/182
+      app.userAgentFallback = app.userAgentFallback
+        // Fix WhatsApp requires Google Chrome 49+ bug
+        // App Name doesn't have white space in user agent. 'Google Chat' app > GoogleChat/8.1.1
+        .replace(` ${app.name.replace(/ /g, '')}/${app.getVersion()}`, '')
+        // Hide Electron from UA to improve compatibility
+        // https://github.com/atomery/webcatalog/issues/182
+        .replace(` Electron/${process.versions.electron}`, '');
+    }
 
     global.attachToMenubar = attachToMenubar;
     global.sidebar = sidebar;

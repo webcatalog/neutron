@@ -174,22 +174,10 @@ const addView = (browserWindow, workspace) => {
   if (customUserAgent) {
     view.webContents.userAgent = customUserAgent;
   } else {
-    // Hide Electron from UA to improve compatibility
-    // https://github.com/atomery/webcatalog/issues/182
-    const uaStr = view.webContents.userAgent;
-    const commonUaStr = uaStr
-      // Fix WhatsApp requires Google Chrome 49+ bug
-      // App Name doesn't have white space in user agent. 'Google Chat' app > GoogleChat/8.1.1
-      .replace(` ${app.name.replace(/ /g, '')}/${app.getVersion()}`, '')
-      // Hide Electron from UA to improve compatibility
-      // https://github.com/atomery/webcatalog/issues/182
-      .replace(` Electron/${process.versions.electron}`, '');
-    view.webContents.userAgent = commonUaStr;
-
     // fix Google prevents signing in because of security concerns
     // https://github.com/atomery/webcatalog/issues/455
     // https://github.com/meetfranz/franz/issues/1720#issuecomment-566460763
-    const fakedEdgeUaStr = `${commonUaStr} Edge/18.18875`;
+    const fakedEdgeUaStr = `${app.userAgentFallback} Edge/18.18875`;
     adjustUserAgentByUrl = (contents, url) => {
       const navigatedDomain = extractDomain(url);
       const currentUaStr = contents.userAgent;
@@ -198,8 +186,8 @@ const addView = (browserWindow, workspace) => {
           contents.userAgent = fakedEdgeUaStr;
           return true;
         }
-      } else if (currentUaStr !== commonUaStr) {
-        contents.userAgent = commonUaStr;
+      } else if (currentUaStr !== app.userAgentFallback) {
+        contents.userAgent = app.userAgentFallback;
         return true;
       }
       return false;
