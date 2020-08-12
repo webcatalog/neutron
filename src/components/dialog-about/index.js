@@ -93,7 +93,7 @@ const About = (props) => {
             </Button>
             <br />
             <Button
-              onClick={() => requestOpenInBrowser('https://atomery.com/support?app=singlebox&utm_source=singlebox_app')}
+              onClick={() => requestOpenInBrowser('https://atomery.com/support/singlebox&utm_source=singlebox_app')}
             >
               Support
             </Button>
@@ -101,7 +101,7 @@ const About = (props) => {
         ) : (
           <>
             <Button
-              onClick={() => requestOpenInBrowser('https://atomery.com/webcataog?utm_source=webcatalog_app')}
+              onClick={() => requestOpenInBrowser('https://atomery.com/webcatalog?utm_source=webcatalog_app')}
             >
               WebCatalog Website
             </Button>
