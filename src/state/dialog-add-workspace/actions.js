@@ -18,7 +18,7 @@ import hasErrors from '../../helpers/has-errors';
 
 import { requestCreateWorkspace } from '../../senders';
 
-const client = algoliasearch('OQ55YRVMNP', 'fc0fb115b113c21d58ed6a4b4de1565f');
+const client = algoliasearch('4TX8Z3FKMI', '57f6e815e97deb2cdf74f49c852bc232');
 const index = client.initIndex('apps');
 
 export const getHits = () => (dispatch, getState) => {

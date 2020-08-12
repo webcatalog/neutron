@@ -185,8 +185,8 @@ const AddWorkspace = ({
             id={app.id}
             name={app.name}
             url={app.url}
-            icon={app.icon}
-            icon128={app.icon128}
+            icon={app.iconFilled}
+            icon128={app.iconFilled128}
           />
         </div>
       );
