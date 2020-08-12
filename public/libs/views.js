@@ -44,6 +44,25 @@ const isSubdomain = (url) => {
   return !!url.match(regex); // make sure it returns boolean
 };
 
+const badgeRules = [
+  // "(2) Inbox | Gmail"
+  /(?<=[([{])(\d*?)(?=[}\])])/,
+  // "1 · Inbox — Yandex.Mail"
+  // eslint-disable-next-line no-irregular-whitespace
+  // "1 • Inbox | Fastmail"
+  // eslint-disable-next-line no-irregular-whitespace
+  /(?<=^)(\d*?)(?=[  ][•·-])/,
+];
+const getBadgeCountFromTitle = (title) => {
+  for (let i = 0; i < badgeRules.length; i += 1) {
+    const matches = badgeRules[i].exec(title);
+    const incStr = matches ? matches[1] : '';
+    const inc = parseInt(incStr, 10);
+    if (inc) return inc;
+  }
+  return 0;
+};
+
 const equivalentDomain = (domain) => {
   if (!domain) return null;
 
@@ -549,11 +568,7 @@ const addView = (browserWindow, workspace) => {
   // Unread count badge
   if (unreadCountBadge) {
     view.webContents.on('page-title-updated', (e, title) => {
-      const itemCountRegex = /[([{](\d*?)[}\])]/;
-      const match = itemCountRegex.exec(title);
-
-      const incStr = match ? match[1] : '';
-      const inc = parseInt(incStr, 10) || 0;
+      const inc = getBadgeCountFromTitle(title);
       setWorkspaceMeta(workspace.id, {
         badgeCount: inc,
       });
