@@ -2,8 +2,9 @@
 const {
   app,
   ipcMain,
-  session,
   nativeTheme,
+  protocol,
+  session,
 } = require('electron');
 const fs = require('fs');
 const settings = require('electron-settings');
@@ -167,6 +168,12 @@ if (!gotTheLock) {
   };
 
   app.on('ready', () => {
+    // https://github.com/electron/electron/issues/23757
+    protocol.registerFileProtocol('file', (request, callback) => {
+      const pathname = decodeURI(request.url.replace('file:///', ''));
+      callback(pathname);
+    });
+
     global.appJson = appJson;
 
     const {

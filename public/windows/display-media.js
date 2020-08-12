@@ -20,6 +20,7 @@ const create = (viewId) => {
     fullscreenable: false,
     autoHideMenuBar: false,
     webPreferences: {
+      enableRemoteModule: true,
       nodeIntegration: true,
       preload: path.join(__dirname, '..', 'preload', 'display-media.js'),
     },

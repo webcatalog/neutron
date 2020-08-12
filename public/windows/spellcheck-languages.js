@@ -1,5 +1,6 @@
 const { BrowserWindow } = require('electron');
 const path = require('path');
+const isDev = require('electron-is-dev');
 
 const { REACT_PATH } = require('../constants/paths');
 
@@ -17,8 +18,9 @@ const create = () => {
     fullscreenable: false,
     autoHideMenuBar: false,
     webPreferences: {
+      enableRemoteModule: true,
       nodeIntegration: true,
-      webSecurity: false,
+      webSecurity: !isDev,
       preload: path.join(__dirname, '..', 'preload', 'spellcheck-languages.js'),
     },
   });
