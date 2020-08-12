@@ -367,3 +367,7 @@ webFrame.executeJavaScript(`
   }
 })();
 `);
+
+// enable pinch zooming (default behavior of Chromium)
+// https://github.com/electron/electron/pull/12679
+webFrame.setVisualZoomLevelLimits(1, 10);
