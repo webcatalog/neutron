@@ -180,11 +180,11 @@ const handleLoaded = (event) => {
               { type: 'separator' },
               {
                 label: 'WebCatalog Support',
-                click: () => shell.openExternal('https://atomery.com/webcataog/support'),
+                click: () => shell.openExternal('https://atomery.com/support/webcatalog'),
               },
               {
                 label: 'WebCatalog Website',
-                click: () => shell.openExternal('https://atomery.com/webcataog'),
+                click: () => shell.openExternal('https://atomery.com/webcatalog'),
               },
               { type: 'separator' },
               {

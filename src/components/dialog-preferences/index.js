@@ -1208,7 +1208,7 @@ const Preferences = ({
           <List disablePadding dense>
             <ListItem
               button
-              onClick={() => requestOpenInBrowser('https://atomery.com/webcataog?utm_source=singlebox_app')}
+              onClick={() => requestOpenInBrowser('https://atomery.com/webcatalog?utm_source=singlebox_app')}
               className={classes.listItemPromotion}
             >
               <div className={classes.promotionBlock}>
@@ -1317,7 +1317,7 @@ const Preferences = ({
                   <ChevronRightIcon color="action" />
                 </ListItem>
                 <Divider />
-                <ListItem button onClick={() => requestOpenInBrowser('https://atomery.com/support?app=singlebox&utm_source=singlebox_app')}>
+                <ListItem button onClick={() => requestOpenInBrowser('https://atomery.com/support/singlebox&utm_source=singlebox_app')}>
                   <ListItemText primary="Support" />
                   <ChevronRightIcon color="action" />
                 </ListItem>
@@ -1325,7 +1325,7 @@ const Preferences = ({
               </>
             ) : (
               <>
-                <ListItem button onClick={() => requestOpenInBrowser('https://atomery.com/webcataog?utm_source=webcatalog_app')}>
+                <ListItem button onClick={() => requestOpenInBrowser('https://atomery.com/webcatalog?utm_source=webcatalog_app')}>
                   <ListItemText primary="WebCatalog Website" />
                   <ChevronRightIcon color="action" />
                 </ListItem>
