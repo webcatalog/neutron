@@ -171,9 +171,7 @@ const addView = (browserWindow, workspace) => {
   view.setBackgroundColor('#FFF');
 
   let adjustUserAgentByUrl = () => false;
-  if (customUserAgent) {
-    view.webContents.userAgent = customUserAgent;
-  } else {
+  if (!customUserAgent) {
     // fix Google prevents signing in because of security concerns
     // https://github.com/atomery/webcatalog/issues/455
     // https://github.com/meetfranz/franz/issues/1720#issuecomment-566460763
