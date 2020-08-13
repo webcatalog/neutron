@@ -49,6 +49,7 @@ const defaultPreferences = {
   hideMenuBar: false,
   ignoreCertificateErrors: false,
   jsCodeInjection: null,
+  lastShowNewUpdateDialog: 0,
   navigationBar: false,
   pauseNotifications: null,
   pauseNotificationsBySchedule: false,
