@@ -16,13 +16,25 @@ const v = '43';
 
 let workspaces;
 
-const countWorkspaces = () => Object.keys(workspaces).length;
-
 const initWorkspaces = () => {
   if (workspaces) return;
 
   const defaultWorkspaces = {};
-  if (appJson.url) {
+  const loadedWorkspaces = settings.get(`workspaces.${v}`, defaultWorkspaces);
+
+  // legacy (v=14 was used for Singlebox prior to merging with Juli)
+  // Singlebox v1-v3
+  if (appJson.id === 'singlebox') {
+    const legacySingleboxV = '14';
+    const legacyWorkspaces = settings.get(`workspaces.${legacySingleboxV}`, null);
+    if (legacyWorkspaces) {
+      Object.assign(loadedWorkspaces, legacyWorkspaces);
+      settings.set(`workspaces.${v}`, loadedWorkspaces);
+      settings.delete(`workspaces.${legacySingleboxV}`);
+    }
+  }
+
+  if (Object.keys(loadedWorkspaces).length < 1 && appJson.url) {
     const initialWorkspaceId = uuidv1();
     defaultWorkspaces[initialWorkspaceId] = {
       id: initialWorkspaceId,
@@ -32,9 +44,13 @@ const initWorkspaces = () => {
     };
   }
 
-  const storedWorkspaces = settings.get(`workspaces.${v}`, defaultWorkspaces);
   // keep workspace objects in memory
-  workspaces = storedWorkspaces;
+  workspaces = loadedWorkspaces;
+};
+
+const countWorkspaces = () => {
+  initWorkspaces();
+  return Object.keys(workspaces).length;
 };
 
 const getWorkspaces = () => {
