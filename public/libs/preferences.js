@@ -61,6 +61,7 @@ const defaultPreferences = {
   proxyType: 'none',
   registered: false,
   rememberLastPageVisited: false,
+  sentry: true,
   shareWorkspaceBrowsingData: false,
   sidebar: !appJson.url || Boolean(MAILTO_URLS[extractHostname(appJson.url)]),
   sidebarShortcutHints: true,
@@ -80,19 +81,33 @@ const initCachedPreferences = () => {
 };
 
 const getPreferences = () => {
-  // store in memory to boost performance
-  if (cachedPreferences == null) {
-    initCachedPreferences();
+  // trigger electron-settings before app ready might fails
+  // so catch with default pref as fallback
+  // https://github.com/nathanbuchar/electron-settings/issues/111
+  try {
+    // store in memory to boost performance
+    if (cachedPreferences == null) {
+      initCachedPreferences();
+    }
+    return cachedPreferences;
+  } catch {
+    return defaultPreferences;
   }
-  return cachedPreferences;
 };
 
 const getPreference = (name) => {
-  // store in memory to boost performance
-  if (cachedPreferences == null) {
-    initCachedPreferences();
+  // trigger electron-settings before app ready might fails
+  // so catch with default pref as fallback
+  // https://github.com/nathanbuchar/electron-settings/issues/111
+  try {
+    // store in memory to boost performance
+    if (cachedPreferences == null) {
+      initCachedPreferences();
+    }
+    return cachedPreferences[name];
+  } catch {
+    return defaultPreferences[name];
   }
-  return cachedPreferences[name];
 };
 
 const isPreferenceUnset = (name) => settings.get(`preferences.${v}.${name}`) == null;

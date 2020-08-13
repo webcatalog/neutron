@@ -218,6 +218,7 @@ const Preferences = ({
   pauseNotificationsByScheduleTo,
   pauseNotificationsMuteAudio,
   rememberLastPageVisited,
+  sentry,
   shareWorkspaceBrowsingData,
   sidebar,
   sidebarShortcutHints,
@@ -986,6 +987,24 @@ const Preferences = ({
               <ChevronRightIcon color="action" />
             </ListItem>
             <Divider />
+            <ListItem>
+              <ListItemText
+                primary="Allow the app to send bug and crash reports on your behalf"
+                secondary="Help us diagnose, fix, and optimize the performance of the app."
+              />
+              <ListItemSecondaryAction>
+                <Switch
+                  edge="end"
+                  color="primary"
+                  checked={sentry}
+                  onChange={(e) => {
+                    requestSetPreference('sentry', e.target.checked);
+                    requestShowRequireRestartDialog();
+                  }}
+                />
+              </ListItemSecondaryAction>
+            </ListItem>
+            <Divider />
             <ListItem button onClick={() => requestOpenInBrowser('https://atomery.com/privacy?app=webcatalog&utm_source=webcatalog_app')}>
               <ListItemText primary="Privacy Policy" />
             </ListItem>
@@ -1383,6 +1402,7 @@ Preferences.propTypes = {
   pauseNotificationsByScheduleTo: PropTypes.string.isRequired,
   pauseNotificationsMuteAudio: PropTypes.bool.isRequired,
   rememberLastPageVisited: PropTypes.bool.isRequired,
+  sentry: PropTypes.bool.isRequired,
   shareWorkspaceBrowsingData: PropTypes.bool.isRequired,
   sidebar: PropTypes.bool.isRequired,
   sidebarShortcutHints: PropTypes.bool.isRequired,
@@ -1425,6 +1445,7 @@ const mapStateToProps = (state) => ({
   pauseNotificationsByScheduleTo: state.preferences.pauseNotificationsByScheduleTo,
   pauseNotificationsMuteAudio: state.preferences.pauseNotificationsMuteAudio,
   rememberLastPageVisited: state.preferences.rememberLastPageVisited,
+  sentry: state.preferences.sentry,
   shareWorkspaceBrowsingData: state.preferences.shareWorkspaceBrowsingData,
   sidebar: state.preferences.sidebar,
   sidebarShortcutHints: state.preferences.sidebarShortcutHints,

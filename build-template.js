@@ -65,7 +65,7 @@ Promise.resolve()
           '!node_modules/image-q/demo/**/*',
           // other files
           '!**/*/*.ts',
-          '!**/*/*.map',
+          '!node_modules/*/*.map',
           '!**/*/.DS_Store',
         ],
         asarUnpack: [
