@@ -80,7 +80,6 @@ export const getIconFromInternet = () => (dispatch, getState) => {
 
 export const updateForm = (changes) => (dispatch) => dispatch({
   type: UPDATE_EDIT_WORKSPACE_FORM,
-  x: console.log(getValidationRules()),
   changes: validate(changes, getValidationRules()),
 });
 
