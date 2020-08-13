@@ -54,8 +54,8 @@ function createMenu() {
         { role: 'paste' },
         {
           role: 'pasteandmatchstyle',
-          // by default, it's 'Alt+Shift+CmdOrCtrl+F'
-          accelerator: 'Shift+CmdOrCtrl+F',
+          // by default, it's 'Alt+Shift+CmdOrCtrl+V'
+          accelerator: 'Shift+CmdOrCtrl+V',
         },
         { role: 'delete' },
         { role: 'selectall' },
