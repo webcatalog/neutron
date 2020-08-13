@@ -11,7 +11,6 @@ const sendToAllWindows = require('./send-to-all-windows');
 const downloadAsync = require('./download-async');
 
 const appJson = require('../app.json');
-const { load } = require('cheerio');
 
 const v = '43';
 
