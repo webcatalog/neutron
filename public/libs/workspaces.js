@@ -1,6 +1,6 @@
 const { app } = require('electron');
 const path = require('path');
-const fsExtra = require('fs-extra');
+const fs = require('fs-extra');
 const settings = require('electron-settings');
 const { v1: uuidv1 } = require('uuid');
 const Jimp = require('jimp');
@@ -18,8 +18,8 @@ let workspaces;
 
 const countWorkspaces = () => Object.keys(workspaces).length;
 
-const getWorkspaces = () => {
-  if (workspaces) return workspaces;
+const initWorkspaces = () => {
+  if (workspaces) return;
 
   const defaultWorkspaces = {};
   if (appJson.url) {
@@ -35,7 +35,10 @@ const getWorkspaces = () => {
   const storedWorkspaces = settings.get(`workspaces.${v}`, defaultWorkspaces);
   // keep workspace objects in memory
   workspaces = storedWorkspaces;
+};
 
+const getWorkspaces = () => {
+  initWorkspaces();
   return workspaces;
 };
 
@@ -46,7 +49,10 @@ const getWorkspacesAsList = () => {
   return workspaceLst;
 };
 
-const getWorkspace = (id) => workspaces[id];
+const getWorkspace = (id) => {
+  initWorkspaces();
+  return workspaces[id];
+};
 
 const getPreviousWorkspace = (id) => {
   const workspaceLst = getWorkspacesAsList();
@@ -185,7 +191,7 @@ const setWorkspacePicture = (id, sourcePicturePath) => {
         picturePath: destPicturePath,
       });
       if (currentPicturePath) {
-        return fsExtra.remove(currentPicturePath);
+        return fs.remove(currentPicturePath);
       }
       return null;
     });
@@ -194,7 +200,7 @@ const setWorkspacePicture = (id, sourcePicturePath) => {
 const removeWorkspacePicture = (id) => {
   const workspace = getWorkspace(id);
   if (workspace.picturePath) {
-    return fsExtra.remove(workspace.picturePath)
+    return fs.remove(workspace.picturePath)
       .then(() => {
         setWorkspace(id, {
           pictureId: null,
@@ -205,10 +211,54 @@ const removeWorkspacePicture = (id) => {
   return Promise.resolve();
 };
 
+// tasks to clean up leftover workspace data
+const cleanUpAsync = () => Promise.resolve()
+  .then(() => {
+    // remove unused partitions
+    const partitionsDirPath = path.join(app.getPath('userData'), 'Partitions');
+    if (!fs.existsSync(partitionsDirPath)) {
+      return null;
+    }
+
+    const p = fs.readdirSync(
+      partitionsDirPath,
+      { withFileTypes: true },
+    )
+      .filter((d) => d.isDirectory() && getWorkspace(d.name) == null)
+      .map((d) => fs.remove(path.join(partitionsDirPath, d.name)));
+
+    return Promise.all(p);
+  })
+  .then(() => {
+    // remove unused pictures
+    const picturesDirPath = path.join(app.getPath('userData'), 'pictures');
+    if (!fs.existsSync(picturesDirPath)) {
+      return null;
+    }
+
+    const p = fs.readdirSync(
+      picturesDirPath,
+      { withFileTypes: true },
+    )
+      .filter((f) => {
+        if (!f.isFile() || !f.name.endsWith('.png')) return false;
+
+        const pictureId = path.parse(f.name).name;
+        const isInUse = Object.values(getWorkspaces())
+          .some((workspace) => workspace.pictureId === pictureId);
+
+        return !isInUse;
+      })
+      .map((f) => fs.remove(path.join(picturesDirPath, f.name)));
+
+    return Promise.all(p);
+  });
+
 const removeWorkspace = (id) => {
   delete workspaces[id];
   sendToAllWindows('set-workspace', id, null);
   settings.delete(`workspaces.${v}.${id}`);
+  cleanUpAsync();
 };
 
 module.exports = {
