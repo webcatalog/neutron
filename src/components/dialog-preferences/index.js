@@ -990,7 +990,7 @@ const Preferences = ({
             <ListItem>
               <ListItemText
                 primary="Allow the app to send bug and crash reports on your behalf"
-                secondary="Help us diagnose, fix, and optimize the performance of the app."
+                secondary="Help us quickly diagnose and fix bugs in the app."
               />
               <ListItemSecondaryAction>
                 <Switch
