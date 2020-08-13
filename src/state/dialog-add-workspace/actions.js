@@ -109,11 +109,10 @@ const getValidationRules = () => ({
 export const getWebsiteIconUrlAsync = (url) => new Promise((resolve, reject) => {
   try {
     const id = Date.now().toString();
-    const { ipcRenderer } = window.require('electron');
-    ipcRenderer.once(id, (e, uurl) => {
+    window.ipcRenderer.once(id, (e, uurl) => {
       resolve(uurl);
     });
-    ipcRenderer.send('request-get-website-icon-url', id, url);
+    window.ipcRenderer.send('request-get-website-icon-url', id, url);
   } catch (err) {
     reject(err);
   }
@@ -144,8 +143,7 @@ export const getIconFromInternet = () => (dispatch, getState) => {
       }
 
       if (!iconUrl) {
-        const { remote } = window.require('electron');
-        return remote.dialog.showMessageBox(remote.getCurrentWindow(), {
+        return window.remote.dialog.showMessageBox(window.remote.getCurrentWindow(), {
           message: 'Unable to find a suitable icon from the Internet.',
           buttons: ['OK'],
           cancelId: 0,
@@ -179,8 +177,7 @@ export const save = () => (dispatch, getState) => {
     form.internetIcon || form.picturePath,
     Boolean(form.transparentBackground),
   );
-  const { remote } = window.require('electron');
-  remote.getCurrentWindow().close();
+  window.remote.getCurrentWindow().close();
   return null;
 };
 

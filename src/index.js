@@ -56,9 +56,6 @@ const App = () => {
 const runApp = () => {
   Promise.resolve()
     .then(() => {
-      const { remote, webFrame } = window.require('electron');
-      webFrame.setVisualZoomLevelLimits(1, 1);
-
       if (window.mode === 'about') {
         document.title = 'About';
       } else if (window.mode === 'auth') {
@@ -69,7 +66,7 @@ const runApp = () => {
         store.dispatch(initDialogEditWorkspace());
         const { workspaces } = store.getState();
         const workspaceList = getWorkspacesAsList(workspaces);
-        const editWorkspaceId = remote.getGlobal('editWorkspaceId');
+        const editWorkspaceId = window.remote.getGlobal('editWorkspaceId');
         const workspace = workspaces[editWorkspaceId];
         workspaceList.some((item, index) => {
           if (item.id === editWorkspaceId) {
@@ -83,7 +80,7 @@ const runApp = () => {
         document.title = 'Open Link With';
       } else if (window.mode === 'code-injection') {
         store.dispatch(initDialogCodeInjection());
-        const codeInjectionType = remote.getGlobal('codeInjectionType');
+        const codeInjectionType = window.remote.getGlobal('codeInjectionType');
         document.title = `Edit ${codeInjectionType.toUpperCase()} Code Injection`;
       } else if (window.mode === 'notifications') {
         document.title = 'Notifications';
@@ -105,7 +102,7 @@ const runApp = () => {
       } else if (window.mode === 'license-registration') {
         document.title = 'License Registration';
       } else {
-        document.title = remote.getGlobal('appJson').name;
+        document.title = window.remote.getGlobal('appJson').name;
       }
 
       if (window.mode !== 'main' && window.mode !== 'menubar') {
@@ -114,7 +111,7 @@ const runApp = () => {
             if (window.preventClosingWindow) {
               return;
             }
-            remote.getCurrentWindow().close();
+            window.remote.getCurrentWindow().close();
           }
         });
       }

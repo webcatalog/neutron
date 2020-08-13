@@ -35,86 +35,84 @@ const loadListeners = (store) => {
     window.addEventListener('offline', handleOnlineOffline);
   }
 
-  const { ipcRenderer } = window.require('electron');
-
-  ipcRenderer.on('log', (e, message) => {
+  window.ipcRenderer.on('log', (e, message) => {
     // eslint-disable-next-line
     if (message) console.log(message);
   });
 
-  ipcRenderer.on('set-preference', (e, name, value) => {
+  window.ipcRenderer.on('set-preference', (e, name, value) => {
     store.dispatch(setPreference(name, value));
   });
 
-  ipcRenderer.on('set-system-preference', (e, name, value) => {
+  window.ipcRenderer.on('set-system-preference', (e, name, value) => {
     store.dispatch(setSystemPreference(name, value));
   });
 
-  ipcRenderer.on('set-workspace', (e, id, value) => {
+  window.ipcRenderer.on('set-workspace', (e, id, value) => {
     store.dispatch(setWorkspace(id, value));
   });
 
-  ipcRenderer.on('set-workspaces', (e, newWorkspaces) => {
+  window.ipcRenderer.on('set-workspaces', (e, newWorkspaces) => {
     store.dispatch(setWorkspaces(newWorkspaces));
   });
 
-  ipcRenderer.on('set-workspace-meta', (e, id, value) => {
+  window.ipcRenderer.on('set-workspace-meta', (e, id, value) => {
     store.dispatch(setWorkspaceMeta(id, value));
   });
 
-  ipcRenderer.on('set-workspace-metas', (e, newWorkspaceMetas) => {
+  window.ipcRenderer.on('set-workspace-metas', (e, newWorkspaceMetas) => {
     store.dispatch(setWorkspaceMetas(newWorkspaceMetas));
   });
 
-  ipcRenderer.on('update-can-go-back', (e, value) => {
+  window.ipcRenderer.on('update-can-go-back', (e, value) => {
     store.dispatch(updateCanGoBack(value));
   });
 
-  ipcRenderer.on('update-can-go-forward', (e, value) => {
+  window.ipcRenderer.on('update-can-go-forward', (e, value) => {
     store.dispatch(updateCanGoForward(value));
   });
 
-  ipcRenderer.on('update-address', (e, address, edited) => {
+  window.ipcRenderer.on('update-address', (e, address, edited) => {
     store.dispatch(updateAddressBarInfo(address, edited));
   });
 
-  ipcRenderer.on('update-title', (e, title) => {
+  window.ipcRenderer.on('update-title', (e, title) => {
     store.dispatch(updateTitle(title));
   });
 
   // Find In Page
-  ipcRenderer.on('open-find-in-page', () => {
+  window.ipcRenderer.on('open-find-in-page', () => {
     store.dispatch(openFindInPage());
   });
 
-  ipcRenderer.on('close-find-in-page', () => {
+  window.ipcRenderer.on('close-find-in-page', () => {
     store.dispatch(closeFindInPage());
   });
 
-  ipcRenderer.on('update-find-in-page-matches', (e, activeMatch, matches) => {
+  window.ipcRenderer.on('update-find-in-page-matches', (e, activeMatch, matches) => {
     store.dispatch(updateFindInPageMatches(activeMatch, matches));
   });
 
   // send back a request with text
-  ipcRenderer.on('request-back-find-in-page', (e, forward) => {
+  window.ipcRenderer.on('request-back-find-in-page', (e, forward) => {
     const { open, text } = store.getState().findInPage;
     if (!open) return;
     requestFindInPage(text, forward);
   });
 
-  ipcRenderer.on('native-theme-updated', () => {
+  window.ipcRenderer.on('native-theme-updated', () => {
     store.dispatch(updateShouldUseDarkColors(getShouldUseDarkColors()));
   });
 
-  ipcRenderer.on('should-pause-notifications-changed', (e, val) => {
+  window.ipcRenderer.on('should-pause-notifications-changed', (e, val) => {
     store.dispatch(updatePauseNotificationsInfo(val));
   });
 
-  ipcRenderer.on('is-fullscreen-updated', (e, val) => {
+  window.ipcRenderer.on('is-fullscreen-updated', (e, val) => {
     store.dispatch(updateIsFullScreen(val));
   });
 
-  ipcRenderer.on('update-updater', (e, updaterObj) => {
+  window.ipcRenderer.on('update-updater', (e, updaterObj) => {
     store.dispatch(updateUpdater(updaterObj));
   });
 };

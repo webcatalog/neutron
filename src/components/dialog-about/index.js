@@ -52,9 +52,8 @@ const About = (props) => {
     classes,
   } = props;
 
-  const { remote } = window.require('electron');
-  const appVersion = remote.app.getVersion();
-  const appJson = remote.getGlobal('appJson');
+  const appVersion = window.remote.app.getVersion();
+  const appJson = window.remote.getGlobal('appJson');
   const utmSource = appJson.id === 'singlebox' ? 'singlebox_app' : 'juli_app';
 
   const versions = [

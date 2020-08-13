@@ -51,11 +51,10 @@ const FindInPage = (props) => {
     inputRef.current.select();
   }, [inputRef]);
   useEffect(() => {
-    const { ipcRenderer } = window.require('electron');
-    ipcRenderer.on('open-find-in-page', handleOpenFindInPage);
+    window.ipcRenderer.on('open-find-in-page', handleOpenFindInPage);
     // Remove event listener on cleanup
     return () => {
-      ipcRenderer.removeListener('open-find-in-page', handleOpenFindInPage);
+      window.ipcRenderer.removeListener('open-find-in-page', handleOpenFindInPage);
     };
   }, [handleOpenFindInPage]);
 

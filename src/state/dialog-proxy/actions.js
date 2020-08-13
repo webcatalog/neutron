@@ -74,7 +74,6 @@ export const save = () => (dispatch, getState) => {
   requestSetPreference('proxyType', form.proxyType);
   requestShowRequireRestartDialog();
 
-  const { remote } = window.require('electron');
-  remote.getCurrentWindow().close();
+  window.remote.getCurrentWindow().close();
   return null;
 };

@@ -37,7 +37,6 @@ export const register = () => (dispatch, getState) => {
 
   requestShowMessageBox('Registration Complete! Thank you for supporting the future development of Singlebox.');
 
-  const { remote } = window.require('electron');
-  remote.getCurrentWindow().close();
+  window.remote.getCurrentWindow().close();
   return null;
 };

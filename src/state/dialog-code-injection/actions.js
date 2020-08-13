@@ -12,8 +12,7 @@ export const updateForm = (changes) => (dispatch) => dispatch({
 
 export const save = () => (dispatch, getState) => {
   const { form } = getState().dialogCodeInjection;
-  const { remote } = window.require('electron');
-  const codeInjectionType = remote.getGlobal('codeInjectionType');
+  const codeInjectionType = window.remote.getGlobal('codeInjectionType');
 
   requestSetPreference(`${codeInjectionType}CodeInjection`, form.code);
 
@@ -23,5 +22,5 @@ export const save = () => (dispatch, getState) => {
 
   requestShowRequireRestartDialog();
 
-  remote.getCurrentWindow().close();
+  window.remote.getCurrentWindow().close();
 };

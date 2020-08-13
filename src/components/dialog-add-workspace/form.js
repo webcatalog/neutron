@@ -171,14 +171,13 @@ const AddWorkspaceCustom = ({
             size="small"
             disabled={downloadingIcon}
             onClick={() => {
-              const { remote } = window.require('electron');
               const opts = {
                 properties: ['openFile'],
                 filters: [
                   { name: 'Images', extensions: ['jpg', 'jpeg', 'png', 'gif', 'tiff', 'tif', 'bmp', 'dib'] },
                 ],
               };
-              remote.dialog.showOpenDialog(remote.getCurrentWindow(), opts)
+              window.remote.dialog.showOpenDialog(window.remote.getCurrentWindow(), opts)
                 .then(({ canceled, filePaths }) => {
                   if (!canceled && filePaths.length > 0) {
                     onUpdateForm({ picturePath: filePaths[0] });

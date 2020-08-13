@@ -44,7 +44,7 @@ const FakeTitleBar = (props) => {
       onDoubleClick={() => {
         // feature: double click on title bar to expand #656
         // https://github.com/atomery/webcatalog/issues/656
-        const win = window.require('electron').remote.getCurrentWindow();
+        const win = window.remote.getCurrentWindow();
         if (win.isMaximized()) {
           win.unmaximize();
         } else {
@@ -52,7 +52,7 @@ const FakeTitleBar = (props) => {
         }
       }}
     >
-      {(window.mode === 'main' || window.mode === 'menubar') && title ? title : window.require('electron').remote.getGlobal('appJson').name}
+      {(window.mode === 'main' || window.mode === 'menubar') && title ? title : window.remote.getGlobal('appJson').name}
     </div>
   );
 };

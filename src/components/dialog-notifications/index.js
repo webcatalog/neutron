@@ -67,8 +67,6 @@ const DialogPauseNotifications = (props) => {
 
   const shouldPauseNotifications = pauseNotificationsInfo !== null;
 
-  const { remote } = window.require('electron');
-
   const quickShortcuts = [
     {
       name: '15 minutes',
@@ -126,7 +124,7 @@ const DialogPauseNotifications = (props) => {
       title: 'Notifications paused',
       body: `Notifications paused until ${formatDate(tilDate)}.`,
     });
-    remote.getCurrentWindow().close();
+    window.remote.getCurrentWindow().close();
   };
 
   const renderList = () => {
@@ -158,7 +156,7 @@ const DialogPauseNotifications = (props) => {
                   title: 'Notifications resumed',
                   body: 'Notifications are now resumed.',
                 });
-                remote.getCurrentWindow().close();
+                window.remote.getCurrentWindow().close();
               }}
             />
           </ListItem>
@@ -198,7 +196,7 @@ const DialogPauseNotifications = (props) => {
               primary={pauseNotificationsInfo.reason === 'scheduled' ? 'Adjust schedule...' : 'Pause notifications by schedule...'}
               onClick={() => {
                 requestShowPreferencesWindow('notifications');
-                remote.getCurrentWindow().close();
+                window.remote.getCurrentWindow().close();
               }}
             />
           </ListItem>
@@ -233,7 +231,7 @@ const DialogPauseNotifications = (props) => {
             primary="Pause notifications by schedule..."
             onClick={() => {
               requestShowPreferencesWindow('notifications');
-              remote.getCurrentWindow().close();
+              window.remote.getCurrentWindow().close();
             }}
           />
         </ListItem>

@@ -15,8 +15,6 @@ import {
   getShouldUseDarkColors,
 } from '../../senders';
 
-const { remote } = window.require('electron');
-
 const canGoBack = (state = false, action) => {
   switch (action.type) {
     case UPDATE_CAN_GO_BACK: return action.canGoBack;
@@ -31,21 +29,21 @@ const canGoForward = (state = false, action) => {
   }
 };
 
-const isFullScreen = (state = remote.getCurrentWindow().isFullScreen(), action) => {
+const isFullScreen = (state = window.remote.getCurrentWindow().isFullScreen(), action) => {
   switch (action.type) {
     case UPDATE_IS_FULL_SCREEN: return action.isFullScreen;
     default: return state;
   }
 };
 
-const isDefaultMailClient = (state = remote.app.isDefaultProtocolClient('mailto'), action) => {
+const isDefaultMailClient = (state = window.remote.app.isDefaultProtocolClient('mailto'), action) => {
   switch (action.type) {
     case UPDATE_IS_DEFAULT_MAIL_CLIENT: return action.isDefaultMailClient;
     default: return state;
   }
 };
 
-const isDefaultWebBrowser = (state = remote.app.isDefaultProtocolClient('http'), action) => {
+const isDefaultWebBrowser = (state = window.remote.app.isDefaultProtocolClient('http'), action) => {
   switch (action.type) {
     case UPDATE_IS_DEFAULT_WEB_BROWSER: return action.isDefaultWebBrowser;
     default: return state;

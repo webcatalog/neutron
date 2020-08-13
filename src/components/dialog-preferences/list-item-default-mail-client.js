@@ -12,12 +12,11 @@ import connectComponent from '../../helpers/connect-component';
 import { requestOpenInBrowser } from '../../senders';
 
 const ListItemDefaultMailClient = () => {
-  const { remote } = window.require('electron');
-  const appJson = remote.getGlobal('appJson');
+  const appJson = window.remote.getGlobal('appJson');
   const [isDefault, setIsDefault] = useState(false);
   const appId = appJson.id === 'singlebox' ? 'Singlebox' : `webcatalog-${appJson.id}`;
 
-  const isWindows10 = window.process.platform === 'win32' && semver.gt(window.require('electron').remote.require('os').release(), '10.0.0');
+  const isWindows10 = window.process.platform === 'win32' && semver.gt(window.remote.require('os').release(), '10.0.0');
 
   const recheckIsDefault = useCallback(
     () => {
@@ -27,7 +26,7 @@ const ListItemDefaultMailClient = () => {
         // https://stackoverflow.com/questions/32354861/how-to-find-the-default-browser-via-the-registry-on-windows-10
         const protocolName = 'mailto';
         const userChoicePath = `HKCU\\SOFTWARE\\Microsoft\\Windows\\Shell\\Associations\\URLAssociations\\${protocolName}\\UserChoice`;
-        window.require('electron').remote.require('regedit').list([userChoicePath], (err, result) => {
+        window.remote.require('regedit').list([userChoicePath], (err, result) => {
           try {
             setIsDefault(!err && result[userChoicePath].values.ProgId.value === appId);
           } catch (tryErr) {
@@ -39,7 +38,7 @@ const ListItemDefaultMailClient = () => {
         return;
       }
 
-      setIsDefault(window.require('electron').remote.app.isDefaultProtocolClient('mailto'));
+      setIsDefault(window.remote.app.isDefaultProtocolClient('mailto'));
     },
     [isWindows10, appId],
   );
@@ -83,7 +82,7 @@ const ListItemDefaultMailClient = () => {
         size="small"
         color="default"
         onClick={() => {
-          window.require('electron').remote.app.setAsDefaultProtocolClient('mailto');
+          window.remote.app.setAsDefaultProtocolClient('mailto');
           recheckIsDefault();
         }}
       >
