@@ -5,6 +5,7 @@ const sendToAllWindows = require('./send-to-all-windows');
 const createMenu = require('./create-menu');
 
 const mainWindow = require('../windows/main');
+const preferencesWindow = require('../windows/preferences');
 
 global.updateSilent = true;
 
@@ -20,7 +21,7 @@ autoUpdater.on('checking-for-update', () => {
 
 autoUpdater.on('update-available', (info) => {
   if (!global.updateSilent) {
-    dialog.showMessageBox({
+    dialog.showMessageBox(preferencesWindow.get() || mainWindow.get(), {
       title: 'An Update is Available',
       message: 'There is an available update. It is being downloaded. We will let you know when it is ready.',
       buttons: ['OK'],
@@ -40,7 +41,7 @@ autoUpdater.on('update-available', (info) => {
 
 autoUpdater.on('update-not-available', (info) => {
   if (!global.updateSilent) {
-    dialog.showMessageBox({
+    dialog.showMessageBox(preferencesWindow.get() || mainWindow.get(), {
       title: 'No Updates',
       message: 'There are currently no updates available.',
       buttons: ['OK'],
@@ -60,7 +61,7 @@ autoUpdater.on('update-not-available', (info) => {
 
 autoUpdater.on('error', (err) => {
   if (!global.updateSilent) {
-    dialog.showMessageBox({
+    dialog.showMessageBox(preferencesWindow.get() || mainWindow.get(), {
       title: 'Failed to Check for Updates',
       message: 'Failed to check for updates. Please check your Internet connection.',
       buttons: ['OK'],
@@ -112,7 +113,7 @@ autoUpdater.on('update-downloaded', (info) => {
     cancelId: 1,
   };
 
-  dialog.showMessageBox(dialogOpts)
+  dialog.showMessageBox(mainWindow.get(), dialogOpts)
     .then(({ response }) => {
       if (response === 0) {
         // Fix autoUpdater.quitAndInstall() does not quit immediately
