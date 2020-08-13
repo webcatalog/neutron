@@ -55,6 +55,7 @@ const About = (props) => {
   const { remote } = window.require('electron');
   const appVersion = remote.app.getVersion();
   const appJson = remote.getGlobal('appJson');
+  const utmSource = appJson.id === 'singlebox' ? 'singlebox_app' : 'juli_app';
 
   const versions = [
     { name: 'Electron Version', version: window.process.versions.electron },
@@ -87,13 +88,13 @@ const About = (props) => {
         {appJson.id === 'singlebox' ? (
           <>
             <Button
-              onClick={() => requestOpenInBrowser('https://atomery.com/singlebox?utm_source=singlebox_app')}
+              onClick={() => requestOpenInBrowser(`https://atomery.com/singlebox?utm_source=${utmSource}`)}
             >
               Website
             </Button>
             <br />
             <Button
-              onClick={() => requestOpenInBrowser('https://atomery.com/support/singlebox&utm_source=singlebox_app')}
+              onClick={() => requestOpenInBrowser(`https://atomery.com/support/singlebox&utm_source=${utmSource}`)}
             >
               Support
             </Button>
@@ -101,13 +102,13 @@ const About = (props) => {
         ) : (
           <>
             <Button
-              onClick={() => requestOpenInBrowser('https://atomery.com/webcatalog?utm_source=webcatalog_app')}
+              onClick={() => requestOpenInBrowser(`https://atomery.com/webcatalog?utm_source=${utmSource}`)}
             >
               WebCatalog Website
             </Button>
             <br />
             <Button
-              onClick={() => requestOpenInBrowser('https://atomery.com/support?app=webcatalog&utm_source=webcatalog_app')}
+              onClick={() => requestOpenInBrowser(`https://atomery.com/support/webcatalog?utm_source=${utmSource}`)}
             >
               WebCatalog Support
             </Button>
@@ -119,10 +120,10 @@ const About = (props) => {
           <span role="img" aria-label="love">❤</span>
           <span> by </span>
           <span
-            onClick={() => requestOpenInBrowser('https://atomery.com?utm_source=webcatalog_app')}
+            onClick={() => requestOpenInBrowser(`https://atomery.com?utm_source=${utmSource}`)}
             onKeyDown={(e) => {
               if (e.key !== 'Enter') return;
-              requestOpenInBrowser('https://atomery.com?utm_source=webcatalog_app');
+              requestOpenInBrowser(`https://atomery.com?utm_source=${utmSource}`);
             }}
             role="link"
             tabIndex="0"
