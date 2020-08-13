@@ -1,7 +1,6 @@
 {
-    "id": "gmail",
-    "name": "Gmail",
-    "url": "https://gmail.com",
+    "id": "singlebox",
+    "name": "Singlebox",
     "registered": true,
-    "squirrel": false
+    "squirrel": true
 }
