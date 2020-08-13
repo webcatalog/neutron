@@ -17,6 +17,7 @@ import {
 const getValidationRules = () => ({
   homeUrl: {
     fieldName: 'Home URL',
+    required: !window.remote.getGlobal('appJson').url,
     lessStrictUrl: true,
   },
 });
