@@ -79,7 +79,7 @@ const opts = {
       '!node_modules/image-q/demo/**/*',
       // other files
       '!**/*/*.ts',
-      '!**/*/*.map',
+      '!node_modules/*/*.map',
       '!**/*/.DS_Store',
     ],
     asarUnpack: filesToBeReplaced.map((fileName) => path.join('build', fileName)),

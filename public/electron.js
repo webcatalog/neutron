@@ -6,9 +6,16 @@ const {
   protocol,
   session,
 } = require('electron');
-const fs = require('fs');
-const settings = require('electron-settings');
+const isDev = require('electron-is-dev');
 const { autoUpdater } = require('electron-updater');
+
+const { getPreference, getPreferences } = require('./libs/preferences');
+
+// Activate the Sentry Electron SDK as early as possible in every process.
+if (!isDev && getPreference('sentry')) {
+  // eslint-disable-next-line global-require
+  require('./libs/sentry');
+}
 
 const loadListeners = require('./listeners');
 
@@ -20,7 +27,6 @@ const createMenu = require('./libs/create-menu');
 const { addView, reloadViewsDarkReader } = require('./libs/views');
 const fetchUpdater = require('./libs/fetch-updater');
 require('./libs/squirrel-updater');
-const { getPreference, getPreferences } = require('./libs/preferences');
 const { getWorkspaces, setWorkspace } = require('./libs/workspaces');
 const sendToAllWindows = require('./libs/send-to-all-windows');
 const extractHostname = require('./libs/extract-hostname');
@@ -28,9 +34,6 @@ const extractHostname = require('./libs/extract-hostname');
 const MAILTO_URLS = require('./constants/mailto-urls');
 
 const appJson = require('./app.json');
-
-// see https://github.com/electron/electron/issues/18397
-app.allowRendererProcessReuse = true;
 
 const gotTheLock = app.requestSingleInstanceLock();
 
@@ -49,22 +52,15 @@ if (!gotTheLock) {
 } else {
   app.setName(appJson.name);
 
-  // make sure "Settings" file exists
-  // if not, ignore this chunk of code
-  // as using electron-settings before app.on('ready') and "Settings" is created
-  // would return error
-  // https://github.com/nathanbuchar/electron-settings/issues/111
-  if (fs.existsSync(settings.file())) {
-    const useHardwareAcceleration = getPreference('useHardwareAcceleration');
-    if (!useHardwareAcceleration) {
-      app.disableHardwareAcceleration();
-    }
+  const useHardwareAcceleration = getPreference('useHardwareAcceleration');
+  if (!useHardwareAcceleration) {
+    app.disableHardwareAcceleration();
+  }
 
-    const ignoreCertificateErrors = getPreference('ignoreCertificateErrors');
-    if (ignoreCertificateErrors) {
-      // https://www.electronjs.org/docs/api/command-line-switches
-      app.commandLine.appendSwitch('ignore-certificate-errors');
-    }
+  const ignoreCertificateErrors = getPreference('ignoreCertificateErrors');
+  if (ignoreCertificateErrors) {
+    // https://www.electronjs.org/docs/api/command-line-switches
+    app.commandLine.appendSwitch('ignore-certificate-errors');
   }
 
   // mock app.whenReady
