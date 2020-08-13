@@ -3,27 +3,27 @@ import isValidLicenseKey from './is-valid-license-key';
 
 const kits = {
   required: (val, ruleVal, fieldName) => {
-    if (!val || val === '') {
+    if (ruleVal && (!val || val === '')) {
       return '{fieldName} is required.'.replace('{fieldName}', fieldName);
     }
 
     return null;
   },
-  url: (val, maxLength, fieldName) => {
-    if (val && !isUrl(val)) {
+  url: (val, ruleVal, fieldName) => {
+    if (ruleVal && val && !isUrl(val)) {
       return '{fieldName} is not valid.'.replace('{fieldName}', fieldName);
     }
     return null;
   },
   // accept link without protocol prefix
-  lessStrictUrl: (val, _, fieldName) => {
-    if (val && !isUrl(val) && !isUrl(`http://${val}`)) {
+  lessStrictUrl: (val, ruleVal, fieldName) => {
+    if (ruleVal && val && !isUrl(val) && !isUrl(`http://${val}`)) {
       return '{fieldName} is not valid.'.replace('{fieldName}', fieldName);
     }
     return null;
   },
   licenseKey: (val, ruleVal, fieldName) => {
-    if (val && !isValidLicenseKey(val)) {
+    if (ruleVal && val && !isValidLicenseKey(val)) {
       return '{fieldName} is not valid.'.replace('{fieldName}', fieldName);
     }
     return null;
