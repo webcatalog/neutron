@@ -233,6 +233,7 @@ const Preferences = ({
 }) => {
   const { remote } = window.require('electron');
   const appJson = remote.getGlobal('appJson');
+  const utmSource = appJson.id === 'singlebox' ? 'singlebox_app' : 'juli_app';
 
   const sections = {
     general: {
@@ -986,7 +987,7 @@ const Preferences = ({
               <ChevronRightIcon color="action" />
             </ListItem>
             <Divider />
-            <ListItem button onClick={() => requestOpenInBrowser('https://atomery.com/privacy?app=webcatalog&utm_source=webcatalog_app')}>
+            <ListItem button onClick={() => requestOpenInBrowser(`https://atomery.com/privacy?utm_source=${utmSource}`)}>
               <ListItemText primary="Privacy Policy" />
             </ListItem>
           </List>
@@ -1208,7 +1209,7 @@ const Preferences = ({
           <List disablePadding dense>
             <ListItem
               button
-              onClick={() => requestOpenInBrowser('https://atomery.com/webcatalog?utm_source=singlebox_app')}
+              onClick={() => requestOpenInBrowser(`https://atomery.com/webcatalog?utm_source=${utmSource}`)}
               className={classes.listItemPromotion}
             >
               <div className={classes.promotionBlock}>
@@ -1231,7 +1232,7 @@ const Preferences = ({
             <Divider />
             <ListItem
               button
-              onClick={() => requestOpenInBrowser('https://atomery.com/singlebox?utm_source=singlebox_app')}
+              onClick={() => requestOpenInBrowser(`https://atomery.com/singlebox?utm_source=${utmSource}`)}
               className={classes.listItemPromotion}
             >
               <div className={classes.promotionBlock}>
@@ -1254,7 +1255,7 @@ const Preferences = ({
             <Divider />
             <ListItem
               button
-              onClick={() => requestOpenInBrowser('https://atomery.com/switchbar?utm_source=webcatalog_app')}
+              onClick={() => requestOpenInBrowser(`https://atomery.com/switchbar?utm_source=${utmSource}`)}
               className={classes.listItemPromotion}
             >
               <div className={classes.promotionBlock}>
@@ -1277,7 +1278,7 @@ const Preferences = ({
             <Divider />
             <ListItem
               button
-              onClick={() => requestOpenInBrowser('https://atomery.com/translatium?utm_source=singlebox_app')}
+              onClick={() => requestOpenInBrowser(`https://atomery.com/translatium?utm_source=${utmSource}`)}
               className={classes.listItemPromotion}
             >
               <div className={classes.promotionBlock}>
@@ -1312,12 +1313,12 @@ const Preferences = ({
             <Divider />
             {appJson.id === 'singlebox' ? (
               <>
-                <ListItem button onClick={() => requestOpenInBrowser('https://atomery.com/singlebox?utm_source=singlebox_app')}>
+                <ListItem button onClick={() => requestOpenInBrowser(`https://atomery.com/singlebox?utm_source=${utmSource}`)}>
                   <ListItemText primary="Website" />
                   <ChevronRightIcon color="action" />
                 </ListItem>
                 <Divider />
-                <ListItem button onClick={() => requestOpenInBrowser('https://atomery.com/support/singlebox&utm_source=singlebox_app')}>
+                <ListItem button onClick={() => requestOpenInBrowser(`https://atomery.com/support/singlebox&utm_source=${utmSource}`)}>
                   <ListItemText primary="Support" />
                   <ChevronRightIcon color="action" />
                 </ListItem>
@@ -1325,12 +1326,12 @@ const Preferences = ({
               </>
             ) : (
               <>
-                <ListItem button onClick={() => requestOpenInBrowser('https://atomery.com/webcatalog?utm_source=webcatalog_app')}>
+                <ListItem button onClick={() => requestOpenInBrowser(`https://atomery.com/webcatalog?utm_source=${utmSource}`)}>
                   <ListItemText primary="WebCatalog Website" />
                   <ChevronRightIcon color="action" />
                 </ListItem>
                 <Divider />
-                <ListItem button onClick={() => requestOpenInBrowser('https://atomery.com/support?app=webcatalog&utm_source=webcatalog_app')}>
+                <ListItem button onClick={() => requestOpenInBrowser(`https://atomery.com/support/webcatalog&utm_source=${utmSource}`)}>
                   <ListItemText primary="WebCatalog Support" />
                   <ChevronRightIcon color="action" />
                 </ListItem>
