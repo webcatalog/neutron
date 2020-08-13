@@ -198,9 +198,8 @@ const SortableItem = sortableElement(({ value }) => {
           });
         }
 
-        const { remote } = window.require('electron');
-        const menu = remote.Menu.buildFromTemplate(template);
-        menu.popup(remote.getCurrentWindow());
+        const menu = window.remote.Menu.buildFromTemplate(template);
+        menu.popup(window.remote.getCurrentWindow());
       }}
     />
   );
@@ -235,8 +234,7 @@ const Main = ({
   const showTitleBar = window.process.platform === 'darwin' && titleBar && !isFullScreen;
 
   const handleAddWorkspace = () => {
-    const { remote } = window.require('electron');
-    const appJson = remote.getGlobal('appJson');
+    const appJson = window.remote.getGlobal('appJson');
 
     if (!appJson.url) {
       requestShowAddWorkspaceWindow();
@@ -254,8 +252,8 @@ const Main = ({
       },
     ];
 
-    const menu = remote.Menu.buildFromTemplate(template);
-    menu.popup(remote.getCurrentWindow());
+    const menu = window.remote.Menu.buildFromTemplate(template);
+    menu.popup(window.remote.getCurrentWindow());
   };
 
   return (

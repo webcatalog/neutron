@@ -4,8 +4,6 @@ import isUrl from '../../helpers/is-url';
 import validate from '../../helpers/validate';
 import { requestLoadUrl } from '../../senders';
 
-const { remote } = window.require('electron');
-
 const getValidationRules = () => ({
   url: {
     fieldName: 'URL',
@@ -31,6 +29,6 @@ export const go = () => (dispatch, getState) => {
   const finalUrl = isUrl(url) ? url : `http://${url}`;
 
   requestLoadUrl(finalUrl);
-  remote.getCurrentWindow().close();
+  window.remote.getCurrentWindow().close();
   return null;
 };

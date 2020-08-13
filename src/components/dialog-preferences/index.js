@@ -232,8 +232,7 @@ const Preferences = ({
   updaterStatus,
   useHardwareAcceleration,
 }) => {
-  const { remote } = window.require('electron');
-  const appJson = remote.getGlobal('appJson');
+  const appJson = window.remote.getGlobal('appJson');
   const utmSource = appJson.id === 'singlebox' ? 'singlebox_app' : 'juli_app';
 
   const sections = {
@@ -310,7 +309,7 @@ const Preferences = ({
   };
 
   useEffect(() => {
-    const scrollTo = window.require('electron').remote.getGlobal('preferencesScrollTo');
+    const scrollTo = window.remote.getGlobal('preferencesScrollTo');
     if (!scrollTo) return;
     sections[scrollTo].ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
@@ -777,7 +776,7 @@ const Preferences = ({
                   // only show this message on macOS Catalina 10.15 & above
                   if (
                     window.process.platform === 'darwin'
-                    && semver.gte(remote.process.getSystemVersion(), '10.15.0')
+                    && semver.gte(window.remote.process.getSystemVersion(), '10.15.0')
                   ) {
                     return (
                       <>
@@ -867,7 +866,7 @@ const Preferences = ({
             <ListItem
               button
               onClick={() => {
-                remote.dialog.showOpenDialog(remote.getCurrentWindow(), {
+                window.remote.dialog.showOpenDialog(window.remote.getCurrentWindow(), {
                   properties: ['openDirectory'],
                 })
                   .then(({ canceled, filePaths }) => {

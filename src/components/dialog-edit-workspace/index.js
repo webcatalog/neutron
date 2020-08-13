@@ -154,7 +154,7 @@ const EditWorkspace = ({
             return 'Email app detected.';
           }
           if (!homeUrl) {
-            return `Defaults to ${window.require('electron').remote.getGlobal('appJson').url}.`;
+            return `Defaults to ${window.remote.getGlobal('appJson').url}.`;
           }
           return homeUrlError;
         })()}
@@ -185,8 +185,7 @@ const EditWorkspace = ({
                   { name: 'Images', extensions: ['jpg', 'jpeg', 'png', 'gif', 'tiff', 'tif', 'bmp', 'dib'] },
                 ],
               };
-              const { remote } = window.require('electron');
-              remote.dialog.showOpenDialog(remote.getCurrentWindow(), opts)
+              window.remote.dialog.showOpenDialog(window.remote.getCurrentWindow(), opts)
                 .then(({ canceled, filePaths }) => {
                   if (!canceled && filePaths && filePaths.length > 0) {
                     onUpdateForm({ picturePath: filePaths[0] });

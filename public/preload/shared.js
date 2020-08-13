@@ -1,4 +1,9 @@
-const { remote, ipcRenderer } = require('electron');
+const {
+  desktopCapturer,
+  ipcRenderer,
+  remote,
+  webFrame,
+} = require('electron');
 const contextMenu = require('electron-context-menu');
 const isDev = require('electron-is-dev');
 
@@ -11,3 +16,9 @@ if (!isDev && ipcRenderer.sendSync('get-preference', 'sentry')) {
 contextMenu({
   window: remote.getCurrentWindow(),
 });
+
+window.remote = remote;
+window.desktopCapturer = desktopCapturer;
+window.ipcRenderer = ipcRenderer;
+
+webFrame.setVisualZoomLevelLimits(1, 1);

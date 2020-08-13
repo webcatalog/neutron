@@ -126,7 +126,7 @@ const AppCard = (props) => {
           disableElevation
           onClick={() => {
             requestCreateWorkspace(name, url, icon);
-            window.require('electron').remote.getCurrentWindow().close();
+            window.remote.getCurrentWindow().close();
           }}
         >
           Add
