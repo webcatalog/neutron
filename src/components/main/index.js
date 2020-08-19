@@ -265,7 +265,9 @@ const Main = ({
               </SortableContainer>
               <WorkspaceSelector
                 id="add"
-                onClick={!appJson.url ? () => requestShowAddWorkspaceWindow() : () => requestCreateWorkspace()}
+                onClick={!appJson.url
+                  ? () => requestShowAddWorkspaceWindow()
+                  : () => requestCreateWorkspace()}
                 onContextMenu={!appJson.url ? null : (e) => {
                   e.preventDefault();
                   const template = [
