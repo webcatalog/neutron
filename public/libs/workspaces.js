@@ -228,8 +228,10 @@ const removeWorkspacePicture = (id) => {
 };
 
 // tasks to clean up leftover workspace data
-const cleanUpAsync = () => Promise.resolve()
+const cleanLeftoversAsync = () => Promise.resolve()
   .then(() => {
+    // eslint-disable-next-line no-console
+    console.log('Cleaning workspace leftovers...');
     // remove unused partitions
     const partitionsDirPath = path.join(app.getPath('userData'), 'Partitions');
     if (!fs.existsSync(partitionsDirPath)) {
@@ -268,13 +270,23 @@ const cleanUpAsync = () => Promise.resolve()
       .map((f) => fs.remove(path.join(picturesDirPath, f.name)));
 
     return Promise.all(p);
+  })
+  .then(() => {
+    // eslint-disable-next-line no-console
+    console.log('Done cleaning workspace leftovers.');
+  })
+  .catch((err) => {
+    // eslint-disable-next-line no-console
+    console.log(err);
   });
 
 const removeWorkspace = (id) => {
   delete workspaces[id];
   sendToAllWindows('set-workspace', id, null);
   settings.delete(`workspaces.${v}.${id}`);
-  cleanUpAsync();
+  setTimeout(() => {
+    cleanLeftoversAsync();
+  }, 5000);
 };
 
 module.exports = {
