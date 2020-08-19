@@ -20,7 +20,7 @@ const loadInvokers = () => {
         pauseNotificationsInfo: getPauseNotificationsInfo(),
       },
       general: {
-        shouldUseDarkColros: nativeTheme.shouldUseDarkColors,
+        shouldUseDarkColors: nativeTheme.shouldUseDarkColors,
       },
     };
     return Promise.resolve(initialState);
