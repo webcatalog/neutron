@@ -42,7 +42,7 @@ export const getWebsiteIconUrlAsync = (url) => new Promise((resolve, reject) => 
 
 export const getIconFromInternet = () => (dispatch, getState) => {
   const { form: { homeUrl, homeUrlError } } = getState().dialogEditWorkspace;
-  if (homeUrl || homeUrlError) return;
+  if (homeUrlError) return;
 
   dispatch({
     type: UPDATE_EDIT_WORKSPACE_DOWNLOADING_ICON,
