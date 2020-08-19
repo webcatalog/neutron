@@ -17,7 +17,6 @@ const create = () => {
     minimizable: false,
     fullscreenable: false,
     autoHideMenuBar: false,
-    show: false,
     webPreferences: {
       enableRemoteModule: true,
       nodeIntegration: true,
@@ -27,15 +26,11 @@ const create = () => {
   });
   win.setMenuBarVisibility(false);
 
+  win.loadURL(REACT_PATH);
+
   win.on('closed', () => {
     win = null;
   });
-
-  win.once('ready-to-show', () => {
-    win.show();
-  });
-
-  win.loadURL(REACT_PATH);
 };
 
 const show = () => {

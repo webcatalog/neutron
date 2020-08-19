@@ -19,7 +19,6 @@ const create = (scrollTo) => {
     minimizable: false,
     fullscreenable: false,
     autoHideMenuBar: false,
-    show: false,
     webPreferences: {
       enableRemoteModule: true,
       nodeIntegration: true,
@@ -28,16 +27,12 @@ const create = (scrollTo) => {
   });
   win.setMenuBarVisibility(false);
 
+  win.loadURL(REACT_PATH);
+
   win.on('closed', () => {
     win = null;
     global.preferencesScrollTo = null;
   });
-
-  win.once('ready-to-show', () => {
-    win.show();
-  });
-
-  win.loadURL(REACT_PATH);
 };
 
 const show = (scrollTo) => {
