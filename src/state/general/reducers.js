@@ -29,7 +29,8 @@ const canGoForward = (state = false, action) => {
   }
 };
 
-const isFullScreen = (state = window.remote.getCurrentWindow().isFullScreen(), action) => {
+const defaultIsFullScreen = window.remote.getCurrentWindow().isFullScreen();
+const isFullScreen = (state = defaultIsFullScreen, action) => {
   switch (action.type) {
     case UPDATE_IS_FULL_SCREEN: return action.isFullScreen;
     default: return state;
@@ -50,7 +51,8 @@ const isDefaultWebBrowser = (state = window.remote.app.isDefaultProtocolClient('
   }
 };
 
-const shouldUseDarkColors = (state = getShouldUseDarkColors(), action) => {
+const initialShouldUseDarkColors = getShouldUseDarkColors();
+const shouldUseDarkColors = (state = initialShouldUseDarkColors, action) => {
   switch (action.type) {
     case UPDATE_SHOULD_USE_DARK_COLORS: return action.shouldUseDarkColors;
     default: return state;
