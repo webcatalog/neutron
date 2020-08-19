@@ -2,9 +2,6 @@ name: macOS
 
 on:
   push:
-    branches:
-      - master
-      - next
     tags:
       - "v*.*.*"
   pull_request:

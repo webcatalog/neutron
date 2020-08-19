@@ -230,31 +230,9 @@ const Main = ({
   titleBar,
   workspaces,
 }) => {
+  const appJson = window.remote.getGlobal('appJson');
   const workspacesList = getWorkspacesAsList(workspaces);
   const showTitleBar = window.process.platform === 'darwin' && titleBar && !isFullScreen;
-
-  const handleAddWorkspace = () => {
-    const appJson = window.remote.getGlobal('appJson');
-
-    if (!appJson.url) {
-      requestShowAddWorkspaceWindow();
-      return;
-    }
-
-    const template = [
-      {
-        label: `Add ${appJson.name} Workspace`,
-        click: () => requestCreateWorkspace(),
-      },
-      {
-        label: 'Add Custom Workspace',
-        click: () => requestShowAddWorkspaceWindow(),
-      },
-    ];
-
-    const menu = window.remote.Menu.buildFromTemplate(template);
-    menu.popup(window.remote.getCurrentWindow());
-  };
 
   return (
     <div className={classes.outerRoot}>
@@ -287,10 +265,24 @@ const Main = ({
               </SortableContainer>
               <WorkspaceSelector
                 id="add"
-                onClick={handleAddWorkspace}
-                onContextMenu={(e) => {
+                onClick={!appJson.url
+                  ? () => requestShowAddWorkspaceWindow()
+                  : () => requestCreateWorkspace()}
+                onContextMenu={!appJson.url ? null : (e) => {
                   e.preventDefault();
-                  handleAddWorkspace();
+                  const template = [
+                    {
+                      label: `Add ${appJson.name} Workspace`,
+                      click: () => requestCreateWorkspace(),
+                    },
+                    {
+                      label: 'Add Custom Workspace',
+                      click: () => requestShowAddWorkspaceWindow(),
+                    },
+                  ];
+
+                  const menu = window.remote.Menu.buildFromTemplate(template);
+                  menu.popup(window.remote.getCurrentWindow());
                 }}
               />
             </div>
