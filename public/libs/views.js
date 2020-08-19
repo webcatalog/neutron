@@ -173,6 +173,7 @@ const addView = (browserWindow, workspace) => {
     nativeWindowOpen: true,
     nodeIntegration: false,
     contextIsolation: true,
+    plugins: true, // PDF reader
     session: ses,
     preload: path.join(__dirname, '..', 'preload', 'view.js'),
   };
