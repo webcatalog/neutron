@@ -6,8 +6,6 @@ const preferences = (state = {}, action) => {
       const newState = { ...state };
       newState[action.name] = action.value;
 
-      window.localStorage.setItem('preferences', JSON.stringify(newState));
-
       return newState;
     }
     default:
