@@ -1,5 +1,6 @@
 const {
   ipcMain,
+  nativeTheme,
 } = require('electron');
 
 const { getPreferences } = require('../libs/preferences');
@@ -17,6 +18,9 @@ const loadInvokers = () => {
       workspaceMetas: getWorkspaceMetas(),
       notifications: {
         pauseNotificationsInfo: getPauseNotificationsInfo(),
+      },
+      general: {
+        shouldUseDarkColros: nativeTheme.shouldUseDarkColors,
       },
     };
     return Promise.resolve(initialState);
