@@ -45,15 +45,16 @@ const rootReducer = combineReducers({
   workspaces,
 });
 
-const configureStore = (initialState) => createStore(
-  rootReducer,
-  initialState,
-  applyMiddleware(thunkMiddleware),
-);
+const configureStore = (initialState) => {
+  const store = createStore(
+    rootReducer,
+    initialState,
+    applyMiddleware(thunkMiddleware),
+  );
 
-// init store
-const store = configureStore();
+  loadListeners(store);
 
-loadListeners(store);
+  return store;
+};
 
-export default store;
+export default configureStore;

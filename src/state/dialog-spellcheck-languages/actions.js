@@ -1,12 +1,7 @@
 import {
-  DIALOG_SPELLCHECK_LANGUAGES_INIT,
   DIALOG_SPELLCHECK_LANGUAGES_UPDATE_FORM,
 } from '../../constants/actions';
 import { requestSetPreference, requestShowRequireRestartDialog } from '../../senders';
-
-export const init = () => ({
-  type: DIALOG_SPELLCHECK_LANGUAGES_INIT,
-});
 
 export const updateForm = (changes) => (dispatch) => dispatch({
   type: DIALOG_SPELLCHECK_LANGUAGES_UPDATE_FORM,

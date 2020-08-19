@@ -18,6 +18,7 @@ if (!isDev && getPreference('sentry')) {
 }
 
 const loadListeners = require('./listeners');
+const loadInvokers = require('./invokers');
 
 const authWindow = require('./windows/auth');
 const mainWindow = require('./windows/main');
@@ -77,6 +78,7 @@ if (!gotTheLock) {
   };
 
   loadListeners();
+  loadInvokers();
 
   const commonInit = () => {
     app.whenReady()

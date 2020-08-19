@@ -11,10 +11,6 @@ import {
   UPDATE_TITLE,
 } from '../../constants/actions';
 
-import {
-  getShouldUseDarkColors,
-} from '../../senders';
-
 const canGoBack = (state = false, action) => {
   switch (action.type) {
     case UPDATE_CAN_GO_BACK: return action.canGoBack;
@@ -51,8 +47,7 @@ const isDefaultWebBrowser = (state = window.remote.app.isDefaultProtocolClient('
   }
 };
 
-const initialShouldUseDarkColors = getShouldUseDarkColors();
-const shouldUseDarkColors = (state = initialShouldUseDarkColors, action) => {
+const shouldUseDarkColors = (state = false, action) => {
   switch (action.type) {
     case UPDATE_SHOULD_USE_DARK_COLORS: return action.shouldUseDarkColors;
     default: return state;
