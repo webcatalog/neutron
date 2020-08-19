@@ -50,14 +50,10 @@ jobs:
           dist/template-linux-x64.zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - run: |
-        curl -sL https://sentry.io/get-cli/ | bash
-        sentry-cli info
-      env:
-        SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
     - name: Create Sentry Release
       if: startsWith(github.ref, 'refs/tags/')
       run: |
+        curl -sL https://sentry.io/get-cli/ | bash
         VERSION=$(node -p -e "require('./package.json').version")
         sentry-cli releases new $VERSION
         sentry-cli releases set-commits --auto $VERSION
