@@ -52,7 +52,9 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - run: |
         curl -sL https://sentry.io/get-cli/ | bash
-        sentry-cli
+        sentry-cli info
+      env:
+        SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
     - name: Create Sentry Release
       if: startsWith(github.ref, 'refs/tags/')
       run: |
