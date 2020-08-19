@@ -1,6 +1,5 @@
 import {
   DIALOG_PROXY_FORM_UPDATE,
-  DIALOG_PROXY_INIT,
 } from '../../constants/actions';
 
 import validate from '../../helpers/validate';
@@ -10,10 +9,6 @@ import {
   requestSetPreference,
   requestShowRequireRestartDialog,
 } from '../../senders';
-
-export const init = () => ({
-  type: DIALOG_PROXY_INIT,
-});
 
 const getValidationRules = (proxyType) => {
   if (proxyType === 'rules') {

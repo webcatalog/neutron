@@ -5,8 +5,6 @@ import {
   UPDATE_SHOW_DATE_TIME_PICKER,
 } from '../../constants/actions';
 
-import { getPauseNotificationsInfo } from '../../senders';
-
 const showDateTimePicker = (state = false, action) => {
   switch (action.type) {
     case UPDATE_SHOW_DATE_TIME_PICKER: {
@@ -18,20 +16,9 @@ const showDateTimePicker = (state = false, action) => {
   }
 };
 
-const getInitialState = () => {
-  const cachedState = window.localStorage.getItem('pauseNotificationsInfo');
-  if (cachedState) {
-    return JSON.parse(cachedState);
-  }
-  const latestState = getPauseNotificationsInfo();
-  window.localStorage.setItem('pauseNotificationsInfo', JSON.stringify(latestState));
-  return latestState;
-};
-const initialState = getInitialState();
-const pauseNotificationsInfo = (state = initialState, action) => {
+const pauseNotificationsInfo = (state = null, action) => {
   switch (action.type) {
     case UPDATE_PAUSE_NOTIFICATIONS_INFO: {
-      window.localStorage.setItem('pauseNotificationsInfo', JSON.stringify(action.pauseNotificationsInfo));
       return action.pauseNotificationsInfo;
     }
     default:

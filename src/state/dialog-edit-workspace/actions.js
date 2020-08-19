@@ -1,5 +1,4 @@
 import {
-  DIALOG_EDIT_WORKSPACE_INIT,
   UPDATE_EDIT_WORKSPACE_FORM,
   UPDATE_EDIT_WORKSPACE_DOWNLOADING_ICON,
 } from '../../constants/actions';
@@ -20,10 +19,6 @@ const getValidationRules = () => ({
     required: !window.remote.getGlobal('appJson').url,
     lessStrictUrl: true,
   },
-});
-
-export const init = () => ({
-  type: DIALOG_EDIT_WORKSPACE_INIT,
 });
 
 // to be replaced with invoke (electron 7+)

@@ -6,12 +6,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 
 import 'typeface-roboto/index.css';
 
-import store from './state';
-import { init as initDialogCodeInjection } from './state/dialog-code-injection/actions';
-import { init as initDialogCustomUserAgent } from './state/dialog-custom-user-agent/actions';
-import { init as initDialogEditWorkspace } from './state/dialog-edit-workspace/actions';
-import { init as initDialogProxy } from './state/dialog-proxy/actions';
-import { init as initDialogSpellcheckLanguages } from './state/dialog-spellcheck-languages/actions';
+import configureStore from './state';
 
 import AppWrapper from './components/app-wrapper';
 
@@ -55,7 +50,9 @@ const App = () => {
 
 const runApp = () => {
   Promise.resolve()
-    .then(() => {
+    .then(async () => {
+      const initialState = await window.ipcRenderer.invoke('get-react-initial-state');
+
       if (window.mode === 'about') {
         document.title = 'About';
       } else if (window.mode === 'auth') {
@@ -63,11 +60,9 @@ const runApp = () => {
       } else if (window.mode === 'preferences') {
         document.title = 'Preferences';
       } else if (window.mode === 'edit-workspace') {
-        store.dispatch(initDialogEditWorkspace());
-        const { workspaces } = store.getState();
-        const workspaceList = getWorkspacesAsList(workspaces);
         const editWorkspaceId = window.remote.getGlobal('editWorkspaceId');
-        const workspace = workspaces[editWorkspaceId];
+        const workspaceList = getWorkspacesAsList(initialState.workspaces);
+        const workspace = initialState.workspaces[editWorkspaceId];
         workspaceList.some((item, index) => {
           if (item.id === editWorkspaceId) {
             workspace.order = index;
@@ -75,27 +70,46 @@ const runApp = () => {
           }
           return false;
         });
+        initialState.dialogEditWorkspace = { form: workspace };
+
         document.title = workspace.name ? `Edit Workspace ${workspace.order + 1} "${workspace.name}"` : `Edit Workspace ${workspace.order + 1}`;
       } else if (window.mode === 'open-url-with') {
         document.title = 'Open Link With';
       } else if (window.mode === 'code-injection') {
-        store.dispatch(initDialogCodeInjection());
         const codeInjectionType = window.remote.getGlobal('codeInjectionType');
+        initialState.dialogCodeInjection = {
+          form: {
+            code: initialState.preferences[`${codeInjectionType}CodeInjection`],
+            // allowNodeInJsCodeInjection is only used for js injection
+            allowNodeInJsCodeInjection: codeInjectionType === 'js' ? initialState.preferences.allowNodeInJsCodeInjection : false,
+          },
+        };
         document.title = `Edit ${codeInjectionType.toUpperCase()} Code Injection`;
       } else if (window.mode === 'notifications') {
         document.title = 'Notifications';
       } else if (window.mode === 'display-media') {
         document.title = 'Share your Screen';
       } else if (window.mode === 'custom-user-agent') {
-        store.dispatch(initDialogCustomUserAgent());
+        initialState.dialogCustomUserAgent = {
+          form: { code: initialState.preferences.customUserAgent },
+        };
         document.title = 'Edit Custom User Agent';
       } else if (window.mode === 'go-to-url') {
         document.title = 'Go to URL';
       } else if (window.mode === 'proxy') {
-        store.dispatch(initDialogProxy());
+        initialState.dialogProxy = {
+          proxyBypassRules: initialState.preferences.proxyBypassRules,
+          proxyPacScript: initialState.preferences.proxyPacScript,
+          proxyRules: initialState.preferences.proxyRules,
+          proxyType: initialState.preferences.proxyType,
+        };
         document.title = 'Proxy Settings';
       } else if (window.mode === 'spellcheck-languages') {
-        store.dispatch(initDialogSpellcheckLanguages());
+        initialState.dialogSpellcheckLanguages = {
+          form: {
+            spellcheckLanguages: initialState.preferences.spellcheckLanguages,
+          },
+        };
         document.title = 'Spell Checking Languages';
       } else if (window.mode === 'add-workspace') {
         document.title = 'Add Custom Workspace';
@@ -115,19 +129,23 @@ const runApp = () => {
           }
         });
       }
-    });
 
-  ReactDOM.render(
-    <Provider store={store}>
-      <AppWrapper>
-        <CssBaseline />
-        <React.Suspense fallback={<div />}>
-          <App />
-        </React.Suspense>
-      </AppWrapper>
-    </Provider>,
-    document.getElementById('app'),
-  );
+      const store = configureStore(initialState);
+      return store;
+    })
+    .then((store) => {
+      ReactDOM.render(
+        <Provider store={store}>
+          <AppWrapper>
+            <CssBaseline />
+            <React.Suspense fallback={<div />}>
+              <App />
+            </React.Suspense>
+          </AppWrapper>
+        </Provider>,
+        document.getElementById('app'),
+      );
+    });
 };
 
 runApp();
