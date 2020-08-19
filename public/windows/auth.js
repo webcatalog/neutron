@@ -28,8 +28,6 @@ const create = (id) => {
   });
   wins[id].setMenuBarVisibility(false);
 
-  wins[id].loadURL(REACT_PATH);
-
   const identityValidationListener = (e, windowId, username, password) => {
     if (windowId !== wins[id].id) return;
 
@@ -50,6 +48,12 @@ const create = (id) => {
   });
 
   ipcMain.on('request-validate-auth-identity', identityValidationListener);
+
+  wins[id].once('ready-to-show', () => {
+    wins[id].show();
+  });
+
+  wins[id].loadURL(REACT_PATH);
 };
 
 const show = (id) => {

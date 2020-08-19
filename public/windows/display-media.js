@@ -19,6 +19,7 @@ const create = (viewId) => {
     minimizable: false,
     fullscreenable: false,
     autoHideMenuBar: false,
+    show: false,
     webPreferences: {
       enableRemoteModule: true,
       nodeIntegration: true,
@@ -26,8 +27,6 @@ const create = (viewId) => {
     },
   });
   win.setMenuBarVisibility(false);
-
-  win.loadURL(REACT_PATH);
 
   const onClose = () => {
     BrowserView.fromId(global.displayMediaRequestedViewId).webContents.send('display-media-id-received', null);
@@ -45,6 +44,12 @@ const create = (viewId) => {
   win.on('closed', () => {
     win = null;
   });
+
+  win.once('ready-to-show', () => {
+    win.show();
+  });
+
+  win.loadURL(REACT_PATH);
 };
 
 const show = (viewId) => {
