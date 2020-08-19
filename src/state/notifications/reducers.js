@@ -18,9 +18,20 @@ const showDateTimePicker = (state = false, action) => {
   }
 };
 
-const pauseNotificationsInfo = (state = getPauseNotificationsInfo(), action) => {
+const getInitialState = () => {
+  const cachedState = window.localStorage.getItem('pauseNotificationsInfo');
+  if (cachedState) {
+    return JSON.parse(cachedState);
+  }
+  const latestState = getPauseNotificationsInfo();
+  window.localStorage.setItem('pauseNotificationsInfo', JSON.stringify(latestState));
+  return latestState;
+};
+const initialState = getInitialState();
+const pauseNotificationsInfo = (state = initialState, action) => {
   switch (action.type) {
     case UPDATE_PAUSE_NOTIFICATIONS_INFO: {
+      window.localStorage.setItem('pauseNotificationsInfo', JSON.stringify(action.pauseNotificationsInfo));
       return action.pauseNotificationsInfo;
     }
     default:
