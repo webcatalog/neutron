@@ -33,7 +33,7 @@ const initWorkspaces = () => {
     }
   }
 
-  if (Object.keys(loadedWorkspaces).length < 1 && appJson.url) {
+  if (appJson.url && Object.keys(loadedWorkspaces).length < 1) {
     const initialWorkspaceId = uuidv1();
     loadedWorkspaces[initialWorkspaceId] = {
       id: initialWorkspaceId,
