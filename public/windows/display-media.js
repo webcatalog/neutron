@@ -36,8 +36,10 @@ const create = (viewId) => {
   const onSelected = (e, displayMediaId) => {
     BrowserView.fromId(global.displayMediaRequestedViewId).webContents.send('display-media-id-received', displayMediaId);
     ipcMain.removeListener('display-media-selected', onSelected);
-    win.removeListener('close', onClose);
-    win.close();
+    if (win) {
+      win.removeListener('close', onClose);
+      win.close();
+    }
   };
   ipcMain.once('display-media-selected', onSelected);
 
