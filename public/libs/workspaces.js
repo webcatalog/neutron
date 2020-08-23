@@ -284,12 +284,10 @@ const removeWorkspace = (id) => {
   delete workspaces[id];
   sendToAllWindows('set-workspace', id, null);
   settings.delete(`workspaces.${v}.${id}`);
-  setTimeout(() => {
-    cleanLeftoversAsync();
-  }, 5000);
 };
 
 module.exports = {
+  cleanLeftoversAsync,
   countWorkspaces,
   createWorkspace,
   getActiveWorkspace,
@@ -299,9 +297,9 @@ module.exports = {
   getWorkspaces,
   getWorkspacesAsList,
   removeWorkspace,
+  removeWorkspacePicture,
   setActiveWorkspace,
   setWorkspace,
-  setWorkspaces,
   setWorkspacePicture,
-  removeWorkspacePicture,
+  setWorkspaces,
 };
