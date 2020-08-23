@@ -448,8 +448,9 @@ const addView = (browserWindow, workspace) => {
 
     // load in same window
     if (
+      (appDomain.endsWith('slack.com') && nextDomain.endsWith('slack.com'))
       // Google: Add account
-      nextDomain === 'accounts.google.com'
+      || nextDomain === 'accounts.google.com'
       // Google: Switch account
       || (
         nextDomain && nextDomain.indexOf('google.com') > 0
