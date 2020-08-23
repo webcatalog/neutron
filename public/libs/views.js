@@ -68,12 +68,19 @@ const equivalentDomain = (domain) => {
 
   let eDomain = domain;
 
-  const prefixes = ['www', 'app', 'login', 'go', 'accounts', 'open'];
+  const prefixes = [
+    'www', 'app', 'login', 'go', 'accounts', 'open', 'web', 'join',
+    'auth', 'hello',
+  ];
   // app.portcast.io ~ portcast.io
   // login.xero.com ~ xero.com
   // go.xero.com ~ xero.com
   // accounts.google.com ~ google.com
   // open.spotify.com ~ spotify.com
+  // web.whatsapp.com ~ whatsapp.com
+  // join.slack.com ~ slack.com
+  // auth.monday.com ~ monday.com
+  // hello.dubsado.com ~ dubsado.com
 
   // remove one by one not to break domain
   prefixes.forEach((prefix) => {
