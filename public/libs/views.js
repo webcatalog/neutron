@@ -181,6 +181,7 @@ const addView = (browserWindow, workspace) => {
     nodeIntegration: false,
     contextIsolation: true,
     plugins: true, // PDF reader
+    enableRemoteModule: true,
     session: ses,
     preload: path.join(__dirname, '..', 'preload', 'view.js'),
   };
