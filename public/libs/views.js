@@ -280,6 +280,7 @@ const addView = (browserWindow, workspace) => {
     setWorkspace(workspace.id, {
       lastUrl: currentUrl,
     });
+    ipcMain.emit('request-realign-active-workspace');
   });
 
   if (workspace.active) {
