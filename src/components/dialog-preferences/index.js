@@ -233,7 +233,28 @@ const Preferences = ({
   useHardwareAcceleration,
 }) => {
   const appJson = window.remote.getGlobal('appJson');
-  const utmSource = appJson.id === 'singlebox' ? 'singlebox_app' : 'juli_app';
+  const isSinglebox = appJson.id === 'singlebox';
+  const utmSource = isSinglebox ? 'singlebox_app' : 'juli_app';
+
+  const checkLicense = () => {
+    if (!isSinglebox && !window.remote.getGlobal('appJson').registered) {
+      window.remote.dialog.showMessageBox(window.remote.getCurrentWindow(), {
+        type: 'info',
+        message: 'You are currently running the free version of WebCatalog which does not include this feature. To remove the limitations, please purchase the full version ($19.99) from our store.',
+        buttons: ['OK', 'Learn More...'],
+        cancelId: 0,
+        defaultId: 0,
+      })
+        .then(({ response }) => {
+          if (response === 1) {
+            window.remote.shell.openExternal('https://atomery.com/webcatalog/pricing?utm_source=juli_app');
+          }
+        })
+        .catch(console.log); // eslint-disable-line no-console
+      return false;
+    }
+    return true;
+  };
 
   const sections = {
     general: {
@@ -471,6 +492,8 @@ const Preferences = ({
                   color="primary"
                   checked={attachToMenubar}
                   onChange={(e) => {
+                    if (!checkLicense()) return;
+
                     requestSetPreference('attachToMenubar', e.target.checked);
                     requestShowRequireRestartDialog();
                   }}
@@ -513,6 +536,10 @@ const Preferences = ({
                   color="primary"
                   checked={blockAds}
                   onChange={(e) => {
+                    if (!checkLicense()) {
+                      return;
+                    }
+
                     requestSetPreference('blockAds', e.target.checked);
                     requestShowRequireRestartDialog();
                   }}
@@ -1052,12 +1079,24 @@ const Preferences = ({
               <ChevronRightIcon color="action" />
             </ListItem>
             <Divider />
-            <ListItem button onClick={() => requestShowCodeInjectionWindow('js')}>
+            <ListItem
+              button
+              onClick={() => {
+                if (!checkLicense()) return;
+                requestShowCodeInjectionWindow('js');
+              }}
+            >
               <ListItemText primary="JS Code Injection" secondary={jsCodeInjection ? `Set ${allowNodeInJsCodeInjection ? ' (with access to Node.JS & Electron APIs)' : ''}` : 'Not set'} />
               <ChevronRightIcon color="action" />
             </ListItem>
             <Divider />
-            <ListItem button onClick={() => requestShowCodeInjectionWindow('css')}>
+            <ListItem
+              button
+              onClick={() => {
+                if (!checkLicense()) return;
+                requestShowCodeInjectionWindow('css');
+              }}
+            >
               <ListItemText primary="CSS Code Injection" secondary={cssCodeInjection ? 'Set' : 'Not set'} />
               <ChevronRightIcon color="action" />
             </ListItem>
@@ -1329,7 +1368,7 @@ const Preferences = ({
               <ChevronRightIcon color="action" />
             </ListItem>
             <Divider />
-            {appJson.id === 'singlebox' ? (
+            {isSinglebox ? (
               <>
                 <ListItem button onClick={() => requestOpenInBrowser(`https://atomery.com/singlebox?utm_source=${utmSource}`)}>
                   <ListItemText primary="Website" />
