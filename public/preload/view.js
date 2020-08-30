@@ -3,42 +3,58 @@ const {
   remote,
   webFrame,
 } = require('electron');
-
-const {
-  enable: enableDarkMode,
-  disable: disableDarkMode,
-} = require('darkreader');
+const fs = require('fs');
+const path = require('path');
 
 const ContextMenuBuilder = require('../libs/context-menu-builder');
 
 const { MenuItem, shell } = remote;
+
+const loadDarkReader = () => {
+  const shouldUseDarkColor = ipcRenderer.sendSync('get-should-use-dark-colors');
+  const darkReader = ipcRenderer.sendSync('get-preference', 'darkReader');
+  let loadScript = '';
+  if (shouldUseDarkColor && darkReader) {
+    const {
+      darkReaderBrightness,
+      darkReaderContrast,
+      darkReaderGrayscale,
+      darkReaderSepia,
+    } = ipcRenderer.sendSync('get-preferences');
+    console.log(`DarkReader.setFetchMethod(window.fetch);
+DarkReader.enable({
+  darkReaderBrightness: ${darkReaderBrightness},
+  darkReaderContrast: ${darkReaderContrast},
+  darkReaderGrayscale: ${darkReaderGrayscale},
+  darkReaderSepia: ${darkReaderSepia},
+});`);
+    loadScript = `DarkReader.setFetchMethod(window.fetch);
+DarkReader.enable({
+  darkReaderBrightness: ${darkReaderBrightness},
+  darkReaderContrast: ${darkReaderContrast},
+  darkReaderGrayscale: ${darkReaderGrayscale},
+  darkReaderSepia: ${darkReaderSepia},
+});`;
+  } else {
+    loadScript = `DarkReader.setFetchMethod(window.fetch);
+DarkReader.disable()`;
+  }
+
+  // inject dark reader instead of using DarkReader API directly in preload
+  // to avoid CORS-related issues
+  // see https://github.com/atomery/webcatalog/issues/993
+  const darkReaderJsPath = path.resolve(__dirname, '..', '..', 'node_modules', 'darkreader', 'darkreader.js');
+  const darkReaderJsString = fs.readFileSync(darkReaderJsPath, 'utf-8');
+  const node = document.createElement('script');
+  node.innerHTML = `${darkReaderJsString}${loadScript}`;
+  document.body.appendChild(node);
+};
 
 let handled = false;
 const handleLoaded = (event) => {
   if (handled) return;
   // eslint-disable-next-line no-console
   console.log(`Preload script is loading on ${event}...`);
-
-  const loadDarkReader = () => {
-    const shouldUseDarkColor = ipcRenderer.sendSync('get-should-use-dark-colors');
-    const darkReader = ipcRenderer.sendSync('get-preference', 'darkReader');
-    if (shouldUseDarkColor && darkReader) {
-      const {
-        darkReaderBrightness,
-        darkReaderContrast,
-        darkReaderGrayscale,
-        darkReaderSepia,
-      } = ipcRenderer.sendSync('get-preferences');
-      enableDarkMode({
-        brightness: darkReaderBrightness,
-        contrast: darkReaderContrast,
-        grayscale: darkReaderGrayscale,
-        sepia: darkReaderSepia,
-      });
-    } else {
-      disableDarkMode();
-    }
-  };
 
   loadDarkReader();
   ipcRenderer.on('reload-dark-reader', () => {
