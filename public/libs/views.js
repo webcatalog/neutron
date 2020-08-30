@@ -5,6 +5,7 @@ const {
   app,
   session,
   shell,
+  ipcMain,
 } = require('electron');
 const path = require('path');
 const fsExtra = require('fs-extra');
@@ -280,6 +281,7 @@ const addView = (browserWindow, workspace) => {
     setWorkspace(workspace.id, {
       lastUrl: currentUrl,
     });
+    ipcMain.emit('request-realign-active-workspace');
   });
 
   if (workspace.active) {
