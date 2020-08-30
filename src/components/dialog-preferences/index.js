@@ -254,7 +254,7 @@ const Preferences = ({
       return false;
     }
     return true;
-  }
+  };
 
   const sections = {
     general: {
@@ -1079,8 +1079,8 @@ const Preferences = ({
               <ChevronRightIcon color="action" />
             </ListItem>
             <Divider />
-            <ListItem 
-              button 
+            <ListItem
+              button
               onClick={() => {
                 if (!checkLicense()) return;
                 requestShowCodeInjectionWindow('js');
@@ -1090,8 +1090,8 @@ const Preferences = ({
               <ChevronRightIcon color="action" />
             </ListItem>
             <Divider />
-            <ListItem 
-              button 
+            <ListItem
+              button
               onClick={() => {
                 if (!checkLicense()) return;
                 requestShowCodeInjectionWindow('css');
