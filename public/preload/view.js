@@ -13,9 +13,6 @@ const ContextMenuBuilder = require('../libs/context-menu-builder');
 
 const { MenuItem, shell } = remote;
 
-window.global = {};
-window.ipcRenderer = ipcRenderer;
-
 let handled = false;
 const handleLoaded = (event) => {
   if (handled) return;
