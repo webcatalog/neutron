@@ -51,7 +51,7 @@ const DialogLicenseRegistration = (props) => {
     <div className={classes.root}>
       <div className={classes.flexGrow}>
         <DialogContentText className={classes.dialogContentText}>
-          You are currently running a trial version of Singlebox which only
+          You are currently running the trial version of Singlebox which only
           lets you add up to two workspaces.
           To remove the trial limitations, please purchase a
           perpetual license key ($14.99) from our store.
