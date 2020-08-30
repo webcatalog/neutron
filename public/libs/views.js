@@ -5,6 +5,7 @@ const {
   app,
   session,
   shell,
+  ipcMain,
 } = require('electron');
 const path = require('path');
 const fsExtra = require('fs-extra');
