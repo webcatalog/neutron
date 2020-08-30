@@ -263,14 +263,14 @@ const loadListeners = () => {
 
         dialog.showMessageBox(mainWindow.get(), {
           type: 'info',
-          message: 'You are currently running a trial version of WebCatalog which only lets you add up to two workspaces per app. To remove the trial limitations, please purchase a perpetual license key ($19.99) from our store.',
+          message: 'You are currently running the free version of WebCatalog which only lets you add up to two workspaces per app. To remove the limitations, please purchase the full version ($19.99) from our store.',
           buttons: ['OK', 'Visit Store...'],
           cancelId: 0,
           defaultId: 0,
         })
           .then(({ response }) => {
             if (response === 1) {
-              shell.openExternal('https://webcatalog.onfastspring.com/webcatalog-lite');
+              shell.openExternal('https://webcatalog.onfastspring.com/webcatalog-lite?utm_source=juli_app');
             }
           })
           .catch(console.log); // eslint-disable-line no-console

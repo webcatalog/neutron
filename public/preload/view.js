@@ -21,13 +21,6 @@ const loadDarkReader = () => {
       darkReaderGrayscale,
       darkReaderSepia,
     } = ipcRenderer.sendSync('get-preferences');
-    console.log(`DarkReader.setFetchMethod(window.fetch);
-DarkReader.enable({
-  darkReaderBrightness: ${darkReaderBrightness},
-  darkReaderContrast: ${darkReaderContrast},
-  darkReaderGrayscale: ${darkReaderGrayscale},
-  darkReaderSepia: ${darkReaderSepia},
-});`);
     loadScript = `DarkReader.setFetchMethod(window.fetch);
 DarkReader.enable({
   darkReaderBrightness: ${darkReaderBrightness},
