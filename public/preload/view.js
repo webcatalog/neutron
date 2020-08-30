@@ -13,7 +13,7 @@ const { MenuItem, shell } = remote;
 const loadDarkReader = () => {
   const shouldUseDarkColor = ipcRenderer.sendSync('get-should-use-dark-colors');
   const darkReader = ipcRenderer.sendSync('get-preference', 'darkReader');
-  let loadScript = '';
+  let jsScript = '';
   if (shouldUseDarkColor && darkReader) {
     const {
       darkReaderBrightness,
@@ -21,26 +21,24 @@ const loadDarkReader = () => {
       darkReaderGrayscale,
       darkReaderSepia,
     } = ipcRenderer.sendSync('get-preferences');
-    loadScript = `DarkReader.setFetchMethod(window.fetch);
+    const darkReaderJsPath = path.resolve(__dirname, '..', '..', 'node_modules', 'darkreader', 'darkreader.js');
+    const darkReaderJsString = fs.readFileSync(darkReaderJsPath, 'utf-8');
+    jsScript = `if (window.DarkReader == null) { ${darkReaderJsString} }
+DarkReader.setFetchMethod(window.fetch);
 DarkReader.enable({
-  darkReaderBrightness: ${darkReaderBrightness},
-  darkReaderContrast: ${darkReaderContrast},
-  darkReaderGrayscale: ${darkReaderGrayscale},
-  darkReaderSepia: ${darkReaderSepia},
+  brightness: ${darkReaderBrightness},
+  contrast: ${darkReaderContrast},
+  grayscale: ${darkReaderGrayscale},
+  sepia: ${darkReaderSepia},
 });`;
   } else {
-    loadScript = `DarkReader.setFetchMethod(window.fetch);
-DarkReader.disable()`;
+    jsScript = 'if (window.DarkReader) { DarkReader.disable(); }';
   }
 
   // inject dark reader instead of using DarkReader API directly in preload
   // to avoid CORS-related issues
   // see https://github.com/atomery/webcatalog/issues/993
-  const darkReaderJsPath = path.resolve(__dirname, '..', '..', 'node_modules', 'darkreader', 'darkreader.js');
-  const darkReaderJsString = fs.readFileSync(darkReaderJsPath, 'utf-8');
-  const node = document.createElement('script');
-  node.innerHTML = `${darkReaderJsString}${loadScript}`;
-  document.body.appendChild(node);
+  webFrame.executeJavaScript(jsScript);
 };
 
 let handled = false;
