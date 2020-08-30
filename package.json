@@ -1,7 +1,7 @@
 {
   "name": "Singlebox",
   "description": "AppView template for WebCatalog",
-  "version": "10.0.0-alpha.2",
+  "version": "10.0.0-alpha.3",
   "minimumWebCatalogVersion": "23.0.0",
   "engines": {
     "node": ">=12.0.0 <13.0.0"
@@ -25,7 +25,7 @@
   "repository": "https://github.com/atomery/juli",
   "author": "Quang Lam <quang.lam@atomery.com>",
   "dependencies": {
-    "@cliqz/adblocker-electron": "1.18.1",
+    "@cliqz/adblocker-electron": "1.18.2",
     "@sentry/electron": "2.0.0",
     "cheerio": "1.0.0-rc.3",
     "darkreader": "4.9.16",
@@ -37,7 +37,7 @@
     "follow-redirects": "1.13.0",
     "fs-extra": "9.0.1",
     "is-url": "1.2.4",
-    "jimp": "0.16.0",
+    "jimp": "0.16.1",
     "menubar": "9.0.1",
     "node-fetch": "2.6.0",
     "proxy-agent": "3.1.1",
@@ -60,8 +60,8 @@
     "classnames": "2.2.6",
     "concurrently": "5.3.0",
     "cross-env": "7.0.2",
-    "date-fns": "2.15.0",
-    "electron": "10.0.0",
+    "date-fns": "2.16.0",
+    "electron": "10.1.0",
     "electron-builder": "22.8.1",
     "electron-notarize": "1.0.0",
     "eslint": "6.8.0",
