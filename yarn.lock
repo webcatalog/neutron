@@ -5175,10 +5175,10 @@ damerau-levenshtein@^1.0.4, damerau-levenshtein@^1.0.6:
   resolved "https://registry.yarnpkg.com/damerau-levenshtein/-/damerau-levenshtein-1.0.6.tgz#143c1641cb3d85c60c32329e26899adea8701791"
   integrity sha512-JVrozIeElnj3QzfUIt8tB8YMluBJom4Vw9qTPpjGYQ9fYlB3D/rb6OordUxf3xeFB35LKWs0xqcO5U6ySvBtug==
 
-darkreader@4.9.16:
-  version "4.9.16"
-  resolved "https://registry.yarnpkg.com/darkreader/-/darkreader-4.9.16.tgz#8a6db8da187abb9f4fcad4cf9f382ec1015adef1"
-  integrity sha512-vzBJkDL/O4H7d6CamCaqm+XHVF6diaZ6RORBCVxPBUvETlyJf6ERQhw4kzpJQOlpZdkwAvQ9Yy3LvF7rQHpdZg==
+darkreader@4.9.17:
+  version "4.9.17"
+  resolved "https://registry.yarnpkg.com/darkreader/-/darkreader-4.9.17.tgz#8a045887503206df0dd150b4fcec0c87684e6c2c"
+  integrity sha512-hOTlh2GCzKKZWnzyCdbVAiKYwrjhvIgkFLXfsFLpQyZQWaTwNvBIeTQfTtk9nfpof7/phCmFd1XSWuvoBy+W+g==
 
 dashdash@^1.12.0:
   version "1.14.1"
@@ -5716,10 +5716,10 @@ electron-window-state@5.0.3:
     jsonfile "^4.0.0"
     mkdirp "^0.5.1"
 
-electron@10.1.0:
-  version "10.1.0"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-10.1.0.tgz#3559182545dc76e20d9764d183d555415d55c250"
-  integrity sha512-DyS6WhQ59+ZXQsI1EkpsYkOXFt0Xbp+mbxPTJS9A7O21r3JDzaTC+1Jxz7g6J+Sbi9Y7UFdRs0tn/vqhHJx2gA==
+electron@10.1.1:
+  version "10.1.1"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-10.1.1.tgz#44ff9207afc9df253d3b5ea40c7e6513c5dc08d8"
+  integrity sha512-ZJtZHMr17AvvBosuA6XUmpehwAlGM4/n46Mw9BcyD8tpgdI6IQd0X5OU9meE3X3M8Y6Ja2Kr2udTMgtjvot2hA==
   dependencies:
     "@electron/get" "^1.0.1"
     "@types/node" "^12.0.12"
