@@ -1375,7 +1375,7 @@ const Preferences = ({
                   <ChevronRightIcon color="action" />
                 </ListItem>
                 <Divider />
-                <ListItem button onClick={() => requestOpenInBrowser(`https://atomery.com/support/singlebox&utm_source=${utmSource}`)}>
+                <ListItem button onClick={() => requestOpenInBrowser(`https://atomery.com/singlebox/support&utm_source=${utmSource}`)}>
                   <ListItemText primary="Support" />
                   <ChevronRightIcon color="action" />
                 </ListItem>
@@ -1388,7 +1388,7 @@ const Preferences = ({
                   <ChevronRightIcon color="action" />
                 </ListItem>
                 <Divider />
-                <ListItem button onClick={() => requestOpenInBrowser(`https://atomery.com/support/webcatalog&utm_source=${utmSource}`)}>
+                <ListItem button onClick={() => requestOpenInBrowser(`https://atomery.com/webcatalog/support&utm_source=${utmSource}`)}>
                   <ListItemText primary="WebCatalog Support" />
                   <ChevronRightIcon color="action" />
                 </ListItem>
