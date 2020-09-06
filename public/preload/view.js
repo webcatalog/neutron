@@ -164,6 +164,7 @@ const handleLoaded = (event) => {
 
         menu.append(new MenuItem({ type: 'separator' }));
 
+        const appJson = remote.getGlobal('appJson');
         menu.append(
           new MenuItem({
             label: 'More',
@@ -182,13 +183,19 @@ const handleLoaded = (event) => {
                 click: () => ipcRenderer.send('request-show-preferences-window'),
               },
               { type: 'separator' },
-              {
+              appJson.id === 'singlebox' ? {
+                label: 'Singlebox Support',
+                click: () => shell.openExternal('https://atomery.com/singlebox/support?utm_source=singlebox_app'),
+              } : {
                 label: 'WebCatalog Support',
-                click: () => shell.openExternal('https://atomery.com/support/webcatalog'),
+                click: () => shell.openExternal('https://atomery.com/webcatalog/support?utm_source=juli_app'),
               },
-              {
+              appJson.id === 'singlebox' ? {
+                label: 'Singlebox Website',
+                click: () => shell.openExternal('https://atomery.com/singlebox?utm_source=singlebox_app'),
+              } : {
                 label: 'WebCatalog Website',
-                click: () => shell.openExternal('https://atomery.com/webcatalog'),
+                click: () => shell.openExternal('https://atomery.com/webcatalog?utm_source=juli_app'),
               },
               { type: 'separator' },
               {
