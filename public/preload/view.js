@@ -164,36 +164,6 @@ const handleLoaded = (event) => {
 
         menu.append(new MenuItem({ type: 'separator' }));
 
-        const submenu = [
-          {
-            label: 'About',
-            click: () => ipcRenderer.send('request-show-about-window'),
-          },
-          { type: 'separator' },
-          {
-            label: 'Check for Updates',
-            click: () => ipcRenderer.send('request-check-for-updates'),
-          },
-          {
-            label: 'Preferences...',
-            click: () => ipcRenderer.send('request-show-preferences-window'),
-          },
-          { type: 'separator' },
-          {
-            label: 'WebCatalog Support',
-            click: () => shell.openExternal('https://atomery.com/webcatalog/support'),
-          },
-          {
-            label: 'WebCatalog Website',
-            click: () => shell.openExternal('https://atomery.com/webcatalog'),
-          },
-          { type: 'separator' },
-          {
-            label: 'Quit',
-            click: () => ipcRenderer.send('request-quit'),
-          },
-        ];
-
         const appJson = remote.getGlobal('appJson');
         menu.append(
           new MenuItem({
