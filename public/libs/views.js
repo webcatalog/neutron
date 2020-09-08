@@ -288,9 +288,7 @@ const addView = (browserWindow, workspace) => {
   // https://github.com/atomery/webcatalog/issues/398
   if (workspace.active) {
     view.webContents.once('did-stop-loading', () => {
-      console.log('focused', view.webContents.isFocused());
       if (browserWindow.isFocused() && !view.webContents.isFocused()) {
-        console.log('recall');
         view.webContents.focus();
       }
     });
