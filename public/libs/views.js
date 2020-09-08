@@ -204,16 +204,20 @@ const addView = (browserWindow, workspace) => {
     // https://github.com/atomery/webcatalog/issues/455
     // https://github.com/meetfranz/franz/issues/1720#issuecomment-566460763
     const fakedEdgeUaStr = `${app.userAgentFallback} Edge/18.18875`;
-    adjustUserAgentByUrl = (contents, url) => {
+    adjustUserAgentByUrl = (contents, url, occasion) => {
       const navigatedDomain = extractDomain(url);
       const currentUaStr = contents.userAgent;
       if (navigatedDomain === 'accounts.google.com') {
         if (currentUaStr !== fakedEdgeUaStr) {
           contents.userAgent = fakedEdgeUaStr;
+          // eslint-disable-next-line no-console
+          console.log('Changed user agent to', fakedEdgeUaStr, 'for web compatibility URL: ', url, 'when', occasion);
           return true;
         }
       } else if (currentUaStr !== app.userAgentFallback) {
         contents.userAgent = app.userAgentFallback;
+        // eslint-disable-next-line no-console
+        console.log('Changed user agent to', app.userAgentFallback, 'for web compatibility URL: ', url, 'when', occasion);
         return true;
       }
       return false;
@@ -235,10 +239,7 @@ const addView = (browserWindow, workspace) => {
     ) {
       e.preventDefault();
       shell.openExternal(nextUrl);
-      return;
     }
-
-    adjustUserAgentByUrl(e.sender.webContents, nextUrl);
   });
 
   view.webContents.on('did-start-loading', () => {
@@ -347,7 +348,7 @@ const addView = (browserWindow, workspace) => {
     // so user agent to needed to be double check here
     // not the best solution as page will be unexpectedly reloaded
     // but it won't happen very often
-    if (adjustUserAgentByUrl(view.webContents, url)) {
+    if (adjustUserAgentByUrl(view.webContents, url, 'did-navigate')) {
       view.webContents.reload();
     }
 
@@ -419,11 +420,8 @@ const addView = (browserWindow, workspace) => {
       // so user agent to needed to be double check here
       // not the best solution as page will be unexpectedly reloaded
       // but it won't happen very often
-      popupWin.webContents.on('will-navigate', (ee, url) => {
-        adjustUserAgentByUrl(ee.sender.webContents, url);
-      });
       popupWin.webContents.on('did-navigate', (ee, url) => {
-        if (adjustUserAgentByUrl(ee.sender.webContents, url)) {
+        if (adjustUserAgentByUrl(ee.sender.webContents, url, 'popup-did-navigate')) {
           ee.sender.webContents.reload();
         }
       });
@@ -473,7 +471,6 @@ const addView = (browserWindow, workspace) => {
       || ((appDomain.includes('asana.com') || currentDomain.includes('asana.com')) && nextDomain.includes('asana.com'))
     ) {
       e.preventDefault();
-      adjustUserAgentByUrl(e.sender.webContents, nextUrl);
       e.sender.loadURL(nextUrl);
       return;
     }
