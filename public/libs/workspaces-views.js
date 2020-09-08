@@ -17,6 +17,7 @@ const {
 const {
   addView,
   hibernateView,
+  realignActiveView,
   removeView,
   setActiveView,
   setViewsAudioPref,
@@ -91,6 +92,11 @@ const setActiveWorkspaceView = (id) => {
   }
 };
 
+const realignActiveWorkspaceView = () => {
+  const activeWorkspace = getActiveWorkspace();
+  realignActiveView(mainWindow.get(), activeWorkspace.id);
+};
+
 const removeWorkspaceView = (id) => {
   // if there's only one workspace left, clear all
   if (countWorkspaces() === 1) {
@@ -136,6 +142,7 @@ module.exports = {
   createWorkspaceView,
   hibernateWorkspaceView,
   loadURL,
+  realignActiveWorkspaceView,
   removeWorkspaceView,
   setActiveWorkspaceView,
   setWorkspaceView,

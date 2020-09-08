@@ -284,16 +284,16 @@ const addView = (browserWindow, workspace) => {
     ipcMain.emit('request-realign-active-workspace');
   });
 
+  // focus on initial load
+  // https://github.com/atomery/webcatalog/issues/398
   if (workspace.active) {
-    const handleFocus = () => {
-      // focus on webview
-      // https://github.com/atomery/webcatalog/issues/398
-      if (browserWindow.isFocused()) {
+    view.webContents.once('did-stop-loading', () => {
+      console.log('focused', view.webContents.isFocused());
+      if (browserWindow.isFocused() && !view.webContents.isFocused()) {
+        console.log('recall');
         view.webContents.focus();
       }
-      view.webContents.removeListener('did-stop-loading', handleFocus);
-    };
-    view.webContents.on('did-stop-loading', handleFocus);
+    });
   }
 
   // https://electronjs.org/docs/api/web-contents#event-did-fail-load
@@ -686,6 +686,20 @@ const setActiveView = (browserWindow, id) => {
   }
 };
 
+const realignActiveView = (browserWindow, activeId) => {
+  const view = browserWindow.getBrowserView();
+  if (view && view.webContents) {
+    const contentSize = browserWindow.getContentSize();
+    if (getWorkspaceMeta(activeId).didFailLoad) {
+      view.setBounds(
+        getViewBounds(contentSize, false, 0, 0),
+      ); // hide browserView to show error message
+    } else {
+      view.setBounds(getViewBounds(contentSize));
+    }
+  }
+};
+
 const removeView = (id) => {
   const view = views[id];
   session.fromPartition(`persist:${id}`).clearStorageData();
@@ -756,6 +770,7 @@ module.exports = {
   addView,
   getView,
   hibernateView,
+  realignActiveView,
   reloadViewsDarkReader,
   reloadViewsWebContentsIfDidFailLoad,
   removeView,
