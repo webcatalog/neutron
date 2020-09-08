@@ -205,20 +205,20 @@ const addView = (browserWindow, workspace) => {
     // https://github.com/atomery/webcatalog/issues/455
     // https://github.com/meetfranz/franz/issues/1720#issuecomment-566460763
     const fakedEdgeUaStr = `${app.userAgentFallback} Edge/18.18875`;
-    adjustUserAgentByUrl = (contents, url, occassion) => {
+    adjustUserAgentByUrl = (contents, url, occasion) => {
       const navigatedDomain = extractDomain(url);
       const currentUaStr = contents.userAgent;
       if (navigatedDomain === 'accounts.google.com') {
         if (currentUaStr !== fakedEdgeUaStr) {
           contents.userAgent = fakedEdgeUaStr;
           // eslint-disable-next-line no-console
-          console.log('Changed user agent to', fakedEdgeUaStr, 'for web compatibility URL: ', url, 'when', occassion);
+          console.log('Changed user agent to', fakedEdgeUaStr, 'for web compatibility URL: ', url, 'when', occasion);
           return true;
         }
       } else if (currentUaStr !== app.userAgentFallback) {
         contents.userAgent = app.userAgentFallback;
         // eslint-disable-next-line no-console
-        console.log('Changed user agent to', app.userAgentFallback, 'for web compatibility URL: ', url, 'when', occassion);
+        console.log('Changed user agent to', app.userAgentFallback, 'for web compatibility URL: ', url, 'when', occasion);
         return true;
       }
       return false;
