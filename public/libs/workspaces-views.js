@@ -94,7 +94,10 @@ const setActiveWorkspaceView = (id) => {
 
 const realignActiveWorkspaceView = () => {
   const activeWorkspace = getActiveWorkspace();
-  realignActiveView(mainWindow.get(), activeWorkspace.id);
+  const win = mainWindow.get();
+  if (activeWorkspace && win) {
+    realignActiveView(win, activeWorkspace.id);
+  }
 };
 
 const removeWorkspaceView = (id) => {
