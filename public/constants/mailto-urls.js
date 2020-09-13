@@ -26,6 +26,10 @@ const rawMailtoUrls = [
     hostnames: ['tutanota.com', 'mail.tutanota.com'],
     mailtoUrl: 'https://mail.tutanota.com/mailto#url=%s',
   },
+  {
+    hostnames: ['hey.com', 'app.hey.com'],
+    mailtoUrl: 'https://app.hey.com/mailto/%s',
+  },
 ];
 
 const MAILTO_URLS = {};
