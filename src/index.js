@@ -22,7 +22,6 @@ const DialogLicenseRegistration = React.lazy(() => import('./components/dialog-l
 const DialogNotifications = React.lazy(() => import('./components/dialog-notifications'));
 const DialogOpenUrlWith = React.lazy(() => import('./components/dialog-open-url-with'));
 const DialogPreferences = React.lazy(() => import('./components/dialog-preferences'));
-const DialogProxy = React.lazy(() => import('./components/dialog-proxy'));
 const Main = React.lazy(() => import('./components/main'));
 
 const App = () => {
@@ -37,7 +36,6 @@ const App = () => {
     case 'notifications': return <DialogNotifications />;
     case 'open-url-with': return <DialogOpenUrlWith />;
     case 'preferences': return <DialogPreferences />;
-    case 'proxy': return <DialogProxy />;
     default: return <Main />;
   }
 };
@@ -75,14 +73,6 @@ const runApp = () => {
         document.title = 'Share your Screen';
       } else if (window.mode === 'go-to-url') {
         document.title = 'Go to URL';
-      } else if (window.mode === 'proxy') {
-        initialState.dialogProxy = {
-          proxyBypassRules: initialState.preferences.proxyBypassRules,
-          proxyPacScript: initialState.preferences.proxyPacScript,
-          proxyRules: initialState.preferences.proxyRules,
-          proxyType: initialState.preferences.proxyType,
-        };
-        document.title = 'Proxy Settings';
       } else if (window.mode === 'add-workspace') {
         document.title = 'Add Custom Workspace';
       } else if (window.mode === 'license-registration') {

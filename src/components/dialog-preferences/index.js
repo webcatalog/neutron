@@ -49,13 +49,13 @@ import {
   requestShowAboutWindow,
   requestShowNotification,
   requestShowNotificationsWindow,
-  requestShowProxyWindow,
   requestShowRequireRestartDialog,
 } from '../../senders';
 
 import { open as openDialogCustomUserAgent } from '../../state/dialog-custom-user-agent/actions';
 import { open as openDialogCodeInjection } from '../../state/dialog-code-injection/actions';
 import { open as openDialogSpellcheckLanguages } from '../../state/dialog-spellcheck-languages/actions';
+import { open as openDialogProxy } from '../../state/dialog-proxy/actions';
 
 import hunspellLanguagesMap from '../../constants/hunspell-languages';
 
@@ -70,6 +70,7 @@ import ListItemDefaultBrowser from './list-item-default-browser';
 import DialogCodeInjection from '../dialog-code-injection';
 import DialogCustomUserAgent from '../dialog-custom-user-agent';
 import DialogSpellcheckLanguages from '../dialog-spellcheck-languages';
+import DialogProxy from '../dialog-proxy';
 
 const styles = (theme) => ({
   root: {
@@ -220,6 +221,7 @@ const Preferences = ({
   onOpenDialogCodeInjection,
   onOpenDialogCustomUserAgent,
   onOpenDialogSpellcheckLanguages,
+  onOpenDialogProxy,
   openAtLogin,
   pauseNotificationsBySchedule,
   pauseNotificationsByScheduleFrom,
@@ -940,7 +942,7 @@ const Preferences = ({
         </Typography>
         <Paper elevation={0} className={classes.paper}>
           <List disablePadding dense>
-            <ListItem button onClick={requestShowProxyWindow}>
+            <ListItem button onClick={onOpenDialogProxy}>
               <ListItemText primary="Configure proxy settings (BETA)" />
               <ChevronRightIcon color="action" />
             </ListItem>
@@ -1413,6 +1415,7 @@ const Preferences = ({
       <DialogCodeInjection />
       <DialogCustomUserAgent />
       <DialogSpellcheckLanguages />
+      <DialogProxy />
     </div>
   );
 };
@@ -1449,6 +1452,7 @@ Preferences.propTypes = {
   onOpenDialogCodeInjection: PropTypes.func.isRequired,
   onOpenDialogCustomUserAgent: PropTypes.func.isRequired,
   onOpenDialogSpellcheckLanguages: PropTypes.func.isRequired,
+  onOpenDialogProxy: PropTypes.func.isRequired,
   openAtLogin: PropTypes.oneOf(['yes', 'yes-hidden', 'no']).isRequired,
   pauseNotificationsBySchedule: PropTypes.bool.isRequired,
   pauseNotificationsByScheduleFrom: PropTypes.string.isRequired,
@@ -1517,6 +1521,7 @@ const actionCreators = {
   openDialogCodeInjection,
   openDialogCustomUserAgent,
   openDialogSpellcheckLanguages,
+  openDialogProxy,
 };
 
 export default connectComponent(

@@ -16,7 +16,6 @@ export const requestShowEditWorkspaceWindow = (id) => window.ipcRenderer.send('r
 export const requestShowLicenseRegistrationWindow = () => window.ipcRenderer.send('request-show-license-registration-window');
 export const requestShowNotificationsWindow = () => window.ipcRenderer.send('request-show-notifications-window');
 export const requestShowPreferencesWindow = (scrollTo) => window.ipcRenderer.send('request-show-preferences-window', scrollTo);
-export const requestShowProxyWindow = () => window.ipcRenderer.send('request-show-proxy-window');
 
 // Notifications
 export const requestShowNotification = (opts) => window.ipcRenderer.send('request-show-notification', opts);

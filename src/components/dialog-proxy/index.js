@@ -9,10 +9,14 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Radio from '@material-ui/core/Radio';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
 
 import connectComponent from '../../helpers/connect-component';
 
 import {
+  close,
   updateForm,
   save,
 } from '../../state/dialog-proxy/actions';
@@ -52,8 +56,10 @@ const styles = (theme) => ({
 const DialogProxy = (props) => {
   const {
     classes,
-    onUpdateForm,
+    onClose,
     onSave,
+    onUpdateForm,
+    open,
     proxyBypassRules,
     proxyPacScript,
     proxyPacScriptError,
@@ -63,8 +69,13 @@ const DialogProxy = (props) => {
   } = props;
 
   return (
-    <div className={classes.root}>
-      <div className={classes.flexGrow}>
+    <Dialog
+      onClose={onClose}
+      open={open}
+      fullWidth
+      maxWidth="sm"
+    >
+      <DialogContent>
         <List disablePadding dense>
           <ListItem>
             <div style={{ width: '100%' }}>
@@ -223,26 +234,26 @@ const DialogProxy = (props) => {
             </div>
           </ListItem>
         </List>
-      </div>
-      <div className={classes.dialogActions}>
+      </DialogContent>
+      <DialogActions>
+        <Button variant="contained" disableElevation onClick={onClose}>
+          Cancel
+        </Button>
         <Button
           color="primary"
           variant="contained"
           disableElevation
-          className={classes.button}
           onClick={onSave}
         >
           Save
         </Button>
-        <Button variant="contained" disableElevation className={classes.button} onClick={() => window.remote.getCurrentWindow().close()}>
-          Cancel
-        </Button>
-      </div>
-    </div>
+      </DialogActions>
+    </Dialog>
   );
 };
 
 DialogProxy.defaultProps = {
+  open: false,
   proxyBypassRules: '',
   proxyPacScript: '',
   proxyPacScriptError: null,
@@ -253,8 +264,10 @@ DialogProxy.defaultProps = {
 
 DialogProxy.propTypes = {
   classes: PropTypes.object.isRequired,
+  onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   onUpdateForm: PropTypes.func.isRequired,
+  open: PropTypes.bool,
   proxyBypassRules: PropTypes.string,
   proxyPacScript: PropTypes.string,
   proxyPacScriptError: PropTypes.string,
@@ -265,6 +278,7 @@ DialogProxy.propTypes = {
 
 const mapStateToProps = (state) => {
   const {
+    open,
     form: {
       proxyBypassRules,
       proxyPacScript,
@@ -276,6 +290,7 @@ const mapStateToProps = (state) => {
   } = state.dialogProxy;
 
   return {
+    open,
     proxyBypassRules,
     proxyPacScript,
     proxyPacScriptError,
@@ -286,6 +301,7 @@ const mapStateToProps = (state) => {
 };
 
 const actionCreators = {
+  close,
   updateForm,
   save,
 };
