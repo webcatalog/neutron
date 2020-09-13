@@ -61,17 +61,15 @@ const CodeInjection = ({
     maxWidth="sm"
   >
     <DialogContent className={classes.content}>
-      {open && (
-        <AceEditor
-          mode={getMode(codeInjectionType)}
-          theme={shouldUseDarkColors ? 'monokai' : 'github'}
-          height="100%"
-          width="100%"
-          name="codeEditor"
-          value={code}
-          onChange={(value) => onUpdateForm({ code: value })}
-        />
-      )}
+      <AceEditor
+        mode={getMode(codeInjectionType)}
+        theme={shouldUseDarkColors ? 'monokai' : 'github'}
+        height="100%"
+        width="100%"
+        name="codeEditor"
+        value={code}
+        onChange={(value) => onUpdateForm({ code: value })}
+      />
     </DialogContent>
     <DialogActions>
       <div className={classes.actions}>

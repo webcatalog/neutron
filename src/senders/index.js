@@ -50,7 +50,6 @@ export const requestSetActiveWorkspace = (id) => window.ipcRenderer.send('reques
 export const requestSetWorkspace = (id, opts) => window.ipcRenderer.send('request-set-workspace', id, opts);
 export const requestSetWorkspaces = (workspaces) => window.ipcRenderer.send('request-set-workspaces', workspaces);
 export const requestSetWorkspacePicture = (id, picturePath) => window.ipcRenderer.send('request-set-workspace-picture', id, picturePath);
-export const requestShowCustomUserAgentWindow = () => window.ipcRenderer.send('request-show-custom-user-agent-window');
 export const requestWakeUpWorkspace = (id) => window.ipcRenderer.send('request-wake-up-workspace', id);
 
 // Workspace Meta

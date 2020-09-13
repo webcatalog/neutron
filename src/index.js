@@ -15,7 +15,6 @@ import getWorkspacesAsList from './helpers/get-workspaces-as-list';
 const DialogAbout = React.lazy(() => import('./components/dialog-about'));
 const DialogAddWorkspace = React.lazy(() => import('./components/dialog-add-workspace'));
 const DialogAuth = React.lazy(() => import('./components/dialog-auth'));
-const DialogCustomUserAgent = React.lazy(() => import('./components/dialog-custom-user-agent'));
 const DialogDisplayMedia = React.lazy(() => import('./components/dialog-display-media'));
 const DialogEditWorkspace = React.lazy(() => import('./components/dialog-edit-workspace'));
 const DialogGoToUrl = React.lazy(() => import('./components/dialog-go-to-url'));
@@ -32,7 +31,6 @@ const App = () => {
     case 'about': return <DialogAbout />;
     case 'add-workspace': return <DialogAddWorkspace />;
     case 'auth': return <DialogAuth />;
-    case 'custom-user-agent': return <DialogCustomUserAgent />;
     case 'display-media': return <DialogDisplayMedia />;
     case 'edit-workspace': return <DialogEditWorkspace />;
     case 'go-to-url': return <DialogGoToUrl />;
@@ -77,11 +75,6 @@ const runApp = () => {
         document.title = 'Notifications';
       } else if (window.mode === 'display-media') {
         document.title = 'Share your Screen';
-      } else if (window.mode === 'custom-user-agent') {
-        initialState.dialogCustomUserAgent = {
-          form: { code: initialState.preferences.customUserAgent },
-        };
-        document.title = 'Edit Custom User Agent';
       } else if (window.mode === 'go-to-url') {
         document.title = 'Go to URL';
       } else if (window.mode === 'proxy') {

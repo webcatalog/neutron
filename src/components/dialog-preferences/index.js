@@ -47,7 +47,6 @@ import {
   requestSetPreference,
   requestSetSystemPreference,
   requestShowAboutWindow,
-  requestShowCustomUserAgentWindow,
   requestShowNotification,
   requestShowNotificationsWindow,
   requestShowProxyWindow,
@@ -55,6 +54,7 @@ import {
   requestShowSpellcheckLanguagesWindow,
 } from '../../senders';
 
+import { open as openDialogCustomUserAgent } from '../../state/dialog-custom-user-agent/actions';
 import { open as openDialogCodeInjection } from '../../state/dialog-code-injection/actions';
 
 import hunspellLanguagesMap from '../../constants/hunspell-languages';
@@ -68,6 +68,7 @@ import ListItemDefaultMailClient from './list-item-default-mail-client';
 import ListItemDefaultBrowser from './list-item-default-browser';
 
 import DialogCodeInjection from '../dialog-code-injection';
+import DialogCustomUserAgent from '../dialog-custom-user-agent';
 
 const styles = (theme) => ({
   root: {
@@ -216,6 +217,7 @@ const Preferences = ({
   jsCodeInjection,
   navigationBar,
   onOpenDialogCodeInjection,
+  onOpenDialogCustomUserAgent,
   openAtLogin,
   pauseNotificationsBySchedule,
   pauseNotificationsByScheduleFrom,
@@ -1074,7 +1076,7 @@ const Preferences = ({
         </Typography>
         <Paper elevation={0} className={classes.paper}>
           <List disablePadding dense>
-            <ListItem button onClick={requestShowCustomUserAgentWindow}>
+            <ListItem button onClick={onOpenDialogCustomUserAgent}>
               <ListItemText
                 primary="Custom User Agent"
                 secondary={customUserAgent || 'Not set'}
@@ -1407,6 +1409,7 @@ const Preferences = ({
         </Paper>
       </div>
       <DialogCodeInjection />
+      <DialogCustomUserAgent />
     </div>
   );
 };
@@ -1441,6 +1444,7 @@ Preferences.propTypes = {
   jsCodeInjection: PropTypes.string,
   navigationBar: PropTypes.bool.isRequired,
   onOpenDialogCodeInjection: PropTypes.func.isRequired,
+  onOpenDialogCustomUserAgent: PropTypes.func.isRequired,
   openAtLogin: PropTypes.oneOf(['yes', 'yes-hidden', 'no']).isRequired,
   pauseNotificationsBySchedule: PropTypes.bool.isRequired,
   pauseNotificationsByScheduleFrom: PropTypes.string.isRequired,
@@ -1507,6 +1511,7 @@ const mapStateToProps = (state) => ({
 
 const actionCreators = {
   openDialogCodeInjection,
+  openDialogCustomUserAgent,
 };
 
 export default connectComponent(
