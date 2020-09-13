@@ -47,14 +47,15 @@ import {
   requestSetPreference,
   requestSetSystemPreference,
   requestShowAboutWindow,
-  requestShowCodeInjectionWindow,
-  requestShowCustomUserAgentWindow,
   requestShowNotification,
   requestShowNotificationsWindow,
-  requestShowProxyWindow,
   requestShowRequireRestartDialog,
-  requestShowSpellcheckLanguagesWindow,
 } from '../../senders';
+
+import { open as openDialogCustomUserAgent } from '../../state/dialog-custom-user-agent/actions';
+import { open as openDialogCodeInjection } from '../../state/dialog-code-injection/actions';
+import { open as openDialogSpellcheckLanguages } from '../../state/dialog-spellcheck-languages/actions';
+import { open as openDialogProxy } from '../../state/dialog-proxy/actions';
 
 import hunspellLanguagesMap from '../../constants/hunspell-languages';
 
@@ -65,6 +66,11 @@ import switchbarIconPng from '../../images/switchbar-icon.png';
 
 import ListItemDefaultMailClient from './list-item-default-mail-client';
 import ListItemDefaultBrowser from './list-item-default-browser';
+
+import DialogCodeInjection from '../dialog-code-injection';
+import DialogCustomUserAgent from '../dialog-custom-user-agent';
+import DialogSpellcheckLanguages from '../dialog-spellcheck-languages';
+import DialogProxy from '../dialog-proxy';
 
 const styles = (theme) => ({
   root: {
@@ -212,6 +218,10 @@ const Preferences = ({
   ignoreCertificateErrors,
   jsCodeInjection,
   navigationBar,
+  onOpenDialogCodeInjection,
+  onOpenDialogCustomUserAgent,
+  onOpenDialogSpellcheckLanguages,
+  onOpenDialogProxy,
   openAtLogin,
   pauseNotificationsBySchedule,
   pauseNotificationsByScheduleFrom,
@@ -873,7 +883,7 @@ const Preferences = ({
             {window.process.platform !== 'darwin' && (
               <>
                 <Divider />
-                <ListItem button onClick={requestShowSpellcheckLanguagesWindow}>
+                <ListItem button onClick={onOpenDialogSpellcheckLanguages}>
                   <ListItemText
                     primary="Spell checking languages"
                     secondary={spellcheckLanguages.map((code) => hunspellLanguagesMap[code]).join(' | ')}
@@ -932,7 +942,7 @@ const Preferences = ({
         </Typography>
         <Paper elevation={0} className={classes.paper}>
           <List disablePadding dense>
-            <ListItem button onClick={requestShowProxyWindow}>
+            <ListItem button onClick={onOpenDialogProxy}>
               <ListItemText primary="Configure proxy settings (BETA)" />
               <ChevronRightIcon color="action" />
             </ListItem>
@@ -1070,7 +1080,7 @@ const Preferences = ({
         </Typography>
         <Paper elevation={0} className={classes.paper}>
           <List disablePadding dense>
-            <ListItem button onClick={requestShowCustomUserAgentWindow}>
+            <ListItem button onClick={onOpenDialogCustomUserAgent}>
               <ListItemText
                 primary="Custom User Agent"
                 secondary={customUserAgent || 'Not set'}
@@ -1083,7 +1093,7 @@ const Preferences = ({
               button
               onClick={() => {
                 if (!checkLicense()) return;
-                requestShowCodeInjectionWindow('js');
+                onOpenDialogCodeInjection('js');
               }}
             >
               <ListItemText primary="JS Code Injection" secondary={jsCodeInjection ? `Set ${allowNodeInJsCodeInjection ? ' (with access to Node.JS & Electron APIs)' : ''}` : 'Not set'} />
@@ -1094,7 +1104,7 @@ const Preferences = ({
               button
               onClick={() => {
                 if (!checkLicense()) return;
-                requestShowCodeInjectionWindow('css');
+                onOpenDialogCodeInjection('css');
               }}
             >
               <ListItemText primary="CSS Code Injection" secondary={cssCodeInjection ? 'Set' : 'Not set'} />
@@ -1402,6 +1412,10 @@ const Preferences = ({
           </List>
         </Paper>
       </div>
+      <DialogCodeInjection />
+      <DialogCustomUserAgent />
+      <DialogSpellcheckLanguages />
+      <DialogProxy />
     </div>
   );
 };
@@ -1435,6 +1449,10 @@ Preferences.propTypes = {
   ignoreCertificateErrors: PropTypes.bool.isRequired,
   jsCodeInjection: PropTypes.string,
   navigationBar: PropTypes.bool.isRequired,
+  onOpenDialogCodeInjection: PropTypes.func.isRequired,
+  onOpenDialogCustomUserAgent: PropTypes.func.isRequired,
+  onOpenDialogSpellcheckLanguages: PropTypes.func.isRequired,
+  onOpenDialogProxy: PropTypes.func.isRequired,
   openAtLogin: PropTypes.oneOf(['yes', 'yes-hidden', 'no']).isRequired,
   pauseNotificationsBySchedule: PropTypes.bool.isRequired,
   pauseNotificationsByScheduleFrom: PropTypes.string.isRequired,
@@ -1499,9 +1517,16 @@ const mapStateToProps = (state) => ({
   useHardwareAcceleration: state.preferences.useHardwareAcceleration,
 });
 
+const actionCreators = {
+  openDialogCodeInjection,
+  openDialogCustomUserAgent,
+  openDialogSpellcheckLanguages,
+  openDialogProxy,
+};
+
 export default connectComponent(
   Preferences,
   mapStateToProps,
-  null,
+  actionCreators,
   styles,
 );

@@ -1,5 +1,7 @@
 import {
   DIALOG_PROXY_FORM_UPDATE,
+  DIALOG_PROXY_OPEN,
+  DIALOG_PROXY_CLOSE,
 } from '../../constants/actions';
 
 import validate from '../../helpers/validate';
@@ -9,6 +11,29 @@ import {
   requestSetPreference,
   requestShowRequireRestartDialog,
 } from '../../senders';
+
+export const open = () => (dispatch, getState) => {
+  const {
+    proxyBypassRules,
+    proxyPacScript,
+    proxyRules,
+    proxyType,
+  } = getState().preferences;
+
+  dispatch({
+    type: DIALOG_PROXY_OPEN,
+    form: {
+      proxyBypassRules,
+      proxyPacScript,
+      proxyRules,
+      proxyType,
+    },
+  });
+};
+
+export const close = () => ({
+  type: DIALOG_PROXY_CLOSE,
+});
 
 const getValidationRules = (proxyType) => {
   if (proxyType === 'rules') {

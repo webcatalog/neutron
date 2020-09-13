@@ -4,33 +4,28 @@ import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+
 import connectComponent from '../../helpers/connect-component';
 
-import { updateForm, save } from '../../state/dialog-custom-user-agent/actions';
-
-const styles = (theme) => ({
-  root: {
-    background: theme.palette.background.paper,
-    height: '100vh',
-    width: '100vw',
-    padding: theme.spacing(2),
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  flexGrow: {
-    flex: 1,
-  },
-  button: {
-    float: 'right',
-    marginLeft: theme.spacing(1),
-  },
-});
+import { close, updateForm, save } from '../../state/dialog-custom-user-agent/actions';
 
 const CustomUserAgent = ({
-  classes, code, onUpdateForm, onSave,
+  code,
+  onClose,
+  onSave,
+  onUpdateForm,
+  open,
 }) => (
-  <div className={classes.root}>
-    <div className={classes.flexGrow}>
+  <Dialog
+    onClose={onClose}
+    open={open}
+    fullWidth
+    maxWidth="sm"
+  >
+    <DialogContent>
       <TextField
         autoFocus
         id="outlined-full-width"
@@ -47,30 +42,37 @@ const CustomUserAgent = ({
         value={code}
         onChange={(e) => onUpdateForm({ code: e.target.value })}
       />
-    </div>
-    <div>
-      <Button color="primary" variant="contained" disableElevation className={classes.button} onClick={onSave}>
-        Save
-      </Button>
-      <Button variant="contained" disableElevation className={classes.button} onClick={() => window.remote.getCurrentWindow().close()}>
+    </DialogContent>
+    <DialogActions>
+      <Button variant="contained" disableElevation onClick={onClose}>
         Cancel
       </Button>
-    </div>
-  </div>
+      <Button color="primary" variant="contained" disableElevation onClick={onSave}>
+        Save
+      </Button>
+    </DialogActions>
+  </Dialog>
 );
 
+CustomUserAgent.defaultProps = {
+  open: false,
+};
+
 CustomUserAgent.propTypes = {
-  classes: PropTypes.object.isRequired,
   code: PropTypes.string.isRequired,
-  onUpdateForm: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
+  onUpdateForm: PropTypes.func.isRequired,
+  open: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({
   code: state.dialogCustomUserAgent.form.code || '',
+  open: state.dialogCustomUserAgent.open,
 });
 
 const actionCreators = {
+  close,
   updateForm,
   save,
 };
@@ -79,5 +81,5 @@ export default connectComponent(
   CustomUserAgent,
   mapStateToProps,
   actionCreators,
-  styles,
+  null,
 );

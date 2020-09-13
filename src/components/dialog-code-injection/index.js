@@ -5,6 +5,10 @@ import Button from '@material-ui/core/Button';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+
 import AceEditor from 'react-ace';
 
 import 'ace-builds/src-noconflict/mode-css';
@@ -14,23 +18,14 @@ import 'ace-builds/src-noconflict/theme-monokai';
 
 import connectComponent from '../../helpers/connect-component';
 
-import { updateForm, save } from '../../state/dialog-code-injection/actions';
+import { updateForm, save, close } from '../../state/dialog-code-injection/actions';
 
 const styles = (theme) => ({
-  root: {
-    background: theme.palette.background.paper,
-    height: '100vh',
-    width: '100vw',
+  content: {
+    height: theme.spacing(50),
     padding: 0,
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  flexGrow: {
-    flex: 1,
   },
   actions: {
-    borderTop: `1px solid ${theme.palette.divider}`,
-    padding: theme.spacing(2),
     display: 'flex',
   },
   actionsLeft: {
@@ -52,24 +47,31 @@ const CodeInjection = ({
   allowNodeInJsCodeInjection,
   classes,
   code,
+  codeInjectionType,
+  onClose,
   onSave,
   onUpdateForm,
+  open,
   shouldUseDarkColors,
-}) => {
-  const codeInjectionType = window.remote.getGlobal('codeInjectionType');
-  return (
-    <div className={classes.root}>
-      <div className={classes.flexGrow}>
-        <AceEditor
-          mode={getMode(codeInjectionType)}
-          theme={shouldUseDarkColors ? 'monokai' : 'github'}
-          height="100%"
-          width="100%"
-          name="codeEditor"
-          value={code}
-          onChange={(value) => onUpdateForm({ code: value })}
-        />
-      </div>
+}) => (
+  <Dialog
+    onClose={onClose}
+    open={open}
+    fullWidth
+    maxWidth="sm"
+  >
+    <DialogContent className={classes.content}>
+      <AceEditor
+        mode={getMode(codeInjectionType)}
+        theme={shouldUseDarkColors ? 'monokai' : 'github'}
+        height="100%"
+        width="100%"
+        name="codeEditor"
+        value={code}
+        onChange={(value) => onUpdateForm({ code: value })}
+      />
+    </DialogContent>
+    <DialogActions>
       <div className={classes.actions}>
         <div className={classes.actionsLeft}>
           {codeInjectionType === 'js' && (
@@ -89,37 +91,45 @@ const CodeInjection = ({
           <Button color="primary" variant="contained" disableElevation className={classes.button} onClick={onSave}>
             Save
           </Button>
-          <Button variant="contained" disableElevation className={classes.button} onClick={() => window.remote.getCurrentWindow().close()}>
+          <Button variant="contained" disableElevation className={classes.button} onClick={onClose}>
             Cancel
           </Button>
         </div>
       </div>
-    </div>
-  );
-};
+    </DialogActions>
+  </Dialog>
+);
 
 CodeInjection.defaultProps = {
   allowNodeInJsCodeInjection: false,
+  codeInjectionType: 'js',
+  open: false,
 };
 
 CodeInjection.propTypes = {
   allowNodeInJsCodeInjection: PropTypes.bool,
   classes: PropTypes.object.isRequired,
   code: PropTypes.string.isRequired,
+  codeInjectionType: PropTypes.string,
+  onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   onUpdateForm: PropTypes.func.isRequired,
+  open: PropTypes.bool,
   shouldUseDarkColors: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  code: state.dialogCodeInjection.form.code || '',
   allowNodeInJsCodeInjection: state.dialogCodeInjection.form.allowNodeInJsCodeInjection,
+  code: state.dialogCodeInjection.form.code || '',
+  codeInjectionType: state.dialogCodeInjection.codeInjectionType,
+  open: state.dialogCodeInjection.open,
   shouldUseDarkColors: state.general.shouldUseDarkColors,
 });
 
 const actionCreators = {
-  updateForm,
+  close,
   save,
+  updateForm,
 };
 
 export default connectComponent(

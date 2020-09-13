@@ -12,13 +12,10 @@ export const requestCheckForUpdates = () => window.ipcRenderer.send('request-che
 
 export const requestShowAboutWindow = () => window.ipcRenderer.send('request-show-about-window');
 export const requestShowAddWorkspaceWindow = () => window.ipcRenderer.send('request-show-add-workspace-window');
-export const requestShowCodeInjectionWindow = (type) => window.ipcRenderer.send('request-show-code-injection-window', type);
 export const requestShowEditWorkspaceWindow = (id) => window.ipcRenderer.send('request-show-edit-workspace-window', id);
 export const requestShowLicenseRegistrationWindow = () => window.ipcRenderer.send('request-show-license-registration-window');
 export const requestShowNotificationsWindow = () => window.ipcRenderer.send('request-show-notifications-window');
 export const requestShowPreferencesWindow = (scrollTo) => window.ipcRenderer.send('request-show-preferences-window', scrollTo);
-export const requestShowProxyWindow = () => window.ipcRenderer.send('request-show-proxy-window');
-export const requestShowSpellcheckLanguagesWindow = () => window.ipcRenderer.send('request-show-spellcheck-languages-window');
 
 // Notifications
 export const requestShowNotification = (opts) => window.ipcRenderer.send('request-show-notification', opts);
@@ -51,7 +48,6 @@ export const requestSetActiveWorkspace = (id) => window.ipcRenderer.send('reques
 export const requestSetWorkspace = (id, opts) => window.ipcRenderer.send('request-set-workspace', id, opts);
 export const requestSetWorkspaces = (workspaces) => window.ipcRenderer.send('request-set-workspaces', workspaces);
 export const requestSetWorkspacePicture = (id, picturePath) => window.ipcRenderer.send('request-set-workspace-picture', id, picturePath);
-export const requestShowCustomUserAgentWindow = () => window.ipcRenderer.send('request-show-custom-user-agent-window');
 export const requestWakeUpWorkspace = (id) => window.ipcRenderer.send('request-wake-up-workspace', id);
 
 // Workspace Meta

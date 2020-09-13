@@ -1,7 +1,22 @@
 import {
   DIALOG_SPELLCHECK_LANGUAGES_UPDATE_FORM,
+  DIALOG_SPELLCHECK_LANGUAGES_OPEN,
+  DIALOG_SPELLCHECK_LANGUAGES_CLOSE,
 } from '../../constants/actions';
 import { requestSetPreference, requestShowRequireRestartDialog } from '../../senders';
+
+export const open = () => (dispatch, getState) => {
+  const { preferences } = getState();
+
+  dispatch({
+    type: DIALOG_SPELLCHECK_LANGUAGES_OPEN,
+    form: { spellcheckLanguages: preferences.spellcheckLanguages },
+  });
+};
+
+export const close = () => ({
+  type: DIALOG_SPELLCHECK_LANGUAGES_CLOSE,
+});
 
 export const updateForm = (changes) => (dispatch) => dispatch({
   type: DIALOG_SPELLCHECK_LANGUAGES_UPDATE_FORM,
@@ -33,5 +48,5 @@ export const save = () => (dispatch, getState) => {
 
   requestShowRequireRestartDialog();
 
-  window.remote.getCurrentWindow().close();
+  dispatch(close());
 };
