@@ -19,17 +19,17 @@ let workspaces;
 const initWorkspaces = () => {
   if (workspaces) return;
 
-  const loadedWorkspaces = settings.get(`workspaces.${v}`, {});
+  const loadedWorkspaces = settings.getSync(`workspaces.${v}`, {});
 
   // legacy (v=14 was used for Singlebox prior to merging with Juli)
   // Singlebox v1-v3
   if (appJson.id === 'singlebox') {
     const legacySingleboxV = '14';
-    const legacyWorkspaces = settings.get(`workspaces.${legacySingleboxV}`, null);
+    const legacyWorkspaces = settings.getSync(`workspaces.${legacySingleboxV}`, null);
     if (legacyWorkspaces) {
       Object.assign(loadedWorkspaces, legacyWorkspaces);
-      settings.set(`workspaces.${v}`, loadedWorkspaces);
-      settings.delete(`workspaces.${legacySingleboxV}`);
+      settings.set(`workspaces.${v}`, loadedWorkspaces); // async
+      settings.unset(`workspaces.${legacySingleboxV}`); // async
     }
   }
 
@@ -41,7 +41,7 @@ const initWorkspaces = () => {
       order: 0,
       active: true,
     };
-    settings.set(`workspaces.${v}`, loadedWorkspaces);
+    settings.set(`workspaces.${v}`, loadedWorkspaces); // async
   }
 
   // keep workspace objects in memory
@@ -129,7 +129,7 @@ const createWorkspace = (name, homeUrl, transparentBackground) => {
   workspaces[newId] = newWorkspace;
 
   sendToAllWindows('set-workspace', newId, newWorkspace);
-  settings.set(`workspaces.${v}.${newId}`, newWorkspace);
+  settings.set(`workspaces.${v}.${newId}`, newWorkspace); // async
 
   return newWorkspace;
 };
@@ -148,7 +148,7 @@ const setActiveWorkspace = (id) => {
     currentActiveWorkspace.active = false;
     workspaces[currentActiveWorkspace.id] = currentActiveWorkspace;
     sendToAllWindows('set-workspace', currentActiveWorkspace.id, currentActiveWorkspace);
-    settings.set(`workspaces.${v}.${currentActiveWorkspace.id}`, currentActiveWorkspace);
+    settings.set(`workspaces.${v}.${currentActiveWorkspace.id}`, currentActiveWorkspace); // async
   }
 
   // active new one
@@ -157,20 +157,20 @@ const setActiveWorkspace = (id) => {
   newActiveWorkspace.hibernated = false;
   workspaces[id] = newActiveWorkspace;
   sendToAllWindows('set-workspace', id, newActiveWorkspace);
-  settings.set(`workspaces.${v}.${id}`, newActiveWorkspace);
+  settings.set(`workspaces.${v}.${id}`, newActiveWorkspace); // async
 };
 
 const setWorkspace = (id, opts) => {
   const workspace = { ...workspaces[id], ...opts };
   workspaces[id] = workspace;
   sendToAllWindows('set-workspace', id, workspace);
-  settings.set(`workspaces.${v}.${id}`, workspace);
+  settings.set(`workspaces.${v}.${id}`, workspace); // async
 };
 
 const setWorkspaces = (newWorkspaces) => {
   workspaces = newWorkspaces;
   sendToAllWindows('set-workspaces', newWorkspaces);
-  settings.set(`workspaces.${v}`, newWorkspaces);
+  settings.set(`workspaces.${v}`, newWorkspaces); // async
 };
 
 const setWorkspacePicture = (id, sourcePicturePath) => {
@@ -283,7 +283,7 @@ const cleanLeftoversAsync = () => Promise.resolve()
 const removeWorkspace = (id) => {
   delete workspaces[id];
   sendToAllWindows('set-workspace', id, null);
-  settings.delete(`workspaces.${v}.${id}`);
+  settings.unset(`workspaces.${v}.${id}`); // async
 };
 
 module.exports = {

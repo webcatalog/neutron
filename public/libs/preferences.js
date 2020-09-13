@@ -25,6 +25,10 @@ const getDefaultPauseNotificationsByScheduleTo = () => {
   return d.toString();
 };
 
+settings.configure({
+  fileName: 'Settings', // backward compatible with electron-settings@3
+});
+
 // scope
 const v = '2018.2';
 
@@ -78,7 +82,7 @@ const defaultPreferences = {
 let cachedPreferences = null;
 
 const initCachedPreferences = () => {
-  cachedPreferences = { ...defaultPreferences, ...settings.get(`preferences.${v}`) };
+  cachedPreferences = { ...defaultPreferences, ...settings.getSync(`preferences.${v}`) };
 };
 
 const getPreferences = () => {
@@ -111,13 +115,13 @@ const getPreference = (name) => {
   }
 };
 
-const isPreferenceUnset = (name) => settings.get(`preferences.${v}.${name}`) == null;
+const isPreferenceUnset = (name) => settings.getSync(`preferences.${v}.${name}`) == null;
 
 const setPreference = (name, value) => {
   sendToAllWindows('set-preference', name, value);
   cachedPreferences[name] = value;
 
-  Promise.resolve().then(() => settings.set(`preferences.${v}.${name}`, value));
+  settings.set(`preferences.${v}.${name}`, value); // async
 
   if (name.startsWith('darkReader')) {
     ipcMain.emit('request-reload-views-dark-reader');
@@ -138,7 +142,7 @@ const setPreference = (name, value) => {
 
 const resetPreferences = () => {
   cachedPreferences = null;
-  settings.deleteAll();
+  settings.unsetSync();
   const preferences = getPreferences();
   Object.keys(preferences).forEach((name) => {
     sendToAllWindows('set-preference', name, preferences[name]);
