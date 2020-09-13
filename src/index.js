@@ -15,7 +15,6 @@ import getWorkspacesAsList from './helpers/get-workspaces-as-list';
 const DialogAbout = React.lazy(() => import('./components/dialog-about'));
 const DialogAddWorkspace = React.lazy(() => import('./components/dialog-add-workspace'));
 const DialogAuth = React.lazy(() => import('./components/dialog-auth'));
-const DialogCodeInjection = React.lazy(() => import('./components/dialog-code-injection'));
 const DialogCustomUserAgent = React.lazy(() => import('./components/dialog-custom-user-agent'));
 const DialogDisplayMedia = React.lazy(() => import('./components/dialog-display-media'));
 const DialogEditWorkspace = React.lazy(() => import('./components/dialog-edit-workspace'));
@@ -33,7 +32,6 @@ const App = () => {
     case 'about': return <DialogAbout />;
     case 'add-workspace': return <DialogAddWorkspace />;
     case 'auth': return <DialogAuth />;
-    case 'code-injection': return <DialogCodeInjection />;
     case 'custom-user-agent': return <DialogCustomUserAgent />;
     case 'display-media': return <DialogDisplayMedia />;
     case 'edit-workspace': return <DialogEditWorkspace />;
@@ -75,16 +73,6 @@ const runApp = () => {
         document.title = workspace.name ? `Edit Workspace ${workspace.order + 1} "${workspace.name}"` : `Edit Workspace ${workspace.order + 1}`;
       } else if (window.mode === 'open-url-with') {
         document.title = 'Open Link With';
-      } else if (window.mode === 'code-injection') {
-        const codeInjectionType = window.remote.getGlobal('codeInjectionType');
-        initialState.dialogCodeInjection = {
-          form: {
-            code: initialState.preferences[`${codeInjectionType}CodeInjection`],
-            // allowNodeInJsCodeInjection is only used for js injection
-            allowNodeInJsCodeInjection: codeInjectionType === 'js' ? initialState.preferences.allowNodeInJsCodeInjection : false,
-          },
-        };
-        document.title = `Edit ${codeInjectionType.toUpperCase()} Code Injection`;
       } else if (window.mode === 'notifications') {
         document.title = 'Notifications';
       } else if (window.mode === 'display-media') {
@@ -119,7 +107,7 @@ const runApp = () => {
         document.title = window.remote.getGlobal('appJson').name;
       }
 
-      if (window.mode !== 'main' && window.mode !== 'menubar') {
+      if (window.mode !== 'main' && window.mode !== 'menubar' && window.mode !== 'preferences') {
         document.addEventListener('keydown', (event) => {
           if (event.key === 'Escape') {
             if (window.preventClosingWindow) {

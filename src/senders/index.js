@@ -12,7 +12,6 @@ export const requestCheckForUpdates = () => window.ipcRenderer.send('request-che
 
 export const requestShowAboutWindow = () => window.ipcRenderer.send('request-show-about-window');
 export const requestShowAddWorkspaceWindow = () => window.ipcRenderer.send('request-show-add-workspace-window');
-export const requestShowCodeInjectionWindow = (type) => window.ipcRenderer.send('request-show-code-injection-window', type);
 export const requestShowEditWorkspaceWindow = (id) => window.ipcRenderer.send('request-show-edit-workspace-window', id);
 export const requestShowLicenseRegistrationWindow = () => window.ipcRenderer.send('request-show-license-registration-window');
 export const requestShowNotificationsWindow = () => window.ipcRenderer.send('request-show-notifications-window');

@@ -66,7 +66,6 @@ const getViewBounds = require('../libs/get-view-bounds');
 
 const aboutWindow = require('../windows/about');
 const addWorkspaceWindow = require('../windows/add-workspace');
-const codeInjectionWindow = require('../windows/code-injection');
 const customUserAgentWindow = require('../windows/custom-user-agent');
 const displayMediaWindow = require('../windows/display-media');
 const editWorkspaceWindow = require('../windows/edit-workspace');
@@ -145,10 +144,6 @@ const loadListeners = () => {
 
   ipcMain.on('request-set-preference', (e, name, value) => {
     setPreference(name, value);
-  });
-
-  ipcMain.on('request-show-code-injection-window', (e, type) => {
-    codeInjectionWindow.show(type);
   });
 
   ipcMain.on('request-show-custom-user-agent-window', () => {

@@ -47,7 +47,6 @@ import {
   requestSetPreference,
   requestSetSystemPreference,
   requestShowAboutWindow,
-  requestShowCodeInjectionWindow,
   requestShowCustomUserAgentWindow,
   requestShowNotification,
   requestShowNotificationsWindow,
@@ -55,6 +54,8 @@ import {
   requestShowRequireRestartDialog,
   requestShowSpellcheckLanguagesWindow,
 } from '../../senders';
+
+import { open as openDialogCodeInjection } from '../../state/dialog-code-injection/actions';
 
 import hunspellLanguagesMap from '../../constants/hunspell-languages';
 
@@ -65,6 +66,8 @@ import switchbarIconPng from '../../images/switchbar-icon.png';
 
 import ListItemDefaultMailClient from './list-item-default-mail-client';
 import ListItemDefaultBrowser from './list-item-default-browser';
+
+import DialogCodeInjection from '../dialog-code-injection';
 
 const styles = (theme) => ({
   root: {
@@ -212,6 +215,7 @@ const Preferences = ({
   ignoreCertificateErrors,
   jsCodeInjection,
   navigationBar,
+  onOpenDialogCodeInjection,
   openAtLogin,
   pauseNotificationsBySchedule,
   pauseNotificationsByScheduleFrom,
@@ -1083,7 +1087,7 @@ const Preferences = ({
               button
               onClick={() => {
                 if (!checkLicense()) return;
-                requestShowCodeInjectionWindow('js');
+                onOpenDialogCodeInjection('js');
               }}
             >
               <ListItemText primary="JS Code Injection" secondary={jsCodeInjection ? `Set ${allowNodeInJsCodeInjection ? ' (with access to Node.JS & Electron APIs)' : ''}` : 'Not set'} />
@@ -1094,7 +1098,7 @@ const Preferences = ({
               button
               onClick={() => {
                 if (!checkLicense()) return;
-                requestShowCodeInjectionWindow('css');
+                onOpenDialogCodeInjection('css');
               }}
             >
               <ListItemText primary="CSS Code Injection" secondary={cssCodeInjection ? 'Set' : 'Not set'} />
@@ -1402,6 +1406,7 @@ const Preferences = ({
           </List>
         </Paper>
       </div>
+      <DialogCodeInjection />
     </div>
   );
 };
@@ -1435,6 +1440,7 @@ Preferences.propTypes = {
   ignoreCertificateErrors: PropTypes.bool.isRequired,
   jsCodeInjection: PropTypes.string,
   navigationBar: PropTypes.bool.isRequired,
+  onOpenDialogCodeInjection: PropTypes.func.isRequired,
   openAtLogin: PropTypes.oneOf(['yes', 'yes-hidden', 'no']).isRequired,
   pauseNotificationsBySchedule: PropTypes.bool.isRequired,
   pauseNotificationsByScheduleFrom: PropTypes.string.isRequired,
@@ -1499,9 +1505,13 @@ const mapStateToProps = (state) => ({
   useHardwareAcceleration: state.preferences.useHardwareAcceleration,
 });
 
+const actionCreators = {
+  openDialogCodeInjection,
+};
+
 export default connectComponent(
   Preferences,
   mapStateToProps,
-  null,
+  actionCreators,
   styles,
 );
