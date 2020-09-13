@@ -17,7 +17,6 @@ export const requestShowLicenseRegistrationWindow = () => window.ipcRenderer.sen
 export const requestShowNotificationsWindow = () => window.ipcRenderer.send('request-show-notifications-window');
 export const requestShowPreferencesWindow = (scrollTo) => window.ipcRenderer.send('request-show-preferences-window', scrollTo);
 export const requestShowProxyWindow = () => window.ipcRenderer.send('request-show-proxy-window');
-export const requestShowSpellcheckLanguagesWindow = () => window.ipcRenderer.send('request-show-spellcheck-languages-window');
 
 // Notifications
 export const requestShowNotification = (opts) => window.ipcRenderer.send('request-show-notification', opts);

@@ -51,11 +51,11 @@ import {
   requestShowNotificationsWindow,
   requestShowProxyWindow,
   requestShowRequireRestartDialog,
-  requestShowSpellcheckLanguagesWindow,
 } from '../../senders';
 
 import { open as openDialogCustomUserAgent } from '../../state/dialog-custom-user-agent/actions';
 import { open as openDialogCodeInjection } from '../../state/dialog-code-injection/actions';
+import { open as openDialogSpellcheckLanguages } from '../../state/dialog-spellcheck-languages/actions';
 
 import hunspellLanguagesMap from '../../constants/hunspell-languages';
 
@@ -69,6 +69,7 @@ import ListItemDefaultBrowser from './list-item-default-browser';
 
 import DialogCodeInjection from '../dialog-code-injection';
 import DialogCustomUserAgent from '../dialog-custom-user-agent';
+import DialogSpellcheckLanguages from '../dialog-spellcheck-languages';
 
 const styles = (theme) => ({
   root: {
@@ -218,6 +219,7 @@ const Preferences = ({
   navigationBar,
   onOpenDialogCodeInjection,
   onOpenDialogCustomUserAgent,
+  onOpenDialogSpellcheckLanguages,
   openAtLogin,
   pauseNotificationsBySchedule,
   pauseNotificationsByScheduleFrom,
@@ -879,7 +881,7 @@ const Preferences = ({
             {window.process.platform !== 'darwin' && (
               <>
                 <Divider />
-                <ListItem button onClick={requestShowSpellcheckLanguagesWindow}>
+                <ListItem button onClick={onOpenDialogSpellcheckLanguages}>
                   <ListItemText
                     primary="Spell checking languages"
                     secondary={spellcheckLanguages.map((code) => hunspellLanguagesMap[code]).join(' | ')}
@@ -1410,6 +1412,7 @@ const Preferences = ({
       </div>
       <DialogCodeInjection />
       <DialogCustomUserAgent />
+      <DialogSpellcheckLanguages />
     </div>
   );
 };
@@ -1445,6 +1448,7 @@ Preferences.propTypes = {
   navigationBar: PropTypes.bool.isRequired,
   onOpenDialogCodeInjection: PropTypes.func.isRequired,
   onOpenDialogCustomUserAgent: PropTypes.func.isRequired,
+  onOpenDialogSpellcheckLanguages: PropTypes.func.isRequired,
   openAtLogin: PropTypes.oneOf(['yes', 'yes-hidden', 'no']).isRequired,
   pauseNotificationsBySchedule: PropTypes.bool.isRequired,
   pauseNotificationsByScheduleFrom: PropTypes.string.isRequired,
@@ -1512,6 +1516,7 @@ const mapStateToProps = (state) => ({
 const actionCreators = {
   openDialogCodeInjection,
   openDialogCustomUserAgent,
+  openDialogSpellcheckLanguages,
 };
 
 export default connectComponent(

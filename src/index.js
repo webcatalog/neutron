@@ -23,7 +23,6 @@ const DialogNotifications = React.lazy(() => import('./components/dialog-notific
 const DialogOpenUrlWith = React.lazy(() => import('./components/dialog-open-url-with'));
 const DialogPreferences = React.lazy(() => import('./components/dialog-preferences'));
 const DialogProxy = React.lazy(() => import('./components/dialog-proxy'));
-const DialogSpellcheckLanguages = React.lazy(() => import('./components/dialog-spellcheck-languages'));
 const Main = React.lazy(() => import('./components/main'));
 
 const App = () => {
@@ -39,7 +38,6 @@ const App = () => {
     case 'open-url-with': return <DialogOpenUrlWith />;
     case 'preferences': return <DialogPreferences />;
     case 'proxy': return <DialogProxy />;
-    case 'spellcheck-languages': return <DialogSpellcheckLanguages />;
     default: return <Main />;
   }
 };
@@ -85,13 +83,6 @@ const runApp = () => {
           proxyType: initialState.preferences.proxyType,
         };
         document.title = 'Proxy Settings';
-      } else if (window.mode === 'spellcheck-languages') {
-        initialState.dialogSpellcheckLanguages = {
-          form: {
-            spellcheckLanguages: initialState.preferences.spellcheckLanguages,
-          },
-        };
-        document.title = 'Spell Checking Languages';
       } else if (window.mode === 'add-workspace') {
         document.title = 'Add Custom Workspace';
       } else if (window.mode === 'license-registration') {

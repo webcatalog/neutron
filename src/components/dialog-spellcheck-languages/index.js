@@ -7,108 +7,112 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
 
 import connectComponent from '../../helpers/connect-component';
 
 import hunspellLanguagesMap from '../../constants/hunspell-languages';
 
 import {
+  close,
   addLanguage,
   removeLanguage,
   save,
 } from '../../state/dialog-spellcheck-languages/actions';
 
-const styles = (theme) => ({
-  root: {
-    display: 'flex',
-    flexDirection: 'column',
-    height: '100vh',
-  },
+const styles = () => ({
   top: {
     flex: 1,
     overflow: 'auto',
-  },
-  bottom: {
-    display: 'fixed',
-    zIndex: 10,
-    bottom: 0,
-    left: 0,
-    padding: theme.spacing(1),
-  },
-  button: {
-    float: 'right',
-    marginLeft: theme.spacing(1),
   },
 });
 
 const DialogSpellcheckLanguages = (props) => {
   const {
     classes,
-    spellcheckLanguages,
-    onSave,
     onAddLanguage,
+    onClose,
     onRemoveLanguage,
+    onSave,
+    open,
+    spellcheckLanguages,
   } = props;
 
   return (
-    <div className={classes.root}>
-      <List
-        disablePadding
-        dense
-        className={classes.top}
-      >
-        {Object.keys(hunspellLanguagesMap).map((code) => (
-          <ListItem
-            dense
-            key={code}
-            button
-            onClick={() => {
-              if (spellcheckLanguages.includes(code)) {
-                onRemoveLanguage(code);
-              } else {
-                onAddLanguage(code);
-              }
-            }}
-          >
-            <ListItemIcon>
-              <Checkbox
-                edge="start"
-                checked={spellcheckLanguages.includes(code)}
-                disabled={spellcheckLanguages.length < 2
-                  && spellcheckLanguages.includes(code)}
-              />
-            </ListItemIcon>
-            <ListItemText primary={hunspellLanguagesMap[code]} />
-          </ListItem>
-        ))}
-      </List>
-      <div className={classes.bottom}>
-        <Button color="primary" variant="contained" disableElevation className={classes.button} onClick={onSave}>
-          Save
-        </Button>
-        <Button variant="contained" disableElevation className={classes.button} onClick={() => window.remote.getCurrentWindow().close()}>
+    <Dialog
+      onClose={onClose}
+      open={open}
+      fullWidth
+      maxWidth="xs"
+    >
+      <DialogContent>
+        <List
+          disablePadding
+          dense
+          className={classes.top}
+        >
+          {Object.keys(hunspellLanguagesMap).map((code) => (
+            <ListItem
+              dense
+              key={code}
+              button
+              onClick={() => {
+                if (spellcheckLanguages.includes(code)) {
+                  onRemoveLanguage(code);
+                } else {
+                  onAddLanguage(code);
+                }
+              }}
+            >
+              <ListItemIcon>
+                <Checkbox
+                  edge="start"
+                  checked={spellcheckLanguages.includes(code)}
+                  disabled={spellcheckLanguages.length < 2
+                    && spellcheckLanguages.includes(code)}
+                />
+              </ListItemIcon>
+              <ListItemText primary={hunspellLanguagesMap[code]} />
+            </ListItem>
+          ))}
+        </List>
+      </DialogContent>
+      <DialogActions>
+        <Button variant="contained" disableElevation onClick={onClose}>
           Cancel
         </Button>
-      </div>
-    </div>
+        <Button color="primary" variant="contained" disableElevation onClick={onSave}>
+          Save
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 };
 
-DialogSpellcheckLanguages.defaultProps = {};
+DialogSpellcheckLanguages.defaultProps = {
+  open: false,
+  spellcheckLanguages: [],
+};
 
 DialogSpellcheckLanguages.propTypes = {
   classes: PropTypes.object.isRequired,
   onAddLanguage: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
   onRemoveLanguage: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
-  spellcheckLanguages: PropTypes.arrayOf(PropTypes.string).isRequired,
+  open: PropTypes.bool,
+  spellcheckLanguages: PropTypes.arrayOf(PropTypes.string),
 };
 
 const mapStateToProps = (state) => ({
+  open: state.dialogSpellcheckLanguages.open,
   spellcheckLanguages: state.dialogSpellcheckLanguages.form.spellcheckLanguages,
 });
 
 const actionCreators = {
+  close,
   save,
   addLanguage,
   removeLanguage,
