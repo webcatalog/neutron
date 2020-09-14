@@ -15,6 +15,10 @@ const rawMailtoUrls = [
     mailtoUrl: 'https://outlook.live.com/owa/?path=/mail/action/compose&to=%s',
   },
   {
+    hostnames: ['outlook.office.com'],
+    mailtoUrl: 'https://outlook.office.com/mail/deeplink/compose?to=%s',
+  },
+  {
     hostnames: ['mail.yahoo.com', 'yahoomail.com'],
     mailtoUrl: 'https://compose.mail.yahoo.com/?To=%s',
   },
