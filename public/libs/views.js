@@ -96,6 +96,8 @@ const equivalentDomain = (domain) => {
   return eDomain;
 };
 
+const isMicrosoftUrl = (url) => /.+(microsoft.com|live.com|1drv.ms|office.com|sharepoint.com|skype.com)/g.test(url);
+
 const isInternalUrl = (url, currentInternalUrls) => {
   // google have a lot of redirections after logging in
   // so assume any requests made after 'accounts.google.com' are internals
@@ -109,6 +111,16 @@ const isInternalUrl = (url, currentInternalUrls) => {
   // https://meet.google.com/linkredirect?authuser=1&dest=https://something.com
   if (url.startsWith('https://meet.google.com/linkredirect')) {
     return false;
+  }
+
+  // Microsoft uses many different domains
+  // So we define special rules for it
+  if (isMicrosoftUrl(isMicrosoftUrl)) {
+    for (let i = 0; i < currentInternalUrls.length; i += 1) {
+      if (currentInternalUrls[i] && isMicrosoftUrl(currentInternalUrls[i])) {
+        return true;
+      }
+    }
   }
 
   const domain = equivalentDomain(extractDomain(url));
