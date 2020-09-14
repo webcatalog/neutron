@@ -42,6 +42,23 @@ function createMenu() {
   const registered = getPreference('registered');
   const updaterEnabled = process.env.SNAP == null && !process.mas && !process.windowsStore;
 
+  const handleZoomIn = (menuItem, browserWindow) => {
+    // if item is called in popup window
+    // open menu bar in the popup window instead
+    if (browserWindow && browserWindow.isPopup) {
+      const contents = browserWindow.webContents;
+      contents.zoomFactor += 0.1;
+      return;
+    }
+
+    const win = mainWindow.get();
+
+    if (win != null) {
+      const contents = win.getBrowserView().webContents;
+      contents.zoomFactor += 0.1;
+    }
+  };
+
   const template = [
     {
       label: 'Edit',
@@ -171,25 +188,20 @@ function createMenu() {
           },
           enabled: hasWorkspaces,
         },
+        // duplicate zooming in menuitem
+        // as it's not posible to set multiple accelerators
+        // https://github.com/atomery/webcatalog/issues/1015
         {
           label: 'Zoom In',
           accelerator: 'CmdOrCtrl+=',
-          click: (menuItem, browserWindow) => {
-            // if item is called in popup window
-            // open menu bar in the popup window instead
-            if (browserWindow && browserWindow.isPopup) {
-              const contents = browserWindow.webContents;
-              contents.zoomFactor += 0.1;
-              return;
-            }
-
-            const win = mainWindow.get();
-
-            if (win != null) {
-              const contents = win.getBrowserView().webContents;
-              contents.zoomFactor += 0.1;
-            }
-          },
+          click: handleZoomIn,
+          enabled: hasWorkspaces,
+          visible: false,
+        },
+        {
+          label: 'Zoom In',
+          accelerator: 'CmdOrCtrl+Plus',
+          click: handleZoomIn,
           enabled: hasWorkspaces,
         },
         {
