@@ -115,7 +115,7 @@ const getPreference = (name) => {
   }
 };
 
-const isPreferenceUnset = (name) => settings.getSync(`preferences.${v}.${name}`) == null;
+const isPreferenceUnset = (name) => settings.hasSync(`preferences.${v}.${name}`);
 
 const setPreference = (name, value) => {
   sendToAllWindows('set-preference', name, value);
