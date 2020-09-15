@@ -19,13 +19,13 @@ let workspaces;
 const initWorkspaces = () => {
   if (workspaces) return;
 
-  const loadedWorkspaces = settings.getSync(`workspaces.${v}`, {});
+  const loadedWorkspaces = settings.getSync(`workspaces.${v}`) || {};
 
   // legacy (v=14 was used for Singlebox prior to merging with Juli)
   // Singlebox v1-v3
   if (appJson.id === 'singlebox') {
     const legacySingleboxV = '14';
-    const legacyWorkspaces = settings.getSync(`workspaces.${legacySingleboxV}`, null);
+    const legacyWorkspaces = settings.getSync(`workspaces.${legacySingleboxV}`);
     if (legacyWorkspaces) {
       Object.assign(loadedWorkspaces, legacyWorkspaces);
       settings.set(`workspaces.${v}`, loadedWorkspaces); // async
