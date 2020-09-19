@@ -59,6 +59,7 @@ import { open as openDialogProxy } from '../../state/dialog-proxy/actions';
 
 import hunspellLanguagesMap from '../../constants/hunspell-languages';
 import searchEngines from '../../constants/search-engines';
+import autoRefreshIntervals from '../../constants/auto-refresh-intervals';
 
 import webcatalogIconPng from '../../images/webcatalog-icon.png';
 import translatiumIconPng from '../../images/translatium-icon.png';
@@ -165,6 +166,10 @@ const styles = (theme) => ({
     paddingBottom: theme.spacing(1),
     paddingLeft: theme.spacing(1.5),
   },
+  refreshEvery: {
+    float: 'right',
+    paddingRight: theme.spacing(1),
+  },
 });
 
 const formatBytes = (bytes, decimals = 2) => {
@@ -206,6 +211,8 @@ const Preferences = ({
   askForDownloadPath,
   attachToMenubar,
   autoCheckForUpdates,
+  autoRefresh,
+  autoRefreshInterval,
   blockAds,
   classes,
   cssCodeInjection,
@@ -756,6 +763,45 @@ const Preferences = ({
                   </Grid>
                 </Grid>
               </ListItemText>
+            </ListItem>
+            <Divider />
+            <ListItem>
+              <ListItemText
+                primary="Reload web pages automatically"
+              />
+              <ListItemSecondaryAction>
+                <Switch
+                  edge="end"
+                  color="primary"
+                  checked={autoRefresh}
+                  onChange={(e) => {
+                    requestSetPreference('autoRefresh', e.target.checked);
+                    requestShowRequireRestartDialog();
+                  }}
+                />
+              </ListItemSecondaryAction>
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="Refresh every" classes={{ primary: classes.refreshEvery }} />
+              <Select
+                value={autoRefreshInterval}
+                onChange={(e) => {
+                  requestSetPreference('autoRefreshInterval', e.target.value);
+                  requestShowRequireRestartDialog();
+                }}
+                variant="filled"
+                disableUnderline
+                margin="dense"
+                classes={{
+                  root: classes.select,
+                }}
+                className={classNames(classes.selectRoot, classes.selectRootExtraMargin)}
+                disabled={!autoRefresh}
+              >
+                {autoRefreshIntervals.map((opt) => (
+                  <MenuItem key={opt.value} dense value={opt.value}>{opt.name}</MenuItem>
+                ))}
+              </Select>
             </ListItem>
           </List>
         </Paper>
@@ -1479,6 +1525,8 @@ Preferences.propTypes = {
   askForDownloadPath: PropTypes.bool.isRequired,
   attachToMenubar: PropTypes.bool.isRequired,
   autoCheckForUpdates: PropTypes.bool.isRequired,
+  autoRefresh: PropTypes.bool.isRequired,
+  autoRefreshInterval: PropTypes.number.isRequired,
   blockAds: PropTypes.bool.isRequired,
   classes: PropTypes.object.isRequired,
   cssCodeInjection: PropTypes.string,
@@ -1526,6 +1574,8 @@ const mapStateToProps = (state) => ({
   askForDownloadPath: state.preferences.askForDownloadPath,
   attachToMenubar: state.preferences.attachToMenubar,
   autoCheckForUpdates: state.preferences.autoCheckForUpdates,
+  autoRefresh: state.preferences.autoRefresh,
+  autoRefreshInterval: state.preferences.autoRefreshInterval,
   blockAds: state.preferences.blockAds,
   cssCodeInjection: state.preferences.cssCodeInjection,
   customUserAgent: state.preferences.customUserAgent,

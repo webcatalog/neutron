@@ -38,6 +38,8 @@ const defaultPreferences = {
   askForDownloadPath: true,
   attachToMenubar: false,
   autoCheckForUpdates: true,
+  autoRefresh: false,
+  autoRefreshInterval: 3600000,
   blockAds: false,
   cssCodeInjection: null,
   customUserAgent: null,

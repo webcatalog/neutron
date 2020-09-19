@@ -52,9 +52,19 @@ const handleLoaded = (event) => {
     loadDarkReader();
   });
 
-  const jsCodeInjection = ipcRenderer.sendSync('get-preference', 'jsCodeInjection');
-  const allowNodeInJsCodeInjection = ipcRenderer.sendSync('get-preference', 'allowNodeInJsCodeInjection');
-  const cssCodeInjection = ipcRenderer.sendSync('get-preference', 'cssCodeInjection');
+  const {
+    jsCodeInjection,
+    allowNodeInJsCodeInjection,
+    cssCodeInjection,
+    autoRefresh,
+    autoRefreshInterval,
+  } = ipcRenderer.sendSync('get-preferences');
+
+  if (autoRefresh) {
+    setInterval(() => {
+      window.location.reload();
+    }, autoRefreshInterval);
+  }
 
   if (jsCodeInjection && jsCodeInjection.trim().length > 0) {
     if (allowNodeInJsCodeInjection) {
