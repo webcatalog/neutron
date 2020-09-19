@@ -30,6 +30,7 @@
     "cheerio": "1.0.0-rc.3",
     "darkreader": "4.9.17",
     "electron-context-menu": "2.3.0",
+    "electron-dl": "3.0.2",
     "electron-is-dev": "1.2.0",
     "electron-settings": "4.0.2",
     "electron-updater": "4.3.5",
