@@ -54,6 +54,7 @@ const defaultPreferences = {
   hibernateUnusedWorkspacesAtLaunch: false,
   hideMenuBar: false,
   ignoreCertificateErrors: false,
+  internalUrlRule: '',
   jsCodeInjection: null,
   lastShowNewUpdateDialog: 0,
   navigationBar: false,

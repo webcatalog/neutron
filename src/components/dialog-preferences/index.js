@@ -52,10 +52,11 @@ import {
   requestShowRequireRestartDialog,
 } from '../../senders';
 
-import { open as openDialogCustomUserAgent } from '../../state/dialog-custom-user-agent/actions';
 import { open as openDialogCodeInjection } from '../../state/dialog-code-injection/actions';
-import { open as openDialogSpellcheckLanguages } from '../../state/dialog-spellcheck-languages/actions';
+import { open as openDialogCustomUserAgent } from '../../state/dialog-custom-user-agent/actions';
+import { open as openDialogInternalUrls } from '../../state/dialog-internal-urls/actions';
 import { open as openDialogProxy } from '../../state/dialog-proxy/actions';
+import { open as openDialogSpellcheckLanguages } from '../../state/dialog-spellcheck-languages/actions';
 
 import hunspellLanguagesMap from '../../constants/hunspell-languages';
 import searchEngines from '../../constants/search-engines';
@@ -71,8 +72,9 @@ import ListItemDefaultBrowser from './list-item-default-browser';
 
 import DialogCodeInjection from '../dialog-code-injection';
 import DialogCustomUserAgent from '../dialog-custom-user-agent';
-import DialogSpellcheckLanguages from '../dialog-spellcheck-languages';
+import DialogInternalUrls from '../dialog-internal-urls';
 import DialogProxy from '../dialog-proxy';
+import DialogSpellcheckLanguages from '../dialog-spellcheck-languages';
 
 const styles = (theme) => ({
   root: {
@@ -226,10 +228,12 @@ const Preferences = ({
   hibernateUnusedWorkspacesAtLaunch,
   hideMenuBar,
   ignoreCertificateErrors,
+  internalUrlRule,
   jsCodeInjection,
   navigationBar,
   onOpenDialogCodeInjection,
   onOpenDialogCustomUserAgent,
+  onOpenDialogInternalUrls,
   onOpenDialogProxy,
   onOpenDialogSpellcheckLanguages,
   openAtLogin,
@@ -268,7 +272,7 @@ const Preferences = ({
       })
         .then(({ response }) => {
           if (response === 1) {
-            window.remote.shell.openExternal('https://atomery.com/webcatalog/pricing?utm_source=juli_app');
+            window.remote.shell.openExternal(`https://atomery.com/webcatalog/pricing?utm_source=${utmSource}`);
           }
         })
         .catch(console.log); // eslint-disable-line no-console
@@ -782,7 +786,7 @@ const Preferences = ({
               </ListItemSecondaryAction>
             </ListItem>
             <ListItem>
-              <ListItemText primary="Refresh every" classes={{ primary: classes.refreshEvery }} />
+              <ListItemText primary="Reload every" classes={{ primary: classes.refreshEvery }} />
               <Select
                 value={autoRefreshInterval}
                 onChange={(e) => {
@@ -931,10 +935,10 @@ const Preferences = ({
                       role="link"
                       tabIndex={0}
                       className={classes.link}
-                      onClick={() => requestOpenInBrowser('https://github.com/atomery/webcatalog/wiki/How-to-Enable-Notifications-in-Web-Apps')}
+                      onClick={() => requestOpenInBrowser(`https://atomery.com/webcatalog/web-apps-notifications?utm_source=${utmSource}`)}
                       onKeyDown={(e) => {
                         if (e.key !== 'Enter') return;
-                        requestOpenInBrowser('https://github.com/atomery/webcatalog/wiki/How-to-Enable-Notifications-in-Web-Apps');
+                        requestOpenInBrowser(`https://atomery.com/webcatalog/web-apps-notifications?utm_source=${utmSource}`);
                       }}
                     >
                       Learn more
@@ -1209,6 +1213,14 @@ const Preferences = ({
         </Typography>
         <Paper elevation={0} className={classes.paper}>
           <List disablePadding dense>
+            <ListItem button onClick={onOpenDialogInternalUrls}>
+              <ListItemText
+                primary="Internal URLs"
+                secondary={internalUrlRule ? `/^${internalUrlRule}$/i` : 'Not set'}
+              />
+              <ChevronRightIcon color="action" />
+            </ListItem>
+            <Divider />
             <ListItem>
               <ListItemText
                 primary="Hibernate unused workspaces at app launch"
@@ -1507,6 +1519,7 @@ const Preferences = ({
       <DialogCustomUserAgent />
       <DialogSpellcheckLanguages />
       <DialogProxy />
+      <DialogInternalUrls />
     </div>
   );
 };
@@ -1514,6 +1527,7 @@ const Preferences = ({
 Preferences.defaultProps = {
   cssCodeInjection: null,
   customUserAgent: null,
+  internalUrlRule: null,
   jsCodeInjection: null,
   updaterInfo: null,
   updaterStatus: null,
@@ -1540,10 +1554,12 @@ Preferences.propTypes = {
   hibernateUnusedWorkspacesAtLaunch: PropTypes.bool.isRequired,
   hideMenuBar: PropTypes.bool.isRequired,
   ignoreCertificateErrors: PropTypes.bool.isRequired,
+  internalUrlRule: PropTypes.string,
   jsCodeInjection: PropTypes.string,
   navigationBar: PropTypes.bool.isRequired,
   onOpenDialogCodeInjection: PropTypes.func.isRequired,
   onOpenDialogCustomUserAgent: PropTypes.func.isRequired,
+  onOpenDialogInternalUrls: PropTypes.func.isRequired,
   onOpenDialogProxy: PropTypes.func.isRequired,
   onOpenDialogSpellcheckLanguages: PropTypes.func.isRequired,
   openAtLogin: PropTypes.oneOf(['yes', 'yes-hidden', 'no']).isRequired,
@@ -1588,6 +1604,7 @@ const mapStateToProps = (state) => ({
   hibernateUnusedWorkspacesAtLaunch: state.preferences.hibernateUnusedWorkspacesAtLaunch,
   hideMenuBar: state.preferences.hideMenuBar,
   ignoreCertificateErrors: state.preferences.ignoreCertificateErrors,
+  internalUrlRule: state.preferences.internalUrlRule,
   isDefaultMailClient: state.general.isDefaultMailClient,
   isDefaultWebBrowser: state.general.isDefaultWebBrowser,
   jsCodeInjection: state.preferences.jsCodeInjection,
@@ -1617,8 +1634,9 @@ const mapStateToProps = (state) => ({
 const actionCreators = {
   openDialogCodeInjection,
   openDialogCustomUserAgent,
-  openDialogSpellcheckLanguages,
+  openDialogInternalUrls,
   openDialogProxy,
+  openDialogSpellcheckLanguages,
 };
 
 export default connectComponent(
