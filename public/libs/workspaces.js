@@ -70,6 +70,16 @@ const getWorkspace = (id) => {
   return workspaces[id];
 };
 
+const getWorkspacePreferences = (id) => {
+  const { preferences } = getWorkspace(id);
+  return preferences || {};
+};
+
+const getWorkspacePreference = (id, preferenceName) => {
+  const preferences = getWorkspacePreferences(id);
+  return preferences[preferenceName];
+};
+
 const getPreviousWorkspace = (id) => {
   const workspaceLst = getWorkspacesAsList();
 
@@ -294,6 +304,8 @@ module.exports = {
   getNextWorkspace,
   getPreviousWorkspace,
   getWorkspace,
+  getWorkspacePreferences,
+  getWorkspacePreference,
   getWorkspaces,
   getWorkspacesAsList,
   removeWorkspace,

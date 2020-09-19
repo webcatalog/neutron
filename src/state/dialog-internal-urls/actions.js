@@ -10,9 +10,19 @@ import {
 import validate from '../../helpers/validate';
 import hasErrors from '../../helpers/has-errors';
 
-export const open = () => (dispatch, getState) => {
-  const { preferences } = getState();
+import { updateForm as updateFormDialogWorkspacePreferences } from '../dialog-workspace-preferences/actions';
 
+export const open = () => (dispatch, getState) => {
+  if (window.mode === 'workspace-preferences') {
+    const { form } = getState().dialogWorkspacePreferences;
+    dispatch({
+      type: OPEN_DIALOG_INTERNAL_URLS,
+      form: { internalUrlRule: form.internalUrlRule },
+    });
+    return;
+  }
+
+  const { preferences } = getState();
   dispatch({
     type: OPEN_DIALOG_INTERNAL_URLS,
     form: { internalUrlRule: preferences.internalUrlRule },
@@ -44,7 +54,13 @@ export const save = () => (dispatch, getState) => {
     return;
   }
 
-  requestSetPreference('internalUrlRule', form.internalUrlRule);
+  if (window.mode === 'workspace-preferences') {
+    dispatch(updateFormDialogWorkspacePreferences({
+      internalUrlRule: form.internalUrlRule,
+    }));
+  } else {
+    requestSetPreference('internalUrlRule', form.internalUrlRule);
+  }
 
   dispatch(close());
 };

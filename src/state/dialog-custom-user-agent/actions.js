@@ -5,12 +5,21 @@ import {
 } from '../../constants/actions';
 import {
   requestSetPreference,
-  requestShowRequireRestartDialog,
 } from '../../senders';
 
-export const open = () => (dispatch, getState) => {
-  const { preferences } = getState();
+import { updateForm as updateFormDialogWorkspacePreferences } from '../dialog-workspace-preferences/actions';
 
+export const open = () => (dispatch, getState) => {
+  if (window.mode === 'workspace-preferences') {
+    const { form } = getState().dialogWorkspacePreferences;
+    dispatch({
+      type: OPEN_CUSTOM_USER_AGENT_FORM,
+      form: { code: form.customUserAgent },
+    });
+    return;
+  }
+
+  const { preferences } = getState();
   dispatch({
     type: OPEN_CUSTOM_USER_AGENT_FORM,
     form: { code: preferences.customUserAgent },
@@ -29,9 +38,13 @@ export const updateForm = (changes) => (dispatch) => dispatch({
 export const save = () => (dispatch, getState) => {
   const { form } = getState().dialogCustomUserAgent;
 
-  requestSetPreference('customUserAgent', form.code);
+  if (window.mode === 'workspace-preferences') {
+    dispatch(updateFormDialogWorkspacePreferences({
+      customUserAgent: form.code,
+    }));
+  } else {
+    requestSetPreference('customUserAgent', form.code);
+  }
 
   dispatch(close());
-
-  requestShowRequireRestartDialog();
 };

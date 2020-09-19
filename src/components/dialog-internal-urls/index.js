@@ -86,7 +86,11 @@ const DialogInternalUrls = ({
           id="outlined-full-width"
           label="Internal URL rule"
           placeholder=""
-          helperText={internalUrlRuleError || 'Regular expression (regexp)'}
+          helperText={(() => {
+            if (internalUrlRuleError) return internalUrlRuleError;
+            if (window.mode === 'workspace-preferences') return 'Leave it blank to use global preference.';
+            return 'Regular expression (regexp)';
+          })()}
           fullWidth
           margin="dense"
           variant="outlined"

@@ -16,6 +16,7 @@ export const requestShowEditWorkspaceWindow = (id) => window.ipcRenderer.send('r
 export const requestShowLicenseRegistrationWindow = () => window.ipcRenderer.send('request-show-license-registration-window');
 export const requestShowNotificationsWindow = () => window.ipcRenderer.send('request-show-notifications-window');
 export const requestShowPreferencesWindow = (scrollTo) => window.ipcRenderer.send('request-show-preferences-window', scrollTo);
+export const requestShowWorkspacePreferencesWindow = (id) => window.ipcRenderer.send('request-show-workspace-preferences-window', id);
 
 // Notifications
 export const requestShowNotification = (opts) => window.ipcRenderer.send('request-show-notification', opts);
@@ -36,6 +37,8 @@ export const requestSetSystemPreference = (name, value) => window.ipcRenderer.se
 
 // Workspace
 export const getWorkspace = (id) => window.ipcRenderer.sendSync('get-workspace', id);
+export const getWorkspacePreference = (id, preferenceName) => window.ipcRenderer.sendSync('get-workspace-preference', id, preferenceName);
+export const getWorkspacePreferences = (id) => window.ipcRenderer.sendSync('get-workspace-preferences', id);
 export const getWorkspaces = () => window.ipcRenderer.sendSync('get-workspaces');
 export const requestClearBrowsingData = () => window.ipcRenderer.send('request-clear-browsing-data');
 export const requestCreateWorkspace = (name, homeUrl, picture, transparentBackground) => window.ipcRenderer.send('request-create-workspace', name, homeUrl, picture, transparentBackground);
@@ -49,6 +52,8 @@ export const requestSetWorkspace = (id, opts) => window.ipcRenderer.send('reques
 export const requestSetWorkspaces = (workspaces) => window.ipcRenderer.send('request-set-workspaces', workspaces);
 export const requestSetWorkspacePicture = (id, picturePath) => window.ipcRenderer.send('request-set-workspace-picture', id, picturePath);
 export const requestWakeUpWorkspace = (id) => window.ipcRenderer.send('request-wake-up-workspace', id);
+export const requestReloadViewsDarkReader = () => window.ipcRenderer.send('request-reload-views-dark-reader');
+export const requestReloadViewDarkReader = (id) => window.ipcRenderer.send('request-reload-view-dark-reader', id);
 
 // Workspace Meta
 export const getWorkspaceMeta = (id) => window.ipcRenderer.sendSync('get-workspace-meta', id);

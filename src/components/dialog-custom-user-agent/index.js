@@ -31,7 +31,9 @@ const CustomUserAgent = ({
         id="outlined-full-width"
         label="User-Agent"
         placeholder=""
-        helperText="Leave it blank to use default User-Agent string."
+        helperText={window.mode === 'workspace-preferences'
+          ? 'Leave it blank to use global preference.'
+          : 'Leave it blank to use default User-Agent string.'}
         fullWidth
         margin="dense"
         variant="outlined"

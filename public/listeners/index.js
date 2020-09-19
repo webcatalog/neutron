@@ -25,6 +25,8 @@ const {
 const {
   getActiveWorkspace,
   getWorkspace,
+  getWorkspacePreference,
+  getWorkspacePreferences,
   getWorkspaces,
   setWorkspacePicture,
   removeWorkspacePicture,
@@ -49,6 +51,7 @@ const {
 } = require('../libs/workspaces-views');
 
 const {
+  reloadViewDarkReader,
   reloadViewsDarkReader,
   reloadViewsWebContentsIfDidFailLoad,
 } = require('../libs/views');
@@ -72,6 +75,7 @@ const licenseRegistrationWindow = require('../windows/license-registration');
 const mainWindow = require('../windows/main');
 const notificationsWindow = require('../windows/notifications');
 const preferencesWindow = require('../windows/preferences');
+const workspacePreferencesWindow = require('../windows/workspace-preferences');
 
 const appJson = require('../app.json');
 
@@ -165,6 +169,10 @@ const loadListeners = () => {
     preferencesWindow.show(scrollTo);
   });
 
+  ipcMain.on('request-show-workspace-preferences-window', (e, id) => {
+    workspacePreferencesWindow.show(id);
+  });
+
   ipcMain.on('request-show-edit-workspace-window', (e, id) => {
     editWorkspaceWindow.show(id);
   });
@@ -224,6 +232,16 @@ const loadListeners = () => {
   // Workspaces
   ipcMain.on('get-workspace', (e, id) => {
     const val = getWorkspace(id);
+    e.returnValue = val;
+  });
+
+  ipcMain.on('get-workspace-preference', (e, id, preferenceName) => {
+    const val = getWorkspacePreference(id, preferenceName);
+    e.returnValue = val;
+  });
+
+  ipcMain.on('get-workspace-preferences', (e, id) => {
+    const val = getWorkspacePreferences(id);
     e.returnValue = val;
   });
 
@@ -469,6 +487,10 @@ const loadListeners = () => {
 
   ipcMain.on('request-reload-views-dark-reader', () => {
     reloadViewsDarkReader();
+  });
+
+  ipcMain.on('request-reload-view-dark-reader', (e, id) => {
+    reloadViewDarkReader(id);
   });
 
   // if global.forceNewWindow = true

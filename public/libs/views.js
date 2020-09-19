@@ -16,6 +16,8 @@ const appJson = require('../app.json');
 const { getPreference, getPreferences } = require('./preferences');
 const {
   getWorkspace,
+  getWorkspacePreference,
+  getWorkspacePreferences,
   setWorkspace,
 } = require('./workspaces');
 const {
@@ -143,9 +145,9 @@ const isInternalUrl = (url, currentInternalUrls) => {
 const addView = (browserWindow, workspace) => {
   if (views[workspace.id] != null) return;
 
+  const preferences = getPreferences();
   const {
     blockAds,
-    customUserAgent,
     proxyBypassRules,
     proxyPacScript,
     proxyRules,
@@ -155,7 +157,7 @@ const addView = (browserWindow, workspace) => {
     spellcheck,
     spellcheckLanguages,
     unreadCountBadge,
-  } = getPreferences();
+  } = preferences;
 
   // configure session, proxy & ad blocker
   const partitionId = shareWorkspaceBrowsingData ? 'persist:shared' : `persist:${workspace.id}`;
@@ -211,31 +213,38 @@ const addView = (browserWindow, workspace) => {
   // https://github.com/electron/electron/issues/16212
   view.setBackgroundColor('#FFF');
 
-  let adjustUserAgentByUrl = () => false;
-  if (!customUserAgent) {
-    // fix Google prevents signing in because of security concerns
-    // https://github.com/atomery/webcatalog/issues/455
-    // https://github.com/meetfranz/franz/issues/1720#issuecomment-566460763
-    const fakedEdgeUaStr = `${app.userAgentFallback} Edge/18.18875`;
-    adjustUserAgentByUrl = (contents, url, occasion) => {
-      const navigatedDomain = extractDomain(url);
-      const currentUaStr = contents.userAgent;
-      if (navigatedDomain === 'accounts.google.com') {
-        if (currentUaStr !== fakedEdgeUaStr) {
-          contents.userAgent = fakedEdgeUaStr;
-          // eslint-disable-next-line no-console
-          console.log('Changed user agent to', fakedEdgeUaStr, 'for web compatibility URL: ', url, 'when', occasion);
-          return true;
-        }
-      } else if (currentUaStr !== app.userAgentFallback) {
-        contents.userAgent = app.userAgentFallback;
-        // eslint-disable-next-line no-console
-        console.log('Changed user agent to', app.userAgentFallback, 'for web compatibility URL: ', url, 'when', occasion);
+  // fix Google prevents signing in because of security concerns
+  // https://github.com/atomery/webcatalog/issues/455
+  // https://github.com/meetfranz/franz/issues/1720#issuecomment-566460763
+  const fakedEdgeUaStr = `${app.userAgentFallback} Edge/18.18875`;
+  const adjustUserAgentByUrl = (contents, url, occasion) => {
+    const currentUaStr = contents.userAgent;
+
+    const customUserAgent = getWorkspacePreference(workspace.id, 'customUserAgent') || getPreference('customUserAgent');
+    if (customUserAgent) {
+      if (currentUaStr !== customUserAgent) {
+        contents.userAgent = customUserAgent;
         return true;
       }
       return false;
-    };
-  }
+    }
+
+    const navigatedDomain = extractDomain(url);
+    if (navigatedDomain === 'accounts.google.com') {
+      if (currentUaStr !== fakedEdgeUaStr) {
+        contents.userAgent = fakedEdgeUaStr;
+        // eslint-disable-next-line no-console
+        console.log('Changed user agent to', fakedEdgeUaStr, 'for web compatibility URL: ', url, 'when', occasion);
+        return true;
+      }
+    } else if (currentUaStr !== app.userAgentFallback) {
+      contents.userAgent = app.userAgentFallback;
+      // eslint-disable-next-line no-console
+      console.log('Changed user agent to', app.userAgentFallback, 'for web compatibility URL: ', url, 'when', occasion);
+      return true;
+    }
+    return false;
+  };
 
   view.webContents.on('will-navigate', (e, nextUrl) => {
     // open external links in browser
@@ -451,7 +460,7 @@ const addView = (browserWindow, workspace) => {
 
     // check defined internal URL rule
     // https://atomery.com/webcatalog/internal-urls
-    const internalUrlRule = getPreference('internalUrlRule');
+    const internalUrlRule = getWorkspacePreference(workspace.id, 'internalUrlRule') || getPreference('internalUrlRule');
     if (nextUrl && internalUrlRule) {
       const re = new RegExp(`^${internalUrlRule}$`, 'i');
       if (re.test(nextUrl)) {
@@ -573,10 +582,12 @@ const addView = (browserWindow, workspace) => {
   // Handle downloads
   // https://electronjs.org/docs/api/download-item
   view.webContents.session.on('will-download', (event, item) => {
-    const {
-      askForDownloadPath,
-      downloadPath,
-    } = getPreferences();
+    const globalPreferences = getPreferences();
+    const workspacePreferences = getWorkspacePreferences(workspace.id);
+    const downloadPath = workspacePreferences.downloadPath || globalPreferences.downloadPath;
+    const askForDownloadPath = workspacePreferences.askForDownloadPath != null
+      ? workspacePreferences.askForDownloadPath
+      : globalPreferences.askForDownloadPath;
 
     // Set the save path, making Electron not to prompt a save dialog.
     if (!askForDownloadPath) {
@@ -767,12 +778,16 @@ const hibernateView = (id) => {
   }
 };
 
+const reloadViewDarkReader = (id) => {
+  const view = views[id];
+  if (view != null) {
+    view.webContents.send('reload-dark-reader');
+  }
+};
+
 const reloadViewsDarkReader = () => {
   Object.keys(views).forEach((id) => {
-    const view = views[id];
-    if (view != null) {
-      view.webContents.send('reload-dark-reader');
-    }
+    reloadViewDarkReader(id);
   });
 };
 
@@ -793,6 +808,7 @@ module.exports = {
   getView,
   hibernateView,
   realignActiveView,
+  reloadViewDarkReader,
   reloadViewsDarkReader,
   reloadViewsWebContentsIfDidFailLoad,
   removeView,

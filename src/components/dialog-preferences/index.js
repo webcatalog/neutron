@@ -36,6 +36,7 @@ import WidgetsIcon from '@material-ui/icons/Widgets';
 import { TimePicker } from '@material-ui/pickers';
 
 import connectComponent from '../../helpers/connect-component';
+import checkLicense from '../../helpers/check-license';
 
 import {
   requestCheckForUpdates,
@@ -95,11 +96,6 @@ const styles = (theme) => ({
     display: 'flex',
     justifyContent: 'space-between',
   },
-  secondaryEllipsis: {
-    textOverflow: 'ellipsis',
-    overflow: 'hidden',
-    whiteSpace: 'nowrap',
-  },
   sidebar: {
     position: 'fixed',
     width: 200,
@@ -107,7 +103,7 @@ const styles = (theme) => ({
   },
   inner: {
     width: '100%',
-    maxWidth: 500,
+    maxWidth: 516,
     float: 'right',
   },
   link: {
@@ -208,7 +204,6 @@ const getUpdaterDesc = (status, info) => {
 };
 
 const Preferences = ({
-  allowNodeInJsCodeInjection,
   allowPrerelease,
   askForDownloadPath,
   attachToMenubar,
@@ -260,26 +255,6 @@ const Preferences = ({
   const appJson = window.remote.getGlobal('appJson');
   const isSinglebox = appJson.id === 'singlebox';
   const utmSource = isSinglebox ? 'singlebox_app' : 'juli_app';
-
-  const checkLicense = () => {
-    if (!isSinglebox && !window.remote.getGlobal('appJson').registered) {
-      window.remote.dialog.showMessageBox(window.remote.getCurrentWindow(), {
-        type: 'info',
-        message: 'You are currently running the free version of WebCatalog which does not include this feature. To remove the limitations, please purchase the full version ($19.99) from our store.',
-        buttons: ['OK', 'Learn More...'],
-        cancelId: 0,
-        defaultId: 0,
-      })
-        .then(({ response }) => {
-          if (response === 1) {
-            window.remote.shell.openExternal(`https://atomery.com/webcatalog/pricing?utm_source=${utmSource}`);
-          }
-        })
-        .catch(console.log); // eslint-disable-line no-console
-      return false;
-    }
-    return true;
-  };
 
   const sections = {
     general: {
@@ -395,7 +370,7 @@ const Preferences = ({
               <ListItemText primary="Theme" />
               <Select
                 value={themeSource}
-                onChange={(e) => requestSetSystemPreference('themeSource', e.target.value)}
+                onChange={(e) => requestSetPreference('themeSource', e.target.value)}
                 variant="filled"
                 disableUnderline
                 margin="dense"
@@ -610,7 +585,7 @@ const Preferences = ({
             <Divider />
             <ListItem>
               <ListItemText
-                primary="Create dark themes for web apps on the fly"
+                primary="Create dark themes for web pages on the fly"
                 secondary={(
                   <>
                     <span>Powered by </span>
@@ -627,8 +602,6 @@ const Preferences = ({
                       Dark Reader
                     </span>
                     <span>.</span>
-                    <span> Invert bright colors making them high contrast </span>
-                    <span>and easy to read at night.</span>
                   </>
                 )}
               />
@@ -636,8 +609,7 @@ const Preferences = ({
                 <Switch
                   edge="end"
                   color="primary"
-                  checked={themeSource !== 'light' && darkReader}
-                  disabled={themeSource === 'light'}
+                  checked={darkReader}
                   onChange={(e) => {
                     requestSetPreference('darkReader', e.target.checked);
                   }}
@@ -656,7 +628,7 @@ const Preferences = ({
                     <Slider
                       classes={{ markLabel: classes.sliderMarkLabel }}
                       value={darkReaderBrightness - 100}
-                      disabled={themeSource === 'light' || !darkReader}
+                      disabled={!darkReader}
                       aria-labelledby="brightness-slider"
                       valueLabelDisplay="auto"
                       step={5}
@@ -688,7 +660,7 @@ const Preferences = ({
                     <Slider
                       classes={{ markLabel: classes.sliderMarkLabel }}
                       value={darkReaderContrast - 100}
-                      disabled={themeSource === 'light' || !darkReader}
+                      disabled={!darkReader}
                       aria-labelledby="contrast-slider"
                       valueLabelDisplay="auto"
                       step={5}
@@ -720,7 +692,7 @@ const Preferences = ({
                     <Slider
                       classes={{ markLabel: classes.sliderMarkLabel }}
                       value={darkReaderSepia}
-                      disabled={themeSource === 'light' || !darkReader}
+                      disabled={!darkReader}
                       aria-labelledby="sepia-slider"
                       valueLabelDisplay="auto"
                       step={5}
@@ -748,7 +720,7 @@ const Preferences = ({
                     <Slider
                       classes={{ markLabel: classes.sliderMarkLabel }}
                       value={darkReaderGrayscale}
-                      disabled={themeSource === 'light' || !darkReader}
+                      disabled={!darkReader}
                       aria-labelledby="grayscale-slider"
                       valueLabelDisplay="auto"
                       step={5}
@@ -1179,7 +1151,7 @@ const Preferences = ({
               <ListItemText
                 primary="Custom User Agent"
                 secondary={customUserAgent || 'Not set'}
-                classes={{ secondary: classes.secondaryEllipsis }}
+                secondaryTypographyProps={{ noWrap: true }}
               />
               <ChevronRightIcon color="action" />
             </ListItem>
@@ -1191,7 +1163,11 @@ const Preferences = ({
                 onOpenDialogCodeInjection('js');
               }}
             >
-              <ListItemText primary="JS Code Injection" secondary={jsCodeInjection ? `Set ${allowNodeInJsCodeInjection ? ' (with access to Node.JS & Electron APIs)' : ''}` : 'Not set'} />
+              <ListItemText
+                primary="JS Code Injection"
+                secondary={jsCodeInjection || 'Not set'}
+                secondaryTypographyProps={{ noWrap: true }}
+              />
               <ChevronRightIcon color="action" />
             </ListItem>
             <Divider />
@@ -1202,7 +1178,11 @@ const Preferences = ({
                 onOpenDialogCodeInjection('css');
               }}
             >
-              <ListItemText primary="CSS Code Injection" secondary={cssCodeInjection ? 'Set' : 'Not set'} />
+              <ListItemText
+                primary="CSS Code Injection"
+                secondary={cssCodeInjection || 'Not set'}
+                secondaryTypographyProps={{ noWrap: true }}
+              />
               <ChevronRightIcon color="action" />
             </ListItem>
           </List>
@@ -1534,7 +1514,6 @@ Preferences.defaultProps = {
 };
 
 Preferences.propTypes = {
-  allowNodeInJsCodeInjection: PropTypes.bool.isRequired,
   allowPrerelease: PropTypes.bool.isRequired,
   askForDownloadPath: PropTypes.bool.isRequired,
   attachToMenubar: PropTypes.bool.isRequired,
@@ -1585,7 +1564,6 @@ Preferences.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  allowNodeInJsCodeInjection: state.preferences.allowNodeInJsCodeInjection,
   allowPrerelease: state.preferences.allowPrerelease,
   askForDownloadPath: state.preferences.askForDownloadPath,
   attachToMenubar: state.preferences.attachToMenubar,

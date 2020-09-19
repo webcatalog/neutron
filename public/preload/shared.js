@@ -1,5 +1,4 @@
 const {
-  desktopCapturer,
   ipcRenderer,
   remote,
 } = require('electron');
@@ -17,5 +16,4 @@ contextMenu({
 });
 
 window.remote = remote;
-window.desktopCapturer = desktopCapturer;
 window.ipcRenderer = ipcRenderer;
