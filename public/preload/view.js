@@ -61,7 +61,7 @@ const handleLoaded = (event) => {
   } = ipcRenderer.sendSync('get-preferences');
 
   if (autoRefresh) {
-    setInterval(() => {
+    setTimeout(() => {
       window.location.reload();
     }, autoRefreshInterval);
   }
