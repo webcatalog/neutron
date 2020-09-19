@@ -15,6 +15,8 @@ import SettingsIcon from '@material-ui/icons/SettingsSharp';
 import connectComponent from '../../helpers/connect-component';
 import isUrl from '../../helpers/is-url';
 
+import searchEngines from '../../constants/search-engines';
+
 import { updateAddressBarInfo } from '../../state/general/actions';
 
 import {
@@ -73,7 +75,7 @@ const styles = (theme) => ({
   },
 });
 
-const processUrl = (url) => {
+const processUrl = (url, searchEngine) => {
   if (!url) return url;
 
   if (isUrl(url)) {
@@ -85,7 +87,8 @@ const processUrl = (url) => {
     return httpUrl;
   }
 
-  const processedUrl = `http://google.com/search?q=${encodeURIComponent(url)}`;
+  const { queryUrl } = searchEngines[searchEngine];
+  const processedUrl = queryUrl.replace('%s', encodeURIComponent(url));
   return processedUrl;
 };
 
@@ -95,10 +98,11 @@ const NavigationBar = ({
   canGoBack,
   canGoForward,
   classes,
-  onUpdateAddressBarInfo,
-  shouldPauseNotifications,
   hasTrafficLights,
   hasWorkspaces,
+  onUpdateAddressBarInfo,
+  searchEngine,
+  shouldPauseNotifications,
 }) => {
   const [addressInputClicked, setAddressInputClicked] = useState(false);
 
@@ -130,7 +134,7 @@ const NavigationBar = ({
               aria-label="Go"
               className={classes.goButton}
               onClick={() => {
-                const processedUrl = processUrl(address);
+                const processedUrl = processUrl(address, searchEngine);
                 onUpdateAddressBarInfo(processedUrl, false);
                 requestLoadUrl(processedUrl);
               }}
@@ -144,7 +148,7 @@ const NavigationBar = ({
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
               e.target.blur();
-              const processedUrl = processUrl(address);
+              const processedUrl = processUrl(address, searchEngine);
               onUpdateAddressBarInfo(processedUrl, false);
               requestLoadUrl(processedUrl);
             }
@@ -188,6 +192,7 @@ NavigationBar.propTypes = {
   hasTrafficLights: PropTypes.bool.isRequired,
   hasWorkspaces: PropTypes.bool.isRequired,
   onUpdateAddressBarInfo: PropTypes.func.isRequired,
+  searchEngine: PropTypes.string.isRequired,
   shouldPauseNotifications: PropTypes.bool.isRequired,
 };
 
@@ -196,9 +201,10 @@ const mapStateToProps = (state) => ({
   addressEdited: Boolean(state.general.addressEdited),
   canGoBack: state.general.canGoBack,
   canGoForward: state.general.canGoForward,
-  shouldPauseNotifications: state.notifications.pauseNotificationsInfo !== null,
   hasTrafficLights: window.process.platform === 'darwin' && !state.preferences.titleBar && !state.preferences.sidebar,
   hasWorkspaces: Object.keys(state.workspaces).length > 0,
+  searchEngine: state.preferences.searchEngine,
+  shouldPauseNotifications: state.notifications.pauseNotificationsInfo !== null,
 });
 
 const actionCreators = {

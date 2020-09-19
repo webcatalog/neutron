@@ -1,8 +1,10 @@
 import React, { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import semver from 'semver';
+import classNames from 'classnames';
 
 import Divider from '@material-ui/core/Divider';
+import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -10,10 +12,10 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
+import Select from '@material-ui/core/Select';
 import Slider from '@material-ui/core/Slider';
 import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
 
 import BuildIcon from '@material-ui/icons/Build';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -34,8 +36,6 @@ import WidgetsIcon from '@material-ui/icons/Widgets';
 import { TimePicker } from '@material-ui/pickers';
 
 import connectComponent from '../../helpers/connect-component';
-
-import StatedMenu from '../shared/stated-menu';
 
 import {
   requestCheckForUpdates,
@@ -58,6 +58,7 @@ import { open as openDialogSpellcheckLanguages } from '../../state/dialog-spellc
 import { open as openDialogProxy } from '../../state/dialog-proxy/actions';
 
 import hunspellLanguagesMap from '../../constants/hunspell-languages';
+import searchEngines from '../../constants/search-engines';
 
 import webcatalogIconPng from '../../images/webcatalog-icon.png';
 import translatiumIconPng from '../../images/translatium-icon.png';
@@ -150,19 +151,21 @@ const styles = (theme) => ({
   appIcon: {
     height: 64,
   },
+  selectRoot: {
+    borderRadius: theme.spacing(0.5),
+    fontSize: '0.84375rem',
+  },
+  selectRootExtraMargin: {
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+  },
+  select: {
+    paddingTop: theme.spacing(1),
+    paddingRight: 26,
+    paddingBottom: theme.spacing(1),
+    paddingLeft: theme.spacing(1.5),
+  },
 });
-
-const getThemeString = (theme) => {
-  if (theme === 'light') return 'Light';
-  if (theme === 'dark') return 'Dark';
-  return 'System default';
-};
-
-const getOpenAtLoginString = (openAtLogin) => {
-  if (openAtLogin === 'yes-hidden') return 'Yes, but minimized';
-  if (openAtLogin === 'yes') return 'Yes';
-  return 'No';
-};
 
 const formatBytes = (bytes, decimals = 2) => {
   if (bytes === 0) return '0 Bytes';
@@ -220,14 +223,15 @@ const Preferences = ({
   navigationBar,
   onOpenDialogCodeInjection,
   onOpenDialogCustomUserAgent,
-  onOpenDialogSpellcheckLanguages,
   onOpenDialogProxy,
+  onOpenDialogSpellcheckLanguages,
   openAtLogin,
   pauseNotificationsBySchedule,
   pauseNotificationsByScheduleFrom,
   pauseNotificationsByScheduleTo,
   pauseNotificationsMuteAudio,
   rememberLastPageVisited,
+  searchEngine,
   sentry,
   shareWorkspaceBrowsingData,
   sidebar,
@@ -376,19 +380,24 @@ const Preferences = ({
         </Typography>
         <Paper elevation={0} className={classes.paper}>
           <List disablePadding dense>
-            <StatedMenu
-              id="theme"
-              buttonElement={(
-                <ListItem button>
-                  <ListItemText primary="Theme" secondary={getThemeString(themeSource)} />
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-              )}
-            >
-              {window.process.platform === 'darwin' && <MenuItem dense onClick={() => requestSetPreference('themeSource', 'system')}>System default</MenuItem>}
-              <MenuItem dense onClick={() => requestSetPreference('themeSource', 'light')}>Light</MenuItem>
-              <MenuItem dense onClick={() => requestSetPreference('themeSource', 'dark')}>Dark</MenuItem>
-            </StatedMenu>
+            <ListItem>
+              <ListItemText primary="Theme" />
+              <Select
+                value={themeSource}
+                onChange={(e) => requestSetSystemPreference('themeSource', e.target.value)}
+                variant="filled"
+                disableUnderline
+                margin="dense"
+                classes={{
+                  root: classes.select,
+                }}
+                className={classNames(classes.selectRoot, classes.selectRootExtraMargin)}
+              >
+                {window.process.platform === 'darwin' && <MenuItem dense value="system">System default</MenuItem>}
+                <MenuItem dense value="light">Light</MenuItem>
+                <MenuItem dense value="dark">Dark</MenuItem>
+              </Select>
+            </ListItem>
             <Divider />
             <ListItem>
               <ListItemText
@@ -444,6 +453,37 @@ const Preferences = ({
                   }}
                 />
               </ListItemSecondaryAction>
+            </ListItem>
+            <Divider />
+            <ListItem>
+              <ListItemText
+                primary="Search engine"
+                secondary="Search engine used in the address bar."
+              />
+              <Select
+                value={searchEngine}
+                onChange={(e) => requestSetPreference('searchEngine', e.target.value)}
+                variant="filled"
+                disableUnderline
+                margin="dense"
+                classes={{
+                  root: classes.select,
+                }}
+                className={classes.selectRoot}
+              >
+                {Object.keys(searchEngines).map((optKey) => {
+                  const opt = searchEngines[optKey];
+                  return (
+                    <MenuItem
+                      key={optKey}
+                      value={optKey}
+                      dense
+                    >
+                      {opt.name}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
             </ListItem>
             {window.process.platform === 'darwin' && (
               <>
@@ -1058,19 +1098,24 @@ const Preferences = ({
             <ListItemDefaultMailClient />
             <Divider />
             {window.process.platform !== 'linux' && (
-              <StatedMenu
-                id="openAtLogin"
-                buttonElement={(
-                  <ListItem button>
-                    <ListItemText primary="Open at login" secondary={getOpenAtLoginString(openAtLogin)} />
-                    <ChevronRightIcon color="action" />
-                  </ListItem>
-              )}
-              >
-                <MenuItem dense onClick={() => requestSetSystemPreference('openAtLogin', 'yes')}>Yes</MenuItem>
-                <MenuItem dense onClick={() => requestSetSystemPreference('openAtLogin', 'yes-hidden')}>Yes, but minimized</MenuItem>
-                <MenuItem dense onClick={() => requestSetSystemPreference('openAtLogin', 'no')}>No</MenuItem>
-              </StatedMenu>
+              <ListItem>
+                <ListItemText primary="Open at login" />
+                <Select
+                  value={openAtLogin}
+                  onChange={(e) => requestSetSystemPreference('openAtLogin', e.target.value)}
+                  variant="filled"
+                  disableUnderline
+                  margin="dense"
+                  classes={{
+                    root: classes.select,
+                  }}
+                  className={classNames(classes.selectRoot, classes.selectRootExtraMargin)}
+                >
+                  <MenuItem dense value="yes">Yes</MenuItem>
+                  <MenuItem dense value="yes-hidden">Yes, but minimized</MenuItem>
+                  <MenuItem dense value="no">No</MenuItem>
+                </Select>
+              </ListItem>
             )}
           </List>
         </Paper>
@@ -1451,14 +1496,15 @@ Preferences.propTypes = {
   navigationBar: PropTypes.bool.isRequired,
   onOpenDialogCodeInjection: PropTypes.func.isRequired,
   onOpenDialogCustomUserAgent: PropTypes.func.isRequired,
-  onOpenDialogSpellcheckLanguages: PropTypes.func.isRequired,
   onOpenDialogProxy: PropTypes.func.isRequired,
+  onOpenDialogSpellcheckLanguages: PropTypes.func.isRequired,
   openAtLogin: PropTypes.oneOf(['yes', 'yes-hidden', 'no']).isRequired,
   pauseNotificationsBySchedule: PropTypes.bool.isRequired,
   pauseNotificationsByScheduleFrom: PropTypes.string.isRequired,
   pauseNotificationsByScheduleTo: PropTypes.string.isRequired,
   pauseNotificationsMuteAudio: PropTypes.bool.isRequired,
   rememberLastPageVisited: PropTypes.bool.isRequired,
+  searchEngine: PropTypes.string.isRequired,
   sentry: PropTypes.bool.isRequired,
   shareWorkspaceBrowsingData: PropTypes.bool.isRequired,
   sidebar: PropTypes.bool.isRequired,
@@ -1502,6 +1548,7 @@ const mapStateToProps = (state) => ({
   pauseNotificationsByScheduleTo: state.preferences.pauseNotificationsByScheduleTo,
   pauseNotificationsMuteAudio: state.preferences.pauseNotificationsMuteAudio,
   rememberLastPageVisited: state.preferences.rememberLastPageVisited,
+  searchEngine: state.preferences.searchEngine,
   sentry: state.preferences.sentry,
   shareWorkspaceBrowsingData: state.preferences.shareWorkspaceBrowsingData,
   sidebar: state.preferences.sidebar,
