@@ -25,10 +25,6 @@ const getDefaultPauseNotificationsByScheduleTo = () => {
   return d.toString();
 };
 
-settings.configure({
-  fileName: 'Settings', // backward compatible with electron-settings@3
-});
-
 // scope
 const v = '2018.2';
 
@@ -125,7 +121,7 @@ const setPreference = (name, value) => {
   sendToAllWindows('set-preference', name, value);
   cachedPreferences[name] = value;
 
-  settings.set(`preferences.${v}.${name}`, value); // async
+  settings.setSync(`preferences.${v}.${name}`, value);
 
   if (name.startsWith('darkReader')) {
     ipcMain.emit('request-reload-views-dark-reader');

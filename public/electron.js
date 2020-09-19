@@ -8,6 +8,11 @@ const {
 } = require('electron');
 const isDev = require('electron-is-dev');
 const { autoUpdater } = require('electron-updater');
+const settings = require('electron-settings');
+
+settings.configure({
+  fileName: 'Settings', // backward compatible with electron-settings@3
+});
 
 const { getPreference, getPreferences } = require('./libs/preferences');
 
