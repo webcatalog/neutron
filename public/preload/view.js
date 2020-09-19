@@ -10,17 +10,36 @@ const ContextMenuBuilder = require('../libs/context-menu-builder');
 
 const { MenuItem, shell } = remote;
 
+const { workspaceId } = remote.getCurrentWebContents();
+
 const loadDarkReader = () => {
   const shouldUseDarkColor = ipcRenderer.sendSync('get-should-use-dark-colors');
-  const darkReader = ipcRenderer.sendSync('get-preference', 'darkReader');
+  const workspaceDarkReader = ipcRenderer.sendSync('get-workspace-preference', workspaceId, 'darkReader');
+  const darkReader = workspaceDarkReader != null
+    ? workspaceDarkReader
+    : ipcRenderer.sendSync('get-preference', 'darkReader');
   let jsScript = '';
   if (shouldUseDarkColor && darkReader) {
-    const {
-      darkReaderBrightness,
-      darkReaderContrast,
-      darkReaderGrayscale,
-      darkReaderSepia,
-    } = ipcRenderer.sendSync('get-preferences');
+    let darkReaderBrightness;
+    let darkReaderContrast;
+    let darkReaderGrayscale;
+    let darkReaderSepia;
+
+    // if workspaceDarkReader is defined
+    // use darkReader config
+    if (workspaceDarkReader != null) {
+      const workspacePreferences = ipcRenderer.sendSync('get-workspace-preferences', workspaceId);
+      darkReaderBrightness = workspacePreferences.darkReaderBrightness || 100;
+      darkReaderContrast = workspacePreferences.darkReaderContrast || 100;
+      darkReaderGrayscale = workspacePreferences.darkReaderGrayscale || 0;
+      darkReaderSepia = workspacePreferences.darkReaderSepia || 0;
+    } else {
+      const preferences = ipcRenderer.sendSync('get-preferences');
+      darkReaderBrightness = preferences.darkReaderBrightness;
+      darkReaderContrast = preferences.darkReaderContrast;
+      darkReaderGrayscale = preferences.darkReaderGrayscale;
+      darkReaderSepia = preferences.darkReaderSepia;
+    }
     const darkReaderJsPath = path.resolve(__dirname, '..', '..', 'node_modules', 'darkreader', 'darkreader.js');
     const darkReaderJsString = fs.readFileSync(darkReaderJsPath, 'utf-8');
     jsScript = `if (window.DarkReader == null) { ${darkReaderJsString} }
@@ -52,13 +71,18 @@ const handleLoaded = (event) => {
     loadDarkReader();
   });
 
-  const {
-    jsCodeInjection,
-    allowNodeInJsCodeInjection,
-    cssCodeInjection,
-    autoRefresh,
-    autoRefreshInterval,
-  } = ipcRenderer.sendSync('get-preferences');
+  const preferences = ipcRenderer.sendSync('get-preferences');
+  const workspacePreferences = ipcRenderer.sendSync('get-workspace-preferences', workspaceId);
+
+  const jsCodeInjection = workspacePreferences.jsCodeInjection || preferences.jsCodeInjection;
+  const allowNodeInJsCodeInjection = workspacePreferences.jsCodeInjection
+    ? Boolean(workspacePreferences.allowNodeInJsCodeInjection)
+    : preferences.allowNodeInJsCodeInjection;
+  const cssCodeInjection = workspacePreferences.cssCodeInjection || preferences.cssCodeInjection;
+  const autoRefresh = workspacePreferences.autoRefresh || preferences.autoRefresh;
+  const autoRefreshInterval = workspacePreferences.autoRefresh
+    ? (workspacePreferences.autoRefreshInterval || 360000)
+    : preferences.autoRefreshInterval;
 
   if (autoRefresh) {
     setTimeout(() => {
@@ -311,7 +335,6 @@ window.addEventListener('message', (e) => {
 // Fix chrome.runtime.sendMessage is undefined for FastMail
 // https://github.com/quanglam2807/singlebox/issues/21
 const initialShouldPauseNotifications = ipcRenderer.sendSync('get-pause-notifications-info') != null;
-const { workspaceId } = remote.getCurrentWebContents();
 webFrame.executeJavaScript(`
 (function() {
   window.chrome = {

@@ -22,6 +22,7 @@ const DialogLicenseRegistration = React.lazy(() => import('./components/dialog-l
 const DialogNotifications = React.lazy(() => import('./components/dialog-notifications'));
 const DialogOpenUrlWith = React.lazy(() => import('./components/dialog-open-url-with'));
 const DialogPreferences = React.lazy(() => import('./components/dialog-preferences'));
+const DialogWorkspacePreferences = React.lazy(() => import('./components/dialog-workspace-preferences'));
 const Main = React.lazy(() => import('./components/main'));
 
 const App = () => {
@@ -36,6 +37,7 @@ const App = () => {
     case 'notifications': return <DialogNotifications />;
     case 'open-url-with': return <DialogOpenUrlWith />;
     case 'preferences': return <DialogPreferences />;
+    case 'workspace-preferences': return <DialogWorkspacePreferences />;
     default: return <Main />;
   }
 };
@@ -51,6 +53,20 @@ const runApp = () => {
         document.title = 'Sign In';
       } else if (window.mode === 'preferences') {
         document.title = 'Preferences';
+      } else if (window.mode === 'workspace-preferences') {
+        const workspaceId = window.remote.getGlobal('workspacePreferencesWorkspaceId');
+        const workspaceList = getWorkspacesAsList(initialState.workspaces);
+        const workspace = initialState.workspaces[workspaceId];
+        workspaceList.some((item, index) => {
+          if (item.id === workspaceId) {
+            workspace.order = index;
+            return true;
+          }
+          return false;
+        });
+        initialState.dialogWorkspacePreferences = { form: workspace.preferences || {} };
+
+        document.title = workspace.name ? `Configure Workspace ${workspace.order + 1} "${workspace.name}"` : `Configure Workspace ${workspace.order + 1}`;
       } else if (window.mode === 'edit-workspace') {
         const editWorkspaceId = window.remote.getGlobal('editWorkspaceId');
         const workspaceList = getWorkspacesAsList(initialState.workspaces);
@@ -81,7 +97,10 @@ const runApp = () => {
         document.title = window.remote.getGlobal('appJson').name;
       }
 
-      if (window.mode !== 'main' && window.mode !== 'menubar' && window.mode !== 'preferences') {
+      if (window.mode !== 'main'
+      && window.mode !== 'menubar'
+      && window.mode !== 'preferences'
+      && window.mode !== 'workspace-preferences') {
         document.addEventListener('keydown', (event) => {
           if (event.key === 'Escape') {
             if (window.preventClosingWindow) {

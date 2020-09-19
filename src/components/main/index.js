@@ -37,6 +37,7 @@ import {
   requestShowEditWorkspaceWindow,
   requestShowNotificationsWindow,
   requestShowPreferencesWindow,
+  requestShowWorkspacePreferencesWindow,
   requestWakeUpWorkspace,
   requestReload,
 } from '../../senders';
@@ -179,6 +180,10 @@ const SortableItem = sortableElement(({ value }) => {
           {
             label: 'Edit Workspace',
             click: () => requestShowEditWorkspaceWindow(id),
+          },
+          {
+            label: 'Configure Workspace',
+            click: () => requestShowWorkspacePreferencesWindow(id),
           },
           {
             label: 'Remove Workspace',
