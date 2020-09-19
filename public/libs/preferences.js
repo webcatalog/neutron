@@ -66,6 +66,7 @@ const defaultPreferences = {
   proxyType: 'none',
   registered: false,
   rememberLastPageVisited: false,
+  searchEngine: 'google',
   sentry: true,
   shareWorkspaceBrowsingData: false,
   sidebar: !appJson.url || Boolean(MAILTO_URLS[extractHostname(appJson.url)]),
