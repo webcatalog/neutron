@@ -1,5 +1,6 @@
 import isUrl from './is-url';
 import isValidLicenseKey from './is-valid-license-key';
+import isRegExp from './is-reg-exp';
 
 const kits = {
   required: (val, ruleVal, fieldName) => {
@@ -24,6 +25,12 @@ const kits = {
   },
   licenseKey: (val, ruleVal, fieldName) => {
     if (ruleVal && val && !isValidLicenseKey(val)) {
+      return '{fieldName} is not valid.'.replace('{fieldName}', fieldName);
+    }
+    return null;
+  },
+  regExp: (val, ruleVal, fieldName) => {
+    if (ruleVal && val && !isRegExp(val)) {
       return '{fieldName} is not valid.'.replace('{fieldName}', fieldName);
     }
     return null;

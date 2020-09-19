@@ -13,7 +13,7 @@ const { ElectronBlocker } = require('@cliqz/adblocker-electron');
 
 const appJson = require('../app.json');
 
-const { getPreferences } = require('./preferences');
+const { getPreference, getPreferences } = require('./preferences');
 const {
   getWorkspace,
   setWorkspace,
@@ -448,6 +448,17 @@ const addView = (browserWindow, workspace) => {
     };
 
     // Conditions are listed by order of priority
+
+    // check defined internal URL rule
+    // https://atomery.com/webcatalog/internal-urls
+    const internalUrlRule = getPreference('internalUrlRule');
+    if (nextUrl && internalUrlRule) {
+      const re = new RegExp(`^${internalUrlRule}$`, 'i');
+      if (re.test(nextUrl)) {
+        openInNewWindow();
+        return;
+      }
+    }
 
     // if global.forceNewWindow = true
     // or regular new-window event
