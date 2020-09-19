@@ -1,4 +1,3 @@
-const path = require('path');
 const settings = require('electron-settings');
 const { app, nativeTheme, ipcMain } = require('electron');
 
@@ -9,7 +8,7 @@ const MAILTO_URLS = require('../constants/mailto-urls');
 
 const appJson = require('../app.json');
 
-const getDefaultDownloadsPath = () => path.join(app.getPath('home'), 'Downloads');
+const getDefaultDownloadsPath = () => app.getPath('downloads');
 
 const getDefaultPauseNotificationsByScheduleFrom = () => {
   const d = new Date();

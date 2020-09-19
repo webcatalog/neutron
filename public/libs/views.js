@@ -10,6 +10,7 @@ const {
 const path = require('path');
 const fsExtra = require('fs-extra');
 const { ElectronBlocker } = require('@cliqz/adblocker-electron');
+const { download } = require('electron-dl');
 
 const appJson = require('../app.json');
 
@@ -582,6 +583,8 @@ const addView = (browserWindow, workspace) => {
   // Handle downloads
   // https://electronjs.org/docs/api/download-item
   view.webContents.session.on('will-download', (event, item) => {
+    event.preventDefault();
+
     const globalPreferences = getPreferences();
     const workspacePreferences = getWorkspacePreferences(workspace.id);
     const downloadPath = workspacePreferences.downloadPath || globalPreferences.downloadPath;
@@ -589,21 +592,15 @@ const addView = (browserWindow, workspace) => {
       ? workspacePreferences.askForDownloadPath
       : globalPreferences.askForDownloadPath;
 
-    // Set the save path, making Electron not to prompt a save dialog.
-    if (!askForDownloadPath) {
-      const finalFilePath = path.join(downloadPath, item.getFilename());
-      if (!fsExtra.existsSync(finalFilePath)) {
-        // eslint-disable-next-line no-param-reassign
-        item.savePath = finalFilePath;
-      }
-    } else {
-      // set preferred path for save dialog
-      const opts = {
-        ...item.getSaveDialogOptions(),
-        defaultPath: path.join(downloadPath, item.getFilename()),
-      };
-      item.setSaveDialogOptions(opts);
-    }
+    download(browserWindow, item.getURL(), {
+      directory: downloadPath,
+      saveAs: askForDownloadPath,
+      // on macOS, if the file is downloaded to default Download dir
+      // we bounce the dock icon
+      // for other directories, as they're not on dock, we open the dir in Finder
+      // for other platforms, always open the dir in file explorer
+      openFolderWhenDone: process.platform !== 'darwin' || downloadPath !== app.getPath('downloads'),
+    });
   });
 
   // Unread count badge
