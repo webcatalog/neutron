@@ -195,7 +195,7 @@ const addView = (browserWindow, workspace) => {
     spellcheck,
     nativeWindowOpen: true,
     nodeIntegration: false,
-    contextIsolation: false,
+    contextIsolation: true,
     plugins: true, // PDF reader
     enableRemoteModule: true,
     session: ses,
