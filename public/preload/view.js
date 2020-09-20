@@ -3,8 +3,12 @@ const {
   remote,
   webFrame,
 } = require('electron');
-const fs = require('fs');
-const path = require('path');
+const {
+  enable: enableDarkMode,
+  disable: disableDarkMode,
+  setFetchMethod: setFetchMethodDarkMode,
+} = require('darkreader');
+const nodeFetch = require('node-fetch');
 
 const ContextMenuBuilder = require('../libs/context-menu-builder');
 
@@ -18,7 +22,6 @@ const loadDarkReader = () => {
   const darkReader = workspaceDarkReader != null
     ? workspaceDarkReader
     : ipcRenderer.sendSync('get-preference', 'darkReader');
-  let jsScript = '';
   if (shouldUseDarkColor && darkReader) {
     let darkReaderBrightness;
     let darkReaderContrast;
@@ -40,24 +43,19 @@ const loadDarkReader = () => {
       darkReaderGrayscale = preferences.darkReaderGrayscale;
       darkReaderSepia = preferences.darkReaderSepia;
     }
-    const darkReaderJsPath = path.resolve(__dirname, '..', '..', 'node_modules', 'darkreader', 'darkreader.js');
-    const darkReaderJsString = fs.readFileSync(darkReaderJsPath, 'utf-8');
-    jsScript = `if (window.DarkReader == null) { ${darkReaderJsString} }
-DarkReader.setFetchMethod(window.fetch);
-DarkReader.enable({
-  brightness: ${darkReaderBrightness},
-  contrast: ${darkReaderContrast},
-  grayscale: ${darkReaderGrayscale},
-  sepia: ${darkReaderSepia},
-});`;
+    // use node-fetch
+    // to avoid CORS-related issues
+    // see https://github.com/atomery/webcatalog/issues/993
+    setFetchMethodDarkMode((url) => nodeFetch(url));
+    enableDarkMode({
+      darkReaderBrightness,
+      darkReaderContrast,
+      darkReaderGrayscale,
+      darkReaderSepia,
+    });
   } else {
-    jsScript = 'if (window.DarkReader) { DarkReader.disable(); }';
+    disableDarkMode();
   }
-
-  // inject dark reader instead of using DarkReader API directly in preload
-  // to avoid CORS-related issues
-  // see https://github.com/atomery/webcatalog/issues/993
-  webFrame.executeJavaScript(jsScript);
 };
 
 let handled = false;
