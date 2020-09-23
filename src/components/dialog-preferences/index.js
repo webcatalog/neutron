@@ -66,7 +66,7 @@ import autoRefreshIntervals from '../../constants/auto-refresh-intervals';
 import webcatalogIconPng from '../../images/webcatalog-icon.png';
 import translatiumIconPng from '../../images/translatium-icon.png';
 import singleboxIconPng from '../../images/singlebox-icon.png';
-import switchbarIconPng from '../../images/switchbar-icon.png';
+// import switchbarIconPng from '../../images/switchbar-icon.png';
 
 import ListItemDefaultMailClient from './list-item-default-mail-client';
 import ListItemDefaultBrowser from './list-item-default-browser';
@@ -1402,6 +1402,7 @@ const Preferences = ({
               </div>
               <ChevronRightIcon color="action" />
             </ListItem>
+            {/*
             <Divider />
             <ListItem
               button
@@ -1425,6 +1426,7 @@ const Preferences = ({
               </div>
               <ChevronRightIcon color="action" />
             </ListItem>
+            */}
             <Divider />
             <ListItem
               button
