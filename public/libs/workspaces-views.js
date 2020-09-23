@@ -24,7 +24,10 @@ const {
   setViewsNotificationsPref,
 } = require('./views');
 
-const { isPreferenceUnset } = require('./preferences');
+const {
+  hasPreference,
+  setPreference,
+} = require('./preferences');
 
 const mainWindow = require('../windows/main');
 
@@ -46,8 +49,12 @@ const createWorkspaceView = (name, homeUrl, picture, transparentBackground) => {
 
   // if user add workspace for the first time
   // show sidebar
-  if (isPreferenceUnset('sidebar')) {
-    ipcMain.emit('request-set-preference', null, 'sidebar', true);
+  if (!hasPreference('sidebar')) {
+    setPreference('sidebar', true);
+    // if sidebar is shown, then hide title bar if user hasn't overwritten the pref
+    if (!hasPreference('titlebar')) {
+      setPreference('titlebar', false);
+    }
     ipcMain.emit('request-realign-active-workspace');
   }
 };

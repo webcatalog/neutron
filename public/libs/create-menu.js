@@ -18,7 +18,10 @@ const preferencesWindow = require('../windows/preferences');
 
 const getViewBounds = require('./get-view-bounds');
 const formatBytes = require('./format-bytes');
-const { getPreference } = require('./preferences');
+const {
+  getPreference,
+  setPreference,
+} = require('./preferences');
 
 const {
   getWorkspaces,
@@ -122,7 +125,7 @@ function createMenu() {
           label: global.sidebar ? 'Hide Sidebar' : 'Show Sidebar',
           accelerator: 'CmdOrCtrl+Alt+S',
           click: () => {
-            ipcMain.emit('request-set-preference', null, 'sidebar', !global.sidebar);
+            setPreference('sidebar', !global.sidebar);
             ipcMain.emit('request-realign-active-workspace');
           },
         },
@@ -131,7 +134,7 @@ function createMenu() {
           accelerator: 'CmdOrCtrl+Alt+N',
           enabled: !(process.platform === 'linux' && global.attachToMenubar && !global.sidebar),
           click: () => {
-            ipcMain.emit('request-set-preference', null, 'navigationBar', !global.navigationBar);
+            setPreference('navigationBar', !global.navigationBar);
             ipcMain.emit('request-realign-active-workspace');
           },
         },
@@ -141,7 +144,7 @@ function createMenu() {
           enabled: process.platform === 'darwin',
           visible: process.platform === 'darwin',
           click: () => {
-            ipcMain.emit('request-set-preference', null, 'titleBar', !global.titleBar);
+            setPreference('titleBar', !global.titleBar);
             ipcMain.emit('request-realign-active-workspace');
           },
         },
