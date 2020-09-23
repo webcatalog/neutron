@@ -27,6 +27,9 @@ const getDefaultPauseNotificationsByScheduleTo = () => {
 // scope
 const v = '2018.2';
 
+// show sidebar by default for Singlebox, multisite apps & mail apps
+const shouldShowSidebar = !appJson.url || Boolean(MAILTO_URLS[extractHostname(appJson.url)]);
+
 const defaultPreferences = {
   allowNodeInJsCodeInjection: false,
   allowPrerelease: false,
@@ -67,13 +70,13 @@ const defaultPreferences = {
   searchEngine: 'google',
   sentry: true,
   shareWorkspaceBrowsingData: false,
-  sidebar: !appJson.url || Boolean(MAILTO_URLS[extractHostname(appJson.url)]),
+  sidebar: shouldShowSidebar,
   sidebarShortcutHints: true,
   spellcheck: true,
   spellcheckLanguages: ['en-US'],
   swipeToNavigate: true,
   themeSource: 'system',
-  titleBar: true,
+  titleBar: !shouldShowSidebar, // if sidebar is shown, then hide titleBar
   unreadCountBadge: true,
   useHardwareAcceleration: true,
 };
@@ -114,7 +117,7 @@ const getPreference = (name) => {
   }
 };
 
-const isPreferenceUnset = (name) => settings.hasSync(`preferences.${v}.${name}`);
+const hasPreference = (name) => settings.hasSync(`preferences.${v}.${name}`);
 
 const setPreference = (name, value) => {
   sendToAllWindows('set-preference', name, value);
@@ -151,7 +154,7 @@ const resetPreferences = () => {
 module.exports = {
   getPreference,
   getPreferences,
-  isPreferenceUnset,
+  hasPreference,
   resetPreferences,
   setPreference,
 };
