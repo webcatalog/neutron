@@ -71,7 +71,7 @@ const getWorkspace = (id) => {
 };
 
 const getWorkspacePreferences = (id) => {
-  const { preferences } = getWorkspace(id);
+  const { preferences } = getWorkspace(id) || {};
   return preferences || {};
 };
 
