@@ -36,6 +36,7 @@ let shouldMuteAudio;
 let shouldPauseNotifications;
 
 const extractDomain = (fullUrl) => {
+  if (!fullUrl) return null;
   const matches = fullUrl.match(/^https?:\/\/([^/?#]+)(?:[/?#]|$)/i);
   const domain = matches && matches[1];
   // https://stackoverflow.com/a/9928725
