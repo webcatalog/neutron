@@ -36,6 +36,14 @@ const styles = (theme) => ({
     float: 'right',
     marginLeft: theme.spacing(1),
   },
+  link: {
+    fontWeight: 600,
+    cursor: 'pointer',
+    outline: 'none',
+    '&:hover': {
+      textDecoration: 'underline',
+    },
+  },
 });
 
 const DialogLicenseRegistration = (props) => {
@@ -51,10 +59,23 @@ const DialogLicenseRegistration = (props) => {
     <div className={classes.root}>
       <div className={classes.flexGrow}>
         <DialogContentText className={classes.dialogContentText}>
-          You are currently running the trial version of Singlebox which only
-          lets you add up to two workspaces.
-          To remove the trial limitations, please purchase a
-          perpetual license key ($14.99) from our store.
+          You are currently running the free version of Singlebox which
+          which only
+          lets you add up to 5 workspaces and does not include&nbsp;
+          <span
+            onClick={() => requestOpenInBrowser('https://atomery.com/singlebox/pricing?utm_source=singlebox_app')}
+            onKeyDown={(e) => {
+              if (e.key !== 'Enter') return;
+              requestOpenInBrowser('https://atomery.com/singlebox/pricing?utm_source=singlebox_app');
+            }}
+            role="link"
+            tabIndex="0"
+            className={classes.link}
+          >
+            premium features
+          </span>
+          &nbsp;such as blocking ads & trackers and more.
+          To remove the limitations, please purchase the full version ($19.99) from our store.
         </DialogContentText>
         <TextField
           autoFocus
@@ -76,6 +97,11 @@ const DialogLicenseRegistration = (props) => {
             onClick={() => requestOpenInBrowser('https://webcatalog.onfastspring.com/singleboxapp?utm_source=singlebox_app')}
           >
             Visit Store...
+          </Button>
+          <Button
+            onClick={() => requestOpenInBrowser('https://atomery.com/singlebox/pricing?utm_source=singlebox_app')}
+          >
+            Learn More...
           </Button>
         </div>
         <div>

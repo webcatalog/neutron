@@ -3,19 +3,14 @@ const path = require('path');
 const isDev = require('electron-is-dev');
 
 const { REACT_PATH } = require('../constants/paths');
-const { getPreference } = require('../libs/preferences');
-
-const mainWindow = require('./main');
 
 let win;
 
 const get = () => win;
 
 const create = () => {
-  const attachToMenubar = getPreference('attachToMenubar');
-
   win = new BrowserWindow({
-    width: 400,
+    width: 500,
     height: 350,
     resizable: false,
     maximizable: false,
@@ -29,7 +24,6 @@ const create = () => {
       webSecurity: !isDev,
       preload: path.join(__dirname, '..', 'preload', 'license-registration.js'),
     },
-    parent: attachToMenubar ? null : mainWindow.get(),
   });
   win.setMenuBarVisibility(false);
 

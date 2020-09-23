@@ -251,11 +251,16 @@ const loadListeners = () => {
   });
 
   ipcMain.on('request-create-workspace', (e, name, homeUrl, picture, transparentBackground) => {
-    const registered = appJson.id === 'singlebox' ? getPreference('registered') : global.appJson.registered;
+    const isSinglebox = appJson.id === 'singlebox';
+    const registered = isSinglebox ? getPreference('registered') : global.appJson.registered;
     if (!registered) {
       const workspaces = getWorkspaces();
-      if (Object.keys(workspaces).length > 1) {
-        if (appJson.id === 'singlebox') {
+
+      // 5 for Singlebox, 2 for WebCatalog
+      const maxWorkspaceNum = isSinglebox ? 5 : 2;
+
+      if (Object.keys(workspaces).length >= maxWorkspaceNum) {
+        if (isSinglebox) {
           licenseRegistrationWindow.show();
           return;
         }
