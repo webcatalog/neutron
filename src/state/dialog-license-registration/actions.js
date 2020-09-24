@@ -34,6 +34,7 @@ export const register = () => (dispatch, getState) => {
   }
 
   requestSetPreference('registered', true);
+  requestSetPreference('licenseKey', form.licenseKey);
 
   requestShowMessageBox('Registration Complete! Thank you for supporting the future development of Singlebox.');
 
