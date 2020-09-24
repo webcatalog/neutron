@@ -55,6 +55,13 @@ const create = (viewId) => {
 };
 
 const show = (viewId) => {
+  // https://github.com/karaggeorge/mac-screen-capture-permissions/tree/master
+  // https://nyrra33.com/2019/07/23/open-preference-pane-programmatically/
+  if (window.process.platform === 'darwin' && systemPreferences.getMediaAccessStatus('screen') !== 'granted') {
+    shell.openExternal('x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture');
+    return;
+  }
+
   if (win == null) {
     create(viewId);
   } else if (viewId !== global.displayMediaRequestedViewId) {
