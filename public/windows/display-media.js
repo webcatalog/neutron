@@ -1,4 +1,10 @@
-const { BrowserWindow, BrowserView, ipcMain } = require('electron');
+const {
+  BrowserWindow,
+  BrowserView,
+  ipcMain,
+  shell,
+  systemPreferences,
+} = require('electron');
 const path = require('path');
 
 const { REACT_PATH } = require('../constants/paths');
