@@ -55,6 +55,7 @@ const defaultPreferences = {
   internalUrlRule: '',
   jsCodeInjection: null,
   lastShowNewUpdateDialog: 0,
+  licenseKey: null,
   navigationBar: false,
   pauseNotifications: null,
   pauseNotificationsBySchedule: false,
