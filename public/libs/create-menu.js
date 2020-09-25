@@ -513,6 +513,7 @@ function createMenu() {
         type: 'checkbox',
         checked: workspace.active,
         click: () => {
+          if (workspace.active) return;
           setActiveWorkspaceView(workspace.id);
           createMenu();
         },

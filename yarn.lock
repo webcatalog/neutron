@@ -6106,10 +6106,10 @@ eslint-plugin-react@7.19.0:
     string.prototype.matchall "^4.0.2"
     xregexp "^4.3.0"
 
-eslint-plugin-react@7.20.6:
-  version "7.20.6"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-react/-/eslint-plugin-react-7.20.6.tgz#4d7845311a93c463493ccfa0a19c9c5d0fd69f60"
-  integrity sha512-kidMTE5HAEBSLu23CUDvj8dc3LdBU0ri1scwHBZjI41oDv4tjsWZKU7MQccFzH1QYPYhsnTF2ovh7JlcIcmxgg==
+eslint-plugin-react@7.21.2:
+  version "7.21.2"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-react/-/eslint-plugin-react-7.21.2.tgz#3bd5d2c4c36d5a0428d0d6dda301ac9a84d681b2"
+  integrity sha512-j3XKvrK3rpBzveKFbgAeGsWb9uz6iUOrR0jixRfjwdFeGSRsXvVTFtHDQYCjsd1/6Z/xvb8Vy3LiI5Reo7fDrg==
   dependencies:
     array-includes "^3.1.1"
     array.prototype.flatmap "^1.2.3"
@@ -11275,10 +11275,10 @@ rc@^1.2.8:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-ace@9.1.3:
-  version "9.1.3"
-  resolved "https://registry.yarnpkg.com/react-ace/-/react-ace-9.1.3.tgz#848dc3741d5460f3ac73468b6c39879aab9238bc"
-  integrity sha512-1TZBs/9hFGgPuzu6DUiBogyhRA5Z1Po2wzPfZslbrTFGQtbNe+JXHuPoJNlUu/uerElzOLLsuJEDTO9FfLnZJA==
+react-ace@9.1.4:
+  version "9.1.4"
+  resolved "https://registry.yarnpkg.com/react-ace/-/react-ace-9.1.4.tgz#7c45c361aa5fe1efa3313fa876bce30aa64a244f"
+  integrity sha512-4DBWvElbVR3WhsA2HhQ524K9Yoa/J/sjuBV9NUZ+yar3Q4BGJRTnhY6pM0INffH1IkBZHKIOyz34XHjc7RNTpw==
   dependencies:
     ace-builds "^1.4.6"
     diff-match-patch "^1.0.4"
