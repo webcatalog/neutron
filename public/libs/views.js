@@ -606,7 +606,6 @@ const addView = (browserWindow, workspace) => {
 
   // Handle downloads
   // https://electronjs.org/docs/api/download-item
-  const callback = () => {};
   const willDownloadListener = (event, item) => {
     const globalPreferences = getPreferences();
     const workspacePreferences = getWorkspacePreferences(workspace.id);
@@ -624,6 +623,7 @@ const addView = (browserWindow, workspace) => {
       // for other platforms, always open the dir in file explorer
       openFolderWhenDone: process.platform !== 'darwin' || downloadPath !== app.getPath('downloads'),
     };
+    const callback = () => {};
 
     /* electron-dl port start */
     // https://github.com/sindresorhus/electron-dl
