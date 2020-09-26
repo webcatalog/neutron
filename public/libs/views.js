@@ -10,7 +10,9 @@ const {
 const path = require('path');
 const fsExtra = require('fs-extra');
 const { ElectronBlocker } = require('@cliqz/adblocker-electron');
-const { download } = require('electron-dl');
+const unusedFilename = require('unused-filename');
+const pupa = require('pupa');
+const extName = require('ext-name');
 
 const appJson = require('../app.json');
 
@@ -34,6 +36,27 @@ const customizedFetch = require('./customized-fetch');
 const views = {};
 let shouldMuteAudio;
 let shouldPauseNotifications;
+
+/* electron-dl port start */
+// MIT License: https://github.com/sindresorhus/electron-dl/blob/master/license
+// https://github.com/sindresorhus/electron-dl
+const downloadItems = new Set();
+let receivedBytes = 0;
+let completedBytes = 0;
+let totalBytes = 0;
+const activeDownloadItems = () => downloadItems.size;
+const progressDownloadItems = () => receivedBytes / totalBytes;
+
+const getFilenameFromMime = (name, mime) => {
+  const extensions = extName.mime(mime);
+
+  if (extensions.length !== 1) {
+    return name;
+  }
+
+  return `${name}.${extensions[0].ext}`;
+};
+/* electron-dl port end */
 
 const extractDomain = (fullUrl) => {
   if (!fullUrl) return null;
@@ -583,9 +606,8 @@ const addView = (browserWindow, workspace) => {
 
   // Handle downloads
   // https://electronjs.org/docs/api/download-item
-  view.webContents.session.on('will-download', (event, item) => {
-    event.preventDefault();
-
+  const callback = () => {};
+  const willDownloadListener = (event, item) => {
     const globalPreferences = getPreferences();
     const workspacePreferences = getWorkspacePreferences(workspace.id);
     const downloadPath = workspacePreferences.downloadPath || globalPreferences.downloadPath;
@@ -593,7 +615,7 @@ const addView = (browserWindow, workspace) => {
       ? workspacePreferences.askForDownloadPath
       : globalPreferences.askForDownloadPath;
 
-    download(browserWindow, item.getURL(), {
+    const options = {
       directory: downloadPath,
       saveAs: askForDownloadPath,
       // on macOS, if the file is downloaded to default Download dir
@@ -601,8 +623,105 @@ const addView = (browserWindow, workspace) => {
       // for other directories, as they're not on dock, we open the dir in Finder
       // for other platforms, always open the dir in file explorer
       openFolderWhenDone: process.platform !== 'darwin' || downloadPath !== app.getPath('downloads'),
+    };
+
+    /* electron-dl port start */
+    // https://github.com/sindresorhus/electron-dl
+    downloadItems.add(item);
+    totalBytes += item.getTotalBytes();
+
+    const directory = options.directory || app.getPath('downloads');
+    let filePath;
+    if (options.filename) {
+      filePath = path.join(directory, options.filename);
+    } else {
+      const filename = item.getFilename();
+      const name = path.extname(filename)
+        ? filename : getFilenameFromMime(filename, item.getMimeType());
+      filePath = unusedFilename.sync(path.join(directory, name));
+    }
+
+    const errorMessage = options.errorMessage || 'The download of {filename} was interrupted';
+
+    if (!options.saveAs) {
+      item.setSavePath(filePath);
+    }
+
+    if (options.saveAs) {
+      item.setSaveDialogOptions({ defaultPath: filePath });
+    }
+
+    if (typeof options.onStarted === 'function') {
+      options.onStarted(item);
+    }
+
+    item.on('updated', () => {
+      receivedBytes = [...downloadItems].reduce((receivedBytes_, item_) => {
+        receivedBytes_ += item_.getReceivedBytes();
+        return receivedBytes_;
+      }, completedBytes);
+
+      if (options.showBadge && ['darwin', 'linux'].includes(process.platform)) {
+        app.badgeCount = activeDownloadItems();
+      }
+
+      if (!browserWindow.isDestroyed()) {
+        browserWindow.setProgressBar(progressDownloadItems());
+      }
+
+      if (typeof options.onProgress === 'function') {
+        const itemTransferredBytes = item.getReceivedBytes();
+        const itemTotalBytes = item.getTotalBytes();
+
+        options.onProgress({
+          percent: itemTotalBytes ? itemTransferredBytes / itemTotalBytes : 0,
+          transferredBytes: itemTransferredBytes,
+          totalBytes: itemTotalBytes,
+        });
+      }
     });
-  });
+
+    item.on('done', (_, state) => {
+      completedBytes += item.getTotalBytes();
+      downloadItems.delete(item);
+
+      if (options.showBadge && ['darwin', 'linux'].includes(process.platform)) {
+        app.badgeCount = activeDownloadItems();
+      }
+
+      if (!browserWindow.isDestroyed() && !activeDownloadItems()) {
+        browserWindow.setProgressBar(-1);
+        receivedBytes = 0;
+        completedBytes = 0;
+        totalBytes = 0;
+      }
+
+      if (options.unregisterWhenDone) {
+        session.removeListener('will-download', willDownloadListener);
+      }
+
+      if (state === 'cancelled') {
+        if (typeof options.onCancel === 'function') {
+          options.onCancel(item);
+        }
+      } else if (state === 'interrupted') {
+        const message = pupa(errorMessage, { filename: path.basename(item.getSavePath()) });
+        callback(new Error(message));
+      } else if (state === 'completed') {
+        if (process.platform === 'darwin') {
+          app.dock.downloadFinished(item.getSavePath());
+        }
+
+        if (options.openFolderWhenDone) {
+          shell.showItemInFolder(item.getSavePath());
+        }
+
+        callback(null, item);
+      }
+    });
+    /* electron-dl port end */
+  };
+  view.webContents.session.on('will-download', willDownloadListener);
 
   // Unread count badge
   if (unreadCountBadge) {
