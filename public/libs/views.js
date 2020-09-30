@@ -188,43 +188,52 @@ const addView = (browserWindow, workspace) => {
   // configure session, proxy & ad blocker
   let ses;
 
+  // if shouldPatchRes = true
+  // we initiate proxy & ad blocking configuration for the session
+  let shouldPatchSes = false;
+
   // share the session object if possible
   // to avoid strange bugs
   // https://github.com/atomery/webcatalog/issues/1036
   if (shareWorkspaceBrowsingData) {
     if (sharedSes == null) {
       sharedSes = session.fromPartition('persist:shared');
+    } else {
+      // sharedSes is defined so the session is already patched
+      shouldPatchSes = true;
     }
     ses = sharedSes;
   } else {
     ses = session.fromPartition(`persist:${workspace.id}`);
   }
 
-  // proxy
-  if (proxyType === 'rules') {
-    ses.setProxy({
-      proxyRules,
-      proxyBypassRules,
-    });
-  } else if (proxyType === 'pacScript') {
-    ses.setProxy({
-      proxyPacScript,
-      proxyBypassRules,
-    });
-  }
-  // blocker
-  if (blockAds) {
-    ElectronBlocker.fromPrebuiltAdsAndTracking(customizedFetch, {
-      path: path.join(app.getPath('userData'), 'adblocker.bin'),
-      read: fsExtra.readFile,
-      write: fsExtra.writeFile,
-    }).then((blocker) => {
-      blocker.enableBlockingInSession(ses);
-    });
-  }
-  // spellchecker
-  if (spellcheck && process.platform !== 'darwin') {
-    ses.setSpellCheckerLanguages(spellcheckLanguages);
+  if (shouldPatchSes) {
+    // proxy
+    if (proxyType === 'rules') {
+      ses.setProxy({
+        proxyRules,
+        proxyBypassRules,
+      });
+    } else if (proxyType === 'pacScript') {
+      ses.setProxy({
+        proxyPacScript,
+        proxyBypassRules,
+      });
+    }
+    // blocker
+    if (blockAds) {
+      ElectronBlocker.fromPrebuiltAdsAndTracking(customizedFetch, {
+        path: path.join(app.getPath('userData'), 'adblocker.bin'),
+        read: fsExtra.readFile,
+        write: fsExtra.writeFile,
+      }).then((blocker) => {
+        blocker.enableBlockingInSession(ses);
+      });
+    }
+    // spellchecker
+    if (spellcheck && process.platform !== 'darwin') {
+      ses.setSpellCheckerLanguages(spellcheckLanguages);
+    }
   }
 
   const sharedWebPreferences = {
