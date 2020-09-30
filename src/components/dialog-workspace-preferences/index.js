@@ -56,12 +56,12 @@ const styles = (theme) => ({
   },
   sidebar: {
     position: 'fixed',
-    width: 200,
+    width: 204,
     color: theme.palette.text.primary,
   },
   inner: {
     width: '100%',
-    maxWidth: 516,
+    maxWidth: 512,
     float: 'right',
   },
   link: {

@@ -98,12 +98,12 @@ const styles = (theme) => ({
   },
   sidebar: {
     position: 'fixed',
-    width: 200,
+    width: 204,
     color: theme.palette.text.primary,
   },
   inner: {
     width: '100%',
-    maxWidth: 516,
+    maxWidth: 512,
     float: 'right',
   },
   link: {
@@ -379,7 +379,7 @@ const Preferences = ({
                 }}
                 className={classNames(classes.selectRoot, classes.selectRootExtraMargin)}
               >
-                {window.process.platform === 'darwin' && <MenuItem dense value="system">System default</MenuItem>}
+                <MenuItem dense value="system">System default</MenuItem>
                 <MenuItem dense value="light">Light</MenuItem>
                 <MenuItem dense value="dark">Dark</MenuItem>
               </Select>
