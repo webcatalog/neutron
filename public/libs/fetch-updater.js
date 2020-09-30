@@ -16,7 +16,7 @@ const checkForUpdates = (silent) => {
   // to avoid using GitHub API as it has rate limit (60 requests per hour)
   // to avoid bugs with instead of https://github.com/atomery/juli/releases.atom
   // https://github.com/atomery/webcatalog/issues/890
-  customizedFetch('https://atomery.com/webcatalog/juli/releases/latest.json')
+  customizedFetch('https://webcatalog.app/juli/releases/latest.json')
     .then((res) => res.json())
     .then((data) => data.version)
     .then((latestVersion) => {

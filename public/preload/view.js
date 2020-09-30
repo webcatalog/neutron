@@ -220,14 +220,14 @@ const handleLoaded = (event) => {
                 click: () => shell.openExternal('https://atomery.com/singlebox/support?utm_source=singlebox_app'),
               } : {
                 label: 'WebCatalog Support',
-                click: () => shell.openExternal('https://atomery.com/webcatalog/support?utm_source=juli_app'),
+                click: () => shell.openExternal('https://webcatalog.app/support?utm_source=juli_app'),
               },
               appJson.id === 'singlebox' ? {
                 label: 'Singlebox Website',
                 click: () => shell.openExternal('https://atomery.com/singlebox?utm_source=singlebox_app'),
               } : {
                 label: 'WebCatalog Website',
-                click: () => shell.openExternal('https://atomery.com/webcatalog?utm_source=juli_app'),
+                click: () => shell.openExternal('https://webcatalog.app?utm_source=juli_app'),
               },
               { type: 'separator' },
               {

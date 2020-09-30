@@ -23,7 +23,7 @@
     "singlebox:dist-dev": "cross-env CSC_IDENTITY_AUTO_DISCOVERY=false yarn singlebox:dist"
   },
   "repository": "https://github.com/atomery/juli",
-  "author": "Quang Lam <quang.lam@atomery.com>",
+  "author": "Quang Lam <quang.lam@webcatalog.app>",
   "dependencies": {
     "@cliqz/adblocker-electron": "1.18.3",
     "@sentry/electron": "2.0.1",

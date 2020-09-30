@@ -509,7 +509,7 @@ const addView = (browserWindow, workspace) => {
     // Conditions are listed by order of priority
 
     // check defined internal URL rule
-    // https://atomery.com/webcatalog/internal-urls
+    // https://webcatalog.app/internal-urls
     const internalUrlRule = getWorkspacePreference(workspace.id, 'internalUrlRule') || getPreference('internalUrlRule');
     if (nextUrl && internalUrlRule) {
       const re = new RegExp(`^${internalUrlRule}$`, 'i');

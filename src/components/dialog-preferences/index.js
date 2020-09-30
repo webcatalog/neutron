@@ -63,11 +63,6 @@ import hunspellLanguagesMap from '../../constants/hunspell-languages';
 import searchEngines from '../../constants/search-engines';
 import autoRefreshIntervals from '../../constants/auto-refresh-intervals';
 
-import webcatalogIconPng from '../../images/webcatalog-icon.png';
-import translatiumIconPng from '../../images/translatium-icon.png';
-import singleboxIconPng from '../../images/singlebox-icon.png';
-// import switchbarIconPng from '../../images/switchbar-icon.png';
-
 import ListItemDefaultMailClient from './list-item-default-mail-client';
 import ListItemDefaultBrowser from './list-item-default-browser';
 
@@ -145,10 +140,6 @@ const styles = (theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: theme.spacing(1.5),
-  },
-  appTitle: {},
-  appIcon: {
-    height: 64,
   },
   selectRoot: {
     borderRadius: theme.spacing(0.5),
@@ -907,10 +898,10 @@ const Preferences = ({
                       role="link"
                       tabIndex={0}
                       className={classes.link}
-                      onClick={() => requestOpenInBrowser(`https://atomery.com/webcatalog/web-apps-notifications?utm_source=${utmSource}`)}
+                      onClick={() => requestOpenInBrowser(`https://webcatalog.app/web-apps-notifications?utm_source=${utmSource}`)}
                       onKeyDown={(e) => {
                         if (e.key !== 'Enter') return;
-                        requestOpenInBrowser(`https://atomery.com/webcatalog/web-apps-notifications?utm_source=${utmSource}`);
+                        requestOpenInBrowser(`https://webcatalog.app/web-apps-notifications?utm_source=${utmSource}`);
                       }}
                     >
                       Learn more
@@ -1104,7 +1095,7 @@ const Preferences = ({
               </ListItemSecondaryAction>
             </ListItem>
             <Divider />
-            <ListItem button onClick={() => requestOpenInBrowser(`https://atomery.com/privacy?utm_source=${utmSource}`)}>
+            <ListItem button onClick={() => requestOpenInBrowser(`https://webcatalog.app/privacy?utm_source=${utmSource}`)}>
               <ListItemText primary="Privacy Policy" />
             </ListItem>
           </List>
@@ -1352,107 +1343,6 @@ const Preferences = ({
           </List>
         </Paper>
 
-        <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle} ref={sections.atomeryApps.ref}>
-          Atomery Apps
-        </Typography>
-        <Paper elevation={0} className={classes.paper}>
-          <List disablePadding dense>
-            <ListItem
-              button
-              onClick={() => requestOpenInBrowser(`https://atomery.com/webcatalog?utm_source=${utmSource}`)}
-              className={classes.listItemPromotion}
-            >
-              <div className={classes.promotionBlock}>
-                <div className={classes.promotionLeft}>
-                  <img src={webcatalogIconPng} alt="WebCatalog" className={classes.appIcon} />
-                </div>
-                <div className={classes.promotionRight}>
-                  <div>
-                    <Typography variant="body1" className={classes.appTitle}>
-                      WebCatalog
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary">
-                      Run Web Apps like Real Apps
-                    </Typography>
-                  </div>
-                </div>
-              </div>
-              <ChevronRightIcon color="action" />
-            </ListItem>
-            <Divider />
-            <ListItem
-              button
-              onClick={() => requestOpenInBrowser(`https://atomery.com/singlebox?utm_source=${utmSource}`)}
-              className={classes.listItemPromotion}
-            >
-              <div className={classes.promotionBlock}>
-                <div className={classes.promotionLeft}>
-                  <img src={singleboxIconPng} alt="Singlebox" className={classes.appIcon} />
-                </div>
-                <div className={classes.promotionRight}>
-                  <div>
-                    <Typography variant="body1" className={classes.appTitle}>
-                      Singlebox
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary">
-                      All Your Apps in One Single Window
-                    </Typography>
-                  </div>
-                </div>
-              </div>
-              <ChevronRightIcon color="action" />
-            </ListItem>
-            {/*
-            <Divider />
-            <ListItem
-              button
-              onClick={() => requestOpenInBrowser(`https://atomery.com/switchbar?utm_source=${utmSource}`)}
-              className={classes.listItemPromotion}
-            >
-              <div className={classes.promotionBlock}>
-                <div className={classes.promotionLeft}>
-                  <img src={switchbarIconPng} alt="Switchbar" className={classes.appIcon} />
-                </div>
-                <div className={classes.promotionRight}>
-                  <div>
-                    <Typography variant="body1" className={classes.appTitle}>
-                      Switchbar
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary">
-                      Open Every Link in the Right App
-                    </Typography>
-                  </div>
-                </div>
-              </div>
-              <ChevronRightIcon color="action" />
-            </ListItem>
-            */}
-            <Divider />
-            <ListItem
-              button
-              onClick={() => requestOpenInBrowser(`https://atomery.com/translatium?utm_source=${utmSource}`)}
-              className={classes.listItemPromotion}
-            >
-              <div className={classes.promotionBlock}>
-                <div className={classes.promotionLeft}>
-                  <img src={translatiumIconPng} alt="Translatium" className={classes.appIcon} />
-                </div>
-                <div className={classes.promotionRight}>
-                  <div>
-                    <Typography variant="body1" className={classes.appTitle}>
-                      Translatium
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary">
-                      Translate Any Languages like a Pro
-                    </Typography>
-                  </div>
-                </div>
-              </div>
-              <ChevronRightIcon color="action" />
-            </ListItem>
-          </List>
-        </Paper>
-
         <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.miscs.ref}>
           Miscellaneous
         </Typography>
@@ -1478,12 +1368,12 @@ const Preferences = ({
               </>
             ) : (
               <>
-                <ListItem button onClick={() => requestOpenInBrowser(`https://atomery.com/webcatalog?utm_source=${utmSource}`)}>
+                <ListItem button onClick={() => requestOpenInBrowser(`https://webcatalog.app?utm_source=${utmSource}`)}>
                   <ListItemText primary="WebCatalog Website" />
                   <ChevronRightIcon color="action" />
                 </ListItem>
                 <Divider />
-                <ListItem button onClick={() => requestOpenInBrowser(`https://atomery.com/webcatalog/support&utm_source=${utmSource}`)}>
+                <ListItem button onClick={() => requestOpenInBrowser(`https://webcatalog.app/support&utm_source=${utmSource}`)}>
                   <ListItemText primary="WebCatalog Support" />
                   <ChevronRightIcon color="action" />
                 </ListItem>

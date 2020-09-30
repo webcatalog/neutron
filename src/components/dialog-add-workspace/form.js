@@ -140,7 +140,7 @@ const AddWorkspaceCustom = ({
         id="outlined-full-width"
         label="Home URL"
         error={Boolean(homeUrlError)}
-        placeholder="Example: https://atomery.com"
+        placeholder="Example: https://example.com"
         helperText={homeUrlError || (isMailApp && 'Email app detected.')}
         fullWidth
         margin="dense"
