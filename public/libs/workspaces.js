@@ -243,7 +243,7 @@ const cleanLeftoversAsync = () => Promise.resolve()
       { withFileTypes: true },
     )
       .filter((d) => d.isDirectory() && d.name !== 'shared' && getWorkspace(d.name) == null)
-      .map((d) => path.join(partitionsDirPath, d.name));
+      .map((d) => fs.remove(path.join(partitionsDirPath, d.name)));
 
     return Promise.all(p);
   })
