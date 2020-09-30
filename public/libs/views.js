@@ -199,7 +199,7 @@ const addView = (browserWindow, workspace) => {
     if (sharedSes == null) {
       sharedSes = session.fromPartition('persist:shared');
     } else {
-      // sharedSes is defined so the session is already patched
+      // sharedSes is predefined so the session is already patched
       shouldPatchSes = false;
     }
     ses = sharedSes;
