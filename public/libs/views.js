@@ -37,6 +37,7 @@ const views = {};
 let shouldMuteAudio;
 let shouldPauseNotifications;
 let sharedSes;
+let firstLoadPreferences;
 
 /* electron-dl port start */
 // MIT License: https://github.com/sindresorhus/electron-dl/blob/master/license
@@ -171,7 +172,10 @@ const isInternalUrl = (url, currentInternalUrls) => {
 const addView = (browserWindow, workspace) => {
   if (views[workspace.id] != null) return;
 
-  const preferences = getPreferences();
+  // ensure that to change the preferences
+  // user needs to restart the app
+  // this is to ensure consistency between views
+  firstLoadPreferences = firstLoadPreferences || getPreferences();
   const {
     blockAds,
     proxyBypassRules,
@@ -183,7 +187,7 @@ const addView = (browserWindow, workspace) => {
     spellcheck,
     spellcheckLanguages,
     unreadCountBadge,
-  } = preferences;
+  } = firstLoadPreferences;
 
   // configure session, proxy & ad blocker
   let ses;
