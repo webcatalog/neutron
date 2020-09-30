@@ -36,6 +36,7 @@ const customizedFetch = require('./customized-fetch');
 const views = {};
 let shouldMuteAudio;
 let shouldPauseNotifications;
+let sharedSes;
 
 /* electron-dl port start */
 // MIT License: https://github.com/sindresorhus/electron-dl/blob/master/license
@@ -185,34 +186,54 @@ const addView = (browserWindow, workspace) => {
   } = preferences;
 
   // configure session, proxy & ad blocker
-  const partitionId = shareWorkspaceBrowsingData ? 'persist:shared' : `persist:${workspace.id}`;
-  // session
-  const ses = session.fromPartition(partitionId);
-  // proxy
-  if (proxyType === 'rules') {
-    ses.setProxy({
-      proxyRules,
-      proxyBypassRules,
-    });
-  } else if (proxyType === 'pacScript') {
-    ses.setProxy({
-      proxyPacScript,
-      proxyBypassRules,
-    });
+  let ses;
+
+  // if shouldPatchRes = true
+  // we initiate proxy & ad blocking configuration for the session
+  let shouldPatchSes = true;
+
+  // share the session object if possible
+  // to avoid strange bugs
+  // https://github.com/atomery/webcatalog/issues/1036
+  if (shareWorkspaceBrowsingData) {
+    if (sharedSes == null) {
+      sharedSes = session.fromPartition('persist:shared');
+    } else {
+      // sharedSes is predefined so the session is already patched
+      shouldPatchSes = false;
+    }
+    ses = sharedSes;
+  } else {
+    ses = session.fromPartition(`persist:${workspace.id}`);
   }
-  // blocker
-  if (blockAds) {
-    ElectronBlocker.fromPrebuiltAdsAndTracking(customizedFetch, {
-      path: path.join(app.getPath('userData'), 'adblocker.bin'),
-      read: fsExtra.readFile,
-      write: fsExtra.writeFile,
-    }).then((blocker) => {
-      blocker.enableBlockingInSession(ses);
-    });
-  }
-  // spellchecker
-  if (spellcheck && process.platform !== 'darwin') {
-    ses.setSpellCheckerLanguages(spellcheckLanguages);
+
+  if (shouldPatchSes) {
+    // proxy
+    if (proxyType === 'rules') {
+      ses.setProxy({
+        proxyRules,
+        proxyBypassRules,
+      });
+    } else if (proxyType === 'pacScript') {
+      ses.setProxy({
+        proxyPacScript,
+        proxyBypassRules,
+      });
+    }
+    // blocker
+    if (blockAds) {
+      ElectronBlocker.fromPrebuiltAdsAndTracking(customizedFetch, {
+        path: path.join(app.getPath('userData'), 'adblocker.bin'),
+        read: fsExtra.readFile,
+        write: fsExtra.writeFile,
+      }).then((blocker) => {
+        blocker.enableBlockingInSession(ses);
+      });
+    }
+    // spellchecker
+    if (spellcheck && process.platform !== 'darwin') {
+      ses.setSpellCheckerLanguages(spellcheckLanguages);
+    }
   }
 
   const sharedWebPreferences = {
