@@ -466,7 +466,10 @@ function createMenu() {
           label: 'About',
           click: () => aboutWindow.show(),
         },
-        { type: 'separator' },
+        {
+          type: 'separator',
+          visible: appJson.id === 'singlebox',
+        },
         {
           label: registered ? 'Registered' : 'Registration...',
           enabled: !registered,
