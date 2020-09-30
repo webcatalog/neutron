@@ -190,7 +190,7 @@ const addView = (browserWindow, workspace) => {
 
   // if shouldPatchRes = true
   // we initiate proxy & ad blocking configuration for the session
-  let shouldPatchSes = false;
+  let shouldPatchSes = true;
 
   // share the session object if possible
   // to avoid strange bugs
@@ -200,7 +200,7 @@ const addView = (browserWindow, workspace) => {
       sharedSes = session.fromPartition('persist:shared');
     } else {
       // sharedSes is defined so the session is already patched
-      shouldPatchSes = true;
+      shouldPatchSes = false;
     }
     ses = sharedSes;
   } else {
