@@ -36,6 +36,7 @@ const customizedFetch = require('./customized-fetch');
 const views = {};
 let shouldMuteAudio;
 let shouldPauseNotifications;
+let sharedSes;
 
 /* electron-dl port start */
 // MIT License: https://github.com/sindresorhus/electron-dl/blob/master/license
@@ -185,9 +186,20 @@ const addView = (browserWindow, workspace) => {
   } = preferences;
 
   // configure session, proxy & ad blocker
-  const partitionId = shareWorkspaceBrowsingData ? 'persist:shared' : `persist:${workspace.id}`;
-  // session
-  const ses = session.fromPartition(partitionId);
+  let ses;
+
+  // share the session object if possible
+  // to avoid strange bugs
+  // https://github.com/atomery/webcatalog/issues/1036
+  if (shareWorkspaceBrowsingData) {
+    if (sharedSes == null) {
+      sharedSes = session.fromPartition('persist:shared');
+    }
+    ses = sharedSes;
+  } else {
+    ses = session.fromPartition(`persist:${workspace.id}`);
+  }
+
   // proxy
   if (proxyType === 'rules') {
     ses.setProxy({
