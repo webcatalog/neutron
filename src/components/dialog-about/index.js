@@ -34,17 +34,6 @@ const styles = (theme) => ({
   goToTheWebsiteButton: {
     marginRight: theme.spacing(1),
   },
-  madeBy: {
-    marginTop: theme.spacing(2),
-  },
-  link: {
-    fontWeight: 600,
-    cursor: 'pointer',
-    outline: 'none',
-    '&:hover': {
-      textDecoration: 'underline',
-    },
-  },
 });
 
 const About = (props) => {
@@ -101,36 +90,18 @@ const About = (props) => {
         ) : (
           <>
             <Button
-              onClick={() => requestOpenInBrowser(`https://atomery.com/webcatalog?utm_source=${utmSource}`)}
+              onClick={() => requestOpenInBrowser(`https://webcatalog.app?utm_source=${utmSource}`)}
             >
               WebCatalog Website
             </Button>
             <br />
             <Button
-              onClick={() => requestOpenInBrowser(`https://atomery.com/webcatalog/support?utm_source=${utmSource}`)}
+              onClick={() => requestOpenInBrowser(`https://webcatalog.app/support?utm_source=${utmSource}`)}
             >
               WebCatalog Support
             </Button>
           </>
         )}
-
-        <Typography variant="body2" className={classes.madeBy}>
-          <span>Made with </span>
-          <span role="img" aria-label="love">❤</span>
-          <span> by </span>
-          <span
-            onClick={() => requestOpenInBrowser(`https://atomery.com?utm_source=${utmSource}`)}
-            onKeyDown={(e) => {
-              if (e.key !== 'Enter') return;
-              requestOpenInBrowser(`https://atomery.com?utm_source=${utmSource}`);
-            }}
-            role="link"
-            tabIndex="0"
-            className={classes.link}
-          >
-            Atomery
-          </span>
-        </Typography>
       </DialogContent>
     </div>
   );

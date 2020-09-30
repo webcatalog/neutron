@@ -26,7 +26,7 @@ const checkLicense = () => {
     })
       .then(({ response }) => {
         if (response === 1) {
-          window.remote.shell.openExternal(`https://atomery.com/webcatalog/pricing?utm_source=${utmSource}`);
+          window.remote.shell.openExternal(`https://webcatalog.app/pricing?utm_source=${utmSource}`);
         }
       })
       .catch(console.log); // eslint-disable-line no-console

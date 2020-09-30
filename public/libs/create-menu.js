@@ -378,11 +378,11 @@ function createMenu() {
       ] : [
         {
           label: 'WebCatalog Support',
-          click: () => shell.openExternal('https://atomery.com/webcatalog/support?utm_source=juli_app'),
+          click: () => shell.openExternal('https://webcatalog.app/support?utm_source=juli_app'),
         },
         {
           label: 'WebCatalog Website',
-          click: () => shell.openExternal('https://atomery.com/webcatalog?utm_source=juli_app'),
+          click: () => shell.openExternal('https://webcatalog.app?utm_source=juli_app'),
         },
       ],
     },

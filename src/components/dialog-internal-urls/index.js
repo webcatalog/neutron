@@ -68,11 +68,11 @@ const DialogInternalUrls = ({
             href="#"
             onClick={(e) => {
               e.preventDefault();
-              requestOpenInBrowser(`https://atomery.com/webcatalog/internal-urls?utm_source=${utmSource}`);
+              requestOpenInBrowser(`https://webcatalog.app/internal-urls?utm_source=${utmSource}`);
             }}
             onKeyDown={(e) => {
               if (e.key !== 'Enter') return;
-              requestOpenInBrowser(`https://atomery.com/webcatalog/internal-urls?utm_source=${utmSource}`);
+              requestOpenInBrowser(`https://webcatalog.app/internal-urls?utm_source=${utmSource}`);
             }}
           >
             Learn more
