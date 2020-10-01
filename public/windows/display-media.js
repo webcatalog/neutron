@@ -3,8 +3,8 @@ const {
   BrowserView,
   ipcMain,
   shell,
-  systemPreferences,
 } = require('electron');
+const permissions = require('node-mac-permissions');
 const path = require('path');
 
 const { REACT_PATH } = require('../constants/paths');
@@ -63,8 +63,13 @@ const create = (viewId) => {
 const show = (viewId) => {
   // https://github.com/karaggeorge/mac-screen-capture-permissions/tree/master
   // https://nyrra33.com/2019/07/23/open-preference-pane-programmatically/
-  if (process.platform === 'darwin' && systemPreferences.getMediaAccessStatus('screen') !== 'granted') {
-    shell.openExternal('x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture');
+
+  // use node-mac-permissions
+  // as Electron API doesn't support askForScreenCaptureAccess()
+  // shell.openExternal('x-apple.systempreferences...') is not sufficient as it doesn't ensure
+  // the app is added to app list in system pref
+  if (process.platform === 'darwin' && permissions.getAuthStatus('screen') !== 'authorized') {
+    permissions.askForScreenCaptureAccess();
     return;
   }
 
