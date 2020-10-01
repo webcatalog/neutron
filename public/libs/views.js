@@ -157,7 +157,7 @@ const isInternalUrl = (url, currentInternalUrls) => {
     const internalDomain = equivalentDomain(extractDomain(internalUrl));
 
     // Ex: music.yandex.ru => passport.yandex.ru?retpath=....music.yandex.ru
-    // https://github.com/atomery/webcatalog/issues/546#issuecomment-586639519
+    // https://github.com/webcatalog/webcatalog-app/issues/546#issuecomment-586639519
     if (domain === 'clck.yandex.ru' || domain === 'passport.yandex.ru') {
       return url.includes(internalDomain);
     }
@@ -198,7 +198,7 @@ const addView = (browserWindow, workspace) => {
 
   // share the session object if possible
   // to avoid strange bugs
-  // https://github.com/atomery/webcatalog/issues/1036
+  // https://github.com/webcatalog/webcatalog-app/issues/1036
   if (shareWorkspaceBrowsingData) {
     if (sharedSes == null) {
       sharedSes = session.fromPartition('persist:shared');
@@ -259,12 +259,12 @@ const addView = (browserWindow, workspace) => {
   // which would break the CSS of certain websites
   // even with dark mode, all major browsers
   // always use #FFF as default page background
-  // https://github.com/atomery/webcatalog/issues/723
+  // https://github.com/webcatalog/webcatalog-app/issues/723
   // https://github.com/electron/electron/issues/16212
   view.setBackgroundColor('#FFF');
 
   // fix Google prevents signing in because of security concerns
-  // https://github.com/atomery/webcatalog/issues/455
+  // https://github.com/webcatalog/webcatalog-app/issues/455
   // https://github.com/meetfranz/franz/issues/1720#issuecomment-566460763
   const fakedEdgeUaStr = `${app.userAgentFallback} Edge/18.18875`;
   const adjustUserAgentByUrl = (contents, url, occasion) => {
@@ -298,7 +298,7 @@ const addView = (browserWindow, workspace) => {
 
   view.webContents.on('will-navigate', (e, nextUrl) => {
     // open external links in browser
-    // https://github.com/atomery/webcatalog/issues/849#issuecomment-629587264
+    // https://github.com/webcatalog/webcatalog-app/issues/849#issuecomment-629587264
     // this behavior is likely to break many apps (eg Microsoft Teams)
     // apply this rule only to github.com for now
     const appUrl = getWorkspace(workspace.id).homeUrl || appJson.url;
@@ -318,7 +318,7 @@ const addView = (browserWindow, workspace) => {
     const workspaceObj = getWorkspace(workspace.id);
     // this event might be triggered
     // even after the workspace obj and BrowserView
-    // are destroyed. See https://github.com/atomery/webcatalog/issues/836
+    // are destroyed. See https://github.com/webcatalog/webcatalog-app/issues/836
     if (!workspaceObj) return;
 
     if (workspaceObj.active) {
@@ -342,7 +342,7 @@ const addView = (browserWindow, workspace) => {
     const workspaceObj = getWorkspace(workspace.id);
     // this event might be triggered
     // even after the workspace obj and BrowserView
-    // are destroyed. See https://github.com/atomery/webcatalog/issues/836
+    // are destroyed. See https://github.com/webcatalog/webcatalog-app/issues/836
     if (!workspaceObj) return;
 
     if (workspaceObj.active) {
@@ -357,7 +357,7 @@ const addView = (browserWindow, workspace) => {
   });
 
   // focus on initial load
-  // https://github.com/atomery/webcatalog/issues/398
+  // https://github.com/webcatalog/webcatalog-app/issues/398
   if (workspace.active) {
     view.webContents.once('did-stop-loading', () => {
       if (browserWindow.isFocused() && !view.webContents.isFocused()) {
@@ -371,7 +371,7 @@ const addView = (browserWindow, workspace) => {
     const workspaceObj = getWorkspace(workspace.id);
     // this event might be triggered
     // even after the workspace obj and BrowserView
-    // are destroyed. See https://github.com/atomery/webcatalog/issues/836
+    // are destroyed. See https://github.com/webcatalog/webcatalog-app/issues/836
     if (!workspaceObj) return;
 
     if (isMainFrame && errorCode < 0 && errorCode !== -3) {
@@ -401,18 +401,18 @@ const addView = (browserWindow, workspace) => {
     const workspaceObj = getWorkspace(workspace.id);
     // this event might be triggered
     // even after the workspace obj and BrowserView
-    // are destroyed. See https://github.com/atomery/webcatalog/issues/836
+    // are destroyed. See https://github.com/webcatalog/webcatalog-app/issues/836
     if (!workspaceObj) return;
 
     // fix "Google Chat isn't supported on your current browser"
-    // https://github.com/atomery/webcatalog/issues/820
+    // https://github.com/webcatalog/webcatalog-app/issues/820
     if (url && url.indexOf('error/browser-not-supported') > -1 && url.startsWith('https://chat.google.com')) {
       const ref = new URL(url).searchParams.get('ref') || '';
       view.webContents.loadURL(`https://chat.google.com${ref}`);
     }
 
     // fix Google prevents signing in because of security concerns
-    // https://github.com/atomery/webcatalog/issues/455
+    // https://github.com/webcatalog/webcatalog-app/issues/455
     // https://github.com/meetfranz/franz/issues/1720#issuecomment-566460763
     // will-navigate doesn't trigger for loadURL, goBack, goForward
     // so user agent to needed to be double check here
@@ -433,7 +433,7 @@ const addView = (browserWindow, workspace) => {
     const workspaceObj = getWorkspace(workspace.id);
     // this event might be triggered
     // even after the workspace obj and BrowserView
-    // are destroyed. See https://github.com/atomery/webcatalog/issues/836
+    // are destroyed. See https://github.com/webcatalog/webcatalog-app/issues/836
     if (!workspaceObj) return;
 
     if (workspaceObj.active) {
@@ -447,7 +447,7 @@ const addView = (browserWindow, workspace) => {
     const workspaceObj = getWorkspace(workspace.id);
     // this event might be triggered
     // even after the workspace obj and BrowserView
-    // are destroyed. See https://github.com/atomery/webcatalog/issues/836
+    // are destroyed. See https://github.com/webcatalog/webcatalog-app/issues/836
     if (!workspaceObj) return;
 
     if (workspaceObj.active) {
@@ -469,7 +469,7 @@ const addView = (browserWindow, workspace) => {
 
       // if 'new-window' is triggered with Cmd+Click
       // options is undefined
-      // https://github.com/atomery/webcatalog/issues/842
+      // https://github.com/webcatalog/webcatalog-app/issues/842
       const cmdClick = Boolean(!options);
       const newOptions = cmdClick ? {
         show: true,
@@ -484,7 +484,7 @@ const addView = (browserWindow, workspace) => {
       popupWin.webContents.on('new-window', handleNewWindow);
 
       // fix Google prevents signing in because of security concerns
-      // https://github.com/atomery/webcatalog/issues/455
+      // https://github.com/webcatalog/webcatalog-app/issues/455
       // https://github.com/meetfranz/franz/issues/1720#issuecomment-566460763
       // will-navigate doesn't trigger for loadURL, goBack, goForward
       // so user agent to needed to be double check here
@@ -498,7 +498,7 @@ const addView = (browserWindow, workspace) => {
 
       // if 'new-window' is triggered with Cmd+Click
       // url is not loaded automatically
-      // https://github.com/atomery/webcatalog/issues/842
+      // https://github.com/webcatalog/webcatalog-app/issues/842
       if (cmdClick) {
         popupWin.loadURL(nextUrl);
       }
@@ -521,7 +521,7 @@ const addView = (browserWindow, workspace) => {
 
     // if global.forceNewWindow = true
     // or regular new-window event
-    // or if in Google Drive app, open Google Docs files internally https://github.com/atomery/webcatalog/issues/800
+    // or if in Google Drive app, open Google Docs files internally https://github.com/webcatalog/webcatalog-app/issues/800
     // the next external link request will be opened in new window
     if (
       global.forceNewWindow
@@ -548,7 +548,7 @@ const addView = (browserWindow, workspace) => {
           || (/\/u\/[0-9]+\/{0,1}$/.test(nextUrl)) // https://mail.google.com/mail/u/1/ (ends with /u/1/)
         )
       )
-      // https://github.com/atomery/webcatalog/issues/315
+      // https://github.com/webcatalog/webcatalog-app/issues/315
       || ((appDomain.includes('asana.com') || currentDomain.includes('asana.com')) && nextDomain.includes('asana.com'))
     ) {
       e.preventDefault();
@@ -564,7 +564,7 @@ const addView = (browserWindow, workspace) => {
 
     // special case for Roam Research
     // if popup window is not opened and loaded, Roam crashes (shows white page)
-    // https://github.com/atomery/webcatalog/issues/793
+    // https://github.com/webcatalog/webcatalog-app/issues/793
     if (
       appDomain === 'roamresearch.com'
       && nextDomain != null
@@ -599,7 +599,7 @@ const addView = (browserWindow, workspace) => {
 
     // App tries to open external link using JS
     // nextURL === 'about:blank' but then window will redirect to the external URL
-    // https://github.com/atomery/webcatalog/issues/467#issuecomment-569857721
+    // https://github.com/webcatalog/webcatalog-app/issues/467#issuecomment-569857721
     if (
       nextDomain === null
       && (disposition === 'foreground-tab' || disposition === 'background-tab')
@@ -850,7 +850,7 @@ const setActiveView = (browserWindow, id) => {
     });
 
     // focus on webview
-    // https://github.com/atomery/webcatalog/issues/398
+    // https://github.com/webcatalog/webcatalog-app/issues/398
     if (browserWindow.isFocused()) {
       view.webContents.focus();
     }

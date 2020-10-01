@@ -141,13 +141,13 @@ if (!gotTheLock) {
       .then(() => {
         // Fix webview is not resized automatically
         // when window is maximized on Linux
-        // https://github.com/atomery/webcatalog/issues/561
+        // https://github.com/webcatalog/webcatalog-app/issues/561
 
         // run it here not in mainWindow.createAsync()
         // because if the `mainWindow` is maximized or minimized
         // before the workspaces's BrowserView fully loaded
         // error will occur
-        // see https://github.com/atomery/webcatalog/issues/637
+        // see https://github.com/webcatalog/webcatalog-app/issues/637
         if (process.platform === 'linux') {
           const win = mainWindow.get();
           const handleMaximize = () => {
@@ -196,13 +196,13 @@ if (!gotTheLock) {
       app.userAgentFallback = customUserAgent;
     } else {
       // Hide Electron from UA to improve compatibility
-      // https://github.com/atomery/webcatalog/issues/182
+      // https://github.com/webcatalog/webcatalog-app/issues/182
       app.userAgentFallback = app.userAgentFallback
         // Fix WhatsApp requires Google Chrome 49+ bug
         // App Name doesn't have white space in user agent. 'Google Chat' app > GoogleChat/8.1.1
         .replace(` ${app.name.replace(/ /g, '')}/${app.getVersion()}`, '')
         // Hide Electron from UA to improve compatibility
-        // https://github.com/atomery/webcatalog/issues/182
+        // https://github.com/webcatalog/webcatalog-app/issues/182
         .replace(` Electron/${process.versions.electron}`, '');
     }
 

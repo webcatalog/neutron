@@ -45,7 +45,7 @@ const loadDarkReader = () => {
     }
     // use node-fetch
     // to avoid CORS-related issues
-    // see https://github.com/atomery/webcatalog/issues/993
+    // see https://github.com/webcatalog/webcatalog-app/issues/993
     setFetchMethodDarkMode((url) => nodeFetch(url));
     enableDarkMode({
       darkReaderBrightness,
@@ -302,7 +302,7 @@ const handleLoaded = (event) => {
 document.addEventListener('DOMContentLoaded', () => handleLoaded('document.on("DOMContentLoaded")'));
 // if user navigates between the same website
 // DOMContentLoaded might not be triggered so double check with 'onload'
-// https://github.com/atomery/webcatalog/issues/797
+// https://github.com/webcatalog/webcatalog-app/issues/797
 window.addEventListener('load', () => handleLoaded('window.on("onload")'));
 
 // Communicate with the frame

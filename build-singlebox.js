@@ -86,7 +86,7 @@ const opts = {
     publish: [
       {
         provider: 'github',
-        owner: 'atomery',
+        owner: 'webcatalog',
         repo: 'singlebox',
       },
     ],
@@ -127,7 +127,7 @@ const opts = {
         },
         {
           provider: 'github',
-          owner: 'atomery',
+          owner: 'webcatalog',
           repo: 'singlebox',
         },
       ],

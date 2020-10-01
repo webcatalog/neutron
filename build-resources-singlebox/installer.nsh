@@ -1,6 +1,6 @@
 # add registry to define Singlebox as browser and mail client on Windows 10+
 # rewritten in NSH from https://github.com/minbrowser/min/blob/master/main/registryConfig.js
-# fix https://github.com/atomery/webcatalog/issues/784
+# fix https://github.com/webcatalog/webcatalog-app/issues/784
 # useful doc https://github.com/electron-userland/electron-builder/issues/837#issuecomment-614127460
 # useful doc https://www.electron.build/configuration/nsis#custom-nsis-script
 

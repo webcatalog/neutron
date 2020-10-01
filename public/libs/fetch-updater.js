@@ -14,8 +14,8 @@ const checkForUpdates = (silent) => {
   console.log('Checking for updates...'); // eslint-disable-line no-console
   // use in-house API
   // to avoid using GitHub API as it has rate limit (60 requests per hour)
-  // to avoid bugs with instead of https://github.com/atomery/juli/releases.atom
-  // https://github.com/atomery/webcatalog/issues/890
+  // to avoid bugs with instead of https://github.com/webcatalog/webcatalog-engine/releases.atom
+  // https://github.com/webcatalog/webcatalog-app/issues/890
   customizedFetch('https://webcatalog.app/juli/releases/latest.json')
     .then((res) => res.json())
     .then((data) => data.version)
@@ -27,7 +27,7 @@ const checkForUpdates = (silent) => {
 
       if (hasNewUpdate) {
         // silent mode: update checker only shows pop up if the main window is visible.
-        // https://github.com/atomery/webcatalog/issues/975
+        // https://github.com/webcatalog/webcatalog-app/issues/975
         const shouldShowDialog = !silent || (mainWindow.get() && mainWindow.get().isVisible());
         if (shouldShowDialog) {
           dialog.showMessageBox(mainWindow.get(), {

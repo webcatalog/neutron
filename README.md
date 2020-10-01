@@ -2,15 +2,15 @@
 
 |macOS|Linux|Windows|
 |---|---|---|
-|[![GitHub Actions macOS Build Status](https://github.com/atomery/juli/workflows/macOS/badge.svg)](https://github.com/atomery/juli/actions?query=workflow%3AmacOS)|[![GitHub Actions Linux Build Status](https://github.com/atomery/juli/workflows/Linux/badge.svg)](https://github.com/atomery/juli/actions?query=workflow%3ALinux)|[![GitHub Actions Windows Build Status](https://github.com/atomery/juli/workflows/Windows/badge.svg)](https://github.com/atomery/juli/actions?query=workflow%3AWindows)|
+|[![GitHub Actions macOS Build Status](https://github.com/webcatalog/webcatalog-engine/workflows/macOS/badge.svg)](https://github.com/webcatalog/webcatalog-engine/actions?query=workflow%3AmacOS)|[![GitHub Actions Linux Build Status](https://github.com/webcatalog/webcatalog-engine/workflows/Linux/badge.svg)](https://github.com/webcatalog/webcatalog-engine/actions?query=workflow%3ALinux)|[![GitHub Actions Windows Build Status](https://github.com/webcatalog/webcatalog-engine/workflows/Windows/badge.svg)](https://github.com/webcatalog/webcatalog-engine/actions?query=workflow%3AWindows)|
 
-[WebCatalog](https://webcatalog.app) downloads and uses this Electron app template (aka Juli) under the hood to generate Electron-based apps locally.
+[WebCatalog](https://webcatalog.app) downloads and uses this Electron app template under the hood to generate Electron-based apps locally.
 ---
 
 ## Development
 ```
 # First, clone the project:
-git clone https://github.com/atomery/juli.git
+git clone https://github.com/webcatalog/webcatalog-engine.git
 cd juli
 
 # install the dependencies

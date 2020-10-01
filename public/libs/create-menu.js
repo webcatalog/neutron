@@ -193,7 +193,7 @@ function createMenu() {
         },
         // duplicate zooming in menuitem
         // as it's not posible to set multiple accelerators
-        // https://github.com/atomery/webcatalog/issues/1015
+        // https://github.com/webcatalog/webcatalog-app/issues/1015
         {
           label: 'Zoom In',
           accelerator: 'CmdOrCtrl+=',

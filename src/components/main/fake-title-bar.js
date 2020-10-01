@@ -43,7 +43,7 @@ const FakeTitleBar = (props) => {
       className={classnames(classes.root, window.mode === 'menubar' && classes.rootMenubar)}
       onDoubleClick={() => {
         // feature: double click on title bar to expand #656
-        // https://github.com/atomery/webcatalog/issues/656
+        // https://github.com/webcatalog/webcatalog-app/issues/656
         const win = window.remote.getCurrentWindow();
         if (win.isMaximized()) {
           win.unmaximize();

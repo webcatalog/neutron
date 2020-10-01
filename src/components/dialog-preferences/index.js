@@ -29,7 +29,6 @@ import PowerIcon from '@material-ui/icons/Power';
 import RotateLeftIcon from '@material-ui/icons/RotateLeft';
 import RouterIcon from '@material-ui/icons/Router';
 import SecurityIcon from '@material-ui/icons/Security';
-import StorefrontIcon from '@material-ui/icons/Storefront';
 import SystemUpdateAltIcon from '@material-ui/icons/SystemUpdateAlt';
 import WidgetsIcon from '@material-ui/icons/Widgets';
 
@@ -306,11 +305,6 @@ const Preferences = ({
     reset: {
       text: 'Reset',
       Icon: RotateLeftIcon,
-      ref: useRef(),
-    },
-    atomeryApps: {
-      text: 'Atomery Apps',
-      Icon: StorefrontIcon,
       ref: useRef(),
     },
     miscs: {
