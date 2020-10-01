@@ -2,7 +2,6 @@ const {
   BrowserWindow,
   BrowserView,
   ipcMain,
-  shell,
 } = require('electron');
 const permissions = require('node-mac-permissions');
 const path = require('path');
