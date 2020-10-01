@@ -68,9 +68,12 @@ const show = (viewId) => {
   // as Electron API doesn't support askForScreenCaptureAccess()
   // shell.openExternal('x-apple.systempreferences...') is not sufficient as it doesn't ensure
   // the app is added to app list in system pref
-  if (process.platform === 'darwin' && permissions.getAuthStatus('screen') !== 'authorized') {
-    permissions.askForScreenCaptureAccess();
-    return;
+  if (process.platform === 'darwin') {
+    const authStatus = permissions.getAuthStatus('screen');
+    if (authStatus === 'denied' || authStatus === 'restricted') {
+      permissions.askForScreenCaptureAccess();
+      return;
+    }
   }
 
   if (win == null) {
