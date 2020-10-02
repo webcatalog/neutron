@@ -67,6 +67,7 @@ const show = (viewId) => {
   // shell.openExternal('x-apple.systempreferences...') is not sufficient as it doesn't ensure
   // the app is added to app list in system pref
   if (process.platform === 'darwin') {
+    // eslint-disable-next-line global-require
     const permissions = require('node-mac-permissions');
     const authStatus = permissions.getAuthStatus('screen');
     if (authStatus === 'denied' || authStatus === 'restricted') {
