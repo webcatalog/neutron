@@ -11,7 +11,6 @@ const aboutWindow = require('../windows/about');
 const addWorkspaceWindow = require('../windows/add-workspace');
 const editWorkspaceWindow = require('../windows/edit-workspace');
 const goToUrlWindow = require('../windows/go-to-url');
-const licenseRegistrationWindow = require('../windows/license-registration');
 const mainWindow = require('../windows/main');
 const notificationsWindow = require('../windows/notifications');
 const preferencesWindow = require('../windows/preferences');
@@ -19,7 +18,6 @@ const preferencesWindow = require('../windows/preferences');
 const getViewBounds = require('./get-view-bounds');
 const formatBytes = require('./format-bytes');
 const {
-  getPreference,
   setPreference,
 } = require('./preferences');
 
@@ -42,7 +40,6 @@ const {
 function createMenu() {
   const workspaces = getWorkspaces();
   const hasWorkspaces = Object.keys(workspaces).length > 0;
-  const registered = getPreference('registered');
   const updaterEnabled = process.env.SNAP == null && !process.mas && !process.windowsStore;
 
   const handleZoomIn = (menuItem, browserWindow) => {

@@ -196,7 +196,6 @@ const handleLoaded = (event) => {
 
         menu.append(new MenuItem({ type: 'separator' }));
 
-        const appJson = remote.getGlobal('appJson');
         menu.append(
           new MenuItem({
             label: 'More',

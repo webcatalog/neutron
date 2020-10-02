@@ -82,7 +82,6 @@ const createAsync = () => new Promise((resolve) => {
 
     mb.on('ready', () => {
       mb.tray.on('right-click', () => {
-        const registered = getPreference('registered');
         const updaterEnabled = process.env.SNAP == null
           && !process.mas && !process.windowsStore;
 

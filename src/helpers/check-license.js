@@ -1,8 +1,3 @@
-import {
-  getPreference,
-  requestShowLicenseRegistrationWindow,
-} from '../senders';
-
 const checkLicense = () => {
   const appJson = window.remote.getGlobal('appJson');
   const utmSource = 'juli_app';
