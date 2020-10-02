@@ -44,9 +44,7 @@ const createAsync = () => new Promise((resolve) => {
     const iconPath = path.resolve(
       __dirname,
       '..',
-      process.platform === 'darwin' && appJson.id === 'singlebox'
-        ? 'menubarTemplate.png'
-        : 'menubar-icon.png',
+      'menubar-icon.png',
     );
     tray.setImage(iconPath);
 
@@ -84,7 +82,6 @@ const createAsync = () => new Promise((resolve) => {
 
     mb.on('ready', () => {
       mb.tray.on('right-click', () => {
-        const registered = getPreference('registered');
         const updaterEnabled = process.env.SNAP == null
           && !process.mas && !process.windowsStore;
 
@@ -120,16 +117,6 @@ const createAsync = () => new Promise((resolve) => {
             click: () => ipcMain.emit('request-show-about-window'),
           },
           { type: 'separator' },
-          {
-            label: registered ? 'Registered' : 'Registration...',
-            enabled: !registered,
-            click: registered ? null : () => ipcMain.emit('request-show-license-registration-window'),
-            visible: appJson.id === 'singlebox',
-          },
-          {
-            type: 'separator',
-            visible: appJson.id === 'singlebox',
-          },
           updaterMenuItem,
           {
             type: 'separator',

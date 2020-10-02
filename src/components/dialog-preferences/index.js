@@ -160,41 +160,7 @@ const styles = (theme) => ({
   },
 });
 
-const formatBytes = (bytes, decimals = 2) => {
-  if (bytes === 0) return '0 Bytes';
-
-  const k = 1024;
-  const dm = decimals < 0 ? 0 : decimals;
-  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-
-  return `${parseFloat((bytes / k ** i).toFixed(dm))} ${sizes[i]}`;
-};
-
-const getUpdaterDesc = (status, info) => {
-  if (status === 'download-progress') {
-    if (info != null) {
-      const { transferred, total, bytesPerSecond } = info;
-      return `Downloading updates (${formatBytes(transferred)}/${formatBytes(total)} at ${formatBytes(bytesPerSecond)}/s)...`;
-    }
-    return 'Downloading updates...';
-  }
-  if (status === 'checking-for-update') {
-    return 'Checking for updates...';
-  }
-  if (status === 'update-available') {
-    return 'Downloading updates...';
-  }
-  if (status === 'update-downloaded') {
-    if (info && info.version) return `A new version (${info.version}) has been downloaded.`;
-    return 'A new version has been downloaded.';
-  }
-  return null;
-};
-
 const Preferences = ({
-  allowPrerelease,
   askForDownloadPath,
   attachToMenubar,
   autoCheckForUpdates,
@@ -238,13 +204,10 @@ const Preferences = ({
   themeSource,
   titleBar,
   unreadCountBadge,
-  updaterInfo,
-  updaterStatus,
   useHardwareAcceleration,
 }) => {
   const appJson = window.remote.getGlobal('appJson');
-  const isSinglebox = appJson.id === 'singlebox';
-  const utmSource = isSinglebox ? 'singlebox_app' : 'juli_app';
+  const utmSource = 'juli_app';
 
   const sections = {
     general: {
@@ -1263,51 +1226,15 @@ const Preferences = ({
         </Typography>
         <Paper elevation={0} className={classes.paper}>
           <List disablePadding dense>
-            {appJson.squirrel ? (
-              <>
-                <ListItem
-                  button
-                  onClick={() => requestCheckForUpdates(false)}
-                  disabled={updaterStatus === 'checking-for-update'
-                    || updaterStatus === 'download-progress'
-                    || updaterStatus === 'download-progress'
-                    || updaterStatus === 'update-available'}
-                >
-                  <ListItemText
-                    primary={updaterStatus === 'update-downloaded' ? 'Restart to Apply Updates' : 'Check for Updates'}
-                    secondary={getUpdaterDesc(updaterStatus, updaterInfo)}
-                  />
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-                <Divider />
-                <ListItem>
-                  <ListItemText
-                    primary="Receive pre-release updates"
-                  />
-                  <ListItemSecondaryAction>
-                    <Switch
-                      edge="end"
-                      color="primary"
-                      checked={allowPrerelease}
-                      onChange={(e) => {
-                        requestSetPreference('allowPrerelease', e.target.checked);
-                        requestShowRequireRestartDialog();
-                      }}
-                    />
-                  </ListItemSecondaryAction>
-                </ListItem>
-              </>
-            ) : (
-              <ListItem
-                button
-                onClick={requestCheckForUpdates}
-              >
-                <ListItemText
-                  primary="Check for Updates"
-                />
-                <ChevronRightIcon color="action" />
-              </ListItem>
-            )}
+            <ListItem
+              button
+              onClick={requestCheckForUpdates}
+            >
+              <ListItemText
+                primary="Check for Updates"
+              />
+              <ChevronRightIcon color="action" />
+            </ListItem>
             <Divider />
             <ListItem>
               <ListItemText primary="Check for updates automatically" />
@@ -1347,33 +1274,16 @@ const Preferences = ({
               <ChevronRightIcon color="action" />
             </ListItem>
             <Divider />
-            {isSinglebox ? (
-              <>
-                <ListItem button onClick={() => requestOpenInBrowser(`https://atomery.com/singlebox?utm_source=${utmSource}`)}>
-                  <ListItemText primary="Website" />
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-                <Divider />
-                <ListItem button onClick={() => requestOpenInBrowser(`https://atomery.com/singlebox/support&utm_source=${utmSource}`)}>
-                  <ListItemText primary="Support" />
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-                <Divider />
-              </>
-            ) : (
-              <>
-                <ListItem button onClick={() => requestOpenInBrowser(`https://webcatalog.app?utm_source=${utmSource}`)}>
-                  <ListItemText primary="WebCatalog Website" />
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-                <Divider />
-                <ListItem button onClick={() => requestOpenInBrowser(`https://webcatalog.app/support&utm_source=${utmSource}`)}>
-                  <ListItemText primary="WebCatalog Support" />
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-                <Divider />
-              </>
-            )}
+            <ListItem button onClick={() => requestOpenInBrowser(`https://webcatalog.app?utm_source=${utmSource}`)}>
+              <ListItemText primary="WebCatalog Website" />
+              <ChevronRightIcon color="action" />
+            </ListItem>
+            <Divider />
+            <ListItem button onClick={() => requestOpenInBrowser(`https://webcatalog.app/support&utm_source=${utmSource}`)}>
+              <ListItemText primary="WebCatalog Support" />
+              <ChevronRightIcon color="action" />
+            </ListItem>
+            <Divider />
             <ListItem button onClick={requestQuit}>
               <ListItemText primary="Quit" />
               <ChevronRightIcon color="action" />
@@ -1395,12 +1305,9 @@ Preferences.defaultProps = {
   customUserAgent: null,
   internalUrlRule: null,
   jsCodeInjection: null,
-  updaterInfo: null,
-  updaterStatus: null,
 };
 
 Preferences.propTypes = {
-  allowPrerelease: PropTypes.bool.isRequired,
   askForDownloadPath: PropTypes.bool.isRequired,
   attachToMenubar: PropTypes.bool.isRequired,
   autoCheckForUpdates: PropTypes.bool.isRequired,
@@ -1444,13 +1351,10 @@ Preferences.propTypes = {
   themeSource: PropTypes.string.isRequired,
   titleBar: PropTypes.bool.isRequired,
   unreadCountBadge: PropTypes.bool.isRequired,
-  updaterInfo: PropTypes.object,
-  updaterStatus: PropTypes.string,
   useHardwareAcceleration: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  allowPrerelease: state.preferences.allowPrerelease,
   askForDownloadPath: state.preferences.askForDownloadPath,
   attachToMenubar: state.preferences.attachToMenubar,
   autoCheckForUpdates: state.preferences.autoCheckForUpdates,
@@ -1490,8 +1394,6 @@ const mapStateToProps = (state) => ({
   themeSource: state.preferences.themeSource,
   titleBar: state.preferences.titleBar,
   unreadCountBadge: state.preferences.unreadCountBadge,
-  updaterInfo: state.updater.info,
-  updaterStatus: state.updater.status,
   useHardwareAcceleration: state.preferences.useHardwareAcceleration,
 });
 

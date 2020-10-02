@@ -9,7 +9,6 @@ const {
   shell,
 } = require('electron');
 const isDev = require('electron-is-dev');
-const { autoUpdater } = require('electron-updater');
 const settings = require('electron-settings');
 
 settings.configure({
@@ -34,7 +33,6 @@ const openUrlWithWindow = require('./windows/open-url-with');
 const createMenu = require('./libs/create-menu');
 const { addView, reloadViewsDarkReader } = require('./libs/views');
 const fetchUpdater = require('./libs/fetch-updater');
-require('./libs/squirrel-updater');
 const { getWorkspaces, setWorkspace, cleanLeftoversAsync } = require('./libs/workspaces');
 const sendToAllWindows = require('./libs/send-to-all-windows');
 const extractHostname = require('./libs/extract-hostname');
@@ -185,7 +183,6 @@ if (!gotTheLock) {
     global.appJson = appJson;
 
     const {
-      allowPrerelease,
       attachToMenubar,
       autoCheckForUpdates,
       customUserAgent,
@@ -237,17 +234,12 @@ if (!gotTheLock) {
         }
 
         if (autoCheckForUpdates) {
-          if (appJson.squirrel) {
-            autoUpdater.allowPrerelease = allowPrerelease;
-            ipcMain.emit('request-check-for-updates', null, true);
-          } else {
-            // only notify user about update again after one week
-            const lastShowNewUpdateDialog = getPreference('lastShowNewUpdateDialog');
-            const updateInterval = 7 * 24 * 60 * 60 * 1000; // one week
-            const now = Date.now();
-            if (now - lastShowNewUpdateDialog > updateInterval) {
-              fetchUpdater.checkForUpdates(true);
-            }
+          // only notify user about update again after one week
+          const lastShowNewUpdateDialog = getPreference('lastShowNewUpdateDialog');
+          const updateInterval = 7 * 24 * 60 * 60 * 1000; // one week
+          const now = Date.now();
+          if (now - lastShowNewUpdateDialog > updateInterval) {
+            fetchUpdater.checkForUpdates(true);
           }
         }
       });

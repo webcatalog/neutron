@@ -14,7 +14,7 @@ import { requestOpenInBrowser } from '../../senders';
 const ListItemDefaultBrowser = () => {
   const appJson = window.remote.getGlobal('appJson');
   const [isDefault, setIsDefault] = useState(false);
-  const appId = appJson.id === 'singlebox' ? 'Singlebox' : `webcatalog-${appJson.id}`;
+  const appId = `webcatalog-${appJson.id}`;
 
   const isWindows10 = window.process.platform === 'win32' && semver.gt(window.remote.require('os').release(), '10.0.0');
 

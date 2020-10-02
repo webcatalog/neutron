@@ -16,7 +16,6 @@ import InfiniteLoader from 'react-window-infinite-loader';
 import { FixedSizeList } from 'react-window';
 
 import connectComponent from '../../helpers/connect-component';
-import checkLicense from '../../helpers/check-license';
 
 import { requestOpenInBrowser } from '../../senders';
 
@@ -108,9 +107,6 @@ const AddWorkspace = ({
   shouldUseDarkColors,
   totalPage,
 }) => {
-  const appJson = window.remote.getGlobal('appJson');
-  const isSinglebox = appJson.id === 'singlebox';
-
   useEffect(() => {
     onGetHits();
   }, [onGetHits]);
@@ -259,7 +255,6 @@ const AddWorkspace = ({
           value={mode}
           onChange={(e, value) => {
             // custom workspace is disabled in free version of Singlebox
-            if (isSinglebox && !checkLicense()) return;
             onUpdateMode(value);
           }}
           classes={{ root: classes.bottomNavigation }}

@@ -43,7 +43,7 @@ const About = (props) => {
 
   const appVersion = window.remote.app.getVersion();
   const appJson = window.remote.getGlobal('appJson');
-  const utmSource = appJson.id === 'singlebox' ? 'singlebox_app' : 'juli_app';
+  const utmSource = 'juli_app';
 
   const versions = [
     { name: 'Electron Version', version: window.process.versions.electron },
@@ -60,7 +60,7 @@ const About = (props) => {
           variant="body2"
           className={classes.version}
         >
-          {appJson.id === 'singlebox' ? `Version v${appVersion}` : `Version v${appVersion}. Powered by WebCatalog.`}
+          {`Version v${appVersion}. Powered by WebCatalog.`}
         </Typography>
         <div className={classes.versionSmallContainer}>
           {versions.map(({ name, version }) => (
@@ -73,35 +73,17 @@ const About = (props) => {
           ))}
         </div>
 
-        {appJson.id === 'singlebox' ? (
-          <>
-            <Button
-              onClick={() => requestOpenInBrowser(`https://atomery.com/singlebox?utm_source=${utmSource}`)}
-            >
-              Website
-            </Button>
-            <br />
-            <Button
-              onClick={() => requestOpenInBrowser(`https://atomery.com/singlebox/support&utm_source=${utmSource}`)}
-            >
-              Support
-            </Button>
-          </>
-        ) : (
-          <>
-            <Button
-              onClick={() => requestOpenInBrowser(`https://webcatalog.app?utm_source=${utmSource}`)}
-            >
-              WebCatalog Website
-            </Button>
-            <br />
-            <Button
-              onClick={() => requestOpenInBrowser(`https://webcatalog.app/support?utm_source=${utmSource}`)}
-            >
-              WebCatalog Support
-            </Button>
-          </>
-        )}
+        <Button
+          onClick={() => requestOpenInBrowser(`https://webcatalog.app?utm_source=${utmSource}`)}
+        >
+          WebCatalog Website
+        </Button>
+        <br />
+        <Button
+          onClick={() => requestOpenInBrowser(`https://webcatalog.app/support?utm_source=${utmSource}`)}
+        >
+          WebCatalog Support
+        </Button>
       </DialogContent>
     </div>
   );

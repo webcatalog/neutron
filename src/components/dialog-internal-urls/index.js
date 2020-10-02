@@ -29,8 +29,7 @@ const DialogInternalUrls = ({
   open,
 }) => {
   const appJson = window.remote.getGlobal('appJson');
-  const isSinglebox = appJson.id === 'singlebox';
-  const utmSource = isSinglebox ? 'singlebox_app' : 'juli_app';
+  const utmSource = 'juli_app';
 
   return (
     <Dialog

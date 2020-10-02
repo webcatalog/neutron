@@ -1,5 +1,4 @@
 import isUrl from './is-url';
-import isValidLicenseKey from './is-valid-license-key';
 import isRegExp from './is-reg-exp';
 
 const kits = {
@@ -19,12 +18,6 @@ const kits = {
   // accept link without protocol prefix
   lessStrictUrl: (val, ruleVal, fieldName) => {
     if (ruleVal && val && !isUrl(val) && !isUrl(`http://${val}`)) {
-      return '{fieldName} is not valid.'.replace('{fieldName}', fieldName);
-    }
-    return null;
-  },
-  licenseKey: (val, ruleVal, fieldName) => {
-    if (ruleVal && val && !isValidLicenseKey(val)) {
       return '{fieldName} is not valid.'.replace('{fieldName}', fieldName);
     }
     return null;

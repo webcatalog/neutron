@@ -1,20 +1,6 @@
-import {
-  getPreference,
-  requestShowLicenseRegistrationWindow,
-} from '../senders';
-
 const checkLicense = () => {
   const appJson = window.remote.getGlobal('appJson');
-  const isSinglebox = appJson.id === 'singlebox';
-  const utmSource = isSinglebox ? 'singlebox_app' : 'juli_app';
-
-  if (isSinglebox) {
-    if (!getPreference('registered')) {
-      requestShowLicenseRegistrationWindow();
-      return false;
-    }
-    return true;
-  }
+  const utmSource = 'juli_app';
 
   if (!appJson.registered) {
     window.remote.dialog.showMessageBox(window.remote.getCurrentWindow(), {

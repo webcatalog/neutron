@@ -7,7 +7,6 @@ const {
   nativeTheme,
   shell,
 } = require('electron');
-const { autoUpdater } = require('electron-updater');
 
 const {
   getPreference,
@@ -71,7 +70,6 @@ const aboutWindow = require('../windows/about');
 const addWorkspaceWindow = require('../windows/add-workspace');
 const displayMediaWindow = require('../windows/display-media');
 const editWorkspaceWindow = require('../windows/edit-workspace');
-const licenseRegistrationWindow = require('../windows/license-registration');
 const mainWindow = require('../windows/main');
 const notificationsWindow = require('../windows/notifications');
 const preferencesWindow = require('../windows/preferences');
@@ -181,10 +179,6 @@ const loadListeners = () => {
     addWorkspaceWindow.show();
   });
 
-  ipcMain.on('request-show-license-registration-window', () => {
-    licenseRegistrationWindow.show();
-  });
-
   ipcMain.on('request-show-notifications-window', () => {
     notificationsWindow.show();
   });
@@ -251,20 +245,13 @@ const loadListeners = () => {
   });
 
   ipcMain.on('request-create-workspace', (e, name, homeUrl, picture, transparentBackground) => {
-    const isSinglebox = appJson.id === 'singlebox';
-    const registered = isSinglebox ? getPreference('registered') : global.appJson.registered;
+    const { registered } = global.appJson;
     if (!registered) {
       const workspaces = getWorkspaces();
 
-      // 5 for Singlebox, 2 for WebCatalog
-      const maxWorkspaceNum = isSinglebox ? 5 : 2;
+      const maxWorkspaceNum = 2;
 
       if (Object.keys(workspaces).length >= maxWorkspaceNum) {
-        if (isSinglebox) {
-          licenseRegistrationWindow.show();
-          return;
-        }
-
         dialog.showMessageBox(mainWindow.get(), {
           type: 'info',
           message: 'You are currently running the free version of WebCatalog which only lets you add up to two workspaces per app. To remove the limitations, please purchase the full version ($19.99) from our store.',
@@ -437,29 +424,7 @@ const loadListeners = () => {
     }
   });
 
-  ipcMain.on('request-check-for-updates', (e, isSilent) => {
-    if (appJson.squirrel) {
-      // https://github.com/electron-userland/electron-builder/issues/4028
-      if (!autoUpdater.isUpdaterActive()) return;
-
-      // restart & apply updates
-      if (global.updaterObj && global.updaterObj.status === 'update-downloaded') {
-        setImmediate(() => {
-          app.removeAllListeners('window-all-closed');
-          if (mainWindow.get() != null) {
-            mainWindow.get().forceClose = true;
-            mainWindow.get().close();
-          }
-          autoUpdater.quitAndInstall(false);
-        });
-      }
-
-      // check for updates
-      global.updateSilent = Boolean(isSilent);
-      autoUpdater.checkForUpdates();
-      return;
-    }
-
+  ipcMain.on('request-check-for-updates', () => {
     fetchUpdater.checkForUpdates();
   });
 

@@ -18,9 +18,7 @@
     "build-json": "node build-json.js",
     "build-template": "cross-env CSC_IDENTITY_AUTO_DISCOVERY=false node build-template.js",
     "build-zip": "7z a -mm=Deflate -mx=9 -r dist/template.zip dist/template/.",
-    "dist": "yarn build && yarn build-template && yarn build-zip && yarn build-json",
-    "singlebox:dist": "yarn build && node build-singlebox.js",
-    "singlebox:dist-dev": "cross-env CSC_IDENTITY_AUTO_DISCOVERY=false yarn singlebox:dist"
+    "dist": "yarn build && yarn build-template && yarn build-zip && yarn build-json"
   },
   "repository": "https://github.com/webcatalog/webcatalog-engine",
   "author": "Quang Lam <quang.lam@webcatalog.app>",
@@ -32,7 +30,6 @@
     "electron-context-menu": "2.3.0",
     "electron-is-dev": "1.2.0",
     "electron-settings": "4.0.2",
-    "electron-updater": "4.3.5",
     "electron-window-state": "5.0.3",
     "ext-name": "5.0.0",
     "follow-redirects": "1.13.0",
@@ -68,7 +65,6 @@
     "date-fns": "2.16.1",
     "electron": "9.3.1",
     "electron-builder": "22.9.1",
-    "electron-notarize": "1.0.0",
     "eslint": "6.8.0",
     "eslint-config-airbnb": "18.2.0",
     "eslint-plugin-import": "2.22.1",
@@ -89,7 +85,6 @@
     "redux-thunk": "2.3.0",
     "simplebar": "5.3.0",
     "simplebar-react": "2.3.0",
-    "typeface-roboto": "0.0.75",
     "wait-on": "5.2.0"
   },
   "homepage": "./",
