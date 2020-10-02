@@ -16,7 +16,6 @@ const DialogAuth = React.lazy(() => import('./components/dialog-auth'));
 const DialogDisplayMedia = React.lazy(() => import('./components/dialog-display-media'));
 const DialogEditWorkspace = React.lazy(() => import('./components/dialog-edit-workspace'));
 const DialogGoToUrl = React.lazy(() => import('./components/dialog-go-to-url'));
-const DialogLicenseRegistration = React.lazy(() => import('./components/dialog-license-registration'));
 const DialogNotifications = React.lazy(() => import('./components/dialog-notifications'));
 const DialogOpenUrlWith = React.lazy(() => import('./components/dialog-open-url-with'));
 const DialogPreferences = React.lazy(() => import('./components/dialog-preferences'));
@@ -31,7 +30,6 @@ const App = () => {
     case 'display-media': return <DialogDisplayMedia />;
     case 'edit-workspace': return <DialogEditWorkspace />;
     case 'go-to-url': return <DialogGoToUrl />;
-    case 'license-registration': return <DialogLicenseRegistration />;
     case 'notifications': return <DialogNotifications />;
     case 'open-url-with': return <DialogOpenUrlWith />;
     case 'preferences': return <DialogPreferences />;
@@ -89,8 +87,6 @@ const runApp = () => {
         document.title = 'Go to URL';
       } else if (window.mode === 'add-workspace') {
         document.title = 'Add Custom Workspace';
-      } else if (window.mode === 'license-registration') {
-        document.title = 'License Registration';
       } else {
         document.title = window.remote.getGlobal('appJson').name;
       }
