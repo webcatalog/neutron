@@ -26,6 +26,7 @@ import FindInPage from './find-in-page';
 import NavigationBar from './navigation-bar';
 import FakeTitleBar from './fake-title-bar';
 import DraggableRegion from './draggable-region';
+import TelemetryManager from './telemetry-manager';
 
 import {
   requestCreateWorkspace,
@@ -242,7 +243,7 @@ const Main = ({
   return (
     <div className={classes.outerRoot}>
       {showTitleBar && (<FakeTitleBar />)}
-      {<DraggableRegion />}
+      <DraggableRegion />
       <div className={classes.root}>
         {sidebar && (
           <SidebarContainer className={classes.sidebarRoot}>
@@ -367,6 +368,7 @@ const Main = ({
           </div>
         </div>
       </div>
+      <TelemetryManager />
     </div>
   );
 };

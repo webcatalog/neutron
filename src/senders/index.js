@@ -1,3 +1,5 @@
+import amplitude from '../amplitude';
+
 export const requestOpenInBrowser = (url) => window.ipcRenderer.send('request-open-in-browser', url);
 export const requestLoadUrl = (url, id) => window.ipcRenderer.send('request-load-url', url, id);
 export const requestShowMessageBox = (message, type) => window.ipcRenderer.send('request-show-message-box', message, type);
@@ -40,13 +42,25 @@ export const getWorkspacePreference = (id, preferenceName) => window.ipcRenderer
 export const getWorkspacePreferences = (id) => window.ipcRenderer.sendSync('get-workspace-preferences', id);
 export const getWorkspaces = () => window.ipcRenderer.sendSync('get-workspaces');
 export const requestClearBrowsingData = () => window.ipcRenderer.send('request-clear-browsing-data');
-export const requestCreateWorkspace = (name, homeUrl, picture, transparentBackground) => window.ipcRenderer.send('request-create-workspace', name, homeUrl, picture, transparentBackground);
+export const requestCreateWorkspace = (name, homeUrl, picture, transparentBackground) => {
+  // only log event type to protect privacy
+  amplitude.getInstance().logEvent('webcatalog-engine: add workspace');
+  window.ipcRenderer.send('request-create-workspace', name, homeUrl, picture, transparentBackground);
+};
 export const requestHibernateWorkspace = (id) => window.ipcRenderer.send('request-hibernate-workspace', id);
 export const requestOpenUrlInWorkspace = (url, id) => window.ipcRenderer.send('request-open-url-in-workspace', url, id);
 export const requestRealignActiveWorkspace = () => window.ipcRenderer.send('request-realign-active-workspace');
-export const requestRemoveWorkspace = (id) => window.ipcRenderer.send('request-remove-workspace', id);
+export const requestRemoveWorkspace = (id) => {
+  // only log event type to protect privacy
+  amplitude.getInstance().logEvent('webcatalog-engine: remove workspace');
+  window.ipcRenderer.send('request-remove-workspace', id);
+};
 export const requestRemoveWorkspacePicture = (id) => window.ipcRenderer.send('request-remove-workspace-picture', id);
-export const requestSetActiveWorkspace = (id) => window.ipcRenderer.send('request-set-active-workspace', id);
+export const requestSetActiveWorkspace = (id) => {
+  // only log event type to protect privacy
+  amplitude.getInstance().logEvent('webcatalog-engine: set active workspace');
+  window.ipcRenderer.send('request-set-active-workspace', id);
+};
 export const requestSetWorkspace = (id, opts) => window.ipcRenderer.send('request-set-workspace', id, opts);
 export const requestSetWorkspaces = (workspaces) => window.ipcRenderer.send('request-set-workspaces', workspaces);
 export const requestSetWorkspacePicture = (id, picturePath) => window.ipcRenderer.send('request-set-workspace-picture', id, picturePath);

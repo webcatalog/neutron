@@ -4,6 +4,8 @@ import { Provider } from 'react-redux';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 
+import './amplitude';
+
 import configureStore from './state';
 
 import AppWrapper from './components/app-wrapper';

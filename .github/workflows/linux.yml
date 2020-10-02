@@ -41,6 +41,8 @@ jobs:
     - run: yarn lint
     - run: yarn dist
       if: startsWith(github.ref, 'refs/tags/')
+      env:
+        REACT_APP_AMPLITUDE_API_KEY: ${{ secrets.REACT_APP_AMPLITUDE_API_KEY }}
     - name: Create Release
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')

@@ -201,6 +201,7 @@ const Preferences = ({
   spellcheck,
   spellcheckLanguages,
   swipeToNavigate,
+  telemetry,
   themeSource,
   titleBar,
   unreadCountBadge,
@@ -1036,7 +1037,7 @@ const Preferences = ({
             <Divider />
             <ListItem>
               <ListItemText
-                primary="Allow the app to send bug and crash reports on your behalf"
+                primary="Allow the app to send anonymous crash reports"
                 secondary="Help us quickly diagnose and fix bugs in the app."
               />
               <ListItemSecondaryAction>
@@ -1046,6 +1047,24 @@ const Preferences = ({
                   checked={sentry}
                   onChange={(e) => {
                     requestSetPreference('sentry', e.target.checked);
+                    requestShowRequireRestartDialog();
+                  }}
+                />
+              </ListItemSecondaryAction>
+            </ListItem>
+            <Divider />
+            <ListItem>
+              <ListItemText
+                primary="Allow the app to send anonymous usage data"
+                secondary="Help us understand how to improve the product."
+              />
+              <ListItemSecondaryAction>
+                <Switch
+                  edge="end"
+                  color="primary"
+                  checked={telemetry}
+                  onChange={(e) => {
+                    requestSetPreference('telemetry', e.target.checked);
                     requestShowRequireRestartDialog();
                   }}
                 />
@@ -1348,6 +1367,7 @@ Preferences.propTypes = {
   spellcheck: PropTypes.bool.isRequired,
   spellcheckLanguages: PropTypes.arrayOf(PropTypes.string).isRequired,
   swipeToNavigate: PropTypes.bool.isRequired,
+  telemetry: PropTypes.bool.isRequired,
   themeSource: PropTypes.string.isRequired,
   titleBar: PropTypes.bool.isRequired,
   unreadCountBadge: PropTypes.bool.isRequired,
@@ -1391,6 +1411,7 @@ const mapStateToProps = (state) => ({
   spellcheck: state.preferences.spellcheck,
   spellcheckLanguages: state.preferences.spellcheckLanguages,
   swipeToNavigate: state.preferences.swipeToNavigate,
+  telemetry: state.preferences.telemetry,
   themeSource: state.preferences.themeSource,
   titleBar: state.preferences.titleBar,
   unreadCountBadge: state.preferences.unreadCountBadge,
