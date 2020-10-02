@@ -251,20 +251,13 @@ const loadListeners = () => {
   });
 
   ipcMain.on('request-create-workspace', (e, name, homeUrl, picture, transparentBackground) => {
-    const isSinglebox = appJson.id === 'singlebox';
-    const registered = isSinglebox ? getPreference('registered') : global.appJson.registered;
+    const { registered } = global.appJson;
     if (!registered) {
       const workspaces = getWorkspaces();
 
-      // 5 for Singlebox, 2 for WebCatalog
-      const maxWorkspaceNum = isSinglebox ? 5 : 2;
+      const maxWorkspaceNum = 2;
 
       if (Object.keys(workspaces).length >= maxWorkspaceNum) {
-        if (isSinglebox) {
-          licenseRegistrationWindow.show();
-          return;
-        }
-
         dialog.showMessageBox(mainWindow.get(), {
           type: 'info',
           message: 'You are currently running the free version of WebCatalog which only lets you add up to two workspaces per app. To remove the limitations, please purchase the full version ($19.99) from our store.',

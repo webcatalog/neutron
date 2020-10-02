@@ -243,8 +243,7 @@ const Preferences = ({
   useHardwareAcceleration,
 }) => {
   const appJson = window.remote.getGlobal('appJson');
-  const isSinglebox = appJson.id === 'singlebox';
-  const utmSource = isSinglebox ? 'singlebox_app' : 'juli_app';
+  const utmSource = 'juli_app';
 
   const sections = {
     general: {
@@ -1347,33 +1346,16 @@ const Preferences = ({
               <ChevronRightIcon color="action" />
             </ListItem>
             <Divider />
-            {isSinglebox ? (
-              <>
-                <ListItem button onClick={() => requestOpenInBrowser(`https://atomery.com/singlebox?utm_source=${utmSource}`)}>
-                  <ListItemText primary="Website" />
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-                <Divider />
-                <ListItem button onClick={() => requestOpenInBrowser(`https://atomery.com/singlebox/support&utm_source=${utmSource}`)}>
-                  <ListItemText primary="Support" />
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-                <Divider />
-              </>
-            ) : (
-              <>
-                <ListItem button onClick={() => requestOpenInBrowser(`https://webcatalog.app?utm_source=${utmSource}`)}>
-                  <ListItemText primary="WebCatalog Website" />
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-                <Divider />
-                <ListItem button onClick={() => requestOpenInBrowser(`https://webcatalog.app/support&utm_source=${utmSource}`)}>
-                  <ListItemText primary="WebCatalog Support" />
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-                <Divider />
-              </>
-            )}
+            <ListItem button onClick={() => requestOpenInBrowser(`https://webcatalog.app?utm_source=${utmSource}`)}>
+              <ListItemText primary="WebCatalog Website" />
+              <ChevronRightIcon color="action" />
+            </ListItem>
+            <Divider />
+            <ListItem button onClick={() => requestOpenInBrowser(`https://webcatalog.app/support&utm_source=${utmSource}`)}>
+              <ListItemText primary="WebCatalog Support" />
+              <ChevronRightIcon color="action" />
+            </ListItem>
+            <Divider />
             <ListItem button onClick={requestQuit}>
               <ListItemText primary="Quit" />
               <ChevronRightIcon color="action" />

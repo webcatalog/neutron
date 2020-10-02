@@ -354,28 +354,7 @@ function createMenu() {
     },
     {
       role: 'help',
-      submenu: appJson.id === 'singlebox' ? [
-        {
-          label: 'Singlebox Support',
-          click: () => shell.openExternal('https://atomery.com/singlebox/support?utm_source=singlebox_app'),
-        },
-        {
-          label: 'Report a Bug via GitHub...',
-          click: () => shell.openExternal('https://github.com/atomery/singlebox/issues'),
-        },
-        {
-          label: 'Request a New Feature via GitHub...',
-          click: () => shell.openExternal('https://github.com/atomery/singlebox/issues/new?template=feature.md&title=feature%3A+'),
-        },
-        {
-          label: 'Submit New App to Catalog...',
-          click: () => shell.openExternal('https://forms.gle/redZCVMwkuhvuDtb9'),
-        },
-        {
-          label: 'Learn More...',
-          click: () => shell.openExternal('https://atomery.com/singlebox?utm_source=singlebox_app'),
-        },
-      ] : [
+      submenu: [
         {
           label: 'WebCatalog Support',
           click: () => shell.openExternal('https://webcatalog.app/support?utm_source=juli_app'),
@@ -416,16 +395,6 @@ function createMenu() {
           click: () => aboutWindow.show(),
         },
         { type: 'separator' },
-        {
-          label: registered ? 'Registered' : 'Registration...',
-          enabled: !registered,
-          click: registered ? null : () => licenseRegistrationWindow.show(),
-          visible: appJson.id === 'singlebox',
-        },
-        {
-          type: 'separator',
-          visible: appJson.id === 'singlebox',
-        },
         updaterMenuItem,
         {
           type: 'separator',
@@ -465,20 +434,6 @@ function createMenu() {
         {
           label: 'About',
           click: () => aboutWindow.show(),
-        },
-        {
-          type: 'separator',
-          visible: appJson.id === 'singlebox',
-        },
-        {
-          label: registered ? 'Registered' : 'Registration...',
-          enabled: !registered,
-          click: registered ? null : () => licenseRegistrationWindow.show(),
-          visible: appJson.id === 'singlebox',
-        },
-        {
-          type: 'separator',
-          visible: appJson.id === 'singlebox',
         },
         updaterMenuItem,
         {
