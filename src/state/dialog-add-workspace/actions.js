@@ -4,12 +4,13 @@ import {
   ADD_WORKSPACE_GET_FAILED,
   ADD_WORKSPACE_GET_REQUEST,
   ADD_WORKSPACE_GET_SUCCESS,
-  ADD_WORKSPACE_UPDATE_SCROLL_OFFSET,
+  ADD_WORKSPACE_RESET_FORM,
   ADD_WORKSPACE_UPDATE_CURRENT_QUERY,
   ADD_WORKSPACE_UPDATE_DOWNLOADING_ICON,
   ADD_WORKSPACE_UPDATE_FORM,
   ADD_WORKSPACE_UPDATE_MODE,
   ADD_WORKSPACE_UPDATE_QUERY,
+  ADD_WORKSPACE_UPDATE_SCROLL_OFFSET,
 } from '../../constants/actions';
 
 import validate from '../../helpers/validate';
@@ -160,6 +161,10 @@ export const updateForm = (changes) => ({
   changes: validate(changes, getValidationRules()),
 });
 
+export const resetForm = () => ({
+  type: ADD_WORKSPACE_RESET_FORM,
+});
+
 export const save = () => (dispatch, getState) => {
   const { form } = getState().dialogAddWorkspace;
 
@@ -177,7 +182,12 @@ export const save = () => (dispatch, getState) => {
     form.internetIcon || form.picturePath,
     Boolean(form.transparentBackground),
   );
-  window.remote.getCurrentWindow().close();
+
+  // don't close window, only hide it
+  // 1. it's faster for users (normally people add multiple workspaces at once to set up)
+  // 2. it gives Amplitude time to run
+  window.remote.getCurrentWindow().hide();
+  dispatch(resetForm());
   return null;
 };
 

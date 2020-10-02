@@ -75,6 +75,7 @@ const defaultPreferences = {
   spellcheck: true,
   spellcheckLanguages: ['en-US'],
   swipeToNavigate: true,
+  telemetry: true,
   themeSource: 'system',
   titleBar: !shouldShowSidebar, // if sidebar is shown, then hide titleBar
   unreadCountBadge: true,

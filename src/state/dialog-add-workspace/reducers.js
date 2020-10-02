@@ -4,12 +4,13 @@ import {
   ADD_WORKSPACE_GET_FAILED,
   ADD_WORKSPACE_GET_REQUEST,
   ADD_WORKSPACE_GET_SUCCESS,
-  ADD_WORKSPACE_UPDATE_SCROLL_OFFSET,
+  ADD_WORKSPACE_RESET_FORM,
   ADD_WORKSPACE_UPDATE_CURRENT_QUERY,
   ADD_WORKSPACE_UPDATE_DOWNLOADING_ICON,
   ADD_WORKSPACE_UPDATE_FORM,
   ADD_WORKSPACE_UPDATE_MODE,
   ADD_WORKSPACE_UPDATE_QUERY,
+  ADD_WORKSPACE_UPDATE_SCROLL_OFFSET,
 } from '../../constants/actions';
 
 const hasFailed = (state = false, action) => {
@@ -76,6 +77,7 @@ const defaultForm = {
 };
 const form = (state = defaultForm, action) => {
   switch (action.type) {
+    case ADD_WORKSPACE_RESET_FORM: return defaultForm;
     case ADD_WORKSPACE_UPDATE_FORM: return { ...state, ...action.changes };
     default: return state;
   }
