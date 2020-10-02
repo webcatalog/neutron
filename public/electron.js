@@ -1,10 +1,12 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 const {
   app,
+  dialog,
   ipcMain,
   nativeTheme,
   protocol,
   session,
+  shell,
 } = require('electron');
 const isDev = require('electron-is-dev');
 const { autoUpdater } = require('electron-updater');
@@ -208,6 +210,24 @@ if (!gotTheLock) {
 
     whenTrulyReady()
       .then(() => {
+        if (appJson.legacySinglebox) {
+          setTimeout(() => {
+            dialog.showMessageBox(mainWindow.get(), {
+              type: 'info',
+              message: 'We\'ve merged Singlebox into WebCatalog. Visit our website to learn more.',
+              buttons: ['Learn more', 'OK'],
+              cancelId: 1,
+              defaultId: 0,
+            })
+              .then(({ response }) => {
+                if (response === 0) {
+                  shell.openExternal('https://webcatalog.app/singlebox?utm_source=singlebox&utm_campaign=singlebox_merged');
+                }
+              })
+              .catch(console.log); // eslint-disable-line
+          }, 2000);
+        }
+
         if (autoCheckForUpdates) {
           if (appJson.squirrel) {
             autoUpdater.allowPrerelease = allowPrerelease;

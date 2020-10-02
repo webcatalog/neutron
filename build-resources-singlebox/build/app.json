@@ -1,5 +1,6 @@
 {
     "id": "singlebox",
     "name": "Singlebox",
-    "squirrel": true
+    "squirrel": true,
+    "legacySinglebox": true
 }
