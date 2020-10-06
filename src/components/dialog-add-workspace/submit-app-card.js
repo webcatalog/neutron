@@ -23,6 +23,7 @@ const styles = (theme) => ({
       backgroundColor: theme.palette.action.selected,
     },
     textAlign: 'left',
+    marginTop: theme.spacing(2),
   },
   appName: {
     overflow: 'hidden',

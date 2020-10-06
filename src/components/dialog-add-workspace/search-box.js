@@ -1,5 +1,11 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import PropTypes from 'prop-types';
+
+import {
+  WithSearch,
+  SearchBox as SwiftypeSearchBox,
+} from '@elastic/react-search-ui';
 
 import CloseIcon from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
@@ -7,8 +13,6 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
 import connectComponent from '../../helpers/connect-component';
-
-import { updateQuery } from '../../state/dialog-add-workspace/actions';
 
 const styles = (theme) => ({
   toolbarSearchContainer: {
@@ -39,7 +43,7 @@ const styles = (theme) => ({
   },
   input: {
     font: 'inherit',
-    border: 0,
+    border: '0 !important',
     display: 'block',
     verticalAlign: 'middle',
     whiteSpace: 'normal',
@@ -47,9 +51,11 @@ const styles = (theme) => ({
     margin: 0,
     color: theme.palette.text.primary,
     width: '100%',
-    paddingLeft: 0,
+    padding: '0 !important',
     '&:focus': {
       outline: 0,
+      border: 0,
+      boxShadow: 'none',
     },
     '&::placeholder': {
       color: theme.palette.text.secondary,
@@ -67,77 +73,73 @@ const styles = (theme) => ({
 
 const SearchBox = ({
   classes,
-  onUpdateQuery,
-  query,
-}) => {
-  const clearSearchAction = query.length > 0 && (
-    <>
-      <IconButton
-        color="default"
-        className={classes.iconButton}
-        aria-label="Clear"
-        onClick={() => onUpdateQuery('', true)}
+}) => (
+  <Paper elevation={1} className={classes.toolbarSearchContainer}>
+    <div className={classes.toolbarSectionSearch}>
+      <Typography
+        className={classes.searchBarText}
+        color="inherit"
+        variant="body1"
+        component="div"
       >
-        <CloseIcon fontSize="small" />
-      </IconButton>
-    </>
-  );
-
-  return (
-    <Paper elevation={1} className={classes.toolbarSearchContainer}>
-      <div className={classes.toolbarSectionSearch}>
-        <Typography
-          className={classes.searchBarText}
-          color="inherit"
-          variant="body1"
-        >
-          <input
-            className={classes.input}
-            onChange={(e) => onUpdateQuery(e.target.value)}
-            onInput={(e) => onUpdateQuery(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Escape') {
-                e.target.blur();
-                onUpdateQuery('', true);
-              }
-            }}
-            placeholder="Search apps..."
-            value={query}
-            onFocus={() => {
-              window.preventClosingWindow = true;
-            }}
-            onBlur={() => {
-              window.preventClosingWindow = false;
-            }}
-          />
-        </Typography>
-        {clearSearchAction}
-      </div>
-    </Paper>
-  );
-};
-
-SearchBox.defaultProps = {
-  query: '',
-};
+        <SwiftypeSearchBox
+          searchAsYouType
+          debounceLength={300}
+          inputView={({ getAutocomplete, getInputProps }) => (
+            <>
+              <div className="sui-search-box__wrapper">
+                <input
+                  {...getInputProps({
+                    className: classes.input,
+                    placeholder: 'Search apps...',
+                    onFocus: () => {
+                      window.preventClosingWindow = true;
+                    },
+                    onBlur: () => {
+                      window.preventClosingWindow = false;
+                    },
+                  })}
+                />
+                {getAutocomplete()}
+              </div>
+            </>
+          )}
+          shouldClearFilters={false}
+        />
+      </Typography>
+      <WithSearch
+        mapContextToProps={({ searchTerm, setSearchTerm }) => ({ searchTerm, setSearchTerm })}
+      >
+        {({ searchTerm, setSearchTerm }) => (
+          <>
+            {searchTerm.length > 0 && (
+              <IconButton
+                color="default"
+                className={classes.iconButton}
+                aria-label="Clear"
+                onClick={() => setSearchTerm('', {
+                  refresh: true,
+                  debounce: 0,
+                  shouldClearFilters: false,
+                })}
+              >
+                <CloseIcon fontSize="small" />
+              </IconButton>
+            )}
+          </>
+        )}
+      </WithSearch>
+    </div>
+  </Paper>
+);
 
 SearchBox.propTypes = {
   classes: PropTypes.object.isRequired,
-  onUpdateQuery: PropTypes.func.isRequired,
-  query: PropTypes.string,
-};
-
-const mapStateToProps = (state) => ({
-  query: state.dialogAddWorkspace.query,
-});
-
-const actionCreators = {
-  updateQuery,
 };
 
 export default connectComponent(
   SearchBox,
-  mapStateToProps,
-  actionCreators,
+  null,
+  null,
   styles,
 );

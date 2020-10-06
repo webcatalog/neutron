@@ -1,16 +1,8 @@
-import algoliasearch from 'algoliasearch';
-
 import {
-  ADD_WORKSPACE_GET_FAILED,
-  ADD_WORKSPACE_GET_REQUEST,
-  ADD_WORKSPACE_GET_SUCCESS,
   ADD_WORKSPACE_RESET_FORM,
-  ADD_WORKSPACE_UPDATE_CURRENT_QUERY,
   ADD_WORKSPACE_UPDATE_DOWNLOADING_ICON,
   ADD_WORKSPACE_UPDATE_FORM,
   ADD_WORKSPACE_UPDATE_MODE,
-  ADD_WORKSPACE_UPDATE_QUERY,
-  ADD_WORKSPACE_UPDATE_SCROLL_OFFSET,
 } from '../../constants/actions';
 
 import validate from '../../helpers/validate';
@@ -18,80 +10,6 @@ import isUrl from '../../helpers/is-url';
 import hasErrors from '../../helpers/has-errors';
 
 import { requestCreateWorkspace } from '../../senders';
-
-const client = algoliasearch('4TX8Z3FKMI', '57f6e815e97deb2cdf74f49c852bc232');
-const index = client.initIndex('apps');
-
-export const getHits = () => (dispatch, getState) => {
-  const state = getState();
-
-  const {
-    isGetting,
-    page,
-    currentQuery,
-    totalPage,
-  } = state.dialogAddWorkspace;
-
-  if (isGetting) return;
-
-  // If all pages have already been fetched, we stop
-  if (totalPage && page + 1 >= totalPage) return;
-
-  dispatch({
-    type: ADD_WORKSPACE_GET_REQUEST,
-  });
-
-  index.search(currentQuery, {
-    page: page + 1,
-    hitsPerPage: 12,
-  })
-    .then((res) => {
-      // validate to make sure this request is not from older query
-      const currentHome = getState().dialogAddWorkspace;
-      if (currentQuery !== currentHome.currentQuery || page !== currentHome.page) {
-        return;
-      }
-      dispatch({
-        type: ADD_WORKSPACE_GET_SUCCESS,
-        hits: res.hits,
-        page: res.page,
-        totalPage: res.nbPages,
-      });
-    })
-    .catch(() => {
-      // validate to make sure this request is not from older query
-      const currentHome = getState().dialogAddWorkspace;
-      if (currentQuery !== currentHome.currentQuery || page !== currentHome.page) {
-        return;
-      }
-      dispatch({
-        type: ADD_WORKSPACE_GET_FAILED,
-      });
-    });
-};
-
-export const resetThenGetHits = () => (dispatch, getState) => {
-  const state = getState();
-  const { query } = state.dialogAddWorkspace;
-
-  dispatch({
-    type: ADD_WORKSPACE_UPDATE_CURRENT_QUERY,
-    currentQuery: query,
-  });
-  dispatch(getHits());
-};
-
-let timeout;
-export const updateQuery = (query, immediate = false) => (dispatch) => {
-  dispatch({
-    type: ADD_WORKSPACE_UPDATE_QUERY,
-    query,
-  });
-  clearTimeout(timeout);
-  timeout = setTimeout(() => {
-    dispatch(resetThenGetHits());
-  }, immediate ? 0 : 500);
-};
 
 const getValidationRules = () => ({
   name: {
@@ -194,9 +112,4 @@ export const save = () => (dispatch, getState) => {
 export const updateMode = (mode) => ({
   type: ADD_WORKSPACE_UPDATE_MODE,
   mode,
-});
-
-export const updateScrollOffset = (scrollOffset) => ({
-  type: ADD_WORKSPACE_UPDATE_SCROLL_OFFSET,
-  scrollOffset,
 });

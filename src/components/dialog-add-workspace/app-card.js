@@ -21,7 +21,6 @@ const styles = (theme) => ({
   card: {
     width: '100%',
     boxSizing: 'border-box',
-    borderRadius: 4,
     paddingLeft: theme.spacing(1),
     paddingRight: theme.spacing(1),
     display: 'flex',
@@ -82,7 +81,7 @@ const AppCard = (props) => {
   } = props;
 
   return (
-    <Paper elevation={0} className={classes.card}>
+    <Paper elevation={0} className={classes.card} square>
       <img
         alt={name}
         className={classes.paperIcon}
