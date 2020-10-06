@@ -354,7 +354,7 @@ function createMenu() {
       submenu: [
         {
           label: 'WebCatalog Support',
-          click: () => shell.openExternal('https://webcatalog.app/support?utm_source=juli_app'),
+          click: () => shell.openExternal('https://help.webcatalog.app?utm_source=juli_app'),
         },
         {
           label: 'WebCatalog Website',
