@@ -46,9 +46,10 @@ const About = (props) => {
   const utmSource = 'juli_app';
 
   const versions = [
-    { name: 'Electron Version', version: window.process.versions.electron },
-    { name: 'Node Version', version: window.process.versions.node },
-    { name: 'Chromium Version', version: window.process.versions.chrome },
+    { name: 'WebCatalog Engine', version: appVersion },
+    { name: 'Electron', version: window.process.versions.electron },
+    { name: 'Node', version: window.process.versions.node },
+    { name: 'Chromium', version: window.process.versions.chrome },
   ];
 
   return (
@@ -60,7 +61,7 @@ const About = (props) => {
           variant="body2"
           className={classes.version}
         >
-          {`Version v${appVersion}. Powered by WebCatalog.`}
+          Powered by WebCatalog
         </Typography>
         <div className={classes.versionSmallContainer}>
           {versions.map(({ name, version }) => (
@@ -80,7 +81,7 @@ const About = (props) => {
         </Button>
         <br />
         <Button
-          onClick={() => requestOpenInBrowser(`https://webcatalog.app/support?utm_source=${utmSource}`)}
+          onClick={() => requestOpenInBrowser(`https://help.webcatalog.app?utm_source=${utmSource}`)}
         >
           WebCatalog Support
         </Button>
