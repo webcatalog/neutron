@@ -35,7 +35,7 @@ const NoConnection = (props) => {
       <ErrorIcon className={classes.icon} color="disabled" />
       <br />
       <Typography
-        color="disabled"
+        color="textSecondary"
         variant="h6"
       >
         Failed to Connect to Server
