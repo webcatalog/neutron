@@ -237,67 +237,33 @@ const removeWorkspacePicture = (id) => {
   return Promise.resolve();
 };
 
-// tasks to clean up leftover workspace data
-const cleanLeftoversAsync = () => Promise.resolve()
-  .then(() => {
-    // eslint-disable-next-line no-console
-    console.log('Cleaning workspace leftovers...');
-    // remove unused partitions
-    const partitionsDirPath = path.join(app.getPath('userData'), 'Partitions');
-    if (!fs.existsSync(partitionsDirPath)) {
-      return null;
-    }
-
-    const p = fs.readdirSync(
-      partitionsDirPath,
-      { withFileTypes: true },
-    )
-      .filter((d) => d.isDirectory() && d.name !== 'shared' && getWorkspace(d.name) == null)
-      .map((d) => fs.remove(path.join(partitionsDirPath, d.name)));
-
-    return Promise.all(p);
-  })
-  .then(() => {
-    // remove unused pictures
-    const picturesDirPath = path.join(app.getPath('userData'), 'pictures');
-    if (!fs.existsSync(picturesDirPath)) {
-      return null;
-    }
-
-    const p = fs.readdirSync(
-      picturesDirPath,
-      { withFileTypes: true },
-    )
-      .filter((f) => {
-        if (!f.isFile() || !f.name.endsWith('.png')) return false;
-
-        const pictureId = path.parse(f.name).name;
-        const isInUse = Object.values(getWorkspaces())
-          .some((workspace) => workspace.pictureId === pictureId);
-
-        return !isInUse;
-      })
-      .map((f) => fs.remove(path.join(picturesDirPath, f.name)));
-
-    return Promise.all(p);
-  })
-  .then(() => {
-    // eslint-disable-next-line no-console
-    console.log('Done cleaning workspace leftovers.');
-  })
-  .catch((err) => {
-    // eslint-disable-next-line no-console
-    console.log(err);
-  });
-
 const removeWorkspace = (id) => {
+  const workspace = workspaces[id];
+
   delete workspaces[id];
   sendToAllWindows('set-workspace', id, null);
   settings.unsetSync(`workspaces.${v}.${id}`);
+
+  // remove workspace data from disk
+  fs.remove(path.join(app.getPath('userData'), 'Partitions', id))
+    .then(() => {
+      if (workspace && workspace.picturePath) {
+        return fs.remove(workspace.picturePath);
+      }
+      return null;
+    })
+    .then(() => {
+      // eslint-disable-next-line no-console
+      console.log('Removed workspace data:', id);
+    })
+    .catch((err) => {
+      // ignore the error as it doesn't affect the experience
+      // eslint-disable-next-line no-console
+      console.log(err);
+    });
 };
 
 module.exports = {
-  cleanLeftoversAsync,
   countWorkspaces,
   createWorkspace,
   getActiveWorkspace,

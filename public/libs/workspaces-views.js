@@ -120,8 +120,8 @@ const removeWorkspaceView = (id) => {
     setActiveWorkspaceView(getPreviousWorkspace(id).id);
   }
 
-  removeWorkspace(id);
   removeView(id);
+  removeWorkspace(id);
 };
 
 const clearBrowsingData = () => {

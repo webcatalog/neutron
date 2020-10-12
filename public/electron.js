@@ -33,7 +33,7 @@ const openUrlWithWindow = require('./windows/open-url-with');
 const createMenu = require('./libs/create-menu');
 const { addView, reloadViewsDarkReader } = require('./libs/views');
 const fetchUpdater = require('./libs/fetch-updater');
-const { getWorkspaces, setWorkspace, cleanLeftoversAsync } = require('./libs/workspaces');
+const { getWorkspaces, setWorkspace } = require('./libs/workspaces');
 const sendToAllWindows = require('./libs/send-to-all-windows');
 const extractHostname = require('./libs/extract-hostname');
 
@@ -165,9 +165,6 @@ if (!gotTheLock) {
         }
       })
       .then(() => {
-        // clean leftover files from deleted workspaces
-        cleanLeftoversAsync();
-
         // trigger whenTrulyReady;
         ipcMain.emit('truly-ready');
       });
