@@ -796,7 +796,9 @@ const addView = (browserWindow, workspace) => {
   const initialUrl = (rememberLastPageVisited && workspace.lastUrl)
   || workspace.homeUrl || appJson.url;
   adjustUserAgentByUrl(view.webContents, initialUrl);
-  view.webContents.loadURL(initialUrl);
+  if (initialUrl) {
+    view.webContents.loadURL(initialUrl);
+  }
 };
 
 const getView = (id) => views[id];
