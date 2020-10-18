@@ -125,6 +125,8 @@ const Preferences = ({
 
   formAskForDownloadPath,
   formAutoRefresh,
+  formAutoRefreshInterval,
+  formAutoRefreshOnlyWhenInactive,
   formCssCodeInjection,
   formCustomUserAgent,
   formDarkReader,
@@ -135,7 +137,6 @@ const Preferences = ({
   formDownloadPath,
   formInternalUrlRule,
   formJsCodeInjection,
-  formAutoRefreshOnlyWhenInactive,
 }) => {
   const utmSource = 'juli_app';
   const workspaceId = window.remote.getGlobal('workspacePreferencesWorkspaceId');
@@ -387,9 +388,11 @@ const Preferences = ({
                 <ListItem>
                   <ListItemText primary="Reload every" classes={{ primary: classes.refreshEvery }} />
                   <Select
-                    value={autoRefreshInterval}
+                    value={formAutoRefreshInterval}
                     onChange={(e) => {
-                      requestSetPreference('autoRefreshInterval', e.target.value);
+                      onUpdateForm({
+                        autoRefreshInterval: e.target.value,
+                      });
                       requestRequestReloadWorkspaceDialog(workspaceId);
                     }}
                     variant="filled"
@@ -599,6 +602,7 @@ Preferences.defaultProps = {
 
   formAskForDownloadPath: null,
   formAutoRefresh: null,
+  formAutoRefreshInterval: 360000,
   formAutoRefreshOnlyWhenInactive: null,
   formCssCodeInjection: null,
   formCustomUserAgent: null,
@@ -631,6 +635,7 @@ Preferences.propTypes = {
 
   formAskForDownloadPath: PropTypes.bool,
   formAutoRefresh: PropTypes.bool,
+  formAutoRefreshInterval: PropTypes.number,
   formAutoRefreshOnlyWhenInactive: PropTypes.bool,
   formCustomUserAgent: PropTypes.string,
   formDarkReader: PropTypes.bool,
@@ -658,6 +663,7 @@ const mapStateToProps = (state) => ({
 
   formAskForDownloadPath: state.dialogWorkspacePreferences.form.askForDownloadPath,
   formAutoRefresh: state.dialogWorkspacePreferences.form.autoRefresh,
+  formAutoRefreshInterval: state.dialogWorkspacePreferences.form.autoRefreshInterval,
   formAutoRefreshOnlyWhenInactive:
     state.dialogWorkspacePreferences.form.autoRefreshOnlyWhenInactive,
   formDarkReader: state.dialogWorkspacePreferences.form.darkReader,
