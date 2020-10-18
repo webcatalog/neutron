@@ -20,8 +20,6 @@ import {
   updateForm,
 } from '../../state/dialog-add-workspace/actions';
 
-import EnhancedDialogTitle from './enhanced-dialog-title';
-
 const styles = (theme) => ({
   root: {
     background: theme.palette.background.paper,
@@ -116,9 +114,6 @@ const AddWorkspaceCustom = ({
   transparentBackground,
 }) => (
   <div className={classes.root}>
-    <EnhancedDialogTitle>
-      Custom Workspace
-    </EnhancedDialogTitle>
     <div>
       <TextField
         id="outlined-full-width"

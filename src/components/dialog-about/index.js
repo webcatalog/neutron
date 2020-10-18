@@ -83,7 +83,7 @@ const About = (props) => {
         <Button
           onClick={() => requestOpenInBrowser(`https://help.webcatalog.app?utm_source=${utmSource}`)}
         >
-          WebCatalog Support
+          WebCatalog Help
         </Button>
       </DialogContent>
     </div>

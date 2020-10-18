@@ -926,11 +926,19 @@ const reloadViewsWebContentsIfDidFailLoad = () => {
   });
 };
 
+const reloadView = (id) => {
+  const view = views[id];
+  if (view != null) {
+    view.webContents.reload();
+  }
+};
+
 module.exports = {
   addView,
   getView,
   hibernateView,
   realignActiveView,
+  reloadView,
   reloadViewDarkReader,
   reloadViewsDarkReader,
   reloadViewsWebContentsIfDidFailLoad,

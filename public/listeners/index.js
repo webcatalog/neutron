@@ -50,6 +50,7 @@ const {
 } = require('../libs/workspaces-views');
 
 const {
+  reloadView,
   reloadViewDarkReader,
   reloadViewsDarkReader,
   reloadViewsWebContentsIfDidFailLoad,
@@ -164,10 +165,22 @@ const loadListeners = () => {
   });
 
   ipcMain.on('request-show-preferences-window', (e, scrollTo) => {
+    // prevent opening both global & workspace-specific preferences window
+    // to avoid conflicts
+    if (workspacePreferencesWindow.get()) {
+      workspacePreferencesWindow.get().close();
+    }
+
     preferencesWindow.show(scrollTo);
   });
 
   ipcMain.on('request-show-workspace-preferences-window', (e, id) => {
+    // prevent opening both global & workspace-specific preferences window
+    // to avoid conflicts
+    if (preferencesWindow.get()) {
+      preferencesWindow.get().close();
+    }
+
     workspacePreferencesWindow.show(id);
   });
 
@@ -184,7 +197,8 @@ const loadListeners = () => {
   });
 
   ipcMain.on('request-show-require-restart-dialog', () => {
-    dialog.showMessageBox(preferencesWindow.get() || mainWindow.get(), {
+    const win = workspacePreferencesWindow.get() || preferencesWindow.get() || mainWindow.get();
+    dialog.showMessageBox(win, {
       type: 'question',
       buttons: ['Restart Now', 'Later'],
       message: 'You need to restart the app for this change to take effect.',
@@ -193,6 +207,21 @@ const loadListeners = () => {
       if (response === 0) {
         app.relaunch();
         app.exit(0);
+      }
+    })
+    .catch(console.log); // eslint-disable-line
+  });
+
+  ipcMain.on('request-show-require-reload-workspace-dialog', (e, id) => {
+    const win = workspacePreferencesWindow.get() || preferencesWindow.get() || mainWindow.get();
+    dialog.showMessageBox(win, {
+      type: 'question',
+      buttons: ['Reload Now', 'Later'],
+      message: 'You need to reload the workspace for this change to take effect.',
+      cancelId: 1,
+    }).then(({ response }) => {
+      if (response === 0) {
+        reloadView(id);
       }
     })
     .catch(console.log); // eslint-disable-line

@@ -7,13 +7,8 @@ const {
 
 const appJson = require('../app.json');
 
-const aboutWindow = require('../windows/about');
-const addWorkspaceWindow = require('../windows/add-workspace');
-const editWorkspaceWindow = require('../windows/edit-workspace');
 const goToUrlWindow = require('../windows/go-to-url');
 const mainWindow = require('../windows/main');
-const notificationsWindow = require('../windows/notifications');
-const preferencesWindow = require('../windows/preferences');
 
 const getViewBounds = require('./get-view-bounds');
 const formatBytes = require('./format-bytes');
@@ -353,7 +348,7 @@ function createMenu() {
       role: 'help',
       submenu: [
         {
-          label: 'WebCatalog Support',
+          label: 'WebCatalog Help',
           click: () => shell.openExternal('https://help.webcatalog.app?utm_source=juli_app'),
         },
         {
@@ -389,7 +384,7 @@ function createMenu() {
       submenu: [
         {
           label: `About ${appJson.name}`,
-          click: () => aboutWindow.show(),
+          click: () => ipcMain.emit('request-show-about-window'),
         },
         { type: 'separator' },
         updaterMenuItem,
@@ -400,12 +395,12 @@ function createMenu() {
         {
           label: 'Preferences...',
           accelerator: 'CmdOrCtrl+,',
-          click: () => preferencesWindow.show(),
+          click: () => ipcMain.emit('request-show-preferences-window'),
         },
         { type: 'separator' },
         {
           label: 'Notifications...',
-          click: () => notificationsWindow.show(),
+          click: () => ipcMain.emit('request-show-notifications-window'),
           accelerator: 'CmdOrCtrl+Shift+N',
         },
         { type: 'separator' },
@@ -430,7 +425,7 @@ function createMenu() {
       submenu: [
         {
           label: 'About',
-          click: () => aboutWindow.show(),
+          click: () => ipcMain.emit('request-show-about-window'),
         },
         updaterMenuItem,
         {
@@ -440,12 +435,12 @@ function createMenu() {
         {
           label: 'Preferences...',
           accelerator: 'CmdOrCtrl+,',
-          click: () => preferencesWindow.show(),
+          click: () => ipcMain.emit('request-show-preferences-window'),
         },
         { type: 'separator' },
         {
           label: 'Notifications...',
-          click: () => notificationsWindow.show(),
+          click: () => ipcMain.emit('request-show-notifications-window'),
           accelerator: 'CmdOrCtrl+Shift+N',
         },
         { type: 'separator' },
@@ -513,7 +508,15 @@ function createMenu() {
       label: 'Edit Current Workspace',
       click: () => {
         const activeWorkspace = getActiveWorkspace();
-        editWorkspaceWindow.show(activeWorkspace.id);
+        ipcMain.emit('request-show-edit-workspace-window', null, activeWorkspace.id);
+      },
+      enabled: hasWorkspaces,
+    },
+    {
+      label: 'Configure Current Workspace',
+      click: () => {
+        const activeWorkspace = getActiveWorkspace();
+        ipcMain.emit('request-show-workspace-preferences-window', null, activeWorkspace.id);
       },
       enabled: hasWorkspaces,
     },
@@ -536,7 +539,7 @@ function createMenu() {
     },
     {
       label: 'Add Custom Workspace',
-      click: () => addWorkspaceWindow.show(),
+      click: () => ipcMain.emit('request-show-add-workspace-window'),
     },
   );
 

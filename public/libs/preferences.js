@@ -37,6 +37,7 @@ const defaultPreferences = {
   autoCheckForUpdates: true,
   autoRefresh: false,
   autoRefreshInterval: 3600000,
+  autoRefreshOnlyWhenInactive: false,
   blockAds: false,
   cssCodeInjection: null,
   customUserAgent: null,

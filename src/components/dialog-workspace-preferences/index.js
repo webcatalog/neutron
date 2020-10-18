@@ -26,8 +26,7 @@ import checkLicense from '../../helpers/check-license';
 
 import {
   requestOpenInBrowser,
-  requestSetPreference,
-  requestShowRequireRestartDialog,
+  requestRequestReloadWorkspaceDialog,
 } from '../../senders';
 
 import { open as openDialogCodeInjection } from '../../state/dialog-code-injection/actions';
@@ -110,6 +109,7 @@ const Preferences = ({
   askForDownloadPath,
   autoRefresh,
   autoRefreshInterval,
+  autoRefreshOnlyWhenInactive,
   classes,
   cssCodeInjection,
   customUserAgent,
@@ -124,6 +124,8 @@ const Preferences = ({
 
   formAskForDownloadPath,
   formAutoRefresh,
+  formAutoRefreshInterval,
+  formAutoRefreshOnlyWhenInactive,
   formCssCodeInjection,
   formCustomUserAgent,
   formDarkReader,
@@ -135,6 +137,9 @@ const Preferences = ({
   formInternalUrlRule,
   formJsCodeInjection,
 }) => {
+  const utmSource = 'juli_app';
+  const workspaceId = window.remote.getGlobal('workspacePreferencesWorkspaceId');
+
   const sections = {
     extensions: {
       text: 'Extensions',
@@ -358,9 +363,12 @@ const Preferences = ({
               />
               <Select
                 value={formAutoRefresh != null ? formAutoRefresh : 'global'}
-                onChange={(e) => onUpdateForm({
-                  autoRefresh: e.target.value !== 'global' ? e.target.value : null,
-                })}
+                onChange={(e) => {
+                  onUpdateForm({
+                    autoRefresh: e.target.value !== 'global' ? e.target.value : null,
+                  });
+                  requestRequestReloadWorkspaceDialog(workspaceId);
+                }}
                 variant="filled"
                 disableUnderline
                 margin="dense"
@@ -375,28 +383,75 @@ const Preferences = ({
               </Select>
             </ListItem>
             {formAutoRefresh && (
-              <ListItem>
-                <ListItemText primary="Reload every" classes={{ primary: classes.refreshEvery }} />
-                <Select
-                  value={autoRefreshInterval}
-                  onChange={(e) => {
-                    requestSetPreference('autoRefreshInterval', e.target.value);
-                    requestShowRequireRestartDialog();
-                  }}
-                  variant="filled"
-                  disableUnderline
-                  margin="dense"
-                  classes={{
-                    root: classes.select,
-                  }}
-                  className={classNames(classes.selectRoot, classes.selectRootExtraMargin)}
-                  disabled={!autoRefresh}
-                >
-                  {autoRefreshIntervals.map((opt) => (
-                    <MenuItem key={opt.value} dense value={opt.value}>{opt.name}</MenuItem>
-                  ))}
-                </Select>
-              </ListItem>
+              <>
+                <ListItem>
+                  <ListItemText primary="Reload every" classes={{ primary: classes.refreshEvery }} />
+                  <Select
+                    value={formAutoRefreshInterval || autoRefreshInterval}
+                    onChange={(e) => {
+                      onUpdateForm({
+                        autoRefreshInterval: e.target.value,
+                      });
+                      requestRequestReloadWorkspaceDialog(workspaceId);
+                    }}
+                    variant="filled"
+                    disableUnderline
+                    margin="dense"
+                    classes={{
+                      root: classes.select,
+                    }}
+                    className={classNames(classes.selectRoot, classes.selectRootExtraMargin)}
+                  >
+                    {autoRefreshIntervals.map((opt) => (
+                      <MenuItem key={opt.value} dense value={opt.value}>{opt.name}</MenuItem>
+                    ))}
+                  </Select>
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="Only reload on inactivity"
+                    secondary={(
+                      <>
+                        <span>Keep certain apps from logging </span>
+                        <span>out automatically when you are away. </span>
+                        <span
+                          role="link"
+                          tabIndex={0}
+                          className={classes.link}
+                          onClick={() => requestOpenInBrowser(`https://help.webcatalog.app/article/25-how-to-prevent-apps-from-logging-me-out-on-inactivity?utm_source=${utmSource}`)}
+                          onKeyDown={(e) => {
+                            if (e.key !== 'Enter') return;
+                            requestOpenInBrowser(`https://help.webcatalog.app/article/25-how-to-prevent-apps-from-logging-me-out-on-inactivity?utm_source=${utmSource}`);
+                          }}
+                        >
+                          Learn more
+                        </span>
+                        <span>.</span>
+                      </>
+                    )}
+                  />
+                  <Select
+                    value={formAutoRefreshOnlyWhenInactive != null ? formAutoRefreshOnlyWhenInactive : 'global'}
+                    onChange={(e) => {
+                      onUpdateForm({
+                        autoRefreshOnlyWhenInactive: e.target.value !== 'global' ? e.target.value : null,
+                      });
+                      requestRequestReloadWorkspaceDialog(workspaceId);
+                    }}
+                    variant="filled"
+                    disableUnderline
+                    margin="dense"
+                    classes={{
+                      root: classes.select,
+                    }}
+                    className={classNames(classes.selectRoot, classes.selectRootExtraMargin)}
+                  >
+                    <MenuItem dense value="global">{`Same as global (${autoRefreshOnlyWhenInactive ? 'Yes' : 'No'})`}</MenuItem>
+                    <MenuItem dense value={true}>Yes</MenuItem>
+                    <MenuItem dense value={false}>No</MenuItem>
+                  </Select>
+                </ListItem>
+              </>
             )}
           </List>
         </Paper>
@@ -546,6 +601,8 @@ Preferences.defaultProps = {
 
   formAskForDownloadPath: null,
   formAutoRefresh: null,
+  formAutoRefreshInterval: null,
+  formAutoRefreshOnlyWhenInactive: null,
   formCssCodeInjection: null,
   formCustomUserAgent: null,
   formDarkReader: null,
@@ -562,6 +619,7 @@ Preferences.propTypes = {
   askForDownloadPath: PropTypes.bool.isRequired,
   autoRefresh: PropTypes.bool.isRequired,
   autoRefreshInterval: PropTypes.number.isRequired,
+  autoRefreshOnlyWhenInactive: PropTypes.bool.isRequired,
   classes: PropTypes.object.isRequired,
   cssCodeInjection: PropTypes.string,
   customUserAgent: PropTypes.string,
@@ -576,6 +634,8 @@ Preferences.propTypes = {
 
   formAskForDownloadPath: PropTypes.bool,
   formAutoRefresh: PropTypes.bool,
+  formAutoRefreshInterval: PropTypes.number,
+  formAutoRefreshOnlyWhenInactive: PropTypes.bool,
   formCustomUserAgent: PropTypes.string,
   formDarkReader: PropTypes.bool,
   formDarkReaderBrightness: PropTypes.number,
@@ -592,6 +652,7 @@ const mapStateToProps = (state) => ({
   askForDownloadPath: state.preferences.askForDownloadPath,
   autoRefresh: state.preferences.autoRefresh,
   autoRefreshInterval: state.preferences.autoRefreshInterval,
+  autoRefreshOnlyWhenInactive: state.preferences.autoRefreshOnlyWhenInactive,
   cssCodeInjection: state.preferences.cssCodeInjection,
   customUserAgent: state.preferences.customUserAgent,
   darkReader: state.preferences.darkReader,
@@ -601,6 +662,9 @@ const mapStateToProps = (state) => ({
 
   formAskForDownloadPath: state.dialogWorkspacePreferences.form.askForDownloadPath,
   formAutoRefresh: state.dialogWorkspacePreferences.form.autoRefresh,
+  formAutoRefreshInterval: state.dialogWorkspacePreferences.form.autoRefreshInterval,
+  formAutoRefreshOnlyWhenInactive:
+    state.dialogWorkspacePreferences.form.autoRefreshOnlyWhenInactive,
   formDarkReader: state.dialogWorkspacePreferences.form.darkReader,
   formDarkReaderBrightness: state.dialogWorkspacePreferences.form.darkReaderBrightness,
   formDarkReaderContrast: state.dialogWorkspacePreferences.form.darkReaderContrast,
