@@ -79,7 +79,7 @@ const handleLoaded = (event) => {
   const cssCodeInjection = workspacePreferences.cssCodeInjection || preferences.cssCodeInjection;
   const autoRefresh = workspacePreferences.autoRefresh || preferences.autoRefresh;
   const autoRefreshInterval = workspacePreferences.autoRefresh
-    ? (workspacePreferences.autoRefreshInterval || 360000)
+    ? (workspacePreferences.autoRefreshInterval || preferences.autoRefreshInterval)
     : preferences.autoRefreshInterval;
   const autoRefreshOnlyWhenInactive = workspacePreferences.autoRefreshOnlyWhenInactive
     || preferences.autoRefreshOnlyWhenInactive;

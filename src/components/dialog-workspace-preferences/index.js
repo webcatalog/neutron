@@ -26,7 +26,6 @@ import checkLicense from '../../helpers/check-license';
 
 import {
   requestOpenInBrowser,
-  requestSetPreference,
   requestRequestReloadWorkspaceDialog,
 } from '../../senders';
 
@@ -388,7 +387,7 @@ const Preferences = ({
                 <ListItem>
                   <ListItemText primary="Reload every" classes={{ primary: classes.refreshEvery }} />
                   <Select
-                    value={formAutoRefreshInterval}
+                    value={formAutoRefreshInterval || autoRefreshInterval}
                     onChange={(e) => {
                       onUpdateForm({
                         autoRefreshInterval: e.target.value,
@@ -602,7 +601,7 @@ Preferences.defaultProps = {
 
   formAskForDownloadPath: null,
   formAutoRefresh: null,
-  formAutoRefreshInterval: 360000,
+  formAutoRefreshInterval: null,
   formAutoRefreshOnlyWhenInactive: null,
   formCssCodeInjection: null,
   formCustomUserAgent: null,
