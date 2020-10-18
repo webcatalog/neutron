@@ -1,4 +1,4 @@
-# Juli [![License: MPL 2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](LICENSE)
+# WebCatalog Engine [![License: MPL 2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](LICENSE)
 
 |macOS|Linux|Windows|
 |---|---|---|
