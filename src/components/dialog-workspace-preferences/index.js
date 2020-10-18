@@ -138,6 +138,7 @@ const Preferences = ({
   formAutoRefreshOnlyWhenInactive,
 }) => {
   const utmSource = 'juli_app';
+  const workspaceId = window.remote.getGlobal('workspacePreferencesWorkspaceId');
 
   const sections = {
     extensions: {
@@ -366,7 +367,7 @@ const Preferences = ({
                   onUpdateForm({
                     autoRefresh: e.target.value !== 'global' ? e.target.value : null,
                   });
-                  requestRequestReloadWorkspaceDialog();
+                  requestRequestReloadWorkspaceDialog(workspaceId);
                 }}
                 variant="filled"
                 disableUnderline
@@ -389,7 +390,7 @@ const Preferences = ({
                     value={autoRefreshInterval}
                     onChange={(e) => {
                       requestSetPreference('autoRefreshInterval', e.target.value);
-                      requestRequestReloadWorkspaceDialog();
+                      requestRequestReloadWorkspaceDialog(workspaceId);
                     }}
                     variant="filled"
                     disableUnderline
@@ -433,7 +434,7 @@ const Preferences = ({
                       onUpdateForm({
                         autoRefreshOnlyWhenInactive: e.target.value !== 'global' ? e.target.value : null,
                       });
-                      requestRequestReloadWorkspaceDialog();
+                      requestRequestReloadWorkspaceDialog(workspaceId);
                     }}
                     variant="filled"
                     disableUnderline

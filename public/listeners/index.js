@@ -212,7 +212,7 @@ const loadListeners = () => {
     .catch(console.log); // eslint-disable-line
   });
 
-  ipcMain.on('request-show-require-reload-workspace-dialog', (id) => {
+  ipcMain.on('request-show-require-reload-workspace-dialog', (e, id) => {
     const win = workspacePreferencesWindow.get() || preferencesWindow.get() || mainWindow.get();
     dialog.showMessageBox(win, {
       type: 'question',
