@@ -4,7 +4,8 @@
 |---|---|---|
 |[![GitHub Actions macOS Build Status](https://github.com/webcatalog/webcatalog-engine/workflows/macOS/badge.svg)](https://github.com/webcatalog/webcatalog-engine/actions?query=workflow%3AmacOS)|[![GitHub Actions Linux Build Status](https://github.com/webcatalog/webcatalog-engine/workflows/Linux/badge.svg)](https://github.com/webcatalog/webcatalog-engine/actions?query=workflow%3ALinux)|[![GitHub Actions Windows Build Status](https://github.com/webcatalog/webcatalog-engine/workflows/Windows/badge.svg)](https://github.com/webcatalog/webcatalog-engine/actions?query=workflow%3AWindows)|
 
-[WebCatalog](https://webcatalog.app) downloads and uses this Electron app template under the hood to generate Electron-based apps locally.
+This powers the apps you install from [WebCatalog](https://webcatalog.app).
+
 ---
 
 ## Development
