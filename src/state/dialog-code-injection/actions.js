@@ -3,7 +3,10 @@ import {
   OPEN_CODE_INJECTION_FORM,
   CLOSE_CODE_INJECTION_FORM,
 } from '../../constants/actions';
-import { requestSetPreference } from '../../senders';
+import {
+  requestSetPreference,
+  requestShowRequireRestartDialog,
+} from '../../senders';
 
 import { updateForm as updateFormDialogWorkspacePreferences } from '../dialog-workspace-preferences/actions';
 
@@ -59,4 +62,5 @@ export const save = () => (dispatch, getState) => {
   }
 
   dispatch(close());
+  requestShowRequireRestartDialog();
 };

@@ -122,24 +122,6 @@ const styles = (theme) => ({
   sliderMarkLabel: {
     fontSize: '0.75rem',
   },
-  listItemPromotion: {
-    paddingLeft: theme.spacing(1),
-  },
-  promotionBlock: {
-    display: 'flex',
-    flex: 1,
-  },
-  promotionLeft: {
-    height: 64,
-    width: 64,
-  },
-  promotionRight: {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingLeft: theme.spacing(1.5),
-  },
   selectRoot: {
     borderRadius: theme.spacing(0.5),
     fontSize: '0.84375rem',
@@ -166,6 +148,7 @@ const Preferences = ({
   autoCheckForUpdates,
   autoRefresh,
   autoRefreshInterval,
+  autoRefreshOnlyWhenInactive,
   blockAds,
   classes,
   cssCodeInjection,
@@ -728,6 +711,42 @@ const Preferences = ({
                 ))}
               </Select>
             </ListItem>
+            <ListItem>
+              <ListItemText
+                primary="Only reload on inactivity"
+                secondary={(
+                  <>
+                    <span>Keep certain apps from logging </span>
+                    <span>out automatically when you are away. </span>
+                    <span
+                      role="link"
+                      tabIndex={0}
+                      className={classes.link}
+                      onClick={() => requestOpenInBrowser(`https://help.webcatalog.app/article/25-how-to-prevent-apps-from-logging-me-out-on-inactivity?utm_source=${utmSource}`)}
+                      onKeyDown={(e) => {
+                        if (e.key !== 'Enter') return;
+                        requestOpenInBrowser(`https://help.webcatalog.app/article/25-how-to-prevent-apps-from-logging-me-out-on-inactivity?utm_source=${utmSource}`);
+                      }}
+                    >
+                      Learn more
+                    </span>
+                    <span>.</span>
+                  </>
+                )}
+              />
+              <ListItemSecondaryAction>
+                <Switch
+                  edge="end"
+                  color="primary"
+                  checked={autoRefreshOnlyWhenInactive}
+                  disabled={!autoRefreshOnlyWhenInactive}
+                  onChange={(e) => {
+                    requestSetPreference('autoRefreshOnlyWhenInactive', e.target.checked);
+                    requestShowRequireRestartDialog();
+                  }}
+                />
+              </ListItemSecondaryAction>
+            </ListItem>
           </List>
         </Paper>
 
@@ -856,10 +875,10 @@ const Preferences = ({
                       role="link"
                       tabIndex={0}
                       className={classes.link}
-                      onClick={() => requestOpenInBrowser(`https://webcatalog.app/web-apps-notifications?utm_source=${utmSource}`)}
+                      onClick={() => requestOpenInBrowser(`https://help.webcatalog.app/article/17-how-to-enable-notifications-in-web-apps?utm_source=${utmSource}`)}
                       onKeyDown={(e) => {
                         if (e.key !== 'Enter') return;
-                        requestOpenInBrowser(`https://webcatalog.app/web-apps-notifications?utm_source=${utmSource}`);
+                        requestOpenInBrowser(`https://help.webcatalog.app/article/17-how-to-enable-notifications-in-web-apps?utm_source=${utmSource}`);
                       }}
                     >
                       Learn more
@@ -1299,7 +1318,7 @@ const Preferences = ({
             </ListItem>
             <Divider />
             <ListItem button onClick={() => requestOpenInBrowser(`https://help.webcatalog.app?utm_source=${utmSource}`)}>
-              <ListItemText primary="WebCatalog Support" />
+              <ListItemText primary="WebCatalog Help" />
               <ChevronRightIcon color="action" />
             </ListItem>
             <Divider />
@@ -1332,6 +1351,7 @@ Preferences.propTypes = {
   autoCheckForUpdates: PropTypes.bool.isRequired,
   autoRefresh: PropTypes.bool.isRequired,
   autoRefreshInterval: PropTypes.number.isRequired,
+  autoRefreshOnlyWhenInactive: PropTypes.bool.isRequired,
   blockAds: PropTypes.bool.isRequired,
   classes: PropTypes.object.isRequired,
   cssCodeInjection: PropTypes.string,
@@ -1380,6 +1400,7 @@ const mapStateToProps = (state) => ({
   autoCheckForUpdates: state.preferences.autoCheckForUpdates,
   autoRefresh: state.preferences.autoRefresh,
   autoRefreshInterval: state.preferences.autoRefreshInterval,
+  autoRefreshOnlyWhenInactive: state.preferences.autoRefreshOnlyWhenInactive,
   blockAds: state.preferences.blockAds,
   cssCodeInjection: state.preferences.cssCodeInjection,
   customUserAgent: state.preferences.customUserAgent,

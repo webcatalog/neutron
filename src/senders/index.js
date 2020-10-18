@@ -67,6 +67,7 @@ export const requestSetWorkspacePicture = (id, picturePath) => window.ipcRendere
 export const requestWakeUpWorkspace = (id) => window.ipcRenderer.send('request-wake-up-workspace', id);
 export const requestReloadViewsDarkReader = () => window.ipcRenderer.send('request-reload-views-dark-reader');
 export const requestReloadViewDarkReader = (id) => window.ipcRenderer.send('request-reload-view-dark-reader', id);
+export const requestRequestReloadWorkspaceDialog = (id) => window.ipcRenderer.send('request-show-require-reload-workspace-dialog', id);
 
 // Workspace Meta
 export const getWorkspaceMeta = (id) => window.ipcRenderer.sendSync('get-workspace-meta', id);

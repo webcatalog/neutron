@@ -81,9 +81,15 @@ const handleLoaded = (event) => {
   const autoRefreshInterval = workspacePreferences.autoRefresh
     ? (workspacePreferences.autoRefreshInterval || 360000)
     : preferences.autoRefreshInterval;
+  const autoRefreshOnlyWhenInactive = workspacePreferences.autoRefreshOnlyWhenInactive
+    || preferences.autoRefreshOnlyWhenInactive;
 
   if (autoRefresh) {
     setTimeout(() => {
+      if (autoRefreshOnlyWhenInactive && remote.getCurrentWebContents().isFocused()) {
+        return;
+      }
+
       window.location.reload();
     }, autoRefreshInterval);
   }
@@ -215,7 +221,7 @@ const handleLoaded = (event) => {
               },
               { type: 'separator' },
               {
-                label: 'WebCatalog Support',
+                label: 'WebCatalog Help',
                 click: () => shell.openExternal('https://help.webcatalog.app?utm_source=juli_app'),
               },
               {

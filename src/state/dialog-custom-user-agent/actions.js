@@ -5,6 +5,7 @@ import {
 } from '../../constants/actions';
 import {
   requestSetPreference,
+  requestShowRequireRestartDialog,
 } from '../../senders';
 
 import { updateForm as updateFormDialogWorkspacePreferences } from '../dialog-workspace-preferences/actions';
@@ -46,5 +47,6 @@ export const save = () => (dispatch, getState) => {
     requestSetPreference('customUserAgent', form.code);
   }
 
+  requestShowRequireRestartDialog();
   dispatch(close());
 };
