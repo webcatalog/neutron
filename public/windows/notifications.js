@@ -17,7 +17,6 @@ const create = () => {
     maximizable: false,
     minimizable: true,
     fullscreenable: false,
-    autoHideMenuBar: false,
     show: false,
     frame: process.platform === 'darwin',
     webPreferences: {

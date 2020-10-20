@@ -16,7 +16,6 @@ const create = () => {
     maximizable: false,
     minimizable: true,
     fullscreenable: false,
-    autoHideMenuBar: false,
     show: false,
     frame: process.platform === 'darwin',
     webPreferences: {
@@ -25,7 +24,6 @@ const create = () => {
       preload: path.join(__dirname, '..', 'preload', 'go-to-url.js'),
     },
   });
-  win.setMenuBarVisibility(false);
 
   win.on('closed', () => {
     win = null;

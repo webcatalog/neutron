@@ -170,9 +170,6 @@ const createAsync = () => new Promise((resolve) => {
       preload: path.join(__dirname, '..', 'preload', 'main.js'),
     },
   });
-  if (getPreference('hideMenuBar')) {
-    win.setMenuBarVisibility(false);
-  }
 
   mainWindowState.manage(win);
 
