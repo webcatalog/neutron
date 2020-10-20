@@ -16,8 +16,7 @@ import WindowsTitleBar from './shared/windows-title-bar';
 const AppWrapper = ({ children, shouldUseDarkColors }) => {
   const themeObj = {
     typography: {
-      /* System Fonts as used by Medium and WordPress */
-      fontFamily: '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif',
+      fontFamily: '"Roboto",-apple-system,BlinkMacSystemFont,"Segoe UI",Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif',
       fontSize: 13.5,
     },
     palette: {
