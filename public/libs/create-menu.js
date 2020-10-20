@@ -432,7 +432,7 @@ function createMenu() {
           click: () => ipcMain.emit('request-clear-browsing-data'),
         },
         { type: 'separator' },
-        { role: 'quit' },
+        { role: 'quit', label: 'Quit' },
       ],
     });
   }
