@@ -5,9 +5,15 @@ import {
   UPDATE_IS_DEFAULT_MAIL_CLIENT,
   UPDATE_IS_DEFAULT_WEB_BROWSER,
   UPDATE_IS_FULL_SCREEN,
+  UPDATE_IS_MAXIMIZED,
   UPDATE_SHOULD_USE_DARK_COLORS,
   UPDATE_TITLE,
 } from '../../constants/actions';
+
+export const updateIsMaximized = (isMaximized) => ({
+  type: UPDATE_IS_MAXIMIZED,
+  isMaximized,
+});
 
 export const updateCanGoBack = (canGoBack) => ({
   type: UPDATE_CAN_GO_BACK,

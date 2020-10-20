@@ -14,7 +14,6 @@ import { requestShowAppMenu } from '../../senders';
 
 import connectComponent from '../../helpers/connect-component';
 
-const LEFT_RIGHT_WIDTH = window.process.platform !== 'darwin' ? 160 : 100;
 const TOOLBAR_HEIGHT = 28;
 const BUTTON_WIDTH = 46;
 
@@ -23,7 +22,7 @@ const styles = (theme) => ({
     // leave space for resizing cursor
     // https://github.com/electron/electron/issues/3022
     padding: 2,
-    background: theme.palette.type === 'dark' ? undefined : theme.palette.grey[200],
+    background: theme.palette.type === 'dark' ? undefined : theme.palette.grey[300],
   },
   toolbar: {
     minHeight: 28,
@@ -34,16 +33,23 @@ const styles = (theme) => ({
     userSelect: 'none',
   },
   left: {
-    width: LEFT_RIGHT_WIDTH,
     // leave space for traffic light buttons
     paddingLeft: window.process.platform === 'darwin' && window.mode !== 'menubar' ? 64 : 0,
     boxSizing: 'border-box',
   },
   center: {
     flex: 1,
+    fontSize: '0.8rem',
+    height: TOOLBAR_HEIGHT,
+    lineHeight: `${TOOLBAR_HEIGHT}px`,
+    color: theme.palette.text.secondary,
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    paddingLeft: theme.spacing(1),
+    paddingRight: theme.spacing(1),
   },
   right: {
-    width: LEFT_RIGHT_WIDTH,
     textAlign: 'right',
     boxSizing: 'border-box',
   },
@@ -68,10 +74,10 @@ const styles = (theme) => ({
     padding: 0,
     margin: 0,
     '&:hover': {
-      backgroundColor: theme.palette.type === 'dark' ? theme.palette.common.black : theme.palette.grey[300],
+      backgroundColor: theme.palette.type === 'dark' ? theme.palette.common.black : theme.palette.grey[400],
     },
     '&:focus': {
-      backgroundColor: theme.palette.type === 'dark' ? theme.palette.common.black : theme.palette.grey[300],
+      backgroundColor: theme.palette.type === 'dark' ? theme.palette.common.black : theme.palette.grey[400],
     },
   },
   windowsIcon: {
@@ -102,7 +108,7 @@ const styles = (theme) => ({
 });
 
 const EnhancedAppBar = ({
-  center,
+  title,
   classes,
   isMaximized,
 }) => {
@@ -132,7 +138,7 @@ const EnhancedAppBar = ({
         className={classes.toolbar}
       >
         <div className={classes.left} onDoubleClick={onDoubleClick}>
-          {(window.process.platform === 'darwin' && window.mode !== 'menubar') ? null : (
+          {(window.mode !== 'main') ? null : (
             <Tooltip title="Menu">
               <IconButton
                 size="small"
@@ -151,7 +157,7 @@ const EnhancedAppBar = ({
           )}
         </div>
         <div className={classes.center} onDoubleClick={onDoubleClick}>
-          {center}
+          {title}
         </div>
         <div className={classes.right} onDoubleClick={onDoubleClick}>
           {window.process.platform !== 'darwin' && (
@@ -168,28 +174,30 @@ const EnhancedAppBar = ({
               >
                 <div className={classnames(classes.windowsIcon, classes.windowsIconMinimize)} />
               </button>
-              <button
-                className={classes.windowsIconBg}
-                type="button"
-                aria-label={isMaximized ? 'Unmaximize' : 'Maximize'}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  const browserWindow = window.remote.getCurrentWindow();
-                  if (browserWindow.isMaximized()) {
-                    browserWindow.unmaximize();
-                  } else {
-                    browserWindow.maximize();
-                  }
-                }}
-              >
-                <div
-                  className={classnames(
-                    classes.windowsIcon,
-                    isMaximized && classes.windowsIconUnmaximize,
-                    !isMaximized && classes.windowsIconMaximize,
-                  )}
-                />
-              </button>
+              {window.mode === 'main' && (
+                <button
+                  className={classes.windowsIconBg}
+                  type="button"
+                  aria-label={isMaximized ? 'Unmaximize' : 'Maximize'}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const browserWindow = window.remote.getCurrentWindow();
+                    if (browserWindow.isMaximized()) {
+                      browserWindow.unmaximize();
+                    } else {
+                      browserWindow.maximize();
+                    }
+                  }}
+                >
+                  <div
+                    className={classnames(
+                      classes.windowsIcon,
+                      isMaximized && classes.windowsIconUnmaximize,
+                      !isMaximized && classes.windowsIconMaximize,
+                    )}
+                  />
+                </button>
+              )}
               <button
                 className={classes.windowsIconBg}
                 type="button"
@@ -213,17 +221,18 @@ const EnhancedAppBar = ({
 };
 
 EnhancedAppBar.defaultProps = {
-  center: null,
+  title: '',
 };
 
 EnhancedAppBar.propTypes = {
-  center: PropTypes.node,
   classes: PropTypes.object.isRequired,
   isMaximized: PropTypes.bool.isRequired,
+  title: PropTypes.string,
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state, ownProps) => ({
   isMaximized: state.general.isMaximized,
+  title: ownProps.title || ((window.mode === 'main' || window.mode === 'menubar') && state.general.title ? state.general.title : window.remote.getGlobal('appJson').name),
 });
 
 export default connectComponent(

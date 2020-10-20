@@ -75,6 +75,9 @@ const styles = (theme) => ({
   root: {
     padding: theme.spacing(2),
     background: theme.palette.background.default,
+    height: '100%',
+    width: '100%',
+    overflow: 'auto',
   },
   sectionTitle: {
     paddingLeft: theme.spacing(2),

@@ -7,6 +7,7 @@ import {
   updateCanGoBack,
   updateCanGoForward,
   updateIsFullScreen,
+  updateIsMaximized,
   updateShouldUseDarkColors,
   updateTitle,
 } from '../state/general/actions';
@@ -109,6 +110,10 @@ const loadListeners = (store) => {
 
   window.ipcRenderer.on('is-fullscreen-updated', (e, val) => {
     store.dispatch(updateIsFullScreen(val));
+  });
+
+  window.ipcRenderer.on('set-is-maximized', (e, isMaximized) => {
+    store.dispatch(updateIsMaximized(isMaximized));
   });
 };
 

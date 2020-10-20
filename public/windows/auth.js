@@ -17,9 +17,10 @@ const create = (id) => {
     height: 220,
     resizable: false,
     maximizable: false,
-    minimizable: false,
+    minimizable: true,
     fullscreenable: false,
     autoHideMenuBar: false,
+    frame: process.platform === 'darwin',
     webPreferences: {
       enableRemoteModule: true,
       nodeIntegration: true,

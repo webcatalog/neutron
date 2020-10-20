@@ -16,10 +16,11 @@ const create = (workspaceId) => {
     height: 600,
     resizable: false,
     maximizable: false,
-    minimizable: false,
+    minimizable: true,
     fullscreenable: false,
     autoHideMenuBar: false,
     show: false,
+    frame: process.platform === 'darwin',
     webPreferences: {
       enableRemoteModule: true,
       nodeIntegration: true,

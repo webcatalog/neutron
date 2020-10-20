@@ -207,6 +207,13 @@ const createAsync = () => new Promise((resolve) => {
     }
   });
 
+  win.on('maximize', () => {
+    win.webContents.send('set-is-maximized', true);
+  });
+  win.on('unmaximize', () => {
+    win.webContents.send('set-is-maximized', false);
+  });
+
   win.on('closed', () => {
     win = null;
   });

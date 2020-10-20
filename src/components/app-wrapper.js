@@ -11,6 +11,8 @@ import DateFnsUtils from '@date-io/date-fns';
 
 import connectComponent from '../helpers/connect-component';
 
+import WindowsTitleBar from './shared/windows-title-bar';
+
 const AppWrapper = ({ children, shouldUseDarkColors }) => {
   const themeObj = {
     typography: {
@@ -44,7 +46,18 @@ const AppWrapper = ({ children, shouldUseDarkColors }) => {
   return (
     <MuiThemeProvider theme={theme}>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        {children}
+        <div
+          style={{
+            height: '100vh',
+            width: '100vw',
+            overflow: 'hidden',
+          }}
+        >
+          {window.process.platform === 'win32' && <WindowsTitleBar title={window.mode !== 'main' ? document.title : undefined} />}
+          <div style={{ height: window.process.platform === 'win32' ? 'calc(100vh - 32px)' : '100vh' }}>
+            {children}
+          </div>
+        </div>
       </MuiPickersUtilsProvider>
     </MuiThemeProvider>
   );

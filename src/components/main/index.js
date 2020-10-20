@@ -25,7 +25,6 @@ import WorkspaceSelector from './workspace-selector';
 import FindInPage from './find-in-page';
 import NavigationBar from './navigation-bar';
 import MacTitleBar from './mac-title-bar';
-import WindowsTitleBar from './windows-title-bar';
 import DraggableRegion from './draggable-region';
 import TelemetryManager from './telemetry-manager';
 
@@ -57,8 +56,8 @@ const styles = (theme) => ({
   outerRoot: {
     display: 'flex',
     flexDirection: 'column',
-    height: '100vh',
-    width: '100vw',
+    height: '100%',
+    width: '100%',
     overflow: 'hidden',
   },
   root: {
@@ -69,12 +68,20 @@ const styles = (theme) => ({
     width: '100%',
     overflow: 'hidden',
   },
-  sidebarRoot: {
+  sidebarUpperRoot: {
     height: '100%',
     width: 68,
+    position: 'relative',
+  },
+  sidebarRoot: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    height: '100%',
+    width: '100%',
     borderRight: '1px solid rgba(0, 0, 0, 0.2)',
     backgroundColor: theme.palette.background.paper,
-    WebkitAppRegion: 'drag',
+    WebkitAppRegion: window.process.platform === 'darwin' ? 'drag' : 'no-drag',
     WebkitUserSelect: 'none',
     display: 'flex',
     flexDirection: 'column',
@@ -243,68 +250,70 @@ const Main = ({
 
   return (
     <div className={classes.outerRoot}>
-      {window.process.platform === 'darwin' ? (showTitleBar && <MacTitleBar />) : <WindowsTitleBar />}
+      {showTitleBar && <MacTitleBar />}
       <DraggableRegion />
       <div className={classes.root}>
         {sidebar && (
-          <SidebarContainer className={classes.sidebarRoot}>
-            <div className={classNames(classes.sidebarTop,
-              (isFullScreen || showTitleBar || window.mode === 'menubar') && classes.sidebarTopFullScreen)}
-            >
-              <SortableContainer
-                distance={10}
-                helperClass={classes.grabbing}
-                onSortEnd={({ oldIndex, newIndex }) => {
-                  if (oldIndex === newIndex) return;
-
-                  const newWorkspacesList = arrayMove(workspacesList, oldIndex, newIndex);
-                  const newWorkspaces = { ...workspaces };
-                  newWorkspacesList.forEach((workspace, i) => {
-                    newWorkspaces[workspace.id].order = i;
-                  });
-
-                  requestSetWorkspaces(newWorkspaces);
-                }}
+          <SidebarContainer className={classes.sidebarUpperRoot}>
+            <div className={classes.sidebarRoot}>
+              <div className={classNames(classes.sidebarTop,
+                (isFullScreen || showTitleBar || window.mode === 'menubar') && classes.sidebarTopFullScreen)}
               >
-                {workspacesList.map((workspace, i) => (
-                  <SortableItem key={`item-${workspace.id}`} index={i} value={{ index: i, workspace }} />
-                ))}
-              </SortableContainer>
-              <WorkspaceSelector
-                id="add"
-                onClick={!appJson.url
-                  ? () => requestShowAddWorkspaceWindow()
-                  : () => requestCreateWorkspace()}
-                onContextMenu={!appJson.url ? null : (e) => {
-                  e.preventDefault();
-                  const template = [
-                    {
-                      label: `Add ${appJson.name} Workspace`,
-                      click: () => requestCreateWorkspace(),
-                    },
-                    {
-                      label: 'Add Custom Workspace',
-                      click: () => requestShowAddWorkspaceWindow(),
-                    },
-                  ];
+                <SortableContainer
+                  distance={10}
+                  helperClass={classes.grabbing}
+                  onSortEnd={({ oldIndex, newIndex }) => {
+                    if (oldIndex === newIndex) return;
 
-                  const menu = window.remote.Menu.buildFromTemplate(template);
-                  menu.popup(window.remote.getCurrentWindow());
-                }}
-              />
-            </div>
-            {!navigationBar && (
-            <div className={classes.end}>
-              <IconButton aria-label="Notifications" onClick={requestShowNotificationsWindow} className={classes.iconButton}>
-                {shouldPauseNotifications ? <NotificationsPausedIcon /> : <NotificationsIcon />}
-              </IconButton>
-              {window.mode === 'menubar' && (
-                <IconButton aria-label="Preferences" onClick={() => requestShowPreferencesWindow()} className={classes.iconButton}>
-                  <SettingsIcon />
+                    const newWorkspacesList = arrayMove(workspacesList, oldIndex, newIndex);
+                    const newWorkspaces = { ...workspaces };
+                    newWorkspacesList.forEach((workspace, i) => {
+                      newWorkspaces[workspace.id].order = i;
+                    });
+
+                    requestSetWorkspaces(newWorkspaces);
+                  }}
+                >
+                  {workspacesList.map((workspace, i) => (
+                    <SortableItem key={`item-${workspace.id}`} index={i} value={{ index: i, workspace }} />
+                  ))}
+                </SortableContainer>
+                <WorkspaceSelector
+                  id="add"
+                  onClick={!appJson.url
+                    ? () => requestShowAddWorkspaceWindow()
+                    : () => requestCreateWorkspace()}
+                  onContextMenu={!appJson.url ? null : (e) => {
+                    e.preventDefault();
+                    const template = [
+                      {
+                        label: `Add ${appJson.name} Workspace`,
+                        click: () => requestCreateWorkspace(),
+                      },
+                      {
+                        label: 'Add Custom Workspace',
+                        click: () => requestShowAddWorkspaceWindow(),
+                      },
+                    ];
+
+                    const menu = window.remote.Menu.buildFromTemplate(template);
+                    menu.popup(window.remote.getCurrentWindow());
+                  }}
+                />
+              </div>
+              {!navigationBar && (
+              <div className={classes.end}>
+                <IconButton aria-label="Notifications" onClick={requestShowNotificationsWindow} className={classes.iconButton}>
+                  {shouldPauseNotifications ? <NotificationsPausedIcon /> : <NotificationsIcon />}
                 </IconButton>
+                {window.mode === 'menubar' && (
+                  <IconButton aria-label="Preferences" onClick={() => requestShowPreferencesWindow()} className={classes.iconButton}>
+                    <SettingsIcon />
+                  </IconButton>
+                )}
+              </div>
               )}
             </div>
-            )}
           </SidebarContainer>
         )}
         <div className={classes.contentRoot}>
