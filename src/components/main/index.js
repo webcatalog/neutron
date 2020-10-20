@@ -131,7 +131,7 @@ const styles = (theme) => ({
     color: theme.palette.getContrastText(theme.palette.type === 'dark' ? theme.palette.common.white : theme.palette.common.black),
     lineHeight: '36px',
     textAlign: 'center',
-    fontWeight: 500,
+    fontWeight: 400,
     textTransform: 'uppercase',
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),

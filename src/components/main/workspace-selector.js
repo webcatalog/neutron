@@ -53,7 +53,7 @@ const styles = (theme) => ({
     color: theme.palette.getContrastText(theme.palette.common.white),
     lineHeight: '36px',
     textAlign: 'center',
-    fontWeight: 500,
+    fontWeight: 400,
     textTransform: 'uppercase',
     border: theme.palette.type === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)',
     overflow: 'hidden',

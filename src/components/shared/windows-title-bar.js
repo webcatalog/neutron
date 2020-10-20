@@ -25,8 +25,8 @@ const styles = (theme) => ({
   },
   toolbar: {
     minHeight: 28,
-    paddingLeft: theme.spacing(1) - 6,
-    paddingRight: theme.spacing(1) - 6,
+    paddingLeft: 0,
+    paddingRight: 0,
     display: 'flex',
     WebkitAppRegion: 'drag',
     userSelect: 'none',
