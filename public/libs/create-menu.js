@@ -32,6 +32,8 @@ const {
   getView,
 } = require('./views');
 
+let menu;
+
 function createMenu() {
   const workspaces = getWorkspaces();
   const hasWorkspaces = Object.keys(workspaces).length > 0;
@@ -137,26 +139,6 @@ function createMenu() {
           visible: process.platform === 'darwin',
           click: () => {
             setPreference('titleBar', !global.titleBar);
-            ipcMain.emit('request-realign-active-workspace');
-          },
-        },
-        // same behavior as BrowserWindow with autoHideMenuBar: true
-        // but with addition to readjust BrowserView so it won't cover the menu bar
-        {
-          label: 'Toggle Menu Bar',
-          visible: false,
-          accelerator: 'Alt+M',
-          enabled: process.platform === 'win32',
-          click: (menuItem, browserWindow) => {
-            // if back is called in popup window
-            // open menu bar in the popup window instead
-            if (browserWindow && browserWindow.isPopup) {
-              browserWindow.setMenuBarVisibility(!browserWindow.isMenuBarVisible());
-              return;
-            }
-
-            const win = mainWindow.get();
-            win.setMenuBarVisibility(!win.isMenuBarVisible());
             ipcMain.emit('request-realign-active-workspace');
           },
         },
@@ -450,7 +432,7 @@ function createMenu() {
           click: () => ipcMain.emit('request-clear-browsing-data'),
         },
         { type: 'separator' },
-        { role: 'quit', label: 'Exit' },
+        { role: 'quit' },
       ],
     });
   }
@@ -543,8 +525,23 @@ function createMenu() {
     },
   );
 
-  const menu = Menu.buildFromTemplate(template);
+  menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);
 }
 
-module.exports = createMenu;
+// https://dev.to/saisandeepvaddi/creating-a-custom-menu-bar-in-electron-1pi3
+// Register an event listener.
+// When ipcRenderer sends mouse click co-ordinates, show menu at that position.
+const showMenu = (window, x, y) => {
+  if (!menu) return;
+  menu.popup({
+    window,
+    x,
+    y,
+  });
+};
+
+module.exports = {
+  createMenu,
+  showMenu,
+};

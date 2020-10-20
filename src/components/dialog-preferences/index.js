@@ -75,6 +75,9 @@ const styles = (theme) => ({
   root: {
     padding: theme.spacing(2),
     background: theme.palette.background.default,
+    height: '100%',
+    width: '100%',
+    overflow: 'auto',
   },
   sectionTitle: {
     paddingLeft: theme.spacing(2),
@@ -160,7 +163,6 @@ const Preferences = ({
   darkReaderSepia,
   downloadPath,
   hibernateUnusedWorkspacesAtLaunch,
-  hideMenuBar,
   ignoreCertificateErrors,
   internalUrlRule,
   jsCodeInjection,
@@ -419,28 +421,6 @@ const Preferences = ({
                       onChange={(e) => {
                         requestSetPreference('titleBar', e.target.checked);
                         requestRealignActiveWorkspace();
-                      }}
-                    />
-                  </ListItemSecondaryAction>
-                </ListItem>
-              </>
-            )}
-            {window.process.platform !== 'darwin' && (
-              <>
-                <Divider />
-                <ListItem>
-                  <ListItemText
-                    primary="Hide menu bar"
-                    secondary="Hide the menu bar unless the Alt+M is pressed."
-                  />
-                  <ListItemSecondaryAction>
-                    <Switch
-                      edge="end"
-                      color="primary"
-                      checked={hideMenuBar}
-                      onChange={(e) => {
-                        requestSetPreference('hideMenuBar', e.target.checked);
-                        requestShowRequireRestartDialog();
                       }}
                     />
                   </ListItemSecondaryAction>
@@ -1363,7 +1343,6 @@ Preferences.propTypes = {
   darkReaderSepia: PropTypes.number.isRequired,
   downloadPath: PropTypes.string.isRequired,
   hibernateUnusedWorkspacesAtLaunch: PropTypes.bool.isRequired,
-  hideMenuBar: PropTypes.bool.isRequired,
   ignoreCertificateErrors: PropTypes.bool.isRequired,
   internalUrlRule: PropTypes.string,
   jsCodeInjection: PropTypes.string,
@@ -1411,7 +1390,6 @@ const mapStateToProps = (state) => ({
   darkReaderSepia: state.preferences.darkReaderSepia,
   downloadPath: state.preferences.downloadPath,
   hibernateUnusedWorkspacesAtLaunch: state.preferences.hibernateUnusedWorkspacesAtLaunch,
-  hideMenuBar: state.preferences.hideMenuBar,
   ignoreCertificateErrors: state.preferences.ignoreCertificateErrors,
   internalUrlRule: state.preferences.internalUrlRule,
   isDefaultMailClient: state.general.isDefaultMailClient,

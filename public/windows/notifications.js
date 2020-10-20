@@ -12,13 +12,13 @@ const create = () => {
   win = new BrowserWindow({
     backgroundColor: '#FFF',
     width: 400,
-    height: 565,
+    height: 600,
     resizable: false,
     maximizable: false,
-    minimizable: false,
+    minimizable: true,
     fullscreenable: false,
-    autoHideMenuBar: false,
     show: false,
+    frame: process.platform === 'darwin',
     webPreferences: {
       enableRemoteModule: true,
       nodeIntegration: true,

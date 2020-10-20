@@ -12,8 +12,8 @@ import connectComponent from '../../helpers/connect-component';
 
 const styles = (theme) => ({
   root: {
-    height: '100vh',
-    width: '100vw',
+    height: '100%',
+    width: '100%',
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
     paddingLeft: 0,

@@ -26,8 +26,8 @@ import { requestOpenInBrowser } from '../../senders';
 const styles = (theme) => ({
   root: {
     background: theme.palette.background.paper,
-    height: '100vh',
-    width: '100vw',
+    height: '100%',
+    width: '100%',
     padding: theme.spacing(2),
     display: 'flex',
     flexDirection: 'column',

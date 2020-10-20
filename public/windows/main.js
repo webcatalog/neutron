@@ -161,6 +161,7 @@ const createAsync = () => new Promise((resolve) => {
     title: global.appJson.name,
     titleBarStyle: 'hidden',
     show: false,
+    frame: process.platform === 'darwin',
     icon: process.platform === 'linux' ? path.resolve(__dirname, '..', 'dock-icon.png') : undefined,
     webPreferences: {
       enableRemoteModule: true,
@@ -169,9 +170,6 @@ const createAsync = () => new Promise((resolve) => {
       preload: path.join(__dirname, '..', 'preload', 'main.js'),
     },
   });
-  if (getPreference('hideMenuBar')) {
-    win.setMenuBarVisibility(false);
-  }
 
   mainWindowState.manage(win);
 
@@ -204,6 +202,13 @@ const createAsync = () => new Promise((resolve) => {
         win.hide();
       }
     }
+  });
+
+  win.on('maximize', () => {
+    win.webContents.send('set-is-maximized', true);
+  });
+  win.on('unmaximize', () => {
+    win.webContents.send('set-is-maximized', false);
   });
 
   win.on('closed', () => {

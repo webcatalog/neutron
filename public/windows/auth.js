@@ -17,16 +17,15 @@ const create = (id) => {
     height: 220,
     resizable: false,
     maximizable: false,
-    minimizable: false,
+    minimizable: true,
     fullscreenable: false,
-    autoHideMenuBar: false,
+    frame: process.platform === 'darwin',
     webPreferences: {
       enableRemoteModule: true,
       nodeIntegration: true,
       preload: path.join(__dirname, '..', 'preload', 'auth.js'),
     },
   });
-  wins[id].setMenuBarVisibility(false);
 
   const identityValidationListener = (e, windowId, username, password) => {
     if (windowId !== wins[id].id) return;

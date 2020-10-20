@@ -16,17 +16,16 @@ const create = (scrollTo) => {
     height: 600,
     resizable: false,
     maximizable: false,
-    minimizable: false,
+    minimizable: true,
     fullscreenable: false,
-    autoHideMenuBar: false,
     show: false,
+    frame: process.platform === 'darwin',
     webPreferences: {
       enableRemoteModule: true,
       nodeIntegration: true,
       preload: path.join(__dirname, '..', 'preload', 'preferences.js'),
     },
   });
-  win.setMenuBarVisibility(false);
 
   win.on('closed', () => {
     win = null;

@@ -17,7 +17,7 @@ import Form from './form';
 
 const styles = () => ({
   root: {
-    height: '100vh',
+    height: '100%',
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',

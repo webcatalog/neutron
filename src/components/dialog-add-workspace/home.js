@@ -19,15 +19,6 @@ import EmptyState from './empty-state';
 import SearchBox from './search-box';
 
 const styles = (theme) => ({
-  root: {
-    height: '100vh',
-    display: 'flex',
-    flexDirection: 'column',
-    overflow: 'hidden',
-  },
-  title: {
-    flex: 1,
-  },
   paper: {
     zIndex: 1,
   },

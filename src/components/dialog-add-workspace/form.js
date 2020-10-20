@@ -23,8 +23,8 @@ import {
 const styles = (theme) => ({
   root: {
     background: theme.palette.background.paper,
-    height: '100vh',
-    width: '100vw',
+    height: '100%',
+    width: '100%',
     paddingTop: theme.spacing(3),
     paddingBottom: theme.spacing(3),
     paddingLeft: theme.spacing(2),
