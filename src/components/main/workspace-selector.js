@@ -32,7 +32,7 @@ const styles = (theme) => ({
     borderRightColor: 'transparent',
   },
   rootWithText: {
-    height: 68,
+    height: 60,
   },
   rootHibernate: {
     opacity: 0.4,
