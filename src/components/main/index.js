@@ -43,6 +43,8 @@ import {
   requestReload,
 } from '../../senders';
 
+import './main.css';
+
 // https://github.com/sindresorhus/array-move/blob/master/index.js
 const arrayMove = (array, from, to) => {
   const newArray = array.slice();
@@ -71,17 +73,13 @@ const styles = (theme) => ({
   sidebarUpperRoot: {
     height: '100%',
     width: 68,
-  },
-  simplebarContent: {
-    minHeight: '100%',
-  },
-  sidebarRoot: {
-    minHeight: '100%',
-    width: '100%',
-    borderRight: '1px solid rgba(0, 0, 0, 0.2)',
     backgroundColor: theme.palette.background.paper,
     WebkitAppRegion: window.process.platform === 'darwin' ? 'drag' : 'no-drag',
+    borderRight: '1px solid rgba(0, 0, 0, 0.2)',
     WebkitUserSelect: 'none',
+  },
+  sidebarRoot: {
+    width: '100%',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -232,9 +230,10 @@ const SidebarContainer = ({ classes, children }) => {
   return (
     <SimpleBar
       className={classes.sidebarUpperRoot}
-      classNames={{ content: classes.sidebarRoot }}
     >
-      {children}
+      <div className={classes.sidebarRoot}>
+        {children}
+      </div>
     </SimpleBar>
   );
 };
