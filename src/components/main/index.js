@@ -71,13 +71,12 @@ const styles = (theme) => ({
   sidebarUpperRoot: {
     height: '100%',
     width: 68,
-    position: 'relative',
+  },
+  simplebarContent: {
+    minHeight: '100%',
   },
   sidebarRoot: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    height: '100%',
+    minHeight: '100%',
     width: '100%',
     borderRight: '1px solid rgba(0, 0, 0, 0.2)',
     backgroundColor: theme.palette.background.paper,
@@ -88,8 +87,6 @@ const styles = (theme) => ({
     alignItems: 'center',
     paddingBottom: theme.spacing(1),
     boxSizing: 'border-box',
-    overflowY: 'auto',
-    overflowX: 'hidden',
   },
   sidebarTop: {
     flex: 1,
@@ -221,15 +218,28 @@ const SortableItem = sortableElement(({ value }) => {
 
 const SortableContainer = sortableContainer(({ children }) => <div>{children}</div>);
 
-const SidebarContainer = ({ className, children }) => {
+const SidebarContainer = ({ classes, children }) => {
   // use native scroll bar on macOS
   if (window.process.platform === 'darwin') {
-    return <div className={className}>{children}</div>;
+    return (
+      <div className={classes.sidebarUpperRoot}>
+        <div className={classes.sidebarTop}>
+          {children}
+        </div>
+      </div>
+    );
   }
-  return <SimpleBar className={className}>{children}</SimpleBar>;
+  return (
+    <SimpleBar
+      className={classes.sidebarUpperRoot}
+      classNames={{ content: classes.sidebarRoot }}
+    >
+      {children}
+    </SimpleBar>
+  );
 };
 SidebarContainer.propTypes = {
-  className: PropTypes.string.isRequired,
+  classes: PropTypes.object.isRequired,
   children: PropTypes.node.isRequired,
 };
 
@@ -254,66 +264,64 @@ const Main = ({
       <DraggableRegion />
       <div className={classes.root}>
         {sidebar && (
-          <SidebarContainer className={classes.sidebarUpperRoot}>
-            <div className={classes.sidebarRoot}>
-              <div className={classNames(classes.sidebarTop,
-                (isFullScreen || showTitleBar || window.mode === 'menubar') && classes.sidebarTopFullScreen)}
+          <SidebarContainer classes={classes}>
+            <div className={classNames(classes.sidebarTop,
+              (isFullScreen || showTitleBar || window.mode === 'menubar') && classes.sidebarTopFullScreen)}
+            >
+              <SortableContainer
+                distance={10}
+                helperClass={classes.grabbing}
+                onSortEnd={({ oldIndex, newIndex }) => {
+                  if (oldIndex === newIndex) return;
+
+                  const newWorkspacesList = arrayMove(workspacesList, oldIndex, newIndex);
+                  const newWorkspaces = { ...workspaces };
+                  newWorkspacesList.forEach((workspace, i) => {
+                    newWorkspaces[workspace.id].order = i;
+                  });
+
+                  requestSetWorkspaces(newWorkspaces);
+                }}
               >
-                <SortableContainer
-                  distance={10}
-                  helperClass={classes.grabbing}
-                  onSortEnd={({ oldIndex, newIndex }) => {
-                    if (oldIndex === newIndex) return;
+                {workspacesList.map((workspace, i) => (
+                  <SortableItem key={`item-${workspace.id}`} index={i} value={{ index: i, workspace }} />
+                ))}
+              </SortableContainer>
+              <WorkspaceSelector
+                id="add"
+                onClick={!appJson.url
+                  ? () => requestShowAddWorkspaceWindow()
+                  : () => requestCreateWorkspace()}
+                onContextMenu={!appJson.url ? null : (e) => {
+                  e.preventDefault();
+                  const template = [
+                    {
+                      label: `Add ${appJson.name} Workspace`,
+                      click: () => requestCreateWorkspace(),
+                    },
+                    {
+                      label: 'Add Custom Workspace',
+                      click: () => requestShowAddWorkspaceWindow(),
+                    },
+                  ];
 
-                    const newWorkspacesList = arrayMove(workspacesList, oldIndex, newIndex);
-                    const newWorkspaces = { ...workspaces };
-                    newWorkspacesList.forEach((workspace, i) => {
-                      newWorkspaces[workspace.id].order = i;
-                    });
-
-                    requestSetWorkspaces(newWorkspaces);
-                  }}
-                >
-                  {workspacesList.map((workspace, i) => (
-                    <SortableItem key={`item-${workspace.id}`} index={i} value={{ index: i, workspace }} />
-                  ))}
-                </SortableContainer>
-                <WorkspaceSelector
-                  id="add"
-                  onClick={!appJson.url
-                    ? () => requestShowAddWorkspaceWindow()
-                    : () => requestCreateWorkspace()}
-                  onContextMenu={!appJson.url ? null : (e) => {
-                    e.preventDefault();
-                    const template = [
-                      {
-                        label: `Add ${appJson.name} Workspace`,
-                        click: () => requestCreateWorkspace(),
-                      },
-                      {
-                        label: 'Add Custom Workspace',
-                        click: () => requestShowAddWorkspaceWindow(),
-                      },
-                    ];
-
-                    const menu = window.remote.Menu.buildFromTemplate(template);
-                    menu.popup(window.remote.getCurrentWindow());
-                  }}
-                />
-              </div>
-              {!navigationBar && (
-              <div className={classes.end}>
-                <IconButton aria-label="Notifications" onClick={requestShowNotificationsWindow} className={classes.iconButton}>
-                  {shouldPauseNotifications ? <NotificationsPausedIcon /> : <NotificationsIcon />}
+                  const menu = window.remote.Menu.buildFromTemplate(template);
+                  menu.popup(window.remote.getCurrentWindow());
+                }}
+              />
+            </div>
+            {!navigationBar && (
+            <div className={classes.end}>
+              <IconButton aria-label="Notifications" onClick={requestShowNotificationsWindow} className={classes.iconButton}>
+                {shouldPauseNotifications ? <NotificationsPausedIcon /> : <NotificationsIcon />}
+              </IconButton>
+              {window.mode === 'menubar' && (
+                <IconButton aria-label="Preferences" onClick={() => requestShowPreferencesWindow()} className={classes.iconButton}>
+                  <SettingsIcon />
                 </IconButton>
-                {window.mode === 'menubar' && (
-                  <IconButton aria-label="Preferences" onClick={() => requestShowPreferencesWindow()} className={classes.iconButton}>
-                    <SettingsIcon />
-                  </IconButton>
-                )}
-              </div>
               )}
             </div>
+            )}
           </SidebarContainer>
         )}
         <div className={classes.contentRoot}>

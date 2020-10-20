@@ -84,7 +84,6 @@ const styles = (theme) => ({
     height: '100%',
     width: '100%',
     maskSize: '23.1%',
-    x: console.log(theme),
     backgroundColor: theme.palette.type === 'dark' ? theme.palette.common.white : theme.palette.text.primary,
     cursor: 'pointer',
   },
@@ -160,7 +159,7 @@ const EnhancedAppBar = ({
           {title}
         </div>
         <div className={classes.right} onDoubleClick={onDoubleClick}>
-          {window.process.platform !== 'darwin' && (
+          {window.process.platform !== 'darwin' && window.mode !== 'menubar' && (
             <div className={classes.windowsControl}>
               <button
                 className={classes.windowsIconBg}
