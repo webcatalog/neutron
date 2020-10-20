@@ -6,7 +6,6 @@ import classnames from 'classnames';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
 
 import MenuIcon from '@material-ui/icons/Menu';
 
@@ -138,21 +137,19 @@ const EnhancedAppBar = ({
       >
         <div className={classes.left} onDoubleClick={onDoubleClick}>
           {(window.mode !== 'main' && window.mode !== 'menubar') ? null : (
-            <Tooltip title="Menu">
-              <IconButton
-                size="small"
-                color="inherit"
-                aria-label="More"
-                className={classnames(classes.iconButton, classes.noDrag)}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  requestShowAppMenu(e.x, e.y);
-                }}
-                disableRipple
-              >
-                <MenuIcon fontSize="small" />
-              </IconButton>
-            </Tooltip>
+            <IconButton
+              size="small"
+              color="inherit"
+              aria-label="Menu"
+              className={classnames(classes.iconButton, classes.noDrag)}
+              onClick={(e) => {
+                e.stopPropagation();
+                requestShowAppMenu(e.x, e.y);
+              }}
+              disableRipple
+            >
+              <MenuIcon fontSize="small" />
+            </IconButton>
           )}
         </div>
         <div className={classes.center} onDoubleClick={onDoubleClick}>
@@ -164,7 +161,7 @@ const EnhancedAppBar = ({
               <button
                 className={classes.windowsIconBg}
                 type="button"
-                aria-label={isMaximized ? 'Unmaximize' : 'Maximize'}
+                aria-label="Minimize"
                 onClick={(e) => {
                   e.stopPropagation();
                   const browserWindow = window.remote.getCurrentWindow();
