@@ -137,7 +137,7 @@ const EnhancedAppBar = ({
         className={classes.toolbar}
       >
         <div className={classes.left} onDoubleClick={onDoubleClick}>
-          {(window.mode !== 'main') ? null : (
+          {(window.mode !== 'main' && window.mode !== 'menubar') ? null : (
             <Tooltip title="Menu">
               <IconButton
                 size="small"
@@ -159,7 +159,7 @@ const EnhancedAppBar = ({
           {title}
         </div>
         <div className={classes.right} onDoubleClick={onDoubleClick}>
-          {window.process.platform !== 'darwin' && window.mode !== 'menubar' && (
+          {window.process.platform !== 'darwin' && (
             <div className={classes.windowsControl}>
               <button
                 className={classes.windowsIconBg}
@@ -197,20 +197,22 @@ const EnhancedAppBar = ({
                   />
                 </button>
               )}
-              <button
-                className={classes.windowsIconBg}
-                type="button"
-                aria-label={isMaximized ? 'Unmaximize' : 'Maximize'}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  const browserWindow = window.remote.getCurrentWindow();
-                  browserWindow.close();
-                }}
-              >
-                <div
-                  className={classnames(classes.windowsIcon, classes.windowsIconClose)}
-                />
-              </button>
+              {window.mode !== 'menubar' && (
+                <button
+                  className={classes.windowsIconBg}
+                  type="button"
+                  aria-label={isMaximized ? 'Unmaximize' : 'Maximize'}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const browserWindow = window.remote.getCurrentWindow();
+                    browserWindow.close();
+                  }}
+                >
+                  <div
+                    className={classnames(classes.windowsIcon, classes.windowsIconClose)}
+                  />
+                </button>
+              )}
             </div>
           )}
         </div>
