@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import semver from 'semver';
-import classNames from 'classnames';
+import classnames from 'classnames';
 
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
@@ -182,7 +182,7 @@ const Preferences = ({
   sentry,
   shareWorkspaceBrowsingData,
   sidebar,
-  sidebarShortcutHints,
+  sidebarTips,
   spellcheck,
   spellcheckLanguages,
   swipeToNavigate,
@@ -311,7 +311,7 @@ const Preferences = ({
                 classes={{
                   root: classes.select,
                 }}
-                className={classNames(classes.selectRoot, classes.selectRootExtraMargin)}
+                className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
               >
                 <MenuItem dense value="system">System default</MenuItem>
                 <MenuItem dense value="light">Light</MenuItem>
@@ -336,21 +336,40 @@ const Preferences = ({
                 />
               </ListItemSecondaryAction>
             </ListItem>
-            <Divider />
             <ListItem>
               <ListItemText
-                primary="Show keyboard shortcut hints on sidebar"
+                primary="Show tips on sidebar"
               />
-              <ListItemSecondaryAction>
-                <Switch
-                  edge="end"
-                  color="primary"
-                  checked={sidebarShortcutHints}
-                  onChange={(e) => {
-                    requestSetPreference('sidebarShortcutHints', e.target.checked);
-                  }}
-                />
-              </ListItemSecondaryAction>
+              <Select
+                value={sidebarTips}
+                onChange={(e) => requestSetPreference('sidebarTips', e.target.value)}
+                variant="filled"
+                disableUnderline
+                margin="dense"
+                classes={{
+                  root: classes.select,
+                }}
+                className={classes.selectRoot}
+              >
+                <MenuItem
+                  value="shortcut"
+                  dense
+                >
+                  Workspace keyboard shortcuts
+                </MenuItem>
+                <MenuItem
+                  value="name"
+                  dense
+                >
+                  Workspace names
+                </MenuItem>
+                <MenuItem
+                  value="none"
+                  dense
+                >
+                  None
+                </MenuItem>
+              </Select>
             </ListItem>
             <Divider />
             <ListItem>
@@ -683,7 +702,7 @@ const Preferences = ({
                 classes={{
                   root: classes.select,
                 }}
-                className={classNames(classes.selectRoot, classes.selectRootExtraMargin)}
+                className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
                 disabled={!autoRefresh}
               >
                 {autoRefreshIntervals.map((opt) => (
@@ -1097,7 +1116,7 @@ const Preferences = ({
                   classes={{
                     root: classes.select,
                   }}
-                  className={classNames(classes.selectRoot, classes.selectRootExtraMargin)}
+                  className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
                 >
                   <MenuItem dense value="yes">Yes</MenuItem>
                   <MenuItem dense value="yes-hidden">Yes, but minimized</MenuItem>
@@ -1362,7 +1381,7 @@ Preferences.propTypes = {
   sentry: PropTypes.bool.isRequired,
   shareWorkspaceBrowsingData: PropTypes.bool.isRequired,
   sidebar: PropTypes.bool.isRequired,
-  sidebarShortcutHints: PropTypes.bool.isRequired,
+  sidebarTips: PropTypes.oneOf(['shortcut', 'name', 'none']).isRequired,
   spellcheck: PropTypes.bool.isRequired,
   spellcheckLanguages: PropTypes.arrayOf(PropTypes.string).isRequired,
   swipeToNavigate: PropTypes.bool.isRequired,
@@ -1406,7 +1425,7 @@ const mapStateToProps = (state) => ({
   sentry: state.preferences.sentry,
   shareWorkspaceBrowsingData: state.preferences.shareWorkspaceBrowsingData,
   sidebar: state.preferences.sidebar,
-  sidebarShortcutHints: state.preferences.sidebarShortcutHints,
+  sidebarTips: state.preferences.sidebarTips,
   spellcheck: state.preferences.spellcheck,
   spellcheckLanguages: state.preferences.spellcheckLanguages,
   swipeToNavigate: state.preferences.swipeToNavigate,

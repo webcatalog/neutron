@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-boolean-value */
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import classnames from 'classnames';
 
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
@@ -375,7 +375,7 @@ const Preferences = ({
                 classes={{
                   root: classes.select,
                 }}
-                className={classNames(classes.selectRoot, classes.selectRootExtraMargin)}
+                className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
               >
                 <MenuItem dense value="global">{`Same as global (${autoRefresh ? 'Yes' : 'No'})`}</MenuItem>
                 <MenuItem dense value={true}>Yes</MenuItem>
@@ -400,7 +400,7 @@ const Preferences = ({
                     classes={{
                       root: classes.select,
                     }}
-                    className={classNames(classes.selectRoot, classes.selectRootExtraMargin)}
+                    className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
                   >
                     {autoRefreshIntervals.map((opt) => (
                       <MenuItem key={opt.value} dense value={opt.value}>{opt.name}</MenuItem>
@@ -444,7 +444,7 @@ const Preferences = ({
                     classes={{
                       root: classes.select,
                     }}
-                    className={classNames(classes.selectRoot, classes.selectRootExtraMargin)}
+                    className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
                   >
                     <MenuItem dense value="global">{`Same as global (${autoRefreshOnlyWhenInactive ? 'Yes' : 'No'})`}</MenuItem>
                     <MenuItem dense value={true}>Yes</MenuItem>
@@ -495,7 +495,7 @@ const Preferences = ({
                 classes={{
                   root: classes.select,
                 }}
-                className={classNames(classes.selectRoot, classes.selectRootExtraMargin)}
+                className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
               >
                 <MenuItem dense value="global">{`Same as global (${askForDownloadPath ? 'Yes' : 'No'})`}</MenuItem>
                 <MenuItem dense value={true}>Yes</MenuItem>

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import classnames from 'classnames';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -162,7 +162,7 @@ const EditWorkspace = ({
       <div className={classes.avatarFlex}>
         <div className={classes.avatarLeft}>
           <div
-            className={classNames(
+            className={classnames(
               classes.avatar,
               !picturePath && !internetIcon && classes.textAvatar,
               transparentBackground && classes.transparentAvatar,

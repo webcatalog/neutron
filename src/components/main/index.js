@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import classnames from 'classnames';
 
 import SimpleBar from 'simplebar-react';
 import 'simplebar/dist/simplebar.min.css';
@@ -72,12 +72,16 @@ const styles = (theme) => ({
   },
   sidebarUpperRoot: {
     height: '100%',
-    width: 68,
+    width: 48,
     backgroundColor: theme.palette.background.paper,
     WebkitAppRegion: window.process.platform === 'darwin' ? 'drag' : 'no-drag',
-    borderRight: '1px solid rgba(0, 0, 0, 0.2)',
+    borderRight: '1px solid',
+    borderRightColor: theme.palette.divider,
     WebkitUserSelect: 'none',
     overflowX: 'hidden',
+  },
+  sidebarUpperRootWide: {
+    width: 68,
   },
   sidebarRoot: {
     flex: 1,
@@ -91,6 +95,7 @@ const styles = (theme) => ({
   sidebarTop: {
     flex: 1,
     paddingTop: window.process.platform === 'darwin' ? theme.spacing(3) : 0,
+    width: '100%',
   },
   sidebarTopFullScreen: {
     paddingTop: 0,
@@ -112,8 +117,8 @@ const styles = (theme) => ({
     height: 202,
     width: 150,
     position: 'absolute',
-    top: 50,
-    left: 72,
+    top: window.process.platform === 'darwin' ? 50 : 60,
+    left: window.process.platform === 'darwin' ? 72 : 60,
     backgroundImage: `url('${theme.palette.type === 'dark' ? arrowWhite : arrowBlack}')`,
     backgroundSize: '150px 202px',
   },
@@ -127,7 +132,7 @@ const styles = (theme) => ({
     color: theme.palette.getContrastText(theme.palette.type === 'dark' ? theme.palette.common.white : theme.palette.common.black),
     lineHeight: '36px',
     textAlign: 'center',
-    fontWeight: 500,
+    fontWeight: 400,
     textTransform: 'uppercase',
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
@@ -157,10 +162,15 @@ const styles = (theme) => ({
   end: {
     display: 'flex',
     flexDirection: 'column',
+    width: '100%',
   },
   ul: {
     marginTop: 0,
     marginBottom: '1.5rem',
+  },
+  iconButton: {
+    width: '100%',
+    borderRadius: 0,
   },
 });
 
@@ -232,20 +242,23 @@ const Main = ({
 }) => {
   const appJson = window.remote.getGlobal('appJson');
   const workspacesList = getWorkspacesAsList(workspaces);
-  const showTitleBar = window.process.platform === 'darwin' && titleBar && !isFullScreen;
+  const showMacTitleBar = window.process.platform === 'darwin' && titleBar && !isFullScreen;
 
   return (
     <div className={classes.outerRoot}>
-      {showTitleBar && <MacTitleBar />}
+      {showMacTitleBar && <MacTitleBar />}
       <DraggableRegion />
       <div className={classes.root}>
         {sidebar && (
           <SimpleBar
-            className={classes.sidebarUpperRoot}
+            className={classnames(
+              classes.sidebarUpperRoot,
+              window.process.platform === 'darwin' && classes.sidebarUpperRootWide,
+            )}
           >
             <div className={classes.sidebarRoot}>
-              <div className={classNames(classes.sidebarTop,
-                (isFullScreen || showTitleBar || window.mode === 'menubar') && classes.sidebarTopFullScreen)}
+              <div className={classnames(classes.sidebarTop,
+                (isFullScreen || showMacTitleBar || window.mode === 'menubar') && classes.sidebarTopFullScreen)}
               >
                 <SortableContainer
                   distance={10}
@@ -291,14 +304,22 @@ const Main = ({
               </div>
               {!navigationBar && (
               <div className={classes.end}>
-                <IconButton aria-label="Notifications" onClick={requestShowNotificationsWindow} className={classes.iconButton}>
+                <IconButton
+                  aria-label="Notifications"
+                  onClick={requestShowNotificationsWindow}
+                  className={classes.iconButton}
+                  size="small"
+                >
                   {shouldPauseNotifications ? <NotificationsPausedIcon /> : <NotificationsIcon />}
                 </IconButton>
-                {window.mode === 'menubar' && (
-                  <IconButton aria-label="Preferences" onClick={() => requestShowPreferencesWindow()} className={classes.iconButton}>
-                    <SettingsIcon />
-                  </IconButton>
-                )}
+                <IconButton
+                  aria-label="Preferences"
+                  onClick={() => requestShowPreferencesWindow()}
+                  className={classes.iconButton}
+                  size="small"
+                >
+                  <SettingsIcon />
+                </IconButton>
               </div>
               )}
             </div>

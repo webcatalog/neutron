@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import classnames from 'classnames';
 
 import Badge from '@material-ui/core/Badge';
 
@@ -9,8 +9,8 @@ import getAvatarText from '../../helpers/get-avatar-text';
 
 const styles = (theme) => ({
   root: {
-    height: 68,
-    width: 68,
+    height: 48,
+    width: '100%',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -24,15 +24,26 @@ const styles = (theme) => ({
     WebkitAppRegion: 'no-drag',
     opacity: 0.8,
     position: 'relative',
-    borderLeft: '4px solid',
-    borderColor: 'transparent',
+    // to show active status
+    borderLeft: '3px solid',
+    borderLeftColor: 'transparent',
+    // same as left minus 1px of sidebar border to align the children to the center
+    borderRight: '2px solid',
+    borderRightColor: 'transparent',
+  },
+  rootWithText: {
+    height: 60,
   },
   rootHibernate: {
     opacity: 0.4,
   },
   rootActive: {
-    borderColor: theme.palette.type === 'dark' ? theme.palette.common.white : theme.palette.common.black,
+    background: theme.palette.action.selected,
+    borderLeftColor: theme.palette.type === 'dark' ? theme.palette.common.white : theme.palette.common.black,
     opacity: 1,
+    '&:hover': {
+      background: theme.palette.action.selected,
+    },
   },
   avatar: {
     height: 36,
@@ -42,24 +53,15 @@ const styles = (theme) => ({
     color: theme.palette.getContrastText(theme.palette.common.white),
     lineHeight: '36px',
     textAlign: 'center',
-    fontWeight: 500,
+    fontWeight: 400,
     textTransform: 'uppercase',
     border: theme.palette.type === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)',
     overflow: 'hidden',
     fontSize: '24px',
   },
-  avatarLarge: {
-    height: 44,
-    width: 44,
-    lineHeight: '44px',
-  },
   avatarPicture: {
     height: 36,
     width: 36,
-  },
-  avatarPictureLarge: {
-    height: 44,
-    width: 44,
   },
   textAvatar: {
     background: theme.palette.type === 'dark' ? theme.palette.common.white : theme.palette.common.black,
@@ -74,9 +76,14 @@ const styles = (theme) => ({
     marginTop: 2,
     marginBottom: 0,
     padding: 0,
-    fontSize: '12px',
+    fontSize: '10px',
     fontWeight: 500,
     color: theme.palette.text.primary,
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    width: 'calc(100% - 8px)',
+    textAlign: 'center',
   },
   badge: {
     lineHeight: '20px',
@@ -94,48 +101,65 @@ const WorkspaceSelector = ({
   onContextMenu,
   order,
   picturePath,
-  sidebarShortcutHints,
+  sidebarTips,
   transparentBackground,
-}) => (
-  <div
-    role="button"
-    className={classNames(
-      classes.root,
-      hibernated && classes.rootHibernate,
-      active && classes.rootActive,
-    )}
-    onClick={onClick}
-    onKeyDown={null}
-    onContextMenu={onContextMenu}
-    tabIndex="0"
-  >
-    <Badge color="secondary" badgeContent={badgeCount} max={99} classes={{ badge: classes.badge }}>
-      <div
-        className={classNames(
-          classes.avatar,
-          !sidebarShortcutHints && classes.avatarLarge,
-          (id === 'add' || !picturePath) && classes.textAvatar,
-          transparentBackground && classes.transparentAvatar,
-        )}
-      >
-        {picturePath ? (
-          <img
-            alt="Icon"
-            className={classNames(
-              classes.avatarPicture,
-              !sidebarShortcutHints && classes.avatarPictureLarge,
-            )}
-            src={`file://${picturePath}`}
-            draggable={false}
-          />
-        ) : getAvatarText(id, name, order)}
-      </div>
-    </Badge>
-    {sidebarShortcutHints && (id === 'add' || order < 9) && (
-      <p className={classes.shortcutText}>{id === 'add' ? 'Add' : `${window.process.platform === 'darwin' ? '⌘' : 'Ctrl'} + ${order + 1}`}</p>
-    )}
-  </div>
-);
+}) => {
+  const tipText = (() => {
+    if (sidebarTips !== 'none' && id === 'add') {
+      return 'Add';
+    }
+
+    if (sidebarTips === 'shortcut') {
+      return `${window.process.platform === 'darwin' ? '⌘' : 'Ctrl'} + ${order + 1}`;
+    }
+
+    if (sidebarTips === 'name') {
+      return name;
+    }
+
+    return null;
+  })();
+
+  return (
+    <div
+      role="button"
+      className={classnames(
+        classes.root,
+        tipText && classes.rootWithText,
+        hibernated && classes.rootHibernate,
+        active && classes.rootActive,
+      )}
+      onClick={onClick}
+      onKeyDown={null}
+      onContextMenu={onContextMenu}
+      tabIndex="0"
+    >
+      <Badge color="secondary" badgeContent={badgeCount} max={99} classes={{ badge: classes.badge }}>
+        <div
+          className={classnames(
+            classes.avatar,
+            (id === 'add' || !picturePath) && classes.textAvatar,
+            transparentBackground && classes.transparentAvatar,
+          )}
+        >
+          {picturePath ? (
+            <img
+              alt="Icon"
+              className={classnames(
+                classes.avatarPicture,
+              )}
+              src={`file://${picturePath}`}
+              draggable={false}
+            />
+          ) : getAvatarText(id, name, order)}
+        </div>
+      </Badge>
+      {tipText && (
+        <p className={classes.shortcutText}>{tipText}</p>
+      )}
+    </div>
+  );
+};
 
 WorkspaceSelector.defaultProps = {
   active: false,
@@ -159,13 +183,13 @@ WorkspaceSelector.propTypes = {
   onContextMenu: PropTypes.func,
   order: PropTypes.number,
   picturePath: PropTypes.string,
-  sidebarShortcutHints: PropTypes.bool.isRequired,
+  sidebarTips: PropTypes.oneOf(['shortcut', 'name', 'none']).isRequired,
   transparentBackground: PropTypes.bool,
 };
 
 const mapStateToProps = (state, ownProps) => ({
   badgeCount: state.workspaceMetas[ownProps.id] ? state.workspaceMetas[ownProps.id].badgeCount : 0,
-  sidebarShortcutHints: state.preferences.sidebarShortcutHints,
+  sidebarTips: state.preferences.sidebarTips,
 });
 
 export default connectComponent(
