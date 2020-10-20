@@ -46,6 +46,7 @@ const styles = (theme) => ({
     textTransform: 'uppercase',
     border: theme.palette.type === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)',
     overflow: 'hidden',
+    fontSize: '24px',
   },
   avatarLarge: {
     height: 44,

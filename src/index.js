@@ -4,6 +4,8 @@ import { Provider } from 'react-redux';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 
+import 'typeface-roboto/index.css';
+
 import './amplitude';
 
 import configureStore from './state';

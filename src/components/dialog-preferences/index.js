@@ -95,12 +95,12 @@ const styles = (theme) => ({
   },
   sidebar: {
     position: 'fixed',
-    width: 204,
+    width: 200,
     color: theme.palette.text.primary,
   },
   inner: {
     width: '100%',
-    maxWidth: 512,
+    maxWidth: 500,
     float: 'right',
   },
   link: {
