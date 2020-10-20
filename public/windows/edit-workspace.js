@@ -19,7 +19,6 @@ const create = (id) => {
     maximizable: false,
     minimizable: true,
     fullscreenable: false,
-    autoHideMenuBar: false,
     show: false,
     frame: process.platform === 'darwin',
     webPreferences: {
@@ -29,7 +28,6 @@ const create = (id) => {
       preload: path.join(__dirname, '..', 'preload', 'edit-workspace.js'),
     },
   });
-  win.setMenuBarVisibility(false);
 
   win.on('closed', () => {
     win = null;

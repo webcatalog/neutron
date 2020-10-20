@@ -142,26 +142,6 @@ function createMenu() {
             ipcMain.emit('request-realign-active-workspace');
           },
         },
-        // same behavior as BrowserWindow with autoHideMenuBar: true
-        // but with addition to readjust BrowserView so it won't cover the menu bar
-        {
-          label: 'Toggle Menu Bar',
-          visible: false,
-          accelerator: 'Alt+M',
-          enabled: process.platform === 'win32',
-          click: (menuItem, browserWindow) => {
-            // if back is called in popup window
-            // open menu bar in the popup window instead
-            if (browserWindow && browserWindow.isPopup) {
-              browserWindow.setMenuBarVisibility(!browserWindow.isMenuBarVisible());
-              return;
-            }
-
-            const win = mainWindow.get();
-            win.setMenuBarVisibility(!win.isMenuBarVisible());
-            ipcMain.emit('request-realign-active-workspace');
-          },
-        },
         { type: 'separator' },
         { role: 'togglefullscreen' },
         {

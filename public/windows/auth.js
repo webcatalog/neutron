@@ -19,7 +19,6 @@ const create = (id) => {
     maximizable: false,
     minimizable: true,
     fullscreenable: false,
-    autoHideMenuBar: false,
     frame: process.platform === 'darwin',
     webPreferences: {
       enableRemoteModule: true,
@@ -27,7 +26,6 @@ const create = (id) => {
       preload: path.join(__dirname, '..', 'preload', 'auth.js'),
     },
   });
-  wins[id].setMenuBarVisibility(false);
 
   const identityValidationListener = (e, windowId, username, password) => {
     if (windowId !== wins[id].id) return;

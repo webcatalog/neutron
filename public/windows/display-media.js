@@ -22,7 +22,6 @@ const create = (viewId) => {
     maximizable: false,
     minimizable: true,
     fullscreenable: false,
-    autoHideMenuBar: false,
     show: false,
     frame: process.platform === 'darwin',
     webPreferences: {
@@ -31,7 +30,6 @@ const create = (viewId) => {
       preload: path.join(__dirname, '..', 'preload', 'display-media.js'),
     },
   });
-  win.setMenuBarVisibility(false);
 
   const onClose = () => {
     BrowserView.fromId(global.displayMediaRequestedViewId).webContents.send('display-media-id-received', null);

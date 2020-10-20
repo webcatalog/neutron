@@ -18,7 +18,6 @@ const create = (workspaceId) => {
     maximizable: false,
     minimizable: true,
     fullscreenable: false,
-    autoHideMenuBar: false,
     show: false,
     frame: process.platform === 'darwin',
     webPreferences: {
@@ -27,7 +26,6 @@ const create = (workspaceId) => {
       preload: path.join(__dirname, '..', 'preload', 'workspace-preferences.js'),
     },
   });
-  win.setMenuBarVisibility(false);
 
   win.on('closed', () => {
     win = null;
