@@ -15,6 +15,8 @@ import { requestShowAppMenu } from '../../senders';
 import connectComponent from '../../helpers/connect-component';
 
 const LEFT_RIGHT_WIDTH = window.process.platform !== 'darwin' ? 160 : 100;
+const TOOLBAR_HEIGHT = 28;
+const BUTTON_WIDTH = 46;
 
 const styles = (theme) => ({
   appBar: {
@@ -52,14 +54,14 @@ const styles = (theme) => ({
   windowsControl: {
     verticalAlign: 'middle',
     display: 'inline-block',
-    height: 28,
+    height: TOOLBAR_HEIGHT,
     marginLeft: theme.spacing(2),
   },
   windowsIconBg: {
     display: 'inline-block',
     WebkitAppRegion: 'no-drag',
     height: '100%',
-    width: 46,
+    width: BUTTON_WIDTH,
     background: 'none',
     border: 'none',
     outline: 'none',
@@ -91,6 +93,11 @@ const styles = (theme) => ({
   },
   windowsIconMinimize: {
     mask: "url(\"data:image/svg+xml;charset=utf-8,%3Csvg width='11' height='11' viewBox='0 0 11 11' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 4.399V5.5H0V4.399h11z' fill='%23000'/%3E%3C/svg%3E\") no-repeat 50% 50%",
+  },
+  iconButton: {
+    width: BUTTON_WIDTH,
+    borderRadius: 0,
+    height: TOOLBAR_HEIGHT,
   },
 });
 
@@ -131,11 +138,12 @@ const EnhancedAppBar = ({
                 size="small"
                 color="inherit"
                 aria-label="More"
-                className={classes.noDrag}
+                className={classnames(classes.iconButton, classes.noDrag)}
                 onClick={(e) => {
                   e.stopPropagation();
                   requestShowAppMenu(e.x, e.y);
                 }}
+                disableRipple
               >
                 <MenuIcon fontSize="small" />
               </IconButton>

@@ -243,7 +243,7 @@ const Main = ({
 
   return (
     <div className={classes.outerRoot}>
-      {window.process.platform === 'darwin' && showTitleBar ? <MacTitleBar /> : <WindowsTitleBar />}
+      {window.process.platform === 'darwin' ? (showTitleBar && <MacTitleBar />) : <WindowsTitleBar />}
       <DraggableRegion />
       <div className={classes.root}>
         {sidebar && (
