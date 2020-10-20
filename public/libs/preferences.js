@@ -72,7 +72,7 @@ const defaultPreferences = {
   sentry: true,
   shareWorkspaceBrowsingData: false,
   sidebar: shouldShowSidebar,
-  sidebarShortcutHints: true,
+  sidebarTips: 'shortcut',
   spellcheck: true,
   spellcheckLanguages: ['en-US'],
   swipeToNavigate: true,

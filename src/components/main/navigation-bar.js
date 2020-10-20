@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import classnames from 'classnames';
 
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
@@ -107,7 +107,7 @@ const NavigationBar = ({
   const [addressInputClicked, setAddressInputClicked] = useState(false);
 
   return (
-    <div className={classNames(classes.root, hasTrafficLights && classes.rootWithTrafficLights)}>
+    <div className={classnames(classes.root, hasTrafficLights && classes.rootWithTrafficLights)}>
       <div className={classes.left}>
         <IconButton aria-label="Go back" className={classes.iconButton} disabled={!hasWorkspaces || !canGoBack} onClick={requestGoBack}>
           <ArrowBackIcon className={classes.icon} />
