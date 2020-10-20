@@ -76,7 +76,7 @@ const styles = (theme) => ({
     marginTop: 2,
     marginBottom: 0,
     padding: 0,
-    fontSize: '12px',
+    fontSize: '10px',
     fontWeight: 500,
     color: theme.palette.text.primary,
     whiteSpace: 'nowrap',
