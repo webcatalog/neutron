@@ -30,7 +30,7 @@ const authWindow = require('./windows/auth');
 const mainWindow = require('./windows/main');
 const openUrlWithWindow = require('./windows/open-url-with');
 
-const createMenu = require('./libs/create-menu');
+const { createMenu } = require('./libs/create-menu');
 const { addView, reloadViewsDarkReader } = require('./libs/views');
 const fetchUpdater = require('./libs/fetch-updater');
 const { getWorkspaces, setWorkspace } = require('./libs/workspaces');

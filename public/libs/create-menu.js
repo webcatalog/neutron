@@ -32,6 +32,8 @@ const {
   getView,
 } = require('./views');
 
+let menu;
+
 function createMenu() {
   const workspaces = getWorkspaces();
   const hasWorkspaces = Object.keys(workspaces).length > 0;
@@ -543,8 +545,23 @@ function createMenu() {
     },
   );
 
-  const menu = Menu.buildFromTemplate(template);
+  menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);
 }
 
-module.exports = createMenu;
+// https://dev.to/saisandeepvaddi/creating-a-custom-menu-bar-in-electron-1pi3
+// Register an event listener.
+// When ipcRenderer sends mouse click co-ordinates, show menu at that position.
+const showMenu = (window, x, y) => {
+  if (!menu) return;
+  menu.popup({
+    window,
+    x,
+    y,
+  });
+};
+
+module.exports = {
+  createMenu,
+  showMenu,
+};
