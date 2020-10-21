@@ -339,7 +339,8 @@ const addView = (browserWindow, workspace) => {
   // https://github.com/webcatalog/webcatalog-app/issues/398
   if (workspace.active) {
     view.webContents.once('did-stop-loading', () => {
-      if (browserWindow.isFocused() && !view.webContents.isFocused()) {
+      if (browserWindow && !browserWindow.isDestroyed()
+        && browserWindow.isFocused() && !view.webContents.isFocused()) {
         view.webContents.focus();
       }
     });
