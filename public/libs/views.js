@@ -431,7 +431,9 @@ const addView = (browserWindow, workspace) => {
 
     if (workspaceObj.active) {
       sendToAllWindows('update-title', title);
-      browserWindow.setTitle(title);
+      if (browserWindow && !browserWindow.isDestroyed()) {
+        browserWindow.setTitle(title);
+      }
     }
   });
 
@@ -746,13 +748,15 @@ const addView = (browserWindow, workspace) => {
       app.badgeCount = count;
 
       if (process.platform === 'win32') {
-        if (count > 0) {
-          browserWindow.setOverlayIcon(
-            path.resolve(__dirname, '..', 'overlay-icon.png'),
-            `You have ${count} new messages.`,
-          );
-        } else {
-          browserWindow.setOverlayIcon(null, '');
+        if (browserWindow && !browserWindow.isDestroyed()) {
+          if (count > 0) {
+            browserWindow.setOverlayIcon(
+              path.resolve(__dirname, '..', 'overlay-icon.png'),
+              `You have ${count} new messages.`,
+            );
+          } else {
+            browserWindow.setOverlayIcon(null, '');
+          }
         }
       }
     });
