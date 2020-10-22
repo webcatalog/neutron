@@ -52,8 +52,8 @@ const AppWrapper = ({ children, shouldUseDarkColors }) => {
             overflow: 'hidden',
           }}
         >
-          {window.process.platform === 'win32' && <WindowsTitleBar title={window.mode !== 'main' ? document.title : undefined} />}
-          <div style={{ height: window.process.platform === 'win32' ? 'calc(100vh - 32px)' : '100vh' }}>
+          {window.process.platform !== 'darwin' && <WindowsTitleBar title={window.mode !== 'main' ? document.title : undefined} />}
+          <div style={{ height: window.process.platform !== 'darwin' ? 'calc(100vh - 32px)' : '100vh' }}>
             {children}
           </div>
         </div>
