@@ -3,6 +3,17 @@ const path = require('path');
 const fs = require('fs-extra');
 const tmp = require('tmp');
 const builder = require('electron-builder');
+const { downloadArtifact } = require('@electron/get');
+const extract = require('extract-zip');
+
+const platform = process.env.TEMPLATE_PLATFORM || process.platform;
+const arch = process.env.TEMPLATE_ARCH || 'x64';
+
+if ((['x64', 'arm64'].indexOf(arch) < 0) || (platform !== 'linux' && arch !== 'x64')) {
+  console.log(`${platform} ${arch} is not supported`);
+}
+
+console.log(`Building for ${platform} ${arch}...`);
 
 const { Arch, Platform } = builder;
 
@@ -12,34 +23,39 @@ const APP_PATH = tmp.dirSync().name;
 const TEMPLATE_PATH = path.join(DIST_PATH, 'template');
 
 const getDotAppPath = () => {
-  if (process.platform === 'darwin') {
+  if (platform === 'darwin') {
     return path.join(APP_PATH, 'mac', `${appName}.app`);
   }
-  if (process.platform === 'linux') {
+  if (platform === 'linux') {
+    if (arch === 'arm64') {
+      return path.join(APP_PATH, 'linux-arm64-unpacked');
+    }
     return path.join(APP_PATH, 'linux-unpacked');
   }
-  if (process.platform === 'win32') {
+  if (platform === 'win32') {
     return path.join(APP_PATH, 'win-unpacked');
   }
   throw Error('Unsupported platform');
 };
 
 let targets;
-switch (process.platform) {
+switch (platform) {
   case 'darwin': {
     targets = Platform.MAC.createTarget(['dir']);
     break;
   }
   case 'win32': {
-    targets = Platform.WINDOWS.createTarget(['dir'], Arch.x64);
+    targets = Platform.WINDOWS.createTarget(['dir'], Arch[arch]);
     break;
   }
   default:
   case 'linux': {
-    targets = Platform.LINUX.createTarget(['dir'], Arch.x64);
+    targets = Platform.LINUX.createTarget(['dir'], Arch[arch]);
     break;
   }
 }
+
+console.log(targets);
 
 Promise.resolve()
   .then(() => fs.remove(DIST_PATH))
@@ -88,9 +104,12 @@ Promise.resolve()
   .then(() => {
     // copy all neccessary to unpacked folder
     const dotAppPath = getDotAppPath();
-    const resourcesPath = process.platform === 'darwin'
+    const targetName = Array.from(targets)[0][0].name;
+    const resourcesPath = targetName === 'mac'
       ? path.join(dotAppPath, 'Contents', 'Resources')
       : path.join(dotAppPath, 'resources');
+
+    const electronVersion = fs.readJSONSync(path.join(__dirname, 'package.json')).devDependencies.electron;
 
     const tasks = [
       fs.copy(
@@ -104,10 +123,6 @@ Promise.resolve()
       fs.move(
         path.join(resourcesPath, 'app.asar.unpacked'),
         path.join(TEMPLATE_PATH, 'app.asar.unpacked'),
-      ),
-      fs.copy(
-        path.join(__dirname, 'node_modules', 'electron', 'dist'),
-        path.join(TEMPLATE_PATH, 'node_modules', 'electron', 'dist'),
       ),
       fs.copy(
         path.join(__dirname, 'node_modules', 'electron', 'package.json'),
@@ -125,6 +140,25 @@ Promise.resolve()
         path.join(__dirname, 'node_modules', 'electron', 'LICENSE'),
         path.join(TEMPLATE_PATH, 'node_modules', 'electron', 'LICENSE'),
       ),
+      // based on electron/install.js
+      Promise.resolve()
+        .then(() => {
+          console.log(`Preparing electron for ${platform} ${arch}...`);
+          return downloadArtifact({
+            version: electronVersion,
+            artifactName: 'electron',
+            force: process.env.force_no_cache === 'true',
+            cacheRoot: process.env.electron_config_cache,
+            platform,
+            arch,
+          });
+        })
+        .then((zipPath) => {
+          console.log('Downloaded to', zipPath);
+          const distPath = path.join(TEMPLATE_PATH, 'node_modules', 'electron', 'dist');
+          console.log('Extracting to', distPath);
+          return extract(zipPath, { dir: distPath });
+        }),
     ];
 
     return Promise.all(tasks);

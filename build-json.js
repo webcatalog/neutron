@@ -5,10 +5,13 @@ const hasha = require('hasha');
 
 const packageJson = require('./package.json');
 
-const zipFileName = `template-${process.platform}-x64.zip`;
+const platform = process.env.TEMPLATE_PLATFORM || process.platform;
+const arch = process.env.TEMPLATE_ARCH || 'x64';
+
+const zipFileName = `template-${platform}-${arch}.zip`;
 const DIST_PATH = path.join(__dirname, 'dist');
 const TEMPLATE_ZIP_PATH = path.join(DIST_PATH, zipFileName);
-const TEMPLATE_JSON_PATH = path.join(DIST_PATH, `template-${process.platform}-x64.json`);
+const TEMPLATE_JSON_PATH = path.join(DIST_PATH, `template-${platform}-${arch}.json`);
 
 Promise.resolve()
   .then(() => {
