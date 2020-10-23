@@ -628,7 +628,7 @@ const addView = (browserWindow, workspace) => {
       // we bounce the dock icon
       // for other directories, as they're not on dock, we open the dir in Finder
       // for other platforms, always open the dir in file explorer
-      openFolderWhenDone: process.platform !== 'darwin' || downloadPath !== app.getPath('downloads'),
+      openFolderWhenDone: globalPreferences.openFolderWhenDoneDownloading,
     };
     const callback = () => {};
 

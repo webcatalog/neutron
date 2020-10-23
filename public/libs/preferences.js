@@ -57,6 +57,7 @@ const defaultPreferences = {
   lastShowNewUpdateDialog: 0,
   licenseKey: null,
   navigationBar: false,
+  openFolderWhenDoneDownloading: false,
   pauseNotifications: null,
   pauseNotificationsBySchedule: false,
   pauseNotificationsByScheduleFrom: getDefaultPauseNotificationsByScheduleFrom(),
