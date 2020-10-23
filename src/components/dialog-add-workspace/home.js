@@ -62,7 +62,7 @@ const Home = ({ classes }) => (
         resultsPerPage: 60,
         sortField: '',
         sortDirection: '',
-        filters: [{ field: 'type', values: ['Standard'], type: 'all' }],
+        filters: [{ field: 'type', values: ['Singlesite'], type: 'all' }],
       },
       alwaysSearchOnInitialLoad: true,
       searchQuery: {
