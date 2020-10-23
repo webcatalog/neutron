@@ -145,6 +145,12 @@ const styles = (theme) => ({
   },
 });
 
+const getFileManagerName = () => {
+  if (window.process.platform === 'darwin') return 'Finder';
+  if (window.process.platform === 'win32') return 'File Explorer';
+  return 'file manager';
+};
+
 const Preferences = ({
   askForDownloadPath,
   attachToMenubar,
@@ -173,6 +179,7 @@ const Preferences = ({
   onOpenDialogProxy,
   onOpenDialogSpellcheckLanguages,
   openAtLogin,
+  openFolderWhenDoneDownloading,
   pauseNotificationsBySchedule,
   pauseNotificationsByScheduleFrom,
   pauseNotificationsByScheduleTo,
@@ -963,6 +970,20 @@ const Preferences = ({
                 />
               </ListItemSecondaryAction>
             </ListItem>
+            <Divider />
+            <ListItem>
+              <ListItemText primary={`Reveal the file in ${getFileManagerName()} when it is downloaded`} />
+              <ListItemSecondaryAction>
+                <Switch
+                  edge="end"
+                  color="primary"
+                  checked={openFolderWhenDoneDownloading}
+                  onChange={(e) => {
+                    requestSetPreference('openFolderWhenDoneDownloading', e.target.checked);
+                  }}
+                />
+              </ListItemSecondaryAction>
+            </ListItem>
           </List>
         </Paper>
 
@@ -1372,6 +1393,7 @@ Preferences.propTypes = {
   onOpenDialogProxy: PropTypes.func.isRequired,
   onOpenDialogSpellcheckLanguages: PropTypes.func.isRequired,
   openAtLogin: PropTypes.oneOf(['yes', 'yes-hidden', 'no']).isRequired,
+  openFolderWhenDoneDownloading: PropTypes.bool.isRequired,
   pauseNotificationsBySchedule: PropTypes.bool.isRequired,
   pauseNotificationsByScheduleFrom: PropTypes.string.isRequired,
   pauseNotificationsByScheduleTo: PropTypes.string.isRequired,
@@ -1416,6 +1438,7 @@ const mapStateToProps = (state) => ({
   jsCodeInjection: state.preferences.jsCodeInjection,
   navigationBar: state.preferences.navigationBar,
   openAtLogin: state.systemPreferences.openAtLogin,
+  openFolderWhenDoneDownloading: state.preferences.openFolderWhenDoneDownloading,
   pauseNotificationsBySchedule: state.preferences.pauseNotificationsBySchedule,
   pauseNotificationsByScheduleFrom: state.preferences.pauseNotificationsByScheduleFrom,
   pauseNotificationsByScheduleTo: state.preferences.pauseNotificationsByScheduleTo,
