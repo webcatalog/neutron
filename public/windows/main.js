@@ -236,11 +236,17 @@ const createAsync = () => new Promise((resolve) => {
 
   win.on('enter-full-screen', () => {
     win.webContents.send('is-fullscreen-updated', true);
-    ipcMain.emit('request-realign-active-workspace');
+    // it takes some time for the fullscreen state to populate
+    setTimeout(() => {
+      ipcMain.emit('request-realign-active-workspace');
+    }, 500);
   });
   win.on('leave-full-screen', () => {
     win.webContents.send('is-fullscreen-updated', false);
-    ipcMain.emit('request-realign-active-workspace');
+    // it takes some time for the fullscreen state to populate
+    setTimeout(() => {
+      ipcMain.emit('request-realign-active-workspace');
+    }, 500);
   });
 
   // ensure redux is loaded first

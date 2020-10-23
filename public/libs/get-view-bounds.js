@@ -3,7 +3,7 @@ const mainWindow = require('../windows/main');
 const getViewBounds = (contentSize, findInPage = false, height, width) => {
   const showSidebar = global.sidebar;
   const isFullScreen = mainWindow.get() && mainWindow.get().isFullScreen();
-  const showTitleBar = process.platform === 'darwin' ? (global.titleBar && !isFullScreen) : true;
+  const showTitleBar = process.platform === 'darwin' ? (global.titleBar && !isFullScreen) : !isFullScreen;
   const showNavigationBar = (process.platform === 'linux'
     && global.attachToMenubar
     && !global.sidebar) || global.navigationBar;
