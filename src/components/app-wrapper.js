@@ -13,8 +13,8 @@ import connectComponent from '../helpers/connect-component';
 
 import WindowsTitleBar from './shared/windows-title-bar';
 
-const AppWrapper = ({ 
-  children, 
+const AppWrapper = ({
+  children,
   shouldUseDarkColors,
   isFullScreen,
 }) => {
