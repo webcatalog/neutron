@@ -13,7 +13,11 @@ import connectComponent from '../helpers/connect-component';
 
 import WindowsTitleBar from './shared/windows-title-bar';
 
-const AppWrapper = ({ children, shouldUseDarkColors }) => {
+const AppWrapper = ({ 
+  children, 
+  shouldUseDarkColors,
+  isFullScreen,
+}) => {
   const themeObj = {
     typography: {
       fontFamily: '"Roboto",-apple-system,BlinkMacSystemFont,"Segoe UI",Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif',
@@ -42,6 +46,8 @@ const AppWrapper = ({ children, shouldUseDarkColors }) => {
 
   const theme = createMuiTheme(themeObj);
 
+  const showWindowsTitleBar = window.process.platform !== 'darwin' && !isFullScreen;
+
   return (
     <MuiThemeProvider theme={theme}>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -52,8 +58,8 @@ const AppWrapper = ({ children, shouldUseDarkColors }) => {
             overflow: 'hidden',
           }}
         >
-          {window.process.platform !== 'darwin' && <WindowsTitleBar title={window.mode !== 'main' ? document.title : undefined} />}
-          <div style={{ height: window.process.platform !== 'darwin' ? 'calc(100vh - 32px)' : '100vh' }}>
+          {showWindowsTitleBar && <WindowsTitleBar title={window.mode !== 'main' ? document.title : undefined} />}
+          <div style={{ height: showWindowsTitleBar ? 'calc(100vh - 32px)' : '100vh' }}>
             {children}
           </div>
         </div>
@@ -69,9 +75,11 @@ AppWrapper.propTypes = {
     PropTypes.string,
   ]).isRequired,
   shouldUseDarkColors: PropTypes.bool.isRequired,
+  isFullScreen: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
+  isFullScreen: state.general.isFullScreen,
   shouldUseDarkColors: state.general.shouldUseDarkColors,
 });
 
