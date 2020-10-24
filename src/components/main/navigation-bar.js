@@ -125,7 +125,7 @@ const NavigationBar = ({
       <div className={classes.center}>
         <InputBase
           classes={{ root: classes.addressBarRoot, input: classes.addressBarInput }}
-          placeholder="Search Google or type a URL"
+          placeholder={`Search on ${searchEngines[searchEngine].name} or type a URL`}
           type="text"
           value={hasWorkspaces ? address : ''}
           disabled={!hasWorkspaces}
