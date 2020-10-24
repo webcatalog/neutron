@@ -271,6 +271,16 @@ module.exports = class ContextMenuBuilder {
       this.addSeparator(menu);
     }
 
+    // Allow users to add the misspelled word to the dictionary
+    menu.append(
+      new MenuItem({
+        label: 'Add to Dictionary',
+        click: () => target.session.addWordToSpellCheckerDictionary(menuInfo.misspelledWord),
+      }),
+    );
+
+    this.addSeparator(menu);
+
     return menu;
   }
 
