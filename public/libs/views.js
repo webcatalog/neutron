@@ -290,7 +290,7 @@ const addView = (browserWindow, workspace) => {
     const appDomain = extractDomain(appUrl);
     const currentDomain = extractDomain(currentUrl);
     if (
-      (appDomain.includes('github.com') || currentDomain.includes('github.com'))
+      ((appDomain && appDomain.includes('github.com')) || (currentDomain && currentDomain.includes('github.com')))
       && !isInternalUrl(nextUrl, [appUrl, currentUrl])
     ) {
       e.preventDefault();
