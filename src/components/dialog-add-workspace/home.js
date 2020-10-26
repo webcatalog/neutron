@@ -62,8 +62,6 @@ const Home = ({ classes }) => {
     filters.push({ field: 'group_id', values: [groupId], type: 'all' });
   }
 
-  console.log(filters);
-
   return (
     <SearchProvider
       config={{
@@ -205,7 +203,7 @@ const Home = ({ classes }) => {
       </div>
     </SearchProvider>
   );
-}
+};
 
 Home.defaultProps = {};
 
