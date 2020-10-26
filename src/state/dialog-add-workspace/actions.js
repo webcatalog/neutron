@@ -11,6 +11,8 @@ import hasErrors from '../../helpers/has-errors';
 
 import { requestCreateWorkspace } from '../../senders';
 
+import swiftype from '../../swiftype';
+
 const getValidationRules = () => ({
   name: {
     fieldName: 'Name',
@@ -25,7 +27,7 @@ const getValidationRules = () => ({
 
 // to be replaced with invoke (electron 7+)
 // https://electronjs.org/docs/api/ipc-renderer#ipcrendererinvokechannel-args
-export const getWebsiteIconUrlAsync = (url) => new Promise((resolve, reject) => {
+export const getWebsiteIconUrlFromMainProcessAsync = (url) => new Promise((resolve, reject) => {
   try {
     const id = Date.now().toString();
     window.ipcRenderer.once(id, (e, uurl) => {
@@ -37,8 +39,33 @@ export const getWebsiteIconUrlAsync = (url) => new Promise((resolve, reject) => 
   }
 });
 
+// attempt to get icon from manifest, favicon, etc of the URL first
+export const getWebsiteIconUrlAsync = (url, name) => getWebsiteIconUrlFromMainProcessAsync(url)
+  .then((iconUrl) => {
+    if (iconUrl) return iconUrl;
+    // if it fails, try to get icon from in-house database
+    const query = name && name.length > 0 ? `${url} ${name}` : url;
+    return swiftype
+      .search(query, {
+        search_fields: {
+          name: {},
+          url: { weight: 5 },
+        },
+        result_fields: {
+          icon_filled: { raw: {} },
+        },
+        page: { size: 1 },
+      })
+      .then((res) => {
+        if (res.rawResults.length < 1) return null;
+        const app = res.rawResults[0];
+        return app.icon_filled.raw;
+      })
+      .catch(() => null);
+  });
+
 export const getIconFromInternet = () => (dispatch, getState) => {
-  const { form: { homeUrl, homeUrlError } } = getState().dialogAddWorkspace;
+  const { form: { name, homeUrl, homeUrlError } } = getState().dialogAddWorkspace;
   if (!homeUrl || homeUrlError) return;
 
   dispatch({
@@ -46,7 +73,7 @@ export const getIconFromInternet = () => (dispatch, getState) => {
     downloadingIcon: true,
   });
 
-  getWebsiteIconUrlAsync(homeUrl)
+  getWebsiteIconUrlAsync(homeUrl, name)
     .then((iconUrl) => {
       const { form } = getState().dialogAddWorkspace;
       if (form.homeUrl === homeUrl) {

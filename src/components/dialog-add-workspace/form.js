@@ -189,7 +189,7 @@ const AddWorkspaceCustom = ({
             variant="outlined"
             size="small"
             className={classes.buttonBot}
-            disabled={!homeUrl || homeUrlError || downloadingIcon}
+            disabled={Boolean(!homeUrl || homeUrlError || downloadingIcon)}
             onClick={() => onGetIconFromInternet()}
           >
             {downloadingIcon ? 'Downloading Icon...' : 'Download Icon from the Internet'}

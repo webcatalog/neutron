@@ -50,6 +50,7 @@
   },
   "devDependencies": {
     "@date-io/date-fns": "1.3.13",
+    "@elastic/app-search-javascript": "7.8.0",
     "@elastic/react-search-ui": "1.4.1",
     "@elastic/react-search-ui-views": "1.4.1",
     "@elastic/search-ui-app-search-connector": "1.4.1",
