@@ -127,6 +127,11 @@ const equivalentDomain = (domain) => {
 const isMicrosoftUrl = (url) => /.+(microsoft.com|live.com|1drv.ms|office.com|sharepoint.com|skype.com)/g.test(url);
 
 const isInternalUrl = (url, currentInternalUrls) => {
+  // // Google Printing PDF CDN
+  if (url && url.includes('apps-viewer.googleusercontent.com')) {
+    return true;
+  }
+
   // google have a lot of redirections after logging in
   // so assume any requests made after 'accounts.google.com' are internals
   for (let i = 0; i < currentInternalUrls.length; i += 1) {
