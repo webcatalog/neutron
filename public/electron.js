@@ -7,6 +7,7 @@ const {
   protocol,
   session,
   shell,
+  BrowserView,
 } = require('electron');
 const isDev = require('electron-is-dev');
 const settings = require('electron-settings');
@@ -243,13 +244,20 @@ if (!gotTheLock) {
   });
 
   app.on('before-quit', () => {
-    // https://github.com/atom/electron/issues/444#issuecomment-76492576
-    if (process.platform === 'darwin') {
-      const win = mainWindow.get();
-      if (win) {
-        win.forceClose = true;
-      }
+    const win = mainWindow.get();
+    if (win) {
+      // https://github.com/atom/electron/issues/444#issuecomment-76492576
+      win.forceClose = true;
+      win.setBrowserView(null);
     }
+
+    // https://github.com/webcatalog/webcatalog-app/issues/1141
+    // the bug seems to only occur when there's BrowserView opened
+    // so destroy all BrowserViews before exiting
+    const views = BrowserView.getAllViews();
+    views.forEach((view) => {
+      view.destroy();
+    });
   });
 
   app.on('window-all-closed', () => {
