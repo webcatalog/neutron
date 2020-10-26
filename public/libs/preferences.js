@@ -71,7 +71,9 @@ const defaultPreferences = {
   rememberLastPageVisited: false,
   searchEngine: 'google',
   sentry: true,
-  shareWorkspaceBrowsingData: false,
+  // branded apps (like Google/Microsoft) share browsing data by default
+  // https://github.com/webcatalog/webcatalog-app/issues/986
+  shareWorkspaceBrowsingData: appJson.id.startsWith('group-'),
   sidebar: shouldShowSidebar,
   sidebarTips: 'shortcut',
   spellcheck: true,

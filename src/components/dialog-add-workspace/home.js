@@ -54,147 +54,158 @@ const connector = new AppSearchAPIConnector({
   hostIdentifier: process.env.REACT_APP_SWIFTYPE_HOST_ID,
 });
 
-const Home = ({ classes }) => (
-  <SearchProvider
-    config={{
-      apiConnector: connector,
-      initialState: {
-        resultsPerPage: 60,
-        sortField: '',
-        sortDirection: '',
-        filters: [{ field: 'type', values: ['Singlesite'], type: 'all' }],
-      },
-      alwaysSearchOnInitialLoad: true,
-      searchQuery: {
-        result_fields: {
-          id: { raw: {} },
-          name: { raw: {} },
-          url: { raw: {} },
-          icon_filled: { raw: {} },
-          icon_filled_128: { raw: {} },
+const Home = ({ classes }) => {
+  const filters = [{ field: 'type', values: ['Singlesite'], type: 'all' }];
+  const appJsonId = window.remote.getGlobal('appJson').id;
+  if (appJsonId.startsWith('group-')) {
+    const groupId = appJsonId.substring('group-'.length);
+    filters.push({ field: 'group_id', values: [groupId], type: 'all' });
+  }
+
+  console.log(filters);
+
+  return (
+    <SearchProvider
+      config={{
+        apiConnector: connector,
+        initialState: {
+          resultsPerPage: 60,
+          sortField: '',
+          sortDirection: '',
+          filters,
         },
-      },
-    }}
-  >
-    <div className={classes.homeContainer}>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <SearchBox />
+        alwaysSearchOnInitialLoad: true,
+        searchQuery: {
+          result_fields: {
+            id: { raw: {} },
+            name: { raw: {} },
+            url: { raw: {} },
+            icon_filled: { raw: {} },
+            icon_filled_128: { raw: {} },
+          },
+        },
+      }}
+    >
+      <div className={classes.homeContainer}>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <SearchBox />
+          </Grid>
         </Grid>
-      </Grid>
-      <div
-        className={classes.scrollContainer}
-      >
-        <WithSearch
-          mapContextToProps={({
-            error,
-            isLoading,
-            results,
-            searchTerm,
-            setSearchTerm,
-            wasSearched,
-          }) => ({
-            error,
-            isLoading,
-            results,
-            searchTerm,
-            setSearchTerm,
-            wasSearched,
-          })}
+        <div
+          className={classes.scrollContainer}
         >
-          {({
-            error,
-            isLoading,
-            results,
-            searchTerm,
-            setSearchTerm,
-            wasSearched,
-          }) => {
-            if (error) {
-              return (
-                <div className={classes.contentContainer}>
-                  <NoConnection
-                    onTryAgainButtonClick={() => {
-                      setSearchTerm(searchTerm, {
-                        refresh: true,
-                        debounce: 0,
-                        shouldClearFilters: false,
-                      });
-                    }}
-                  />
-                </div>
-              );
-            }
+          <WithSearch
+            mapContextToProps={({
+              error,
+              isLoading,
+              results,
+              searchTerm,
+              setSearchTerm,
+              wasSearched,
+            }) => ({
+              error,
+              isLoading,
+              results,
+              searchTerm,
+              setSearchTerm,
+              wasSearched,
+            })}
+          >
+            {({
+              error,
+              isLoading,
+              results,
+              searchTerm,
+              setSearchTerm,
+              wasSearched,
+            }) => {
+              if (error) {
+                return (
+                  <div className={classes.contentContainer}>
+                    <NoConnection
+                      onTryAgainButtonClick={() => {
+                        setSearchTerm(searchTerm, {
+                          refresh: true,
+                          debounce: 0,
+                          shouldClearFilters: false,
+                        });
+                      }}
+                    />
+                  </div>
+                );
+              }
 
-            if (isLoading && results.length < 1) {
-              return (
-                <div className={classes.contentContainer}>
-                  <Typography
-                    variant="body2"
-                    align="center"
-                    color="textSecondary"
-                    className={classes.loading}
-                  >
-                    Loading...
-                  </Typography>
-                </div>
-              );
-            }
-
-            if (wasSearched && results.length < 1) {
-              return (
-                <div className={classes.contentContainer}>
-                  <EmptyState icon={SearchIcon} title="No Matching Results">
+              if (isLoading && results.length < 1) {
+                return (
+                  <div className={classes.contentContainer}>
                     <Typography
-                      variant="subtitle1"
+                      variant="body2"
                       align="center"
+                      color="textSecondary"
+                      className={classes.loading}
                     >
-                      Your query did not match any apps in our database.
+                      Loading...
                     </Typography>
-                    <Grid container justify="center" spacing={1} className={classes.noMatchingResultOpts}>
-                      <SubmitAppCard />
-                    </Grid>
-                  </EmptyState>
-                </div>
-              );
-            }
+                  </div>
+                );
+              }
 
-            return (
-              <>
-                {results.map((app) => (
-                  <AppCard
-                    key={app.id.raw}
-                    id={app.id.raw}
-                    name={app.name.raw}
-                    url={app.url.raw}
-                    icon={app.icon_filled.raw}
-                    icon128={app.icon_filled_128.raw}
-                  />
-                ))}
-                <Grid container justify="center">
-                  <Paging />
-                </Grid>
-              </>
-            );
-          }}
+              if (wasSearched && results.length < 1) {
+                return (
+                  <div className={classes.contentContainer}>
+                    <EmptyState icon={SearchIcon} title="No Matching Results">
+                      <Typography
+                        variant="subtitle1"
+                        align="center"
+                      >
+                        Your query did not match any apps in our database.
+                      </Typography>
+                      <Grid container justify="center" spacing={1} className={classes.noMatchingResultOpts}>
+                        <SubmitAppCard />
+                      </Grid>
+                    </EmptyState>
+                  </div>
+                );
+              }
+
+              return (
+                <>
+                  {results.map((app) => (
+                    <AppCard
+                      key={app.id.raw}
+                      id={app.id.raw}
+                      name={app.name.raw}
+                      url={app.url.raw}
+                      icon={app.icon_filled.raw}
+                      icon128={app.icon_filled_128.raw}
+                    />
+                  ))}
+                  <Grid container justify="center">
+                    <Paging />
+                  </Grid>
+                </>
+              );
+            }}
+          </WithSearch>
+        </div>
+        <WithSearch
+          mapContextToProps={({ isLoading }) => ({ isLoading })}
+        >
+          {({ isLoading }) => (
+            <>
+              {isLoading && (
+                <div className={classes.progressContainer}>
+                  <CircularProgress size={20} />
+                </div>
+              )}
+            </>
+          )}
         </WithSearch>
       </div>
-      <WithSearch
-        mapContextToProps={({ isLoading }) => ({ isLoading })}
-      >
-        {({ isLoading }) => (
-          <>
-            {isLoading && (
-              <div className={classes.progressContainer}>
-                <CircularProgress size={20} />
-              </div>
-            )}
-          </>
-        )}
-      </WithSearch>
-    </div>
-  </SearchProvider>
-);
+    </SearchProvider>
+  );
+}
 
 Home.defaultProps = {};
 
