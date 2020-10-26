@@ -1377,7 +1377,7 @@
     ajv "^6.12.0"
     ajv-keywords "^3.4.1"
 
-"@elastic/app-search-javascript@^7.3.0":
+"@elastic/app-search-javascript@7.8.0", "@elastic/app-search-javascript@^7.3.0":
   version "7.8.0"
   resolved "https://registry.yarnpkg.com/@elastic/app-search-javascript/-/app-search-javascript-7.8.0.tgz#cbc7af6bcdd224518f7f595145d6ec744e0b165d"
   integrity sha512-EsAa/E/dQwBO72nrQ9YrXudP9KVY0sVUOvqPKZ3hBj9Mr3+MtWMyIKcyMf09bzdayk4qE+moetYDe5ahVbiA+Q==
@@ -11426,10 +11426,10 @@ punycode@^2.1.0, punycode@^2.1.1:
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
 
-pupa@2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/pupa/-/pupa-2.1.0.tgz#9e4ec587952b5e4f2c06fe577b0e7db97e8ef721"
-  integrity sha512-Pj8EhJzFiPwnf4dEXpuUWwH8M/Yl4vpl4cN2RX1i3R77DWvbY5ZPKni7CCKkOYxz+XKt2fieemsV+WTZbIlYzg==
+pupa@2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/pupa/-/pupa-2.1.1.tgz#f5e8fd4afc2c5d97828faa523549ed8744a20d62"
+  integrity sha512-l1jNAspIBSFqbT+y+5FosojNpVpF94nlI+wDUpqP9enwOTfHx9f0gh5nB96vl+6yTpsJsypeNrwfzPrKuHB41A==
   dependencies:
     escape-goat "^2.0.0"
 
@@ -11559,10 +11559,10 @@ rc@^1.2.8:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-ace@9.1.4:
-  version "9.1.4"
-  resolved "https://registry.yarnpkg.com/react-ace/-/react-ace-9.1.4.tgz#7c45c361aa5fe1efa3313fa876bce30aa64a244f"
-  integrity sha512-4DBWvElbVR3WhsA2HhQ524K9Yoa/J/sjuBV9NUZ+yar3Q4BGJRTnhY6pM0INffH1IkBZHKIOyz34XHjc7RNTpw==
+react-ace@9.2.0:
+  version "9.2.0"
+  resolved "https://registry.yarnpkg.com/react-ace/-/react-ace-9.2.0.tgz#204873cafc2540b9e7580a483ffaccb6acda5edd"
+  integrity sha512-vuxDt/8+szWsS8TdrgChRk9TFrbHCrzCUvAb2fRN9iziQZwwHYgFQfaUcnv/+7gysK/pJng9Zeuh3svEweiKwg==
   dependencies:
     ace-builds "^1.4.6"
     diff-match-patch "^1.0.4"
