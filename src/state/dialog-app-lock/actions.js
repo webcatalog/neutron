@@ -8,26 +8,24 @@ import validate from '../../helpers/validate';
 import hasErrors from '../../helpers/has-errors';
 
 import {
-  getPasswordAsync,
-  setPasswordAsync,
-  deletePasswordAsync,
+  getAppLockStatusAsync,
+  setAppLockPasswordAsync,
+  setAppLockTouchIdAsync,
+  validateAppLockPasswordAsync,
 } from '../../invokers';
 
 export const open = () => (dispatch) => {
   Promise.resolve()
     .then(async () => {
-      const currentPassword = await getPasswordAsync(window.remote.getGlobal('appJson').id, 'app-lock-password');
-      const useTouchId = window.process.platform === 'darwin'
-        ? await getPasswordAsync(window.remote.getGlobal('appJson').id, 'app-lock-touch-id') === '1'
-        : false;
+      const status = await getAppLockStatusAsync();
 
       dispatch({
         type: OPEN_DIALOG_APP_LOCK,
         form: {
           password: '',
           currentPassword: '',
-          useTouchId,
-          requireCurrentPassword: Boolean(currentPassword),
+          useTouchId: status.useTouchId,
+          requireCurrentPassword: status.hasPassword,
         },
       });
     })
@@ -60,31 +58,23 @@ export const save = () => (dispatch, getState) => {
     return;
   }
 
-  getPasswordAsync(window.remote.getGlobal('appJson').id, 'app-lock-password')
-    .then(async (password) => {
-      if (!password || password === form.currentPassword) {
-        await setPasswordAsync(window.remote.getGlobal('appJson').id, 'app-lock-password', form.password);
-        if (window.process.platform === 'darwin') {
-          if (form.useTouchId) {
-            await setPasswordAsync(window.remote.getGlobal('appJson').id, 'app-lock-touch-id', '1');
-          } else {
-            await deletePasswordAsync(window.remote.getGlobal('appJson').id, 'app-lock-touch-id');
-          }
-        }
-        dispatch(close());
+  Promise.resolve()
+    .then(async () => {
+      await setAppLockPasswordAsync(form.currentPassword, form.password);
+      if (window.process.platform === 'darwin') {
+        await setAppLockTouchIdAsync(form.currentPassword, form.useTouchId);
       }
+      dispatch(close());
       return null;
     })
     // eslint-disable-next-line no-console
     .catch(console.log);
 };
 
-export const validateCurrentPassword = () => (dispatch, getState) => {
-  const { form } = getState().dialogAppLock;
-
-  getPasswordAsync(window.remote.getGlobal('appJson').id, 'app-lock-password')
-    .then((password) => {
-      if (!password || password === form.currentPassword) {
+export const validateCurrentPassword = () => (dispatch) => {
+  validateAppLockPasswordAsync()
+    .then((isValid) => {
+      if (isValid) {
         dispatch(updateForm({ requireCurrentPassword: false }));
       } else {
         dispatch(updateForm({ currentPasswordError: 'Wrong password.' }));

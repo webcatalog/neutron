@@ -118,7 +118,6 @@ const AppLock = ({
             <TextField
               autoFocus
               label="Password"
-              helperText={passwordError}
               fullWidth
               margin="none"
               variant="filled"

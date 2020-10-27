@@ -2,13 +2,20 @@ const {
   ipcMain,
   nativeTheme,
 } = require('electron');
-const keytar = require('keytar');
 
 const { getPreferences } = require('../libs/preferences');
 const { getSystemPreferences } = require('../libs/system-preferences');
 const { getWorkspaces } = require('../libs/workspaces');
 const { getWorkspaceMetas } = require('../libs/workspace-metas');
 const { getPauseNotificationsInfo } = require('../libs/notifications');
+
+const {
+  getAppLockStatusAsync,
+  validateAppLockPasswordAsync,
+  deleteAppLockPasswordAsync,
+  setAppLockPasswordAsync,
+  setAppLockTouchIdAsync,
+} = require('../libs/app-lock');
 
 const loadInvokers = () => {
   ipcMain.handle('get-react-initial-state', () => {
@@ -27,9 +34,11 @@ const loadInvokers = () => {
     return Promise.resolve(initialState);
   });
 
-  ipcMain.handle('get-password', (e, service, account) => keytar.getPassword(service, account));
-  ipcMain.handle('delete-password', (e, service, account) => keytar.deletePassword(service, account));
-  ipcMain.handle('set-password', (e, service, account, password) => keytar.setPassword(service, account, password));
+  ipcMain.handle('get-app-lock-status', () => getAppLockStatusAsync());
+  ipcMain.handle('validate-app-lock-password', async (e, inputPassword) => validateAppLockPasswordAsync(inputPassword));
+  ipcMain.handle('delete-app-lock-password', async (e, inputPassword) => deleteAppLockPasswordAsync(inputPassword));
+  ipcMain.handle('set-app-lock-password', async (e, inputPassword, newPassword) => setAppLockPasswordAsync(inputPassword, newPassword));
+  ipcMain.handle('set-app-lock-touch-id', async (e, inputPassword, touchId) => setAppLockTouchIdAsync(inputPassword, touchId));
 };
 
 module.exports = loadInvokers;

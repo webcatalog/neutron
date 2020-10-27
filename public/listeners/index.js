@@ -61,6 +61,11 @@ const {
   getPauseNotificationsInfo,
 } = require('../libs/notifications');
 
+const {
+  lockApp,
+  unlockApp,
+} = require('../libs/app-lock');
+
 const { createMenu, showMenu } = require('../libs/create-menu');
 const sendToAllWindows = require('../libs/send-to-all-windows');
 const fetchUpdater = require('../libs/fetch-updater');
@@ -513,6 +518,15 @@ const loadListeners = () => {
     if (win) {
       showMenu(win, x, y);
     }
+  });
+
+  ipcMain.on('request-lock-app', () => {
+    lockApp();
+  });
+
+  ipcMain.on('request-unlock-app', (e, password) => {
+    console.log('request-unlock-app');
+    unlockApp(password);
   });
 };
 

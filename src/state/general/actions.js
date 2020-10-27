@@ -8,6 +8,7 @@ import {
   UPDATE_IS_MAXIMIZED,
   UPDATE_SHOULD_USE_DARK_COLORS,
   UPDATE_TITLE,
+  UPDATE_LOCKED,
 } from '../../constants/actions';
 
 export const updateIsMaximized = (isMaximized) => ({
@@ -54,4 +55,9 @@ export const updateAddressBarInfo = (address, edited) => ({
 export const updateTitle = (title) => ({
   type: UPDATE_TITLE,
   title,
+});
+
+export const updateLocked = (locked) => ({
+  type: UPDATE_LOCKED,
+  locked,
 });

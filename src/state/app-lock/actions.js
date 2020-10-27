@@ -6,8 +6,12 @@ import validate from '../../helpers/validate';
 import hasErrors from '../../helpers/has-errors';
 
 import {
-  getPasswordAsync,
+  validateAppLockPasswordAsync,
 } from '../../invokers';
+
+import {
+  requestUnlockApp,
+} from '../../senders';
 
 const getValidationRules = () => ({
   password: {
@@ -26,14 +30,16 @@ export const validateForm = () => (dispatch, getState) => {
 
   const validatedChanges = validate(form, getValidationRules());
   if (hasErrors(validatedChanges)) {
+    console.log(updateForm(validatedChanges));
     dispatch(updateForm(validatedChanges));
     return;
   }
 
-  getPasswordAsync(window.remote.getGlobal('appJson').id, 'app-lock-password')
-    .then((password) => {
-      if (!password || password === form.currentPassword) {
-        dispatch(updateForm({ passwordError: 'Perfecto.' }));
+  console.log(form.password);
+  validateAppLockPasswordAsync(form.password)
+    .then((isValid) => {
+      if (isValid) {
+        requestUnlockApp(form.password);
       } else {
         dispatch(updateForm({ passwordError: 'Wrong password.' }));
       }

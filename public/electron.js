@@ -37,6 +37,7 @@ const fetchUpdater = require('./libs/fetch-updater');
 const { getWorkspaces, setWorkspace } = require('./libs/workspaces');
 const sendToAllWindows = require('./libs/send-to-all-windows');
 const extractHostname = require('./libs/extract-hostname');
+const { getAppLockStatusAsync } = require('./libs/app-lock');
 
 const MAILTO_URLS = require('./constants/mailto-urls');
 
@@ -88,6 +89,13 @@ if (!gotTheLock) {
 
   const commonInit = () => {
     app.whenReady()
+      // if app lock is in Keychain, lock the app at first launch
+      .then(() => getAppLockStatusAsync())
+      .then((appLockStatus) => {
+        if (appLockStatus.hasPassword) {
+          global.locked = true;
+        }
+      })
       .then(() => mainWindow.createAsync())
       .then(() => {
         const {
