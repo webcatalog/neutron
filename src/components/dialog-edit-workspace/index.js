@@ -122,7 +122,6 @@ const EditWorkspace = ({
   <div className={classes.root}>
     <div className={classes.flexGrow}>
       <TextField
-        id="outlined-full-width"
         label="Name"
         placeholder="Optional"
         fullWidth
@@ -136,7 +135,6 @@ const EditWorkspace = ({
         onChange={(e) => onUpdateForm({ name: e.target.value })}
       />
       <TextField
-        id="outlined-full-width"
         label="Home URL"
         error={Boolean(homeUrlError)}
         placeholder="Optional"

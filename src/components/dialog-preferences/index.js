@@ -52,6 +52,7 @@ import {
   requestShowRequireRestartDialog,
 } from '../../senders';
 
+import { open as openDialogAppLock } from '../../state/dialog-app-lock/actions';
 import { open as openDialogCodeInjection } from '../../state/dialog-code-injection/actions';
 import { open as openDialogCustomUserAgent } from '../../state/dialog-custom-user-agent/actions';
 import { open as openDialogInternalUrls } from '../../state/dialog-internal-urls/actions';
@@ -65,6 +66,7 @@ import autoRefreshIntervals from '../../constants/auto-refresh-intervals';
 import ListItemDefaultMailClient from './list-item-default-mail-client';
 import ListItemDefaultBrowser from './list-item-default-browser';
 
+import DialogAppLock from '../dialog-app-lock';
 import DialogCodeInjection from '../dialog-code-injection';
 import DialogCustomUserAgent from '../dialog-custom-user-agent';
 import DialogInternalUrls from '../dialog-internal-urls';
@@ -173,6 +175,7 @@ const Preferences = ({
   internalUrlRule,
   jsCodeInjection,
   navigationBar,
+  onOpenDialogAppLock,
   onOpenDialogCodeInjection,
   onOpenDialogCustomUserAgent,
   onOpenDialogInternalUrls,
@@ -201,6 +204,7 @@ const Preferences = ({
 }) => {
   const appJson = window.remote.getGlobal('appJson');
   const utmSource = 'juli_app';
+  const canPromptTouchId = window.remote.systemPreferences.canPromptTouchID();
 
   const sections = {
     general: {
@@ -1004,6 +1008,14 @@ const Preferences = ({
         </Typography>
         <Paper elevation={0} className={classes.paper}>
           <List disablePadding dense>
+            <ListItem button onClick={onOpenDialogAppLock}>
+              <ListItemText
+                primary="App Lock"
+                secondary={`Protect this app from unauthorized access with password${canPromptTouchId ? ' or Touch ID' : ''}.`}
+              />
+              <ChevronRightIcon color="action" />
+            </ListItem>
+            <Divider />
             <ListItem>
               <ListItemText primary="Remember last page visited" />
               <ListItemSecondaryAction>
@@ -1349,6 +1361,7 @@ const Preferences = ({
           </List>
         </Paper>
       </div>
+      <DialogAppLock />
       <DialogCodeInjection />
       <DialogCustomUserAgent />
       <DialogSpellcheckLanguages />
@@ -1387,6 +1400,7 @@ Preferences.propTypes = {
   internalUrlRule: PropTypes.string,
   jsCodeInjection: PropTypes.string,
   navigationBar: PropTypes.bool.isRequired,
+  onOpenDialogAppLock: PropTypes.func.isRequired,
   onOpenDialogCodeInjection: PropTypes.func.isRequired,
   onOpenDialogCustomUserAgent: PropTypes.func.isRequired,
   onOpenDialogInternalUrls: PropTypes.func.isRequired,
@@ -1460,6 +1474,7 @@ const mapStateToProps = (state) => ({
 });
 
 const actionCreators = {
+  openDialogAppLock,
   openDialogCodeInjection,
   openDialogCustomUserAgent,
   openDialogInternalUrls,

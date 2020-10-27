@@ -84,6 +84,12 @@ const title = (state = '', action) => {
   }
 };
 
+const locked = (state = true, action) => {
+  switch (action.type) {
+    default: return state;
+  }
+};
+
 export default combineReducers({
   address,
   addressEdited,
@@ -95,4 +101,5 @@ export default combineReducers({
   isMaximized,
   shouldUseDarkColors,
   title,
+  locked,
 });

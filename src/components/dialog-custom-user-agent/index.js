@@ -28,7 +28,6 @@ const CustomUserAgent = ({
     <DialogContent>
       <TextField
         autoFocus
-        id="outlined-full-width"
         label="User-Agent"
         placeholder=""
         helperText={window.mode === 'workspace-preferences'

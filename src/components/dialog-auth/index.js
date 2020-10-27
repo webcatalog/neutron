@@ -37,7 +37,6 @@ const Auth = ({
       <TextField
         className={classes.textField}
         fullWidth
-        id="outlined-full-width"
         label="Username"
         margin="dense"
         onChange={(e) => onUpdateForm({ username: e.target.value })}
@@ -50,7 +49,6 @@ const Auth = ({
       />
       <TextField
         fullWidth
-        id="outlined-full-width"
         label="Password"
         margin="dense"
         onChange={(e) => onUpdateForm({ password: e.target.value })}

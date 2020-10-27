@@ -2,6 +2,7 @@ const {
   ipcMain,
   nativeTheme,
 } = require('electron');
+const keytar = require('keytar');
 
 const { getPreferences } = require('../libs/preferences');
 const { getSystemPreferences } = require('../libs/system-preferences');
@@ -25,6 +26,10 @@ const loadInvokers = () => {
     };
     return Promise.resolve(initialState);
   });
+
+  ipcMain.handle('get-password', (e, service, account) => keytar.getPassword(service, account));
+  ipcMain.handle('delete-password', (e, service, account) => keytar.deletePassword(service, account));
+  ipcMain.handle('set-password', (e, service, account, password) => keytar.setPassword(service, account, password));
 };
 
 module.exports = loadInvokers;

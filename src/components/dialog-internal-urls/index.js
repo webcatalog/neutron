@@ -82,7 +82,6 @@ const DialogInternalUrls = ({
 
         <TextField
           autoFocus
-          id="outlined-full-width"
           label="Internal URL rule"
           placeholder=""
           helperText={(() => {
