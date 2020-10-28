@@ -1008,7 +1008,16 @@ const Preferences = ({
         </Typography>
         <Paper elevation={0} className={classes.paper}>
           <List disablePadding dense>
-            <ListItem button onClick={onOpenDialogAppLock}>
+            <ListItem
+              button
+              onClick={() => {
+                if (!checkLicense()) {
+                  return;
+                }
+
+                onOpenDialogAppLock();
+              }}
+            >
               <ListItemText
                 primary="App Lock"
                 secondary={`Protect this app from unauthorized access with password${canPromptTouchId ? ' or Touch ID' : ''}.`}
