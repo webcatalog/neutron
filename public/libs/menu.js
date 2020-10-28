@@ -14,6 +14,7 @@ const getViewBounds = require('./get-view-bounds');
 const formatBytes = require('./format-bytes');
 const {
   setPreference,
+  getPreference,
 } = require('./preferences');
 
 const {
@@ -126,6 +127,15 @@ const createMenu = async () => {
         },
         ...macMenuItems,
         { type: 'separator' },
+        {
+          label: 'Warn Before Quitting',
+          click: () => {
+            setPreference('warnBeforeQuitting', !getPreference('warnBeforeQuitting'));
+            createMenu();
+          },
+          type: 'checkbox',
+          checked: getPreference('warnBeforeQuitting'),
+        },
         { role: 'quit' },
       ],
     },
