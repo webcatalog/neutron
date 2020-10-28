@@ -201,6 +201,7 @@ const Preferences = ({
   titleBar,
   unreadCountBadge,
   useHardwareAcceleration,
+  warnBeforeQuitting,
 }) => {
   const appJson = window.remote.getGlobal('appJson');
   const utmSource = 'juli_app';
@@ -1311,7 +1312,7 @@ const Preferences = ({
               onClick={requestCheckForUpdates}
             >
               <ListItemText
-                primary="Check for Updates"
+                primary="Check for updates"
               />
               <ChevronRightIcon color="action" />
             </ListItem>
@@ -1364,6 +1365,19 @@ const Preferences = ({
               <ChevronRightIcon color="action" />
             </ListItem>
             <Divider />
+            <ListItem>
+              <ListItemText primary="Warn before quitting" />
+              <ListItemSecondaryAction>
+                <Switch
+                  edge="end"
+                  color="primary"
+                  checked={warnBeforeQuitting}
+                  onChange={(e) => {
+                    requestSetPreference('warnBeforeQuitting', e.target.checked);
+                  }}
+                />
+              </ListItemSecondaryAction>
+            </ListItem>
             <ListItem button onClick={requestQuit}>
               <ListItemText primary="Quit" />
               <ChevronRightIcon color="action" />
@@ -1436,6 +1450,7 @@ Preferences.propTypes = {
   titleBar: PropTypes.bool.isRequired,
   unreadCountBadge: PropTypes.bool.isRequired,
   useHardwareAcceleration: PropTypes.bool.isRequired,
+  warnBeforeQuitting: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -1481,6 +1496,7 @@ const mapStateToProps = (state) => ({
   titleBar: state.preferences.titleBar,
   unreadCountBadge: state.preferences.unreadCountBadge,
   useHardwareAcceleration: state.preferences.useHardwareAcceleration,
+  warnBeforeQuitting: state.preferences.warnBeforeQuitting,
 });
 
 const actionCreators = {

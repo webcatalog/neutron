@@ -253,21 +253,42 @@ if (!gotTheLock) {
       });
   });
 
-  app.on('before-quit', () => {
-    const win = mainWindow.get();
-    if (win) {
-      // https://github.com/atom/electron/issues/444#issuecomment-76492576
-      win.forceClose = true;
-      win.setBrowserView(null);
+  app.on('before-quit', (e) => {
+    const handleBeforeQuit = () => {
+      const win = mainWindow.get();
+      if (win) {
+        // https://github.com/atom/electron/issues/444#issuecomment-76492576
+        win.forceClose = true;
+        win.setBrowserView(null);
+      }
+
+      // https://github.com/webcatalog/webcatalog-app/issues/1141
+      // the bug seems to only occur when there's BrowserView opened
+      // so destroy all BrowserViews before exiting
+      const views = BrowserView.getAllViews();
+      views.forEach((view) => {
+        view.destroy();
+      });
+    };
+
+    const warnBeforeQuitting = getPreference('warnBeforeQuitting');
+    if (warnBeforeQuitting) {
+      e.preventDefault();
+      dialog.showMessageBox(mainWindow.get(), {
+        type: 'question',
+        buttons: ['Yes', 'No'],
+        message: 'Are you sure you want to quit the app?',
+        cancelId: 1,
+        defaultId: 1,
+      }).then(({ response }) => {
+        if (response === 0) {
+          handleBeforeQuit();
+        }
+      }).catch(console.log); // eslint-disable-line
+      return;
     }
 
-    // https://github.com/webcatalog/webcatalog-app/issues/1141
-    // the bug seems to only occur when there's BrowserView opened
-    // so destroy all BrowserViews before exiting
-    const views = BrowserView.getAllViews();
-    views.forEach((view) => {
-      view.destroy();
-    });
+    handleBeforeQuit();
   });
 
   app.on('window-all-closed', () => {
