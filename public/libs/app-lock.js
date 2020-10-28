@@ -7,7 +7,7 @@ const appJson = require('../app.json');
 
 const getAppLockStatusAsync = async () => {
   const currentPassword = await keytar.getPassword(appJson.id, 'app-lock-password');
-  const useTouchId = process.platform === 'darwin'
+  const useTouchId = process.platform === 'darwin' && systemPreferences.canPromptTouchID()
     ? await keytar.getPassword(appJson.id, 'app-lock-touch-id') === '1'
     : false;
   return {
