@@ -38,7 +38,7 @@ const fetchUpdater = require('./libs/fetch-updater');
 const { getWorkspaces, setWorkspace } = require('./libs/workspaces');
 const sendToAllWindows = require('./libs/send-to-all-windows');
 const extractHostname = require('./libs/extract-hostname');
-const { getAppLockStatusAsync } = require('./libs/app-lock');
+const { getAppLockStatusAsync, unlockAppUsingTouchId } = require('./libs/app-lock');
 
 const MAILTO_URLS = require('./constants/mailto-urls');
 
@@ -96,6 +96,12 @@ if (!gotTheLock) {
         if (appLockStatus.hasPassword) {
           global.appLock = true;
           global.locked = true;
+          if (appLockStatus.useTouchId) {
+            whenTrulyReady()
+              .then(() => {
+                unlockAppUsingTouchId();
+              });
+          }
         }
       })
       .then(() => mainWindow.createAsync())

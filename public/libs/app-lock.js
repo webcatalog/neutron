@@ -7,7 +7,7 @@ const appJson = require('../app.json');
 
 const getAppLockStatusAsync = async () => {
   const currentPassword = await keytar.getPassword(appJson.id, 'app-lock-password');
-  const useTouchId = process.platform === 'darwin'
+  const useTouchId = process.platform === 'darwin' && systemPreferences.canPromptTouchID()
     ? await keytar.getPassword(appJson.id, 'app-lock-touch-id') === '1'
     : false;
   return {
@@ -85,13 +85,11 @@ const unlockAppUsingTouchId = () => {
       }
       return false;
     })
-    .then((success) => {
-      if (success) {
-        global.locked = false;
-        sendToAllWindows('set-locked', global.locked);
-        ipcMain.emit('request-realign-active-workspace');
-        createMenu();
-      }
+    .then(() => {
+      global.locked = false;
+      sendToAllWindows('set-locked', global.locked);
+      ipcMain.emit('request-realign-active-workspace');
+      createMenu();
     })
     // eslint-disable-next-line no-console
     .catch(console.log);

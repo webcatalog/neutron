@@ -163,7 +163,7 @@ const DialogAppLock = ({
           <TextField
             autoFocus
             label="Password"
-            placeholder="Set a password"
+            placeholder={hasPassword ? 'Leave this blank if you want no change' : 'Set a password'}
             helperText={passwordError || `Password is stored locally and securely by ${vaultName}.`}
             fullWidth
             margin="dense"

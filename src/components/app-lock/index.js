@@ -187,6 +187,7 @@ const AppLock = ({
               className={classes.unlockButton}
               startIcon={<LockIcon />}
               disableElevation
+              onClick={onValidateForm}
             >
               Unlock
             </Button>
