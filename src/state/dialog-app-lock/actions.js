@@ -41,17 +41,21 @@ export const close = () => ({
   type: CLOSE_DIALOG_APP_LOCK,
 });
 
-const getValidationRules = () => ({
+const getValidationRules = (hasPassword) => ({
   password: {
     fieldName: 'Password',
-    required: true,
+    required: !hasPassword,
   },
 });
 
-export const updateForm = (changes) => (dispatch) => dispatch({
-  type: UPDATE_DIALOG_APP_LOCK,
-  changes: validate(changes, getValidationRules()),
-});
+export const updateForm = (changes) => (dispatch, getState) => {
+  const { hasPassword } = getState().dialogAppLock.form;
+
+  dispatch({
+    type: UPDATE_DIALOG_APP_LOCK,
+    changes: validate(changes, getValidationRules(hasPassword)),
+  });
+};
 
 export const deletePassword = () => (dispatch, getState) => {
   const { form } = getState().dialogAppLock;
@@ -69,7 +73,7 @@ export const deletePassword = () => (dispatch, getState) => {
 export const save = () => (dispatch, getState) => {
   const { form } = getState().dialogAppLock;
 
-  const validatedChanges = validate(form, getValidationRules());
+  const validatedChanges = validate(form, getValidationRules(form.hasPassword));
   if (hasErrors(validatedChanges)) {
     dispatch(updateForm(validatedChanges));
     return;
@@ -77,7 +81,9 @@ export const save = () => (dispatch, getState) => {
 
   Promise.resolve()
     .then(async () => {
-      await setAppLockPasswordAsync(form.currentPassword, form.password);
+      if (form.password) {
+        await setAppLockPasswordAsync(form.currentPassword, form.password);
+      }
       if (window.process.platform === 'darwin') {
         await setAppLockTouchIdAsync(form.currentPassword, form.useTouchId);
       }
