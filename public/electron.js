@@ -94,6 +94,7 @@ if (!gotTheLock) {
       .then(() => getAppLockStatusAsync())
       .then((appLockStatus) => {
         if (appLockStatus.hasPassword) {
+          global.appLock = true;
           global.locked = true;
         }
       })

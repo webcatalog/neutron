@@ -25,13 +25,19 @@ const validateAppLockPasswordAsync = async (inputPassword) => {
 const deleteAppLockPasswordAsync = async (inputPassword) => {
   const validPassword = await validateAppLockPasswordAsync(inputPassword);
   if (!validPassword) return null;
-  return keytar.deletePassword(appJson.id, 'app-lock-password');
+  return keytar.deletePassword(appJson.id, 'app-lock-password')
+    .then(() => {
+      global.appLock = false;
+    });
 };
 
 const setAppLockPasswordAsync = async (inputPassword, newPassword) => {
   const validPassword = await validateAppLockPasswordAsync(inputPassword);
   if (!validPassword) return null;
-  return keytar.setPassword(appJson.id, 'app-lock-password', newPassword);
+  return keytar.setPassword(appJson.id, 'app-lock-password', newPassword)
+    .then(() => {
+      global.appLock = true;
+    });
 };
 
 const setAppLockTouchIdAsync = async (inputPassword, useTouchId) => {
@@ -71,6 +77,7 @@ const unlockApp = (inputPassword) => {
 };
 
 const unlockAppUsingTouchId = () => {
+  if (process.platform !== 'darwin') return;
   keytar.getPassword(appJson.id, 'app-lock-touch-id')
     .then((val) => {
       if (systemPreferences.canPromptTouchID() && val === '1') {

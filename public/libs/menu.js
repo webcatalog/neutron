@@ -34,7 +34,7 @@ const {
 
 let menu;
 
-function createMenu() {
+const createMenu = async () => {
   const workspaces = getWorkspaces();
   const hasWorkspaces = Object.keys(workspaces).length > 0;
   const updaterEnabled = process.env.SNAP == null && !process.mas && !process.windowsStore;
@@ -96,7 +96,7 @@ function createMenu() {
         {
           label: 'Lock',
           click: () => ipcMain.emit('request-lock-app'),
-          visible: !global.locked,
+          visible: global.appLock && !global.locked,
         },
         { type: 'separator' },
         updaterMenuItem,
@@ -510,7 +510,7 @@ function createMenu() {
 
   menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);
-}
+};
 
 // https://dev.to/saisandeepvaddi/creating-a-custom-menu-bar-in-electron-1pi3
 // Register an event listener.

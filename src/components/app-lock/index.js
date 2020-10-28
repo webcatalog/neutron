@@ -135,7 +135,7 @@ const AppLock = ({
         </Typography>
       </div>
       <div className={classes.rightCorner}>
-        <Typography variant="body2">
+        <Typography variant="body2" color="textSecondary">
           {`Ref ID: ${window.remote.getGlobal('appJson').id}`}
         </Typography>
       </div>

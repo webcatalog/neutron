@@ -53,25 +53,23 @@ const AppWrapper = ({
   const showWindowsTitleBar = window.process.platform !== 'darwin' && !isFullScreen;
 
   return (
-    <>
-      <CssBaseline />
-      <MuiThemeProvider theme={theme}>
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <div
-            style={{
-              height: '100vh',
-              width: '100vw',
-              overflow: 'hidden',
-            }}
-          >
-            {showWindowsTitleBar && <WindowsTitleBar title={window.mode !== 'main' ? document.title : undefined} />}
-            <div style={{ height: showWindowsTitleBar ? 'calc(100vh - 32px)' : '100vh' }}>
-              {locked ? <AppLock /> : children}
-            </div>
+    <MuiThemeProvider theme={theme}>
+      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <CssBaseline />
+        <div
+          style={{
+            height: '100vh',
+            width: '100vw',
+            overflow: 'hidden',
+          }}
+        >
+          {showWindowsTitleBar && <WindowsTitleBar title={window.mode !== 'main' ? document.title : undefined} />}
+          <div style={{ height: showWindowsTitleBar ? 'calc(100vh - 32px)' : '100vh' }}>
+            {locked ? <AppLock /> : children}
           </div>
-        </MuiPickersUtilsProvider>
-      </MuiThemeProvider>
-    </>
+        </div>
+      </MuiPickersUtilsProvider>
+    </MuiThemeProvider>
   );
 };
 

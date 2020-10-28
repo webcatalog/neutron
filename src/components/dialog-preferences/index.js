@@ -204,7 +204,8 @@ const Preferences = ({
 }) => {
   const appJson = window.remote.getGlobal('appJson');
   const utmSource = 'juli_app';
-  const canPromptTouchId = window.remote.systemPreferences.canPromptTouchID();
+  const canPromptTouchId = window.process.platform === 'darwin'
+    && window.remote.systemPreferences.canPromptTouchID();
 
   const sections = {
     general: {

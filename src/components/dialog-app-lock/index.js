@@ -61,7 +61,8 @@ const DialogAppLock = ({
   hasPassword,
 }) => {
   const [revealPassword, setRevealPassword] = useState(false);
-  const canPromptTouchId = window.remote.systemPreferences.canPromptTouchID();
+  const canPromptTouchId = window.process.platform === 'darwin'
+    && window.remote.systemPreferences.canPromptTouchID();
 
   // https://github.com/atom/node-keytar
   let vaultName;
