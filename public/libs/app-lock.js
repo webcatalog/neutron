@@ -64,6 +64,7 @@ const lockApp = () => {
 };
 
 const unlockApp = (inputPassword) => {
+  if (!global.locked) return;
   validateAppLockPasswordAsync(inputPassword)
     .then((isValid) => {
       if (!isValid) return;
@@ -78,6 +79,7 @@ const unlockApp = (inputPassword) => {
 
 const unlockAppUsingTouchId = () => {
   if (process.platform !== 'darwin') return;
+  if (!global.locked) return;
   keytar.getPassword(appJson.id, 'app-lock-touch-id')
     .then((val) => {
       if (systemPreferences.canPromptTouchID() && val === '1') {
