@@ -85,13 +85,11 @@ const unlockAppUsingTouchId = () => {
       }
       return false;
     })
-    .then((success) => {
-      if (success) {
-        global.locked = false;
-        sendToAllWindows('set-locked', global.locked);
-        ipcMain.emit('request-realign-active-workspace');
-        createMenu();
-      }
+    .then(() => {
+      global.locked = false;
+      sendToAllWindows('set-locked', global.locked);
+      ipcMain.emit('request-realign-active-workspace');
+      createMenu();
     })
     // eslint-disable-next-line no-console
     .catch(console.log);
