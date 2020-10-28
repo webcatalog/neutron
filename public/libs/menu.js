@@ -96,7 +96,7 @@ const createMenu = async () => {
         {
           label: 'Lock',
           click: () => ipcMain.emit('request-lock-app'),
-          visible: global.appLock && !global.locked,
+          visible: Boolean(global.appLock) && !global.locked,
         },
         { type: 'separator' },
         updaterMenuItem,
