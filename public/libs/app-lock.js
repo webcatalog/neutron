@@ -1,6 +1,7 @@
-const { ipcMain } = require('electron');
+const { ipcMain, systemPreferences } = require('electron');
 const keytar = require('keytar');
 const sendToAllWindows = require('./send-to-all-windows');
+const { createMenu } = require('./menu');
 
 const appJson = require('../app.json');
 
@@ -43,9 +44,17 @@ const setAppLockTouchIdAsync = async (inputPassword, useTouchId) => {
 };
 
 const lockApp = () => {
-  global.locked = true;
-  sendToAllWindows('set-locked', global.locked);
-  ipcMain.emit('request-realign-active-workspace');
+  getAppLockStatusAsync()
+    .then((status) => {
+      if (status.hasPassword) {
+        global.locked = true;
+        sendToAllWindows('set-locked', global.locked);
+        ipcMain.emit('request-realign-active-workspace');
+        createMenu();
+      }
+    })
+    // eslint-disable-next-line no-console
+    .catch(console.log);
 };
 
 const unlockApp = (inputPassword) => {
@@ -55,17 +64,39 @@ const unlockApp = (inputPassword) => {
       global.locked = false;
       sendToAllWindows('set-locked', global.locked);
       ipcMain.emit('request-realign-active-workspace');
+      createMenu();
+    })
+    // eslint-disable-next-line no-console
+    .catch(console.log);
+};
+
+const unlockAppUsingTouchId = () => {
+  keytar.getPassword(appJson.id, 'app-lock-touch-id')
+    .then((val) => {
+      if (systemPreferences.canPromptTouchID() && val === '1') {
+        return systemPreferences.promptTouchID('Unlock app');
+      }
+      return false;
+    })
+    .then((success) => {
+      if (success) {
+        global.locked = false;
+        sendToAllWindows('set-locked', global.locked);
+        ipcMain.emit('request-realign-active-workspace');
+        createMenu();
+      }
     })
     // eslint-disable-next-line no-console
     .catch(console.log);
 };
 
 module.exports = {
-  getAppLockStatusAsync,
-  validateAppLockPasswordAsync,
   deleteAppLockPasswordAsync,
+  getAppLockStatusAsync,
+  lockApp,
   setAppLockPasswordAsync,
   setAppLockTouchIdAsync,
-  lockApp,
   unlockApp,
+  unlockAppUsingTouchId,
+  validateAppLockPasswordAsync,
 };

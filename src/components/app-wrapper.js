@@ -89,7 +89,7 @@ AppWrapper.propTypes = {
 const mapStateToProps = (state) => ({
   isFullScreen: state.general.isFullScreen,
   shouldUseDarkColors: state.general.shouldUseDarkColors,
-  locked: state.general.locked,
+  locked: window.mode !== 'about' && state.general.locked,
 });
 
 export default connectComponent(

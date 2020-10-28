@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import TextField from '@material-ui/core/TextField';
@@ -19,7 +19,14 @@ import connectComponent from '../../helpers/connect-component';
 
 import { updateForm, validateForm } from '../../state/app-lock/actions';
 
-import { requestOpenInBrowser } from '../../senders';
+import {
+  requestOpenInBrowser,
+  requestUnlockAppUsingTouchId,
+} from '../../senders';
+
+import {
+  getAppLockStatusAsync,
+} from '../../invokers';
 
 import touchIdIcon from '../../images/touch-id-icon.svg';
 
@@ -72,6 +79,13 @@ const styles = (theme) => ({
     bottom: theme.spacing(2),
     left: theme.spacing(2),
   },
+  rightCorner: {
+    WebkitAppRegion: 'no-drag',
+    userSelect: 'text',
+    position: 'absolute',
+    bottom: theme.spacing(2),
+    right: theme.spacing(2),
+  },
   touchIdButton: {
     marginTop: theme.spacing(2),
     backgroundColor: theme.palette.background.paper,
@@ -96,6 +110,14 @@ const AppLock = ({
   passwordError,
 }) => {
   const [revealPassword, setRevealPassword] = useState(false);
+  const [useTouchId, setUseTouchId] = useState(false);
+
+  useEffect(() => {
+    getAppLockStatusAsync()
+      .then((status) => {
+        setUseTouchId(Boolean(status.useTouchId));
+      });
+  }, [setUseTouchId]);
 
   return (
     <div className={classes.outerRoot}>
@@ -105,11 +127,16 @@ const AppLock = ({
             href="#"
             onClick={(e) => {
               e.preventDefault();
-              requestOpenInBrowser('https://help.webcatalog.app');
+              requestOpenInBrowser('https://help.webcatalog.app/article/27-how-to-reset-my-app-lock-password');
             }}
           >
             Forgot your password?
           </Link>
+        </Typography>
+      </div>
+      <div className={classes.rightCorner}>
+        <Typography variant="body2">
+          {`Ref ID: ${window.remote.getGlobal('appJson').id}`}
         </Typography>
       </div>
       <div className={classes.centering}>
@@ -166,11 +193,17 @@ const AppLock = ({
           </div>
         </div>
 
-        <Tooltip title="Unlock with Touch ID" placement="bottom">
-          <Fab aria-label="Unlock with Touch ID" className={classes.touchIdButton}>
-            <img src={touchIdIcon} alt="Touch ID" className={classes.touchIdIcon} />
-          </Fab>
-        </Tooltip>
+        {useTouchId && (
+          <Tooltip title="Unlock with Touch ID" placement="bottom">
+            <Fab
+              aria-label="Unlock with Touch ID"
+              className={classes.touchIdButton}
+              onClick={requestUnlockAppUsingTouchId}
+            >
+              <img src={touchIdIcon} alt="Touch ID" className={classes.touchIdIcon} />
+            </Fab>
+          </Tooltip>
+        )}
       </div>
     </div>
   );

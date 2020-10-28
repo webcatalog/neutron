@@ -30,16 +30,15 @@ export const validateForm = () => (dispatch, getState) => {
 
   const validatedChanges = validate(form, getValidationRules());
   if (hasErrors(validatedChanges)) {
-    console.log(updateForm(validatedChanges));
     dispatch(updateForm(validatedChanges));
     return;
   }
 
-  console.log(form.password);
   validateAppLockPasswordAsync(form.password)
     .then((isValid) => {
       if (isValid) {
         requestUnlockApp(form.password);
+        dispatch(updateForm({ password: '' }));
       } else {
         dispatch(updateForm({ passwordError: 'Wrong password.' }));
       }

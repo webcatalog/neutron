@@ -192,6 +192,8 @@ const createAsync = () => new Promise((resolve) => {
   win.on('close', (e) => {
     if (process.platform === 'darwin' && win && !win.forceClose) {
       e.preventDefault();
+      // on Mac, app won't quit, so lock the app when window is closed but app stays in dock
+      ipcMain.emit('request-lock-app');
       // https://github.com/electron/electron/issues/6033#issuecomment-242023295
       if (win.isFullScreen()) {
         win.once('leave-full-screen', () => {

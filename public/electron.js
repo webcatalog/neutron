@@ -8,6 +8,7 @@ const {
   session,
   shell,
   BrowserView,
+  BrowserWindow,
 } = require('electron');
 const isDev = require('electron-is-dev');
 const settings = require('electron-settings');
@@ -31,7 +32,7 @@ const authWindow = require('./windows/auth');
 const mainWindow = require('./windows/main');
 const openUrlWithWindow = require('./windows/open-url-with');
 
-const { createMenu } = require('./libs/create-menu');
+const { createMenu } = require('./libs/menu');
 const { addView, reloadViewsDarkReader } = require('./libs/views');
 const fetchUpdater = require('./libs/fetch-updater');
 const { getWorkspaces, setWorkspace } = require('./libs/workspaces');
@@ -352,5 +353,27 @@ if (!gotTheLock) {
     };
 
     ipcMain.on('continue-auth', listener);
+  });
+
+  // lock the app when all windows blur for more than 5 minutes
+  let lockAppTimeout;
+  app.on('browser-window-focus', () => {
+    clearTimeout(lockAppTimeout);
+  });
+
+  app.on('browser-window-blur', () => {
+    lockAppTimeout = setTimeout(() => {
+      let allBlurred = true;
+      const wins = BrowserWindow.getAllWindows();
+      for (let i = 0; i < wins.length; i += 1) {
+        if (wins[i] && wins[i].isFocused()) {
+          allBlurred = false;
+          break;
+        }
+      }
+      if (allBlurred) {
+        ipcMain.emit('request-lock-app');
+      }
+    }, 5 * 60 * 1000);
   });
 }

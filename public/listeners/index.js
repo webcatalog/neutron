@@ -64,9 +64,10 @@ const {
 const {
   lockApp,
   unlockApp,
+  unlockAppUsingTouchId,
 } = require('../libs/app-lock');
 
-const { createMenu, showMenu } = require('../libs/create-menu');
+const { createMenu, showMenu } = require('../libs/menu');
 const sendToAllWindows = require('../libs/send-to-all-windows');
 const fetchUpdater = require('../libs/fetch-updater');
 const getWebsiteIconUrlAsync = require('../libs/get-website-icon-url-async');
@@ -525,8 +526,11 @@ const loadListeners = () => {
   });
 
   ipcMain.on('request-unlock-app', (e, password) => {
-    console.log('request-unlock-app');
     unlockApp(password);
+  });
+
+  ipcMain.on('request-unlock-app-using-touch-id', () => {
+    unlockAppUsingTouchId();
   });
 };
 

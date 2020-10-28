@@ -25,6 +25,7 @@ import {
   updateForm,
   save,
   validateCurrentPassword,
+  deletePassword,
 } from '../../state/dialog-app-lock/actions';
 
 import { requestOpenInBrowser } from '../../senders';
@@ -32,6 +33,7 @@ import { requestOpenInBrowser } from '../../senders';
 const styles = (theme) => ({
   actions: {
     display: 'flex',
+    width: '100%',
   },
   actionsLeft: {
     flex: 1,
@@ -52,9 +54,11 @@ const DialogAppLock = ({
   open,
   requireCurrentPassword,
   onValidateCurrentPassword,
+  onDeletePassword,
   currentPassword,
   currentPasswordError,
   useTouchId,
+  hasPassword,
 }) => {
   const [revealPassword, setRevealPassword] = useState(false);
   const canPromptTouchId = window.remote.systemPreferences.canPromptTouchID();
@@ -80,7 +84,7 @@ const DialogAppLock = ({
       href="#"
       onClick={(e) => {
         e.preventDefault();
-        requestOpenInBrowser('https://help.webcatalog.app');
+        requestOpenInBrowser('https://help.webcatalog.app/article/27-how-to-reset-my-app-lock-password');
       }}
     >
       Forgot your password?
@@ -92,7 +96,7 @@ const DialogAppLock = ({
       onClose={onClose}
       open={open}
       fullWidth
-      maxWidth="xs"
+      maxWidth="sm"
     >
       {requireCurrentPassword ? (
         <DialogContent>
@@ -190,6 +194,13 @@ const DialogAppLock = ({
       <DialogActions>
         <div className={classes.actions}>
           <div className={classes.actionsLeft}>
+            {hasPassword && !requireCurrentPassword && (
+              <Button variant="contained" disableElevation onClick={onDeletePassword}>
+                Disable App Lock
+              </Button>
+            )}
+          </div>
+          <div className={classes.actionsRight}>
             {!requireCurrentPassword && canPromptTouchId && (
               <FormControlLabel
                 control={(
@@ -225,6 +236,7 @@ const DialogAppLock = ({
 DialogAppLock.defaultProps = {
   currentPassword: '',
   currentPasswordError: null,
+  hasPassword: false,
   open: false,
   password: '',
   passwordError: null,
@@ -236,7 +248,9 @@ DialogAppLock.propTypes = {
   classes: PropTypes.object.isRequired,
   currentPassword: PropTypes.string,
   currentPasswordError: PropTypes.string,
+  hasPassword: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
+  onDeletePassword: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   onUpdateForm: PropTypes.func.isRequired,
   onValidateCurrentPassword: PropTypes.func.isRequired,
@@ -250,6 +264,7 @@ DialogAppLock.propTypes = {
 const mapStateToProps = (state) => ({
   currentPassword: state.dialogAppLock.form.currentPassword,
   currentPasswordError: state.dialogAppLock.form.currentPasswordError,
+  hasPassword: state.dialogAppLock.form.hasPassword,
   open: state.dialogAppLock.open,
   password: state.dialogAppLock.form.password,
   passwordError: state.dialogAppLock.form.passwordError,
@@ -262,6 +277,7 @@ const actionCreators = {
   updateForm,
   save,
   validateCurrentPassword,
+  deletePassword,
 };
 
 export default connectComponent(
