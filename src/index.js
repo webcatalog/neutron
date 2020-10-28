@@ -2,8 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
-import CssBaseline from '@material-ui/core/CssBaseline';
-
 import 'typeface-roboto/index.css';
 
 import './amplitude';
@@ -13,6 +11,8 @@ import configureStore from './state';
 import AppWrapper from './components/app-wrapper';
 
 import getWorkspacesAsList from './helpers/get-workspaces-as-list';
+
+import { getReactInitialStateAsync } from './invokers';
 
 const DialogAbout = React.lazy(() => import('./components/dialog-about'));
 const DialogAddWorkspace = React.lazy(() => import('./components/dialog-add-workspace'));
@@ -45,7 +45,7 @@ const App = () => {
 const runApp = () => {
   Promise.resolve()
     .then(async () => {
-      const initialState = await window.ipcRenderer.invoke('get-react-initial-state');
+      const initialState = await getReactInitialStateAsync();
 
       if (window.mode === 'about') {
         document.title = 'About';
@@ -116,7 +116,6 @@ const runApp = () => {
       ReactDOM.render(
         <Provider store={store}>
           <AppWrapper>
-            <CssBaseline />
             <React.Suspense fallback={<div />}>
               <App />
             </React.Suspense>

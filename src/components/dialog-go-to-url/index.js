@@ -33,7 +33,6 @@ const GoToUrl = ({
     <div className={classes.flexGrow}>
       <TextField
         autoFocus
-        id="outlined-full-width"
         label="URL"
         error={Boolean(urlError)}
         helperText={urlError}

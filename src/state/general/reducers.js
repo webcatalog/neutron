@@ -10,6 +10,7 @@ import {
   UPDATE_IS_MAXIMIZED,
   UPDATE_SHOULD_USE_DARK_COLORS,
   UPDATE_TITLE,
+  UPDATE_LOCKED,
 } from '../../constants/actions';
 
 const win = window.remote.getCurrentWindow();
@@ -84,6 +85,13 @@ const title = (state = '', action) => {
   }
 };
 
+const locked = (state = Boolean(window.remote.getGlobal('locked')), action) => {
+  switch (action.type) {
+    case UPDATE_LOCKED: return action.locked;
+    default: return state;
+  }
+};
+
 export default combineReducers({
   address,
   addressEdited,
@@ -95,4 +103,5 @@ export default combineReducers({
   isMaximized,
   shouldUseDarkColors,
   title,
+  locked,
 });

@@ -86,3 +86,8 @@ export const getShouldUseDarkColors = () => window.ipcRenderer.sendSync('get-sho
 
 // Online Status
 export const signalOnlineStatusChanged = (online) => window.ipcRenderer.send('online-status-changed', online);
+
+// App Lock
+export const requestLockApp = () => window.ipcRenderer.send('request-lock-app');
+export const requestUnlockApp = (password) => window.ipcRenderer.send('request-unlock-app', password);
+export const requestUnlockAppUsingTouchId = () => window.ipcRenderer.send('request-unlock-app-using-touch-id');

@@ -14,6 +14,15 @@ const getViewBounds = (contentSize, findInPage = false, height, width) => {
   const x = showSidebar ? sidebarWidth : 0;
   const y = showNavigationBar ? 36 + offsetTitlebar : 0 + offsetTitlebar;
 
+  if (global.locked) {
+    return {
+      x: 0,
+      y: 0,
+      height: 0,
+      width: 0,
+    };
+  }
+
   if (findInPage) {
     const FIND_IN_PAGE_HEIGHT = 42;
     return {

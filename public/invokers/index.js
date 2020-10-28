@@ -9,6 +9,14 @@ const { getWorkspaces } = require('../libs/workspaces');
 const { getWorkspaceMetas } = require('../libs/workspace-metas');
 const { getPauseNotificationsInfo } = require('../libs/notifications');
 
+const {
+  getAppLockStatusAsync,
+  validateAppLockPasswordAsync,
+  deleteAppLockPasswordAsync,
+  setAppLockPasswordAsync,
+  setAppLockTouchIdAsync,
+} = require('../libs/app-lock');
+
 const loadInvokers = () => {
   ipcMain.handle('get-react-initial-state', () => {
     const initialState = {
@@ -25,6 +33,12 @@ const loadInvokers = () => {
     };
     return Promise.resolve(initialState);
   });
+
+  ipcMain.handle('get-app-lock-status', () => getAppLockStatusAsync());
+  ipcMain.handle('validate-app-lock-password', async (e, inputPassword) => validateAppLockPasswordAsync(inputPassword));
+  ipcMain.handle('delete-app-lock-password', async (e, inputPassword) => deleteAppLockPasswordAsync(inputPassword));
+  ipcMain.handle('set-app-lock-password', async (e, inputPassword, newPassword) => setAppLockPasswordAsync(inputPassword, newPassword));
+  ipcMain.handle('set-app-lock-touch-id', async (e, inputPassword, touchId) => setAppLockTouchIdAsync(inputPassword, touchId));
 };
 
 module.exports = loadInvokers;

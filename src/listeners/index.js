@@ -10,6 +10,7 @@ import {
   updateIsMaximized,
   updateShouldUseDarkColors,
   updateTitle,
+  updateLocked,
 } from '../state/general/actions';
 import {
   closeFindInPage,
@@ -114,6 +115,10 @@ const loadListeners = (store) => {
 
   window.ipcRenderer.on('set-is-maximized', (e, isMaximized) => {
     store.dispatch(updateIsMaximized(isMaximized));
+  });
+
+  window.ipcRenderer.on('set-locked', (e, locked) => {
+    store.dispatch(updateLocked(locked));
   });
 };
 

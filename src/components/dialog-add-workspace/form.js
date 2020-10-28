@@ -116,7 +116,6 @@ const AddWorkspaceCustom = ({
   <div className={classes.root}>
     <div>
       <TextField
-        id="outlined-full-width"
         label="Name"
         error={Boolean(nameError)}
         placeholder="Example"
@@ -132,7 +131,6 @@ const AddWorkspaceCustom = ({
         onChange={(e) => onUpdateForm({ name: e.target.value })}
       />
       <TextField
-        id="outlined-full-width"
         label="Home URL"
         error={Boolean(homeUrlError)}
         placeholder="https://example.com"

@@ -34,7 +34,7 @@ const {
 
 let menu;
 
-function createMenu() {
+const createMenu = async () => {
   const workspaces = getWorkspaces();
   const hasWorkspaces = Object.keys(workspaces).length > 0;
   const updaterEnabled = process.env.SNAP == null && !process.mas && !process.windowsStore;
@@ -56,7 +56,79 @@ function createMenu() {
     }
   };
 
+  const updaterMenuItem = {
+    label: 'Check for Updates...',
+    click: () => ipcMain.emit('request-check-for-updates'),
+    visible: updaterEnabled,
+  };
+  if (global.updaterObj && global.updaterObj.status === 'update-downloaded') {
+    updaterMenuItem.label = 'Restart to Apply Updates...';
+  } else if (global.updaterObj && global.updaterObj.status === 'update-available') {
+    updaterMenuItem.label = 'Downloading Updates...';
+    updaterMenuItem.enabled = false;
+  } else if (global.updaterObj && global.updaterObj.status === 'download-progress') {
+    const { transferred, total, bytesPerSecond } = global.updaterObj.info;
+    updaterMenuItem.label = `Downloading Updates (${formatBytes(transferred)}/${formatBytes(total)} at ${formatBytes(bytesPerSecond)}/s)...`;
+    updaterMenuItem.enabled = false;
+  } else if (global.updaterObj && global.updaterObj.status === 'checking-for-update') {
+    updaterMenuItem.label = 'Checking for Updates...';
+    updaterMenuItem.enabled = false;
+  }
+
+  const macMenuItems = [
+    { type: 'separator' },
+    { role: 'services', submenu: [] },
+    { type: 'separator' },
+    { role: 'hide' },
+    { role: 'hideothers' },
+    { role: 'unhide' },
+  ];
+
   const template = [
+    {
+      label: appJson.name,
+      submenu: [
+        {
+          label: `About ${appJson.name}`,
+          click: () => ipcMain.emit('request-show-about-window'),
+        },
+        { type: 'separator' },
+        {
+          label: 'Lock',
+          click: () => ipcMain.emit('request-lock-app'),
+          visible: Boolean(global.appLock) && !global.locked,
+        },
+        { type: 'separator' },
+        updaterMenuItem,
+        {
+          type: 'separator',
+          visible: updaterEnabled,
+        },
+        {
+          label: 'Preferences...',
+          accelerator: 'CmdOrCtrl+,',
+          click: () => ipcMain.emit('request-show-preferences-window'),
+          enabled: !global.locked && hasWorkspaces,
+        },
+        { type: 'separator' },
+        {
+          label: 'Notifications...',
+          click: () => ipcMain.emit('request-show-notifications-window'),
+          accelerator: 'CmdOrCtrl+Shift+N',
+          enabled: !global.locked && hasWorkspaces,
+        },
+        { type: 'separator' },
+        {
+          label: 'Clear Browsing Data...',
+          accelerator: 'CmdOrCtrl+Shift+Delete',
+          click: () => ipcMain.emit('request-clear-browsing-data'),
+          enabled: !global.locked && hasWorkspaces,
+        },
+        ...macMenuItems,
+        { type: 'separator' },
+        { role: 'quit' },
+      ],
+    },
     {
       label: 'Edit',
       submenu: [
@@ -90,7 +162,7 @@ function createMenu() {
               view.setBounds(getViewBounds(contentSize, true));
             }
           },
-          enabled: hasWorkspaces,
+          enabled: !global.locked && hasWorkspaces,
         },
         {
           label: 'Find Next',
@@ -99,7 +171,7 @@ function createMenu() {
             const win = mainWindow.get();
             win.send('request-back-find-in-page', true);
           },
-          enabled: hasWorkspaces,
+          enabled: !global.locked && hasWorkspaces,
         },
         {
           label: 'Find Previous',
@@ -108,7 +180,7 @@ function createMenu() {
             const win = mainWindow.get();
             win.send('request-back-find-in-page', false);
           },
-          enabled: hasWorkspaces,
+          enabled: !global.locked && hasWorkspaces,
         },
       ],
     },
@@ -122,11 +194,12 @@ function createMenu() {
             setPreference('sidebar', !global.sidebar);
             ipcMain.emit('request-realign-active-workspace');
           },
+          enabled: !global.locked,
         },
         {
           label: global.navigationBar ? 'Hide Navigation Bar' : 'Show Navigation Bar',
           accelerator: 'CmdOrCtrl+Alt+N',
-          enabled: !(process.platform === 'linux' && global.attachToMenubar && !global.sidebar),
+          enabled: !global.locked && !(process.platform === 'linux' && global.attachToMenubar && !global.sidebar),
           click: () => {
             setPreference('navigationBar', !global.navigationBar);
             ipcMain.emit('request-realign-active-workspace');
@@ -135,7 +208,7 @@ function createMenu() {
         {
           label: global.titleBar ? 'Hide Title Bar' : 'Show Title Bar',
           accelerator: 'CmdOrCtrl+Alt+T',
-          enabled: process.platform === 'darwin',
+          enabled: !global.locked && process.platform === 'darwin',
           visible: process.platform === 'darwin',
           click: () => {
             setPreference('titleBar', !global.titleBar);
@@ -163,7 +236,7 @@ function createMenu() {
               contents.zoomFactor = 1;
             }
           },
-          enabled: hasWorkspaces,
+          enabled: !global.locked && hasWorkspaces,
         },
         // duplicate zooming in menuitem
         // as it's not posible to set multiple accelerators
@@ -172,14 +245,14 @@ function createMenu() {
           label: 'Zoom In',
           accelerator: 'CmdOrCtrl+=',
           click: handleZoomIn,
-          enabled: hasWorkspaces,
+          enabled: !global.locked && hasWorkspaces,
           visible: false,
         },
         {
           label: 'Zoom In',
           accelerator: 'CmdOrCtrl+Plus',
           click: handleZoomIn,
-          enabled: hasWorkspaces,
+          enabled: !global.locked && hasWorkspaces,
         },
         {
           label: 'Zoom Out',
@@ -200,7 +273,7 @@ function createMenu() {
               contents.zoomFactor -= 0.1;
             }
           },
-          enabled: hasWorkspaces,
+          enabled: !global.locked && hasWorkspaces,
         },
         { type: 'separator' },
         {
@@ -220,7 +293,7 @@ function createMenu() {
               win.getBrowserView().webContents.reload();
             }
           },
-          enabled: hasWorkspaces,
+          enabled: !global.locked && hasWorkspaces,
         },
         { type: 'separator' },
         {
@@ -236,7 +309,7 @@ function createMenu() {
           label: 'Home',
           accelerator: 'Shift+CmdOrCtrl+H',
           click: () => ipcMain.emit('request-go-home'),
-          enabled: hasWorkspaces,
+          enabled: !global.locked && hasWorkspaces,
         },
         {
           label: 'Back',
@@ -250,7 +323,7 @@ function createMenu() {
             }
             ipcMain.emit('request-go-back');
           },
-          enabled: hasWorkspaces,
+          enabled: !global.locked && hasWorkspaces,
         },
         {
           label: 'Forward',
@@ -264,7 +337,7 @@ function createMenu() {
             }
             ipcMain.emit('request-go-forward');
           },
-          enabled: hasWorkspaces,
+          enabled: !global.locked && hasWorkspaces,
         },
         { type: 'separator' },
         {
@@ -286,7 +359,7 @@ function createMenu() {
               clipboard.writeText(url);
             }
           },
-          enabled: hasWorkspaces,
+          enabled: !global.locked && hasWorkspaces,
         },
         { type: 'separator' },
         {
@@ -295,7 +368,7 @@ function createMenu() {
           click: () => {
             goToUrlWindow.show();
           },
-          enabled: hasWorkspaces,
+          enabled: !global.locked && hasWorkspaces,
         },
       ],
     },
@@ -341,125 +414,33 @@ function createMenu() {
     },
   ];
 
-  const updaterMenuItem = {
-    label: 'Check for Updates...',
-    click: () => ipcMain.emit('request-check-for-updates'),
-    visible: updaterEnabled,
-  };
-  if (global.updaterObj && global.updaterObj.status === 'update-downloaded') {
-    updaterMenuItem.label = 'Restart to Apply Updates...';
-  } else if (global.updaterObj && global.updaterObj.status === 'update-available') {
-    updaterMenuItem.label = 'Downloading Updates...';
-    updaterMenuItem.enabled = false;
-  } else if (global.updaterObj && global.updaterObj.status === 'download-progress') {
-    const { transferred, total, bytesPerSecond } = global.updaterObj.info;
-    updaterMenuItem.label = `Downloading Updates (${formatBytes(transferred)}/${formatBytes(total)} at ${formatBytes(bytesPerSecond)}/s)...`;
-    updaterMenuItem.enabled = false;
-  } else if (global.updaterObj && global.updaterObj.status === 'checking-for-update') {
-    updaterMenuItem.label = 'Checking for Updates...';
-    updaterMenuItem.enabled = false;
-  }
+  // hide list of workspaces ogether when the app is locked
+  // preventing unauthorized stalking
+  if (!global.locked) {
+    Object.values(getWorkspaces())
+      .sort((a, b) => a.order - b.order)
+      .forEach((workspace, i) => {
+        template[4].submenu.push({
+          label: workspace.name || `Workspace ${i + 1}`,
+          type: 'checkbox',
+          checked: workspace.active,
+          click: () => {
+            if (workspace.active) return;
+            setActiveWorkspaceView(workspace.id);
+            createMenu();
+          },
+          accelerator: i < 9 ? `CmdOrCtrl+${i + 1}` : null,
+        });
 
-  if (process.platform === 'darwin') {
-    template.unshift({
-      label: appJson.name,
-      submenu: [
-        {
-          label: `About ${appJson.name}`,
-          click: () => ipcMain.emit('request-show-about-window'),
-        },
-        { type: 'separator' },
-        updaterMenuItem,
-        {
-          type: 'separator',
-          visible: updaterEnabled,
-        },
-        {
-          label: 'Preferences...',
-          accelerator: 'CmdOrCtrl+,',
-          click: () => ipcMain.emit('request-show-preferences-window'),
-        },
-        { type: 'separator' },
-        {
-          label: 'Notifications...',
-          click: () => ipcMain.emit('request-show-notifications-window'),
-          accelerator: 'CmdOrCtrl+Shift+N',
-        },
-        { type: 'separator' },
-        {
-          label: 'Clear Browsing Data...',
-          accelerator: 'CmdOrCtrl+Shift+Delete',
-          click: () => ipcMain.emit('request-clear-browsing-data'),
-        },
-        { type: 'separator' },
-        { role: 'services', submenu: [] },
-        { type: 'separator' },
-        { role: 'hide' },
-        { role: 'hideothers' },
-        { role: 'unhide' },
-        { type: 'separator' },
-        { role: 'quit' },
-      ],
-    });
-  } else {
-    template.unshift({
-      label: 'File',
-      submenu: [
-        {
-          label: 'About',
-          click: () => ipcMain.emit('request-show-about-window'),
-        },
-        updaterMenuItem,
-        {
-          type: 'separator',
-          visible: updaterEnabled,
-        },
-        {
-          label: 'Preferences...',
-          accelerator: 'CmdOrCtrl+,',
-          click: () => ipcMain.emit('request-show-preferences-window'),
-        },
-        { type: 'separator' },
-        {
-          label: 'Notifications...',
-          click: () => ipcMain.emit('request-show-notifications-window'),
-          accelerator: 'CmdOrCtrl+Shift+N',
-        },
-        { type: 'separator' },
-        {
-          label: 'Clear Browsing Data...',
-          accelerator: 'CmdOrCtrl+Shift+Delete',
-          click: () => ipcMain.emit('request-clear-browsing-data'),
-        },
-        { type: 'separator' },
-        { role: 'quit', label: 'Quit' },
-      ],
-    });
-  }
-
-  Object.values(getWorkspaces())
-    .sort((a, b) => a.order - b.order)
-    .forEach((workspace, i) => {
-      template[4].submenu.push({
-        label: workspace.name || `Workspace ${i + 1}`,
-        type: 'checkbox',
-        checked: workspace.active,
-        click: () => {
-          if (workspace.active) return;
-          setActiveWorkspaceView(workspace.id);
-          createMenu();
-        },
-        accelerator: i < 9 ? `CmdOrCtrl+${i + 1}` : null,
+        template[2].submenu[template[2].submenu.length - 1].submenu.push({
+          label: workspace.name || `Workspace ${i + 1}`,
+          click: () => {
+            const v = getView(workspace.id);
+            v.webContents.toggleDevTools();
+          },
+        });
       });
-
-      template[2].submenu[template[2].submenu.length - 1].submenu.push({
-        label: workspace.name || `Workspace ${i + 1}`,
-        click: () => {
-          const v = getView(workspace.id);
-          v.webContents.toggleDevTools();
-        },
-      });
-    });
+  }
 
   template[4].submenu.push(
     { type: 'separator' },
@@ -472,7 +453,7 @@ function createMenu() {
         createMenu();
       },
       accelerator: 'CmdOrCtrl+Shift+]',
-      enabled: hasWorkspaces,
+      enabled: !global.locked && hasWorkspaces,
     },
     {
       label: 'Select Previous Workspace',
@@ -483,7 +464,7 @@ function createMenu() {
         createMenu();
       },
       accelerator: 'CmdOrCtrl+Shift+[',
-      enabled: hasWorkspaces,
+      enabled: !global.locked && hasWorkspaces,
     },
     { type: 'separator' },
     {
@@ -492,7 +473,7 @@ function createMenu() {
         const activeWorkspace = getActiveWorkspace();
         ipcMain.emit('request-show-edit-workspace-window', null, activeWorkspace.id);
       },
-      enabled: hasWorkspaces,
+      enabled: !global.locked && hasWorkspaces,
     },
     {
       label: 'Configure Current Workspace',
@@ -500,7 +481,7 @@ function createMenu() {
         const activeWorkspace = getActiveWorkspace();
         ipcMain.emit('request-show-workspace-preferences-window', null, activeWorkspace.id);
       },
-      enabled: hasWorkspaces,
+      enabled: !global.locked && hasWorkspaces,
     },
     {
       label: 'Remove Current Workspace',
@@ -508,7 +489,7 @@ function createMenu() {
         const activeWorkspace = getActiveWorkspace();
         ipcMain.emit('request-remove-workspace', null, activeWorkspace.id);
       },
-      enabled: hasWorkspaces,
+      enabled: !global.locked && hasWorkspaces,
     },
     { type: 'separator' },
     {
@@ -518,16 +499,18 @@ function createMenu() {
         createMenu();
       },
       visible: Boolean(appJson.url),
+      enabled: !global.locked,
     },
     {
-      label: 'Add Custom Workspace',
+      label: appJson.url ? 'Add Custom Workspace' : 'Add Workspace',
       click: () => ipcMain.emit('request-show-add-workspace-window'),
+      enabled: !global.locked,
     },
   );
 
   menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);
-}
+};
 
 // https://dev.to/saisandeepvaddi/creating-a-custom-menu-bar-in-electron-1pi3
 // Register an event listener.

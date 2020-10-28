@@ -61,7 +61,13 @@ const {
   getPauseNotificationsInfo,
 } = require('../libs/notifications');
 
-const { createMenu, showMenu } = require('../libs/create-menu');
+const {
+  lockApp,
+  unlockApp,
+  unlockAppUsingTouchId,
+} = require('../libs/app-lock');
+
+const { createMenu, showMenu } = require('../libs/menu');
 const sendToAllWindows = require('../libs/send-to-all-windows');
 const fetchUpdater = require('../libs/fetch-updater');
 const getWebsiteIconUrlAsync = require('../libs/get-website-icon-url-async');
@@ -513,6 +519,18 @@ const loadListeners = () => {
     if (win) {
       showMenu(win, x, y);
     }
+  });
+
+  ipcMain.on('request-lock-app', () => {
+    lockApp();
+  });
+
+  ipcMain.on('request-unlock-app', (e, password) => {
+    unlockApp(password);
+  });
+
+  ipcMain.on('request-unlock-app-using-touch-id', () => {
+    unlockAppUsingTouchId();
   });
 };
 

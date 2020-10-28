@@ -6,17 +6,21 @@ import blue from '@material-ui/core/colors/blue';
 import red from '@material-ui/core/colors/pink';
 import grey from '@material-ui/core/colors/grey';
 
+import CssBaseline from '@material-ui/core/CssBaseline';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+
 import DateFnsUtils from '@date-io/date-fns';
 
 import connectComponent from '../helpers/connect-component';
 
 import WindowsTitleBar from './shared/windows-title-bar';
+import AppLock from './app-lock';
 
 const AppWrapper = ({
   children,
   shouldUseDarkColors,
   isFullScreen,
+  locked,
 }) => {
   const themeObj = {
     typography: {
@@ -51,6 +55,7 @@ const AppWrapper = ({
   return (
     <MuiThemeProvider theme={theme}>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <CssBaseline />
         <div
           style={{
             height: '100vh',
@@ -60,7 +65,7 @@ const AppWrapper = ({
         >
           {showWindowsTitleBar && <WindowsTitleBar title={window.mode !== 'main' ? document.title : undefined} />}
           <div style={{ height: showWindowsTitleBar ? 'calc(100vh - 32px)' : '100vh' }}>
-            {children}
+            {locked ? <AppLock /> : children}
           </div>
         </div>
       </MuiPickersUtilsProvider>
@@ -76,11 +81,13 @@ AppWrapper.propTypes = {
   ]).isRequired,
   shouldUseDarkColors: PropTypes.bool.isRequired,
   isFullScreen: PropTypes.bool.isRequired,
+  locked: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   isFullScreen: state.general.isFullScreen,
   shouldUseDarkColors: state.general.shouldUseDarkColors,
+  locked: window.mode !== 'about' && state.general.locked,
 });
 
 export default connectComponent(
