@@ -1,5 +1,7 @@
 const { ipcMain, systemPreferences } = require('electron');
 const keytar = require('keytar');
+const { captureException } = require('@sentry/electron');
+
 const sendToAllWindows = require('./send-to-all-windows');
 const { createMenu } = require('./menu');
 
@@ -19,6 +21,7 @@ const getAppLockStatusAsync = async () => {
   } catch (e) {
     // eslint-disable-next-line no-console
     console.log(e);
+    captureException(e);
     // keytar might fail on Linux system without libsecret & gnome-keyring installed
     return {
       supported: false,
