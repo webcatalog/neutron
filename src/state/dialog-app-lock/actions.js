@@ -22,6 +22,23 @@ export const open = () => (dispatch) => {
     .then(async () => {
       const status = await getAppLockStatusAsync();
 
+      if (!status.supported && window.process.platform === 'linux') {
+        window.remote.dialog.showMessageBox(window.remote.getCurrentWindow(), {
+          type: 'info',
+          message: 'To use this feature, please install libsecret and gnome-keyring.',
+          buttons: ['OK', 'Learn More...'],
+          cancelId: 0,
+          defaultId: 0,
+        })
+          .then(({ response }) => {
+            if (response === 1) {
+              const utmSource = 'juli_app';
+              window.remote.shell.openExternal(`https://help.webcatalog.app/article/29-what-are-the-requirements-to-use-app-lock-feature-on-linux?utm_source=${utmSource}`);
+            }
+          })
+          .catch(console.log); // eslint-disable-line no-console
+      }
+
       dispatch({
         type: OPEN_DIALOG_APP_LOCK,
         form: {

@@ -24,7 +24,7 @@
   "author": "Quang Lam <quang.lam@webcatalog.app>",
   "dependencies": {
     "@cliqz/adblocker-electron": "1.18.3",
-    "@sentry/electron": "2.0.1",
+    "@sentry/electron": "2.0.2",
     "cheerio": "1.0.0-rc.3",
     "darkreader": "4.9.22",
     "electron-context-menu": "2.3.0",
