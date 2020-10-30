@@ -13,7 +13,6 @@ const isDev = require('electron-is-dev');
 
 const { REACT_PATH } = require('../constants/paths');
 const { getPreference } = require('../libs/preferences');
-const formatBytes = require('../libs/format-bytes');
 const appJson = require('../app.json');
 
 let win;
@@ -85,25 +84,6 @@ const createAsync = () => new Promise((resolve) => {
         const updaterEnabled = process.env.SNAP == null
           && !process.mas && !process.windowsStore;
 
-        const updaterMenuItem = {
-          label: 'Check for Updates...',
-          click: () => ipcMain.emit('request-check-for-updates'),
-          visible: updaterEnabled,
-        };
-        if (global.updaterObj && global.updaterObj.status === 'update-downloaded') {
-          updaterMenuItem.label = 'Restart to Apply Updates...';
-        } else if (global.updaterObj && global.updaterObj.status === 'update-available') {
-          updaterMenuItem.label = 'Downloading Updates...';
-          updaterMenuItem.enabled = false;
-        } else if (global.updaterObj && global.updaterObj.status === 'download-progress') {
-          const { transferred, total, bytesPerSecond } = global.updaterObj.info;
-          updaterMenuItem.label = `Downloading Updates (${formatBytes(transferred)}/${formatBytes(total)} at ${formatBytes(bytesPerSecond)}/s)...`;
-          updaterMenuItem.enabled = false;
-        } else if (global.updaterObj && global.updaterObj.status === 'checking-for-update') {
-          updaterMenuItem.label = 'Checking for Updates...';
-          updaterMenuItem.enabled = false;
-        }
-
         const contextMenu = Menu.buildFromTemplate([
           {
             label: `Open ${appJson.name}`,
@@ -117,7 +97,10 @@ const createAsync = () => new Promise((resolve) => {
             click: () => ipcMain.emit('request-show-about-window'),
           },
           { type: 'separator' },
-          updaterMenuItem,
+          {
+            label: 'Check for Updates...',
+            click: () => ipcMain.emit('request-check-for-updates'),
+          },
           {
             type: 'separator',
             visible: updaterEnabled,
