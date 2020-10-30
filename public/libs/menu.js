@@ -93,7 +93,10 @@ const createMenu = async () => {
           label: `About ${appJson.name}`,
           click: () => ipcMain.emit('request-show-about-window'),
         },
-        { type: 'separator' },
+        {
+          type: 'separator',
+          visible: Boolean(global.appLock) && !global.locked,
+        },
         {
           label: 'Lock',
           click: () => ipcMain.emit('request-lock-app'),
