@@ -46,15 +46,6 @@ const appJson = require('./app.json');
 
 const gotTheLock = app.requestSingleInstanceLock();
 
-app.on('second-instance', () => {
-  // Someone tried to run a second instance, we should focus our window.
-  const win = mainWindow.get();
-  if (win != null) {
-    if (win.isMinimized()) win.restore();
-    win.focus();
-  }
-});
-
 if (!gotTheLock) {
   // eslint-disable-next-line
   app.quit();
@@ -83,6 +74,63 @@ if (!gotTheLock) {
         resolve();
       });
     });
+  };
+
+  const handleOpenUrl = (url) => {
+    whenTrulyReady()
+      .then(() => {
+        // focus on window
+        mainWindow.show();
+
+        const workspaces = Object.values(getWorkspaces());
+
+        if (workspaces.length < 1) return null;
+
+        // handle mailto:
+        if (url.startsWith('mailto:')) {
+          const mailtoWorkspaces = workspaces
+            .filter((workspace) => extractHostname(
+              workspace.homeUrl || appJson.url,
+            ) in MAILTO_URLS);
+
+          // pick automically if there's only one choice
+          if (mailtoWorkspaces.length === 0) {
+            ipcMain.emit(
+              'request-show-message-box', null,
+              'None of your workspaces supports composing email messages.',
+              'error',
+            );
+            return null;
+          }
+          if (mailtoWorkspaces.length === 1) {
+            const mailtoUrl = MAILTO_URLS[extractHostname(
+              mailtoWorkspaces[0].homeUrl || appJson.url,
+            )];
+            const u = mailtoUrl.replace('%s', url);
+            ipcMain.emit('request-load-url', null, u, mailtoWorkspaces[0].id);
+            return null;
+          }
+
+          return openUrlWithWindow.show(url);
+        }
+
+        // handle https/http
+        // pick automically if there's only one choice
+        if (workspaces.length === 1) {
+          ipcMain.emit('request-load-url', null, url, workspaces[0].id);
+          return null;
+        }
+
+        return openUrlWithWindow.show(url);
+      });
+  };
+
+  const handleArgv = (argv) => {
+    if (argv.length <= 1) return;
+    const url = argv.find((a) => a.startsWith('mailto:') || a.startsWith('http') || a.startsWith('https'));
+    if (url) {
+      handleOpenUrl(url);
+    }
   };
 
   loadListeners();
@@ -229,6 +277,12 @@ if (!gotTheLock) {
 
     whenTrulyReady()
       .then(() => {
+        // handle protocols on Windows & Linux
+        // on macOS, use 'open-url' event
+        if (process.platform !== 'darwin') {
+          handleArgv(process.argv);
+        }
+
         if (appJson.legacySinglebox) {
           setTimeout(() => {
             dialog.showMessageBox(mainWindow.get(), {
@@ -312,55 +366,26 @@ if (!gotTheLock) {
     }
   });
 
+  // macOS only
   app.on('open-url', (e, url) => {
     e.preventDefault();
 
-    whenTrulyReady()
-      .then(() => {
-        // focus on window
-        mainWindow.show();
+    handleOpenUrl(url);
+  });
 
-        const workspaces = Object.values(getWorkspaces());
+  app.on('second-instance', (e, argv) => {
+    // Someone tried to run a second instance, we should focus our window.
+    const win = mainWindow.get();
+    if (win != null) {
+      if (win.isMinimized()) win.restore();
+      win.focus();
+    }
 
-        if (workspaces.length < 1) return null;
-
-        // handle mailto:
-        if (url.startsWith('mailto:')) {
-          const mailtoWorkspaces = workspaces
-            .filter((workspace) => extractHostname(
-              workspace.homeUrl || appJson.url,
-            ) in MAILTO_URLS);
-
-          // pick automically if there's only one choice
-          if (mailtoWorkspaces.length === 0) {
-            ipcMain.emit(
-              'request-show-message-box', null,
-              'None of your workspaces supports composing email messages.',
-              'error',
-            );
-            return null;
-          }
-          if (mailtoWorkspaces.length === 1) {
-            const mailtoUrl = MAILTO_URLS[extractHostname(
-              mailtoWorkspaces[0].homeUrl || appJson.url,
-            )];
-            const u = mailtoUrl.replace('%s', url);
-            ipcMain.emit('request-load-url', null, u, mailtoWorkspaces[0].id);
-            return null;
-          }
-
-          return openUrlWithWindow.show(url);
-        }
-
-        // handle https/http
-        // pick automically if there's only one choice
-        if (workspaces.length === 1) {
-          ipcMain.emit('request-load-url', null, url, workspaces[0].id);
-          return null;
-        }
-
-        return openUrlWithWindow.show(url);
-      });
+    // handle protocols on Windows & Linux
+    // on macOS, use 'open-url' event
+    if (process.platform !== 'darwin') {
+      handleArgv(argv);
+    }
   });
 
   app.on('login', (e, webContents, request, authInfo, callback) => {
