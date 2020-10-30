@@ -43,6 +43,8 @@ const deleteAppLockPasswordAsync = async (inputPassword) => {
   return keytar.deletePassword(appJson.id, 'app-lock-password')
     .then(() => {
       global.appLock = false;
+      ipcMain.emit('request-realign-active-workspace');
+      createMenu();
     });
 };
 
@@ -52,6 +54,8 @@ const setAppLockPasswordAsync = async (inputPassword, newPassword) => {
   return keytar.setPassword(appJson.id, 'app-lock-password', newPassword)
     .then(() => {
       global.appLock = true;
+      ipcMain.emit('request-realign-active-workspace');
+      createMenu();
     });
 };
 
