@@ -22,7 +22,7 @@ export const open = () => (dispatch) => {
     .then(async () => {
       const status = await getAppLockStatusAsync();
 
-      if (!status.supported && window.process.platform === 'darwin') {
+      if (!status.supported && window.process.platform === 'linux') {
         window.remote.dialog.showMessageBox(window.remote.getCurrentWindow(), {
           type: 'info',
           message: 'To use this feature, please install libsecret and gnome-keyring.',
