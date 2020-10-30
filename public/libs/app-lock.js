@@ -6,14 +6,26 @@ const { createMenu } = require('./menu');
 const appJson = require('../app.json');
 
 const getAppLockStatusAsync = async () => {
-  const currentPassword = await keytar.getPassword(appJson.id, 'app-lock-password');
-  const useTouchId = process.platform === 'darwin' && systemPreferences.canPromptTouchID()
-    ? await keytar.getPassword(appJson.id, 'app-lock-touch-id') === '1'
-    : false;
-  return {
-    useTouchId,
-    hasPassword: Boolean(currentPassword),
-  };
+  try {
+    const currentPassword = await keytar.getPassword(appJson.id, 'app-lock-password');
+    const useTouchId = process.platform === 'darwin' && systemPreferences.canPromptTouchID()
+      ? await keytar.getPassword(appJson.id, 'app-lock-touch-id') === '1'
+      : false;
+    return {
+      supported: false,
+      useTouchId,
+      hasPassword: Boolean(currentPassword),
+    };
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.log(e);
+    // keytar might fail on Linux system without libsecret & gnome-keyring installed
+    return {
+      supported: false,
+      useTouchId: false,
+      hasPassword: false,
+    };
+  }
 };
 
 const validateAppLockPasswordAsync = async (inputPassword) => {
