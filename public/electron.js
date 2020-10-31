@@ -294,6 +294,7 @@ if (!gotTheLock) {
       });
   });
 
+  let hasWarned = false;
   app.on('before-quit', (e) => {
     const handleBeforeQuit = () => {
       const win = mainWindow.get();
@@ -314,18 +315,24 @@ if (!gotTheLock) {
 
     const warnBeforeQuitting = getPreference('warnBeforeQuitting');
     if (warnBeforeQuitting) {
-      e.preventDefault();
-      dialog.showMessageBox(mainWindow.get(), {
-        type: 'question',
-        buttons: ['Yes', 'No'],
-        message: 'Are you sure you want to quit the app?',
-        cancelId: 1,
-        defaultId: 1,
-      }).then(({ response }) => {
-        if (response === 0) {
-          handleBeforeQuit();
-        }
-      }).catch(console.log); // eslint-disable-line
+      if (!hasWarned) {
+        e.preventDefault();
+        dialog.showMessageBox(mainWindow.get(), {
+          type: 'question',
+          buttons: ['Yes', 'No'],
+          message: 'Are you sure you want to quit the app?',
+          cancelId: 1,
+          defaultId: 1,
+        }).then(({ response }) => {
+          if (response === 0) {
+            hasWarned = true;
+            app.quit();
+          }
+        }).catch(console.log); // eslint-disable-line
+      } else {
+        hasWarned = false;
+        handleBeforeQuit();
+      }
       return;
     }
 
