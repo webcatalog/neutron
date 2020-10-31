@@ -6,7 +6,6 @@ const {
   nativeTheme,
   protocol,
   session,
-  shell,
   BrowserView,
   BrowserWindow,
 } = require('electron');
