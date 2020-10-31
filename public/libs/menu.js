@@ -11,7 +11,6 @@ const goToUrlWindow = require('../windows/go-to-url');
 const mainWindow = require('../windows/main');
 
 const getViewBounds = require('./get-view-bounds');
-const formatBytes = require('./format-bytes');
 const {
   setPreference,
   getPreference,
@@ -38,7 +37,6 @@ let menu;
 const createMenu = async () => {
   const workspaces = getWorkspaces();
   const hasWorkspaces = Object.keys(workspaces).length > 0;
-  const updaterEnabled = process.env.SNAP == null && !process.mas && !process.windowsStore;
 
   const handleZoomIn = (menuItem, browserWindow) => {
     // if item is called in popup window
@@ -56,25 +54,6 @@ const createMenu = async () => {
       contents.zoomFactor += 0.1;
     }
   };
-
-  const updaterMenuItem = {
-    label: 'Check for Updates...',
-    click: () => ipcMain.emit('request-check-for-updates'),
-    visible: updaterEnabled,
-  };
-  if (global.updaterObj && global.updaterObj.status === 'update-downloaded') {
-    updaterMenuItem.label = 'Restart to Apply Updates...';
-  } else if (global.updaterObj && global.updaterObj.status === 'update-available') {
-    updaterMenuItem.label = 'Downloading Updates...';
-    updaterMenuItem.enabled = false;
-  } else if (global.updaterObj && global.updaterObj.status === 'download-progress') {
-    const { transferred, total, bytesPerSecond } = global.updaterObj.info;
-    updaterMenuItem.label = `Downloading Updates (${formatBytes(transferred)}/${formatBytes(total)} at ${formatBytes(bytesPerSecond)}/s)...`;
-    updaterMenuItem.enabled = false;
-  } else if (global.updaterObj && global.updaterObj.status === 'checking-for-update') {
-    updaterMenuItem.label = 'Checking for Updates...';
-    updaterMenuItem.enabled = false;
-  }
 
   const macMenuItems = [
     { type: 'separator' },
@@ -103,10 +82,12 @@ const createMenu = async () => {
           visible: Boolean(global.appLock) && !global.locked,
         },
         { type: 'separator' },
-        updaterMenuItem,
+        {
+          label: 'Check for Updates...',
+          click: () => ipcMain.emit('request-check-for-updates'),
+        },
         {
           type: 'separator',
-          visible: updaterEnabled,
         },
         {
           label: 'Preferences...',
