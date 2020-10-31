@@ -34,7 +34,6 @@ const styles = (theme) => ({
     overflow: 'hidden',
     whiteSpace: 'nowrap',
     textOverflow: 'ellipsis',
-    lineHeight: 1,
     fontWeight: 500,
   },
   appUrl: {

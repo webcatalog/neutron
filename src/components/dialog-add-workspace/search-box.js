@@ -7,10 +7,13 @@ import {
   SearchBox as SwiftypeSearchBox,
 } from '@elastic/react-search-ui';
 
-import CloseIcon from '@material-ui/icons/Close';
+import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+
+import CloseIcon from '@material-ui/icons/Close';
+import RefreshIcon from '@material-ui/icons/Refresh';
 
 import connectComponent from '../../helpers/connect-component';
 
@@ -52,6 +55,7 @@ const styles = (theme) => ({
     color: theme.palette.text.primary,
     width: '100%',
     padding: '0 !important',
+    boxShadow: 'none !important',
     '&:focus': {
       outline: 0,
       border: 0,
@@ -108,23 +112,55 @@ const SearchBox = ({
         />
       </Typography>
       <WithSearch
-        mapContextToProps={({ searchTerm, setSearchTerm }) => ({ searchTerm, setSearchTerm })}
+        mapContextToProps={({
+          searchTerm,
+          setSearchTerm,
+          isLoading,
+        }) => ({
+          searchTerm,
+          setSearchTerm,
+          isLoading,
+        })}
       >
-        {({ searchTerm, setSearchTerm }) => (
+        {({ searchTerm, setSearchTerm, isLoading }) => (
           <>
-            {searchTerm.length > 0 && (
-              <IconButton
-                color="default"
-                className={classes.iconButton}
-                aria-label="Clear"
-                onClick={() => setSearchTerm('', {
-                  refresh: true,
-                  debounce: 0,
-                  shouldClearFilters: false,
-                })}
-              >
-                <CloseIcon fontSize="small" />
-              </IconButton>
+            {searchTerm.length > 0 ? (
+              <Tooltip title="Clear">
+                <IconButton
+                  color="default"
+                  className={classes.iconButton}
+                  aria-label="Clear"
+                  onClick={() => setSearchTerm('', {
+                    refresh: true,
+                    debounce: 0,
+                    shouldClearFilters: false,
+                  })}
+                >
+                  <CloseIcon fontSize="small" />
+                </IconButton>
+              </Tooltip>
+            ) : (
+              <Tooltip title="Refresh">
+                <IconButton
+                  color="default"
+                  className={classes.iconButton}
+                  aria-label="Refresh"
+                  onClick={() => {
+                    // clear cache first
+                    if (window.elasticAppSearchQueryCache) {
+                      window.elasticAppSearchQueryCache.clear();
+                    }
+                    setSearchTerm('', {
+                      refresh: true,
+                      debounce: 0,
+                      shouldClearFilters: false,
+                    });
+                  }}
+                  disabled={isLoading}
+                >
+                  <RefreshIcon fontSize="small" />
+                </IconButton>
+              </Tooltip>
             )}
           </>
         )}
