@@ -25,7 +25,7 @@ export const open = () => (dispatch) => {
       if (!status.supported && window.process.platform === 'linux') {
         window.remote.dialog.showMessageBox(window.remote.getCurrentWindow(), {
           type: 'info',
-          message: 'To use this feature, please install libsecret and gnome-keyring.',
+          message: 'To use this feature, please install libsecret.',
           buttons: ['OK', 'Learn More...'],
           cancelId: 0,
           defaultId: 0,
