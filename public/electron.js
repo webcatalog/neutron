@@ -283,24 +283,6 @@ if (!gotTheLock) {
           handleArgv(process.argv);
         }
 
-        if (appJson.legacySinglebox) {
-          setTimeout(() => {
-            dialog.showMessageBox(mainWindow.get(), {
-              type: 'info',
-              message: 'We\'ve merged Singlebox into WebCatalog. Visit our website to learn more.',
-              buttons: ['Learn more', 'OK'],
-              cancelId: 1,
-              defaultId: 0,
-            })
-              .then(({ response }) => {
-                if (response === 0) {
-                  shell.openExternal('https://webcatalog.app/singlebox?utm_source=singlebox&utm_campaign=singlebox_merged');
-                }
-              })
-              .catch(console.log); // eslint-disable-line
-          }, 2000);
-        }
-
         if (autoCheckForUpdates) {
           // only notify user about update again after one week
           const lastShowNewUpdateDialog = getPreference('lastShowNewUpdateDialog');

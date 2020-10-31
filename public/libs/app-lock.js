@@ -8,6 +8,15 @@ const { createMenu } = require('./menu');
 const appJson = require('../app.json');
 
 const getAppLockStatusAsync = async () => {
+  // temporarily disable the feature on Linux arm64
+  if (process.platform === 'linux' && process.arch === 'arm64') {
+    return {
+      supported: false,
+      useTouchId: false,
+      hasPassword: false,
+    };
+  }
+
   try {
     const currentPassword = await keytar.getPassword(appJson.id, 'app-lock-password');
     const useTouchId = process.platform === 'darwin' && systemPreferences.canPromptTouchID()
@@ -22,7 +31,7 @@ const getAppLockStatusAsync = async () => {
     // eslint-disable-next-line no-console
     console.log(e);
     captureException(e);
-    // keytar might fail on Linux system without libsecret & gnome-keyring installed
+    // keytar might fail on Linux system without libsecret installed
     return {
       supported: false,
       useTouchId: false,
