@@ -6,7 +6,6 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
-import MenuItem from '@material-ui/core/MenuItem';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
@@ -24,8 +23,6 @@ import {
   requestShowPreferencesWindow,
   requestShowNotification,
 } from '../../senders';
-
-import StatedMenu from '../shared/stated-menu';
 
 // https://www.sketchappsources.com/free-source/2501-iphone-app-background-sketch-freebie-resource.html
 import nightBackgroundPng from '../../images/night-background.png';
@@ -163,31 +160,24 @@ const DialogPauseNotifications = (props) => {
           {pauseNotificationsInfo.reason !== 'scheduled' && (
             <>
               <Divider />
-              <StatedMenu
-                id="adjustTime"
-                buttonElement={(
-                  <ListItem button>
-                    <ListItemText primary="Adjust time" />
-                    <ChevronRightIcon color="action" />
-                  </ListItem>
-                )}
+              <ListItem
+                button
+                onClick={() => {
+                  const template = quickShortcuts.map((shortcut) => ({
+                    label: shortcut.name,
+                    click: () => pauseNotif(shortcut.calcDate()),
+                  }));
+                  template.push({
+                    label: 'Custom',
+                    click: () => onUpdateShowDateTimePicker(true),
+                  });
+                  const menu = window.remote.Menu.buildFromTemplate(template);
+                  menu.popup(window.remote.getCurrentWindow());
+                }}
               >
-                {quickShortcuts.map((shortcut) => (
-                  <MenuItem
-                    dense
-                    key={shortcut.name}
-                    onClick={() => pauseNotif(shortcut.calcDate())}
-                  >
-                    {shortcut.name}
-                  </MenuItem>
-                ))}
-                <MenuItem
-                  dense
-                  onClick={() => onUpdateShowDateTimePicker(true)}
-                >
-                  Custom...
-                </MenuItem>
-              </StatedMenu>
+                <ListItemText primary="Adjust time" />
+                <ChevronRightIcon color="action" />
+              </ListItem>
             </>
           )}
           <Divider />

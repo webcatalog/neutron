@@ -6,14 +6,11 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import MenuItem from '@material-ui/core/MenuItem';
 
 import connectComponent from '../../helpers/connect-component';
 import isUrl from '../../helpers/is-url';
 import extractHostname from '../../helpers/extract-hostname';
 import { requestCreateWorkspace } from '../../senders';
-
-import StatedMenu from '../shared/stated-menu';
 
 import { updateForm, updateMode } from '../../state/dialog-add-workspace/actions';
 
@@ -95,27 +92,28 @@ const AppCard = (props) => {
         </Typography>
       </div>
       <div className={classes.actionContainer}>
-        <StatedMenu
-          id={`more-menu-${extractHostname(url)}`}
-          buttonElement={(
-            <IconButton size="small" aria-label="Delete" className={classes.topRight}>
-              <MoreVertIcon fontSize="small" />
-            </IconButton>
-          )}
+        <IconButton
+          size="small"
+          aria-label="More"
+          className={classes.topRight}
+          onClick={() => {
+            const template = [
+              {
+                label: 'Clone',
+                click: () => {
+                  onUpdateForm({
+                    name, homeUrl: url, picturePath: icon,
+                  });
+                  onUpdateMode('custom');
+                },
+              }
+            ];
+            const menu = window.remote.Menu.buildFromTemplate(template);
+            menu.popup(window.remote.getCurrentWindow());
+          }}
         >
-          <MenuItem
-            dense
-            onClick={() => {
-              onUpdateForm({
-                name, homeUrl: url, picturePath: icon,
-              });
-              onUpdateMode('custom');
-            }}
-          >
-            Create Custom Workspace from&nbsp;
-            {name}
-          </MenuItem>
-        </StatedMenu>
+          <MoreVertIcon fontSize="small" />
+        </IconButton>
         <Button
           className={classes.actionButton}
           color="primary"
