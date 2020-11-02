@@ -755,7 +755,7 @@ const Preferences = ({
                   edge="end"
                   color="primary"
                   checked={autoRefreshOnlyWhenInactive}
-                  disabled={!autoRefreshOnlyWhenInactive}
+                  disabled={!autoRefresh}
                   onChange={(e) => {
                     requestSetPreference('autoRefreshOnlyWhenInactive', e.target.checked);
                     requestShowRequireRestartDialog();
