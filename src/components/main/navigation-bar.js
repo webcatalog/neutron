@@ -13,7 +13,7 @@ import RefreshIcon from '@material-ui/icons/Refresh';
 import SettingsIcon from '@material-ui/icons/SettingsSharp';
 
 import connectComponent from '../../helpers/connect-component';
-import isUrl from '../../helpers/is-url';
+import getUrlFromText from '../../helpers/get-url-from-text';
 
 import searchEngines from '../../constants/search-engines';
 
@@ -75,23 +75,6 @@ const styles = (theme) => ({
   },
 });
 
-const processUrl = (url, searchEngine) => {
-  if (!url) return url;
-
-  if (isUrl(url)) {
-    return url;
-  }
-
-  const httpUrl = `http://${url}`;
-  if (/[A-Za-z0-9]+(\.[A-Za-z0-9]+)+/.test(url) && isUrl(httpUrl)) { // match common url format
-    return httpUrl;
-  }
-
-  const { queryUrl } = searchEngines[searchEngine];
-  const processedUrl = queryUrl.replace('%s', encodeURIComponent(url));
-  return processedUrl;
-};
-
 const NavigationBar = ({
   address,
   addressEdited,
@@ -134,7 +117,7 @@ const NavigationBar = ({
               aria-label="Go"
               className={classes.goButton}
               onClick={() => {
-                const processedUrl = processUrl(address, searchEngine);
+                const processedUrl = getUrlFromText(address, searchEngine);
                 onUpdateAddressBarInfo(processedUrl, false);
                 requestLoadUrl(processedUrl);
               }}
@@ -148,7 +131,7 @@ const NavigationBar = ({
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
               e.target.blur();
-              const processedUrl = processUrl(address, searchEngine);
+              const processedUrl = getUrlFromText(address, searchEngine);
               onUpdateAddressBarInfo(processedUrl, false);
               requestLoadUrl(processedUrl);
             }
@@ -162,6 +145,15 @@ const NavigationBar = ({
           }}
           onBlur={() => {
             setAddressInputClicked(false);
+          }}
+          onDrop={(e) => {
+            const text = e.dataTransfer.getData('URL') || e.dataTransfer.getData('text');
+            if (text) {
+              e.preventDefault();
+              const processedUrl = getUrlFromText(text, searchEngine);
+              onUpdateAddressBarInfo(processedUrl, false);
+              requestLoadUrl(processedUrl);
+            }
           }}
         />
       </div>

@@ -6,6 +6,11 @@ import Badge from '@material-ui/core/Badge';
 
 import connectComponent from '../../helpers/connect-component';
 import getAvatarText from '../../helpers/get-avatar-text';
+import getUrlFromText from '../../helpers/get-url-from-text';
+
+import {
+  requestOpenUrlInWorkspace,
+} from '../../senders';
 
 const styles = (theme) => ({
   root: {
@@ -103,6 +108,7 @@ const WorkspaceSelector = ({
   picturePath,
   sidebarTips,
   transparentBackground,
+  searchEngine,
 }) => {
   const tipText = (() => {
     if (sidebarTips !== 'none' && id === 'add') {
@@ -133,6 +139,20 @@ const WorkspaceSelector = ({
       onKeyDown={null}
       onContextMenu={onContextMenu}
       tabIndex="0"
+      onDragOver={(e) => {
+        // In order to have the drop event occur on a div element,
+        // you must cancel ondragover event
+        // https://stackoverflow.com/questions/21339924/drop-event-not-firing-in-chrome
+        e.preventDefault();
+      }}
+      onDrop={(e) => {
+        const text = e.dataTransfer.getData('URL') || e.dataTransfer.getData('text');
+        if (text) {
+          e.preventDefault();
+          const processedUrl = getUrlFromText(text, searchEngine);
+          requestOpenUrlInWorkspace(processedUrl, id);
+        }
+      }}
     >
       <Badge color="secondary" badgeContent={badgeCount} max={99} classes={{ badge: classes.badge }}>
         <div
@@ -183,6 +203,7 @@ WorkspaceSelector.propTypes = {
   onContextMenu: PropTypes.func,
   order: PropTypes.number,
   picturePath: PropTypes.string,
+  searchEngine: PropTypes.string.isRequired,
   sidebarTips: PropTypes.oneOf(['shortcut', 'name', 'none']).isRequired,
   transparentBackground: PropTypes.bool,
 };
@@ -190,6 +211,7 @@ WorkspaceSelector.propTypes = {
 const mapStateToProps = (state, ownProps) => ({
   badgeCount: state.workspaceMetas[ownProps.id] ? state.workspaceMetas[ownProps.id].badgeCount : 0,
   sidebarTips: state.preferences.sidebarTips,
+  searchEngine: state.preferences.searchEngine,
 });
 
 export default connectComponent(
