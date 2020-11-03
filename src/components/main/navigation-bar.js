@@ -39,8 +39,10 @@ const styles = (theme) => ({
     alignItems: 'center',
     paddingLeft: theme.spacing(1),
     paddingRight: theme.spacing(1),
-    WebkitAppRegion: 'drag',
     WebkitUserSelect: 'none',
+  },
+  rootDraggable: {
+    WebkitAppRegion: 'drag',
   },
   rootWithTrafficLights: {
     paddingLeft: 68 + theme.spacing(1),
@@ -49,9 +51,11 @@ const styles = (theme) => ({
     flex: 1,
     paddingLeft: theme.spacing(1),
     paddingRight: theme.spacing(1),
+    WebkitAppRegion: 'no-drag',
   },
   iconButton: {
     padding: 6,
+    WebkitAppRegion: 'no-drag',
   },
   icon: {
     fontSize: '18px',
@@ -86,11 +90,18 @@ const NavigationBar = ({
   onUpdateAddressBarInfo,
   searchEngine,
   shouldPauseNotifications,
+  draggable,
 }) => {
   const [addressInputClicked, setAddressInputClicked] = useState(false);
 
   return (
-    <div className={classnames(classes.root, hasTrafficLights && classes.rootWithTrafficLights)}>
+    <div
+      className={classnames(
+        classes.root,
+        draggable && classes.rootDraggable,
+        hasTrafficLights && classes.rootWithTrafficLights,
+      )}
+    >
       <div className={classes.left}>
         <IconButton aria-label="Go back" className={classes.iconButton} disabled={!hasWorkspaces || !canGoBack} onClick={requestGoBack}>
           <ArrowBackIcon className={classes.icon} />
@@ -181,6 +192,7 @@ NavigationBar.propTypes = {
   canGoBack: PropTypes.bool.isRequired,
   canGoForward: PropTypes.bool.isRequired,
   classes: PropTypes.object.isRequired,
+  draggable: PropTypes.bool.isRequired,
   hasTrafficLights: PropTypes.bool.isRequired,
   hasWorkspaces: PropTypes.bool.isRequired,
   onUpdateAddressBarInfo: PropTypes.func.isRequired,
@@ -193,6 +205,7 @@ const mapStateToProps = (state) => ({
   addressEdited: Boolean(state.general.addressEdited),
   canGoBack: state.general.canGoBack,
   canGoForward: state.general.canGoForward,
+  draggable: window.process.platform === 'darwin' && !state.preferences.titleBar,
   hasTrafficLights: window.process.platform === 'darwin' && !state.preferences.titleBar && !state.preferences.sidebar,
   hasWorkspaces: Object.keys(state.workspaces).length > 0,
   searchEngine: state.preferences.searchEngine,
