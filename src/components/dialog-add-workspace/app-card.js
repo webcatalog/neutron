@@ -106,7 +106,7 @@ const AppCard = (props) => {
                   });
                   onUpdateMode('custom');
                 },
-              }
+              },
             ];
             const menu = window.remote.Menu.buildFromTemplate(template);
             menu.popup(window.remote.getCurrentWindow());
