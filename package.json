@@ -23,7 +23,7 @@
   "repository": "https://github.com/webcatalog/webcatalog-engine",
   "author": "Quang Lam <quang.lam@webcatalog.app>",
   "dependencies": {
-    "@cliqz/adblocker-electron": "1.18.3",
+    "@cliqz/adblocker-electron": "1.18.4",
     "@sentry/electron": "2.0.2",
     "cheerio": "1.0.0-rc.3",
     "darkreader": "4.9.22",
