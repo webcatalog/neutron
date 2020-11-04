@@ -75,9 +75,6 @@ const styles = (theme) => ({
     '&:hover': {
       backgroundColor: theme.palette.type === 'dark' ? theme.palette.common.black : theme.palette.grey[400],
     },
-    '&:focus': {
-      backgroundColor: theme.palette.type === 'dark' ? theme.palette.common.black : theme.palette.grey[400],
-    },
   },
   windowsIcon: {
     height: '100%',
@@ -161,6 +158,7 @@ const EnhancedAppBar = ({
               <button
                 className={classes.windowsIconBg}
                 type="button"
+                tabIndex="-1" // normally, windows buttons is not navigable by keyboard
                 aria-label="Minimize"
                 onClick={(e) => {
                   e.stopPropagation();
@@ -174,6 +172,7 @@ const EnhancedAppBar = ({
                 <button
                   className={classes.windowsIconBg}
                   type="button"
+                  tabIndex="-1" // normally, windows buttons is not navigable by keyboard
                   aria-label={isMaximized ? 'Unmaximize' : 'Maximize'}
                   onClick={(e) => {
                     e.stopPropagation();
@@ -198,6 +197,7 @@ const EnhancedAppBar = ({
                 <button
                   className={classes.windowsIconBg}
                   type="button"
+                  tabIndex="-1" // normally, windows buttons is not navigable by keyboard
                   aria-label={isMaximized ? 'Unmaximize' : 'Maximize'}
                   onClick={(e) => {
                     e.stopPropagation();
