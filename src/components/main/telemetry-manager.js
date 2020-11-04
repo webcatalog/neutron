@@ -17,7 +17,7 @@ const TelemetryManager = () => {
     // instead of quitting and restarting the app
     const win = window.remote.getCurrentWindow();
     const logFocus = () => {
-      amplitude.getInstance().logEvent('focus app');
+      amplitude.getInstance().logEvent('webcatalog-engine: focus app');
     };
     win.on('focus', logFocus);
     return () => {
