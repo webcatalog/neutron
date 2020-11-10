@@ -34,6 +34,10 @@ const rawMailtoUrls = [
     hostnames: ['hey.com', 'app.hey.com'],
     mailtoUrl: 'https://app.hey.com/mailto/%s',
   },
+  {
+    hostnames: ['soverin.net', 'mail.soverin.net'],
+    mailtoUrl: 'https://mail.soverin.net/?_task=mail&_action=compose&_to=%s',
+  },
 ];
 
 const MAILTO_URLS = {};
