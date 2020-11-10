@@ -463,27 +463,29 @@ const Preferences = ({
                 </ListItem>
               </>
             )}
-            <Divider />
-            <ListItem>
-              <ListItemText
-                primary={window.process.platform === 'win32'
-                  ? 'Attach to taskbar' : 'Attach to menu bar'}
-                secondary={window.process.platform !== 'linux' ? 'Tip: Right-click on app icon to access context menu.' : null}
-              />
-              <ListItemSecondaryAction>
-                <Switch
-                  edge="end"
-                  color="primary"
-                  checked={attachToMenubar}
-                  onChange={(e) => {
-                    if (!checkLicense()) return;
-
-                    requestSetPreference('attachToMenubar', e.target.checked);
-                    requestShowRequireRestartDialog();
-                  }}
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
+            {window.process.platform === 'darwin' && (
+              <>
+                <Divider />
+                <ListItem>
+                  <ListItemText
+                    primary={window.process.platform === 'win32'
+                      ? 'Attach to taskbar' : 'Attach to menu bar'}
+                    secondary={window.process.platform !== 'linux' ? 'Tip: Right-click on app icon to access context menu.' : null}
+                  />
+                  <ListItemSecondaryAction>
+                    <Switch
+                      edge="end"
+                      color="primary"
+                      checked={attachToMenubar}
+                      onChange={(e) => {
+                        requestSetPreference('attachToMenubar', e.target.checked);
+                        requestShowRequireRestartDialog();
+                      }}
+                    />
+                  </ListItemSecondaryAction>
+                </ListItem>
+              </>
+            )}
           </List>
         </Paper>
 
