@@ -72,7 +72,7 @@ const styles = (theme) => ({
   },
   sidebarUpperRoot: {
     height: '100%',
-    width: 48,
+    width: 68,
     backgroundColor: theme.palette.background.paper,
     WebkitAppRegion: window.process.platform === 'darwin' ? 'drag' : 'no-drag',
     borderRight: '1px solid',
@@ -81,7 +81,6 @@ const styles = (theme) => ({
     overflowX: 'hidden',
   },
   sidebarUpperRootWide: {
-    width: 68,
   },
   sidebarRoot: {
     flex: 1,
@@ -118,7 +117,7 @@ const styles = (theme) => ({
     width: 150,
     position: 'absolute',
     top: window.process.platform === 'darwin' ? 50 : 60,
-    left: window.process.platform === 'darwin' ? 72 : 60,
+    left: 72,
     backgroundImage: `url('${theme.palette.type === 'dark' ? arrowWhite : arrowBlack}')`,
     backgroundSize: '150px 202px',
   },
@@ -251,10 +250,7 @@ const Main = ({
       <div className={classes.root}>
         {sidebar && (
           <SimpleBar
-            className={classnames(
-              classes.sidebarUpperRoot,
-              window.process.platform === 'darwin' && classes.sidebarUpperRootWide,
-            )}
+            className={classes.sidebarUpperRoot}
           >
             <div className={classes.sidebarRoot}>
               <div className={classnames(classes.sidebarTop,
