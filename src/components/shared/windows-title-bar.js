@@ -103,12 +103,17 @@ const styles = (theme) => ({
     borderRadius: 0,
     height: TOOLBAR_HEIGHT,
   },
+  iconButtonWithSidebar: {
+    marginLeft: 9,
+    marginRight: 11,
+  },
 });
 
 const EnhancedAppBar = ({
-  title,
   classes,
   isMaximized,
+  sidebar,
+  title,
 }) => {
   const onDoubleClick = (e) => {
     // feature: double click on title bar to expand #656
@@ -141,7 +146,11 @@ const EnhancedAppBar = ({
               size="small"
               color="inherit"
               aria-label="Menu"
-              className={classnames(classes.iconButton, classes.noDrag)}
+              className={classnames(
+                classes.iconButton,
+                sidebar && classes.iconButtonWithSidebar,
+                classes.noDrag,
+              )}
               onClick={(e) => {
                 e.stopPropagation();
                 requestShowAppMenu(e.x, e.y);
@@ -225,12 +234,14 @@ EnhancedAppBar.defaultProps = {
 EnhancedAppBar.propTypes = {
   classes: PropTypes.object.isRequired,
   isMaximized: PropTypes.bool.isRequired,
+  sidebar: PropTypes.bool.isRequired,
   title: PropTypes.string,
 };
 
 const mapStateToProps = (state, ownProps) => ({
   isMaximized: state.general.isMaximized,
   title: ownProps.title || ((window.mode === 'main' || window.mode === 'menubar') && state.general.title ? state.general.title : window.remote.getGlobal('appJson').name),
+  sidebar: state.preferences.sidebar,
 });
 
 export default connectComponent(
