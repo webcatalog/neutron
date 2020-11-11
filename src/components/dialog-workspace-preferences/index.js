@@ -1,4 +1,6 @@
-/* eslint-disable react/jsx-boolean-value */
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
@@ -233,7 +235,7 @@ const Preferences = ({
                 className={classes.selectRoot}
               >
                 <MenuItem dense value="global">{`Same as global (${darkReader ? 'Yes' : 'No'})`}</MenuItem>
-                <MenuItem dense value={true}>Yes</MenuItem>
+                <MenuItem dense value>Yes</MenuItem>
                 <MenuItem dense value={false}>No</MenuItem>
               </Select>
             </ListItem>
@@ -381,7 +383,7 @@ const Preferences = ({
                 className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
               >
                 <MenuItem dense value="global">{`Same as global (${autoRefresh ? 'Yes' : 'No'})`}</MenuItem>
-                <MenuItem dense value={true}>Yes</MenuItem>
+                <MenuItem dense value>Yes</MenuItem>
                 <MenuItem dense value={false}>No</MenuItem>
               </Select>
             </ListItem>
@@ -450,7 +452,7 @@ const Preferences = ({
                     className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
                   >
                     <MenuItem dense value="global">{`Same as global (${autoRefreshOnlyWhenInactive ? 'Yes' : 'No'})`}</MenuItem>
-                    <MenuItem dense value={true}>Yes</MenuItem>
+                    <MenuItem dense value>Yes</MenuItem>
                     <MenuItem dense value={false}>No</MenuItem>
                   </Select>
                 </ListItem>
@@ -501,7 +503,7 @@ const Preferences = ({
                 className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
               >
                 <MenuItem dense value="global">{`Same as global (${askForDownloadPath ? 'Yes' : 'No'})`}</MenuItem>
-                <MenuItem dense value={true}>Yes</MenuItem>
+                <MenuItem dense value>Yes</MenuItem>
                 <MenuItem dense value={false}>No</MenuItem>
               </Select>
             </ListItem>

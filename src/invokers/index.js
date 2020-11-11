@@ -1,3 +1,6 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 export const getReactInitialStateAsync = () => window.ipcRenderer.invoke('get-react-initial-state');
 
 export const getAppLockStatusAsync = () => window.ipcRenderer.invoke('get-app-lock-status');

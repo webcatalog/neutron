@@ -1,8 +1,6 @@
-// this component is to fix
-// -webkit-app-region: drag; not working when set to an element in BrowserView
-// This is a workaround for the issue
-// You can put the draggable divs at the same region in BrowserWindow,
-// then even if you put a BrowserView on top of that region, that region is still draggable.
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import React from 'react';
 import PropTypes from 'prop-types';
