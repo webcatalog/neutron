@@ -1,3 +1,6 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { setPreference } from '../state/preferences/actions';
 import { setSystemPreference } from '../state/system-preferences/actions';
 import { setWorkspace, setWorkspaces } from '../state/workspaces/actions';

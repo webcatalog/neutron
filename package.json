@@ -1,7 +1,7 @@
 {
   "name": "Singlebox",
   "description": "AppView template for WebCatalog",
-  "version": "11.3.1",
+  "version": "11.4.0",
   "minimumWebCatalogVersion": "23.0.0",
   "engines": {
     "node": ">=12.0.0 <13.0.0"
@@ -11,8 +11,7 @@
     "postinstall": "npx patch-package && electron-builder install-app-deps",
     "build": "react-scripts build",
     "eject": "react-scripts eject",
-    "lint": "eslint ./public ./src --ext js",
-    "lint:fix": "eslint ./public ./src --ext js --fix",
+    "lint": "eslint ./public ./src ./build-json.js ./build-template.js --ext js",
     "start": "react-scripts start",
     "electron-dev": "concurrently \"cross-env BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\" -k",
     "build-json": "node build-json.js",
@@ -23,8 +22,8 @@
   "repository": "https://github.com/webcatalog/webcatalog-engine",
   "author": "Quang Lam <quang.lam@webcatalog.app>",
   "dependencies": {
-    "@cliqz/adblocker-electron": "1.18.4",
-    "@sentry/electron": "2.0.2",
+    "@cliqz/adblocker-electron": "1.18.5",
+    "@sentry/electron": "2.0.3",
     "cheerio": "1.0.0-rc.3",
     "darkreader": "4.9.22",
     "electron-context-menu": "2.3.0",
@@ -60,7 +59,7 @@
     "@material-ui/icons": "4.9.1",
     "@material-ui/pickers": "3.2.10",
     "ace-builds": "1.4.12",
-    "amplitude-js": "7.3.1",
+    "amplitude-js": "7.3.2",
     "babel-eslint": "10.1.0",
     "babel-preset-env": "1.7.0",
     "babel-preset-react": "6.24.1",
@@ -73,7 +72,8 @@
     "electron": "10.1.5",
     "electron-builder": "22.9.1",
     "eslint": "6.8.0",
-    "eslint-config-airbnb": "18.2.0",
+    "eslint-config-airbnb": "18.2.1",
+    "eslint-plugin-header": "3.1.0",
     "eslint-plugin-import": "2.22.1",
     "eslint-plugin-jsx-a11y": "6.4.1",
     "eslint-plugin-react": "7.21.5",

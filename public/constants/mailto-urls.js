@@ -1,5 +1,6 @@
-// specifies the URL pattern to handle `mailto` links.
-// https://developer.mozilla.org/en-US/docs/Web/API/Navigator/registerProtocolHandler
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 const rawMailtoUrls = [
   {
