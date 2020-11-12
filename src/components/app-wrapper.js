@@ -53,7 +53,7 @@ const AppWrapper = ({
 
   const theme = createMuiTheme(themeObj);
 
-  const showWindowsTitleBar = window.process.platform !== 'darwin' && !isFullScreen;
+  const showWindowsTitleBar = window.process.platform !== 'darwin' && !isFullScreen && !window.remote.getGlobal('useSystemTitleBar');
 
   return (
     <MuiThemeProvider theme={theme}>
@@ -82,15 +82,15 @@ AppWrapper.propTypes = {
     PropTypes.element,
     PropTypes.string,
   ]).isRequired,
-  shouldUseDarkColors: PropTypes.bool.isRequired,
   isFullScreen: PropTypes.bool.isRequired,
   locked: PropTypes.bool.isRequired,
+  shouldUseDarkColors: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   isFullScreen: state.general.isFullScreen,
-  shouldUseDarkColors: state.general.shouldUseDarkColors,
   locked: window.mode !== 'about' && state.general.locked,
+  shouldUseDarkColors: state.general.shouldUseDarkColors,
 });
 
 export default connectComponent(

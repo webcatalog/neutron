@@ -87,6 +87,7 @@ const defaultPreferences = {
   titleBar: !shouldShowSidebar, // if sidebar is shown, then hide titleBar
   unreadCountBadge: true,
   useHardwareAcceleration: true,
+  useSystemTitleBar: false,
   warnBeforeQuitting: false,
 };
 

@@ -20,13 +20,14 @@ const create = () => {
     minimizable: true,
     fullscreenable: false,
     show: false,
-    frame: process.platform === 'darwin',
+    frame: process.platform === 'darwin' || global.useSystemTitleBar,
     webPreferences: {
       enableRemoteModule: true,
       nodeIntegration: true,
       preload: path.join(__dirname, '..', 'preload', 'go-to-url.js'),
     },
   });
+  win.setMenuBarVisibility(false);
 
   win.on('closed', () => {
     win = null;

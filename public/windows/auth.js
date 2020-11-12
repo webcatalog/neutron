@@ -22,13 +22,14 @@ const create = (id) => {
     maximizable: false,
     minimizable: true,
     fullscreenable: false,
-    frame: process.platform === 'darwin',
+    frame: process.platform === 'darwin' || global.useSystemTitleBar,
     webPreferences: {
       enableRemoteModule: true,
       nodeIntegration: true,
       preload: path.join(__dirname, '..', 'preload', 'auth.js'),
     },
   });
+  wins[id].setMenuBarVisibility(false);
 
   const identityValidationListener = (e, windowId, username, password) => {
     if (windowId !== wins[id].id) return;

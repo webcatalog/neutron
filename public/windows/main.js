@@ -147,7 +147,7 @@ const createAsync = () => new Promise((resolve) => {
     title: global.appJson.name,
     titleBarStyle: 'hidden',
     show: false,
-    frame: process.platform === 'darwin',
+    frame: process.platform === 'darwin' || global.useSystemTitleBar,
     icon: process.platform === 'linux' ? path.resolve(__dirname, '..', 'dock-icon.png') : undefined,
     webPreferences: {
       enableRemoteModule: true,

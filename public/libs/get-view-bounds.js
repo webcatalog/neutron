@@ -12,7 +12,12 @@ const getViewBounds = (contentSize, findInPage = false, height, width) => {
     && !global.sidebar) || global.navigationBar;
 
   const sidebarWidth = 68;
-  const titlebarHeight = process.platform === 'darwin' ? 22 : 32;
+  let titlebarHeight = 0;
+  if (process.platform === 'darwin') {
+    titlebarHeight = 22;
+  } else if (!global.useSystemTitleBar) {
+    titlebarHeight = 32;
+  }
   const offsetTitlebar = showTitleBar ? titlebarHeight : 0;
   const x = showSidebar ? sidebarWidth : 0;
   const y = showNavigationBar ? 36 + offsetTitlebar : 0 + offsetTitlebar;
