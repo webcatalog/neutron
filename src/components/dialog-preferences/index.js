@@ -204,6 +204,7 @@ const Preferences = ({
   titleBar,
   unreadCountBadge,
   useHardwareAcceleration,
+  useSystemTitleBar,
   warnBeforeQuitting,
 }) => {
   const appJson = window.remote.getGlobal('appJson');
@@ -1293,6 +1294,27 @@ const Preferences = ({
                 </ListItem>
               </>
             )}
+            {window.process.platform !== 'darwin' && (
+              <>
+                <Divider />
+                <ListItem>
+                  <ListItemText
+                    primary="Use system title bar and borders"
+                  />
+                  <ListItemSecondaryAction>
+                    <Switch
+                      edge="end"
+                      color="primary"
+                      checked={useSystemTitleBar}
+                      onChange={(e) => {
+                        requestSetPreference('useSystemTitleBar', e.target.checked);
+                        requestShowRequireRestartDialog();
+                      }}
+                    />
+                  </ListItemSecondaryAction>
+                </ListItem>
+              </>
+            )}
             <Divider />
             <ListItem>
               <ListItemText
@@ -1461,6 +1483,7 @@ Preferences.propTypes = {
   titleBar: PropTypes.bool.isRequired,
   unreadCountBadge: PropTypes.bool.isRequired,
   useHardwareAcceleration: PropTypes.bool.isRequired,
+  useSystemTitleBar: PropTypes.bool.isRequired,
   warnBeforeQuitting: PropTypes.bool.isRequired,
 };
 
@@ -1507,6 +1530,7 @@ const mapStateToProps = (state) => ({
   titleBar: state.preferences.titleBar,
   unreadCountBadge: state.preferences.unreadCountBadge,
   useHardwareAcceleration: state.preferences.useHardwareAcceleration,
+  useSystemTitleBar: state.preferences.useSystemTitleBar,
   warnBeforeQuitting: state.preferences.warnBeforeQuitting,
 });
 

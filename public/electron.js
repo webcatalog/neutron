@@ -252,6 +252,7 @@ if (!gotTheLock) {
       navigationBar,
       sidebar,
       titleBar,
+      useSystemTitleBar,
     } = getPreferences();
 
     if (customUserAgent) {
@@ -272,6 +273,7 @@ if (!gotTheLock) {
     global.sidebar = sidebar;
     global.titleBar = titleBar;
     global.navigationBar = navigationBar;
+    global.useSystemTitleBar = useSystemTitleBar;
     global.MAILTO_URLS = MAILTO_URLS;
 
     commonInit();

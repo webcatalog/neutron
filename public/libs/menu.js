@@ -67,6 +67,16 @@ const createMenu = async () => {
     { role: 'unhide' },
   ];
 
+  const lockMenuItems = Boolean(global.appLock) && !global.locked ? [
+    {
+      type: 'separator',
+    },
+    {
+      label: 'Lock',
+      click: () => ipcMain.emit('request-lock-app'),
+    },
+  ] : [];
+
   const template = [
     {
       label: appJson.name,
@@ -75,16 +85,8 @@ const createMenu = async () => {
           label: `About ${appJson.name}`,
           click: () => ipcMain.emit('request-show-about-window'),
         },
-        {
-          type: 'separator',
-          visible: Boolean(global.appLock) && !global.locked,
-        },
-        {
-          label: 'Lock',
-          click: () => ipcMain.emit('request-lock-app'),
-          visible: Boolean(global.appLock) && !global.locked,
-        },
         { type: 'separator' },
+        ...lockMenuItems,
         {
           label: 'Check for Updates...',
           click: () => ipcMain.emit('request-check-for-updates'),
