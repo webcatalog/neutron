@@ -153,7 +153,11 @@ const WorkspaceSelector = ({
         if (text) {
           e.preventDefault();
           const processedUrl = getUrlFromText(text, searchEngine);
-          requestOpenUrlInWorkspace(processedUrl, id);
+          if (id === 'add') {
+            requestOpenUrlInWorkspace(processedUrl); // create new workspace & open the URL
+          } else {
+            requestOpenUrlInWorkspace(processedUrl, id);
+          }
         }
       }}
     >

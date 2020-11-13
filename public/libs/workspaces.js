@@ -23,6 +23,10 @@ const initWorkspaces = () => {
   if (workspaces) return;
 
   const loadedWorkspaces = settings.getSync(`workspaces.${v}`) || {};
+  // remove corrupted data caused by v11.4.0
+  if ('add' in loadedWorkspaces) {
+    delete loadedWorkspaces.add;
+  }
 
   // legacy (v=14 was used for Singlebox prior to merging with Juli)
   // Singlebox v1-v3
