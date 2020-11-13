@@ -136,32 +136,9 @@ Promise.resolve()
         path.join(TEMPLATE_PATH, 'node_modules', 'electron', 'index.js'),
       ),
       fs.copy(
-        path.join(__dirname, 'node_modules', 'electron', 'path.txt'),
-        path.join(TEMPLATE_PATH, 'node_modules', 'electron', 'path.txt'),
-      ),
-      fs.copy(
         path.join(__dirname, 'node_modules', 'electron', 'LICENSE'),
         path.join(TEMPLATE_PATH, 'node_modules', 'electron', 'LICENSE'),
       ),
-      // based on electron/install.js
-      Promise.resolve()
-        .then(() => {
-          console.log(`Preparing electron for ${platform} ${arch}...`);
-          return downloadArtifact({
-            version: electronVersion,
-            artifactName: 'electron',
-            force: process.env.force_no_cache === 'true',
-            cacheRoot: process.env.electron_config_cache,
-            platform,
-            arch,
-          });
-        })
-        .then((zipPath) => {
-          console.log('Downloaded to', zipPath);
-          const distPath = path.join(TEMPLATE_PATH, 'node_modules', 'electron', 'dist');
-          console.log('Extracting to', distPath);
-          return extract(zipPath, { dir: distPath });
-        }),
     ];
 
     return Promise.all(tasks);
