@@ -6,8 +6,6 @@ const path = require('path');
 const fs = require('fs-extra');
 const tmp = require('tmp');
 const builder = require('electron-builder');
-const { downloadArtifact } = require('@electron/get');
-const extract = require('extract-zip');
 
 const platform = process.env.TEMPLATE_PLATFORM || process.platform;
 const arch = process.env.TEMPLATE_ARCH || 'x64';
@@ -111,8 +109,6 @@ Promise.resolve()
     const resourcesPath = targetName === 'mac'
       ? path.join(dotAppPath, 'Contents', 'Resources')
       : path.join(dotAppPath, 'resources');
-
-    const electronVersion = fs.readJSONSync(path.join(__dirname, 'package.json')).devDependencies.electron;
 
     const tasks = [
       fs.copy(
