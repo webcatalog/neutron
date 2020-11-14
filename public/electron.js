@@ -215,8 +215,8 @@ if (!gotTheLock) {
         // before the workspaces's BrowserView fully loaded
         // error will occur
         // see https://github.com/webcatalog/webcatalog-app/issues/637
+        const win = mainWindow.get();
         if (process.platform === 'linux') {
-          const win = mainWindow.get();
           const handleMaximize = () => {
             // getContentSize is not updated immediately
             // try once after 0.2s (for fast computer), another one after 1s (to be sure)
@@ -230,6 +230,10 @@ if (!gotTheLock) {
           win.on('maximize', handleMaximize);
           win.on('unmaximize', handleMaximize);
         }
+
+        mainWindow.get().on('focus', () => {
+          win.send('log-focus');
+        });
       })
       .then(() => {
         // trigger whenTrulyReady;
