@@ -40,6 +40,7 @@ const { getWorkspaces, setWorkspace } = require('./libs/workspaces');
 const sendToAllWindows = require('./libs/send-to-all-windows');
 const extractHostname = require('./libs/extract-hostname');
 const { getAppLockStatusAsync, unlockAppUsingTouchId } = require('./libs/app-lock');
+const isMacOs11 = require('./libs/is-mac-os-11');
 
 const MAILTO_URLS = require('./constants/mailto-urls');
 
@@ -269,6 +270,7 @@ if (!gotTheLock) {
         .replace(` Electron/${process.versions.electron}`, '');
     }
 
+    global.isMacOs11 = isMacOs11();
     global.attachToMenubar = attachToMenubar;
     global.sidebar = sidebar;
     global.titleBar = titleBar;
