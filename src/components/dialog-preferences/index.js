@@ -52,7 +52,7 @@ import {
   requestShowAboutWindow,
   requestShowNotification,
   requestShowNotificationsWindow,
-  requestShowRequireRestartDialog,
+  enqueueRequestRestartSnackbar,
 } from '../../senders';
 
 import { open as openDialogAppLock } from '../../state/dialog-app-lock/actions';
@@ -75,6 +75,8 @@ import DialogCustomUserAgent from '../dialog-custom-user-agent';
 import DialogInternalUrls from '../dialog-internal-urls';
 import DialogProxy from '../dialog-proxy';
 import DialogSpellcheckLanguages from '../dialog-spellcheck-languages';
+
+import SnackbarTrigger from '../shared/snackbar-trigger';
 
 const styles = (theme) => ({
   root: {
@@ -483,7 +485,7 @@ const Preferences = ({
                       checked={attachToMenubar}
                       onChange={(e) => {
                         requestSetPreference('attachToMenubar', e.target.checked);
-                        requestShowRequireRestartDialog();
+                        enqueueRequestRestartSnackbar();
                       }}
                     />
                   </ListItemSecondaryAction>
@@ -531,7 +533,7 @@ const Preferences = ({
                     }
 
                     requestSetPreference('blockAds', e.target.checked);
-                    requestShowRequireRestartDialog();
+                    enqueueRequestRestartSnackbar();
                   }}
                 />
               </ListItemSecondaryAction>
@@ -706,7 +708,7 @@ const Preferences = ({
                   checked={autoRefresh}
                   onChange={(e) => {
                     requestSetPreference('autoRefresh', e.target.checked);
-                    requestShowRequireRestartDialog();
+                    enqueueRequestRestartSnackbar();
                   }}
                 />
               </ListItemSecondaryAction>
@@ -717,7 +719,7 @@ const Preferences = ({
                 value={autoRefreshInterval}
                 onChange={(e) => {
                   requestSetPreference('autoRefreshInterval', e.target.value);
-                  requestShowRequireRestartDialog();
+                  enqueueRequestRestartSnackbar();
                 }}
                 variant="filled"
                 disableUnderline
@@ -764,7 +766,7 @@ const Preferences = ({
                   disabled={!autoRefresh}
                   onChange={(e) => {
                     requestSetPreference('autoRefreshOnlyWhenInactive', e.target.checked);
-                    requestShowRequireRestartDialog();
+                    enqueueRequestRestartSnackbar();
                   }}
                 />
               </ListItemSecondaryAction>
@@ -844,7 +846,7 @@ const Preferences = ({
                   checked={unreadCountBadge}
                   onChange={(e) => {
                     requestSetPreference('unreadCountBadge', e.target.checked);
-                    requestShowRequireRestartDialog();
+                    enqueueRequestRestartSnackbar();
                   }}
                 />
               </ListItemSecondaryAction>
@@ -927,7 +929,7 @@ const Preferences = ({
                   checked={spellcheck}
                   onChange={(e) => {
                     requestSetPreference('spellcheck', e.target.checked);
-                    requestShowRequireRestartDialog();
+                    enqueueRequestRestartSnackbar();
                   }}
                 />
               </ListItemSecondaryAction>
@@ -1048,7 +1050,7 @@ const Preferences = ({
                   checked={rememberLastPageVisited}
                   onChange={(e) => {
                     requestSetPreference('rememberLastPageVisited', e.target.checked);
-                    requestShowRequireRestartDialog();
+                    enqueueRequestRestartSnackbar();
                   }}
                 />
               </ListItemSecondaryAction>
@@ -1063,7 +1065,7 @@ const Preferences = ({
                   checked={shareWorkspaceBrowsingData}
                   onChange={(e) => {
                     requestSetPreference('shareWorkspaceBrowsingData', e.target.checked);
-                    requestShowRequireRestartDialog();
+                    enqueueRequestRestartSnackbar();
                   }}
                 />
               </ListItemSecondaryAction>
@@ -1098,7 +1100,7 @@ const Preferences = ({
                   checked={ignoreCertificateErrors}
                   onChange={(e) => {
                     requestSetPreference('ignoreCertificateErrors', e.target.checked);
-                    requestShowRequireRestartDialog();
+                    enqueueRequestRestartSnackbar();
                   }}
                 />
               </ListItemSecondaryAction>
@@ -1121,7 +1123,7 @@ const Preferences = ({
                   checked={sentry}
                   onChange={(e) => {
                     requestSetPreference('sentry', e.target.checked);
-                    requestShowRequireRestartDialog();
+                    enqueueRequestRestartSnackbar();
                   }}
                 />
               </ListItemSecondaryAction>
@@ -1139,7 +1141,7 @@ const Preferences = ({
                   checked={telemetry}
                   onChange={(e) => {
                     requestSetPreference('telemetry', e.target.checked);
-                    requestShowRequireRestartDialog();
+                    enqueueRequestRestartSnackbar();
                   }}
                 />
               </ListItemSecondaryAction>
@@ -1287,7 +1289,7 @@ const Preferences = ({
                       checked={swipeToNavigate}
                       onChange={(e) => {
                         requestSetPreference('swipeToNavigate', e.target.checked);
-                        requestShowRequireRestartDialog();
+                        enqueueRequestRestartSnackbar();
                       }}
                     />
                   </ListItemSecondaryAction>
@@ -1308,7 +1310,7 @@ const Preferences = ({
                       checked={useSystemTitleBar}
                       onChange={(e) => {
                         requestSetPreference('useSystemTitleBar', e.target.checked);
-                        requestShowRequireRestartDialog();
+                        enqueueRequestRestartSnackbar();
                       }}
                     />
                   </ListItemSecondaryAction>
@@ -1327,7 +1329,7 @@ const Preferences = ({
                   checked={useHardwareAcceleration}
                   onChange={(e) => {
                     requestSetPreference('useHardwareAcceleration', e.target.checked);
-                    requestShowRequireRestartDialog();
+                    enqueueRequestRestartSnackbar();
                   }}
                 />
               </ListItemSecondaryAction>
@@ -1424,6 +1426,7 @@ const Preferences = ({
       <DialogSpellcheckLanguages />
       <DialogProxy />
       <DialogInternalUrls />
+      <SnackbarTrigger />
     </div>
   );
 };

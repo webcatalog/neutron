@@ -8,7 +8,7 @@ import {
 } from '../../constants/actions';
 import {
   requestSetPreference,
-  requestShowRequireRestartDialog,
+  enqueueRequestRestartSnackbar,
 } from '../../senders';
 
 import { updateForm as updateFormDialogWorkspacePreferences } from '../dialog-workspace-preferences/actions';
@@ -65,5 +65,6 @@ export const save = () => (dispatch, getState) => {
   }
 
   dispatch(close());
-  requestShowRequireRestartDialog();
+
+  enqueueRequestRestartSnackbar();
 };
