@@ -1373,7 +1373,24 @@ const Preferences = ({
         </Typography>
         <Paper elevation={0} className={classes.paper}>
           <List disablePadding dense>
-            <ListItem button onClick={requestResetPreferences}>
+            <ListItem
+              button
+              onClick={() => {
+                window.remote.dialog.showMessageBox(window.remote.getCurrentWindow(), {
+                  type: 'question',
+                  buttons: ['Reset Now', 'Cancel'],
+                  message: 'Are you sure? All preferences will be restored to their original defaults. Browsing data won\'t be affected. This action cannot be undone.',
+                  cancelId: 1,
+                }).then(({ response }) => {
+                  if (response === 0) {
+                    window.ipcRenderer.once('set-preferences', () => {
+                      enqueueRequestRestartSnackbar();
+                    });
+                    requestResetPreferences();
+                  }
+                }).catch(console.log); // eslint-disable-line
+              }}
+            >
               <ListItemText primary="Restore preferences to their original defaults" />
               <ChevronRightIcon color="action" />
             </ListItem>
