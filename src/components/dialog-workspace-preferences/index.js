@@ -42,6 +42,8 @@ import DialogCodeInjection from '../dialog-code-injection';
 import DialogCustomUserAgent from '../dialog-custom-user-agent';
 import DialogInternalUrls from '../dialog-internal-urls';
 
+import SnackbarTrigger from '../shared/snackbar-trigger';
+
 const styles = (theme) => ({
   root: {
     padding: theme.spacing(2),
@@ -594,6 +596,7 @@ const Preferences = ({
       <DialogCodeInjection />
       <DialogCustomUserAgent />
       <DialogInternalUrls />
+      <SnackbarTrigger />
     </div>
   );
 };

@@ -6,7 +6,7 @@ import {
   DIALOG_SPELLCHECK_LANGUAGES_OPEN,
   DIALOG_SPELLCHECK_LANGUAGES_CLOSE,
 } from '../../constants/actions';
-import { requestSetPreference, requestShowRequireRestartDialog } from '../../senders';
+import { requestSetPreference, enqueueRequestRestartSnackbar } from '../../senders';
 
 export const open = () => (dispatch, getState) => {
   const { preferences } = getState();
@@ -49,7 +49,7 @@ export const save = () => (dispatch, getState) => {
 
   requestSetPreference('spellcheckLanguages', form.spellcheckLanguages);
 
-  requestShowRequireRestartDialog();
+  enqueueRequestRestartSnackbar();
 
   dispatch(close());
 };

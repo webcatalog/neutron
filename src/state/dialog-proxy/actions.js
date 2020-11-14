@@ -12,7 +12,7 @@ import hasErrors from '../../helpers/has-errors';
 
 import {
   requestSetPreference,
-  requestShowRequireRestartDialog,
+  enqueueRequestRestartSnackbar,
 } from '../../senders';
 
 export const open = () => (dispatch, getState) => {
@@ -95,7 +95,7 @@ export const save = () => (dispatch, getState) => {
   requestSetPreference('proxyBypassRules', form.proxyBypassRules);
   requestSetPreference('proxyPacScript', form.proxyPacScript);
   requestSetPreference('proxyType', form.proxyType);
-  requestShowRequireRestartDialog();
+  enqueueRequestRestartSnackbar();
 
   window.remote.getCurrentWindow().close();
   return null;

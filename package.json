@@ -80,6 +80,7 @@
     "eslint-plugin-react-hooks": "2.5.1",
     "extract-zip": "2.0.1",
     "hasha": "5.2.2",
+    "notistack": "1.0.1",
     "prop-types": "15.7.2",
     "react": "16.14.0",
     "react-ace": "9.2.0",

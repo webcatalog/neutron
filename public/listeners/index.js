@@ -155,20 +155,6 @@ const loadListeners = () => {
     setPreference(name, value);
   });
 
-  ipcMain.on('request-reset-preferences', () => {
-    dialog.showMessageBox(preferencesWindow.get(), {
-      type: 'question',
-      buttons: ['Reset Now', 'Cancel'],
-      message: 'Are you sure? All preferences will be restored to their original defaults. Browsing data won\'t be affected. This action cannot be undone.',
-      cancelId: 1,
-    }).then(({ response }) => {
-      if (response === 0) {
-        resetPreferences();
-        ipcMain.emit('request-show-require-restart-dialog');
-      }
-    }).catch(console.log); // eslint-disable-line
-  });
-
   ipcMain.on('request-show-about-window', () => {
     aboutWindow.show();
   });
@@ -205,20 +191,14 @@ const loadListeners = () => {
     notificationsWindow.show();
   });
 
-  ipcMain.on('request-show-require-restart-dialog', () => {
-    const win = workspacePreferencesWindow.get() || preferencesWindow.get() || mainWindow.get();
-    dialog.showMessageBox(win, {
-      type: 'question',
-      buttons: ['Restart Now', 'Later'],
-      message: 'You need to restart the app for this change to take effect.',
-      cancelId: 1,
-    }).then(({ response }) => {
-      if (response === 0) {
-        app.relaunch();
-        app.exit(0);
-      }
-    })
-    .catch(console.log); // eslint-disable-line
+  ipcMain.on('request-reset-preferences', () => {
+    resetPreferences();
+    createMenu();
+  });
+
+  ipcMain.on('request-restart', () => {
+    app.relaunch();
+    app.exit(0);
   });
 
   ipcMain.on('request-show-require-reload-workspace-dialog', (e, id) => {
@@ -534,6 +514,13 @@ const loadListeners = () => {
 
   ipcMain.on('request-unlock-app-using-touch-id', () => {
     unlockAppUsingTouchId();
+  });
+
+  ipcMain.on('request-enqueue-request-restart-snackbar', () => {
+    const win = workspacePreferencesWindow.get() || preferencesWindow.get();
+    if (win) {
+      win.webContents.send('enqueue-request-restart-snackbar');
+    }
   });
 };
 

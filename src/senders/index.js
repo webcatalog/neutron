@@ -3,6 +3,14 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import amplitude from '../amplitude';
 
+export const enqueueRequestRestartSnackbar = () => {
+  if (window.mode === 'workspace-preferences' || window.mode === 'preferences') {
+    window.ipcRenderer.emit('enqueue-request-restart-snackbar');
+    return;
+  }
+  window.ipcRenderer.send('request-enqueue-request-restart-snackbar');
+};
+
 export const requestOpenInBrowser = (url) => window.ipcRenderer.send('request-open-in-browser', url);
 export const requestLoadUrl = (url, id) => window.ipcRenderer.send('request-load-url', url, id);
 export const requestShowMessageBox = (message, type) => window.ipcRenderer.send('request-show-message-box', message, type);
@@ -33,7 +41,7 @@ export const getPreference = (name) => window.ipcRenderer.sendSync('get-preferen
 export const getPreferences = () => window.ipcRenderer.sendSync('get-preferences');
 export const requestSetPreference = (name, value) => window.ipcRenderer.send('request-set-preference', name, value);
 export const requestResetPreferences = () => window.ipcRenderer.send('request-reset-preferences');
-export const requestShowRequireRestartDialog = () => window.ipcRenderer.send('request-show-require-restart-dialog');
+export const requestRestart = () => window.ipcRenderer.send('request-restart');
 
 // System Preferences
 export const getSystemPreference = (name) => window.ipcRenderer.sendSync('get-system-preference', name);
