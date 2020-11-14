@@ -7,31 +7,33 @@ import classnames from 'classnames';
 
 import connectComponent from '../../helpers/connect-component';
 
-const titleBarHeight = 22;
-
-const styles = (theme) => ({
-  root: {
-    background: theme.palette.type === 'dark' ? '#2a2b2c' : 'linear-gradient(top, #e4e4e4, #cecece)',
-    height: titleBarHeight,
-    WebkitAppRegion: 'drag',
-    WebkitUserSelect: 'none',
-    textAlign: 'center',
-    lineHeight: '22px',
-    fontSize: '13px',
-    color: theme.palette.type === 'dark' ? 'rgba(255, 255, 255, 0.7)' : 'rgb(77, 77, 77)',
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif',
-    fontWeight: 500,
-    paddingLeft: 72,
-    paddingRight: 72,
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-  },
-  rootMenubar: {
-    paddingLeft: theme.spacing(1),
-    paddingRight: theme.spacing(1),
-  },
-});
+const styles = (theme) => {
+  // big sur increases title bar height
+  const titleBarHeight = window.remote.getGlobal('isMacOs11') ? 28 : 22;
+  return {
+    root: {
+      background: theme.palette.type === 'dark' ? '#2a2b2c' : 'linear-gradient(top, #e4e4e4, #cecece)',
+      height: titleBarHeight,
+      WebkitAppRegion: 'drag',
+      WebkitUserSelect: 'none',
+      textAlign: 'center',
+      lineHeight: `${titleBarHeight}px`,
+      fontSize: '13px',
+      color: theme.palette.type === 'dark' ? 'rgba(255, 255, 255, 0.7)' : 'rgb(77, 77, 77)',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif',
+      fontWeight: 500,
+      paddingLeft: 72,
+      paddingRight: 72,
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+    },
+    rootMenubar: {
+      paddingLeft: theme.spacing(1),
+      paddingRight: theme.spacing(1),
+    },
+  };
+};
 
 const FakeTitleBar = (props) => {
   const {

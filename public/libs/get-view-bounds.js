@@ -14,7 +14,8 @@ const getViewBounds = (contentSize, findInPage = false, height, width) => {
   const sidebarWidth = 68;
   let titlebarHeight = 0;
   if (process.platform === 'darwin') {
-    titlebarHeight = 22;
+    // Big Sur increases title bar height: https://github.com/microsoft/vscode/pull/110592
+    titlebarHeight = global.isMacOs11 ? 28 : 22;
   } else if (!global.useSystemTitleBar) {
     titlebarHeight = 32;
   }

@@ -57,124 +57,129 @@ const arrayMove = (array, from, to) => {
   return newArray;
 };
 
-const styles = (theme) => ({
-  outerRoot: {
-    display: 'flex',
-    flexDirection: 'column',
-    height: '100%',
-    width: '100%',
-    overflow: 'hidden',
-  },
-  root: {
-    display: 'flex',
-    flexDirection: 'row',
-    flex: 1,
-    height: '100%',
-    width: '100%',
-    overflow: 'hidden',
-  },
-  sidebarUpperRoot: {
-    height: '100%',
-    width: 68,
-    backgroundColor: theme.palette.background.paper,
-    WebkitAppRegion: window.process.platform === 'darwin' ? 'drag' : 'no-drag',
-    borderRight: '1px solid',
-    borderRightColor: theme.palette.divider,
-    WebkitUserSelect: 'none',
-    overflowX: 'hidden',
-  },
-  sidebarUpperRootWide: {
-  },
-  sidebarRoot: {
-    flex: 1,
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    paddingBottom: theme.spacing(1),
-    boxSizing: 'border-box',
-  },
-  sidebarTop: {
-    flex: 1,
-    paddingTop: window.process.platform === 'darwin' ? theme.spacing(3) : 0,
-    width: '100%',
-  },
-  sidebarTopFullScreen: {
-    paddingTop: 0,
-  },
-  innerContentRoot: {
-    flex: 1,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: theme.spacing(1),
-  },
-  contentRoot: {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    width: '100%',
-  },
-  arrow: {
-    height: 202,
-    width: 150,
-    position: 'absolute',
-    top: window.process.platform === 'darwin' ? 50 : 60,
-    left: 72,
-    backgroundImage: `url('${theme.palette.type === 'dark' ? arrowWhite : arrowBlack}')`,
-    backgroundSize: '150px 202px',
-  },
-  avatar: {
-    fontFamily: theme.typography.fontFamily,
-    display: 'inline-block',
-    height: 36,
-    width: 36,
-    background: theme.palette.type === 'dark' ? theme.palette.common.white : theme.palette.common.black,
-    borderRadius: 4,
-    color: theme.palette.getContrastText(theme.palette.type === 'dark' ? theme.palette.common.white : theme.palette.common.black),
-    lineHeight: '36px',
-    textAlign: 'center',
-    fontWeight: 400,
-    textTransform: 'uppercase',
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    border: theme.palette.type === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)',
-    fontSize: '24px',
-  },
-  inlineBlock: {
-    display: 'inline-block',
-    fontSize: '18px',
-    color: theme.palette.type === 'dark' ? theme.palette.common.white : theme.palette.common.black,
-  },
-  tip: {
-    position: 'absolute',
-    top: 112,
-    left: 180,
-    fontFamily: theme.typography.fontFamily,
-    userSelect: 'none',
-  },
-  tip2: {
-    fontFamily: theme.typography.fontFamily,
-    userSelect: 'none',
-  },
-  grabbing: {
-    cursor: 'grabbing !important',
-    pointerEvents: 'auto !important',
-  },
-  end: {
-    display: 'flex',
-    flexDirection: 'column',
-    width: '100%',
-  },
-  ul: {
-    marginTop: 0,
-    marginBottom: '1.5rem',
-  },
-  iconButton: {
-    width: '100%',
-    borderRadius: 0,
-  },
-});
+const styles = (theme) => {
+  // big sur increases title bar height
+  const titleBarHeight = window.remote.getGlobal('isMacOs11') ? 28 : 22;
+
+  return {
+    outerRoot: {
+      display: 'flex',
+      flexDirection: 'column',
+      height: '100%',
+      width: '100%',
+      overflow: 'hidden',
+    },
+    root: {
+      display: 'flex',
+      flexDirection: 'row',
+      flex: 1,
+      height: '100%',
+      width: '100%',
+      overflow: 'hidden',
+    },
+    sidebarUpperRoot: {
+      height: '100%',
+      width: 68,
+      backgroundColor: theme.palette.background.paper,
+      WebkitAppRegion: window.process.platform === 'darwin' ? 'drag' : 'no-drag',
+      borderRight: '1px solid',
+      borderRightColor: theme.palette.divider,
+      WebkitUserSelect: 'none',
+      overflowX: 'hidden',
+    },
+    sidebarUpperRootWide: {
+    },
+    sidebarRoot: {
+      flex: 1,
+      width: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      paddingBottom: theme.spacing(1),
+      boxSizing: 'border-box',
+    },
+    sidebarTop: {
+      flex: 1,
+      paddingTop: window.process.platform === 'darwin' ? titleBarHeight : 0,
+      width: '100%',
+    },
+    sidebarTopFullScreen: {
+      paddingTop: 0,
+    },
+    innerContentRoot: {
+      flex: 1,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: theme.spacing(1),
+    },
+    contentRoot: {
+      flex: 1,
+      display: 'flex',
+      flexDirection: 'column',
+      width: '100%',
+    },
+    arrow: {
+      height: 202,
+      width: 150,
+      position: 'absolute',
+      top: window.process.platform === 'darwin' ? 50 : 60,
+      left: 72,
+      backgroundImage: `url('${theme.palette.type === 'dark' ? arrowWhite : arrowBlack}')`,
+      backgroundSize: '150px 202px',
+    },
+    avatar: {
+      fontFamily: theme.typography.fontFamily,
+      display: 'inline-block',
+      height: 36,
+      width: 36,
+      background: theme.palette.type === 'dark' ? theme.palette.common.white : theme.palette.common.black,
+      borderRadius: 4,
+      color: theme.palette.getContrastText(theme.palette.type === 'dark' ? theme.palette.common.white : theme.palette.common.black),
+      lineHeight: '36px',
+      textAlign: 'center',
+      fontWeight: 400,
+      textTransform: 'uppercase',
+      marginLeft: theme.spacing(1),
+      marginRight: theme.spacing(1),
+      border: theme.palette.type === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)',
+      fontSize: '24px',
+    },
+    inlineBlock: {
+      display: 'inline-block',
+      fontSize: '18px',
+      color: theme.palette.type === 'dark' ? theme.palette.common.white : theme.palette.common.black,
+    },
+    tip: {
+      position: 'absolute',
+      top: 112,
+      left: 180,
+      fontFamily: theme.typography.fontFamily,
+      userSelect: 'none',
+    },
+    tip2: {
+      fontFamily: theme.typography.fontFamily,
+      userSelect: 'none',
+    },
+    grabbing: {
+      cursor: 'grabbing !important',
+      pointerEvents: 'auto !important',
+    },
+    end: {
+      display: 'flex',
+      flexDirection: 'column',
+      width: '100%',
+    },
+    ul: {
+      marginTop: 0,
+      marginBottom: '1.5rem',
+    },
+    iconButton: {
+      width: '100%',
+      borderRadius: 0,
+    },
+  };
+};
 
 const SortableItem = sortableElement(({ value }) => {
   const { workspace, index } = value;

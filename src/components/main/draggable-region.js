@@ -10,7 +10,8 @@ import connectComponent from '../../helpers/connect-component';
 
 const styles = () => ({
   root: {
-    height: 22,
+    // big sur increases title bar height
+    height: window.remote.getGlobal('isMacOs11') ? 28 : 22,
     width: '100vw',
     WebkitAppRegion: 'drag',
     WebkitUserSelect: 'none',
