@@ -59,7 +59,7 @@
     "@material-ui/icons": "4.9.1",
     "@material-ui/pickers": "3.2.10",
     "ace-builds": "1.4.12",
-    "amplitude-js": "7.3.2",
+    "amplitude-js": "7.3.3",
     "babel-eslint": "10.1.0",
     "babel-preset-env": "1.7.0",
     "babel-preset-react": "6.24.1",
