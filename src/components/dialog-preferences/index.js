@@ -20,6 +20,7 @@ import Slider from '@material-ui/core/Slider';
 import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
 
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import BuildIcon from '@material-ui/icons/Build';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
@@ -192,6 +193,7 @@ const Preferences = ({
   pauseNotificationsByScheduleFrom,
   pauseNotificationsByScheduleTo,
   pauseNotificationsMuteAudio,
+  registered,
   rememberLastPageVisited,
   searchEngine,
   sentry,
@@ -215,6 +217,11 @@ const Preferences = ({
     && window.remote.systemPreferences.canPromptTouchID();
 
   const sections = {
+    account: {
+      text: 'Account',
+      Icon: AccountCircleIcon,
+      ref: useRef(),
+    },
     general: {
       text: 'General',
       Icon: WidgetsIcon,
@@ -318,6 +325,31 @@ const Preferences = ({
         </List>
       </div>
       <div className={classes.inner}>
+        <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle} ref={sections.account.ref}>
+          Account
+        </Typography>
+        <Paper elevation={0} className={classes.paper}>
+          <List disablePadding dense>
+            <ListItem button onClick={null} disabled>
+              <ListItemText primary={registered ? 'WebCatalog Plus' : 'WebCatalog Basic'} />
+            </ListItem>
+            {!registered && (
+              <>
+                <Divider />
+                <ListItem button onClick={checkLicense}>
+                  <ListItemText primary="Upgrade to WebCatalog Plus" />
+                  <ChevronRightIcon color="action" />
+                </ListItem>
+              </>
+            )}
+            <Divider />
+            <ListItem button onClick={() => requestOpenInBrowser('https://forms.gle/RqwYdQo8PM67Mmvc9')}>
+              <ListItemText primary="Join WebCatalog Pro Waitlist" />
+              <ChevronRightIcon color="action" />
+            </ListItem>
+          </List>
+        </Paper>
+
         <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.general.ref}>
           General
         </Typography>
@@ -1417,6 +1449,21 @@ const Preferences = ({
               <ChevronRightIcon color="action" />
             </ListItem>
             <Divider />
+            <ListItem button onClick={() => requestOpenInBrowser('https://twitter.com/webcatalog_app')}>
+              <ListItemText primary="Twitter" />
+              <ChevronRightIcon color="action" />
+            </ListItem>
+            <Divider />
+            <ListItem button onClick={() => requestOpenInBrowser('https://www.linkedin.com/company/webcatalogapp')}>
+              <ListItemText primary="LinkedIn" />
+              <ChevronRightIcon color="action" />
+            </ListItem>
+            <Divider />
+            <ListItem button onClick={() => requestOpenInBrowser('https://github.com/webcatalog')}>
+              <ListItemText primary="GitHub" />
+              <ChevronRightIcon color="action" />
+            </ListItem>
+            <Divider />
             <ListItem>
               <ListItemText primary="Warn before quitting" />
               <ListItemSecondaryAction>
@@ -1453,6 +1500,7 @@ Preferences.defaultProps = {
   customUserAgent: null,
   internalUrlRule: null,
   jsCodeInjection: null,
+  registered: false,
 };
 
 Preferences.propTypes = {
@@ -1489,6 +1537,7 @@ Preferences.propTypes = {
   pauseNotificationsByScheduleFrom: PropTypes.string.isRequired,
   pauseNotificationsByScheduleTo: PropTypes.string.isRequired,
   pauseNotificationsMuteAudio: PropTypes.bool.isRequired,
+  registered: PropTypes.bool,
   rememberLastPageVisited: PropTypes.bool.isRequired,
   searchEngine: PropTypes.string.isRequired,
   sentry: PropTypes.bool.isRequired,
@@ -1536,6 +1585,7 @@ const mapStateToProps = (state) => ({
   pauseNotificationsByScheduleFrom: state.preferences.pauseNotificationsByScheduleFrom,
   pauseNotificationsByScheduleTo: state.preferences.pauseNotificationsByScheduleTo,
   pauseNotificationsMuteAudio: state.preferences.pauseNotificationsMuteAudio,
+  registered: window.remote.getGlobal('appJson').registered,
   rememberLastPageVisited: state.preferences.rememberLastPageVisited,
   searchEngine: state.preferences.searchEngine,
   sentry: state.preferences.sentry,
