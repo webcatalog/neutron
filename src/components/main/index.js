@@ -184,8 +184,22 @@ const styles = (theme) => {
 const SortableItem = sortableElement(({ value }) => {
   const { workspace, index } = value;
   const {
-    active, id, name, picturePath, hibernated, transparentBackground,
+    active, id, hibernated, transparentBackground,
   } = workspace;
+  let { picturePath, name } = workspace;
+  if (workspace.googleInfo) {
+    if (!picturePath && workspace.googleInfo.picturePath) {
+      picturePath = workspace.googleInfo.picturePath;
+    }
+    if (!name) {
+      if (workspace.googleInfo.name && workspace.googleInfo.email) {
+        name = `${workspace.googleInfo.name} (${workspace.googleInfo.email})`;
+      } else if (workspace.googleInfo.name) {
+        name = workspace.googleInfo.name;
+      }
+    }
+  }
+
   return (
     <WorkspaceSelector
       active={active}

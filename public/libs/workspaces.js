@@ -5,7 +5,10 @@ const { app } = require('electron');
 const path = require('path');
 const fs = require('fs-extra');
 const settings = require('electron-settings');
-const { v1: uuidv1 } = require('uuid');
+const {
+  v1: uuidv1,
+  v5: uuidv5,
+} = require('uuid');
 const Jimp = require('jimp');
 const isUrl = require('is-url');
 const tmp = require('tmp');
@@ -14,6 +17,8 @@ const sendToAllWindows = require('./send-to-all-windows');
 const downloadAsync = require('./download-async');
 
 const appJson = require('../app.json');
+
+const GOOGLE_PICTURE_PATH_UUID_NAMESPACE = '777ebe80-28ec-11eb-b7fe-6be41598616a';
 
 const v = '43';
 
@@ -244,6 +249,53 @@ const removeWorkspacePicture = (id) => {
   return Promise.resolve();
 };
 
+const setWorkspaceGoogleInfo = (id, googleInfo) => {
+  const workspace = getWorkspace(id);
+  const currentGoogleInfo = workspace.googleInfo || {};
+  if (currentGoogleInfo.pictureUrl === googleInfo.pictureUrl
+    || currentGoogleInfo.name === googleInfo.name
+    || currentGoogleInfo.email === googleInfo.email) {
+    // nothing changes
+    return Promise.resolve();
+  }
+
+  const newGoogleInfo = { ...googleInfo };
+  return Promise.resolve()
+    .then(() => {
+      if (currentGoogleInfo.pictureUrl !== googleInfo.pictureUrl && googleInfo.pictureUrl) {
+        const pictureId = uuidv5(googleInfo.pictureUrl, GOOGLE_PICTURE_PATH_UUID_NAMESPACE);
+        const picturePath = path.join(app.getPath('userData'), 'google-pictures', `${pictureId}.png`);
+        return downloadAsync(googleInfo.pictureUrl, picturePath)
+          .then(() => {
+            newGoogleInfo.pictureId = pictureId;
+            newGoogleInfo.picturePath = picturePath;
+          });
+      }
+      return null;
+    })
+    .then(() => {
+      setWorkspace(id, {
+        googleInfo: newGoogleInfo,
+      });
+    })
+    // eslint-disable-next-line no-console
+    .catch(console.log);
+};
+
+const removeWorkspaceGoogleInfo = (id) => {
+  const workspace = getWorkspace(id);
+  return Promise.resolve()
+    .then(() => {
+      setWorkspace(id, {
+        googleInfo: null,
+      });
+      if (workspace.googleInfo && workspace.googleInfo.picturePath) {
+        return fs.remove(workspace.googleInfo.picturePath);
+      }
+      return null;
+    });
+};
+
 const removeWorkspace = (id) => {
   const workspace = workspaces[id];
 
@@ -254,10 +306,14 @@ const removeWorkspace = (id) => {
   // remove workspace data from disk
   fs.remove(path.join(app.getPath('userData'), 'Partitions', id))
     .then(() => {
+      const p = [];
       if (workspace && workspace.picturePath) {
-        return fs.remove(workspace.picturePath);
+        p.push(fs.remove(workspace.picturePath));
       }
-      return null;
+      if (workspace && workspace.googleInfo && workspace.googleInfo.picturePath) {
+        p.push(fs.remove(workspace.googleInfo.picturePath));
+      }
+      return Promise.all(p);
     })
     .then(() => {
       // eslint-disable-next-line no-console
@@ -277,14 +333,16 @@ module.exports = {
   getNextWorkspace,
   getPreviousWorkspace,
   getWorkspace,
-  getWorkspacePreferences,
   getWorkspacePreference,
+  getWorkspacePreferences,
   getWorkspaces,
   getWorkspacesAsList,
   removeWorkspace,
+  removeWorkspaceGoogleInfo,
   removeWorkspacePicture,
   setActiveWorkspace,
   setWorkspace,
+  setWorkspaceGoogleInfo,
   setWorkspacePicture,
   setWorkspaces,
 };

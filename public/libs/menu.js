@@ -37,6 +37,19 @@ const {
 
 let menu;
 
+const getWorkspaceName = (workspace) => {
+  let workspaceName = `Workspace ${workspace.order + 1}`;
+  if (workspace.name) workspaceName = workspace.name;
+  else if (workspace.googleInfo) {
+    if (workspace.googleInfo.name && workspace.googleInfo.email) {
+      workspaceName = `${workspace.googleInfo.name} (${workspace.googleInfo.email})`;
+    } else if (workspace.googleInfo.name) {
+      workspaceName = workspace.googleInfo.name;
+    }
+  }
+  return workspaceName;
+};
+
 const createMenu = async () => {
   const workspaces = getWorkspaces();
   const hasWorkspaces = Object.keys(workspaces).length > 0;
@@ -419,8 +432,9 @@ const createMenu = async () => {
     Object.values(getWorkspaces())
       .sort((a, b) => a.order - b.order)
       .forEach((workspace, i) => {
+        const label = getWorkspaceName(workspace);
         template[4].submenu.push({
-          label: workspace.name || `Workspace ${i + 1}`,
+          label,
           type: 'checkbox',
           checked: workspace.active,
           click: () => {
@@ -432,7 +446,7 @@ const createMenu = async () => {
         });
 
         template[2].submenu[template[2].submenu.length - 1].submenu.push({
-          label: workspace.name || `Workspace ${i + 1}`,
+          label,
           click: () => {
             const v = getView(workspace.id);
             v.webContents.toggleDevTools();

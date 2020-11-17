@@ -45,6 +45,19 @@ const App = () => {
   }
 };
 
+const getWorkspaceName = (workspace) => {
+  let workspaceName = `Workspace ${workspace.order + 1}`;
+  if (workspace.name) workspaceName = workspace.name;
+  else if (workspace.googleInfo) {
+    if (workspace.googleInfo.name && workspace.googleInfo.email) {
+      workspaceName = `${workspace.googleInfo.name} (${workspace.googleInfo.email})`;
+    } else if (workspace.googleInfo.name) {
+      workspaceName = workspace.googleInfo.name;
+    }
+  }
+  return workspaceName;
+};
+
 const runApp = () => {
   Promise.resolve()
     .then(async () => {
@@ -69,7 +82,7 @@ const runApp = () => {
         });
         initialState.dialogWorkspacePreferences = { form: workspace.preferences || {} };
 
-        document.title = workspace.name ? `Configure Workspace ${workspace.order + 1} "${workspace.name}"` : `Configure Workspace ${workspace.order + 1}`;
+        document.title = `Configure Workspace "${getWorkspaceName(workspace)}"`;
       } else if (window.mode === 'edit-workspace') {
         const editWorkspaceId = window.remote.getGlobal('editWorkspaceId');
         const workspaceList = getWorkspacesAsList(initialState.workspaces);
@@ -83,7 +96,7 @@ const runApp = () => {
         });
         initialState.dialogEditWorkspace = { form: workspace };
 
-        document.title = workspace.name ? `Edit Workspace ${workspace.order + 1} "${workspace.name}"` : `Edit Workspace ${workspace.order + 1}`;
+        document.title = `Edit Workspace "${getWorkspaceName(workspace)}"`;
       } else if (window.mode === 'open-url-with') {
         document.title = 'Open Link With';
       } else if (window.mode === 'notifications') {
