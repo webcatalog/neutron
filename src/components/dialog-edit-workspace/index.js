@@ -108,6 +108,7 @@ const EditWorkspace = ({
   disableAudio,
   disableNotifications,
   downloadingIcon,
+  googleInfo,
   hibernateWhenUnused,
   homeUrl,
   homeUrlError,
@@ -121,162 +122,179 @@ const EditWorkspace = ({
   order,
   picturePath,
   transparentBackground,
-}) => (
-  <div className={classes.root}>
-    <div className={classes.flexGrow}>
-      <TextField
-        label="Name"
-        placeholder="Optional"
-        fullWidth
-        margin="dense"
-        variant="outlined"
-        className={classes.textField}
-        InputLabelProps={{
-          shrink: true,
-        }}
-        value={name}
-        onChange={(e) => onUpdateForm({ name: e.target.value })}
-      />
-      <TextField
-        label="Home URL"
-        error={Boolean(homeUrlError)}
-        placeholder="Optional"
-        fullWidth
-        margin="dense"
-        variant="outlined"
-        className={classes.textField}
-        InputLabelProps={{
-          shrink: true,
-        }}
-        value={homeUrl}
-        onChange={(e) => onUpdateForm({ homeUrl: e.target.value })}
-        helperText={(() => {
-          if (!homeUrlError && isMailApp) {
-            return 'Email app detected.';
-          }
-          if (!homeUrl && window.remote.getGlobal('appJson').url) {
-            return `Defaults to ${window.remote.getGlobal('appJson').url}.`;
-          }
-          return homeUrlError;
-        })()}
-      />
-      <div className={classes.avatarFlex}>
-        <div className={classes.avatarLeft}>
-          <div
-            className={classnames(
-              classes.avatar,
-              !picturePath && !internetIcon && classes.textAvatar,
-              transparentBackground && classes.transparentAvatar,
-            )}
-          >
-            {picturePath || internetIcon ? (
-              <img alt="Icon" className={classes.avatarPicture} src={picturePath ? `file://${picturePath}` : internetIcon} />
-            ) : getAvatarText(id, name, order)}
+}) => {
+  let namePlaceholder = 'Optional';
+  if (googleInfo) {
+    if (googleInfo.name && googleInfo.email) {
+      namePlaceholder = `${googleInfo.name} (${googleInfo.email})`;
+    } else if (googleInfo.name) {
+      namePlaceholder = googleInfo.name;
+    }
+  }
+
+  let displayedPicturePath = picturePath ? `file://${picturePath}` : internetIcon;
+  if (!displayedPicturePath && googleInfo && googleInfo.picturePath) {
+    displayedPicturePath = `file://${googleInfo.picturePath}`;
+  }
+
+  return (
+    <div className={classes.root}>
+      <div className={classes.flexGrow}>
+        <TextField
+          label="Name"
+          placeholder={namePlaceholder}
+          fullWidth
+          margin="dense"
+          variant="outlined"
+          className={classes.textField}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          value={name}
+          onChange={(e) => onUpdateForm({ name: e.target.value })}
+        />
+        <TextField
+          label="Home URL"
+          error={Boolean(homeUrlError)}
+          placeholder="Optional"
+          fullWidth
+          margin="dense"
+          variant="outlined"
+          className={classes.textField}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          value={homeUrl}
+          onChange={(e) => onUpdateForm({ homeUrl: e.target.value })}
+          helperText={(() => {
+            if (!homeUrlError && isMailApp) {
+              return 'Email app detected.';
+            }
+            if (!homeUrl && window.remote.getGlobal('appJson').url) {
+              return `Defaults to ${window.remote.getGlobal('appJson').url}.`;
+            }
+            return homeUrlError;
+          })()}
+        />
+        <div className={classes.avatarFlex}>
+          <div className={classes.avatarLeft}>
+            <div
+              className={classnames(
+                classes.avatar,
+                !picturePath && !internetIcon && classes.textAvatar,
+                transparentBackground && classes.transparentAvatar,
+              )}
+            >
+              {displayedPicturePath ? (
+                <img alt="Icon" className={classes.avatarPicture} src={displayedPicturePath} />
+              ) : getAvatarText(id, name, order)}
+            </div>
+          </div>
+          <div className={classes.avatarRight}>
+            <Button
+              variant="outlined"
+              size="small"
+              disabled={downloadingIcon}
+              onClick={() => {
+                const opts = {
+                  properties: ['openFile'],
+                  filters: [
+                    { name: 'Images', extensions: ['jpg', 'jpeg', 'png', 'gif', 'tiff', 'tif', 'bmp', 'dib'] },
+                  ],
+                };
+                window.remote.dialog.showOpenDialog(window.remote.getCurrentWindow(), opts)
+                  .then(({ canceled, filePaths }) => {
+                    if (!canceled && filePaths && filePaths.length > 0) {
+                      onUpdateForm({ picturePath: filePaths[0] });
+                    }
+                  })
+                  .catch(console.log); // eslint-disable-line
+              }}
+            >
+              Select Local Image...
+            </Button>
+            <Typography variant="caption" className={classes.caption}>
+              PNG, JPEG, GIF, TIFF or BMP.
+            </Typography>
+            <Button
+              variant="outlined"
+              size="small"
+              className={classes.buttonBot}
+              disabled={Boolean(homeUrlError || downloadingIcon)}
+              onClick={() => onGetIconFromInternet(true)}
+            >
+              {downloadingIcon ? 'Downloading Icon from the Internet...' : 'Download Icon from the Internet'}
+            </Button>
+            <Button
+              variant="outlined"
+              size="small"
+              className={classes.buttonBot}
+              onClick={() => onUpdateForm({ picturePath: null, internetIcon: null })}
+              disabled={!(picturePath || internetIcon) || downloadingIcon}
+            >
+              Reset to Default
+            </Button>
+            <FormGroup>
+              <FormControlLabel
+                control={(
+                  <Checkbox
+                    checked={transparentBackground}
+                    onChange={(e) => onUpdateForm({ transparentBackground: e.target.checked })}
+                  />
+                )}
+                label="Use transparent background"
+              />
+            </FormGroup>
           </div>
         </div>
-        <div className={classes.avatarRight}>
-          <Button
-            variant="outlined"
-            size="small"
-            disabled={downloadingIcon}
-            onClick={() => {
-              const opts = {
-                properties: ['openFile'],
-                filters: [
-                  { name: 'Images', extensions: ['jpg', 'jpeg', 'png', 'gif', 'tiff', 'tif', 'bmp', 'dib'] },
-                ],
-              };
-              window.remote.dialog.showOpenDialog(window.remote.getCurrentWindow(), opts)
-                .then(({ canceled, filePaths }) => {
-                  if (!canceled && filePaths && filePaths.length > 0) {
-                    onUpdateForm({ picturePath: filePaths[0] });
-                  }
-                })
-                .catch(console.log); // eslint-disable-line
-            }}
-          >
-            Select Local Image...
-          </Button>
-          <Typography variant="caption" className={classes.caption}>
-            PNG, JPEG, GIF, TIFF or BMP.
-          </Typography>
-          <Button
-            variant="outlined"
-            size="small"
-            className={classes.buttonBot}
-            disabled={Boolean(homeUrlError || downloadingIcon)}
-            onClick={() => onGetIconFromInternet(true)}
-          >
-            {downloadingIcon ? 'Downloading Icon from the Internet...' : 'Download Icon from the Internet'}
-          </Button>
-          <Button
-            variant="outlined"
-            size="small"
-            className={classes.buttonBot}
-            onClick={() => onUpdateForm({ picturePath: null, internetIcon: null })}
-            disabled={!(picturePath || internetIcon) || downloadingIcon}
-          >
-            Reset to Default
-          </Button>
-          <FormGroup>
-            <FormControlLabel
-              control={(
-                <Checkbox
-                  checked={transparentBackground}
-                  onChange={(e) => onUpdateForm({ transparentBackground: e.target.checked })}
-                />
-              )}
-              label="Use transparent background"
-            />
-          </FormGroup>
-        </div>
+        <List>
+          <Divider />
+          <ListItem disableGutters>
+            <ListItemText primary="Hibernate when not used" secondary="Save CPU usage, memory and battery." />
+            <ListItemSecondaryAction>
+              <Switch
+                edge="end"
+                color="primary"
+                checked={hibernateWhenUnused}
+                onChange={(e) => onUpdateForm({ hibernateWhenUnused: e.target.checked })}
+              />
+            </ListItemSecondaryAction>
+          </ListItem>
+          <ListItem disableGutters>
+            <ListItemText primary="Disable notifications" secondary="Prevent workspace from sending notifications." />
+            <ListItemSecondaryAction>
+              <Switch
+                edge="end"
+                color="primary"
+                checked={disableNotifications}
+                onChange={(e) => onUpdateForm({ disableNotifications: e.target.checked })}
+              />
+            </ListItemSecondaryAction>
+          </ListItem>
+          <ListItem disableGutters>
+            <ListItemText primary="Disable audio" secondary="Prevent workspace from playing audio." />
+            <ListItemSecondaryAction>
+              <Switch
+                edge="end"
+                color="primary"
+                checked={disableAudio}
+                onChange={(e) => onUpdateForm({ disableAudio: e.target.checked })}
+              />
+            </ListItemSecondaryAction>
+          </ListItem>
+        </List>
       </div>
-      <List>
-        <Divider />
-        <ListItem disableGutters>
-          <ListItemText primary="Hibernate when not used" secondary="Save CPU usage, memory and battery." />
-          <ListItemSecondaryAction>
-            <Switch
-              edge="end"
-              color="primary"
-              checked={hibernateWhenUnused}
-              onChange={(e) => onUpdateForm({ hibernateWhenUnused: e.target.checked })}
-            />
-          </ListItemSecondaryAction>
-        </ListItem>
-        <ListItem disableGutters>
-          <ListItemText primary="Disable notifications" secondary="Prevent workspace from sending notifications." />
-          <ListItemSecondaryAction>
-            <Switch
-              edge="end"
-              color="primary"
-              checked={disableNotifications}
-              onChange={(e) => onUpdateForm({ disableNotifications: e.target.checked })}
-            />
-          </ListItemSecondaryAction>
-        </ListItem>
-        <ListItem disableGutters>
-          <ListItemText primary="Disable audio" secondary="Prevent workspace from playing audio." />
-          <ListItemSecondaryAction>
-            <Switch
-              edge="end"
-              color="primary"
-              checked={disableAudio}
-              onChange={(e) => onUpdateForm({ disableAudio: e.target.checked })}
-            />
-          </ListItemSecondaryAction>
-        </ListItem>
-      </List>
+      <div>
+        <Button color="primary" variant="contained" className={classes.button} onClick={onSave}>
+          Save
+        </Button>
+      </div>
     </div>
-    <div>
-      <Button color="primary" variant="contained" className={classes.button} onClick={onSave}>
-        Save
-      </Button>
-    </div>
-  </div>
-);
+  );
+};
 
 EditWorkspace.defaultProps = {
+  googleInfo: null,
   homeUrlError: null,
   internetIcon: null,
   picturePath: null,
@@ -287,6 +305,7 @@ EditWorkspace.propTypes = {
   disableAudio: PropTypes.bool.isRequired,
   disableNotifications: PropTypes.bool.isRequired,
   downloadingIcon: PropTypes.bool.isRequired,
+  googleInfo: PropTypes.object,
   hibernateWhenUnused: PropTypes.bool.isRequired,
   homeUrl: PropTypes.string.isRequired,
   homeUrlError: PropTypes.string,
@@ -306,6 +325,7 @@ const mapStateToProps = (state) => ({
   disableAudio: Boolean(state.dialogEditWorkspace.form.disableAudio),
   disableNotifications: Boolean(state.dialogEditWorkspace.form.disableNotifications),
   downloadingIcon: state.dialogEditWorkspace.downloadingIcon,
+  googleInfo: state.dialogEditWorkspace.form.googleInfo,
   hibernateWhenUnused: Boolean(state.dialogEditWorkspace.form.hibernateWhenUnused),
   homeUrl: state.dialogEditWorkspace.form.homeUrl || '',
   homeUrlError: state.dialogEditWorkspace.form.homeUrlError,
