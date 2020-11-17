@@ -40,6 +40,7 @@ let menu;
 const createMenu = async () => {
   const workspaces = getWorkspaces();
   const hasWorkspaces = Object.keys(workspaces).length > 0;
+  const { registered } = appJson;
 
   const handleZoomIn = (menuItem, browserWindow) => {
     // if item is called in popup window
@@ -84,6 +85,18 @@ const createMenu = async () => {
         {
           label: `About ${appJson.name}`,
           click: () => ipcMain.emit('request-show-about-window'),
+        },
+        { type: 'separator' },
+        {
+          label: registered ? 'WebCatalog Plus' : 'WebCatalog Basic',
+          visible: true,
+          enabled: false,
+          click: null,
+        },
+        {
+          label: 'Upgrade...',
+          visible: !registered,
+          click: registered ? null : () => ipcMain.emit('request-show-require-license-dialog'),
         },
         { type: 'separator' },
         ...lockMenuItems,
