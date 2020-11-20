@@ -25,6 +25,7 @@ const {
   getWorkspacePreference,
   getWorkspacePreferences,
   setWorkspace,
+  removeWorkspaceAccountInfo,
 } = require('./workspaces');
 const {
   setWorkspaceMeta,
@@ -298,6 +299,11 @@ const addView = (browserWindow, workspace) => {
     ) {
       e.preventDefault();
       shell.openExternal(nextUrl);
+    }
+
+    // strip account info when logging out
+    if (nextUrl.startsWith('https://accounts.google.com/Logout')) {
+      removeWorkspaceAccountInfo(workspace.id);
     }
   });
 

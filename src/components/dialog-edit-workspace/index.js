@@ -108,7 +108,7 @@ const EditWorkspace = ({
   disableAudio,
   disableNotifications,
   downloadingIcon,
-  googleInfo,
+  accountInfo,
   hibernateWhenUnused,
   homeUrl,
   homeUrlError,
@@ -124,17 +124,17 @@ const EditWorkspace = ({
   transparentBackground,
 }) => {
   let namePlaceholder = 'Optional';
-  if (googleInfo) {
-    if (googleInfo.name && googleInfo.email) {
-      namePlaceholder = `${googleInfo.name} (${googleInfo.email})`;
-    } else if (googleInfo.name) {
-      namePlaceholder = googleInfo.name;
+  if (accountInfo) {
+    if (accountInfo.name && accountInfo.email) {
+      namePlaceholder = `${accountInfo.name} (${accountInfo.email})`;
+    } else if (accountInfo.name) {
+      namePlaceholder = accountInfo.name;
     }
   }
 
   let displayedPicturePath = picturePath ? `file://${picturePath}` : internetIcon;
-  if (!displayedPicturePath && googleInfo && googleInfo.picturePath) {
-    displayedPicturePath = `file://${googleInfo.picturePath}`;
+  if (!displayedPicturePath && accountInfo && accountInfo.picturePath) {
+    displayedPicturePath = `file://${accountInfo.picturePath}`;
   }
 
   return (
@@ -294,7 +294,7 @@ const EditWorkspace = ({
 };
 
 EditWorkspace.defaultProps = {
-  googleInfo: null,
+  accountInfo: null,
   homeUrlError: null,
   internetIcon: null,
   picturePath: null,
@@ -305,7 +305,7 @@ EditWorkspace.propTypes = {
   disableAudio: PropTypes.bool.isRequired,
   disableNotifications: PropTypes.bool.isRequired,
   downloadingIcon: PropTypes.bool.isRequired,
-  googleInfo: PropTypes.object,
+  accountInfo: PropTypes.object,
   hibernateWhenUnused: PropTypes.bool.isRequired,
   homeUrl: PropTypes.string.isRequired,
   homeUrlError: PropTypes.string,
@@ -325,7 +325,7 @@ const mapStateToProps = (state) => ({
   disableAudio: Boolean(state.dialogEditWorkspace.form.disableAudio),
   disableNotifications: Boolean(state.dialogEditWorkspace.form.disableNotifications),
   downloadingIcon: state.dialogEditWorkspace.downloadingIcon,
-  googleInfo: state.dialogEditWorkspace.form.googleInfo,
+  accountInfo: state.dialogEditWorkspace.form.accountInfo,
   hibernateWhenUnused: Boolean(state.dialogEditWorkspace.form.hibernateWhenUnused),
   homeUrl: state.dialogEditWorkspace.form.homeUrl || '',
   homeUrlError: state.dialogEditWorkspace.form.homeUrlError,
