@@ -32,8 +32,8 @@ const {
   getWorkspaces,
   setWorkspacePicture,
   removeWorkspacePicture,
-  setWorkspaceGoogleInfo,
-  removeWorkspaceGoogleInfo,
+  setWorkspaceAccountInfo,
+  removeWorkspaceAccountInfo,
 } = require('../libs/workspaces');
 
 const {
@@ -383,16 +383,16 @@ const loadListeners = () => {
     setWorkspacePicture(id, picturePath);
   });
 
-  ipcMain.on('request-set-workspace-google-info', (e, id, googleInfo) => {
-    setWorkspaceGoogleInfo(id, googleInfo);
+  ipcMain.on('request-set-workspace-account-info', (e, id, accountInfo) => {
+    setWorkspaceAccountInfo(id, accountInfo);
   });
 
   ipcMain.on('request-remove-workspace-picture', (e, id) => {
     removeWorkspacePicture(id);
   });
 
-  ipcMain.on('request-remove-workspace-google-info', (e, id) => {
-    removeWorkspaceGoogleInfo(id);
+  ipcMain.on('request-remove-workspace-account-info', (e, id) => {
+    removeWorkspaceAccountInfo(id);
   });
 
   ipcMain.on('request-clear-browsing-data', () => {

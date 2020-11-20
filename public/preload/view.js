@@ -297,48 +297,46 @@ const handleLoaded = (event) => {
   // tie Google account info with workspace
   if (window.location.hostname.includes('google.com')) {
     let success = false;
-    const getGoogleInfoAsync = () => Promise.resolve()
+    const getAccountInfoAsync = () => Promise.resolve()
       .then(() => {
         if (success) return;
         // eslint-disable-next-line no-console
         console.log('Getting Google account info...');
-        const accountInfoDoc = document.querySelector('.gb_5a.gb_F.gb_l.gb_6a');
-        if (accountInfoDoc) {
-          const pictureUrl = accountInfoDoc.querySelector('.gb_Ma')
-            .getAttribute('data-srcset')
-            .split(',')
-            .pop()
-            .trim()
-            .split(' ')[0];
-          const name = accountInfoDoc.querySelector('.gb_qb').innerText;
-          const email = accountInfoDoc.querySelector('.gb_sb').innerText;
-          ipcRenderer.send('request-set-workspace-google-info', workspaceId, {
-            pictureUrl,
-            name,
-            email,
-          });
-          // eslint-disable-next-line no-console
-          console.log('Google account info retrieved.');
-          success = true;
-        } else {
-          // eslint-disable-next-line no-console
-          console.log('Google account info not found.');
-        }
+        const pictureUrl = document.querySelector('img.gb_ib')
+          .getAttribute('data-srcset')
+          .split(',')
+          .pop()
+          .trim()
+          .split(' ')[0];
+        const name = document.querySelector('.gb_qb').innerText;
+        const email = document.querySelector('.gb_rb').innerText;
+        ipcRenderer.send('request-set-workspace-account-info', workspaceId, {
+          pictureUrl,
+          name,
+          email,
+        });
+        // eslint-disable-next-line no-console
+        console.log('Google account info retrieved.', {
+          pictureUrl,
+          name,
+          email,
+        });
+        success = true;
       })
       // eslint-disable-next-line no-console
       .catch(console.log);
     // run once immediately
-    getGoogleInfoAsync();
+    getAccountInfoAsync();
     // run again after 30 seconds, 1 minute, every 5 minutes
     // as the script fails if the page is not fully loaded
     setTimeout(() => {
-      getGoogleInfoAsync();
+      getAccountInfoAsync();
     }, 30 * 1000);
     setTimeout(() => {
-      getGoogleInfoAsync();
+      getAccountInfoAsync();
     }, 60 * 1000);
     setInterval(() => {
-      getGoogleInfoAsync();
+      getAccountInfoAsync();
     }, 5 * 60 * 1000);
   }
 

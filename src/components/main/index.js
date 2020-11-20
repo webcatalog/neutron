@@ -187,15 +187,15 @@ const SortableItem = sortableElement(({ value }) => {
     active, id, hibernated, transparentBackground,
   } = workspace;
   let { picturePath, name } = workspace;
-  if (workspace.googleInfo) {
-    if (!picturePath && workspace.googleInfo.picturePath) {
-      picturePath = workspace.googleInfo.picturePath;
+  if (workspace.accountInfo) {
+    if (!picturePath && workspace.accountInfo.picturePath) {
+      picturePath = workspace.accountInfo.picturePath;
     }
     if (!name) {
-      if (workspace.googleInfo.name && workspace.googleInfo.email) {
-        name = `${workspace.googleInfo.name} (${workspace.googleInfo.email})`;
-      } else if (workspace.googleInfo.name) {
-        name = workspace.googleInfo.name;
+      if (workspace.accountInfo.name && workspace.accountInfo.email) {
+        name = `${workspace.accountInfo.name} (${workspace.accountInfo.email})`;
+      } else if (workspace.accountInfo.name) {
+        name = workspace.accountInfo.name;
       }
     }
   }

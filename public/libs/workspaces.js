@@ -18,7 +18,7 @@ const downloadAsync = require('./download-async');
 
 const appJson = require('../app.json');
 
-const GOOGLE_PICTURE_PATH_UUID_NAMESPACE = '777ebe80-28ec-11eb-b7fe-6be41598616a';
+const ACCOUNT_PICTURE_PATH_UUID_NAMESPACE = '777ebe80-28ec-11eb-b7fe-6be41598616a';
 
 const v = '43';
 
@@ -249,48 +249,48 @@ const removeWorkspacePicture = (id) => {
   return Promise.resolve();
 };
 
-const setWorkspaceGoogleInfo = (id, googleInfo) => {
+const setWorkspaceAccountInfo = (id, accountInfo) => {
   const workspace = getWorkspace(id);
-  const currentGoogleInfo = workspace.googleInfo || {};
-  if (currentGoogleInfo.pictureUrl === googleInfo.pictureUrl
-    || currentGoogleInfo.name === googleInfo.name
-    || currentGoogleInfo.email === googleInfo.email) {
+  const currentAccountInfo = workspace.accountInfo || {};
+  if (currentAccountInfo.pictureUrl === accountInfo.pictureUrl
+    && currentAccountInfo.name === accountInfo.name
+    && currentAccountInfo.email === accountInfo.email) {
     // nothing changes
     return Promise.resolve();
   }
 
-  const newGoogleInfo = { ...googleInfo };
+  const newAccountInfo = { ...accountInfo };
   return Promise.resolve()
     .then(() => {
-      if (currentGoogleInfo.pictureUrl !== googleInfo.pictureUrl && googleInfo.pictureUrl) {
-        const pictureId = uuidv5(googleInfo.pictureUrl, GOOGLE_PICTURE_PATH_UUID_NAMESPACE);
-        const picturePath = path.join(app.getPath('userData'), 'google-pictures', `${pictureId}.png`);
-        return downloadAsync(googleInfo.pictureUrl, picturePath)
+      const pictureId = uuidv5(accountInfo.pictureUrl, ACCOUNT_PICTURE_PATH_UUID_NAMESPACE);
+      if (currentAccountInfo.pictureUrl !== accountInfo.pictureUrl && accountInfo.pictureUrl) {
+        const picturePath = path.join(app.getPath('userData'), 'account-pictures', `${pictureId}.png`);
+        return downloadAsync(accountInfo.pictureUrl, picturePath)
           .then(() => {
-            newGoogleInfo.pictureId = pictureId;
-            newGoogleInfo.picturePath = picturePath;
+            newAccountInfo.pictureId = pictureId;
+            newAccountInfo.picturePath = picturePath;
           });
       }
       return null;
     })
     .then(() => {
       setWorkspace(id, {
-        googleInfo: newGoogleInfo,
+        accountInfo: newAccountInfo,
       });
     })
     // eslint-disable-next-line no-console
     .catch(console.log);
 };
 
-const removeWorkspaceGoogleInfo = (id) => {
+const removeWorkspaceAccountInfo = (id) => {
   const workspace = getWorkspace(id);
   return Promise.resolve()
     .then(() => {
       setWorkspace(id, {
-        googleInfo: null,
+        accountInfo: null,
       });
-      if (workspace.googleInfo && workspace.googleInfo.picturePath) {
-        return fs.remove(workspace.googleInfo.picturePath);
+      if (workspace.accountInfo && workspace.accountInfo.picturePath) {
+        return fs.remove(workspace.accountInfo.picturePath);
       }
       return null;
     });
@@ -310,8 +310,8 @@ const removeWorkspace = (id) => {
       if (workspace && workspace.picturePath) {
         p.push(fs.remove(workspace.picturePath));
       }
-      if (workspace && workspace.googleInfo && workspace.googleInfo.picturePath) {
-        p.push(fs.remove(workspace.googleInfo.picturePath));
+      if (workspace && workspace.accountInfo && workspace.accountInfo.picturePath) {
+        p.push(fs.remove(workspace.accountInfo.picturePath));
       }
       return Promise.all(p);
     })
@@ -338,11 +338,11 @@ module.exports = {
   getWorkspaces,
   getWorkspacesAsList,
   removeWorkspace,
-  removeWorkspaceGoogleInfo,
+  removeWorkspaceAccountInfo,
   removeWorkspacePicture,
   setActiveWorkspace,
   setWorkspace,
-  setWorkspaceGoogleInfo,
+  setWorkspaceAccountInfo,
   setWorkspacePicture,
   setWorkspaces,
 };

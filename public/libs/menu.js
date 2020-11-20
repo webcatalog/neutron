@@ -40,11 +40,11 @@ let menu;
 const getWorkspaceName = (workspace) => {
   let workspaceName = `Workspace ${workspace.order + 1}`;
   if (workspace.name) workspaceName = workspace.name;
-  else if (workspace.googleInfo) {
-    if (workspace.googleInfo.name && workspace.googleInfo.email) {
-      workspaceName = `${workspace.googleInfo.name} (${workspace.googleInfo.email})`;
-    } else if (workspace.googleInfo.name) {
-      workspaceName = workspace.googleInfo.name;
+  else if (workspace.accountInfo) {
+    if (workspace.accountInfo.name && workspace.accountInfo.email) {
+      workspaceName = `${workspace.accountInfo.name} (${workspace.accountInfo.email})`;
+    } else if (workspace.accountInfo.name) {
+      workspaceName = workspace.accountInfo.name;
     }
   }
   return workspaceName;

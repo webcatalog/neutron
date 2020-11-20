@@ -159,10 +159,6 @@ const createAsync = () => new Promise((resolve) => {
 
   mainWindowState.manage(win);
 
-  if (isDev) {
-    win.webContents.openDevTools({ mode: 'detach' });
-  }
-
   // Enable swipe to navigate
   const swipeToNavigate = getPreference('swipeToNavigate');
   if (swipeToNavigate) {
