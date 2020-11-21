@@ -359,6 +359,29 @@ const Preferences = ({
         </Typography>
         <Paper elevation={0} className={classes.paper}>
           <List disablePadding dense>
+            {appJson.url && (
+              <>
+                <ListItem
+                  button
+                  onClick={() => {
+                    window.remote.dialog.showMessageBox(window.remote.getCurrentWindow(), {
+                      type: 'question',
+                      buttons: ['Learn More..', 'Later'],
+                      message: 'You can change the app URL through the WebCatalog app.',
+                      cancelId: 1,
+                    }).then(({ response }) => {
+                      if (response === 0) {
+                        requestOpenInBrowser(`https://help.webcatalog.app/article/33-can-i-change-the-url-of-an-installed-app?utm_source=${utmSource}`);
+                      }
+                    }).catch(console.log); // eslint-disable-line
+                  }}
+                >
+                  <ListItemText primary="App URL" secondary={appJson.url} />
+                  <ChevronRightIcon color="action" />
+                </ListItem>
+                <Divider />
+              </>
+            )}
             <ListItem>
               <ListItemText primary="Theme" />
               <Select
