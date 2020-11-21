@@ -62,17 +62,17 @@ const FakeTitleBar = (props) => {
           win.maximize();
         }
       }}
-      onDragOver={(e) => {
+      onDragOver={(window.mode === 'main' || window.mode === 'menubar') ? (e) => {
         e.preventDefault();
-      }}
-      onDrop={(e) => {
+      } : null}
+      onDrop={(window.mode === 'main' || window.mode === 'menubar') ? (e) => {
         const text = e.dataTransfer.getData('URL') || e.dataTransfer.getData('text');
         if (text) {
           e.preventDefault();
           const processedUrl = getUrlFromText(text, searchEngine);
           requestLoadUrl(processedUrl);
         }
-      }}
+      } : null}
     >
       {(window.mode === 'main' || window.mode === 'menubar') && title ? title : window.remote.getGlobal('appJson').name}
     </div>
