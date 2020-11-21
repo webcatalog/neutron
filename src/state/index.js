@@ -18,6 +18,7 @@ import dialogEditWorkspace from './dialog-edit-workspace/reducers';
 import dialogGoToUrl from './dialog-go-to-url/reducers';
 import dialogInternalUrls from './dialog-internal-urls/reducers';
 import dialogProxy from './dialog-proxy/reducers';
+import dialogRefreshInterval from './dialog-refresh-interval/reducers';
 import dialogSpellcheckLanguages from './dialog-spellcheck-languages/reducers';
 import dialogWorkspacePreferences from './dialog-workspace-preferences/reducers';
 import findInPage from './find-in-page/reducers';
@@ -41,6 +42,7 @@ const rootReducer = combineReducers({
   dialogGoToUrl,
   dialogInternalUrls,
   dialogProxy,
+  dialogRefreshInterval,
   dialogSpellcheckLanguages,
   dialogWorkspacePreferences,
   findInPage,
