@@ -6,6 +6,11 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import connectComponent from '../../helpers/connect-component';
+import getUrlFromText from '../../helpers/get-url-from-text';
+
+import {
+  requestLoadUrl,
+} from '../../senders';
 
 const styles = (theme) => {
   // big sur increases title bar height
@@ -39,6 +44,7 @@ const FakeTitleBar = (props) => {
   const {
     classes,
     title,
+    searchEngine,
   } = props;
 
   if (window.process.platform !== 'darwin') return null;
@@ -56,6 +62,17 @@ const FakeTitleBar = (props) => {
           win.maximize();
         }
       }}
+      onDragOver={(window.mode === 'main' || window.mode === 'menubar') ? (e) => {
+        e.preventDefault();
+      } : null}
+      onDrop={(window.mode === 'main' || window.mode === 'menubar') ? (e) => {
+        const text = e.dataTransfer.getData('URL') || e.dataTransfer.getData('text');
+        if (text) {
+          e.preventDefault();
+          const processedUrl = getUrlFromText(text, searchEngine);
+          requestLoadUrl(processedUrl);
+        }
+      } : null}
     >
       {(window.mode === 'main' || window.mode === 'menubar') && title ? title : window.remote.getGlobal('appJson').name}
     </div>
@@ -69,10 +86,12 @@ FakeTitleBar.defaultProps = {
 FakeTitleBar.propTypes = {
   classes: PropTypes.object.isRequired,
   title: PropTypes.string,
+  searchEngine: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   title: state.general.title,
+  searchEngine: state.preferences.searchEngine,
 });
 
 export default connectComponent(
