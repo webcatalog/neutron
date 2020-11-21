@@ -40,6 +40,7 @@ import { TimePicker } from '@material-ui/pickers';
 
 import connectComponent from '../../helpers/connect-component';
 import checkLicense from '../../helpers/check-license';
+import roundTime from '../../helpers/round-time';
 
 import {
   requestCheckForUpdates,
@@ -62,6 +63,7 @@ import { open as openDialogCustomUserAgent } from '../../state/dialog-custom-use
 import { open as openDialogInternalUrls } from '../../state/dialog-internal-urls/actions';
 import { open as openDialogProxy } from '../../state/dialog-proxy/actions';
 import { open as openDialogSpellcheckLanguages } from '../../state/dialog-spellcheck-languages/actions';
+import { open as openDialogRefreshInterval } from '../../state/dialog-refresh-interval/actions';
 
 import hunspellLanguagesMap from '../../constants/hunspell-languages';
 import searchEngines from '../../constants/search-engines';
@@ -76,6 +78,7 @@ import DialogCustomUserAgent from '../dialog-custom-user-agent';
 import DialogInternalUrls from '../dialog-internal-urls';
 import DialogProxy from '../dialog-proxy';
 import DialogSpellcheckLanguages from '../dialog-spellcheck-languages';
+import DialogRefreshInterval from '../dialog-refresh-interval';
 
 import SnackbarTrigger from '../shared/snackbar-trigger';
 
@@ -186,6 +189,7 @@ const Preferences = ({
   onOpenDialogCustomUserAgent,
   onOpenDialogInternalUrls,
   onOpenDialogProxy,
+  onOpenDialogRefreshInterval,
   onOpenDialogSpellcheckLanguages,
   openAtLogin,
   openFolderWhenDoneDownloading,
@@ -773,6 +777,10 @@ const Preferences = ({
               <Select
                 value={autoRefreshInterval}
                 onChange={(e) => {
+                  if (e.target.value === 'custom') {
+                    onOpenDialogRefreshInterval();
+                    return;
+                  }
                   requestSetPreference('autoRefreshInterval', e.target.value);
                   enqueueRequestRestartSnackbar();
                 }}
@@ -788,6 +796,20 @@ const Preferences = ({
                 {autoRefreshIntervals.map((opt) => (
                   <MenuItem key={opt.value} dense value={opt.value}>{opt.name}</MenuItem>
                 ))}
+                {(() => {
+                  const isCustom = autoRefreshIntervals
+                    .find((interval) => interval.value === autoRefreshInterval) == null;
+                  if (isCustom) {
+                    const time = roundTime(autoRefreshInterval);
+                    return (
+                      <MenuItem dense value={autoRefreshInterval}>
+                        {`${time.value} ${time.unit}`}
+                      </MenuItem>
+                    );
+                  }
+                  return null;
+                })()}
+                <MenuItem dense value="custom">Custom</MenuItem>
               </Select>
             </ListItem>
             <ListItem>
@@ -1513,6 +1535,7 @@ const Preferences = ({
       <DialogSpellcheckLanguages />
       <DialogProxy />
       <DialogInternalUrls />
+      <DialogRefreshInterval />
       <SnackbarTrigger />
     </div>
   );
@@ -1553,6 +1576,7 @@ Preferences.propTypes = {
   onOpenDialogCustomUserAgent: PropTypes.func.isRequired,
   onOpenDialogInternalUrls: PropTypes.func.isRequired,
   onOpenDialogProxy: PropTypes.func.isRequired,
+  onOpenDialogRefreshInterval: PropTypes.func.isRequired,
   onOpenDialogSpellcheckLanguages: PropTypes.func.isRequired,
   openAtLogin: PropTypes.oneOf(['yes', 'yes-hidden', 'no']).isRequired,
   openFolderWhenDoneDownloading: PropTypes.bool.isRequired,
@@ -1633,6 +1657,7 @@ const actionCreators = {
   openDialogCustomUserAgent,
   openDialogInternalUrls,
   openDialogProxy,
+  openDialogRefreshInterval,
   openDialogSpellcheckLanguages,
 };
 

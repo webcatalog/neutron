@@ -25,6 +25,7 @@ import PowerIcon from '@material-ui/icons/Power';
 
 import connectComponent from '../../helpers/connect-component';
 import checkLicense from '../../helpers/check-license';
+import roundTime from '../../helpers/round-time';
 
 import {
   requestOpenInBrowser,
@@ -34,6 +35,7 @@ import {
 import { open as openDialogCodeInjection } from '../../state/dialog-code-injection/actions';
 import { open as openDialogCustomUserAgent } from '../../state/dialog-custom-user-agent/actions';
 import { open as openDialogInternalUrls } from '../../state/dialog-internal-urls/actions';
+import { open as openDialogRefreshInterval } from '../../state/dialog-refresh-interval/actions';
 import { updateForm } from '../../state/dialog-workspace-preferences/actions';
 
 import autoRefreshIntervals from '../../constants/auto-refresh-intervals';
@@ -41,6 +43,7 @@ import autoRefreshIntervals from '../../constants/auto-refresh-intervals';
 import DialogCodeInjection from '../dialog-code-injection';
 import DialogCustomUserAgent from '../dialog-custom-user-agent';
 import DialogInternalUrls from '../dialog-internal-urls';
+import DialogRefreshInterval from '../dialog-refresh-interval';
 
 import SnackbarTrigger from '../shared/snackbar-trigger';
 
@@ -127,6 +130,7 @@ const Preferences = ({
   onOpenDialogCodeInjection,
   onOpenDialogCustomUserAgent,
   onOpenDialogInternalUrls,
+  onOpenDialogRefreshInterval,
   onUpdateForm,
 
   formAskForDownloadPath,
@@ -396,6 +400,10 @@ const Preferences = ({
                   <Select
                     value={formAutoRefreshInterval || autoRefreshInterval}
                     onChange={(e) => {
+                      if (e.target.value === 'custom') {
+                        onOpenDialogRefreshInterval();
+                        return;
+                      }
                       onUpdateForm({
                         autoRefreshInterval: e.target.value,
                       });
@@ -412,6 +420,21 @@ const Preferences = ({
                     {autoRefreshIntervals.map((opt) => (
                       <MenuItem key={opt.value} dense value={opt.value}>{opt.name}</MenuItem>
                     ))}
+                    {(() => {
+                      const val = formAutoRefreshInterval || autoRefreshInterval;
+                      const isCustom = autoRefreshIntervals
+                        .find((interval) => interval.value === val) == null;
+                      if (isCustom) {
+                        const time = roundTime(val);
+                        return (
+                          <MenuItem dense value={val}>
+                            {`${time.value} ${time.unit}`}
+                          </MenuItem>
+                        );
+                      }
+                      return null;
+                    })()}
+                    <MenuItem dense value="custom">Custom</MenuItem>
                   </Select>
                 </ListItem>
                 <ListItem>
@@ -596,6 +619,7 @@ const Preferences = ({
       <DialogCodeInjection />
       <DialogCustomUserAgent />
       <DialogInternalUrls />
+      <DialogRefreshInterval />
       <SnackbarTrigger />
     </div>
   );
@@ -638,6 +662,7 @@ Preferences.propTypes = {
   onOpenDialogCodeInjection: PropTypes.func.isRequired,
   onOpenDialogCustomUserAgent: PropTypes.func.isRequired,
   onOpenDialogInternalUrls: PropTypes.func.isRequired,
+  onOpenDialogRefreshInterval: PropTypes.func.isRequired,
   onUpdateForm: PropTypes.func.isRequired,
 
   formAskForDownloadPath: PropTypes.bool,
@@ -690,6 +715,7 @@ const actionCreators = {
   openDialogCodeInjection,
   openDialogCustomUserAgent,
   openDialogInternalUrls,
+  openDialogRefreshInterval,
   updateForm,
 };
 
