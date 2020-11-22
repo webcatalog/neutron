@@ -39,6 +39,11 @@ const rawMailtoUrls = [
     hostnames: ['soverin.net', 'mail.soverin.net'],
     mailtoUrl: 'https://mail.soverin.net/?_task=mail&_action=compose&_to=%s',
   },
+  {
+    hostnames: ['mail.disroot.org'],
+    // https://github.com/RainLoop/rainloop-webmail/blob/19d3b559dadc4fbd647e085263257a84f5672be5/dev/App/User.js
+    mailtoUrl: 'https://mail.disroot.org/?mailto&to=%s',
+  },
 ];
 
 const MAILTO_URLS = {};
