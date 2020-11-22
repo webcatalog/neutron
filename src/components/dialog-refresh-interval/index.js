@@ -55,9 +55,15 @@ const RefreshInterval = ({
       <TextField
         label="Refresh every"
         variant="filled"
+        type="number"
+        inputProps={{
+          min: 0,
+          step: 1,
+        }}
         value={value}
         className={classes.textField}
-        onChange={(e) => onUpdateForm({ value: e.target.value })}
+        // prevent decimal with Math.floor
+        onChange={(e) => onUpdateForm({ value: Math.floor(e.target.value) })}
       />
       <FormControl variant="filled" className={classes.formControl}>
         <InputLabel id="unit-label">Unit</InputLabel>
