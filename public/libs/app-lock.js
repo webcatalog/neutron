@@ -1,9 +1,12 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+/* eslint-disable global-require */
 const { ipcMain, systemPreferences } = require('electron');
 const { captureException } = require('@sentry/electron');
-const keytar = require('keytar');
+// do not call require('keytar') here
+// it would prevent the app from starting on Linux arm64
+// details: https://github.com/atom/node-keytar/issues/318
 
 const sendToAllWindows = require('./send-to-all-windows');
 const { createMenu } = require('./menu');
@@ -11,10 +14,20 @@ const { createMenu } = require('./menu');
 const appJson = require('../app.json');
 
 const getAppLockStatusAsync = async () => {
+  // keytar is incompatible with Linux arm64
+  // details: https://github.com/atom/node-keytar/issues/318
+  if (process.platform === 'linux' && process.arch === 'arm64') {
+    return {
+      supported: false,
+      useTouchId: false,
+      hasPassword: false,
+    };
+  }
+
   try {
-    const currentPassword = await keytar.getPassword(appJson.id, 'app-lock-password');
+    const currentPassword = await require('keytar').getPassword(appJson.id, 'app-lock-password');
     const useTouchId = process.platform === 'darwin' && systemPreferences.canPromptTouchID()
-      ? await keytar.getPassword(appJson.id, 'app-lock-touch-id') === '1'
+      ? await require('keytar').getPassword(appJson.id, 'app-lock-touch-id') === '1'
       : false;
     return {
       supported: false,
@@ -35,15 +48,27 @@ const getAppLockStatusAsync = async () => {
 };
 
 const validateAppLockPasswordAsync = async (inputPassword) => {
-  const currentPassword = await keytar.getPassword(appJson.id, 'app-lock-password');
+  // keytar is incompatible with Linux arm64
+  // details: https://github.com/atom/node-keytar/issues/318
+  if (process.platform === 'linux' && process.arch === 'arm64') {
+    return false;
+  }
+
+  const currentPassword = await require('keytar').getPassword(appJson.id, 'app-lock-password');
   if (currentPassword && inputPassword !== currentPassword) return false;
   return true;
 };
 
 const deleteAppLockPasswordAsync = async (inputPassword) => {
+  // keytar is incompatible with Linux arm64
+  // details: https://github.com/atom/node-keytar/issues/318
+  if (process.platform === 'linux' && process.arch === 'arm64') {
+    return Promise.resolve();
+  }
+
   const validPassword = await validateAppLockPasswordAsync(inputPassword);
   if (!validPassword) return null;
-  return keytar.deletePassword(appJson.id, 'app-lock-password')
+  return require('keytar').deletePassword(appJson.id, 'app-lock-password')
     .then(() => {
       global.appLock = false;
       ipcMain.emit('request-realign-active-workspace');
@@ -52,9 +77,15 @@ const deleteAppLockPasswordAsync = async (inputPassword) => {
 };
 
 const setAppLockPasswordAsync = async (inputPassword, newPassword) => {
+  // keytar is incompatible with Linux arm64
+  // details: https://github.com/atom/node-keytar/issues/318
+  if (process.platform === 'linux' && process.arch === 'arm64') {
+    return Promise.resolve();
+  }
+
   const validPassword = await validateAppLockPasswordAsync(inputPassword);
   if (!validPassword) return null;
-  return keytar.setPassword(appJson.id, 'app-lock-password', newPassword)
+  return require('keytar').setPassword(appJson.id, 'app-lock-password', newPassword)
     .then(() => {
       global.appLock = true;
       ipcMain.emit('request-realign-active-workspace');
@@ -63,12 +94,18 @@ const setAppLockPasswordAsync = async (inputPassword, newPassword) => {
 };
 
 const setAppLockTouchIdAsync = async (inputPassword, useTouchId) => {
+  // keytar is incompatible with Linux arm64
+  // details: https://github.com/atom/node-keytar/issues/318
+  if (process.platform === 'linux' && process.arch === 'arm64') {
+    return Promise.resolve();
+  }
+
   const validPassword = await validateAppLockPasswordAsync(inputPassword);
   if (!validPassword) return null;
   if (useTouchId) {
-    return keytar.setPassword(appJson.id, 'app-lock-touch-id', '1');
+    return require('keytar').setPassword(appJson.id, 'app-lock-touch-id', '1');
   }
-  return keytar.deletePassword(appJson.id, 'app-lock-touch-id');
+  return require('keytar').deletePassword(appJson.id, 'app-lock-touch-id');
 };
 
 const lockApp = () => {
@@ -102,7 +139,7 @@ const unlockApp = (inputPassword) => {
 const unlockAppUsingTouchId = () => {
   if (process.platform !== 'darwin') return;
   if (!global.locked) return;
-  keytar.getPassword(appJson.id, 'app-lock-touch-id')
+  require('keytar').getPassword(appJson.id, 'app-lock-touch-id')
     .then((val) => {
       if (systemPreferences.canPromptTouchID() && val === '1') {
         return systemPreferences.promptTouchID('Unlock app');
