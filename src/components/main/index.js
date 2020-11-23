@@ -323,6 +323,7 @@ const Main = ({
               {!navigationBar && (
               <div className={classes.end}>
                 <IconButton
+                  title="Notifications"
                   aria-label="Notifications"
                   onClick={requestShowNotificationsWindow}
                   className={classes.iconButton}
@@ -331,6 +332,7 @@ const Main = ({
                   {shouldPauseNotifications ? <NotificationsPausedIcon /> : <NotificationsIcon />}
                 </IconButton>
                 <IconButton
+                  title="Preferences"
                   aria-label="Preferences"
                   onClick={() => requestShowPreferencesWindow()}
                   className={classes.iconButton}
