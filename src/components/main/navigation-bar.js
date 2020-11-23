@@ -106,16 +106,40 @@ const NavigationBar = ({
       )}
     >
       <div className={classes.left}>
-        <IconButton aria-label="Go back" className={classes.iconButton} disabled={!hasWorkspaces || !canGoBack} onClick={requestGoBack}>
+        <IconButton
+          title="Back"
+          aria-label="Back"
+          className={classes.iconButton}
+          disabled={!hasWorkspaces || !canGoBack}
+          onClick={requestGoBack}
+        >
           <ArrowBackIcon className={classes.icon} />
         </IconButton>
-        <IconButton aria-label="Go forward" className={classes.iconButton} disabled={!hasWorkspaces || !canGoForward} onClick={requestGoForward}>
+        <IconButton
+          title="Forward"
+          aria-label="Forward"
+          className={classes.iconButton}
+          disabled={!hasWorkspaces || !canGoForward}
+          onClick={requestGoForward}
+        >
           <ArrowForwardIcon className={classes.icon} />
         </IconButton>
-        <IconButton aria-label="Reload" className={classes.iconButton} onClick={requestReload} disabled={!hasWorkspaces}>
+        <IconButton
+          title="Reload"
+          aria-label="Reload"
+          className={classes.iconButton}
+          onClick={requestReload}
+          disabled={!hasWorkspaces}
+        >
           <RefreshIcon className={classes.icon} />
         </IconButton>
-        <IconButton aria-label="Go home" className={classes.iconButton} onClick={requestGoHome} disabled={!hasWorkspaces}>
+        <IconButton
+          title="Home"
+          aria-label="Home"
+          className={classes.iconButton}
+          onClick={requestGoHome}
+          disabled={!hasWorkspaces}
+        >
           <HomeIcon className={classes.icon} />
         </IconButton>
       </div>
@@ -128,6 +152,7 @@ const NavigationBar = ({
           disabled={!hasWorkspaces}
           endAdornment={addressEdited && address && hasWorkspaces && (
             <IconButton
+              title="Go"
               aria-label="Go"
               className={classes.goButton}
               onClick={() => {
@@ -172,12 +197,22 @@ const NavigationBar = ({
         />
       </div>
       <div>
-        <IconButton aria-label="Notifications" onClick={requestShowNotificationsWindow} className={classes.iconButton}>
+        <IconButton
+          title="Notifications"
+          aria-label="Notifications"
+          onClick={requestShowNotificationsWindow}
+          className={classes.iconButton}
+        >
           {shouldPauseNotifications
             ? <NotificationsPausedIcon className={classes.icon} />
             : <NotificationsIcon className={classes.icon} />}
         </IconButton>
-        <IconButton aria-label="Preferences" className={classes.iconButton} onClick={() => requestShowPreferencesWindow()}>
+        <IconButton
+          title="Preferences"
+          aria-label="Preferences"
+          className={classes.iconButton}
+          onClick={() => requestShowPreferencesWindow()}
+        >
           <SettingsIcon className={classes.icon} />
         </IconButton>
       </div>

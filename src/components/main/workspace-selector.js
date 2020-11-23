@@ -129,6 +129,22 @@ const WorkspaceSelector = ({
     return null;
   })();
 
+  const hoverText = (() => {
+    if (id === 'add') {
+      return 'Add Workspace';
+    }
+
+    if (name) {
+      return name;
+    }
+
+    if (typeof order === 'number') {
+      return `Workspace ${order + 1}`;
+    }
+
+    return null;
+  })();
+
   return (
     <div
       role="button"
@@ -160,6 +176,7 @@ const WorkspaceSelector = ({
           }
         }
       }}
+      title={hoverText}
     >
       <Badge color="secondary" badgeContent={badgeCount} max={99} classes={{ badge: classes.badge }}>
         <div
