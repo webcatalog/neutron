@@ -42,8 +42,7 @@ jobs:
     # https://github.com/mui-org/material-ui/issues/12432
     - run: yarn --prefer-offline --network-timeout 600000
     - run: yarn lint
-    - run: yarn dist
-      if: startsWith(github.ref, 'refs/tags/')
+    - run: DEBUG=electron-builder yarn dist
       env:
         REACT_APP_AMPLITUDE_API_KEY: ${{ secrets.REACT_APP_AMPLITUDE_API_KEY }}
         REACT_APP_SWIFTYPE_HOST_ID: ${{ secrets.REACT_APP_SWIFTYPE_HOST_ID }}
