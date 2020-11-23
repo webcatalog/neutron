@@ -3,7 +3,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 /* eslint-disable global-require */
 const { ipcMain, systemPreferences } = require('electron');
-const { captureException } = require('@sentry/electron');
 // do not call require('keytar') here
 // it would prevent the app from starting on Linux arm64
 // details: https://github.com/atom/node-keytar/issues/318
@@ -30,14 +29,13 @@ const getAppLockStatusAsync = async () => {
       ? await require('keytar').getPassword(appJson.id, 'app-lock-touch-id') === '1'
       : false;
     return {
-      supported: false,
+      supported: true,
       useTouchId,
       hasPassword: Boolean(currentPassword),
     };
   } catch (e) {
     // eslint-disable-next-line no-console
     console.log(e);
-    captureException(e);
     // keytar might fail on Linux system without libsecret installed
     return {
       supported: false,

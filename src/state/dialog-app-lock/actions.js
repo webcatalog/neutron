@@ -40,6 +40,7 @@ export const open = () => (dispatch) => {
             }
           })
           .catch(console.log); // eslint-disable-line no-console
+        return;
       }
 
       dispatch({
