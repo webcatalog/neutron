@@ -251,6 +251,7 @@ const removeWorkspacePicture = (id) => {
 
 const setWorkspaceAccountInfo = (id, accountInfo) => {
   const workspace = getWorkspace(id);
+  if (!workspace) return Promise.resolve();
   const currentAccountInfo = workspace.accountInfo || {};
   if (currentAccountInfo.pictureUrl === accountInfo.pictureUrl
     && currentAccountInfo.name === accountInfo.name
