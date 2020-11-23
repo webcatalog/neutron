@@ -31,6 +31,7 @@ const {
   setWorkspaceMeta,
   getWorkspaceMeta,
   getWorkspaceMetas,
+  setWorkspaceBadgeCount,
 } = require('./workspace-metas');
 
 const sendToAllWindows = require('./send-to-all-windows');
@@ -746,35 +747,20 @@ const addView = (browserWindow, workspace) => {
 
   // Unread count badge
   if (unreadCountBadge) {
+    let usePageTitle = true;
     view.webContents.on('page-title-updated', (e, title) => {
-      const inc = getBadgeCountFromTitle(title);
-      setWorkspaceMeta(workspace.id, {
-        badgeCount: inc,
-      });
-
-      let count = 0;
-      const metas = getWorkspaceMetas();
-      Object.values(metas).forEach((m) => {
-        if (m && m.badgeCount) {
-          count += m.badgeCount;
-        }
-      });
-
-      app.badgeCount = count;
-
-      if (process.platform === 'win32') {
-        if (browserWindow && !browserWindow.isDestroyed()) {
-          if (count > 0) {
-            browserWindow.setOverlayIcon(
-              path.resolve(__dirname, '..', 'overlay-icon.png'),
-              `You have ${count} new messages.`,
-            );
-          } else {
-            browserWindow.setOverlayIcon(null, '');
-          }
-        }
-      }
+      if (!usePageTitle) return;
+      const num = getBadgeCountFromTitle(title);
+      setWorkspaceBadgeCount(workspace.id, num, browserWindow);
     });
+
+    // if this function is called
+    // then preload script is controlling badge count
+    // so we stop getting badge count from page-title
+    view.webContents.setBadgeCount = (num) => {
+      usePageTitle = false;
+      setWorkspaceBadgeCount(workspace.id, num, browserWindow);
+    };
   }
 
   // Find In Page
