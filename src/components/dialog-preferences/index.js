@@ -460,7 +460,7 @@ const Preferences = ({
                 </ListItem>
               </>
             )}
-            {window.process.platform === 'darwin' && (
+            {window.process.platform !== 'darwin' && (
               <>
                 <Divider />
                 <ListItem>

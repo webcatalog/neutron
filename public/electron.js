@@ -255,6 +255,7 @@ if (!gotTheLock) {
       autoCheckForUpdates,
       customUserAgent,
       navigationBar,
+      runInBackground,
       sidebar,
       titleBar,
       useSystemTitleBar,
@@ -275,7 +276,8 @@ if (!gotTheLock) {
     }
 
     global.isMacOs11 = isMacOs11();
-    global.attachToMenubar = attachToMenubar;
+    global.attachToMenubar = process.platform === 'darwin' && attachToMenubar;
+    global.runInBackground = process.platform !== 'darwin' && runInBackground;
     global.sidebar = sidebar;
     global.titleBar = titleBar;
     global.navigationBar = navigationBar;
@@ -350,7 +352,7 @@ if (!gotTheLock) {
   });
 
   app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
+    if (process.platform !== 'darwin' && getPreference('runInBackground') !== true) {
       app.quit();
     }
   });
