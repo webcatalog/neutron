@@ -17,7 +17,8 @@ const ContextMenuBuilder = require('../libs/context-menu-builder');
 
 const { MenuItem, shell } = remote;
 
-const { workspaceId } = remote.getCurrentWebContents();
+const webContents = remote.getCurrentWebContents();
+const { workspaceId } = webContents;
 
 const loadDarkReader = () => {
   const shouldUseDarkColor = ipcRenderer.sendSync('get-should-use-dark-colors');
@@ -89,7 +90,7 @@ const handleLoaded = (event) => {
 
   if (autoRefresh) {
     setTimeout(() => {
-      if (autoRefreshOnlyWhenInactive && remote.getCurrentWebContents().isFocused()) {
+      if (autoRefreshOnlyWhenInactive && webContents().isFocused()) {
         return;
       }
 
@@ -140,7 +141,7 @@ const handleLoaded = (event) => {
     true,
   );
 
-  remote.getCurrentWebContents().on('context-menu', (e, info) => {
+  webContents.on('context-menu', (e, info) => {
     window.contextMenuBuilder.buildMenuForElement(info)
       .then((menu) => {
         if (info.linkURL && info.linkURL.length > 0) {
@@ -181,25 +182,24 @@ const handleLoaded = (event) => {
 
         menu.append(new MenuItem({ type: 'separator' }));
 
-        const contents = remote.getCurrentWebContents();
         menu.append(new MenuItem({
           label: 'Back',
-          enabled: contents.canGoBack(),
+          enabled: webContents.canGoBack(),
           click: () => {
-            contents.goBack();
+            webContents.goBack();
           },
         }));
         menu.append(new MenuItem({
           label: 'Forward',
-          enabled: contents.canGoForward(),
+          enabled: webContents.canGoForward(),
           click: () => {
-            contents.goForward();
+            webContents.goForward();
           },
         }));
         menu.append(new MenuItem({
           label: 'Reload',
           click: () => {
-            contents.reload();
+            webContents.reload();
           },
         }));
 
@@ -275,7 +275,6 @@ const handleLoaded = (event) => {
 
     window.addEventListener('beforeunload', async () => {
       try {
-        const webContents = remote.getCurrentWebContents();
         const { session } = webContents;
         session.flushStorageData();
         session.clearStorageData({
@@ -338,6 +337,40 @@ const handleLoaded = (event) => {
     setInterval(() => {
       getAccountInfoAsync();
     }, 5 * 60 * 1000);
+  }
+
+  // Discord doesn't use document.title to show message count
+  // but use favicon
+  // so we get the number from the UI and update it whenever favicon changes
+  if (window.location.hostname.includes('discord.com')) {
+    const updateTitle = () => {
+      // eslint-disable-next-line no-console
+      console.log('updating badge');
+      let total = 0;
+      try {
+        const numberBadges = [...document.querySelector('nav').querySelectorAll('[class^="numberBadge-"]')].map((el) => parseInt(el.innerText, 10));
+        numberBadges.forEach((num) => { total += num; });
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.log(err);
+      }
+      webContents.setBadgeCount(total);
+    };
+
+    let interval = setInterval(() => {
+      if (document.querySelector('nav')) {
+        // https://blog.sessionstack.com/how-javascript-works-tracking-changes-in-the-dom-using-mutationobserver-86adc7446401
+        const mutationObserver = new window.MutationObserver(() => {
+          updateTitle();
+        });
+        mutationObserver.observe(document.querySelector('link[rel=icon]'), {
+          attributes: true,
+        });
+        updateTitle();
+        clearInterval(interval);
+        interval = null;
+      }
+    }, 1000);
   }
 
   // eslint-disable-next-line no-console
