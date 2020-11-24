@@ -503,7 +503,7 @@ const Preferences = ({
                   disabled={runInBackground || attachToMenubar}
                   onChange={(e) => {
                     requestSetPreference('trayIcon', e.target.checked);
-                    requestRealignActiveWorkspace();
+                    enqueueRequestRestartSnackbar();
                   }}
                 />
               </ListItemSecondaryAction>
