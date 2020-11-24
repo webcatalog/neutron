@@ -1,7 +1,7 @@
 {
   "name": "Singlebox",
   "description": "AppView template for WebCatalog",
-  "version": "12.4.0",
+  "version": "12.5.0",
   "minimumWebCatalogVersion": "23.0.0",
   "engines": {
     "node": ">=12.0.0 <13.0.0"
@@ -23,7 +23,7 @@
   "author": "Quang Lam <quang.lam@webcatalog.app>",
   "dependencies": {
     "@cliqz/adblocker-electron": "1.18.6",
-    "@sentry/electron": "2.0.3",
+    "@sentry/electron": "2.0.4",
     "cheerio": "1.0.0-rc.3",
     "darkreader": "4.9.22",
     "electron-context-menu": "2.3.0",
