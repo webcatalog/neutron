@@ -34,6 +34,7 @@ import RotateLeftIcon from '@material-ui/icons/RotateLeft';
 import RouterIcon from '@material-ui/icons/Router';
 import SecurityIcon from '@material-ui/icons/Security';
 import SystemUpdateAltIcon from '@material-ui/icons/SystemUpdateAlt';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 import WidgetsIcon from '@material-ui/icons/Widgets';
 
 import { TimePicker } from '@material-ui/pickers';
@@ -199,6 +200,7 @@ const Preferences = ({
   pauseNotificationsMuteAudio,
   registered,
   rememberLastPageVisited,
+  runInBackground,
   searchEngine,
   sentry,
   shareWorkspaceBrowsingData,
@@ -229,6 +231,11 @@ const Preferences = ({
     general: {
       text: 'General',
       Icon: WidgetsIcon,
+      ref: useRef(),
+    },
+    view: {
+      text: 'View',
+      Icon: VisibilityIcon,
       ref: useRef(),
     },
     extensions: {
@@ -403,6 +410,88 @@ const Preferences = ({
             <Divider />
             <ListItem>
               <ListItemText
+                primary="Search engine"
+                secondary="Search engine used in the address bar."
+              />
+              <Select
+                value={searchEngine}
+                onChange={(e) => requestSetPreference('searchEngine', e.target.value)}
+                variant="filled"
+                disableUnderline
+                margin="dense"
+                classes={{
+                  root: classes.select,
+                }}
+                className={classes.selectRoot}
+              >
+                {Object.keys(searchEngines).map((optKey) => {
+                  const opt = searchEngines[optKey];
+                  return (
+                    <MenuItem
+                      key={optKey}
+                      value={optKey}
+                      dense
+                    >
+                      {opt.name}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </ListItem>
+            {window.process.platform === 'darwin' && (
+              <>
+                <Divider />
+                <ListItem>
+                  <ListItemText
+                    primary="Attach to menu bar"
+                    secondary="Tip: Right-click on app icon to access context menu."
+                  />
+                  <ListItemSecondaryAction>
+                    <Switch
+                      edge="end"
+                      color="primary"
+                      checked={attachToMenubar}
+                      onChange={(e) => {
+                        requestSetPreference('attachToMenubar', e.target.checked);
+                        enqueueRequestRestartSnackbar();
+                      }}
+                    />
+                  </ListItemSecondaryAction>
+                </ListItem>
+              </>
+            )}
+            {window.process.platform === 'darwin' && (
+              <>
+                <Divider />
+                <ListItem>
+                  <ListItemText
+                    primary="Run in background"
+                    secondary="Keep the app running in background even when all windows are closed."
+                  />
+                  <ListItemSecondaryAction>
+                    <Switch
+                      edge="end"
+                      color="primary"
+                      checked={runInBackground}
+                      onChange={(e) => {
+                        requestSetPreference('runInBackground', e.target.checked);
+                        enqueueRequestRestartSnackbar();
+                      }}
+                    />
+                  </ListItemSecondaryAction>
+                </ListItem>
+              </>
+            )}
+          </List>
+        </Paper>
+
+        <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.view.ref}>
+          View
+        </Typography>
+        <Paper elevation={0} className={classes.paper}>
+          <List disablePadding dense>
+            <ListItem>
+              <ListItemText
                 primary="Show sidebar"
                 secondary="Sidebar lets you switch easily between workspaces."
               />
@@ -475,37 +564,6 @@ const Preferences = ({
                 />
               </ListItemSecondaryAction>
             </ListItem>
-            <Divider />
-            <ListItem>
-              <ListItemText
-                primary="Search engine"
-                secondary="Search engine used in the address bar."
-              />
-              <Select
-                value={searchEngine}
-                onChange={(e) => requestSetPreference('searchEngine', e.target.value)}
-                variant="filled"
-                disableUnderline
-                margin="dense"
-                classes={{
-                  root: classes.select,
-                }}
-                className={classes.selectRoot}
-              >
-                {Object.keys(searchEngines).map((optKey) => {
-                  const opt = searchEngines[optKey];
-                  return (
-                    <MenuItem
-                      key={optKey}
-                      value={optKey}
-                      dense
-                    >
-                      {opt.name}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-            </ListItem>
             {window.process.platform === 'darwin' && (
               <>
                 <Divider />
@@ -522,29 +580,6 @@ const Preferences = ({
                       onChange={(e) => {
                         requestSetPreference('titleBar', e.target.checked);
                         requestRealignActiveWorkspace();
-                      }}
-                    />
-                  </ListItemSecondaryAction>
-                </ListItem>
-              </>
-            )}
-            {window.process.platform === 'darwin' && (
-              <>
-                <Divider />
-                <ListItem>
-                  <ListItemText
-                    primary={window.process.platform === 'win32'
-                      ? 'Attach to taskbar' : 'Attach to menu bar'}
-                    secondary={window.process.platform !== 'linux' ? 'Tip: Right-click on app icon to access context menu.' : null}
-                  />
-                  <ListItemSecondaryAction>
-                    <Switch
-                      edge="end"
-                      color="primary"
-                      checked={attachToMenubar}
-                      onChange={(e) => {
-                        requestSetPreference('attachToMenubar', e.target.checked);
-                        enqueueRequestRestartSnackbar();
                       }}
                     />
                   </ListItemSecondaryAction>
@@ -1586,6 +1621,7 @@ Preferences.propTypes = {
   pauseNotificationsMuteAudio: PropTypes.bool.isRequired,
   registered: PropTypes.bool,
   rememberLastPageVisited: PropTypes.bool.isRequired,
+  runInBackground: PropTypes.bool.isRequired,
   searchEngine: PropTypes.string.isRequired,
   sentry: PropTypes.bool.isRequired,
   shareWorkspaceBrowsingData: PropTypes.bool.isRequired,
@@ -1634,6 +1670,7 @@ const mapStateToProps = (state) => ({
   pauseNotificationsMuteAudio: state.preferences.pauseNotificationsMuteAudio,
   registered: window.remote.getGlobal('appJson').registered,
   rememberLastPageVisited: state.preferences.rememberLastPageVisited,
+  runInBackground: state.preferences.runInBackground,
   searchEngine: state.preferences.searchEngine,
   sentry: state.preferences.sentry,
   shareWorkspaceBrowsingData: state.preferences.shareWorkspaceBrowsingData,

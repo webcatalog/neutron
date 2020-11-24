@@ -72,6 +72,7 @@ const defaultPreferences = {
   proxyType: 'none',
   registered: false,
   rememberLastPageVisited: false,
+  runInBackground: false,
   searchEngine: 'google',
   sentry: true,
   // branded apps (like Google/Microsoft) share browsing data by default
