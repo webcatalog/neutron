@@ -212,6 +212,7 @@ const Preferences = ({
   telemetry,
   themeSource,
   titleBar,
+  trayIcon,
   unreadCountBadge,
   useHardwareAcceleration,
   useSystemTitleBar,
@@ -490,6 +491,24 @@ const Preferences = ({
         </Typography>
         <Paper elevation={0} className={classes.paper}>
           <List disablePadding dense>
+            <ListItem>
+              <ListItemText
+                primary={window.process.platform === 'darwin' ? 'Show menu bar icon' : 'Show tray icon'}
+              />
+              <ListItemSecondaryAction>
+                <Switch
+                  edge="end"
+                  color="primary"
+                  checked={trayIcon || runInBackground || attachToMenubar}
+                  disabled={runInBackground || attachToMenubar}
+                  onChange={(e) => {
+                    requestSetPreference('trayIcon', e.target.checked);
+                    requestRealignActiveWorkspace();
+                  }}
+                />
+              </ListItemSecondaryAction>
+            </ListItem>
+            <Divider />
             <ListItem>
               <ListItemText
                 primary="Show sidebar"
@@ -1633,6 +1652,7 @@ Preferences.propTypes = {
   telemetry: PropTypes.bool.isRequired,
   themeSource: PropTypes.string.isRequired,
   titleBar: PropTypes.bool.isRequired,
+  trayIcon: PropTypes.bool.isRequired,
   unreadCountBadge: PropTypes.bool.isRequired,
   useHardwareAcceleration: PropTypes.bool.isRequired,
   useSystemTitleBar: PropTypes.bool.isRequired,
@@ -1682,6 +1702,7 @@ const mapStateToProps = (state) => ({
   telemetry: state.preferences.telemetry,
   themeSource: state.preferences.themeSource,
   titleBar: state.preferences.titleBar,
+  trayIcon: state.preferences.trayIcon,
   unreadCountBadge: state.preferences.unreadCountBadge,
   useHardwareAcceleration: state.preferences.useHardwareAcceleration,
   useSystemTitleBar: state.preferences.useSystemTitleBar,
