@@ -258,6 +258,7 @@ if (!gotTheLock) {
       runInBackground,
       sidebar,
       titleBar,
+      trayIcon,
       useSystemTitleBar,
     } = getPreferences();
 
@@ -280,6 +281,7 @@ if (!gotTheLock) {
     global.runInBackground = process.platform !== 'darwin' && runInBackground;
     global.sidebar = sidebar;
     global.titleBar = titleBar;
+    global.trayIcon = trayIcon;
     global.navigationBar = navigationBar;
     global.useSystemTitleBar = useSystemTitleBar;
     global.MAILTO_URLS = MAILTO_URLS;

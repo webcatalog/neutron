@@ -86,6 +86,7 @@ const defaultPreferences = {
   telemetry: true,
   themeSource: 'system',
   titleBar: !shouldShowSidebar, // if sidebar is shown, then hide titleBar
+  trayIcon: false,
   unreadCountBadge: true,
   useHardwareAcceleration: true,
   useSystemTitleBar: false,
