@@ -22,7 +22,7 @@
   "repository": "https://github.com/webcatalog/webcatalog-engine",
   "author": "Quang Lam <quang.lam@webcatalog.app>",
   "dependencies": {
-    "@cliqz/adblocker-electron": "1.18.6",
+    "@cliqz/adblocker-electron": "1.18.7",
     "@sentry/electron": "2.0.4",
     "cheerio": "1.0.0-rc.3",
     "darkreader": "4.9.22",
@@ -55,7 +55,7 @@
     "@elastic/react-search-ui-views": "1.5.0",
     "@elastic/search-ui-app-search-connector": "1.5.0",
     "@electron/get": "1.12.2",
-    "@material-ui/core": "4.11.0",
+    "@material-ui/core": "4.11.1",
     "@material-ui/icons": "4.9.1",
     "@material-ui/pickers": "3.2.10",
     "ace-builds": "1.4.12",

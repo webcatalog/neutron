@@ -16,7 +16,7 @@ const create = (scrollTo) => {
   win = new BrowserWindow({
     backgroundColor: '#FFF',
     width: 760,
-    height: 600,
+    height: 640,
     resizable: false,
     maximizable: false,
     minimizable: true,

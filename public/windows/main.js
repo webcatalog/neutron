@@ -28,6 +28,58 @@ const get = () => {
 };
 
 const createAsync = () => new Promise((resolve) => {
+  const handleTrayRightClick = () => {
+    const contextMenu = Menu.buildFromTemplate([
+      {
+        label: `Open ${appJson.name}`,
+        click: () => {
+          if (global.attachToMenubar) {
+            mb.showWindow();
+            return;
+          }
+
+          if (win == null) {
+            createAsync();
+          } else {
+            win.show();
+          }
+        },
+      },
+      {
+        type: 'separator',
+      },
+      {
+        label: `About ${appJson.name}`,
+        click: () => ipcMain.emit('request-show-about-window'),
+      },
+      { type: 'separator' },
+      {
+        label: 'Check for Updates...',
+        click: () => ipcMain.emit('request-check-for-updates'),
+      },
+      {
+        type: 'separator',
+      },
+      {
+        label: 'Preferences...',
+        click: () => ipcMain.emit('request-show-preferences-window'),
+      },
+      { type: 'separator' },
+      {
+        label: 'Quit',
+        click: () => {
+          if (global.attachToMenubar) {
+            mb.app.quit();
+            return;
+          }
+          app.quit();
+        },
+      },
+    ]);
+
+    (global.attachToMenubar ? mb.tray : tray).popUpContextMenu(contextMenu);
+  };
+
   if (global.attachToMenubar) {
     const menubarWindowState = windowStateKeeper({
       file: 'window-state-menubar.json',
@@ -82,46 +134,7 @@ const createAsync = () => new Promise((resolve) => {
     });
 
     mb.on('ready', () => {
-      mb.tray.on('right-click', () => {
-        const updaterEnabled = process.env.SNAP == null
-          && !process.mas && !process.windowsStore;
-
-        const contextMenu = Menu.buildFromTemplate([
-          {
-            label: `Open ${appJson.name}`,
-            click: () => mb.showWindow(),
-          },
-          {
-            type: 'separator',
-          },
-          {
-            label: `About ${appJson.name}`,
-            click: () => ipcMain.emit('request-show-about-window'),
-          },
-          { type: 'separator' },
-          {
-            label: 'Check for Updates...',
-            click: () => ipcMain.emit('request-check-for-updates'),
-          },
-          {
-            type: 'separator',
-            visible: updaterEnabled,
-          },
-          {
-            label: 'Preferences...',
-            click: () => ipcMain.emit('request-show-preferences-window'),
-          },
-          { type: 'separator' },
-          {
-            label: 'Quit',
-            click: () => {
-              mb.app.quit();
-            },
-          },
-        ]);
-
-        mb.tray.popUpContextMenu(contextMenu);
-      });
+      mb.tray.on('right-click', handleTrayRightClick);
 
       resolve();
     });
@@ -262,6 +275,8 @@ const createAsync = () => new Promise((resolve) => {
         win.show();
       }
     });
+    tray.setToolTip(app.name);
+    tray.on('right-click', handleTrayRightClick);
   }
 });
 
