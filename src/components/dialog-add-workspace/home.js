@@ -40,6 +40,15 @@ const styles = (theme) => ({
     height: '100%',
     overflow: 'hidden',
   },
+  badConfigContainer: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    overflow: 'hidden',
+    justifyContent: 'center',
+    padding: theme.spacing(1),
+  },
   contentContainer: {
     padding: theme.spacing(1),
   },
@@ -51,13 +60,27 @@ const styles = (theme) => ({
   },
 });
 
-const connector = new AppSearchAPIConnector({
+const connector = process.env.REACT_APP_SWIFTYPE_SEARCH_KEY ? new AppSearchAPIConnector({
   searchKey: process.env.REACT_APP_SWIFTYPE_SEARCH_KEY,
   engineName: process.env.REACT_APP_SWIFTYPE_ENGINE_NAME,
   hostIdentifier: process.env.REACT_APP_SWIFTYPE_HOST_ID,
-});
+}) : null;
 
 const Home = ({ classes }) => {
+  if (!connector) {
+    return (
+      <div className={classes.badConfigContainer}>
+        <Typography
+          variant="body1"
+          align="center"
+          color="textPrimary"
+        >
+          Swiftype environment variables are required for &quot;Catalog&quot;. Learn more at: https://github.com/webcatalog/webcatalog-app/blob/master/README.md#development
+        </Typography>
+      </div>
+    );
+  }
+
   const filters = [{ field: 'type', values: ['Singlesite'], type: 'all' }];
   const appJsonId = window.remote.getGlobal('appJson').id;
   if (appJsonId.startsWith('group-')) {
