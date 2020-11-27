@@ -9,10 +9,30 @@ This powers the apps you install from [WebCatalog](https://webcatalog.app).
 ---
 
 ## Development
+This repository only contains the source code of the [WebCatalog Engine](https://help.webcatalog.app/article/23-what-is-webcatalog-engine) - the core that powers the apps created with WebCatalog. If you'd like to contribute to the WebCatalog app, check out <https://github.com/webcatalog/webcatalog-app>.
+
+For the app to be fully functional, set these environment variables:
 ```
-# First, clone the project:
+REACT_APP_AMPLITUDE_API_KEY=
+REACT_APP_SWIFTYPE_HOST_ID=
+REACT_APP_SWIFTYPE_SEARCH_KEY=
+REACT_APP_SWIFTYPE_ENGINE_NAME=
+```
+
+Modify `public/app.json` to change template app configuration. For example:
+```json
+{
+  "id": "gmail",
+  "name": "Gmail",
+  "url": "https://mail.google.com"
+}
+```
+
+Then, run:
+```bash
+# clone the project:
 git clone https://github.com/webcatalog/webcatalog-engine.git
-cd juli
+cd webcatalog-engine
 
 # install the dependencies
 yarn
