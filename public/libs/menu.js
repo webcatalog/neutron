@@ -287,7 +287,10 @@ const createMenu = async () => {
             // open menu bar in the popup window instead
             if (browserWindow && browserWindow.isPopup) {
               const contents = browserWindow.webContents;
-              contents.zoomFactor -= 0.1;
+              // // 'zoomFactor' must be a double greater than 0.0
+              if (contents.zoomFactor.toFixed(1) !== '0.1') {
+                contents.zoomFactor -= 0.1;
+              }
               return;
             }
 
@@ -295,7 +298,10 @@ const createMenu = async () => {
 
             if (win != null) {
               const contents = win.getBrowserView().webContents;
-              contents.zoomFactor -= 0.1;
+              // 'zoomFactor' must be a double greater than 0.0
+              if (contents.zoomFactor.toFixed(1) !== '0.1') {
+                contents.zoomFactor -= 0.1;
+              }
             }
           },
           enabled: !global.locked && hasWorkspaces,
