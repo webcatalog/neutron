@@ -4,12 +4,18 @@
 |---|---|---|
 |[![GitHub Actions macOS Build Status](https://github.com/webcatalog/webcatalog-engine/workflows/macOS/badge.svg)](https://github.com/webcatalog/webcatalog-engine/actions?query=workflow%3AmacOS)|[![GitHub Actions Linux Build Status](https://github.com/webcatalog/webcatalog-engine/workflows/Linux/badge.svg)](https://github.com/webcatalog/webcatalog-engine/actions?query=workflow%3ALinux)|[![GitHub Actions Windows Build Status](https://github.com/webcatalog/webcatalog-engine/workflows/Windows/badge.svg)](https://github.com/webcatalog/webcatalog-engine/actions?query=workflow%3AWindows)|
 
-This powers the apps you install from [WebCatalog](https://webcatalog.app).
+This powers the *WebCatalog Engine (Electron)*-based apps you install from [WebCatalog](https://webcatalog.app).
 
 ---
 
 ## Development
 This repository only contains the source code of the [WebCatalog Engine](https://help.webcatalog.app/article/23-what-is-webcatalog-engine) - the core that powers the apps created with WebCatalog. If you'd like to contribute to the WebCatalog app, check out <https://github.com/webcatalog/webcatalog-app>.
+
+```bash
+# clone the project:
+git clone https://github.com/webcatalog/webcatalog-engine.git
+cd webcatalog-engine
+```
 
 For the app to be fully functional, set these environment variables:
 ```
@@ -28,12 +34,7 @@ Modify `public/app.json` to change template app configuration. For example:
 }
 ```
 
-Then, run:
 ```bash
-# clone the project:
-git clone https://github.com/webcatalog/webcatalog-engine.git
-cd webcatalog-engine
-
 # install the dependencies
 yarn
 
