@@ -115,6 +115,7 @@ const createAsync = () => new Promise((resolve) => {
         minWidth: 250,
         webPreferences: {
           enableRemoteModule: true,
+          contextIsolation: false,
           nodeIntegration: true,
           webSecurity: !isDev,
           preload: path.join(__dirname, '..', 'preload', 'menubar.js'),
@@ -163,6 +164,7 @@ const createAsync = () => new Promise((resolve) => {
     icon: process.platform === 'linux' ? path.resolve(__dirname, '..', 'dock-icon.png') : undefined,
     webPreferences: {
       enableRemoteModule: true,
+      contextIsolation: false,
       nodeIntegration: true,
       webSecurity: !isDev,
       preload: path.join(__dirname, '..', 'preload', 'main.js'),

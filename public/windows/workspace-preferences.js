@@ -25,6 +25,7 @@ const create = (workspaceId) => {
     frame: process.platform === 'darwin' || global.useSystemTitleBar,
     webPreferences: {
       enableRemoteModule: true,
+      contextIsolation: false,
       nodeIntegration: true,
       preload: path.join(__dirname, '..', 'preload', 'workspace-preferences.js'),
     },
