@@ -1,4 +1,4 @@
-name: Linux (ARM)
+name: Windows (x64)
 
 on:
   push:
@@ -9,15 +9,15 @@ on:
       - master
       - next
     paths:
-      - '.github/workflows/linux-arm.yml'
+      - '.github/workflows/windows-x64.yml'
       - 'build-template.js'
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     env:
-      TEMPLATE_ARCH: arm64
+      TEMPLATE_ARCH: x64
 
     steps:
     - uses: actions/checkout@v2
@@ -55,7 +55,7 @@ jobs:
       with:
         draft: true
         files: |
-          dist/template-linux-arm64.json
-          dist/template-linux-arm64.zip
+          dist/template-win32-x64.json
+          dist/template-win32-x64.zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
