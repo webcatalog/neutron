@@ -25,6 +25,7 @@ const create = (scrollTo) => {
     frame: process.platform === 'darwin' || global.useSystemTitleBar,
     webPreferences: {
       enableRemoteModule: true,
+      contextIsolation: false,
       nodeIntegration: true,
       preload: path.join(__dirname, '..', 'preload', 'preferences.js'),
     },

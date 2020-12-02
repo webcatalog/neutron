@@ -23,6 +23,7 @@ const create = () => {
     frame: process.platform === 'darwin' || global.useSystemTitleBar,
     webPreferences: {
       enableRemoteModule: true,
+      contextIsolation: false,
       nodeIntegration: true,
       preload: path.join(__dirname, '..', 'preload', 'go-to-url.js'),
     },
