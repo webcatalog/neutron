@@ -16,6 +16,9 @@ jobs:
   build:
     runs-on: windows-latest
 
+    env:
+      TEMPLATE_ARCH: arm64
+
     steps:
     - uses: actions/checkout@v2
       with:
