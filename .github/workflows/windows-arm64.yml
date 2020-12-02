@@ -1,20 +1,20 @@
-name: Linux
+name: Windows (arm64)
 
 on:
   push:
-    branches:
-      - master
-      - next
     tags:
       - "v*.*.*"
   pull_request:
     branches:
       - master
       - next
+    paths:
+      - '.github/workflows/windows-arm64.yml'
+      - 'build-template.js'
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -52,17 +52,7 @@ jobs:
       with:
         draft: true
         files: |
-          dist/template-linux-x64.json
-          dist/template-linux-x64.zip
+          dist/template-win32-x64.json
+          dist/template-win32-x64.zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Create Sentry Release
-      if: startsWith(github.ref, 'refs/tags/')
-      run: |
-        curl -sL https://sentry.io/get-cli/ | bash
-        VERSION=$(node -p -e "require('./package.json').version")
-        sentry-cli releases new $VERSION
-        sentry-cli releases set-commits --auto $VERSION
-        sentry-cli releases finalize $VERSION
-      env:
-        SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}

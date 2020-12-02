@@ -1,4 +1,4 @@
-name: Windows
+name: macOS (x64)
 
 on:
   push:
@@ -9,12 +9,12 @@ on:
       - master
       - next
     paths:
-      - '.github/workflows/windows.yml'
+      - '.github/workflows/macos-x64.yml'
       - 'build-template.js'
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: macos-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -39,6 +39,7 @@ jobs:
     # https://github.com/mui-org/material-ui/issues/12432
     - run: yarn --prefer-offline --network-timeout 600000
     - run: yarn lint
+    - run: brew install p7zip
     - run: yarn dist
       if: startsWith(github.ref, 'refs/tags/')
       env:
@@ -52,7 +53,7 @@ jobs:
       with:
         draft: true
         files: |
-          dist/template-win32-x64.json
-          dist/template-win32-x64.zip
+          dist/template-darwin-x64.json
+          dist/template-darwin-x64.zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
