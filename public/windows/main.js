@@ -217,6 +217,7 @@ const createAsync = () => new Promise((resolve) => {
   // If BrowserWindows has BrowserView attached
   // KDE Plasma desktop environment will refuse to minimize the app window
   // so we detach the BrowserView when minimizing and restore it later
+  // https://github.com/webcatalog/webcatalog-app/issues/1201
   win.on('minimize', () => {
     minimizedView = win.getBrowserView();
     win.setBrowserView(null);
