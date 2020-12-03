@@ -231,6 +231,7 @@ const createAsync = () => new Promise((resolve) => {
 
   win.on('closed', () => {
     win = null;
+    minimizedView = null;
   });
 
   win.on('focus', () => {
