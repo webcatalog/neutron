@@ -21,6 +21,7 @@ const appJson = require('../app.json');
 let win;
 let mb = {};
 let tray;
+let minimizedView;
 
 const get = () => {
   if (global.attachToMenubar) return mb.window;
@@ -211,8 +212,24 @@ const createAsync = () => new Promise((resolve) => {
     win.webContents.send('set-is-maximized', false);
   });
 
+  // If BrowserWindows has BrowserView attached
+  // KDE Plasma desktop environment will refuse to minimize the app window
+  // so we detach the BrowserView when minimizing and restore it later
+  // https://github.com/webcatalog/webcatalog-app/issues/1201
+  win.on('minimize', () => {
+    minimizedView = win.getBrowserView();
+    win.setBrowserView(null);
+  });
+  win.on('restore', () => {
+    if (minimizedView != null) {
+      win.setBrowserView(minimizedView);
+      minimizedView = null;
+    }
+  });
+
   win.on('closed', () => {
     win = null;
+    minimizedView = null;
   });
 
   win.on('focus', () => {
