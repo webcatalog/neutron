@@ -315,6 +315,7 @@ if (!gotTheLock) {
       if (win) {
         // https://github.com/atom/electron/issues/444#issuecomment-76492576
         win.forceClose = true;
+        // fix https://github.com/webcatalog/webcatalog-app/issues/1141
         win.setBrowserView(null);
       }
     };
