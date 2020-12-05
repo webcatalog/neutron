@@ -16,6 +16,7 @@ const isDev = require('electron-is-dev');
 
 const { REACT_PATH } = require('../constants/paths');
 const { getPreference } = require('../libs/preferences');
+const isKdeAsync = require('../libs/is-kde-async');
 const appJson = require('../app.json');
 
 let win;
@@ -218,16 +219,24 @@ const createAsync = () => new Promise((resolve) => {
   // KDE Plasma desktop environment will refuse to minimize the app window
   // so we detach the BrowserView when minimizing and restore it later
   // https://github.com/webcatalog/webcatalog-app/issues/1201
-  win.on('minimize', () => {
-    minimizedView = win.getBrowserView();
-    win.setBrowserView(null);
-  });
-  win.on('restore', () => {
-    if (minimizedView != null) {
-      win.setBrowserView(minimizedView);
-      minimizedView = null;
-    }
-  });
+  // only apply this bug fix in KDE Plasma environment
+  // as it makes the app feels sluggish (it takes time to restore BrowserView)
+  // also for unknown reason, win.on('restore') is not
+  //  triggered on Windows (production-only, somehow it's working in dev)
+  isKdeAsync()
+    .then((isKde) => {
+      if (!isKde) return;
+      win.on('minimize', () => {
+        minimizedView = win.getBrowserView();
+        win.setBrowserView(null);
+      });
+      win.on('restore', () => {
+        if (minimizedView != null) {
+          win.setBrowserView(minimizedView);
+          minimizedView = null;
+        }
+      });
+    });
 
   win.on('closed', () => {
     win = null;
