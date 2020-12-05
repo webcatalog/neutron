@@ -221,7 +221,8 @@ const createAsync = () => new Promise((resolve) => {
   // https://github.com/webcatalog/webcatalog-app/issues/1201
   // only apply this bug fix in KDE Plasma environment
   // as it makes the app feels sluggish (it takes time to restore BrowserView)
-  // also for unknown reason, win.on('restore') is not triggered on Windows (production-only, somehow it's working in dev)
+  // also for unknown reason, win.on('restore') is not
+  //  triggered on Windows (production-only, somehow it's working in dev)
   isKdeAsync()
     .then((isKde) => {
       if (!isKde) return;
