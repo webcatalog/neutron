@@ -317,14 +317,6 @@ if (!gotTheLock) {
         win.forceClose = true;
         win.setBrowserView(null);
       }
-
-      // https://github.com/webcatalog/webcatalog-app/issues/1141
-      // the bug seems to only occur when there's BrowserView opened
-      // so destroy all BrowserViews before exiting
-      const views = BrowserView.getAllViews();
-      views.forEach((view) => {
-        view.destroy();
-      });
     };
 
     const warnBeforeQuitting = getPreference('warnBeforeQuitting');
