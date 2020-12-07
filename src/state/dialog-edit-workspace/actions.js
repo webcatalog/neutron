@@ -52,7 +52,10 @@ export const getIconFromInternet = () => (dispatch, getState) => {
     .then((iconUrl) => {
       const { form } = getState().dialogEditWorkspace;
       if (form.homeUrl === homeUrl) {
-        const changes = { internetIcon: iconUrl || form.internetIcon };
+        const changes = {
+          preferredIconType: 'image',
+          internetIcon: iconUrl || form.internetIcon,
+        };
         dispatch(({
           type: UPDATE_EDIT_WORKSPACE_FORM,
           changes,
@@ -108,6 +111,7 @@ export const save = () => (dispatch, getState) => {
       disableNotifications: Boolean(form.disableNotifications),
       hibernateWhenUnused: Boolean(form.hibernateWhenUnused),
       transparentBackground: Boolean(form.transparentBackground),
+      preferredIconType: form.preferredIconType,
     },
   );
 

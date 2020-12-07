@@ -99,6 +99,7 @@ const styles = (theme) => ({
 });
 
 const WorkspaceSelector = ({
+  accountInfo,
   active,
   badgeCount,
   classes,
@@ -109,9 +110,10 @@ const WorkspaceSelector = ({
   onContextMenu,
   order,
   picturePath,
+  preferredIconType,
+  searchEngine,
   sidebarTips,
   transparentBackground,
-  searchEngine,
 }) => {
   const tipText = (() => {
     if (sidebarTips !== 'none' && id === 'add') {
@@ -143,6 +145,25 @@ const WorkspaceSelector = ({
     }
 
     return null;
+  })();
+
+  let selectedIconType = 'text';
+  if (picturePath && (preferredIconType === 'auto' || preferredIconType === 'image')) {
+    selectedIconType = 'image';
+  } else if (accountInfo && accountInfo.picturePath && (preferredIconType === 'auto' || preferredIconType === 'accountInfo')) {
+    selectedIconType = 'accountInfo';
+  }
+
+  const finalName = (() => {
+    if (accountInfo) {
+      if (accountInfo.name && accountInfo.email) {
+        return `${accountInfo.name} (${accountInfo.email})`;
+      }
+      if (accountInfo.name) {
+        return accountInfo.name;
+      }
+    }
+    return name;
   })();
 
   return (
@@ -182,11 +203,12 @@ const WorkspaceSelector = ({
         <div
           className={classnames(
             classes.avatar,
-            (id === 'add' || !picturePath) && classes.textAvatar,
+            selectedIconType === 'text' && classes.textAvatar,
             transparentBackground && classes.transparentAvatar,
           )}
         >
-          {picturePath ? (
+          {selectedIconType === 'text' && getAvatarText(id, finalName, order)}
+          {selectedIconType === 'image' && (
             <img
               alt="Icon"
               className={classnames(
@@ -195,7 +217,17 @@ const WorkspaceSelector = ({
               src={`file://${picturePath}`}
               draggable={false}
             />
-          ) : getAvatarText(id, name, order)}
+          )}
+          {selectedIconType === 'accountInfo' && (
+            <img
+              alt="Icon"
+              className={classnames(
+                classes.avatarPicture,
+              )}
+              src={`file://${accountInfo.picturePath}`}
+              draggable={false}
+            />
+          )}
         </div>
       </Badge>
       {tipText && (
@@ -206,6 +238,7 @@ const WorkspaceSelector = ({
 };
 
 WorkspaceSelector.defaultProps = {
+  accountInfo: null,
   active: false,
   badgeCount: 0,
   hibernated: false,
@@ -213,10 +246,12 @@ WorkspaceSelector.defaultProps = {
   onContextMenu: null,
   order: 0,
   picturePath: null,
+  preferredIconType: 'auto',
   transparentBackground: false,
 };
 
 WorkspaceSelector.propTypes = {
+  accountInfo: PropTypes.object,
   active: PropTypes.bool,
   badgeCount: PropTypes.number,
   classes: PropTypes.object.isRequired,
@@ -227,6 +262,7 @@ WorkspaceSelector.propTypes = {
   onContextMenu: PropTypes.func,
   order: PropTypes.number,
   picturePath: PropTypes.string,
+  preferredIconType: PropTypes.oneOf(['auto', 'text', 'image', 'accountInfo']),
   searchEngine: PropTypes.string.isRequired,
   sidebarTips: PropTypes.oneOf(['shortcut', 'name', 'none']).isRequired,
   transparentBackground: PropTypes.bool,

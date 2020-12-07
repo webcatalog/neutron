@@ -17,6 +17,9 @@ import Typography from '@material-ui/core/Typography';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import Badge from '@material-ui/core/Badge';
+
+import CheckIcon from '@material-ui/icons/Check';
 
 import connectComponent from '../../helpers/connect-component';
 import getAvatarText from '../../helpers/get-avatar-text';
@@ -56,7 +59,7 @@ const styles = (theme) => ({
     paddingTop: theme.spacing(1),
     paddingBottom: theme.spacing(1),
     paddingLeft: 0,
-    paddingRight: theme.spacing(1),
+    paddingRight: theme.spacing(4),
   },
   avatarRight: {
     flex: 1,
@@ -65,21 +68,41 @@ const styles = (theme) => ({
     paddingLeft: theme.spacing(1),
     paddingRight: 0,
   },
+  avatarContainer: {
+    position: 'relative',
+    '&:not(:first-child)': {
+      marginTop: theme.spacing(2),
+    },
+  },
   avatar: {
     fontFamily: theme.typography.fontFamily,
-    height: 64,
-    width: 64,
+    height: 36,
+    width: 36,
     background: theme.palette.common.white,
     borderRadius: 4,
     color: theme.palette.getContrastText(theme.palette.common.white),
-    fontSize: '32px',
-    lineHeight: '64px',
+    fontSize: '24px',
+    lineHeight: '36px',
     textAlign: 'center',
-    fontWeight: 500,
+    fontWeight: 400,
     textTransform: 'uppercase',
     userSelect: 'none',
-    border: theme.palette.type === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)',
+    boxShadow: theme.palette.type === 'dark' ? 'none' : '0 0 1px 1px rgba(0, 0, 0, 0.12)',
     overflow: 'hidden',
+  },
+  avatarSelected: {
+    boxShadow: `0 0 4px 4px ${theme.palette.primary.main}`,
+  },
+  avatarSelectedBadgeContent: {
+    background: theme.palette.primary.main,
+    borderRadius: 12,
+    width: 24,
+    height: 24,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontSize: '18px',
+    color: theme.palette.common.white,
   },
   textAvatar: {
     background: theme.palette.type === 'dark' ? theme.palette.common.white : theme.palette.common.black,
@@ -92,8 +115,8 @@ const styles = (theme) => ({
     color: theme.palette.text.primary,
   },
   avatarPicture: {
-    height: 64,
-    width: 64,
+    height: 36,
+    width: 36,
   },
   buttonBot: {
     marginTop: theme.spacing(1),
@@ -104,11 +127,11 @@ const styles = (theme) => ({
 });
 
 const EditWorkspace = ({
+  accountInfo,
   classes,
   disableAudio,
   disableNotifications,
   downloadingIcon,
-  accountInfo,
   hibernateWhenUnused,
   homeUrl,
   homeUrlError,
@@ -121,6 +144,7 @@ const EditWorkspace = ({
   onUpdateForm,
   order,
   picturePath,
+  preferredIconType,
   transparentBackground,
 }) => {
   let namePlaceholder = 'Optional';
@@ -132,10 +156,67 @@ const EditWorkspace = ({
     }
   }
 
-  let displayedPicturePath = picturePath ? `file://${picturePath}` : internetIcon;
-  if (!displayedPicturePath && accountInfo && accountInfo.picturePath) {
-    displayedPicturePath = `file://${accountInfo.picturePath}`;
+  let selectedIconType = 'text';
+  if ((picturePath || internetIcon) && (preferredIconType === 'auto' || preferredIconType === 'image')) {
+    selectedIconType = 'image';
+  } else if (accountInfo && accountInfo.picturePath && (preferredIconType === 'auto' || preferredIconType === 'accountInfo')) {
+    selectedIconType = 'accountInfo';
   }
+
+  const finalName = (() => {
+    if (accountInfo) {
+      if (accountInfo.name && accountInfo.email) {
+        return `${accountInfo.name} (${accountInfo.email})`;
+      }
+      if (accountInfo.name) {
+        return accountInfo.name;
+      }
+    }
+    return name;
+  })();
+
+  const renderAvatar = (avatarContent, type, avatarAdditionalClassnames = []) => (
+    <div className={classes.avatarContainer}>
+      {selectedIconType === type ? (
+        <Badge
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+          badgeContent={(
+            <div className={classes.avatarSelectedBadgeContent}>
+              <CheckIcon fontSize="inherit" />
+            </div>
+          )}
+        >
+          <div
+            className={classnames(
+              classes.avatar,
+              transparentBackground && classes.transparentAvatar,
+              classes.avatarSelected,
+              ...avatarAdditionalClassnames,
+            )}
+          >
+            {avatarContent}
+          </div>
+        </Badge>
+      ) : (
+        <div
+          role="button"
+          tabIndex={0}
+          className={classnames(
+            classes.avatar,
+            transparentBackground && classes.transparentAvatar,
+            ...avatarAdditionalClassnames,
+          )}
+          onClick={() => onUpdateForm({ preferredIconType: type })}
+          onKeyDown={() => onUpdateForm({ preferredIconType: type })}
+        >
+          {avatarContent}
+        </div>
+      )}
+    </div>
+  );
 
   return (
     <div className={classes.root}>
@@ -178,17 +259,19 @@ const EditWorkspace = ({
         />
         <div className={classes.avatarFlex}>
           <div className={classes.avatarLeft}>
-            <div
-              className={classnames(
-                classes.avatar,
-                !picturePath && !internetIcon && classes.textAvatar,
-                transparentBackground && classes.transparentAvatar,
-              )}
-            >
-              {displayedPicturePath ? (
-                <img alt="Icon" className={classes.avatarPicture} src={displayedPicturePath} />
-              ) : getAvatarText(id, name, order)}
-            </div>
+            {renderAvatar(
+              getAvatarText(id, finalName, order),
+              'text',
+              [classes.textAvatar],
+            )}
+            {(picturePath || internetIcon) && renderAvatar(
+              <img alt="Icon" className={classes.avatarPicture} src={picturePath ? `file://${picturePath}` : internetIcon} />,
+              'image',
+            )}
+            {(accountInfo && accountInfo.picturePath) && renderAvatar(
+              <img alt="Icon" className={classes.avatarPicture} src={`file://${accountInfo.picturePath}`} />,
+              'accountInfo',
+            )}
           </div>
           <div className={classes.avatarRight}>
             <Button
@@ -205,7 +288,10 @@ const EditWorkspace = ({
                 window.remote.dialog.showOpenDialog(window.remote.getCurrentWindow(), opts)
                   .then(({ canceled, filePaths }) => {
                     if (!canceled && filePaths && filePaths.length > 0) {
-                      onUpdateForm({ picturePath: filePaths[0] });
+                      onUpdateForm({
+                        preferredIconType: 'image',
+                        picturePath: filePaths[0],
+                      });
                     }
                   })
                   .catch(console.log); // eslint-disable-line
@@ -224,15 +310,6 @@ const EditWorkspace = ({
               onClick={() => onGetIconFromInternet(true)}
             >
               {downloadingIcon ? 'Downloading Icon from the Internet...' : 'Download Icon from the Internet'}
-            </Button>
-            <Button
-              variant="outlined"
-              size="small"
-              className={classes.buttonBot}
-              onClick={() => onUpdateForm({ picturePath: null, internetIcon: null })}
-              disabled={!(picturePath || internetIcon) || downloadingIcon}
-            >
-              Reset to Default
             </Button>
             <FormGroup>
               <FormControlLabel
@@ -298,14 +375,15 @@ EditWorkspace.defaultProps = {
   homeUrlError: null,
   internetIcon: null,
   picturePath: null,
+  preferredIconType: 'auto',
 };
 
 EditWorkspace.propTypes = {
+  accountInfo: PropTypes.object,
   classes: PropTypes.object.isRequired,
   disableAudio: PropTypes.bool.isRequired,
   disableNotifications: PropTypes.bool.isRequired,
   downloadingIcon: PropTypes.bool.isRequired,
-  accountInfo: PropTypes.object,
   hibernateWhenUnused: PropTypes.bool.isRequired,
   homeUrl: PropTypes.string.isRequired,
   homeUrlError: PropTypes.string,
@@ -318,14 +396,15 @@ EditWorkspace.propTypes = {
   onUpdateForm: PropTypes.func.isRequired,
   order: PropTypes.number.isRequired,
   picturePath: PropTypes.string,
+  preferredIconType: PropTypes.oneOf(['auto', 'text', 'image', 'accountInfo']),
   transparentBackground: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
+  accountInfo: state.dialogEditWorkspace.form.accountInfo,
   disableAudio: Boolean(state.dialogEditWorkspace.form.disableAudio),
   disableNotifications: Boolean(state.dialogEditWorkspace.form.disableNotifications),
   downloadingIcon: state.dialogEditWorkspace.downloadingIcon,
-  accountInfo: state.dialogEditWorkspace.form.accountInfo,
   hibernateWhenUnused: Boolean(state.dialogEditWorkspace.form.hibernateWhenUnused),
   homeUrl: state.dialogEditWorkspace.form.homeUrl || '',
   homeUrlError: state.dialogEditWorkspace.form.homeUrlError,
@@ -335,6 +414,7 @@ const mapStateToProps = (state) => ({
   name: state.dialogEditWorkspace.form.name || '',
   order: state.dialogEditWorkspace.form.order || 0,
   picturePath: state.dialogEditWorkspace.form.picturePath,
+  preferredIconType: state.dialogEditWorkspace.form.preferredIconType,
   transparentBackground: Boolean(state.dialogEditWorkspace.form.transparentBackground),
 });
 
