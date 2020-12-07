@@ -184,21 +184,15 @@ const styles = (theme) => {
 const SortableItem = sortableElement(({ value }) => {
   const { workspace, index } = value;
   const {
-    active, id, hibernated, transparentBackground,
+    accountInfo,
+    active,
+    hibernated,
+    id,
+    name,
+    picturePath,
+    preferredIconType,
+    transparentBackground,
   } = workspace;
-  let { picturePath, name } = workspace;
-  if (workspace.accountInfo) {
-    if (!picturePath && workspace.accountInfo.picturePath) {
-      picturePath = workspace.accountInfo.picturePath;
-    }
-    if (!name) {
-      if (workspace.accountInfo.name && workspace.accountInfo.email) {
-        name = `${workspace.accountInfo.name} (${workspace.accountInfo.email})`;
-      } else if (workspace.accountInfo.name) {
-        name = workspace.accountInfo.name;
-      }
-    }
-  }
 
   return (
     <WorkspaceSelector
@@ -206,8 +200,10 @@ const SortableItem = sortableElement(({ value }) => {
       id={id}
       key={id}
       name={name}
+      accountInfo={accountInfo}
       picturePath={picturePath}
       transparentBackground={transparentBackground}
+      preferredIconType={preferredIconType}
       order={index}
       hibernated={hibernated}
       onClick={() => requestSetActiveWorkspace(id)}

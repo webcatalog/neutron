@@ -85,6 +85,10 @@ const styles = (theme) => ({
     height: '100%',
     width: '100%',
   },
+  textAvatar: {
+    background: theme.palette.type === 'dark' ? theme.palette.common.white : theme.palette.common.black,
+    color: theme.palette.getContrastText(theme.palette.type === 'dark' ? theme.palette.common.white : theme.palette.common.black),
+  },
   buttonBot: {
     marginTop: theme.spacing(1),
   },
@@ -154,6 +158,7 @@ const AddWorkspaceCustom = ({
             className={classnames(
               classes.avatar,
               transparentBackground && classes.transparentAvatar,
+              !picturePath && !internetIcon && classes.textAvatar,
             )}
           >
             {picturePath || internetIcon ? (
