@@ -8,7 +8,6 @@ const {
   nativeTheme,
   protocol,
   session,
-  BrowserView,
   BrowserWindow,
 } = require('electron');
 const isDev = require('electron-is-dev');
