@@ -862,11 +862,7 @@ const realignActiveView = (browserWindow, activeId) => {
 };
 
 const removeView = (id) => {
-  const view = views[id];
   session.fromPartition(`persist:${id}`).clearStorageData();
-  if (view != null) {
-    view.destroy();
-  }
   delete views[id];
 };
 
