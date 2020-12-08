@@ -10,11 +10,10 @@
 const {
   clipboard,
   nativeImage,
-  remote,
   shell,
+  Menu,
+  MenuItem,
 } = require('electron');
-
-const { Menu, MenuItem } = remote;
 
 /**
  * Truncates a string to a max length of 25. Will split on a word boundary and
@@ -63,29 +62,17 @@ module.exports = class ContextMenuBuilder {
   /**
    * Creates an instance of ContextMenuBuilder
    *
-   * @param  {BrowserWindow|WebView} windowOrWebView  The hosting window/WebView
+   * @param  {BrowserWindow|WebView} webContents
    * @param  {Boolean} debugMode    If true, display the "Inspect Element" menu item.
    * @param  {function} processMenu If passed, this method will be passed the menu to change
    *                                it prior to display. Signature: (menu, info) => menu
    */
-  constructor(windowOrWebView = null, debugMode = false, processMenu = (m) => m) {
+  constructor(webContents = null, debugMode = false, processMenu = (m) => m) {
     this.debugMode = debugMode;
     this.processMenu = processMenu;
     this.menu = null;
     this.stringTable = { ...contextMenuStringTable };
-
-    windowOrWebView = windowOrWebView || remote.getCurrentWebContents();
-
-    const ctorName = Object.getPrototypeOf(windowOrWebView).constructor.name;
-    if (ctorName === 'WebContents') {
-      this.getWebContents = () => windowOrWebView;
-    } else {
-      // NB: We do this because at the time a WebView is created, it doesn't
-      // have a WebContents, we need to defer the call to getWebContents
-      this.getWebContents = 'webContents' in windowOrWebView
-        ? () => windowOrWebView.webContents
-        : () => windowOrWebView.getWebContents();
-    }
+    this.getWebContents = () => webContents;
   }
 
   /**

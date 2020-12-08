@@ -13,10 +13,6 @@ const {
 } = require('darkreader');
 const nodeFetch = require('node-fetch');
 
-const ContextMenuBuilder = require('../libs/context-menu-builder');
-
-const { MenuItem, shell } = remote;
-
 const webContents = remote.getCurrentWebContents();
 const { workspaceId } = webContents;
 
@@ -135,114 +131,6 @@ const handleLoaded = (event) => {
       /* eslint-enable no-console */
     }
   }
-
-  window.contextMenuBuilder = new ContextMenuBuilder(
-    null,
-    true,
-  );
-
-  webContents.on('context-menu', (e, info) => {
-    window.contextMenuBuilder.buildMenuForElement(info)
-      .then((menu) => {
-        if (info.linkURL && info.linkURL.length > 0) {
-          menu.append(new MenuItem({ type: 'separator' }));
-
-          menu.append(new MenuItem({
-            label: 'Open Link in New Window',
-            click: () => {
-              ipcRenderer.send('request-set-global-force-new-window', true);
-              window.open(info.linkURL);
-            },
-          }));
-
-          menu.append(new MenuItem({ type: 'separator' }));
-
-          const workspaces = ipcRenderer.sendSync('get-workspaces');
-
-          const workspaceLst = Object.values(workspaces).sort((a, b) => a.order - b.order);
-
-          menu.append(new MenuItem({
-            label: 'Open Link in New Workspace',
-            click: () => {
-              ipcRenderer.send('request-open-url-in-workspace', info.linkURL);
-            },
-          }));
-          menu.append(new MenuItem({ type: 'separator' }));
-
-          workspaceLst.forEach((workspace) => {
-            const workspaceName = workspace.name || `Workspace ${workspace.order + 1}`;
-            menu.append(new MenuItem({
-              label: `Open Link in ${workspaceName}`,
-              click: () => {
-                ipcRenderer.send('request-open-url-in-workspace', info.linkURL, workspace.id);
-              },
-            }));
-          });
-        }
-
-        menu.append(new MenuItem({ type: 'separator' }));
-
-        menu.append(new MenuItem({
-          label: 'Back',
-          enabled: webContents.canGoBack(),
-          click: () => {
-            webContents.goBack();
-          },
-        }));
-        menu.append(new MenuItem({
-          label: 'Forward',
-          enabled: webContents.canGoForward(),
-          click: () => {
-            webContents.goForward();
-          },
-        }));
-        menu.append(new MenuItem({
-          label: 'Reload',
-          click: () => {
-            webContents.reload();
-          },
-        }));
-
-        menu.append(new MenuItem({ type: 'separator' }));
-
-        menu.append(
-          new MenuItem({
-            label: 'More',
-            submenu: [
-              {
-                label: 'About',
-                click: () => ipcRenderer.send('request-show-about-window'),
-              },
-              { type: 'separator' },
-              {
-                label: 'Check for Updates',
-                click: () => ipcRenderer.send('request-check-for-updates'),
-              },
-              {
-                label: 'Preferences...',
-                click: () => ipcRenderer.send('request-show-preferences-window'),
-              },
-              { type: 'separator' },
-              {
-                label: 'WebCatalog Help',
-                click: () => shell.openExternal('https://help.webcatalog.app?utm_source=juli_app'),
-              },
-              {
-                label: 'WebCatalog Website',
-                click: () => shell.openExternal('https://webcatalog.app?utm_source=juli_app'),
-              },
-              { type: 'separator' },
-              {
-                label: 'Quit',
-                click: () => ipcRenderer.send('request-quit'),
-              },
-            ],
-          }),
-        );
-
-        menu.popup(remote.getCurrentWindow());
-      });
-  });
 
   // Link preview
   const linkPreview = document.createElement('div');
