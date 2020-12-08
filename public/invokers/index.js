@@ -9,8 +9,12 @@ const {
 const { getPreferences } = require('../libs/preferences');
 const { getSystemPreferences } = require('../libs/system-preferences');
 const { getWorkspaces } = require('../libs/workspaces');
-const { getWorkspaceMetas } = require('../libs/workspace-metas');
+const {
+  getWorkspaceMetas,
+  setWorkspaceBadgeCount,
+} = require('../libs/workspace-metas');
 const { getPauseNotificationsInfo } = require('../libs/notifications');
+const mainWindow = require('../windows/main');
 
 const {
   getAppLockStatusAsync,
@@ -42,6 +46,22 @@ const loadInvokers = () => {
   ipcMain.handle('delete-app-lock-password', async (e, inputPassword) => deleteAppLockPasswordAsync(inputPassword));
   ipcMain.handle('set-app-lock-password', async (e, inputPassword, newPassword) => setAppLockPasswordAsync(inputPassword, newPassword));
   ipcMain.handle('set-app-lock-touch-id', async (e, inputPassword, touchId) => setAppLockTouchIdAsync(inputPassword, touchId));
+
+  // START for BrowserView
+  ipcMain.handle('get-web-contents-workspace-id', (e) => e.sender.workspaceId);
+  ipcMain.handle('get-web-contents-is-focused', (e) => e.sender.isFocused());
+  ipcMain.handle('flush-web-contents-app-data', (e) => {
+    const { session } = e.sender;
+    session.flushStorageData();
+    session.clearStorageData({
+      storages: ['appcache', 'serviceworkers', 'cachestorage', 'websql', 'indexdb'],
+    });
+  });
+  ipcMain.handle('set-web-contents-badge', (e, num) => {
+    e.sender.usePageTitle = false;
+    setWorkspaceBadgeCount(e.sender.workspaceId, num, mainWindow.get());
+  });
+  // END for Browser
 };
 
 module.exports = loadInvokers;

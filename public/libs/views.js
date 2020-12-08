@@ -5,7 +5,6 @@
 const {
   BrowserView,
   BrowserWindow,
-  Menu,
   MenuItem,
   app,
   ipcMain,
@@ -238,7 +237,7 @@ const addView = (browserWindow, workspace) => {
     nodeIntegration: false,
     contextIsolation: true,
     plugins: true, // PDF reader
-    enableRemoteModule: true,
+    enableRemoteModule: false,
     scrollBounce: true,
     session: ses,
     preload: path.join(__dirname, '..', 'preload', 'view.js'),
@@ -751,20 +750,12 @@ const addView = (browserWindow, workspace) => {
 
   // Unread count badge
   if (unreadCountBadge) {
-    let usePageTitle = true;
+    view.webContents.usePageTitle = true;
     view.webContents.on('page-title-updated', (e, title) => {
-      if (!usePageTitle) return;
+      if (!view.webContents.usePageTitle) return;
       const num = getBadgeCountFromTitle(title);
       setWorkspaceBadgeCount(workspace.id, num, browserWindow);
     });
-
-    // if this function is called
-    // then preload script is controlling badge count
-    // so we stop getting badge count from page-title
-    view.webContents.setBadgeCount = (num) => {
-      usePageTitle = false;
-      setWorkspaceBadgeCount(workspace.id, num, browserWindow);
-    };
   }
 
   // Menu

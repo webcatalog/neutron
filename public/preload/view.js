@@ -3,7 +3,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 const {
   ipcRenderer,
-  remote,
   webFrame,
 } = require('electron');
 const {
@@ -13,10 +12,7 @@ const {
 } = require('darkreader');
 const nodeFetch = require('node-fetch');
 
-const webContents = remote.getCurrentWebContents();
-const { workspaceId } = webContents;
-
-const loadDarkReader = () => {
+const loadDarkReader = (workspaceId) => {
   const shouldUseDarkColor = ipcRenderer.sendSync('get-should-use-dark-colors');
   const workspaceDarkReader = ipcRenderer.sendSync('get-workspace-preference', workspaceId, 'darkReader');
   const darkReader = workspaceDarkReader != null
@@ -59,14 +55,17 @@ const loadDarkReader = () => {
 };
 
 let handled = false;
-const handleLoaded = (event) => {
+const handleLoaded = async (event) => {
   if (handled) return;
+
+  const workspaceId = await ipcRenderer.invoke('get-web-contents-workspace-id');
+
   // eslint-disable-next-line no-console
   console.log(`Preload script is loading on ${event}...`);
 
-  loadDarkReader();
+  loadDarkReader(workspaceId);
   ipcRenderer.on('reload-dark-reader', () => {
-    loadDarkReader();
+    loadDarkReader(workspaceId);
   });
 
   const preferences = ipcRenderer.sendSync('get-preferences');
@@ -85,8 +84,9 @@ const handleLoaded = (event) => {
     || preferences.autoRefreshOnlyWhenInactive;
 
   if (autoRefresh) {
-    setTimeout(() => {
-      if (autoRefreshOnlyWhenInactive && webContents().isFocused()) {
+    setTimeout(async () => {
+      const isFocused = await ipcRenderer.invoke('get-web-contents-is-focused');
+      if (autoRefreshOnlyWhenInactive && isFocused()) {
         return;
       }
 
@@ -163,12 +163,7 @@ const handleLoaded = (event) => {
 
     window.addEventListener('beforeunload', async () => {
       try {
-        const { session } = webContents;
-        session.flushStorageData();
-        session.clearStorageData({
-          storages: ['appcache', 'serviceworkers', 'cachestorage', 'websql', 'indexdb'],
-        });
-
+        ipcRenderer.invoked('flush-web-contents-app-data');
         const registrations = await window.navigator.serviceWorker.getRegistrations();
 
         registrations.forEach((r) => {
@@ -242,7 +237,7 @@ const handleLoaded = (event) => {
         // eslint-disable-next-line no-console
         console.log(err);
       }
-      webContents.setBadgeCount(total);
+      ipcRenderer.invoke('set-web-contents-badge', total);
     };
 
     let interval = setInterval(() => {
@@ -260,6 +255,36 @@ const handleLoaded = (event) => {
       }
     }, 1000);
   }
+
+  const initialShouldPauseNotifications = ipcRenderer.sendSync('get-pause-notifications-info') != null;
+  webFrame.executeJavaScript(`
+(function() {
+  // Customize Notification behavior
+  // https://stackoverflow.com/questions/53390156/how-to-override-javascript-web-api-notification-object
+  const oldNotification = window.Notification;
+  let shouldPauseNotifications = ${initialShouldPauseNotifications};
+  window.addEventListener('message', function(e) {
+    if (!e.data || e.data.type !== 'should-pause-notifications-changed') return;
+    shouldPauseNotifications = e.data.val;
+  });
+  window.Notification = function() {
+    if (!shouldPauseNotifications) {
+      const notif = new oldNotification(...arguments);
+      notif.addEventListener('click', () => {
+        window.postMessage({ type: 'focus-workspace', workspaceId: "${workspaceId}" });
+      });
+      return notif;
+    }
+    return null;
+  }
+  window.Notification.requestPermission = oldNotification.requestPermission;
+  Object.defineProperty(Notification, 'permission', {
+    get() {
+      return oldNotification.permission;
+    }
+  });
+})();
+`);
 
   // eslint-disable-next-line no-console
   console.log('Preload script is loaded...');
@@ -301,7 +326,6 @@ window.addEventListener('message', (e) => {
 // https://github.com/electron/electron/issues/16587
 // Fix chrome.runtime.sendMessage is undefined for FastMail
 // https://github.com/quanglam2807/singlebox/issues/21
-const initialShouldPauseNotifications = ipcRenderer.sendSync('get-pause-notifications-info') != null;
 webFrame.executeJavaScript(`
 (function() {
   window.chrome = {
@@ -325,31 +349,6 @@ webFrame.executeJavaScript(`
     on: () => null,
   };
   window.desktop = undefined;
-
-  // Customize Notification behavior
-  // https://stackoverflow.com/questions/53390156/how-to-override-javascript-web-api-notification-object
-  const oldNotification = window.Notification;
-  let shouldPauseNotifications = ${initialShouldPauseNotifications};
-  window.addEventListener('message', function(e) {
-    if (!e.data || e.data.type !== 'should-pause-notifications-changed') return;
-    shouldPauseNotifications = e.data.val;
-  });
-  window.Notification = function() {
-    if (!shouldPauseNotifications) {
-      const notif = new oldNotification(...arguments);
-      notif.addEventListener('click', () => {
-        window.postMessage({ type: 'focus-workspace', workspaceId: "${workspaceId}" });
-      });
-      return notif;
-    }
-    return null;
-  }
-  window.Notification.requestPermission = oldNotification.requestPermission;
-  Object.defineProperty(Notification, 'permission', {
-    get() {
-      return oldNotification.permission;
-    }
-  });
 
   if (window.navigator.mediaDevices) {
     window.navigator.mediaDevices.getDisplayMedia = () => {
