@@ -34,6 +34,9 @@ const getDotAppPath = () => {
     return path.join(APP_PATH, 'linux-unpacked');
   }
   if (platform === 'win32') {
+    if (arch === 'arm64') {
+      return path.join(APP_PATH, 'win-arm64-unpacked');
+    }
     return path.join(APP_PATH, 'win-unpacked');
   }
   throw Error('Unsupported platform');
