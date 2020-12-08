@@ -81,7 +81,10 @@ const Home = ({ classes }) => {
     );
   }
 
-  const filters = [{ field: 'type', values: ['Singlesite'], type: 'all' }];
+  const filters = [
+    { field: 'type', values: ['Singlesite'], type: 'all' },
+    { field: 'widevine', values: [0], type: 'all' },
+  ];
   const appJsonId = window.remote.getGlobal('appJson').id;
   if (appJsonId.startsWith('group-')) {
     const groupId = appJsonId.substring('group-'.length);
