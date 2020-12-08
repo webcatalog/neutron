@@ -5,10 +5,11 @@
 const {
   BrowserView,
   BrowserWindow,
+  MenuItem,
   app,
+  ipcMain,
   session,
   shell,
-  ipcMain,
 } = require('electron');
 const path = require('path');
 const fsExtra = require('fs-extra');
@@ -22,6 +23,7 @@ const appJson = require('../app.json');
 const { getPreference, getPreferences } = require('./preferences');
 const {
   getWorkspace,
+  getWorkspaces,
   getWorkspacePreference,
   getWorkspacePreferences,
   setWorkspace,
@@ -33,6 +35,7 @@ const {
   getWorkspaceMetas,
   setWorkspaceBadgeCount,
 } = require('./workspace-metas');
+const ContextMenuBuilder = require('./context-menu-builder');
 
 const sendToAllWindows = require('./send-to-all-windows');
 const getViewBounds = require('./get-view-bounds');
@@ -234,7 +237,7 @@ const addView = (browserWindow, workspace) => {
     nodeIntegration: false,
     contextIsolation: true,
     plugins: true, // PDF reader
-    enableRemoteModule: true,
+    enableRemoteModule: false,
     scrollBounce: true,
     session: ses,
     preload: path.join(__dirname, '..', 'preload', 'view.js'),
@@ -747,21 +750,122 @@ const addView = (browserWindow, workspace) => {
 
   // Unread count badge
   if (unreadCountBadge) {
-    let usePageTitle = true;
+    view.webContents.usePageTitle = true;
     view.webContents.on('page-title-updated', (e, title) => {
-      if (!usePageTitle) return;
+      if (!view.webContents.usePageTitle) return;
       const num = getBadgeCountFromTitle(title);
       setWorkspaceBadgeCount(workspace.id, num, browserWindow);
     });
-
-    // if this function is called
-    // then preload script is controlling badge count
-    // so we stop getting badge count from page-title
-    view.webContents.setBadgeCount = (num) => {
-      usePageTitle = false;
-      setWorkspaceBadgeCount(workspace.id, num, browserWindow);
-    };
   }
+
+  // Menu
+  const contextMenuBuilder = new ContextMenuBuilder(
+    view.webContents,
+    true,
+  );
+
+  view.webContents.on('context-menu', (e, info) => {
+    contextMenuBuilder.buildMenuForElement(info)
+      .then((menu) => {
+        if (info.linkURL && info.linkURL.length > 0) {
+          menu.append(new MenuItem({ type: 'separator' }));
+
+          menu.append(new MenuItem({
+            label: 'Open Link in New Window',
+            click: () => {
+              ipcMain.emit('request-set-global-force-new-window', null, true);
+              window.open(info.linkURL);
+            },
+          }));
+
+          menu.append(new MenuItem({ type: 'separator' }));
+
+          const workspaces = getWorkspaces();
+
+          const workspaceLst = Object.values(workspaces).sort((a, b) => a.order - b.order);
+
+          menu.append(new MenuItem({
+            label: 'Open Link in New Workspace',
+            click: () => {
+              ipcMain.emit('request-open-url-in-workspace', null, info.linkURL);
+            },
+          }));
+          menu.append(new MenuItem({ type: 'separator' }));
+
+          workspaceLst.forEach((w) => {
+            const workspaceName = w.name || `Workspace ${w.order + 1}`;
+            menu.append(new MenuItem({
+              label: `Open Link in ${workspaceName}`,
+              click: () => {
+                ipcMain.emit('request-open-url-in-workspace', null, info.linkURL, w.id);
+              },
+            }));
+          });
+        }
+
+        menu.append(new MenuItem({ type: 'separator' }));
+
+        menu.append(new MenuItem({
+          label: 'Back',
+          enabled: view.webContents.canGoBack(),
+          click: () => {
+            view.webContents.goBack();
+          },
+        }));
+        menu.append(new MenuItem({
+          label: 'Forward',
+          enabled: view.webContents.canGoForward(),
+          click: () => {
+            view.webContents.goForward();
+          },
+        }));
+        menu.append(new MenuItem({
+          label: 'Reload',
+          click: () => {
+            view.webContents.reload();
+          },
+        }));
+
+        menu.append(new MenuItem({ type: 'separator' }));
+
+        menu.append(
+          new MenuItem({
+            label: 'More',
+            submenu: [
+              {
+                label: 'About',
+                click: () => ipcMain.emit('request-show-about-window'),
+              },
+              { type: 'separator' },
+              {
+                label: 'Check for Updates',
+                click: () => ipcMain.emit('request-check-for-updates'),
+              },
+              {
+                label: 'Preferences...',
+                click: () => ipcMain.emit('request-show-preferences-window'),
+              },
+              { type: 'separator' },
+              {
+                label: 'WebCatalog Help',
+                click: () => shell.openExternal('https://help.webcatalog.app?utm_source=juli_app'),
+              },
+              {
+                label: 'WebCatalog Website',
+                click: () => shell.openExternal('https://webcatalog.app?utm_source=juli_app'),
+              },
+              { type: 'separator' },
+              {
+                label: 'Quit',
+                click: () => ipcMain.emit('request-quit'),
+              },
+            ],
+          }),
+        );
+
+        menu.popup(browserWindow);
+      });
+  });
 
   // Find In Page
   view.webContents.on('found-in-page', (e, result) => {
@@ -862,6 +966,12 @@ const realignActiveView = (browserWindow, activeId) => {
 };
 
 const removeView = (id) => {
+  const view = views[id];
+  if (view != null) {
+    // end webContents so BrowserView can be cleaned with GC
+    // https://github.com/electron/electron/pull/23578#issuecomment-703754455
+    view.webContents.forcefullyCrashRenderer();
+  }
   session.fromPartition(`persist:${id}`).clearStorageData();
   delete views[id];
 };
@@ -896,10 +1006,13 @@ const setViewsNotificationsPref = (_shouldPauseNotifications) => {
 };
 
 const hibernateView = (id) => {
-  if (views[id] != null) {
-    views[id].destroy();
-    views[id] = null;
+  const view = views[id];
+  if (view != null) {
+    // end webContents so BrowserView can be cleaned with GC
+    // https://github.com/electron/electron/pull/23578#issuecomment-703754455
+    view.webContents.forcefullyCrashRenderer();
   }
+  delete views[id];
 };
 
 const reloadViewDarkReader = (id) => {
@@ -934,9 +1047,20 @@ const reloadView = (id) => {
   }
 };
 
+// to be run before-quit
+const destroyAllViews = () => {
+  Object.keys(views)
+    .filter((id) => views[id] != null)
+    .forEach((id) => {
+      views[id].webContents.forcefullyCrashRenderer();
+      delete views[id];
+    });
+};
+
 module.exports = {
   addView,
   getView,
+  destroyAllViews,
   hibernateView,
   realignActiveView,
   reloadView,

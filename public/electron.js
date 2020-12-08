@@ -33,7 +33,11 @@ const mainWindow = require('./windows/main');
 const openUrlWithWindow = require('./windows/open-url-with');
 
 const { createMenu } = require('./libs/menu');
-const { addView, reloadViewsDarkReader } = require('./libs/views');
+const {
+  addView,
+  reloadViewsDarkReader,
+  destroyAllViews,
+} = require('./libs/views');
 const fetchUpdater = require('./libs/fetch-updater');
 const { getWorkspaces, setWorkspace } = require('./libs/workspaces');
 const sendToAllWindows = require('./libs/send-to-all-windows');
@@ -316,6 +320,11 @@ if (!gotTheLock) {
         win.forceClose = true;
         // fix https://github.com/webcatalog/webcatalog-app/issues/1141
         win.setBrowserView(null);
+
+        // https://github.com/webcatalog/webcatalog-app/issues/1141
+        // the bug seems to only occur when there's BrowserView opened
+        // so destroy all BrowserViews before exiting
+        destroyAllViews();
       }
     };
 
