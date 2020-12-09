@@ -1293,26 +1293,24 @@ const Preferences = ({
             <Divider />
             <ListItemDefaultMailClient />
             <Divider />
-            {window.process.platform !== 'linux' && (
-              <ListItem>
-                <ListItemText primary="Open at login" />
-                <Select
-                  value={openAtLogin}
-                  onChange={(e) => requestSetSystemPreference('openAtLogin', e.target.value)}
-                  variant="filled"
-                  disableUnderline
-                  margin="dense"
-                  classes={{
-                    root: classes.select,
-                  }}
-                  className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
-                >
-                  <MenuItem dense value="yes">Yes</MenuItem>
-                  <MenuItem dense value="yes-hidden">Yes, but minimized</MenuItem>
-                  <MenuItem dense value="no">No</MenuItem>
-                </Select>
-              </ListItem>
-            )}
+            <ListItem>
+              <ListItemText primary="Open at login" />
+              <Select
+                value={openAtLogin}
+                onChange={(e) => requestSetSystemPreference('openAtLogin', e.target.value)}
+                variant="filled"
+                disableUnderline
+                margin="dense"
+                classes={{
+                  root: classes.select,
+                }}
+                className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
+              >
+                <MenuItem dense value="yes">Yes</MenuItem>
+                <MenuItem dense value="yes-hidden">Yes, but minimized</MenuItem>
+                <MenuItem dense value="no">No</MenuItem>
+              </Select>
+            </ListItem>
           </List>
         </Paper>
 

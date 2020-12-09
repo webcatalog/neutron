@@ -13,6 +13,7 @@ const windowStateKeeper = require('electron-window-state');
 const { menubar } = require('menubar');
 const path = require('path');
 const isDev = require('electron-is-dev');
+const settings = require('electron-settings');
 
 const { REACT_PATH } = require('../constants/paths');
 const { getPreference } = require('../libs/preferences');
@@ -144,7 +145,11 @@ const createAsync = () => new Promise((resolve) => {
     return;
   }
 
-  const { wasOpenedAsHidden } = app.getLoginItemSettings();
+  // check system-preferences.js
+  // Linux uses different API
+  const wasOpenedAsHidden = process.platform === 'linux'
+    ? settings.getSync('systemPreferences.openAtLogin') === 'yes-hidden'
+    : app.getLoginItemSettings().wasOpenedAsHidden;
 
   const mainWindowState = windowStateKeeper({
     defaultWidth: 800,
