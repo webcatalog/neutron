@@ -405,6 +405,7 @@ window.addEventListener('message', (e) => {
 
   // set workspace to active when its notification is clicked
   if (e.data.type === 'focus-workspace') {
+    ipcRenderer.send('request-show-main-window');
     ipcRenderer.send('request-set-active-workspace', e.data.workspaceId);
   }
 });

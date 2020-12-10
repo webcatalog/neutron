@@ -157,6 +157,10 @@ const loadListeners = () => {
     setPreference(name, value);
   });
 
+  ipcMain.on('request-show-main-window', () => {
+    mainWindow.show();
+  });
+
   ipcMain.on('request-show-about-window', () => {
     aboutWindow.show();
   });
