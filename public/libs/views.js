@@ -488,8 +488,8 @@ const addView = (browserWindow, workspace) => {
       // not the best solution as page will be unexpectedly reloaded
       // but it won't happen very often
       popupWin.webContents.on('did-navigate', (ee, url) => {
-        if (adjustUserAgentByUrl(ee.sender.webContents, url, 'popup-did-navigate')) {
-          ee.sender.webContents.reload();
+        if (adjustUserAgentByUrl(ee.sender, url, 'popup-did-navigate')) {
+          ee.sender.reload();
         }
       });
 
