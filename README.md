@@ -4,9 +4,9 @@
 |---|---|---|
 |[![macOS (x64)](https://github.com/webcatalog/webcatalog-engine/workflows/macOS%20(x64)/badge.svg)](https://github.com/webcatalog/webcatalog-engine/actions?query=workflow%3A%22macOS+%28x64%29%22)|[![Linux (x64)](https://github.com/webcatalog/webcatalog-engine/workflows/Linux%20(x64)/badge.svg)](https://github.com/webcatalog/webcatalog-engine/actions?query=workflow%3A%22Linux+%28x64%29%22)|[![Windows (x64)](https://github.com/webcatalog/webcatalog-engine/workflows/Windows%20(x64)/badge.svg)](https://github.com/webcatalog/webcatalog-engine/actions?query=workflow%3A%22Windows+%28x64%29%22)|
 
-|macOS (arm64)|Linux (arm64)|Windows (arm64)|
-|---|---|---|
-|[![macOS (arm64)](https://github.com/webcatalog/webcatalog-engine/workflows/macOS%20(arm64)/badge.svg)](https://github.com/webcatalog/webcatalog-engine/actions?query=workflow%3A%22macOS+%28arm64%29%22)|[![Linux (arm64)](https://github.com/webcatalog/webcatalog-engine/workflows/Linux%20(arm64)/badge.svg)](https://github.com/webcatalog/webcatalog-engine/actions?query=workflow%3A%22Linux+%28arm64%29%22)|[![Windows (arm64)](https://github.com/webcatalog/webcatalog-engine/workflows/Windows%20(arm64)/badge.svg)](https://github.com/webcatalog/webcatalog-engine/actions?query=workflow%3A%22Windows+%28arm64%29%22)|
+|macOS (arm64)|Linux (arm64)|
+|---|---|
+|[![macOS (arm64)](https://github.com/webcatalog/webcatalog-engine/workflows/macOS%20(arm64)/badge.svg)](https://github.com/webcatalog/webcatalog-engine/actions?query=workflow%3A%22macOS+%28arm64%29%22)|[![Linux (arm64)](https://github.com/webcatalog/webcatalog-engine/workflows/Linux%20(arm64)/badge.svg)](https://github.com/webcatalog/webcatalog-engine/actions?query=workflow%3A%22Linux+%28arm64%29%22)|
 
 
 This powers the *WebCatalog Engine (Electron)*-based apps you install from [WebCatalog](https://webcatalog.app).
