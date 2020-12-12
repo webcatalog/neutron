@@ -156,7 +156,7 @@ const isInternalUrl = (url, currentInternalUrls) => {
 
   // Microsoft uses many different domains
   // So we define special rules for it
-  if (isMicrosoftUrl(isMicrosoftUrl)) {
+  if (isMicrosoftUrl(url)) {
     for (let i = 0; i < currentInternalUrls.length; i += 1) {
       if (currentInternalUrls[i] && isMicrosoftUrl(currentInternalUrls[i])) {
         return true;
