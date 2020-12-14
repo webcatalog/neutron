@@ -1,4 +1,4 @@
-name: Windows (x64)
+name: macOS (arm64)
 
 on:
   push:
@@ -9,15 +9,15 @@ on:
       - master
       - next
     paths:
-      - '.github/workflows/windows-x64.yml'
+      - '.github/workflows/macos-x64.yml'
       - 'build-template.js'
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: macos-latest
 
     env:
-      TEMPLATE_ARCH: x64
+      TEMPLATE_ARCH: arm64
 
     steps:
     - uses: actions/checkout@v2
@@ -40,8 +40,9 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-yarn-
     # https://github.com/mui-org/material-ui/issues/12432
-    - run: yarn install --prefer-offline --network-timeout 600000 --ignore-platform
+    - run: yarn --prefer-offline --network-timeout 600000
     - run: yarn lint
+    - run: brew install p7zip
     - run: yarn dist
       env:
         REACT_APP_AMPLITUDE_API_KEY: ${{ secrets.REACT_APP_AMPLITUDE_API_KEY }}
@@ -54,7 +55,7 @@ jobs:
       with:
         draft: true
         files: |
-          dist/template-win32-x64.json
-          dist/template-win32-x64.zip
+          dist/template-darwin-arm64.json
+          dist/template-darwin-arm64.zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
