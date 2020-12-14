@@ -10,7 +10,7 @@ const builder = require('electron-builder');
 const platform = process.env.TEMPLATE_PLATFORM || process.platform;
 const arch = process.env.TEMPLATE_ARCH || 'x64';
 
-if ((['x64', 'arm64'].indexOf(arch) < 0) || (platform !== 'linux' && arch !== 'x64')) {
+if ((['x64', 'arm64'].indexOf(arch) < 0)) {
   console.log(`${platform} ${arch} is not supported`);
 }
 
@@ -25,6 +25,9 @@ const TEMPLATE_PATH = path.join(DIST_PATH, 'template');
 
 const getDotAppPath = () => {
   if (platform === 'darwin') {
+    if (arch === 'arm64') {
+      return path.join(APP_PATH, 'mac-arm64', `${appName}.app`);
+    }
     return path.join(APP_PATH, 'mac', `${appName}.app`);
   }
   if (platform === 'linux') {
@@ -45,7 +48,7 @@ const getDotAppPath = () => {
 let targets;
 switch (platform) {
   case 'darwin': {
-    targets = Platform.MAC.createTarget(['dir']);
+    targets = Platform.MAC.createTarget(['dir'], Arch[arch]);
     break;
   }
   case 'win32': {
