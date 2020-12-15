@@ -635,9 +635,11 @@ const addView = (browserWindow, workspace) => {
     const globalPreferences = getPreferences();
     const workspacePreferences = getWorkspacePreferences(workspace.id);
     const downloadPath = workspacePreferences.downloadPath || globalPreferences.downloadPath;
-    const askForDownloadPath = workspacePreferences.askForDownloadPath != null
+    const askForDownloadPath = (workspacePreferences.askForDownloadPath != null
       ? workspacePreferences.askForDownloadPath
-      : globalPreferences.askForDownloadPath;
+      : globalPreferences.askForDownloadPath) || global.forceSaveAs;
+    // use for "save image as..." feature
+    global.forceSaveAs = false;
 
     const options = {
       directory: downloadPath,

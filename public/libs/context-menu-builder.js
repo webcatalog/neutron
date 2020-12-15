@@ -40,6 +40,7 @@ const contextMenuStringTable = {
   copyMail: () => 'Copy Email Address',
   copyLinkUrl: () => 'Copy Link',
   openLinkUrl: () => 'Open Link in Browser',
+  saveImage: () => 'Save Image As...',
   copyImageUrl: () => 'Copy Image URL',
   copyImage: () => 'Copy Image',
   addToDictionary: () => 'Add to Dictionary',
@@ -320,8 +321,20 @@ module.exports = class ContextMenuBuilder {
 
   /**
    * Adds "Copy Image" and "Copy Image URL" items when `src` is valid.
+   * Add "Save Image as..."
    */
   addImageItems(menu, menuInfo) {
+    const target = this.getWebContents();
+    const saveImage = new MenuItem({
+      label: this.stringTable.saveImage(),
+      click: () => {
+        global.forceSaveAs = true;
+        target.session.downloadURL(menuInfo.srcURL);
+      },
+    });
+
+    menu.append(saveImage);
+
     const copyImage = new MenuItem({
       label: this.stringTable.copyImage(),
       click: () => this.convertImageToBase64(menuInfo.srcURL,
