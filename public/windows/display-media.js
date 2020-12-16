@@ -3,19 +3,20 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 const {
   BrowserWindow,
-  BrowserView,
   ipcMain,
 } = require('electron');
 const path = require('path');
 
 const { REACT_PATH } = require('../constants/paths');
 
+const { getView } = require('../libs/views');
+
 let win;
 
 const get = () => win;
 
-const create = (viewId) => {
-  global.displayMediaRequestedViewId = viewId;
+const create = (workspaceId) => {
+  global.displayMediaRequestedWorkspaceId = workspaceId;
 
   win = new BrowserWindow({
     backgroundColor: '#FFF',
@@ -37,12 +38,18 @@ const create = (viewId) => {
   win.setMenuBarVisibility(false);
 
   const onClose = () => {
-    BrowserView.fromId(global.displayMediaRequestedViewId).webContents.send('display-media-id-received', null);
+    const view = getView(global.displayMediaRequestedWorkspaceId);
+    if (view) {
+      view.webContents.send('display-media-id-received', null);
+    }
   };
   win.on('close', onClose);
 
   const onSelected = (e, displayMediaId) => {
-    BrowserView.fromId(global.displayMediaRequestedViewId).webContents.send('display-media-id-received', displayMediaId);
+    const view = getView(global.displayMediaRequestedWorkspaceId);
+    if (view) {
+      view.webContents.send('display-media-id-received', displayMediaId);
+    }
     ipcMain.removeListener('display-media-selected', onSelected);
     if (win) {
       win.removeListener('close', onClose);
@@ -62,7 +69,7 @@ const create = (viewId) => {
   win.loadURL(REACT_PATH);
 };
 
-const show = (viewId) => {
+const show = (workspaceId) => {
   // https://github.com/karaggeorge/mac-screen-capture-permissions/tree/master
   // https://nyrra33.com/2019/07/23/open-preference-pane-programmatically/
 
@@ -81,10 +88,10 @@ const show = (viewId) => {
   }
 
   if (win == null) {
-    create(viewId);
-  } else if (viewId !== global.displayMediaRequestedViewId) {
+    create(workspaceId);
+  } else if (workspaceId !== global.displayMediaRequestedWorkspaceId) {
     win.close();
-    create(viewId);
+    create(workspaceId);
   } else {
     win.show();
   }
