@@ -286,6 +286,30 @@ const handleLoaded = async (event) => {
 })();
 `);
 
+  // Communicate with the frame
+  // Have to use this weird trick because contextIsolation: true
+  ipcRenderer.on('should-pause-notifications-changed', (e, val) => {
+    window.postMessage({ type: 'should-pause-notifications-changed', val });
+  });
+
+  ipcRenderer.on('display-media-id-received', (e, val) => {
+    window.postMessage({ type: 'return-display-media-id', val });
+  });
+
+  window.addEventListener('message', (e) => {
+    if (!e.data) return;
+
+    if (e.data.type === 'get-display-media-id') {
+      ipcRenderer.send('request-show-display-media-window', workspaceId);
+    }
+
+    // set workspace to active when its notification is clicked
+    if (e.data.type === 'focus-workspace') {
+      ipcRenderer.send('request-show-main-window');
+      ipcRenderer.send('request-set-active-workspace', e.data.workspaceId);
+    }
+  });
+
   // eslint-disable-next-line no-console
   console.log('Preload script is loaded...');
 
@@ -298,30 +322,6 @@ document.addEventListener('DOMContentLoaded', () => handleLoaded('document.on("D
 // DOMContentLoaded might not be triggered so double check with 'onload'
 // https://github.com/webcatalog/webcatalog-app/issues/797
 window.addEventListener('load', () => handleLoaded('window.on("onload")'));
-
-// Communicate with the frame
-// Have to use this weird trick because contextIsolation: true
-ipcRenderer.on('should-pause-notifications-changed', (e, val) => {
-  window.postMessage({ type: 'should-pause-notifications-changed', val });
-});
-
-ipcRenderer.on('display-media-id-received', (e, val) => {
-  window.postMessage({ type: 'return-display-media-id', val });
-});
-
-window.addEventListener('message', (e) => {
-  if (!e.data) return;
-
-  if (e.data.type === 'get-display-media-id') {
-    ipcRenderer.send('request-show-display-media-window');
-  }
-
-  // set workspace to active when its notification is clicked
-  if (e.data.type === 'focus-workspace') {
-    ipcRenderer.send('request-show-main-window');
-    ipcRenderer.send('request-set-active-workspace', e.data.workspaceId);
-  }
-});
 
 // Fix Can't show file list of Google Drive
 // https://github.com/electron/electron/issues/16587
