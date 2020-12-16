@@ -519,17 +519,14 @@ const addView = (browserWindow, workspace) => {
       }
     }
 
-    // if global.forceNewWindow = true
-    // or regular new-window event
+    // regular new-window event
     // or if in Google Drive app, open Google Docs files internally https://github.com/webcatalog/webcatalog-app/issues/800
     // the next external link request will be opened in new window
     if (
-      global.forceNewWindow
-      || disposition === 'new-window'
+      disposition === 'new-window'
       || disposition === 'default'
       || (appDomain === 'drive.google.com' && nextDomain === 'docs.google.com')
     ) {
-      global.forceNewWindow = false;
       openInNewWindow();
       return;
     }
@@ -775,8 +772,16 @@ const addView = (browserWindow, workspace) => {
           menu.append(new MenuItem({
             label: 'Open Link in New Window',
             click: () => {
-              ipcMain.emit('request-set-global-force-new-window', null, true);
-              window.open(info.linkURL);
+              // trigger the 'new-window' event manually
+              handleNewWindow(
+                {
+                  sender: view.webContents,
+                  preventDefault: () => {},
+                },
+                info.linkURL,
+                '', // frameName
+                'new-window',
+              );
             },
           }));
 

@@ -501,12 +501,6 @@ const loadListeners = () => {
     reloadViewDarkReader(id);
   });
 
-  // if global.forceNewWindow = true
-  // the next external link request will be opened in new window
-  ipcMain.on('request-set-global-force-new-window', (e, val) => {
-    global.forceNewWindow = val;
-  });
-
   // https://www.electronjs.org/docs/tutorial/online-offline-events
   ipcMain.on('online-status-changed', (e, online) => {
     if (online) {
