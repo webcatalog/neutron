@@ -9,7 +9,6 @@
 
 const {
   clipboard,
-  nativeImage,
   shell,
   Menu,
   MenuItem,
@@ -337,8 +336,7 @@ module.exports = class ContextMenuBuilder {
 
     const copyImage = new MenuItem({
       label: this.stringTable.copyImage(),
-      click: () => this.convertImageToBase64(menuInfo.srcURL,
-        (dataURL) => clipboard.writeImage(nativeImage.createFromDataURL(dataURL))),
+      click: () => target.copyImageAt(menuInfo.x, menuInfo.y),
     });
 
     menu.append(copyImage);
@@ -420,31 +418,5 @@ module.exports = class ContextMenuBuilder {
 
     menu.append(inspect);
     return menu;
-  }
-
-  /**
-   * Converts an image to a base-64 encoded string.
-   *
-   * @param  {String} url           The image URL
-   * @param  {Function} callback    A callback that will be invoked with the result
-   * @param  {String} outputFormat  The image format to use, defaults to 'image/png'
-   */
-  convertImageToBase64(url, callback, outputFormat = 'image/png') {
-    let canvas = document.createElement('CANVAS');
-    const ctx = canvas.getContext('2d');
-    const img = new Image();
-    img.crossOrigin = 'Anonymous';
-
-    img.onload = () => {
-      canvas.height = img.height;
-      canvas.width = img.width;
-      ctx.drawImage(img, 0, 0);
-
-      const dataURL = canvas.toDataURL(outputFormat);
-      canvas = null;
-      callback(dataURL);
-    };
-
-    img.src = url;
   }
 };
