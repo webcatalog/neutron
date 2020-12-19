@@ -3,7 +3,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 /* eslint-disable class-methods-use-this */
 /* eslint-disable no-param-reassign */
-/* global Image */
 // Ported from
 // https://github.com/electron-userland/electron-spellchecker/blob/master/src/context-menu-builder.js
 
