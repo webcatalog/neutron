@@ -246,6 +246,28 @@ const SortableItem = sortableElement(({ value }) => {
 
 const SortableContainer = sortableContainer(({ children }) => <div>{children}</div>);
 
+const ScrollbarContainer = ({ children, classes }) => {
+  // SimpleBar brings problems on macOS
+  // https://github.com/webcatalog/webcatalog-app/issues/1247
+  if (window.process.platform === 'darwin') {
+    return (
+      <div className={classes.sidebarUpperRoot}>
+        {children}
+      </div>
+    );
+  }
+
+  return (
+    <SimpleBar className={classes.sidebarUpperRoot}>
+      {children}
+    </SimpleBar>
+  );
+};
+ScrollbarContainer.propTypes = {
+  children: PropTypes.node.isRequired,
+  classes: PropTypes.object.isRequired,
+};
+
 const Main = ({
   classes,
   didFailLoad,
@@ -267,8 +289,8 @@ const Main = ({
       <DraggableRegion />
       <div className={classes.root}>
         {sidebar && (
-          <SimpleBar
-            className={classes.sidebarUpperRoot}
+          <ScrollbarContainer
+            classes={classes}
           >
             <div className={classes.sidebarRoot}>
               <div className={classnames(classes.sidebarTop,
@@ -339,7 +361,7 @@ const Main = ({
               </div>
               )}
             </div>
-          </SimpleBar>
+          </ScrollbarContainer>
         )}
         <div className={classes.contentRoot}>
           {navigationBar && <NavigationBar />}
