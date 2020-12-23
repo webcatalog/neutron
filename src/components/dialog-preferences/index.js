@@ -206,6 +206,7 @@ const Preferences = ({
   shareWorkspaceBrowsingData,
   sidebar,
   sidebarTips,
+  sidebarSize,
   spellcheck,
   spellcheckLanguages,
   swipeToNavigate,
@@ -528,11 +529,14 @@ const Preferences = ({
             </ListItem>
             <ListItem>
               <ListItemText
-                primary="Show tips on sidebar"
+                primary="Workspace size"
               />
               <Select
-                value={sidebarTips}
-                onChange={(e) => requestSetPreference('sidebarTips', e.target.value)}
+                value={sidebarSize}
+                onChange={(e) => {
+                  requestSetPreference('sidebarSize', e.target.value);
+                  requestRealignActiveWorkspace();
+                }}
                 variant="filled"
                 disableUnderline
                 margin="dense"
@@ -541,6 +545,44 @@ const Preferences = ({
                 }}
                 className={classes.selectRoot}
               >
+                <MenuItem
+                  value="compact"
+                  dense
+                >
+                  Compact
+                </MenuItem>
+                <MenuItem
+                  value="expanded"
+                  dense
+                >
+                  Expanded
+                </MenuItem>
+              </Select>
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                primary="Show tips on sidebar"
+              />
+              <Select
+                value={sidebarSize === 'expanded' ? 'name+shortcut' : sidebarTips}
+                onChange={(e) => requestSetPreference('sidebarTips', e.target.value)}
+                variant="filled"
+                disableUnderline
+                margin="dense"
+                classes={{
+                  root: classes.select,
+                }}
+                className={classes.selectRoot}
+                disabled={sidebarSize === 'expanded'}
+              >
+                {sidebarSize === 'expanded' && (
+                  <MenuItem
+                    value="name+shortcut"
+                    dense
+                  >
+                    Workspace names &amp; keyboard shortcuts
+                  </MenuItem>
+                )}
                 <MenuItem
                   value="shortcut"
                   dense
@@ -1644,6 +1686,7 @@ Preferences.propTypes = {
   shareWorkspaceBrowsingData: PropTypes.bool.isRequired,
   sidebar: PropTypes.bool.isRequired,
   sidebarTips: PropTypes.oneOf(['shortcut', 'name', 'none']).isRequired,
+  sidebarSize: PropTypes.oneOf(['compact', 'expanded']).isRequired,
   spellcheck: PropTypes.bool.isRequired,
   spellcheckLanguages: PropTypes.arrayOf(PropTypes.string).isRequired,
   swipeToNavigate: PropTypes.bool.isRequired,
@@ -1694,6 +1737,7 @@ const mapStateToProps = (state) => ({
   shareWorkspaceBrowsingData: state.preferences.shareWorkspaceBrowsingData,
   sidebar: state.preferences.sidebar,
   sidebarTips: state.preferences.sidebarTips,
+  sidebarSize: state.preferences.sidebarSize,
   spellcheck: state.preferences.spellcheck,
   spellcheckLanguages: state.preferences.spellcheckLanguages,
   swipeToNavigate: state.preferences.swipeToNavigate,

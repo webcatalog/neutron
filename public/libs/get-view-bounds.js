@@ -5,13 +5,14 @@ const mainWindow = require('../windows/main');
 
 const getViewBounds = (contentSize, findInPage = false, height, width) => {
   const showSidebar = global.sidebar;
+  const sidebarSize = global.sidebarSize || 'compact';
   const isFullScreen = mainWindow.get() && mainWindow.get().isFullScreen();
   const showTitleBar = process.platform === 'darwin' ? (global.titleBar && !isFullScreen) : !isFullScreen;
   const showNavigationBar = (process.platform === 'linux'
     && global.attachToMenubar
     && !global.sidebar) || global.navigationBar;
 
-  const sidebarWidth = 68;
+  const sidebarWidth = sidebarSize === 'expanded' ? 256 : 68;
   let titlebarHeight = 0;
   if (process.platform === 'darwin') {
     // Big Sur increases title bar height: https://github.com/microsoft/vscode/pull/110592
