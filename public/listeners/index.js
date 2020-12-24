@@ -317,11 +317,13 @@ const loadListeners = () => {
   ipcMain.on('request-realign-active-workspace', () => {
     const {
       sidebar,
+      sidebarSize,
       titleBar,
       navigationBar,
     } = getPreferences();
 
     global.sidebar = sidebar;
+    global.sidebarSize = sidebarSize;
     global.titleBar = titleBar;
     global.navigationBar = navigationBar;
 

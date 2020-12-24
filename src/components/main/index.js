@@ -73,7 +73,7 @@ const styles = (theme) => {
       display: 'flex',
       flexDirection: 'row',
       flex: 1,
-      height: '100%',
+      minHeight: '100%',
       width: '100%',
       overflow: 'hidden',
     },
@@ -88,10 +88,12 @@ const styles = (theme) => {
       overflowX: 'hidden',
     },
     sidebarUpperRootWide: {
+      width: 256,
     },
     sidebarRoot: {
       flex: 1,
       width: '100%',
+      height: '100%',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
@@ -124,9 +126,12 @@ const styles = (theme) => {
       width: 150,
       position: 'absolute',
       top: window.process.platform === 'darwin' ? 50 : 60,
-      left: 72,
+      left: 76,
       backgroundImage: `url('${theme.palette.type === 'dark' ? arrowWhite : arrowBlack}')`,
       backgroundSize: '150px 202px',
+    },
+    arrowExpanded: {
+      left: 264,
     },
     avatar: {
       fontFamily: theme.typography.fontFamily,
@@ -157,6 +162,9 @@ const styles = (theme) => {
       fontFamily: theme.typography.fontFamily,
       userSelect: 'none',
     },
+    tipExpanded: {
+      left: 368,
+    },
     tip2: {
       fontFamily: theme.typography.fontFamily,
       userSelect: 'none',
@@ -169,6 +177,10 @@ const styles = (theme) => {
       display: 'flex',
       flexDirection: 'column',
       width: '100%',
+    },
+    endExpanded: {
+      display: 'block',
+      padding: theme.spacing(1),
     },
     ul: {
       marginTop: 0,
@@ -246,26 +258,26 @@ const SortableItem = sortableElement(({ value }) => {
 
 const SortableContainer = sortableContainer(({ children }) => <div>{children}</div>);
 
-const ScrollbarContainer = ({ children, classes }) => {
+const ScrollbarContainer = ({ children, className }) => {
   // SimpleBar brings problems on macOS
   // https://github.com/webcatalog/webcatalog-app/issues/1247
   if (window.process.platform === 'darwin') {
     return (
-      <div className={classes.sidebarUpperRoot}>
+      <div className={className}>
         {children}
       </div>
     );
   }
 
   return (
-    <SimpleBar className={classes.sidebarUpperRoot}>
+    <SimpleBar className={className}>
       {children}
     </SimpleBar>
   );
 };
 ScrollbarContainer.propTypes = {
   children: PropTypes.node.isRequired,
-  classes: PropTypes.object.isRequired,
+  className: PropTypes.string.isRequired,
 };
 
 const Main = ({
@@ -276,12 +288,14 @@ const Main = ({
   navigationBar,
   shouldPauseNotifications,
   sidebar,
+  sidebarSize,
   titleBar,
   workspaces,
 }) => {
   const appJson = window.remote.getGlobal('appJson');
   const workspacesList = getWorkspacesAsList(workspaces);
   const showMacTitleBar = window.process.platform === 'darwin' && titleBar && !isFullScreen;
+  const isSidebarExpanded = sidebarSize === 'expanded';
 
   return (
     <div className={classes.outerRoot}>
@@ -290,7 +304,10 @@ const Main = ({
       <div className={classes.root}>
         {sidebar && (
           <ScrollbarContainer
-            classes={classes}
+            className={classnames(
+              classes.sidebarUpperRoot,
+              isSidebarExpanded && classes.sidebarUpperRootWide,
+            )}
           >
             <div className={classes.sidebarRoot}>
               <div className={classnames(classes.sidebarTop,
@@ -339,12 +356,14 @@ const Main = ({
                 />
               </div>
               {!navigationBar && (
-              <div className={classes.end}>
+              <div
+                className={classnames(classes.end, isSidebarExpanded && classes.endExpanded)}
+              >
                 <IconButton
                   title="Notifications"
                   aria-label="Notifications"
                   onClick={requestShowNotificationsWindow}
-                  className={classes.iconButton}
+                  className={classnames(!isSidebarExpanded && classes.iconButton)}
                   size="small"
                 >
                   {shouldPauseNotifications ? <NotificationsPausedIcon /> : <NotificationsIcon />}
@@ -353,7 +372,7 @@ const Main = ({
                   title="Preferences"
                   aria-label="Preferences"
                   onClick={() => requestShowPreferencesWindow()}
-                  className={classes.iconButton}
+                  className={classnames(!isSidebarExpanded && classes.iconButton)}
                   size="small"
                 >
                   <SettingsIcon />
@@ -402,8 +421,13 @@ const Main = ({
               <div>
                 {sidebar ? (
                   <>
-                    <div alt="Arrow" className={classes.arrow} />
-                    <div className={classes.tip}>
+                    <div alt="Arrow" className={classnames(classes.arrow, isSidebarExpanded && classes.arrowExpanded)} />
+                    <div
+                      className={classnames(
+                        classes.tip,
+                        isSidebarExpanded && classes.tipExpanded,
+                      )}
+                    >
                       <span className={classes.inlineBlock}>Click</span>
                       <div className={classes.avatar}>
                         +
@@ -443,6 +467,7 @@ Main.propTypes = {
   navigationBar: PropTypes.bool.isRequired,
   shouldPauseNotifications: PropTypes.bool.isRequired,
   sidebar: PropTypes.bool.isRequired,
+  sidebarSize: PropTypes.oneOf(['compact', 'expanded']).isRequired,
   titleBar: PropTypes.bool.isRequired,
   workspaces: PropTypes.object.isRequired,
 };
@@ -465,6 +490,7 @@ const mapStateToProps = (state) => {
       || state.preferences.navigationBar,
     shouldPauseNotifications: state.notifications.pauseNotificationsInfo !== null,
     sidebar: state.preferences.sidebar,
+    sidebarSize: state.preferences.sidebarSize,
     titleBar: state.preferences.titleBar,
     workspaces: state.workspaces,
   };

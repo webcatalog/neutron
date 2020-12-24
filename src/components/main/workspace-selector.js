@@ -39,6 +39,11 @@ const styles = (theme) => ({
     borderRight: '2px solid',
     borderRightColor: 'transparent',
   },
+  rootExpanded: {
+    flexDirection: 'row',
+    paddingLeft: theme.spacing(1),
+    paddingRight: theme.spacing(1),
+  },
   rootWithText: {
     height: 60,
   },
@@ -90,11 +95,17 @@ const styles = (theme) => ({
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
-    width: 'calc(100% - 8px)',
     textAlign: 'center',
   },
   badge: {
     lineHeight: '20px',
+  },
+  expandedText: {
+    flex: 1,
+    padding: theme.spacing(1),
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
   },
 });
 
@@ -113,19 +124,40 @@ const WorkspaceSelector = ({
   preferredIconType,
   searchEngine,
   sidebarTips,
+  sidebarSize,
   transparentBackground,
 }) => {
+  const isExpanded = sidebarSize === 'expanded';
+  const shortcutTip = order < 9 && id !== 'add'
+    ? `${window.process.platform === 'darwin' ? '⌘' : 'Ctrl+'}${order + 1}` : null;
+
+  const fullName = (() => {
+    if (accountInfo) {
+      if (accountInfo.name && accountInfo.email) {
+        return `${accountInfo.name} (${accountInfo.email})`;
+      }
+      if (accountInfo.name) {
+        return accountInfo.name;
+      }
+    }
+    return name;
+  })();
+
   const tipText = (() => {
+    if (isExpanded) {
+      return null;
+    }
+
     if (sidebarTips !== 'none' && id === 'add') {
       return 'Add';
     }
 
     if (sidebarTips === 'shortcut') {
-      return `${window.process.platform === 'darwin' ? '⌘' : 'Ctrl'} + ${order + 1}`;
+      return shortcutTip;
     }
 
     if (sidebarTips === 'name') {
-      return name;
+      return fullName;
     }
 
     return null;
@@ -136,12 +168,12 @@ const WorkspaceSelector = ({
       return 'Add Workspace';
     }
 
-    if (name) {
-      return name;
+    if (fullName) {
+      return `${fullName}${shortcutTip ? ` (${shortcutTip})` : ''}`;
     }
 
     if (typeof order === 'number') {
-      return `Workspace ${order + 1}`;
+      return `Workspace ${order + 1}${shortcutTip ? ` (${shortcutTip})` : ''}`;
     }
 
     return null;
@@ -154,23 +186,12 @@ const WorkspaceSelector = ({
     selectedIconType = 'accountInfo';
   }
 
-  const finalName = (() => {
-    if (accountInfo) {
-      if (accountInfo.name && accountInfo.email) {
-        return `${accountInfo.name} (${accountInfo.email})`;
-      }
-      if (accountInfo.name) {
-        return accountInfo.name;
-      }
-    }
-    return name;
-  })();
-
   return (
     <div
       role="button"
       className={classnames(
         classes.root,
+        isExpanded && classes.rootExpanded,
         tipText && classes.rootWithText,
         hibernated && classes.rootHibernate,
         active && classes.rootActive,
@@ -199,39 +220,46 @@ const WorkspaceSelector = ({
       }}
       title={hoverText}
     >
-      <Badge color="secondary" badgeContent={badgeCount} max={99} classes={{ badge: classes.badge }}>
-        <div
-          className={classnames(
-            classes.avatar,
-            selectedIconType === 'text' && classes.textAvatar,
-            transparentBackground && classes.transparentAvatar,
-          )}
-        >
-          {selectedIconType === 'text' && getAvatarText(id, finalName, order)}
-          {selectedIconType === 'image' && (
-            <img
-              alt="Icon"
-              className={classnames(
-                classes.avatarPicture,
-              )}
-              src={`file://${picturePath}`}
-              draggable={false}
-            />
-          )}
-          {selectedIconType === 'accountInfo' && (
-            <img
-              alt="Icon"
-              className={classnames(
-                classes.avatarPicture,
-              )}
-              src={`file://${accountInfo.picturePath}`}
-              draggable={false}
-            />
-          )}
+      <div>
+        <Badge color="secondary" badgeContent={badgeCount} max={99} classes={{ badge: classes.badge }}>
+          <div
+            className={classnames(
+              classes.avatar,
+              selectedIconType === 'text' && classes.textAvatar,
+              transparentBackground && classes.transparentAvatar,
+            )}
+          >
+            {selectedIconType === 'text' && getAvatarText(id, fullName, order)}
+            {selectedIconType === 'image' && (
+              <img
+                alt="Icon"
+                className={classnames(
+                  classes.avatarPicture,
+                )}
+                src={`file://${picturePath}`}
+                draggable={false}
+              />
+            )}
+            {selectedIconType === 'accountInfo' && (
+              <img
+                alt="Icon"
+                className={classnames(
+                  classes.avatarPicture,
+                )}
+                src={`file://${accountInfo.picturePath}`}
+                draggable={false}
+              />
+            )}
+          </div>
+        </Badge>
+        {tipText && (
+          <p className={classes.shortcutText}>{tipText}</p>
+        )}
+      </div>
+      {isExpanded && (
+        <div className={classes.expandedText}>
+          {hoverText}
         </div>
-      </Badge>
-      {tipText && (
-        <p className={classes.shortcutText}>{tipText}</p>
       )}
     </div>
   );
@@ -265,12 +293,14 @@ WorkspaceSelector.propTypes = {
   preferredIconType: PropTypes.oneOf(['auto', 'text', 'image', 'accountInfo']),
   searchEngine: PropTypes.string.isRequired,
   sidebarTips: PropTypes.oneOf(['shortcut', 'name', 'none']).isRequired,
+  sidebarSize: PropTypes.oneOf(['compact', 'expanded']).isRequired,
   transparentBackground: PropTypes.bool,
 };
 
 const mapStateToProps = (state, ownProps) => ({
   badgeCount: state.workspaceMetas[ownProps.id] ? state.workspaceMetas[ownProps.id].badgeCount : 0,
   sidebarTips: state.preferences.sidebarTips,
+  sidebarSize: state.preferences.sidebarSize,
   searchEngine: state.preferences.searchEngine,
 });
 

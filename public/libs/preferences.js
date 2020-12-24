@@ -80,6 +80,7 @@ const defaultPreferences = {
   shareWorkspaceBrowsingData: appJson.id.startsWith('group-'),
   sidebar: shouldShowSidebar,
   sidebarTips: 'shortcut',
+  sidebarSize: 'compact',
   spellcheck: true,
   spellcheckLanguages: ['en-US'],
   swipeToNavigate: true,

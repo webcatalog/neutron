@@ -260,6 +260,7 @@ if (!gotTheLock) {
       navigationBar,
       runInBackground,
       sidebar,
+      sidebarSize,
       titleBar,
       trayIcon,
       useSystemTitleBar,
@@ -283,6 +284,7 @@ if (!gotTheLock) {
     global.attachToMenubar = process.platform === 'darwin' && attachToMenubar;
     global.runInBackground = process.platform !== 'darwin' && runInBackground;
     global.sidebar = sidebar;
+    global.sidebarSize = sidebarSize;
     global.titleBar = titleBar;
     global.trayIcon = trayIcon;
     global.navigationBar = navigationBar;
