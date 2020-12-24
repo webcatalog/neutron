@@ -30,7 +30,7 @@ const getValidationRules = () => ({
 
 // to be replaced with invoke (electron 7+)
 // https://electronjs.org/docs/api/ipc-renderer#ipcrendererinvokechannel-args
-export const getWebsiteIconUrlFromMainProcessAsync = (url) => new Promise((resolve, reject) => {
+export const getWebsiteIconUrlAsync = (url) => new Promise((resolve, reject) => {
   try {
     const id = Date.now().toString();
     window.ipcRenderer.once(id, (e, uurl) => {
@@ -42,30 +42,27 @@ export const getWebsiteIconUrlFromMainProcessAsync = (url) => new Promise((resol
   }
 });
 
-// attempt to get icon from manifest, favicon, etc of the URL first
-export const getWebsiteIconUrlAsync = (url, name) => getWebsiteIconUrlFromMainProcessAsync(url)
-  .then((iconUrl) => {
-    if (iconUrl) return iconUrl;
-    // if it fails, try to get icon from in-house database
-    const query = name && name.length > 0 ? `${url} ${name}` : url;
-    return swiftype
-      .search(query, {
-        search_fields: {
-          name: {},
-          url: { weight: 5 },
-        },
-        result_fields: {
-          icon_filled: { raw: {} },
-        },
-        page: { size: 1 },
-      })
-      .then((res) => {
-        if (res.rawResults.length < 1) return null;
-        const app = res.rawResults[0];
-        return app.icon_filled.raw;
-      })
-      .catch(() => null);
-  });
+export const getWebsiteIconUrlFromSwifttypeAsync = (url, name) => {
+  // if it fails, try to get icon from in-house database
+  const query = name && name.length > 0 ? `${url} ${name}` : url;
+  return swiftype
+    .search(query, {
+      search_fields: {
+        name: {},
+        url: { weight: 5 },
+      },
+      result_fields: {
+        icon_filled: { raw: {} },
+      },
+      page: { size: 1 },
+    })
+    .then((res) => {
+      if (res.rawResults.length < 1) return null;
+      const app = res.rawResults[0];
+      return app.icon_filled.raw;
+    })
+    .catch(() => null);
+};
 
 export const getIconFromInternet = () => (dispatch, getState) => {
   const { form: { name, homeUrl, homeUrlError } } = getState().dialogAddWorkspace;
@@ -93,7 +90,44 @@ export const getIconFromInternet = () => (dispatch, getState) => {
 
       if (!iconUrl) {
         return window.remote.dialog.showMessageBox(window.remote.getCurrentWindow(), {
-          message: 'Unable to find a suitable icon from the Internet.',
+          message: 'Unable to find a suitable icon from the URL.',
+          buttons: ['OK'],
+          cancelId: 0,
+          defaultId: 0,
+        });
+      }
+
+      return null;
+    }).catch(console.log); // eslint-disable-line no-console
+};
+
+export const getIconFromSwiftype = () => (dispatch, getState) => {
+  const { form: { name, homeUrl, homeUrlError } } = getState().dialogAddWorkspace;
+  if (!homeUrl || homeUrlError) return;
+
+  dispatch({
+    type: ADD_WORKSPACE_UPDATE_DOWNLOADING_ICON,
+    downloadingIcon: true,
+  });
+
+  getWebsiteIconUrlFromSwifttypeAsync(homeUrl, name)
+    .then((iconUrl) => {
+      const { form } = getState().dialogAddWorkspace;
+      if (form.homeUrl === homeUrl) {
+        const changes = { internetIcon: iconUrl || form.internetIcon };
+        dispatch(({
+          type: ADD_WORKSPACE_UPDATE_FORM,
+          changes,
+        }));
+        dispatch({
+          type: ADD_WORKSPACE_UPDATE_DOWNLOADING_ICON,
+          downloadingIcon: false,
+        });
+      }
+
+      if (!iconUrl) {
+        return window.remote.dialog.showMessageBox(window.remote.getCurrentWindow(), {
+          message: 'Unable to find a suitable icon from WebCatalog\'s database.',
           buttons: ['OK'],
           cancelId: 0,
           defaultId: 0,

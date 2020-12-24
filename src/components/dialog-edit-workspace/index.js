@@ -29,6 +29,7 @@ import getMailtoUrl from '../../helpers/get-mailto-url';
 
 import {
   getIconFromInternet,
+  getIconFromSwiftype,
   updateForm,
   save,
 } from '../../state/dialog-edit-workspace/actions';
@@ -72,7 +73,7 @@ const styles = (theme) => ({
     paddingBottom: theme.spacing(1),
     paddingLeft: theme.spacing(1),
     paddingRight: 0,
-    maxHeight: 160,
+    maxHeight: 172,
     overflow: 'auto',
   },
   avatarContainer: {
@@ -164,6 +165,7 @@ const EditWorkspace = ({
   isMailApp,
   name,
   onGetIconFromInternet,
+  onGetIconFromSwiftype,
   onSave,
   onUpdateForm,
   order,
@@ -427,7 +429,30 @@ const EditWorkspace = ({
                   disabled={Boolean(homeUrlError || downloadingIcon)}
                   onClick={() => onGetIconFromInternet(true)}
                 >
-                  {downloadingIcon ? 'Downloading Icon from the Internet...' : 'Download Icon from the Internet'}
+                  {downloadingIcon ? 'Downloading...' : 'Download Icon from URL'}
+                </Button>
+                <br />
+                <Button
+                  variant="outlined"
+                  size="small"
+                  className={classes.buttonBot}
+                  disabled={Boolean(homeUrlError || downloadingIcon)}
+                  onClick={() => onGetIconFromSwiftype(true)}
+                >
+                  {downloadingIcon ? 'Downloading...' : 'Download Icon from WebCatalog'}
+                </Button>
+                <br />
+                <Button
+                  variant="outlined"
+                  size="small"
+                  className={classes.buttonBot}
+                  disabled={Boolean(downloadingIcon)}
+                  onClick={() => onUpdateForm({
+                    picturePath: null,
+                    internetIcon: null,
+                  })}
+                >
+                  Reset to Default
                 </Button>
               </>
             )}
@@ -514,6 +539,7 @@ EditWorkspace.propTypes = {
   isMailApp: PropTypes.bool.isRequired,
   name: PropTypes.string.isRequired,
   onGetIconFromInternet: PropTypes.func.isRequired,
+  onGetIconFromSwiftype: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   onUpdateForm: PropTypes.func.isRequired,
   order: PropTypes.number.isRequired,
@@ -545,6 +571,7 @@ const mapStateToProps = (state) => ({
 
 const actionCreators = {
   getIconFromInternet,
+  getIconFromSwiftype,
   updateForm,
   save,
 };
