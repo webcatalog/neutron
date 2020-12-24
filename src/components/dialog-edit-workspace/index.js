@@ -340,6 +340,25 @@ const EditWorkspace = ({
                       backgroundColor: null,
                     })}
                   />
+                  {backgroundColor != null && (
+                    <div
+                      className={classnames(
+                        classes.colorPicker,
+                        classes.colorPickerSelected,
+                      )}
+                      title="default"
+                      style={{ backgroundColor }}
+                      aria-label="default"
+                      role="button"
+                      tabIndex={0}
+                      onClick={() => onUpdateForm({
+                        backgroundColor,
+                      })}
+                      onKeyDown={() => onUpdateForm({
+                        backgroundColor,
+                      })}
+                    />
+                  )}
                 </div>
                 {Object.keys(materialColors).map((colorId) => {
                   const colorScales = materialColors[colorId];
