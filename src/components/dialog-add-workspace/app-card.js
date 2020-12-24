@@ -73,6 +73,7 @@ const AppCard = (props) => {
     classes,
     icon,
     icon128,
+    id,
     name,
     onUpdateForm,
     onUpdateMode,
@@ -124,7 +125,12 @@ const AppCard = (props) => {
           variant="contained"
           disableElevation
           onClick={() => {
-            requestCreateWorkspace(name, url, icon);
+            requestCreateWorkspace({
+              name,
+              homeUrl: url,
+              picture: icon,
+              catalogId: id,
+            });
 
             // don't close window, only hide it
             // 1. it's faster for users (normally people add multiple workspaces at once to set up)
@@ -147,6 +153,7 @@ AppCard.propTypes = {
   classes: PropTypes.object.isRequired,
   icon128: PropTypes.string,
   icon: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   onUpdateForm: PropTypes.func.isRequired,
   onUpdateMode: PropTypes.func.isRequired,

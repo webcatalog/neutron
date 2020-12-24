@@ -16,6 +16,8 @@ import {
   requestRemoveWorkspacePicture,
 } from '../../senders';
 
+import swiftype from '../../swiftype';
+
 const getValidationRules = () => ({
   homeUrl: {
     fieldName: 'Home URL',
@@ -37,6 +39,28 @@ export const getWebsiteIconUrlAsync = (url) => new Promise((resolve, reject) => 
     reject(err);
   }
 });
+
+export const getWebsiteIconUrlFromSwifttypeAsync = (url, name) => {
+  // if it fails, try to get icon from in-house database
+  const query = name && name.length > 0 ? `${url} ${name}` : url;
+  return swiftype
+    .search(query, {
+      search_fields: {
+        name: {},
+        url: { weight: 5 },
+      },
+      result_fields: {
+        icon_filled: { raw: {} },
+      },
+      page: { size: 1 },
+    })
+    .then((res) => {
+      if (res.rawResults.length < 1) return null;
+      const app = res.rawResults[0];
+      return app.icon_filled.raw;
+    })
+    .catch(() => null);
+};
 
 export const getIconFromInternet = () => (dispatch, getState) => {
   const { form: { homeUrl, homeUrlError } } = getState().dialogEditWorkspace;
@@ -68,7 +92,48 @@ export const getIconFromInternet = () => (dispatch, getState) => {
 
       if (!iconUrl) {
         return window.remote.dialog.showMessageBox(window.remote.getCurrentWindow(), {
-          message: 'Unable to find a suitable icon from the Internet.',
+          message: 'Unable to find a suitable icon from the URL.',
+          buttons: ['OK'],
+          cancelId: 0,
+          defaultId: 0,
+        });
+      }
+
+      return null;
+    }).catch(console.log); // eslint-disable-line no-console
+};
+
+export const getIconFromSwiftype = () => (dispatch, getState) => {
+  const { form: { name, homeUrl, homeUrlError } } = getState().dialogEditWorkspace;
+  if (homeUrlError) return;
+
+  dispatch({
+    type: UPDATE_EDIT_WORKSPACE_DOWNLOADING_ICON,
+    downloadingIcon: true,
+  });
+
+  const appJson = window.remote.getGlobal('appJson');
+  getWebsiteIconUrlFromSwifttypeAsync(homeUrl || appJson.url, name)
+    .then((iconUrl) => {
+      const { form } = getState().dialogEditWorkspace;
+      if (form.homeUrl === homeUrl) {
+        const changes = {
+          preferredIconType: 'image',
+          internetIcon: iconUrl || form.internetIcon,
+        };
+        dispatch(({
+          type: UPDATE_EDIT_WORKSPACE_FORM,
+          changes,
+        }));
+        dispatch({
+          type: UPDATE_EDIT_WORKSPACE_DOWNLOADING_ICON,
+          downloadingIcon: false,
+        });
+      }
+
+      if (!iconUrl) {
+        return window.remote.dialog.showMessageBox(window.remote.getCurrentWindow(), {
+          message: 'Unable to find a suitable icon from WebCatalog\'s database.',
           buttons: ['OK'],
           cancelId: 0,
           defaultId: 0,
