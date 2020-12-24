@@ -422,7 +422,12 @@ const Main = ({
                 {sidebar ? (
                   <>
                     <div alt="Arrow" className={classnames(classes.arrow, isSidebarExpanded && classes.arrowExpanded)} />
-                    <div className={classnames(classes.tip, isSidebarExpanded && classes.tipExpanded)}>
+                    <div
+                      className={classnames(
+                        classes.tip,
+                        isSidebarExpanded && classes.tipExpanded,
+                      )}
+                    >
                       <span className={classes.inlineBlock}>Click</span>
                       <div className={classes.avatar}>
                         +
