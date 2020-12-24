@@ -229,19 +229,6 @@ const SortableItem = sortableElement(({ value }) => {
 
         const template = [
           {
-            label: 'Edit Workspace',
-            click: () => requestShowEditWorkspaceWindow(id),
-          },
-          {
-            label: 'Configure Workspace',
-            click: () => requestShowWorkspacePreferencesWindow(id),
-          },
-          {
-            label: 'Remove Workspace',
-            click: () => requestRemoveWorkspace(id),
-          },
-          { type: 'separator' },
-          {
             type: 'checkbox',
             checked: !disableNotifications,
             label: 'Notifications',
@@ -262,6 +249,19 @@ const SortableItem = sortableElement(({ value }) => {
                 { disableAudio: !disableAudio },
               );
             },
+          },
+          { type: 'separator' },
+          {
+            label: 'Edit Workspace',
+            click: () => requestShowEditWorkspaceWindow(id),
+          },
+          {
+            label: 'Configure Workspace',
+            click: () => requestShowWorkspacePreferencesWindow(id),
+          },
+          {
+            label: 'Remove Workspace',
+            click: () => requestRemoveWorkspace(id),
           },
         ];
 

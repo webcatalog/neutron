@@ -547,6 +547,10 @@ const addView = (browserWindow, workspace) => {
       )
       // https://github.com/webcatalog/webcatalog-app/issues/315
       || ((appDomain.includes('asana.com') || currentDomain.includes('asana.com')) && nextDomain.includes('asana.com'))
+      // handle OneDrive login URL
+      // https://github.com/webcatalog/webcatalog-app/issues/1250
+      || nextUrl.startsWith('https://go.microsoft.com/fwlink/p/?LinkID=2119709')
+      || nextUrl.startsWith('https://go.microsoft.com/fwlink/p/?LinkID=2116067')
     ) {
       e.preventDefault();
       e.sender.loadURL(nextUrl);
