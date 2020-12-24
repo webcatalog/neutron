@@ -258,7 +258,7 @@ const WorkspaceSelector = ({
       </div>
       {isExpanded && (
         <div className={classes.expandedText}>
-          {fullName || hoverText}
+          {hoverText}
         </div>
       )}
     </div>

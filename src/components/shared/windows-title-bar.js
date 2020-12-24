@@ -102,9 +102,14 @@ const styles = (theme) => ({
     borderRadius: 0,
     height: TOOLBAR_HEIGHT,
   },
-  iconButtonWithSidebar: {
+  iconButtonWithCompactSidebar: {
     marginLeft: 9,
     marginRight: 11,
+  },
+  iconButtonWithExpandedSidebar: {
+    width: 36, // same as avatar img size
+    marginLeft: theme.spacing(1),
+    marginRight: 0,
   },
 });
 
@@ -112,6 +117,7 @@ const EnhancedAppBar = ({
   classes,
   isMaximized,
   sidebar,
+  sidebarSize,
   title,
 }) => {
   const onDoubleClick = (e) => {
@@ -147,7 +153,8 @@ const EnhancedAppBar = ({
               aria-label="Menu"
               className={classnames(
                 classes.iconButton,
-                sidebar && classes.iconButtonWithSidebar,
+                sidebar && sidebarSize === 'compact' && classes.iconButtonWithCompactSidebar,
+                sidebar && sidebarSize === 'expanded' && classes.iconButtonWithExpandedSidebar,
                 classes.noDrag,
               )}
               onClick={(e) => {
@@ -237,6 +244,7 @@ EnhancedAppBar.propTypes = {
   classes: PropTypes.object.isRequired,
   isMaximized: PropTypes.bool.isRequired,
   sidebar: PropTypes.bool.isRequired,
+  sidebarSize: PropTypes.oneOf(['compact', 'expanded']).isRequired,
   title: PropTypes.string,
 };
 
@@ -244,6 +252,7 @@ const mapStateToProps = (state, ownProps) => ({
   isMaximized: state.general.isMaximized,
   title: ownProps.title || ((window.mode === 'main' || window.mode === 'menubar') && state.general.title ? state.general.title : window.remote.getGlobal('appJson').name),
   sidebar: state.preferences.sidebar,
+  sidebarSize: state.preferences.sidebarSize,
 });
 
 export default connectComponent(
