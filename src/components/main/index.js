@@ -74,11 +74,11 @@ const styles = (theme) => {
       display: 'flex',
       flexDirection: 'row',
       flex: 1,
-      minHeight: '100%',
       width: '100%',
       overflow: 'hidden',
     },
     sidebarUpperRoot: {
+      display: 'flex',
       height: '100%',
       width: 68,
       backgroundColor: theme.palette.background.paper,
@@ -94,7 +94,6 @@ const styles = (theme) => {
     sidebarRoot: {
       flex: 1,
       width: '100%',
-      height: '100%',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
