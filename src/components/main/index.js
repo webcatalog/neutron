@@ -73,7 +73,7 @@ const styles = (theme) => {
       display: 'flex',
       flexDirection: 'row',
       flex: 1,
-      height: '100%',
+      minHeight: '100%',
       width: '100%',
       overflow: 'hidden',
     },

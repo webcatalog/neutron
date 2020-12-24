@@ -259,9 +259,6 @@ const WorkspaceSelector = ({
       {isExpanded && (
         <div className={classes.expandedText}>
           {fullName || hoverText}
-          <span className={classes.smallExpandedText}>
-            {shortcutTip ? ` (${shortcutTip})` : ''}
-          </span>
         </div>
       )}
     </div>
