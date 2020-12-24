@@ -103,9 +103,9 @@ const styles = (theme) => ({
   expandedText: {
     flex: 1,
     padding: theme.spacing(1),
-  },
-  smallExpandedText: {
-    fontSize: '0.75rem',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
   },
 });
 

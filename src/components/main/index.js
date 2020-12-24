@@ -126,9 +126,12 @@ const styles = (theme) => {
       width: 150,
       position: 'absolute',
       top: window.process.platform === 'darwin' ? 50 : 60,
-      left: 72,
+      left: 76,
       backgroundImage: `url('${theme.palette.type === 'dark' ? arrowWhite : arrowBlack}')`,
       backgroundSize: '150px 202px',
+    },
+    arrowExpanded: {
+      left: 264,
     },
     avatar: {
       fontFamily: theme.typography.fontFamily,
@@ -158,6 +161,9 @@ const styles = (theme) => {
       left: 180,
       fontFamily: theme.typography.fontFamily,
       userSelect: 'none',
+    },
+    tipExpanded: {
+      left: 368,
     },
     tip2: {
       fontFamily: theme.typography.fontFamily,
@@ -415,8 +421,8 @@ const Main = ({
               <div>
                 {sidebar ? (
                   <>
-                    <div alt="Arrow" className={classes.arrow} />
-                    <div className={classes.tip}>
+                    <div alt="Arrow" className={classnames(classes.arrow, isSidebarExpanded && classes.arrowExpanded)} />
+                    <div className={classnames(classes.tip, isSidebarExpanded && classes.tipExpanded)}>
                       <span className={classes.inlineBlock}>Click</span>
                       <div className={classes.avatar}>
                         +
