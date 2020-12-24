@@ -112,6 +112,7 @@ export const save = () => (dispatch, getState) => {
       hibernateWhenUnused: Boolean(form.hibernateWhenUnused),
       transparentBackground: Boolean(form.transparentBackground),
       preferredIconType: form.preferredIconType,
+      backgroundColor: form.backgroundColor,
     },
   );
 
