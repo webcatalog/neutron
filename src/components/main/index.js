@@ -36,6 +36,7 @@ import {
   requestHibernateWorkspace,
   requestRemoveWorkspace,
   requestSetActiveWorkspace,
+  requestSetWorkspace,
   requestSetWorkspaces,
   requestShowAddWorkspaceWindow,
   requestShowEditWorkspaceWindow,
@@ -199,6 +200,8 @@ const SortableItem = sortableElement(({ value }) => {
     accountInfo,
     active,
     backgroundColor,
+    disableAudio,
+    disableNotifications,
     hibernated,
     id,
     name,
@@ -236,6 +239,29 @@ const SortableItem = sortableElement(({ value }) => {
           {
             label: 'Remove Workspace',
             click: () => requestRemoveWorkspace(id),
+          },
+          { type: 'separator' },
+          {
+            type: 'checkbox',
+            checked: !disableNotifications,
+            label: 'Notifications',
+            click: () => {
+              requestSetWorkspace(
+                id,
+                { disableNotifications: !disableNotifications },
+              );
+            },
+          },
+          {
+            type: 'checkbox',
+            checked: !disableAudio,
+            label: 'Audio',
+            click: () => {
+              requestSetWorkspace(
+                id,
+                { disableAudio: !disableAudio },
+              );
+            },
           },
         ];
 
