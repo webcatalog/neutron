@@ -124,12 +124,14 @@ export const save = () => (dispatch, getState) => {
   const url = form.homeUrl.trim();
   const homeUrl = isUrl(url) ? url : `http://${url}`;
 
-  requestCreateWorkspace(
-    form.name,
+  requestCreateWorkspace({
+    name: form.name,
     homeUrl,
-    form.internetIcon || form.picturePath,
-    Boolean(form.transparentBackground),
-  );
+    picture: form.internetIcon || form.picturePath,
+    transparentBackground: Boolean(form.transparentBackground),
+    preferredIconType: form.preferredIconType,
+    backgroundColor: form.backgroundColor,
+  });
 
   // don't close window, only hide it
   // 1. it's faster for users (normally people add multiple workspaces at once to set up)

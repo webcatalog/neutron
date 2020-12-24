@@ -4,7 +4,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import Color from 'color';
 
+import * as materialColors from '@material-ui/core/colors';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Divider from '@material-ui/core/Divider';
@@ -30,6 +32,9 @@ import {
   updateForm,
   save,
 } from '../../state/dialog-edit-workspace/actions';
+
+import defaultWorkspaceImageLight from '../../images/default-workspace-image-light.png';
+import defaultWorkspaceImageDark from '../../images/default-workspace-image-dark.png';
 
 const styles = (theme) => ({
   root: {
@@ -67,6 +72,8 @@ const styles = (theme) => ({
     paddingBottom: theme.spacing(1),
     paddingLeft: theme.spacing(1),
     paddingRight: 0,
+    maxHeight: 160,
+    overflow: 'auto',
   },
   avatarContainer: {
     position: 'relative',
@@ -89,6 +96,7 @@ const styles = (theme) => ({
     userSelect: 'none',
     boxShadow: theme.palette.type === 'dark' ? 'none' : '0 0 1px 1px rgba(0, 0, 0, 0.12)',
     overflow: 'hidden',
+    cursor: 'pointer',
   },
   avatarSelected: {
     boxShadow: `0 0 4px 4px ${theme.palette.primary.main}`,
@@ -124,10 +132,26 @@ const styles = (theme) => ({
   caption: {
     display: 'block',
   },
+  colorPickerRow: {
+    paddingBottom: theme.spacing(1),
+    display: 'flex',
+  },
+  colorPicker: {
+    height: 24,
+    width: 24,
+    borderRadius: 12,
+    marginRight: theme.spacing(1),
+    cursor: 'pointer',
+    outline: 'none',
+  },
+  colorPickerSelected: {
+    boxShadow: `0 0 2px 2px ${theme.palette.primary.main}`,
+  },
 });
 
 const EditWorkspace = ({
   accountInfo,
+  backgroundColor,
   classes,
   disableAudio,
   disableNotifications,
@@ -145,6 +169,7 @@ const EditWorkspace = ({
   order,
   picturePath,
   preferredIconType,
+  shouldUseDarkColors,
   transparentBackground,
 }) => {
   let namePlaceholder = 'Optional';
@@ -157,7 +182,7 @@ const EditWorkspace = ({
   }
 
   let selectedIconType = 'text';
-  if ((picturePath || internetIcon) && (preferredIconType === 'auto' || preferredIconType === 'image')) {
+  if (((picturePath || internetIcon) && preferredIconType === 'auto') || (preferredIconType === 'image')) {
     selectedIconType = 'image';
   } else if (accountInfo && accountInfo.picturePath && (preferredIconType === 'auto' || preferredIconType === 'accountInfo')) {
     selectedIconType = 'accountInfo';
@@ -175,8 +200,8 @@ const EditWorkspace = ({
     return name;
   })();
 
-  const renderAvatar = (avatarContent, type, avatarAdditionalClassnames = []) => (
-    <div className={classes.avatarContainer}>
+  const renderAvatar = (avatarContent, type, title = null, avatarAdditionalClassnames = []) => (
+    <div className={classes.avatarContainer} title={title}>
       {selectedIconType === type ? (
         <Badge
           anchorOrigin={{
@@ -196,6 +221,15 @@ const EditWorkspace = ({
               classes.avatarSelected,
               ...avatarAdditionalClassnames,
             )}
+            style={(() => {
+              if (type === 'text' && backgroundColor && !transparentBackground) {
+                return {
+                  backgroundColor,
+                  color: Color(backgroundColor).isDark() ? '#fff' : '#000',
+                };
+              }
+              return null;
+            })()}
           >
             {avatarContent}
           </div>
@@ -262,68 +296,154 @@ const EditWorkspace = ({
             {renderAvatar(
               getAvatarText(id, finalName, order),
               'text',
+              'Text',
               [classes.textAvatar],
             )}
-            {(picturePath || internetIcon) && renderAvatar(
-              <img alt="Icon" className={classes.avatarPicture} src={picturePath ? `file://${picturePath}` : internetIcon} />,
+            {renderAvatar(
+              <img
+                alt="Icon"
+                className={classes.avatarPicture}
+                src={(() => {
+                  if (picturePath) return `file://${picturePath}`;
+                  if (internetIcon) return internetIcon;
+                  return shouldUseDarkColors
+                    ? defaultWorkspaceImageLight : defaultWorkspaceImageDark;
+                })()}
+              />,
               'image',
+              'Image',
             )}
             {(accountInfo && accountInfo.picturePath) && renderAvatar(
               <img alt="Icon" className={classes.avatarPicture} src={`file://${accountInfo.picturePath}`} />,
               'accountInfo',
+              'Account\'s Picture',
             )}
           </div>
           <div className={classes.avatarRight}>
-            <Button
-              variant="outlined"
-              size="small"
-              disabled={downloadingIcon}
-              onClick={() => {
-                const opts = {
-                  properties: ['openFile'],
-                  filters: [
-                    { name: 'Images', extensions: ['jpg', 'jpeg', 'png', 'gif', 'tiff', 'tif', 'bmp', 'dib'] },
-                  ],
-                };
-                window.remote.dialog.showOpenDialog(window.remote.getCurrentWindow(), opts)
-                  .then(({ canceled, filePaths }) => {
-                    if (!canceled && filePaths && filePaths.length > 0) {
-                      onUpdateForm({
-                        preferredIconType: 'image',
-                        picturePath: filePaths[0],
-                      });
-                    }
-                  })
-                  .catch(console.log); // eslint-disable-line
-              }}
-            >
-              Select Local Image...
-            </Button>
-            <Typography variant="caption" className={classes.caption}>
-              PNG, JPEG, GIF, TIFF or BMP.
-            </Typography>
-            <Button
-              variant="outlined"
-              size="small"
-              className={classes.buttonBot}
-              disabled={Boolean(homeUrlError || downloadingIcon)}
-              onClick={() => onGetIconFromInternet(true)}
-            >
-              {downloadingIcon ? 'Downloading Icon from the Internet...' : 'Download Icon from the Internet'}
-            </Button>
-            <FormGroup>
-              <FormControlLabel
-                control={(
-                  <Checkbox
-                    checked={transparentBackground}
-                    onChange={(e) => onUpdateForm({ transparentBackground: e.target.checked })}
+            {selectedIconType === 'text' && (
+              <>
+                <div className={classes.colorPickerRow}>
+                  <div
+                    className={classnames(
+                      classes.colorPicker,
+                      backgroundColor == null && classes.colorPickerSelected,
+                    )}
+                    title="default"
+                    style={{ backgroundColor: shouldUseDarkColors ? '#fff' : '#000' }}
+                    aria-label="default"
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => onUpdateForm({
+                      backgroundColor: null,
+                    })}
+                    onKeyDown={() => onUpdateForm({
+                      backgroundColor: null,
+                    })}
                   />
-                )}
-                label="Use transparent background"
-              />
-            </FormGroup>
+                  {backgroundColor != null && (
+                    <div
+                      className={classnames(
+                        classes.colorPicker,
+                        classes.colorPickerSelected,
+                      )}
+                      title="default"
+                      style={{ backgroundColor }}
+                      aria-label="default"
+                      role="button"
+                      tabIndex={0}
+                      onClick={() => onUpdateForm({
+                        backgroundColor,
+                      })}
+                      onKeyDown={() => onUpdateForm({
+                        backgroundColor,
+                      })}
+                    />
+                  )}
+                </div>
+                {Object.keys(materialColors).map((colorId) => {
+                  const colorScales = materialColors[colorId];
+                  if (!colorScales[500]) return null;
+                  return (
+                    <div className={classes.colorPickerRow} key={colorId}>
+                      {[900, 800, 700, 600, 500, 400, 300, 200].map((scale) => (
+                        <div
+                          key={`${colorId}-${scale}`}
+                          title={`${colorId} ${scale}`}
+                          className={classnames(
+                            classes.colorPicker,
+                            backgroundColor === colorScales[scale] && classes.colorPickerSelected,
+                          )}
+                          style={{ backgroundColor: materialColors[colorId][scale] }}
+                          aria-label={`${colorId} ${scale}`}
+                          role="button"
+                          tabIndex={0}
+                          onClick={() => onUpdateForm({
+                            backgroundColor: materialColors[colorId][scale],
+                          })}
+                          onKeyDown={() => onUpdateForm({
+                            backgroundColor: materialColors[colorId][scale],
+                          })}
+                        />
+                      ))}
+                    </div>
+                  );
+                })}
+              </>
+            )}
+            {selectedIconType === 'image' && (
+              <>
+                <Button
+                  variant="outlined"
+                  size="small"
+                  disabled={downloadingIcon}
+                  onClick={() => {
+                    const opts = {
+                      properties: ['openFile'],
+                      filters: [
+                        { name: 'Images', extensions: ['jpg', 'jpeg', 'png', 'gif', 'tiff', 'tif', 'bmp', 'dib'] },
+                      ],
+                    };
+                    window.remote.dialog.showOpenDialog(window.remote.getCurrentWindow(), opts)
+                      .then(({ canceled, filePaths }) => {
+                        if (!canceled && filePaths && filePaths.length > 0) {
+                          onUpdateForm({
+                            preferredIconType: 'image',
+                            picturePath: filePaths[0],
+                          });
+                        }
+                      })
+                      .catch(console.log); // eslint-disable-line
+                  }}
+                >
+                  Select Local Image...
+                </Button>
+                <Typography variant="caption" className={classes.caption}>
+                  PNG, JPEG, GIF, TIFF or BMP.
+                </Typography>
+                <Button
+                  variant="outlined"
+                  size="small"
+                  className={classes.buttonBot}
+                  disabled={Boolean(homeUrlError || downloadingIcon)}
+                  onClick={() => onGetIconFromInternet(true)}
+                >
+                  {downloadingIcon ? 'Downloading Icon from the Internet...' : 'Download Icon from the Internet'}
+                </Button>
+              </>
+            )}
           </div>
         </div>
+        <FormGroup>
+          <FormControlLabel
+            control={(
+              <Checkbox
+                checked={transparentBackground}
+                onChange={(e) => onUpdateForm({ transparentBackground: e.target.checked })}
+              />
+            )}
+            label="Use transparent background"
+          />
+        </FormGroup>
         <List>
           <Divider />
           <ListItem disableGutters>
@@ -372,6 +492,7 @@ const EditWorkspace = ({
 
 EditWorkspace.defaultProps = {
   accountInfo: null,
+  backgroundColor: null,
   homeUrlError: null,
   internetIcon: null,
   picturePath: null,
@@ -380,6 +501,7 @@ EditWorkspace.defaultProps = {
 
 EditWorkspace.propTypes = {
   accountInfo: PropTypes.object,
+  backgroundColor: PropTypes.string,
   classes: PropTypes.object.isRequired,
   disableAudio: PropTypes.bool.isRequired,
   disableNotifications: PropTypes.bool.isRequired,
@@ -397,11 +519,13 @@ EditWorkspace.propTypes = {
   order: PropTypes.number.isRequired,
   picturePath: PropTypes.string,
   preferredIconType: PropTypes.oneOf(['auto', 'text', 'image', 'accountInfo']),
+  shouldUseDarkColors: PropTypes.bool.isRequired,
   transparentBackground: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   accountInfo: state.dialogEditWorkspace.form.accountInfo,
+  backgroundColor: state.dialogEditWorkspace.form.backgroundColor,
   disableAudio: Boolean(state.dialogEditWorkspace.form.disableAudio),
   disableNotifications: Boolean(state.dialogEditWorkspace.form.disableNotifications),
   downloadingIcon: state.dialogEditWorkspace.downloadingIcon,
@@ -415,6 +539,7 @@ const mapStateToProps = (state) => ({
   order: state.dialogEditWorkspace.form.order || 0,
   picturePath: state.dialogEditWorkspace.form.picturePath,
   preferredIconType: state.dialogEditWorkspace.form.preferredIconType,
+  shouldUseDarkColors: state.general.shouldUseDarkColors,
   transparentBackground: Boolean(state.dialogEditWorkspace.form.transparentBackground),
 });
 

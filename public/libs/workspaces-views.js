@@ -39,15 +39,15 @@ const sendToAllWindows = require('./send-to-all-windows');
 const appJson = require('../app.json');
 
 // isRecreate: whether workspace is created to replace another workspace
-const createWorkspaceView = (name, homeUrl, picture, transparentBackground) => {
-  const newWorkspace = createWorkspace(name, homeUrl, transparentBackground);
+const createWorkspaceView = (workspaceObj = {}) => {
+  const newWorkspace = createWorkspace(workspaceObj);
   setActiveWorkspace(newWorkspace.id);
 
   addView(mainWindow.get(), getWorkspace(newWorkspace.id));
   setActiveView(mainWindow.get(), newWorkspace.id);
 
-  if (picture) {
-    setWorkspacePicture(newWorkspace.id, picture);
+  if (workspaceObj.picture) {
+    setWorkspacePicture(newWorkspace.id, workspaceObj.picture);
   }
 
   // if user add workspace for the first time

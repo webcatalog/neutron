@@ -4,6 +4,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import Color from 'color';
 
 import Badge from '@material-ui/core/Badge';
 
@@ -14,6 +15,9 @@ import getUrlFromText from '../../helpers/get-url-from-text';
 import {
   requestOpenUrlInWorkspace,
 } from '../../senders';
+
+import defaultWorkspaceImageLight from '../../images/default-workspace-image-light.png';
+import defaultWorkspaceImageDark from '../../images/default-workspace-image-dark.png';
 
 const styles = (theme) => ({
   root: {
@@ -112,6 +116,7 @@ const styles = (theme) => ({
 const WorkspaceSelector = ({
   accountInfo,
   active,
+  backgroundColor,
   badgeCount,
   classes,
   hibernated,
@@ -123,8 +128,9 @@ const WorkspaceSelector = ({
   picturePath,
   preferredIconType,
   searchEngine,
-  sidebarTips,
+  shouldUseDarkColors,
   sidebarSize,
+  sidebarTips,
   transparentBackground,
 }) => {
   const isExpanded = sidebarSize === 'expanded';
@@ -180,7 +186,7 @@ const WorkspaceSelector = ({
   })();
 
   let selectedIconType = 'text';
-  if (picturePath && (preferredIconType === 'auto' || preferredIconType === 'image')) {
+  if ((picturePath && preferredIconType === 'auto') || preferredIconType === 'image') {
     selectedIconType = 'image';
   } else if (accountInfo && accountInfo.picturePath && (preferredIconType === 'auto' || preferredIconType === 'accountInfo')) {
     selectedIconType = 'accountInfo';
@@ -228,6 +234,15 @@ const WorkspaceSelector = ({
               selectedIconType === 'text' && classes.textAvatar,
               transparentBackground && classes.transparentAvatar,
             )}
+            style={(() => {
+              if (selectedIconType === 'text' && backgroundColor && !transparentBackground) {
+                return {
+                  backgroundColor,
+                  color: Color(backgroundColor).isDark() ? '#fff' : '#000',
+                };
+              }
+              return null;
+            })()}
           >
             {selectedIconType === 'text' && getAvatarText(id, fullName, order)}
             {selectedIconType === 'image' && (
@@ -236,7 +251,11 @@ const WorkspaceSelector = ({
                 className={classnames(
                   classes.avatarPicture,
                 )}
-                src={`file://${picturePath}`}
+                src={(() => {
+                  if (picturePath) return `file://${picturePath}`;
+                  return shouldUseDarkColors
+                    ? defaultWorkspaceImageLight : defaultWorkspaceImageDark;
+                })()}
                 draggable={false}
               />
             )}
@@ -268,6 +287,7 @@ const WorkspaceSelector = ({
 WorkspaceSelector.defaultProps = {
   accountInfo: null,
   active: false,
+  backgroundColor: null,
   badgeCount: 0,
   hibernated: false,
   name: null,
@@ -281,6 +301,7 @@ WorkspaceSelector.defaultProps = {
 WorkspaceSelector.propTypes = {
   accountInfo: PropTypes.object,
   active: PropTypes.bool,
+  backgroundColor: PropTypes.string,
   badgeCount: PropTypes.number,
   classes: PropTypes.object.isRequired,
   hibernated: PropTypes.bool,
@@ -292,16 +313,18 @@ WorkspaceSelector.propTypes = {
   picturePath: PropTypes.string,
   preferredIconType: PropTypes.oneOf(['auto', 'text', 'image', 'accountInfo']),
   searchEngine: PropTypes.string.isRequired,
-  sidebarTips: PropTypes.oneOf(['shortcut', 'name', 'none']).isRequired,
+  shouldUseDarkColors: PropTypes.bool.isRequired,
   sidebarSize: PropTypes.oneOf(['compact', 'expanded']).isRequired,
+  sidebarTips: PropTypes.oneOf(['shortcut', 'name', 'none']).isRequired,
   transparentBackground: PropTypes.bool,
 };
 
 const mapStateToProps = (state, ownProps) => ({
   badgeCount: state.workspaceMetas[ownProps.id] ? state.workspaceMetas[ownProps.id].badgeCount : 0,
-  sidebarTips: state.preferences.sidebarTips,
-  sidebarSize: state.preferences.sidebarSize,
   searchEngine: state.preferences.searchEngine,
+  shouldUseDarkColors: state.general.shouldUseDarkColors,
+  sidebarSize: state.preferences.sidebarSize,
+  sidebarTips: state.preferences.sidebarTips,
 });
 
 export default connectComponent(
