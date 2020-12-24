@@ -285,7 +285,7 @@ const loadListeners = () => {
     e.returnValue = workspaces;
   });
 
-  ipcMain.on('request-create-workspace', (e, name, homeUrl, picture, transparentBackground) => {
+  ipcMain.on('request-create-workspace', (e, workspaceObj = {}) => {
     const { registered } = global.appJson;
     if (!registered) {
       const workspaces = getWorkspaces();
@@ -299,8 +299,8 @@ const loadListeners = () => {
     }
 
     // if name & homeUrl is defined, create custom workspace
-    if (name && homeUrl) {
-      createWorkspaceView(name, homeUrl, picture, transparentBackground);
+    if (workspaceObj.name && workspaceObj.homeUrl) {
+      createWorkspaceView(workspaceObj);
     } else { // if not create normal workspace
       createWorkspaceView();
     }

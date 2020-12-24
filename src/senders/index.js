@@ -55,10 +55,10 @@ export const getWorkspacePreference = (id, preferenceName) => window.ipcRenderer
 export const getWorkspacePreferences = (id) => window.ipcRenderer.sendSync('get-workspace-preferences', id);
 export const getWorkspaces = () => window.ipcRenderer.sendSync('get-workspaces');
 export const requestClearBrowsingData = () => window.ipcRenderer.send('request-clear-browsing-data');
-export const requestCreateWorkspace = (name, homeUrl, picture, transparentBackground) => {
+export const requestCreateWorkspace = (workspaceObj) => {
   // only log event type to protect privacy
   amplitude.getInstance().logEvent('webcatalog-engine: add workspace');
-  window.ipcRenderer.send('request-create-workspace', name, homeUrl, picture, transparentBackground);
+  window.ipcRenderer.send('request-create-workspace', workspaceObj);
 };
 export const requestHibernateWorkspace = (id) => window.ipcRenderer.send('request-hibernate-workspace', id);
 export const requestOpenUrlInWorkspace = (url, id) => window.ipcRenderer.send('request-open-url-in-workspace', url, id);

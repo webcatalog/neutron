@@ -126,7 +126,7 @@ const getNextWorkspace = (id) => {
   return workspaceLst[currentWorkspaceI + 1];
 };
 
-const createWorkspace = (name, homeUrl, transparentBackground) => {
+const createWorkspace = (workspaceObj) => {
   const newId = uuidv1();
 
   // find largest order
@@ -141,12 +141,12 @@ const createWorkspace = (name, homeUrl, transparentBackground) => {
   const newWorkspace = {
     active: false,
     hibernated: false,
-    homeUrl,
     id: newId,
-    name: name || '',
+    name: workspaceObj.name || '',
     order: max + 1,
-    transparentBackground,
+    ...workspaceObj,
   };
+  delete newWorkspace.picture;
 
   workspaces[newId] = newWorkspace;
 
