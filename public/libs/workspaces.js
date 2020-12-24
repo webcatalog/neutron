@@ -126,7 +126,7 @@ const getNextWorkspace = (id) => {
   return workspaceLst[currentWorkspaceI + 1];
 };
 
-const createWorkspace = (workspaceObj) => {
+const createWorkspace = (workspaceObj = {}) => {
   const newId = uuidv1();
 
   // find largest order
