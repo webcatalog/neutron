@@ -90,7 +90,7 @@ const defaultPreferences = {
   trayIcon: false,
   unreadCountBadge: true,
   useHardwareAcceleration: true,
-  useSystemTitleBar: false,
+  useSystemTitleBar: true, // revert back to "false" when https://github.com/webcatalog/webcatalog-app/issues/1254 is fixed
   warnBeforeQuitting: false,
 };
 
