@@ -107,6 +107,8 @@ const styles = (theme) => {
     sidebarTop: {
       flex: 1,
       width: '100%',
+      WebkitAppRegion: 'drag',
+      WebkitUserSelect: 'none',
     },
     innerContentRoot: {
       flex: 1,

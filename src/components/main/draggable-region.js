@@ -11,8 +11,9 @@ import connectComponent from '../../helpers/connect-component';
 const styles = () => ({
   root: {
     // big sur increases title bar height
+    // scroll bar width is 20px
     height: window.remote.getGlobal('isMacOs11') ? 28 : 22,
-    width: '100vw',
+    width: 'calc(100vw - 16px)',
     WebkitAppRegion: 'drag',
     WebkitUserSelect: 'none',
     background: 'transparent',
@@ -21,9 +22,17 @@ const styles = () => ({
     left: 0,
   },
   // BrowserView has different position & width because of sidebar
-  rootWithSidebar: {
-    width: 'calc(100vw - 68px)', // sidebar width is 68px
+  rootWithCompactSidebar: {
+    // sidebar width is 68px
+    // scroll bar width is 16px
+    width: 'calc(100vw - 68px - 16px)',
     left: 68,
+  },
+  rootWithExpandedSidebar: {
+    // sidebar width is 256px
+    // scroll bar width is 16px
+    width: 'calc(100vw - 256px - 16px)',
+    left: 256,
   },
 });
 
@@ -32,12 +41,21 @@ const DraggableRegion = ({
   isFullScreen,
   navigationBar,
   sidebar,
+  sidebarSize,
   titleBar,
 }) => {
   // on macOS, if all bars are hidden
   // the top 22px part of BrowserView should be draggable
   if (window.process.platform === 'darwin' && !isFullScreen && !navigationBar && !titleBar) {
-    return <div className={classnames(classes.root, sidebar && classes.rootWithSidebar)} />;
+    return (
+      <div
+        className={classnames(
+          classes.root,
+          sidebar && sidebarSize === 'compact' && classes.rootWithCompactSidebar,
+          sidebar && sidebarSize === 'expanded' && classes.rootWithExpandedSidebar,
+        )}
+      />
+    );
   }
 
   return null;
@@ -48,6 +66,7 @@ DraggableRegion.propTypes = {
   isFullScreen: PropTypes.bool.isRequired,
   navigationBar: PropTypes.bool.isRequired,
   sidebar: PropTypes.bool.isRequired,
+  sidebarSize: PropTypes.oneOf(['compact', 'expanded']).isRequired,
   titleBar: PropTypes.bool.isRequired,
 };
 
@@ -57,6 +76,7 @@ const mapStateToProps = (state) => ({
     && !state.preferences.sidebar)
     || state.preferences.navigationBar,
   sidebar: state.preferences.sidebar,
+  sidebarSize: state.preferences.sidebarSize,
   titleBar: state.preferences.titleBar,
   isFullScreen: state.general.isFullScreen,
 });
