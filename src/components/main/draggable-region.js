@@ -44,7 +44,7 @@ const DraggableRegion = ({
   sidebarSize,
   titleBar,
 }) => {
-  // on macOS, if all bars are hidden
+  // on macOS, if all top bars are hidden
   // the top 22px part of BrowserView should be draggable
   if (window.process.platform === 'darwin' && !isFullScreen && !navigationBar && !titleBar) {
     return (

@@ -101,6 +101,7 @@ const styles = (theme) => {
     sidebarDraggableArea: {
       width: '100%',
       height: titleBarHeight,
+      minHeight: titleBarHeight,
       WebkitAppRegion: 'drag',
       WebkitUserSelect: 'none',
     },
@@ -109,6 +110,7 @@ const styles = (theme) => {
       width: '100%',
       WebkitAppRegion: 'drag',
       WebkitUserSelect: 'none',
+      paddingBottom: theme.spacing(5),
     },
     innerContentRoot: {
       flex: 1,
