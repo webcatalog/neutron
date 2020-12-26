@@ -88,6 +88,7 @@ const styles = (theme) => ({
     background: 'transparent',
     border: 'none',
     color: theme.palette.text.primary,
+    borderRadius: 0,
   },
   shortcutText: {
     marginTop: 2,

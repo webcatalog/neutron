@@ -82,10 +82,8 @@ const styles = (theme) => {
       height: '100%',
       width: 68,
       backgroundColor: theme.palette.background.paper,
-      WebkitAppRegion: window.process.platform === 'darwin' ? 'drag' : 'no-drag',
       borderRight: '1px solid',
       borderRightColor: theme.palette.divider,
-      WebkitUserSelect: 'none',
       overflowX: 'hidden',
     },
     sidebarUpperRootWide: {
@@ -100,13 +98,19 @@ const styles = (theme) => {
       paddingBottom: theme.spacing(1),
       boxSizing: 'border-box',
     },
+    sidebarDraggableArea: {
+      width: '100%',
+      height: titleBarHeight,
+      minHeight: titleBarHeight,
+      WebkitAppRegion: 'drag',
+      WebkitUserSelect: 'none',
+    },
     sidebarTop: {
       flex: 1,
-      paddingTop: window.process.platform === 'darwin' ? titleBarHeight : 0,
       width: '100%',
-    },
-    sidebarTopFullScreen: {
-      paddingTop: 0,
+      WebkitAppRegion: 'drag',
+      WebkitUserSelect: 'none',
+      paddingBottom: theme.spacing(5),
     },
     innerContentRoot: {
       flex: 1,
@@ -337,9 +341,10 @@ const Main = ({
             )}
           >
             <div className={classes.sidebarRoot}>
-              <div className={classnames(classes.sidebarTop,
-                (isFullScreen || showMacTitleBar || window.mode === 'menubar') && classes.sidebarTopFullScreen)}
-              >
+              {window.process.platform === 'darwin' && !(isFullScreen || showMacTitleBar || window.mode === 'menubar') && (
+                <div className={classes.sidebarDraggableArea} />
+              )}
+              <div className={classes.sidebarTop}>
                 <SortableContainer
                   distance={10}
                   helperClass={classes.grabbing}

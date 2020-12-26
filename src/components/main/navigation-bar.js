@@ -54,7 +54,10 @@ const styles = (theme) => ({
     flex: 1,
     paddingLeft: theme.spacing(1),
     paddingRight: theme.spacing(1),
-    WebkitAppRegion: 'no-drag',
+    [theme.breakpoints.up('sm')]: {
+      paddingLeft: theme.spacing(10),
+      paddingRight: theme.spacing(10),
+    },
   },
   iconButton: {
     padding: 6,
@@ -65,8 +68,8 @@ const styles = (theme) => ({
   },
   addressBarRoot: {
     width: '100%',
-    background: theme.palette.background.default,
-    borderRadius: 16,
+    background: theme.palette.type === 'dark' ? undefined : theme.palette.grey[200],
+    borderRadius: 4,
     WebkitAppRegion: 'none',
     WebkitUserSelect: 'text',
   },
@@ -74,8 +77,8 @@ const styles = (theme) => ({
     fontSize: '0.8em',
     paddingLeft: 12,
     paddingRight: 12,
-    paddingTop: 4,
-    paddingBottom: 4,
+    paddingTop: 5,
+    paddingBottom: 5,
   },
   goButton: {
     padding: 4,
