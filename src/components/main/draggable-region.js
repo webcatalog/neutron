@@ -28,11 +28,15 @@ const styles = () => ({
 });
 
 const DraggableRegion = ({
-  classes, navigationBar, sidebar, titleBar,
+  classes,
+  isFullScreen,
+  navigationBar,
+  sidebar,
+  titleBar,
 }) => {
-  // on macOS or menubar mode, if all bars are hidden
+  // on macOS, if all bars are hidden
   // the top 22px part of BrowserView should be draggable
-  if ((window.process.platform === 'darwin' || window.mode === 'menubar') && !navigationBar && !titleBar) {
+  if (window.process.platform === 'darwin' && !isFullScreen && !navigationBar && !titleBar) {
     return <div className={classnames(classes.root, sidebar && classes.rootWithSidebar)} />;
   }
 
@@ -41,6 +45,7 @@ const DraggableRegion = ({
 
 DraggableRegion.propTypes = {
   classes: PropTypes.object.isRequired,
+  isFullScreen: PropTypes.bool.isRequired,
   navigationBar: PropTypes.bool.isRequired,
   sidebar: PropTypes.bool.isRequired,
   titleBar: PropTypes.bool.isRequired,
@@ -53,6 +58,7 @@ const mapStateToProps = (state) => ({
     || state.preferences.navigationBar,
   sidebar: state.preferences.sidebar,
   titleBar: state.preferences.titleBar,
+  isFullScreen: state.general.isFullScreen,
 });
 
 export default connectComponent(
