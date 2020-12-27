@@ -219,8 +219,9 @@ const Preferences = ({
   useSystemTitleBar,
   warnBeforeQuitting,
 }) => {
+  const isMas = Boolean(window.process.mas || process.env.REACT_APP_FORCE_MAS);
   const appJson = window.remote.getGlobal('appJson');
-  const utmSource = 'juli_app';
+  const utmSource = isMas ? 'singlebox_app' : 'juli_app';
   const canPromptTouchId = window.process.platform === 'darwin'
     && window.remote.systemPreferences.canPromptTouchID();
 
@@ -229,6 +230,7 @@ const Preferences = ({
       text: 'Account',
       Icon: AccountCircleIcon,
       ref: useRef(),
+      hidden: isMas,
     },
     general: {
       text: 'General',
@@ -289,6 +291,7 @@ const Preferences = ({
       text: 'Updates',
       Icon: SystemUpdateAltIcon,
       ref: useRef(),
+      hidden: isMas,
     },
     reset: {
       text: 'Reset',
@@ -323,7 +326,8 @@ const Preferences = ({
             if (hidden) return null;
             return (
               <React.Fragment key={sectionKey}>
-                {i > 0 && <Divider />}
+                {i > 0 && !isMas && <Divider />}
+                {i > 1 && isMas && <Divider />}
                 <ListItem button onClick={() => ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
                   <ListItemIcon>
                     <Icon />
@@ -338,30 +342,34 @@ const Preferences = ({
         </List>
       </div>
       <div className={classes.inner}>
-        <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle} ref={sections.account.ref}>
-          Account
-        </Typography>
-        <Paper elevation={0} className={classes.paper}>
-          <List disablePadding dense>
-            <ListItem button onClick={null} disabled>
-              <ListItemText primary={registered ? 'WebCatalog Plus' : 'WebCatalog Basic'} />
-            </ListItem>
-            {!registered && (
-              <>
+        {!isMas && (
+          <>
+            <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle} ref={sections.account.ref}>
+              Account
+            </Typography>
+            <Paper elevation={0} className={classes.paper}>
+              <List disablePadding dense>
+                <ListItem button onClick={null} disabled>
+                  <ListItemText primary={registered ? 'WebCatalog Plus' : 'WebCatalog Basic'} />
+                </ListItem>
+                {!registered && (
+                  <>
+                    <Divider />
+                    <ListItem button onClick={checkLicense}>
+                      <ListItemText primary="Upgrade to WebCatalog Plus" />
+                      <ChevronRightIcon color="action" />
+                    </ListItem>
+                  </>
+                )}
                 <Divider />
-                <ListItem button onClick={checkLicense}>
-                  <ListItemText primary="Upgrade to WebCatalog Plus" />
+                <ListItem button onClick={() => requestOpenInBrowser('https://forms.gle/RqwYdQo8PM67Mmvc9')}>
+                  <ListItemText primary="Join WebCatalog Pro Waitlist" />
                   <ChevronRightIcon color="action" />
                 </ListItem>
-              </>
-            )}
-            <Divider />
-            <ListItem button onClick={() => requestOpenInBrowser('https://forms.gle/RqwYdQo8PM67Mmvc9')}>
-              <ListItemText primary="Join WebCatalog Pro Waitlist" />
-              <ChevronRightIcon color="action" />
-            </ListItem>
-          </List>
-        </Paper>
+              </List>
+            </Paper>
+          </>
+        )}
 
         <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.general.ref}>
           General
@@ -1508,36 +1516,40 @@ const Preferences = ({
           </List>
         </Paper>
 
-        <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.updates.ref}>
-          Updates
-        </Typography>
-        <Paper elevation={0} className={classes.paper}>
-          <List disablePadding dense>
-            <ListItem
-              button
-              onClick={requestCheckForUpdates}
-            >
-              <ListItemText
-                primary="Check for updates"
-              />
-              <ChevronRightIcon color="action" />
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListItemText primary="Check for updates automatically" />
-              <ListItemSecondaryAction>
-                <Switch
-                  edge="end"
-                  color="primary"
-                  checked={autoCheckForUpdates}
-                  onChange={(e) => {
-                    requestSetPreference('autoCheckForUpdates', e.target.checked);
-                  }}
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
-          </List>
-        </Paper>
+        {!isMas && (
+          <>
+            <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.updates.ref}>
+              Updates
+            </Typography>
+            <Paper elevation={0} className={classes.paper}>
+              <List disablePadding dense>
+                <ListItem
+                  button
+                  onClick={requestCheckForUpdates}
+                >
+                  <ListItemText
+                    primary="Check for updates"
+                  />
+                  <ChevronRightIcon color="action" />
+                </ListItem>
+                <Divider />
+                <ListItem>
+                  <ListItemText primary="Check for updates automatically" />
+                  <ListItemSecondaryAction>
+                    <Switch
+                      edge="end"
+                      color="primary"
+                      checked={autoCheckForUpdates}
+                      onChange={(e) => {
+                        requestSetPreference('autoCheckForUpdates', e.target.checked);
+                      }}
+                    />
+                  </ListItemSecondaryAction>
+                </ListItem>
+              </List>
+            </Paper>
+          </>
+        )}
 
         <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.reset.ref}>
           Reset
@@ -1578,30 +1590,46 @@ const Preferences = ({
               <ChevronRightIcon color="action" />
             </ListItem>
             <Divider />
-            <ListItem button onClick={() => requestOpenInBrowser(`https://webcatalog.app?utm_source=${utmSource}`)}>
-              <ListItemText primary="WebCatalog Website" />
-              <ChevronRightIcon color="action" />
-            </ListItem>
-            <Divider />
-            <ListItem button onClick={() => requestOpenInBrowser(`https://help.webcatalog.app?utm_source=${utmSource}`)}>
-              <ListItemText primary="WebCatalog Help" />
-              <ChevronRightIcon color="action" />
-            </ListItem>
-            <Divider />
-            <ListItem button onClick={() => requestOpenInBrowser('https://twitter.com/webcatalog_app')}>
-              <ListItemText primary="Twitter" />
-              <ChevronRightIcon color="action" />
-            </ListItem>
-            <Divider />
-            <ListItem button onClick={() => requestOpenInBrowser('https://www.linkedin.com/company/webcatalogapp')}>
-              <ListItemText primary="LinkedIn" />
-              <ChevronRightIcon color="action" />
-            </ListItem>
-            <Divider />
-            <ListItem button onClick={() => requestOpenInBrowser('https://github.com/webcatalog')}>
-              <ListItemText primary="GitHub" />
-              <ChevronRightIcon color="action" />
-            </ListItem>
+            {isMas ? (
+              <>
+                <ListItem button onClick={() => requestOpenInBrowser(`https://singlebox.app?utm_source=${utmSource}`)}>
+                  <ListItemText primary="Website" />
+                  <ChevronRightIcon color="action" />
+                </ListItem>
+                <Divider />
+                <ListItem button onClick={() => requestOpenInBrowser(`https://singlebox.app/help?utm_source=${utmSource}`)}>
+                  <ListItemText primary="Help" />
+                  <ChevronRightIcon color="action" />
+                </ListItem>
+              </>
+            ) : (
+              <>
+                <ListItem button onClick={() => requestOpenInBrowser(`https://webcatalog.app?utm_source=${utmSource}`)}>
+                  <ListItemText primary="WebCatalog Website" />
+                  <ChevronRightIcon color="action" />
+                </ListItem>
+                <Divider />
+                <ListItem button onClick={() => requestOpenInBrowser(`https://help.webcatalog.app?utm_source=${utmSource}`)}>
+                  <ListItemText primary="WebCatalog Help" />
+                  <ChevronRightIcon color="action" />
+                </ListItem>
+                <Divider />
+                <ListItem button onClick={() => requestOpenInBrowser('https://twitter.com/webcatalog_app')}>
+                  <ListItemText primary="Twitter" />
+                  <ChevronRightIcon color="action" />
+                </ListItem>
+                <Divider />
+                <ListItem button onClick={() => requestOpenInBrowser('https://www.linkedin.com/company/webcatalogapp')}>
+                  <ListItemText primary="LinkedIn" />
+                  <ChevronRightIcon color="action" />
+                </ListItem>
+                <Divider />
+                <ListItem button onClick={() => requestOpenInBrowser('https://github.com/webcatalog')}>
+                  <ListItemText primary="GitHub" />
+                  <ChevronRightIcon color="action" />
+                </ListItem>
+              </>
+            )}
             <Divider />
             <ListItem>
               <ListItemText primary="Warn before quitting" />
