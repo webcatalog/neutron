@@ -14,6 +14,10 @@ const customizedFetch = require('./customized-fetch');
 const { setPreference } = require('./preferences');
 
 const checkForUpdates = (silent) => {
+  if (process.mas || process.env.REACT_APP_FORCE_MAS) {
+    return;
+  }
+
   console.log('Checking for updates...'); // eslint-disable-line no-console
   // use in-house API
   // to avoid using GitHub API as it has rate limit (60 requests per hour)

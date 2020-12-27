@@ -44,9 +44,10 @@ const About = (props) => {
     classes,
   } = props;
 
+  const isMas = Boolean(window.process.mas || process.env.REACT_APP_FORCE_MAS);
   const appVersion = window.remote.app.getVersion();
   const appJson = window.remote.getGlobal('appJson');
-  const utmSource = 'juli_app';
+  const utmSource = isMas ? 'singlebox_app' : 'juli_app';
 
   const versions = [
     { name: 'WebCatalog Engine', version: appVersion },
@@ -64,7 +65,7 @@ const About = (props) => {
           variant="body2"
           className={classes.version}
         >
-          Powered by WebCatalog
+          {isMas ? `Version ${appVersion}` : 'Powered by WebCatalog'}
         </Typography>
         <div className={classes.versionSmallContainer}>
           {versions.map(({ name, version }) => (
@@ -77,17 +78,35 @@ const About = (props) => {
           ))}
         </div>
 
-        <Button
-          onClick={() => requestOpenInBrowser(`https://webcatalog.app?utm_source=${utmSource}`)}
-        >
-          WebCatalog Website
-        </Button>
-        <br />
-        <Button
-          onClick={() => requestOpenInBrowser(`https://help.webcatalog.app?utm_source=${utmSource}`)}
-        >
-          WebCatalog Help
-        </Button>
+        {isMas ? (
+          <>
+            <Button
+              onClick={() => requestOpenInBrowser(`https://singlebox.app?utm_source=${utmSource}`)}
+            >
+              Website
+            </Button>
+            <br />
+            <Button
+              onClick={() => requestOpenInBrowser(`https://singlebox.app/help?utm_source=${utmSource}`)}
+            >
+              Help
+            </Button>
+          </>
+        ) : (
+          <>
+            <Button
+              onClick={() => requestOpenInBrowser(`https://webcatalog.app?utm_source=${utmSource}`)}
+            >
+              WebCatalog Website
+            </Button>
+            <br />
+            <Button
+              onClick={() => requestOpenInBrowser(`https://help.webcatalog.app?utm_source=${utmSource}`)}
+            >
+              WebCatalog Help
+            </Button>
+          </>
+        )}
       </DialogContent>
     </div>
   );
