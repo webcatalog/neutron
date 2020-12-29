@@ -58,6 +58,7 @@ const {
   reloadViewDarkReader,
   reloadViewsDarkReader,
   reloadViewsWebContentsIfDidFailLoad,
+  setViewsAudioPref,
 } = require('../libs/views');
 
 const {
@@ -501,6 +502,10 @@ const loadListeners = () => {
     reloadViewDarkReader(id);
   });
 
+  ipcMain.on('request-set-views-audio-prefs', () => {
+    setViewsAudioPref();
+  });
+
   // https://www.electronjs.org/docs/tutorial/online-offline-events
   ipcMain.on('online-status-changed', (e, online) => {
     if (online) {
@@ -535,6 +540,10 @@ const loadListeners = () => {
     if (win) {
       win.webContents.send('enqueue-request-restart-snackbar');
     }
+  });
+
+  ipcMain.on('create-menu', () => {
+    createMenu();
   });
 };
 

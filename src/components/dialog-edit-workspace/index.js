@@ -494,7 +494,7 @@ const EditWorkspace = ({
             </ListItemSecondaryAction>
           </ListItem>
           <ListItem disableGutters>
-            <ListItemText primary="Disable audio" secondary="Prevent workspace from playing audio." />
+            <ListItemText primary="Disable sound" secondary="Prevent workspace from playing audio." />
             <ListItemSecondaryAction>
               <Switch
                 edge="end"

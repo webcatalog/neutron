@@ -91,6 +91,8 @@ const createMenu = async () => {
     },
   ] : [];
 
+  const muteApp = getPreference('muteApp');
+
   const template = [
     {
       label: appJson.name,
@@ -133,6 +135,12 @@ const createMenu = async () => {
           label: 'Notifications...',
           click: () => ipcMain.emit('request-show-notifications-window'),
           accelerator: 'CmdOrCtrl+Shift+N',
+          enabled: !global.locked,
+        },
+        { type: 'separator' },
+        {
+          label: muteApp ? 'Unmute' : 'Mute',
+          click: () => setPreference('muteApp', !muteApp),
           enabled: !global.locked,
         },
         { type: 'separator' },

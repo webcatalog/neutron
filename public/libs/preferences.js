@@ -60,6 +60,7 @@ const defaultPreferences = {
   lastShowNewUpdateDialog: 0,
   licenseKey: null,
   navigationBar: false,
+  muteApp: false,
   openFolderWhenDoneDownloading: false,
   pauseNotifications: null,
   pauseNotificationsBySchedule: false,
@@ -70,7 +71,6 @@ const defaultPreferences = {
   proxyPacScript: '',
   proxyRules: '',
   proxyType: 'none',
-  registered: false,
   rememberLastPageVisited: false,
   runInBackground: false,
   searchEngine: 'google',
@@ -149,16 +149,17 @@ const setPreference = (name, value) => {
     ipcMain.emit('request-reload-views-dark-reader');
   }
 
-  if (name === 'registered') {
-    ipcMain.emit('create-menu');
-  }
-
   if (name.startsWith('pauseNotifications')) {
     ipcMain.emit('request-update-pause-notifications-info');
   }
 
   if (name === 'themeSource') {
     nativeTheme.themeSource = value;
+  }
+
+  if (name === 'muteApp') {
+    ipcMain.emit('request-set-views-audio-prefs');
+    ipcMain.emit('create-menu');
   }
 };
 

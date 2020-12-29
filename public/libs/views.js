@@ -991,11 +991,12 @@ const setViewsAudioPref = (_shouldMuteAudio) => {
   if (_shouldMuteAudio !== undefined) {
     shouldMuteAudio = _shouldMuteAudio;
   }
+  const muteApp = getPreference('muteApp');
   Object.keys(views).forEach((id) => {
     const view = views[id];
     if (view != null) {
       const workspace = getWorkspace(id);
-      view.webContents.audioMuted = workspace.disableAudio || shouldMuteAudio;
+      view.webContents.audioMuted = workspace.disableAudio || shouldMuteAudio || muteApp;
     }
   });
 };
