@@ -15,6 +15,8 @@ import Typography from '@material-ui/core/Typography';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import NotificationsPausedIcon from '@material-ui/icons/NotificationsPaused';
 import SettingsIcon from '@material-ui/icons/Settings';
+import VolumeUpIcon from '@material-ui/icons/VolumeUp';
+import VolumeOffIcon from '@material-ui/icons/VolumeOff';
 
 import { sortableContainer, sortableElement } from 'react-sortable-hoc';
 
@@ -34,8 +36,10 @@ import TelemetryManager from './telemetry-manager';
 import {
   requestCreateWorkspace,
   requestHibernateWorkspace,
+  requestReload,
   requestRemoveWorkspace,
   requestSetActiveWorkspace,
+  requestSetPreference,
   requestSetWorkspace,
   requestSetWorkspaces,
   requestShowAddWorkspaceWindow,
@@ -44,7 +48,6 @@ import {
   requestShowPreferencesWindow,
   requestShowWorkspacePreferencesWindow,
   requestWakeUpWorkspace,
-  requestReload,
 } from '../../senders';
 
 import './main.css';
@@ -232,6 +235,19 @@ const SortableItem = sortableElement(({ value }) => {
 
         const template = [
           {
+            label: 'Edit Workspace',
+            click: () => requestShowEditWorkspaceWindow(id),
+          },
+          {
+            label: 'Configure Workspace',
+            click: () => requestShowWorkspacePreferencesWindow(id),
+          },
+          {
+            label: 'Remove Workspace',
+            click: () => requestRemoveWorkspace(id),
+          },
+          { type: 'separator' },
+          {
             type: 'checkbox',
             checked: !disableNotifications,
             label: 'Notifications',
@@ -245,26 +261,13 @@ const SortableItem = sortableElement(({ value }) => {
           {
             type: 'checkbox',
             checked: !disableAudio,
-            label: 'Audio',
+            label: 'Sound',
             click: () => {
               requestSetWorkspace(
                 id,
                 { disableAudio: !disableAudio },
               );
             },
-          },
-          { type: 'separator' },
-          {
-            label: 'Edit Workspace',
-            click: () => requestShowEditWorkspaceWindow(id),
-          },
-          {
-            label: 'Configure Workspace',
-            click: () => requestShowWorkspacePreferencesWindow(id),
-          },
-          {
-            label: 'Remove Workspace',
-            click: () => requestRemoveWorkspace(id),
           },
         ];
 
@@ -316,6 +319,7 @@ const Main = ({
   didFailLoad,
   isFullScreen,
   isLoading,
+  muteApp,
   navigationBar,
   shouldPauseNotifications,
   sidebar,
@@ -399,6 +403,15 @@ const Main = ({
                   size="small"
                 >
                   {shouldPauseNotifications ? <NotificationsPausedIcon /> : <NotificationsIcon />}
+                </IconButton>
+                <IconButton
+                  title={muteApp ? 'Unmute' : 'Mute'}
+                  aria-label={muteApp ? 'Unmute' : 'Mute'}
+                  onClick={() => requestSetPreference('muteApp', !muteApp)}
+                  className={classnames(!isSidebarExpanded && classes.iconButton)}
+                  size="small"
+                >
+                  {muteApp ? <VolumeOffIcon /> : <VolumeUpIcon />}
                 </IconButton>
                 <IconButton
                   title="Preferences"
@@ -496,6 +509,7 @@ Main.propTypes = {
   didFailLoad: PropTypes.string,
   isFullScreen: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool,
+  muteApp: PropTypes.bool.isRequired,
   navigationBar: PropTypes.bool.isRequired,
   shouldPauseNotifications: PropTypes.bool.isRequired,
   sidebar: PropTypes.bool.isRequired,
@@ -524,6 +538,7 @@ const mapStateToProps = (state) => {
     sidebar: state.preferences.sidebar,
     sidebarSize: state.preferences.sidebarSize,
     titleBar: state.preferences.titleBar,
+    muteApp: state.preferences.muteApp,
     workspaces: state.workspaces,
   };
 };

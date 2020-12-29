@@ -14,6 +14,8 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import NotificationsPausedIcon from '@material-ui/icons/NotificationsPaused';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import SettingsIcon from '@material-ui/icons/SettingsSharp';
+import VolumeUpIcon from '@material-ui/icons/VolumeUp';
+import VolumeOffIcon from '@material-ui/icons/VolumeOff';
 
 import connectComponent from '../../helpers/connect-component';
 import getUrlFromText from '../../helpers/get-url-from-text';
@@ -28,6 +30,7 @@ import {
   requestGoHome,
   requestLoadUrl,
   requestReload,
+  requestSetPreference,
   requestShowNotificationsWindow,
   requestShowPreferencesWindow,
 } from '../../senders';
@@ -68,7 +71,7 @@ const styles = (theme) => ({
   },
   addressBarRoot: {
     width: '100%',
-    background: theme.palette.type === 'dark' ? undefined : theme.palette.grey[200],
+    background: theme.palette.type === 'dark' ? theme.palette.background.default : theme.palette.grey[200],
     borderRadius: 4,
     WebkitAppRegion: 'none',
     WebkitUserSelect: 'text',
@@ -91,12 +94,13 @@ const NavigationBar = ({
   canGoBack,
   canGoForward,
   classes,
+  draggable,
   hasTrafficLights,
   hasWorkspaces,
+  muteApp,
   onUpdateAddressBarInfo,
   searchEngine,
   shouldPauseNotifications,
-  draggable,
 }) => {
   const [addressInputClicked, setAddressInputClicked] = useState(false);
 
@@ -211,6 +215,16 @@ const NavigationBar = ({
             : <NotificationsIcon className={classes.icon} />}
         </IconButton>
         <IconButton
+          title={muteApp ? 'Unmute' : 'Mute'}
+          aria-label={muteApp ? 'Unmute' : 'Mute'}
+          onClick={() => requestSetPreference('muteApp', !muteApp)}
+          className={classes.iconButton}
+        >
+          {muteApp
+            ? <VolumeOffIcon className={classes.icon} />
+            : <VolumeUpIcon className={classes.icon} />}
+        </IconButton>
+        <IconButton
           title="Preferences"
           aria-label="Preferences"
           className={classes.iconButton}
@@ -236,6 +250,7 @@ NavigationBar.propTypes = {
   draggable: PropTypes.bool.isRequired,
   hasTrafficLights: PropTypes.bool.isRequired,
   hasWorkspaces: PropTypes.bool.isRequired,
+  muteApp: PropTypes.bool.isRequired,
   onUpdateAddressBarInfo: PropTypes.func.isRequired,
   searchEngine: PropTypes.string.isRequired,
   shouldPauseNotifications: PropTypes.bool.isRequired,
@@ -249,6 +264,7 @@ const mapStateToProps = (state) => ({
   draggable: window.process.platform === 'darwin' && !state.preferences.titleBar,
   hasTrafficLights: window.process.platform === 'darwin' && !state.preferences.titleBar && !state.preferences.sidebar,
   hasWorkspaces: Object.keys(state.workspaces).length > 0,
+  muteApp: state.preferences.muteApp,
   searchEngine: state.preferences.searchEngine,
   shouldPauseNotifications: state.notifications.pauseNotificationsInfo !== null,
 });
