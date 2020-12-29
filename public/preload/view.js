@@ -184,14 +184,14 @@ const handleLoaded = async (event) => {
         if (success) return;
         // eslint-disable-next-line no-console
         console.log('Getting Google account info...');
-        const pictureUrl = document.querySelector('img.gb_ib')
+        const pictureUrl = document.querySelector('img.gb_fb')
           .getAttribute('data-srcset')
           .split(',')
           .pop()
           .trim()
           .split(' ')[0];
-        const name = document.querySelector('.gb_qb').innerText;
-        const email = document.querySelector('.gb_rb').innerText;
+        const name = document.querySelector('.gb_nb').innerText;
+        const email = document.querySelector('.gb_ob').innerText;
         ipcRenderer.send('request-set-workspace-account-info', workspaceId, {
           pictureUrl,
           name,
