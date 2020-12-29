@@ -81,6 +81,7 @@ const defaultPreferences = {
   sidebar: shouldShowSidebar,
   sidebarTips: 'shortcut',
   sidebarSize: 'compact',
+  skipAskingDefaultMailClient: false,
   spellcheck: true,
   spellcheckLanguages: ['en-US'],
   swipeToNavigate: true,
