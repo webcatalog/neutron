@@ -360,6 +360,13 @@ const loadListeners = () => {
   });
 
   ipcMain.on('request-remove-workspace', (e, id) => {
+    // browsing data is shared and kept globally so it won't be deleted
+    if (getPreference('shareWorkspaceBrowsingData')) {
+      removeWorkspaceView(id);
+      createMenu();
+      return;
+    }
+
     dialog.showMessageBox(mainWindow.get(), {
       type: 'question',
       buttons: ['Remove Workspace', 'Cancel'],
