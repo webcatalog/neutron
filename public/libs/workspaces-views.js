@@ -1,7 +1,13 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-const { session, ipcMain } = require('electron');
+const {
+  app,
+  dialog,
+  ipcMain,
+  session,
+  shell,
+} = require('electron');
 
 const {
   countWorkspaces,
@@ -30,11 +36,16 @@ const {
 const {
   hasPreference,
   setPreference,
+  getPreference,
 } = require('./preferences');
 
 const mainWindow = require('../windows/main');
 
 const sendToAllWindows = require('./send-to-all-windows');
+const extractHostname = require('./extract-hostname');
+const isWindows10 = require('./is-windows-10');
+const isDefaultMailClientAsync = require('./is-default-mail-client-async');
+const MAILTO_URLS = require('../constants/mailto-urls');
 
 const appJson = require('../app.json');
 
@@ -59,6 +70,40 @@ const createWorkspaceView = (workspaceObj = {}) => {
       setPreference('titlebar', false);
     }
     ipcMain.emit('request-realign-active-workspace');
+  }
+
+  // ask to set as default mail client
+  const skipAskingDefaultMailClient = getPreference('skipAskingDefaultMailClient');
+  if (!skipAskingDefaultMailClient) {
+    if (extractHostname(workspaceObj.homeUrl || appJson.url) in MAILTO_URLS) {
+      isDefaultMailClientAsync()
+        .then((isDefault) => {
+          if (isDefault) return;
+          dialog.showMessageBox(mainWindow.get(), {
+            type: 'info',
+            message: `Do you want to set ${appJson.name} as your default email client?`,
+            buttons: ['No', 'Yes'],
+            cancelId: 0,
+            defaultId: 0,
+            checkboxLabel: 'Don\'t ask again',
+          })
+            .then(({ response, checkboxChecked }) => {
+              if (checkboxChecked) {
+                setPreference('skipAskingDefaultMailClient', checkboxChecked);
+              }
+              if (response === 1) {
+                // open ms-settings on Windows 10
+                // as Windows 10 doesn't allow changing default app programmatically
+                if (isWindows10()) {
+                  shell.openExternal('ms-settings:defaultapps');
+                } else {
+                  app.setAsDefaultProtocolClient('mailto');
+                }
+              }
+            })
+            .catch(console.log); // eslint-disable-line no-console
+        });
+    }
   }
 };
 
