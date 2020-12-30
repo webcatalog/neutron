@@ -161,6 +161,7 @@ const styles = (theme) => {
       display: 'inline-block',
       fontSize: '18px',
       color: theme.palette.type === 'dark' ? theme.palette.common.white : theme.palette.common.black,
+      whiteSpace: 'nowrap',
     },
     tip: {
       position: 'absolute',

@@ -16,7 +16,7 @@ const isDev = require('electron-is-dev');
 const settings = require('electron-settings');
 
 const { REACT_PATH } = require('../constants/paths');
-const { getPreference } = require('../libs/preferences');
+const { setPreference, getPreference } = require('../libs/preferences');
 const isKdeAsync = require('../libs/is-kde-async');
 const appJson = require('../app.json');
 
@@ -32,6 +32,17 @@ const get = () => {
 
 const createAsync = () => new Promise((resolve) => {
   const handleTrayRightClick = () => {
+    const muteApp = getPreference('muteApp');
+    const lockMenuItems = Boolean(global.appLock) && !global.locked ? [
+      {
+        type: 'separator',
+      },
+      {
+        label: 'Lock',
+        click: () => ipcMain.emit('request-lock-app'),
+      },
+    ] : [];
+
     const contextMenu = Menu.buildFromTemplate([
       {
         label: `Open ${appJson.name}`,
@@ -56,6 +67,7 @@ const createAsync = () => new Promise((resolve) => {
         click: () => ipcMain.emit('request-show-about-window'),
       },
       { type: 'separator' },
+      ...lockMenuItems,
       {
         label: 'Check for Updates...',
         click: () => ipcMain.emit('request-check-for-updates'),
@@ -63,6 +75,18 @@ const createAsync = () => new Promise((resolve) => {
       {
         type: 'separator',
       },
+      {
+        label: 'Notifications...',
+        click: () => ipcMain.emit('request-show-notifications-window'),
+        enabled: !global.locked,
+      },
+      { type: 'separator' },
+      {
+        label: muteApp ? 'Unmute' : 'Mute',
+        click: () => setPreference('muteApp', !muteApp),
+        enabled: !global.locked,
+      },
+      { type: 'separator' },
       {
         label: 'Preferences...',
         click: () => ipcMain.emit('request-show-preferences-window'),
@@ -115,7 +139,7 @@ const createAsync = () => new Promise((resolve) => {
         width: menubarWindowState.width,
         height: menubarWindowState.height,
         minHeight: 100,
-        minWidth: 250,
+        minWidth: 400,
         webPreferences: {
           enableRemoteModule: true,
           contextIsolation: false,
@@ -163,7 +187,7 @@ const createAsync = () => new Promise((resolve) => {
     width: mainWindowState.width,
     height: mainWindowState.height,
     minHeight: 100,
-    minWidth: 350,
+    minWidth: 400,
     title: global.appJson.name,
     titleBarStyle: 'hidden',
     show: false,
