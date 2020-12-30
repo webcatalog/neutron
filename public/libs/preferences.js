@@ -35,6 +35,7 @@ const shouldShowSidebar = !appJson.url || Boolean(MAILTO_URLS[extractHostname(ap
 
 const defaultPreferences = {
   allowNodeInJsCodeInjection: false,
+  alwaysOnTop: true, // for menubar
   askForDownloadPath: true,
   attachToMenubar: false,
   autoCheckForUpdates: true,

@@ -164,6 +164,7 @@ const getFileManagerName = () => {
 };
 
 const Preferences = ({
+  alwaysOnTop,
   askForDownloadPath,
   attachToMenubar,
   autoCheckForUpdates,
@@ -463,6 +464,24 @@ const Preferences = ({
                       checked={attachToMenubar}
                       onChange={(e) => {
                         requestSetPreference('attachToMenubar', e.target.checked);
+                        enqueueRequestRestartSnackbar();
+                      }}
+                    />
+                  </ListItemSecondaryAction>
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="Keep attached window always on top"
+                    secondary="The window won't be hidden even when you click outside."
+                  />
+                  <ListItemSecondaryAction>
+                    <Switch
+                      edge="end"
+                      color="primary"
+                      checked={alwaysOnTop}
+                      disabled={!attachToMenubar}
+                      onChange={(e) => {
+                        requestSetPreference('alwaysOnTop', e.target.checked);
                         enqueueRequestRestartSnackbar();
                       }}
                     />
@@ -1672,6 +1691,7 @@ Preferences.defaultProps = {
 };
 
 Preferences.propTypes = {
+  alwaysOnTop: PropTypes.bool.isRequired,
   askForDownloadPath: PropTypes.bool.isRequired,
   attachToMenubar: PropTypes.bool.isRequired,
   autoCheckForUpdates: PropTypes.bool.isRequired,
@@ -1713,8 +1733,8 @@ Preferences.propTypes = {
   sentry: PropTypes.bool.isRequired,
   shareWorkspaceBrowsingData: PropTypes.bool.isRequired,
   sidebar: PropTypes.bool.isRequired,
-  sidebarTips: PropTypes.oneOf(['shortcut', 'name', 'none']).isRequired,
   sidebarSize: PropTypes.oneOf(['compact', 'expanded']).isRequired,
+  sidebarTips: PropTypes.oneOf(['shortcut', 'name', 'none']).isRequired,
   spellcheck: PropTypes.bool.isRequired,
   spellcheckLanguages: PropTypes.arrayOf(PropTypes.string).isRequired,
   swipeToNavigate: PropTypes.bool.isRequired,
@@ -1729,6 +1749,7 @@ Preferences.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
+  alwaysOnTop: state.preferences.alwaysOnTop,
   askForDownloadPath: state.preferences.askForDownloadPath,
   attachToMenubar: state.preferences.attachToMenubar,
   autoCheckForUpdates: state.preferences.autoCheckForUpdates,
@@ -1764,8 +1785,8 @@ const mapStateToProps = (state) => ({
   sentry: state.preferences.sentry,
   shareWorkspaceBrowsingData: state.preferences.shareWorkspaceBrowsingData,
   sidebar: state.preferences.sidebar,
-  sidebarTips: state.preferences.sidebarTips,
   sidebarSize: state.preferences.sidebarSize,
+  sidebarTips: state.preferences.sidebarTips,
   spellcheck: state.preferences.spellcheck,
   spellcheckLanguages: state.preferences.spellcheckLanguages,
   swipeToNavigate: state.preferences.swipeToNavigate,
