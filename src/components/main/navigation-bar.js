@@ -58,8 +58,8 @@ const styles = (theme) => ({
     paddingLeft: theme.spacing(1),
     paddingRight: theme.spacing(1),
     [theme.breakpoints.up('sm')]: {
-      paddingLeft: theme.spacing(10),
-      paddingRight: theme.spacing(10),
+      paddingLeft: theme.spacing(6),
+      paddingRight: theme.spacing(6),
     },
   },
   iconButton: {
@@ -86,6 +86,16 @@ const styles = (theme) => ({
   goButton: {
     padding: 4,
   },
+  leftWithExpandedSidebar: {
+    '@media (max-width:600px)': {
+      display: 'none',
+    },
+  },
+  centerWithExpandedSidebar: {
+    '@media (max-width:700px)': {
+      display: 'none',
+    },
+  },
 });
 
 const NavigationBar = ({
@@ -101,8 +111,11 @@ const NavigationBar = ({
   onUpdateAddressBarInfo,
   searchEngine,
   shouldPauseNotifications,
+  sidebar,
+  sidebarSize,
 }) => {
   const [addressInputClicked, setAddressInputClicked] = useState(false);
+  const hasExpandedSidebar = sidebar && sidebarSize === 'expanded';
 
   return (
     <div
@@ -112,7 +125,9 @@ const NavigationBar = ({
         hasTrafficLights && classes.rootWithTrafficLights,
       )}
     >
-      <div className={classes.left}>
+      <div
+        className={classnames(classes.left, hasExpandedSidebar && classes.leftWithExpandedSidebar)}
+      >
         <IconButton
           title="Back"
           aria-label="Back"
@@ -150,7 +165,12 @@ const NavigationBar = ({
           <HomeIcon className={classes.icon} />
         </IconButton>
       </div>
-      <div className={classes.center}>
+      <div
+        className={classnames(
+          classes.center,
+          hasExpandedSidebar && classes.centerWithExpandedSidebar,
+        )}
+      >
         <InputBase
           classes={{ root: classes.addressBarRoot, input: classes.addressBarInput }}
           placeholder={`Search on ${searchEngines[searchEngine].name} or type a URL`}
@@ -254,6 +274,8 @@ NavigationBar.propTypes = {
   onUpdateAddressBarInfo: PropTypes.func.isRequired,
   searchEngine: PropTypes.string.isRequired,
   shouldPauseNotifications: PropTypes.bool.isRequired,
+  sidebar: PropTypes.bool.isRequired,
+  sidebarSize: PropTypes.oneOf(['compact', 'expanded']).isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -267,6 +289,8 @@ const mapStateToProps = (state) => ({
   muteApp: state.preferences.muteApp,
   searchEngine: state.preferences.searchEngine,
   shouldPauseNotifications: state.notifications.pauseNotificationsInfo !== null,
+  sidebar: state.preferences.sidebar,
+  sidebarSize: state.preferences.sidebarSize,
 });
 
 const actionCreators = {
