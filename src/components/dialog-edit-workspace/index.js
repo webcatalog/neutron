@@ -73,8 +73,6 @@ const styles = (theme) => ({
     paddingBottom: theme.spacing(1),
     paddingLeft: theme.spacing(1),
     paddingRight: 0,
-    maxHeight: 172,
-    overflow: 'auto',
   },
   avatarContainer: {
     position: 'relative',
@@ -135,7 +133,6 @@ const styles = (theme) => ({
   },
   colorPickerRow: {
     paddingBottom: theme.spacing(1),
-    display: 'flex',
   },
   colorPicker: {
     height: 24,
@@ -144,6 +141,7 @@ const styles = (theme) => ({
     marginRight: theme.spacing(1),
     cursor: 'pointer',
     outline: 'none',
+    display: 'inline-block',
   },
   colorPickerSelected: {
     boxShadow: `0 0 2px 2px ${theme.palette.primary.main}`,
@@ -362,34 +360,32 @@ const EditWorkspace = ({
                     />
                   )}
                 </div>
-                {Object.keys(materialColors).map((colorId) => {
-                  const colorScales = materialColors[colorId];
-                  if (!colorScales[500]) return null;
-                  return (
-                    <div className={classes.colorPickerRow} key={colorId}>
-                      {[900, 800, 700, 600, 500, 400, 300, 200].map((scale) => (
-                        <div
-                          key={`${colorId}-${scale}`}
-                          title={`${colorId} ${scale}`}
-                          className={classnames(
-                            classes.colorPicker,
-                            backgroundColor === colorScales[scale] && classes.colorPickerSelected,
-                          )}
-                          style={{ backgroundColor: materialColors[colorId][scale] }}
-                          aria-label={`${colorId} ${scale}`}
-                          role="button"
-                          tabIndex={0}
-                          onClick={() => onUpdateForm({
-                            backgroundColor: materialColors[colorId][scale],
-                          })}
-                          onKeyDown={() => onUpdateForm({
-                            backgroundColor: materialColors[colorId][scale],
-                          })}
-                        />
-                      ))}
-                    </div>
-                  );
-                })}
+                <div className={classes.colorPickerRow}>
+                  {Object.keys(materialColors).map((colorId) => {
+                    const colorScales = materialColors[colorId];
+                    if (!colorScales[500]) return null;
+                    return (
+                      <div
+                        key={colorId}
+                        title={colorId}
+                        className={classnames(
+                          classes.colorPicker,
+                          backgroundColor === colorScales[500] && classes.colorPickerSelected,
+                        )}
+                        style={{ backgroundColor: materialColors[colorId][500] }}
+                        aria-label={colorId}
+                        role="button"
+                        tabIndex={0}
+                        onClick={() => onUpdateForm({
+                          backgroundColor: materialColors[colorId][500],
+                        })}
+                        onKeyDown={() => onUpdateForm({
+                          backgroundColor: materialColors[colorId][500],
+                        })}
+                      />
+                    );
+                  })}
+                </div>
               </>
             )}
             {selectedIconType === 'image' && (
