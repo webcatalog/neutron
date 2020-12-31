@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import DialogContent from '@material-ui/core/DialogContent';
 
 import connectComponent from '../../helpers/connect-component';
+import isMas from '../../helpers/is-mas';
 
 import { requestOpenInBrowser } from '../../senders';
 
@@ -44,10 +45,9 @@ const About = (props) => {
     classes,
   } = props;
 
-  const isMas = Boolean(window.process.mas || process.env.REACT_APP_FORCE_MAS);
   const appVersion = window.remote.app.getVersion();
   const appJson = window.remote.getGlobal('appJson');
-  const utmSource = isMas ? 'singlebox_app' : 'juli_app';
+  const utmSource = isMas() ? 'singlebox_app' : 'juli_app';
 
   const versions = [
     { name: 'WebCatalog Engine', version: appVersion },
@@ -65,7 +65,7 @@ const About = (props) => {
           variant="body2"
           className={classes.version}
         >
-          {isMas ? `Version ${appVersion}` : 'Powered by WebCatalog'}
+          {isMas() ? `Version ${appVersion}` : 'Powered by WebCatalog'}
         </Typography>
         <div className={classes.versionSmallContainer}>
           {versions.map(({ name, version }) => (
@@ -78,7 +78,7 @@ const About = (props) => {
           ))}
         </div>
 
-        {isMas ? (
+        {isMas() ? (
           <>
             <Button
               onClick={() => requestOpenInBrowser(`https://singlebox.app?utm_source=${utmSource}`)}

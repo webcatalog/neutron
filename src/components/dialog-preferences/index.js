@@ -42,6 +42,7 @@ import { TimePicker } from '@material-ui/pickers';
 import connectComponent from '../../helpers/connect-component';
 import checkLicense from '../../helpers/check-license';
 import roundTime from '../../helpers/round-time';
+import isMas from '../../helpers/is-mas';
 
 import {
   requestCheckForUpdates,
@@ -220,9 +221,8 @@ const Preferences = ({
   useSystemTitleBar,
   warnBeforeQuitting,
 }) => {
-  const isMas = Boolean(window.process.mas || process.env.REACT_APP_FORCE_MAS);
   const appJson = window.remote.getGlobal('appJson');
-  const utmSource = isMas ? 'singlebox_app' : 'juli_app';
+  const utmSource = isMas() ? 'singlebox_app' : 'juli_app';
   const canPromptTouchId = window.process.platform === 'darwin'
     && window.remote.systemPreferences.canPromptTouchID();
 
@@ -231,7 +231,7 @@ const Preferences = ({
       text: 'Account',
       Icon: AccountCircleIcon,
       ref: useRef(),
-      hidden: isMas,
+      hidden: isMas(),
     },
     general: {
       text: 'General',
@@ -292,7 +292,7 @@ const Preferences = ({
       text: 'Updates',
       Icon: SystemUpdateAltIcon,
       ref: useRef(),
-      hidden: isMas,
+      hidden: isMas(),
     },
     reset: {
       text: 'Reset',
@@ -327,8 +327,8 @@ const Preferences = ({
             if (hidden) return null;
             return (
               <React.Fragment key={sectionKey}>
-                {i > 0 && !isMas && <Divider />}
-                {i > 1 && isMas && <Divider />}
+                {i > 0 && !isMas() && <Divider />}
+                {i > 1 && isMas() && <Divider />}
                 <ListItem button onClick={() => ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
                   <ListItemIcon>
                     <Icon />
@@ -343,7 +343,7 @@ const Preferences = ({
         </List>
       </div>
       <div className={classes.inner}>
-        {!isMas && (
+        {!isMas() && (
           <>
             <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle} ref={sections.account.ref}>
               Account
@@ -1535,7 +1535,7 @@ const Preferences = ({
           </List>
         </Paper>
 
-        {!isMas && (
+        {!isMas() && (
           <>
             <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.updates.ref}>
               Updates
@@ -1609,7 +1609,7 @@ const Preferences = ({
               <ChevronRightIcon color="action" />
             </ListItem>
             <Divider />
-            {isMas ? (
+            {isMas() ? (
               <>
                 <ListItem button onClick={() => requestOpenInBrowser(`https://singlebox.app?utm_source=${utmSource}`)}>
                   <ListItemText primary="Website" />
