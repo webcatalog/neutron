@@ -13,6 +13,7 @@ const appJson = require('../app.json');
 const goToUrlWindow = require('../windows/go-to-url');
 const mainWindow = require('../windows/main');
 
+const isMas = require('./is-mas');
 const getViewBounds = require('./get-view-bounds');
 const {
   setPreference,
@@ -91,6 +92,21 @@ const createMenu = async () => {
     },
   ] : [];
 
+  const licensingMenuItems = isMas() ? [] : [
+    { type: 'separator' },
+    {
+      label: registered ? 'WebCatalog Plus' : 'WebCatalog Basic',
+      visible: !isMas() && true,
+      enabled: false,
+      click: null,
+    },
+    {
+      label: 'Upgrade...',
+      visible: !isMas() && !registered,
+      click: registered ? null : () => ipcMain.emit('request-show-require-license-dialog'),
+    },
+  ];
+
   const muteApp = getPreference('muteApp');
 
   const template = [
@@ -102,18 +118,7 @@ const createMenu = async () => {
           click: () => ipcMain.emit('request-show-about-window'),
         },
         { type: 'separator' },
-        {
-          label: registered ? 'WebCatalog Plus' : 'WebCatalog Basic',
-          visible: true,
-          enabled: false,
-          click: null,
-        },
-        {
-          label: 'Upgrade...',
-          visible: !registered,
-          click: registered ? null : () => ipcMain.emit('request-show-require-license-dialog'),
-        },
-        { type: 'separator' },
+        ...licensingMenuItems,
         ...lockMenuItems,
         {
           label: 'Check for Updates...',
