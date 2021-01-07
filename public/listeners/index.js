@@ -227,7 +227,7 @@ const loadListeners = () => {
     const win = workspacePreferencesWindow.get() || preferencesWindow.get();
     dialog.showMessageBox(win, {
       type: 'info',
-      message: 'You\'re currently running the free version of WebCatalog. To unlock all features & add unlimited number of workspaces, please purchase WebCatalog Plus ($20) from our store and open WebCatalog app to activate it.',
+      message: 'You\'re currently running the free version of WebCatalog. To unlock all features & add unlimited number of workspaces, please purchase WebCatalog Plus (30 USD) from our store and open WebCatalog app to activate it.',
       buttons: ['OK', 'Learn More...'],
       cancelId: 0,
       defaultId: 0,
