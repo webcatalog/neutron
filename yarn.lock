@@ -2708,10 +2708,10 @@ alphanum-sort@^1.0.0:
   resolved "https://registry.yarnpkg.com/alphanum-sort/-/alphanum-sort-1.0.2.tgz#97a1119649b211ad33691d9f9f486a8ec9fbe0a3"
   integrity sha1-l6ERlkmyEa0zaR2fn0hqjsn74KM=
 
-amplitude-js@7.3.3:
-  version "7.3.3"
-  resolved "https://registry.yarnpkg.com/amplitude-js/-/amplitude-js-7.3.3.tgz#ae4b35bd28231ccdc9713f8cc8675ae1ce64f19e"
-  integrity sha512-krSXUXeHqbQk15ozx0kC3h0K3i7wQ1ycSG08OfZBga2Vfbi3Y30CP6UXLdtJX4AiBB8EkjMePdMgU6kyuIpi/A==
+amplitude-js@7.4.0:
+  version "7.4.0"
+  resolved "https://registry.yarnpkg.com/amplitude-js/-/amplitude-js-7.4.0.tgz#e66e31f3bed7857ea2a86a10209878c7ac2f4ccd"
+  integrity sha512-5n/a8VSTRAGURKBFiJww1dwQmhVCGjDlw0VRuxhPRaJ2L7jNpqnErZH0Cl9b9UgVp3mknhLynsrQ6Tl2YHm4Ug==
   dependencies:
     "@amplitude/ua-parser-js" "0.7.24"
     "@amplitude/utils" "^1.0.5"
@@ -5857,10 +5857,10 @@ electron-builder@22.10.4:
     update-notifier "^5.0.1"
     yargs "^16.2.0"
 
-electron-context-menu@2.3.1:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/electron-context-menu/-/electron-context-menu-2.3.1.tgz#3ff66e17eaef06a57f25bbc58102622c0e4d2850"
-  integrity sha512-Kvjy7G9aYfOzxH5OYdDsGev+cpdVc2KFOt0cbVjzOdQxZi16gUh2RnPLa2a6O4wDyBRfkAe8kKKcSNfnasmA4Q==
+electron-context-menu@2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/electron-context-menu/-/electron-context-menu-2.4.0.tgz#58e3a0e0ff847d3ce78ee81b49544a62b6bf0b00"
+  integrity sha512-6HRAEeFoMoBZyQ69FBGNQIVVDRBw8nYmvMPaV+CfRDa/spreHsjMD+XesJ/2/lMSAAMDTCgFCC24167Uer2cZw==
   dependencies:
     cli-truncate "^2.0.0"
     electron-dl "^3.0.0"
