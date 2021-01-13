@@ -556,7 +556,7 @@ const Preferences = ({
             </ListItem>
             <ListItem>
               <ListItemText
-                primary="Workspace size"
+                primary="Sidebar size"
               />
               <Select
                 value={sidebarSize}
