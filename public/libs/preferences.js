@@ -92,8 +92,7 @@ const defaultPreferences = {
   trayIcon: false,
   unreadCountBadge: true,
   useHardwareAcceleration: true,
-  // revert useSystemTitleBar to false when https://github.com/electron/electron/issues/27131 is resolved
-  useSystemTitleBar: true,
+  useSystemTitleBar: false,
   warnBeforeQuitting: false,
 };
 
