@@ -181,7 +181,7 @@ const createAsync = () => new Promise((resolve) => {
     defaultHeight: 768,
   });
 
-  win = new BrowserWindow({
+  const winOpts = {
     backgroundColor: '#FFF',
     x: mainWindowState.x,
     y: mainWindowState.y,
@@ -193,7 +193,6 @@ const createAsync = () => new Promise((resolve) => {
     titleBarStyle: 'hidden',
     show: false,
     frame: process.platform === 'darwin' || global.useSystemTitleBar,
-    icon: process.platform === 'linux' ? path.resolve(__dirname, '..', 'dock-icon.png') : undefined,
     webPreferences: {
       enableRemoteModule: true,
       contextIsolation: false,
@@ -201,7 +200,14 @@ const createAsync = () => new Promise((resolve) => {
       webSecurity: !isDev,
       preload: path.join(__dirname, '..', 'preload', 'main.js'),
     },
-  });
+  };
+  // winOpts.icon cannot be set to undefined
+  // as it'd crash Electron on macOS
+  // https://github.com/electron/electron/issues/27303#issuecomment-759501184
+  if (process.platform === 'linux') {
+    winOpts.icon = path.resolve(__dirname, '..', 'dock-icon.png');
+  }
+  win = new BrowserWindow(winOpts);
 
   mainWindowState.manage(win);
 
