@@ -4,6 +4,7 @@
 import { useEffect } from 'react';
 
 import connectComponent from '../../helpers/connect-component';
+import isMas from '../../helpers/is-mas';
 
 import amplitude from '../../amplitude';
 
@@ -12,7 +13,10 @@ const TelemetryManager = () => {
   // https://blog.logrocket.com/post-hooks-guide-react-call-order
   useEffect(() => {
     const appJson = window.remote.getGlobal('appJson');
-    amplitude.getInstance().setUserProperties({ registered: Boolean(appJson.registered) });
+    amplitude.getInstance().setUserProperties({
+      registered: Boolean(appJson.registered),
+      isMas: isMas(),
+    });
     amplitude.getInstance().logEvent('webcatalog-engine: start app');
 
     // this is important to track usage correctly
