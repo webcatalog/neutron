@@ -44,12 +44,13 @@ const sendToAllWindows = require('./libs/send-to-all-windows');
 const extractHostname = require('./libs/extract-hostname');
 const { getAppLockStatusAsync, unlockAppUsingTouchId } = require('./libs/app-lock');
 const isMacOs11 = require('./libs/is-mac-os-11');
+const isMas = require('./libs/is-mas');
 
 const MAILTO_URLS = require('./constants/mailto-urls');
 
 const appJson = require('./app.json');
 
-const gotTheLock = app.requestSingleInstanceLock();
+const gotTheLock = isMas() || app.requestSingleInstanceLock();
 
 if (!gotTheLock) {
   // eslint-disable-next-line
