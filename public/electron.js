@@ -10,8 +10,22 @@ const {
   session,
   BrowserWindow,
 } = require('electron');
+const path = require('path');
+const fs = require('fs-extra');
 const isDev = require('electron-is-dev');
 const settings = require('electron-settings');
+
+const appJson = require('./app.json');
+
+// run before anything else
+// WebCatalog Engine 13.x and lower uses default Electron user data path
+// so we don't apply this if legacyUserData = true
+// to keep the app backward compatible
+if (!appJson.legacyUserData) {
+  const userDataPath = path.join(app.getPath('appData'), 'WebCatalog', 'webcatalog-engine-data', appJson.id);
+  fs.ensureDirSync(userDataPath);
+  app.setPath('userData', userDataPath);
+}
 
 settings.configure({
   fileName: 'Settings', // backward compatible with electron-settings@3
@@ -47,8 +61,6 @@ const isMacOs11 = require('./libs/is-mac-os-11');
 const isMas = require('./libs/is-mas');
 
 const MAILTO_URLS = require('./constants/mailto-urls');
-
-const appJson = require('./app.json');
 
 const gotTheLock = isMas() || app.requestSingleInstanceLock();
 
