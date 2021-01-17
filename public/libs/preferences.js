@@ -3,6 +3,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 const settings = require('electron-settings');
 const { app, nativeTheme, ipcMain } = require('electron');
+const path = require('path');
+const fs = require('fs-extra');
 
 const sendToAllWindows = require('./send-to-all-windows');
 const extractHostname = require('./extract-hostname');
@@ -59,7 +61,6 @@ const defaultPreferences = {
   internalUrlRule: '',
   jsCodeInjection: null,
   lastShowNewUpdateDialog: 0,
-  licenseKey: null,
   navigationBar: false,
   muteApp: false,
   openFolderWhenDoneDownloading: false,
@@ -68,6 +69,7 @@ const defaultPreferences = {
   pauseNotificationsByScheduleFrom: getDefaultPauseNotificationsByScheduleFrom(),
   pauseNotificationsByScheduleTo: getDefaultPauseNotificationsByScheduleTo(),
   pauseNotificationsMuteAudio: false,
+  privacyConsentAsked: false,
   proxyBypassRules: '',
   proxyPacScript: '',
   proxyRules: '',
@@ -75,18 +77,18 @@ const defaultPreferences = {
   rememberLastPageVisited: false,
   runInBackground: false,
   searchEngine: 'google',
-  sentry: true,
+  sentry: false,
   // branded apps (like Google/Microsoft) share browsing data by default
   // https://github.com/webcatalog/webcatalog-app/issues/986
   shareWorkspaceBrowsingData: appJson.id.startsWith('group-'),
   sidebar: shouldShowSidebar,
-  sidebarTips: 'shortcut',
   sidebarSize: 'compact',
+  sidebarTips: 'shortcut',
   skipAskingDefaultMailClient: false,
   spellcheck: true,
   spellcheckLanguages: ['en-US'],
   swipeToNavigate: true,
-  telemetry: true,
+  telemetry: false,
   themeSource: 'system',
   titleBar: !shouldShowSidebar, // if sidebar is shown, then hide titleBar
   trayIcon: false,
@@ -99,7 +101,21 @@ const defaultPreferences = {
 let cachedPreferences = null;
 
 const initCachedPreferences = () => {
-  cachedPreferences = { ...defaultPreferences, ...settings.getSync(`preferences.${v}`) };
+  // shared-preferences.json includes:
+  // telemetry & sentry pref
+  // so that privacy consent prefs
+  // can be shared across WebCatalog and WebCatalog-Engine-based apps
+  const sharedPreferencesPath = path.join(app.getPath('home'), '.webcatalog', 'shared-preferences.json');
+  let sharedPreferences;
+  if (fs.existsSync(sharedPreferencesPath)) {
+    sharedPreferences = fs.readJsonSync(sharedPreferencesPath);
+  }
+
+  cachedPreferences = {
+    ...defaultPreferences,
+    ...settings.getSync(`preferences.${v}`),
+    ...sharedPreferences,
+  };
 
   // disable menu bar mode on Windows/Linux
   if (process.platform !== 'darwin') {

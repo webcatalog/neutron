@@ -1310,42 +1310,46 @@ const Preferences = ({
               <ListItemText primary="Clear browsing data" secondary="Clear cookies, cache, and more" />
               <ChevronRightIcon color="action" />
             </ListItem>
-            <Divider />
-            <ListItem>
-              <ListItemText
-                primary="Allow the app to send anonymous crash reports"
-                secondary="Help us quickly diagnose and fix bugs in the app."
-              />
-              <ListItemSecondaryAction>
-                <Switch
-                  edge="end"
-                  color="primary"
-                  checked={sentry}
-                  onChange={(e) => {
-                    requestSetPreference('sentry', e.target.checked);
-                    enqueueRequestRestartSnackbar();
-                  }}
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListItemText
-                primary="Allow the app to send anonymous usage data"
-                secondary="Help us understand how to improve the product."
-              />
-              <ListItemSecondaryAction>
-                <Switch
-                  edge="end"
-                  color="primary"
-                  checked={telemetry}
-                  onChange={(e) => {
-                    requestSetPreference('telemetry', e.target.checked);
-                    enqueueRequestRestartSnackbar();
-                  }}
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
+            {isMas() && (
+              <>
+                <Divider />
+                <ListItem>
+                  <ListItemText
+                    primary="Allow the app to send anonymous crash reports"
+                    secondary="Help us quickly diagnose and fix bugs in the app."
+                  />
+                  <ListItemSecondaryAction>
+                    <Switch
+                      edge="end"
+                      color="primary"
+                      checked={sentry}
+                      onChange={(e) => {
+                        requestSetPreference('sentry', e.target.checked);
+                        enqueueRequestRestartSnackbar();
+                      }}
+                    />
+                  </ListItemSecondaryAction>
+                </ListItem>
+                <Divider />
+                <ListItem>
+                  <ListItemText
+                    primary="Allow the app to send anonymous usage data"
+                    secondary="Help us understand how to improve the product."
+                  />
+                  <ListItemSecondaryAction>
+                    <Switch
+                      edge="end"
+                      color="primary"
+                      checked={telemetry}
+                      onChange={(e) => {
+                        requestSetPreference('telemetry', e.target.checked);
+                        enqueueRequestRestartSnackbar();
+                      }}
+                    />
+                  </ListItemSecondaryAction>
+                </ListItem>
+              </>
+            )}
             <Divider />
             <ListItem button onClick={() => requestOpenInBrowser(`https://webcatalog.app/privacy?utm_source=${utmSource}`)}>
               <ListItemText primary="Privacy Policy" />
