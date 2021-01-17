@@ -31,7 +31,11 @@ settings.configure({
   fileName: 'Settings', // backward compatible with electron-settings@3
 });
 
-const { getPreference, getPreferences } = require('./libs/preferences');
+const {
+  getPreference,
+  getPreferences,
+  setPreference,
+} = require('./libs/preferences');
 
 // Activate the Sentry Electron SDK as early as possible in every process.
 if (!isDev && getPreference('sentry')) {
@@ -179,6 +183,7 @@ if (!gotTheLock) {
           proxyRules,
           proxyType,
           themeSource,
+          privacyConsentAsked,
         } = getPreferences();
 
         // configure proxy for default session
@@ -220,6 +225,26 @@ if (!gotTheLock) {
         });
 
         ipcMain.emit('request-update-pause-notifications-info');
+
+        if (isMas() && !privacyConsentAsked) {
+          dialog.showMessageBox(mainWindow.get(), {
+            type: 'question',
+            buttons: ['Allow', 'Don\'t Allow'],
+            message: 'Can we collect anonymous usage statistics and crash reports?',
+            detail: 'The data helps us improve and optimize the product. You can change your decision at any time in the app’s preferences.',
+            cancelId: 1,
+            defaultId: 0,
+          }).then(({ response }) => {
+            setPreference('privacyConsentAsked', true);
+            if (response === 0) {
+              setPreference('sentry', true);
+              setPreference('telemetry', true);
+            } else {
+              setPreference('sentry', false);
+              setPreference('telemetry', false);
+            }
+          }).catch(console.log); // eslint-disable-line
+        }
       })
       .then(() => {
         // Fix webview is not resized automatically
