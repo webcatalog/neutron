@@ -8,6 +8,7 @@ const fs = require('fs-extra');
 
 const sendToAllWindows = require('./send-to-all-windows');
 const extractHostname = require('./extract-hostname');
+const isMas = require('./is-mas');
 
 const MAILTO_URLS = require('../constants/mailto-urls');
 
@@ -107,7 +108,7 @@ const initCachedPreferences = () => {
   // can be shared across WebCatalog and WebCatalog-Engine-based apps
   const sharedPreferencesPath = path.join(app.getPath('home'), '.webcatalog', 'shared-preferences.json');
   let sharedPreferences;
-  if (fs.existsSync(sharedPreferencesPath)) {
+  if (!isMas() && fs.existsSync(sharedPreferencesPath)) {
     sharedPreferences = fs.readJsonSync(sharedPreferencesPath);
   }
 
