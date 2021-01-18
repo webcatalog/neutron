@@ -425,8 +425,8 @@ const createMenu = async () => {
     {
       role: 'window',
       submenu: [
-        { role: 'minimize' },
         { role: 'close' },
+        { role: 'minimize' },
         // role: 'zoom' is only supported on macOS
         process.platform === 'darwin' ? {
           role: 'zoom',
@@ -442,7 +442,10 @@ const createMenu = async () => {
         },
         { type: 'separator' },
         { role: 'front' },
-        { type: 'separator' },
+        {
+          label: appJson.name,
+          click: () => mainWindow.show(),
+        },
       ],
     },
     {
