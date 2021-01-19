@@ -21,7 +21,7 @@ const appJson = require('./app.json');
 // WebCatalog Engine 13.x and lower uses default Electron user data path
 // so we don't apply this if legacyUserData = true
 // to keep the app backward compatible
-if (!appJson.legacyUserData) {
+if (!appJson.opts.legacyUserData) {
   const userDataPath = path.join(app.getPath('appData'), 'WebCatalog', 'webcatalog-engine-data', appJson.id);
   fs.ensureDirSync(userDataPath);
   app.setPath('userData', userDataPath);
