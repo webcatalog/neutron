@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { setPreference } from '../state/preferences/actions';
+import { setPreference, setPreferences } from '../state/preferences/actions';
 import { setSystemPreference } from '../state/system-preferences/actions';
 import { setWorkspace, setWorkspaces } from '../state/workspaces/actions';
 import { setWorkspaceMeta, setWorkspaceMetas } from '../state/workspace-metas/actions';
@@ -46,6 +46,10 @@ const loadListeners = (store) => {
 
   window.ipcRenderer.on('set-preference', (e, name, value) => {
     store.dispatch(setPreference(name, value));
+  });
+
+  window.ipcRenderer.on('set-preferences', (e, newState) => {
+    store.dispatch(setPreferences(newState));
   });
 
   window.ipcRenderer.on('set-system-preference', (e, name, value) => {

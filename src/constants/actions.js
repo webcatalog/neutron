@@ -5,6 +5,7 @@ export const SET_SYSTEM_PREFERENCE = 'SET_SYSTEM_PREFERENCE';
 
 // Preferences
 export const SET_PREFERENCE = 'SET_PREFERENCE';
+export const SET_PREFERENCES = 'SET_PREFERENCES';
 
 // Workspaces
 export const SET_WORKSPACE = 'SET_WORKSPACE';
