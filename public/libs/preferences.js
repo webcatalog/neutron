@@ -107,9 +107,15 @@ const initCachedPreferences = () => {
   // so that privacy consent prefs
   // can be shared across WebCatalog and WebCatalog-Engine-based apps
   const sharedPreferencesPath = path.join(app.getPath('home'), '.webcatalog', 'shared-preferences.json');
-  let sharedPreferences;
+  let sharedPreferences = {
+    telemetry: false,
+    sentry: false,
+  };
   if (!isMas() && fs.existsSync(sharedPreferencesPath)) {
-    sharedPreferences = fs.readJsonSync(sharedPreferencesPath);
+    sharedPreferences = {
+      ...sharedPreferences,
+      ...fs.readJsonSync(sharedPreferencesPath),
+    };
   }
 
   cachedPreferences = {
