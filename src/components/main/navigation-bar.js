@@ -177,6 +177,9 @@ const NavigationBar = ({
           type="text"
           value={hasWorkspaces ? address : ''}
           disabled={!hasWorkspaces}
+          inputProps={{
+            spellCheck: false,
+          }}
           endAdornment={addressEdited && address && hasWorkspaces && (
             <IconButton
               title="Go"
