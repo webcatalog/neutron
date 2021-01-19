@@ -91,8 +91,17 @@ const badgeRules = [
   /(?<=^)(\d*?)(?=[  ][•·-])/,
 ];
 const getBadgeCountFromTitle = (title) => {
+  // https://stackoverflow.com/a/2842390/5522263
+  // strip US phone numbers from title
+  // as badge rule might mistaken them as badge count
+  let strippedTitle = title;
+  const phoneNumberMatches = /(\(?\d+\)?)([ .-])(\d+)([ .-])(\d+)/.exec(title);
+  if (phoneNumberMatches) {
+    strippedTitle = strippedTitle.replace(phoneNumberMatches[0], '');
+  }
+
   for (let i = 0; i < badgeRules.length; i += 1) {
-    const matches = badgeRules[i].exec(title);
+    const matches = badgeRules[i].exec(strippedTitle);
     const incStr = matches ? matches[1] : '';
     const inc = parseInt(incStr, 10);
     if (inc) return inc;
