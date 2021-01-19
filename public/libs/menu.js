@@ -450,7 +450,16 @@ const createMenu = async () => {
     },
     {
       role: 'help',
-      submenu: [
+      submenu: isMas() ? [
+        {
+          label: 'Help',
+          click: () => shell.openExternal('https://singlebox.app/help?utm_source=singlebox_app'),
+        },
+        {
+          label: 'Website',
+          click: () => shell.openExternal('https://singlebox.app?utm_source=singlebox_app'),
+        },
+      ] : [
         {
           label: 'WebCatalog Help',
           click: () => shell.openExternal('https://help.webcatalog.app?utm_source=juli_app'),
