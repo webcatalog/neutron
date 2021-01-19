@@ -1587,7 +1587,7 @@ const Preferences = ({
                 window.remote.dialog.showMessageBox(window.remote.getCurrentWindow(), {
                   type: 'question',
                   buttons: ['Reset Now', 'Cancel'],
-                  message: 'Are you sure? All preferences will be restored to their original defaults. Browsing data won\'t be affected. This action cannot be undone.',
+                  message: 'Are you sure? All preferences will be restored to their original defaults. Browsing data & workspaces won\'t be affected. This action cannot be undone.',
                   cancelId: 1,
                 }).then(({ response }) => {
                   if (response === 0) {

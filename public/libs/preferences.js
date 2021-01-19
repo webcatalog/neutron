@@ -188,11 +188,10 @@ const setPreference = (name, value) => {
 
 const resetPreferences = () => {
   cachedPreferences = null;
-  settings.unsetSync();
+  settings.setSync(`preferences.${v}`, {});
+
   const preferences = getPreferences();
-  Object.keys(preferences).forEach((name) => {
-    sendToAllWindows('set-preference', name, preferences[name]);
-  });
+  sendToAllWindows('set-preferences', preferences);
 };
 
 module.exports = {
