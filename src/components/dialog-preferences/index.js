@@ -20,7 +20,7 @@ import Slider from '@material-ui/core/Slider';
 import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
 
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import BuildIcon from '@material-ui/icons/Build';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
@@ -227,9 +227,9 @@ const Preferences = ({
     && window.remote.systemPreferences.canPromptTouchID();
 
   const sections = {
-    account: {
-      text: 'Account',
-      Icon: AccountCircleIcon,
+    licensing: {
+      text: 'Licensing',
+      Icon: CheckCircleOutlineIcon,
       ref: useRef(),
       hidden: isMas(),
     },
@@ -345,13 +345,13 @@ const Preferences = ({
       <div className={classes.inner}>
         {!isMas() && (
           <>
-            <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle} ref={sections.account.ref}>
-              Account
+            <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle} ref={sections.licensing.ref}>
+              Licensing
             </Typography>
             <Paper elevation={0} className={classes.paper}>
               <List disablePadding dense>
                 <ListItem button onClick={null} disabled>
-                  <ListItemText primary={registered ? 'WebCatalog Plus' : 'WebCatalog Basic'} />
+                  <ListItemText primary={registered ? 'WebCatalog Plus is activated.' : 'WebCatalog Basic'} />
                 </ListItem>
                 {!registered && (
                   <>
@@ -362,11 +362,6 @@ const Preferences = ({
                     </ListItem>
                   </>
                 )}
-                <Divider />
-                <ListItem button onClick={() => requestOpenInBrowser('https://forms.gle/RqwYdQo8PM67Mmvc9')}>
-                  <ListItemText primary="Join WebCatalog Pro Waitlist" />
-                  <ChevronRightIcon color="action" />
-                </ListItem>
               </List>
             </Paper>
           </>
