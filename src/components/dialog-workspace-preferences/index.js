@@ -496,6 +496,9 @@ const Preferences = ({
               onClick={() => {
                 window.remote.dialog.showOpenDialog(window.remote.getCurrentWindow(), {
                   properties: ['openDirectory'],
+                  // Create a security scoped bookmark when packaged for the Mac App Store
+                  // https://developer.apple.com/library/archive/documentation/Security/Conceptual/AppSandboxDesignGuide/AppSandboxInDepth/AppSandboxInDepth.html#//apple_ref/doc/uid/TP40011183-CH3-SW16
+                  securityScopedBookmarks: true,
                 })
                   .then(({ canceled, filePaths }) => {
                     if (!canceled && filePaths && filePaths.length > 0) {
