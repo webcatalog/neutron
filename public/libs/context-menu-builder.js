@@ -13,6 +13,9 @@ const {
   MenuItem,
 } = require('electron');
 
+const searchEngines = require('../constants/search-engines');
+const { getPreference } = require('./preferences');
+
 /**
  * Truncates a string to a max length of 25. Will split on a word boundary and
  * add an ellipsis.
@@ -43,7 +46,7 @@ const contextMenuStringTable = {
   copyImage: () => 'Copy Image',
   addToDictionary: () => 'Add to Dictionary',
   lookUpDefinition: ({ word }) => `Look Up "${word}"`,
-  searchGoogle: () => 'Search with Google',
+  searchWithSearchEngine: (name) => `Search with ${name}`,
   cut: () => 'Cut',
   copy: () => 'Copy',
   paste: () => 'Paste',
@@ -263,7 +266,7 @@ module.exports = class ContextMenuBuilder {
     // Allow users to add the misspelled word to the dictionary
     menu.append(
       new MenuItem({
-        label: 'Add to Dictionary',
+        label: this.stringTable.addToDictionary(),
         click: () => target.session.addWordToSpellCheckerDictionary(menuInfo.misspelledWord),
       }),
     );
@@ -297,10 +300,11 @@ module.exports = class ContextMenuBuilder {
       menu.append(lookUpDefinition);
     }
 
+    const searchEngineObj = searchEngines[getPreference('searchEngine')];
     const search = new MenuItem({
-      label: this.stringTable.searchGoogle(),
+      label: this.stringTable.searchWithSearchEngine(searchEngineObj.name),
       click: () => {
-        const url = `https://www.google.com/#q=${encodeURIComponent(menuInfo.selectionText)}`;
+        const url = searchEngineObj.queryUrl.replace('%s', encodeURIComponent(menuInfo.selectionText));
 
         // d(`Searching Google using ${url}`);
         shell.openExternal(url);
