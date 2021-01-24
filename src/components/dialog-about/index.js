@@ -13,6 +13,8 @@ import isMas from '../../helpers/is-mas';
 
 import { requestOpenInBrowser } from '../../senders';
 
+import singleboxIconPng from '../../images/products/singlebox-mac-icon-128@2x.png';
+
 const styles = (theme) => ({
   icon: {
     height: 96,
@@ -59,7 +61,11 @@ const About = (props) => {
   return (
     <div>
       <DialogContent className={classes.dialogContent}>
-        <img src={`file://${window.iconPath}`} alt="WebCatalog" className={classes.icon} />
+        <img
+          src={isMas() ? singleboxIconPng : `file://${window.iconPath}`}
+          alt={appJson.name}
+          className={classes.icon}
+        />
         <Typography variant="h6" className={classes.title}>{appJson.name}</Typography>
         <Typography
           variant="body2"
