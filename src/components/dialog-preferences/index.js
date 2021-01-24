@@ -20,8 +20,8 @@ import Slider from '@material-ui/core/Slider';
 import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
 
-import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import BuildIcon from '@material-ui/icons/Build';
+import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import CodeIcon from '@material-ui/icons/Code';
@@ -33,6 +33,7 @@ import PowerIcon from '@material-ui/icons/Power';
 import RotateLeftIcon from '@material-ui/icons/RotateLeft';
 import RouterIcon from '@material-ui/icons/Router';
 import SecurityIcon from '@material-ui/icons/Security';
+import StorefrontIcon from '@material-ui/icons/Storefront';
 import SystemUpdateAltIcon from '@material-ui/icons/SystemUpdateAlt';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import WidgetsIcon from '@material-ui/icons/Widgets';
@@ -83,6 +84,10 @@ import DialogSpellcheckLanguages from '../dialog-spellcheck-languages';
 import DialogRefreshInterval from '../dialog-refresh-interval';
 
 import SnackbarTrigger from '../shared/snackbar-trigger';
+
+import webcatalogIconPng from '../../images/products/webcatalog-mac-icon-128@2x.png';
+import singleboxIconPng from '../../images/products/singlebox-mac-icon-128@2x.png';
+import translatiumIconPng from '../../images/products/translatium-mac-icon-128@2x.png';
 
 const styles = (theme) => ({
   root: {
@@ -155,6 +160,28 @@ const styles = (theme) => ({
   refreshEvery: {
     float: 'right',
     paddingRight: theme.spacing(1),
+  },
+  listItemPromotion: {
+    paddingLeft: theme.spacing(1),
+  },
+  promotionBlock: {
+    display: 'flex',
+    flex: 1,
+  },
+  promotionLeft: {
+    height: 64,
+    width: 64,
+  },
+  promotionRight: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: theme.spacing(1.5),
+  },
+  appTitle: {},
+  appIcon: {
+    height: 64,
   },
 });
 
@@ -297,6 +324,11 @@ const Preferences = ({
     reset: {
       text: 'Reset',
       Icon: RotateLeftIcon,
+      ref: useRef(),
+    },
+    moreApps: {
+      text: 'More Apps',
+      Icon: StorefrontIcon,
       ref: useRef(),
     },
     miscs: {
@@ -1600,6 +1632,98 @@ const Preferences = ({
           </List>
         </Paper>
 
+        {/* Apple doesn't allow linking to app distributed outside Mac App Store version,
+          citing Guideline 2.4.5(iv) - Performance
+          They may not download or install standalone apps, kexts,
+          additional code, or resources to add functionality
+          or significantly change the app from what
+          we see during the review process. */}
+        <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle} ref={sections.moreApps.ref}>
+          More Apps
+        </Typography>
+        <Paper elevation={0} className={classes.paper}>
+          <List disablePadding dense>
+            {!isMas() && (
+              <>
+                <ListItem
+                  button
+                  onClick={() => requestOpenInBrowser('https://webcatalog.app?utm_source=webcatalog_app')}
+                  className={classes.listItemPromotion}
+                >
+                  <div className={classes.promotionBlock}>
+                    <div className={classes.promotionLeft}>
+                      <img src={webcatalogIconPng} alt="WebCatalog" className={classes.appIcon} />
+                    </div>
+                    <div className={classes.promotionRight}>
+                      <div>
+                        <Typography variant="body1" className={classes.appTitle}>
+                          WebCatalog
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary">
+                          Turn Any Websites Into Desktop Apps
+                        </Typography>
+                      </div>
+                    </div>
+                  </div>
+                  <ChevronRightIcon color="action" />
+                </ListItem>
+                <Divider />
+              </>
+            )}
+            <ListItem
+              button
+              onClick={() => {
+                const url = isMas() ? 'macappstore://apps.apple.com/app/singlebox/id1548853763' : 'https://singlebox.app?utm_source=webcatalog_app';
+                requestOpenInBrowser(url);
+              }}
+              className={classes.listItemPromotion}
+            >
+              <div className={classes.promotionBlock}>
+                <div className={classes.promotionLeft}>
+                  <img src={singleboxIconPng} alt="Singlebox" className={classes.appIcon} />
+                </div>
+                <div className={classes.promotionRight}>
+                  <div>
+                    <Typography variant="body1" className={classes.appTitle}>
+                      Singlebox
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      Smart Browser for Busy People
+                    </Typography>
+                  </div>
+                </div>
+              </div>
+              <ChevronRightIcon color="action" />
+            </ListItem>
+            <Divider />
+            <ListItem
+              button
+              onClick={() => {
+                const url = isMas() ? 'macappstore://apps.apple.com/app/translatium/id1547052291' : 'https://translatium.app?utm_source=webcatalog_app';
+                requestOpenInBrowser(url);
+              }}
+              className={classes.listItemPromotion}
+            >
+              <div className={classes.promotionBlock}>
+                <div className={classes.promotionLeft}>
+                  <img src={translatiumIconPng} alt="Translatium" className={classes.appIcon} />
+                </div>
+                <div className={classes.promotionRight}>
+                  <div>
+                    <Typography variant="body1" className={classes.appTitle}>
+                      Translatium
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      Translate 100+ Languages Instantly
+                    </Typography>
+                  </div>
+                </div>
+              </div>
+              <ChevronRightIcon color="action" />
+            </ListItem>
+          </List>
+        </Paper>
+
         <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.miscs.ref}>
           Miscellaneous
         </Typography>
@@ -1619,6 +1743,11 @@ const Preferences = ({
                 <Divider />
                 <ListItem button onClick={() => requestOpenInBrowser(`https://singlebox.app/help?utm_source=${utmSource}`)}>
                   <ListItemText primary="Help" />
+                  <ChevronRightIcon color="action" />
+                </ListItem>
+                <Divider />
+                <ListItem button onClick={() => requestOpenInBrowser('macappstore://apps.apple.com/app/id1548853763?action=write-review')}>
+                  <ListItemText primary="Rate Singlebox on Mac App Store" />
                   <ChevronRightIcon color="action" />
                 </ListItem>
               </>
