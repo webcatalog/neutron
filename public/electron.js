@@ -64,6 +64,7 @@ const extractHostname = require('./libs/extract-hostname');
 const { getAppLockStatusAsync, unlockAppUsingTouchId } = require('./libs/app-lock');
 const isMacOs11 = require('./libs/is-mac-os-11');
 const isMas = require('./libs/is-mas');
+const promptSetAsDefaultMailClient = require('./libs/prompt-set-as-default-email-client');
 
 const MAILTO_URLS = require('./constants/mailto-urls');
 
@@ -280,6 +281,10 @@ if (!gotTheLock) {
       .then(() => {
         // trigger whenTrulyReady;
         ipcMain.emit('truly-ready');
+
+        if (appJson.url && MAILTO_URLS[extractHostname(appJson.url)]) {
+          promptSetAsDefaultMailClient();
+        }
       });
   };
 
