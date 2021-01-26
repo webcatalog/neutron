@@ -8,6 +8,7 @@ const {
   ipcMain,
   nativeTheme,
   shell,
+  inAppPurchase,
 } = require('electron');
 
 const {
@@ -77,6 +78,7 @@ const sendToAllWindows = require('../libs/send-to-all-windows');
 const fetchUpdater = require('../libs/fetch-updater');
 const getWebsiteIconUrlAsync = require('../libs/get-website-icon-url-async');
 const getViewBounds = require('../libs/get-view-bounds');
+const isMas = require('../libs/is-mas');
 
 const aboutWindow = require('../windows/about');
 const addWorkspaceWindow = require('../windows/add-workspace');
@@ -225,6 +227,32 @@ const loadListeners = () => {
   ipcMain.on('request-show-require-license-dialog', () => {
     const utmSource = 'juli_app';
     const win = workspacePreferencesWindow.get() || preferencesWindow.get();
+
+    if (isMas()) {
+      dialog.showMessageBox(win, {
+        type: 'info',
+        message: `To unlock all features & add unlimited number of workspaces, please purchase ${appJson.name} Plus.`,
+        buttons: ['Later', 'Purchase...'],
+        cancelId: 0,
+        defaultId: 1,
+      })
+        .then(({ response }) => {
+          if (response === 1) {
+            const productIdentifier = '';
+            inAppPurchase.purchaseProduct(productIdentifier, 1).then((isProductValid) => {
+              if (!isProductValid) {
+                console.log('The product is not valid.');
+                return;
+              }
+
+              console.log('The payment has been added to the payment queue.');
+            });
+          }
+        })
+        .catch(console.log); // eslint-disable-line no-console
+      return;
+    }
+
     dialog.showMessageBox(win, {
       type: 'info',
       message: 'You\'re currently running the free version of WebCatalog. To unlock all features & add unlimited number of workspaces, please purchase WebCatalog Plus (30 USD) from our store and open WebCatalog app to activate it.',
