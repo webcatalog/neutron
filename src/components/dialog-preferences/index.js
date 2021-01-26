@@ -88,6 +88,7 @@ import SnackbarTrigger from '../shared/snackbar-trigger';
 import webcatalogIconPng from '../../images/products/webcatalog-mac-icon-128@2x.png';
 import singleboxIconPng from '../../images/products/singlebox-mac-icon-128@2x.png';
 import translatiumIconPng from '../../images/products/translatium-mac-icon-128@2x.png';
+import dynamailIconPng from '../../images/products/dynamail-mac-icon-128@2x.png';
 
 const styles = (theme) => ({
   root: {
@@ -249,7 +250,7 @@ const Preferences = ({
   warnBeforeQuitting,
 }) => {
   const appJson = window.remote.getGlobal('appJson');
-  const utmSource = isMas() ? 'singlebox_app' : 'juli_app';
+  const utmSource = isMas() ? `${appJson.id}_app` : 'juli_app';
   const canPromptTouchId = window.process.platform === 'darwin'
     && window.remote.systemPreferences.canPromptTouchID();
 
@@ -1673,7 +1674,7 @@ const Preferences = ({
             <ListItem
               button
               onClick={() => {
-                const url = isMas() ? 'macappstore://apps.apple.com/app/singlebox/id1548853763' : 'https://singlebox.app?utm_source=webcatalog_app';
+                const url = isMas() ? 'macappstore://apps.apple.com/app/singlebox/id1548853763' : `https://singlebox.app?utm_source=${utmSource}`;
                 requestOpenInBrowser(url);
               }}
               className={classes.listItemPromotion}
@@ -1699,7 +1700,7 @@ const Preferences = ({
             <ListItem
               button
               onClick={() => {
-                const url = isMas() ? 'macappstore://apps.apple.com/app/translatium/id1547052291' : 'https://translatium.app?utm_source=webcatalog_app';
+                const url = isMas() ? 'macappstore://apps.apple.com/app/translatium/id1547052291' : `https://translatium.app?utm_source=${utmSource}`;
                 requestOpenInBrowser(url);
               }}
               className={classes.listItemPromotion}
@@ -1721,6 +1722,32 @@ const Preferences = ({
               </div>
               <ChevronRightIcon color="action" />
             </ListItem>
+            <Divider />
+            <ListItem
+              button
+              onClick={() => {
+                const url = isMas() ? 'macappstore://apps.apple.com/us/app/dynamail-for-gmail/id1550739756' : `https://dynamail.app?utm_source=${utmSource}`;
+                requestOpenInBrowser(url);
+              }}
+              className={classes.listItemPromotion}
+            >
+              <div className={classes.promotionBlock}>
+                <div className={classes.promotionLeft}>
+                  <img src={dynamailIconPng} alt="Dynamail" className={classes.appIcon} />
+                </div>
+                <div className={classes.promotionRight}>
+                  <div>
+                    <Typography variant="body1" className={classes.appTitle}>
+                      Dynamail
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      Best Way to Use Gmail on Mac
+                    </Typography>
+                  </div>
+                </div>
+              </div>
+              <ChevronRightIcon color="action" />
+            </ListItem>
           </List>
         </Paper>
 
@@ -1736,12 +1763,30 @@ const Preferences = ({
             <Divider />
             {isMas() ? (
               <>
-                <ListItem button onClick={() => requestOpenInBrowser(`https://singlebox.app?utm_source=${utmSource}`)}>
+                <ListItem
+                  button
+                  onClick={() => {
+                    if (appJson.id === 'singlebox') {
+                      requestOpenInBrowser(`https://singlebox.app?utm_source=${utmSource}`);
+                    } else if (appJson.id === 'dynamail') {
+                      requestOpenInBrowser(`https://dynamail.app?utm_source=${utmSource}`);
+                    }
+                  }}
+                >
                   <ListItemText primary="Website" />
                   <ChevronRightIcon color="action" />
                 </ListItem>
                 <Divider />
-                <ListItem button onClick={() => requestOpenInBrowser(`https://singlebox.app/help?utm_source=${utmSource}`)}>
+                <ListItem
+                  button
+                  onClick={() => {
+                    if (appJson.id === 'singlebox') {
+                      requestOpenInBrowser(`https://singlebox.app/help?utm_source=${utmSource}`);
+                    } else if (appJson.id === 'dynamail') {
+                      requestOpenInBrowser(`https://dynamail.app/help?utm_source=${utmSource}`);
+                    }
+                  }}
+                >
                   <ListItemText primary="Help" />
                   <ChevronRightIcon color="action" />
                 </ListItem>

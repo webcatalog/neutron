@@ -225,7 +225,7 @@ const loadListeners = () => {
   });
 
   ipcMain.on('request-show-require-license-dialog', () => {
-    const utmSource = 'juli_app';
+    const utmSource = isMas() ? `${appJson.id}_app` : 'juli_app';
     const win = workspacePreferencesWindow.get() || preferencesWindow.get();
 
     if (isMas()) {
