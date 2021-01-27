@@ -139,6 +139,7 @@ const WorkspaceSelector = ({
     ? `${window.process.platform === 'darwin' ? '⌘' : 'Ctrl+'}${order + 1}` : null;
 
   const fullName = (() => {
+    if (name) return name;
     if (accountInfo) {
       if (accountInfo.name && accountInfo.email) {
         return `${accountInfo.name} (${accountInfo.email})`;
@@ -147,7 +148,7 @@ const WorkspaceSelector = ({
         return accountInfo.name;
       }
     }
-    return name;
+    return `Workspace ${order + 1}`;
   })();
 
   const tipText = (() => {
