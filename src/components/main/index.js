@@ -371,14 +371,18 @@ const Main = ({
                 </SortableContainer>
                 <WorkspaceSelector
                   id="add"
-                  onClick={!appJson.url
-                    ? () => requestShowAddWorkspaceWindow()
-                    : () => requestCreateWorkspace()}
+                  onClick={() => {
+                    if (!appJson.url) {
+                      requestShowAddWorkspaceWindow();
+                      return;
+                    }
+                    requestCreateWorkspace();
+                  }}
                   onContextMenu={!appJson.url ? null : (e) => {
                     e.preventDefault();
                     const template = [
                       {
-                        label: `Add ${appJson.name} Workspace`,
+                        label: `Add ${appJson.id === 'dynamail' ? 'Gmail' : appJson.name} Workspace`,
                         click: () => requestCreateWorkspace(),
                       },
                       {

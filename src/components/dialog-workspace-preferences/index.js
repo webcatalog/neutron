@@ -26,6 +26,7 @@ import PowerIcon from '@material-ui/icons/Power';
 import connectComponent from '../../helpers/connect-component';
 import checkLicense from '../../helpers/check-license';
 import roundTime from '../../helpers/round-time';
+import isMas from '../../helpers/is-mas';
 
 import {
   requestOpenInBrowser,
@@ -148,7 +149,8 @@ const Preferences = ({
   formInternalUrlRule,
   formJsCodeInjection,
 }) => {
-  const utmSource = 'juli_app';
+  const appJson = window.remote.getGlobal('appJson');
+  const utmSource = isMas() ? `${appJson.id}_app` : 'juli_app';
   const workspaceId = window.remote.getGlobal('workspacePreferencesWorkspaceId');
 
   const sections = {

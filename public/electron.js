@@ -9,6 +9,7 @@ const {
   protocol,
   session,
   BrowserWindow,
+  inAppPurchase,
 } = require('electron');
 const path = require('path');
 const fs = require('fs-extra');
@@ -86,6 +87,87 @@ if (!gotTheLock) {
     // https://www.electronjs.org/docs/api/command-line-switches
     app.commandLine.appendSwitch('ignore-certificate-errors');
   }
+
+  // Listen for transactions as soon as possible.
+  inAppPurchase.on('transactions-updated', (event, transactions) => {
+    if (!isMas() || !Array.isArray(transactions)) {
+      return;
+    }
+
+    const iapPurchased = getPreference('iapPurchased');
+    if (iapPurchased) return;
+
+    // Check each transaction.
+    transactions.forEach((transaction) => {
+      const { payment } = transaction;
+
+      if (appJson.id === 'dynamail' && payment.productIdentifier !== 'dynamail_plus') {
+        return;
+      }
+
+      switch (transaction.transactionState) {
+        case 'purchasing':
+          // eslint-disable-next-line no-console
+          console.log(`Purchasing ${payment.productIdentifier}...`);
+          break;
+        case 'purchased': {
+          // eslint-disable-next-line no-console
+          console.log(`${payment.productIdentifier} purchased.`);
+
+          // Get the receipt url.
+          // const receiptURL = inAppPurchase.getReceiptURL();
+
+          // console.log(`Receipt URL: ${receiptURL}`);
+
+          // Submit the receipt file to the server and check if it is valid.
+          // @see https://developer.apple.com/library/content/releasenotes/General/ValidateAppStoreReceipt/Chapters/ValidateRemotely.html
+          // ...
+          // If the receipt is valid, the product is purchased
+          // ...
+
+          // Finish the transaction.
+          dialog.showMessageBox(mainWindow.get(), {
+            type: 'question',
+            buttons: ['OK'],
+            message: `You've purchased ${appJson.name} Plus successfully. Thank you for supporting us!`,
+            cancelId: 0,
+            defaultId: 0,
+          }).catch(console.log); // eslint-disable-line
+
+          setPreference('iapPurchased', true);
+          inAppPurchase.finishTransactionByDate(transaction.transactionDate);
+          break;
+        }
+        case 'failed':
+          // eslint-disable-next-line no-console
+          console.log(`Failed to purchase ${payment.productIdentifier}.`);
+
+          // Finish the transaction.
+          inAppPurchase.finishTransactionByDate(transaction.transactionDate);
+          break;
+        case 'restored':
+          dialog.showMessageBox(mainWindow.get(), {
+            type: 'question',
+            buttons: ['OK'],
+            message: `${appJson.name} Plus purchase has been restored. Thank you for supporting us!`,
+            cancelId: 0,
+            defaultId: 0,
+          }).catch(console.log); // eslint-disable-line
+
+          setPreference('iapPurchased', true);
+
+          // eslint-disable-next-line no-console
+          console.log(`The purchase of ${payment.productIdentifier} has been restored.`);
+          break;
+        case 'deferred':
+          // eslint-disable-next-line no-console
+          console.log(`The purchase of ${payment.productIdentifier} has been deferred.`);
+          break;
+        default:
+          break;
+      }
+    });
+  });
 
   // mock app.whenReady
   let trulyReady = false;

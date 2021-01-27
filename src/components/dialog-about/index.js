@@ -14,6 +14,7 @@ import isMas from '../../helpers/is-mas';
 import { requestOpenInBrowser } from '../../senders';
 
 import singleboxIconPng from '../../images/products/singlebox-mac-icon-128@2x.png';
+import dynamailIconPng from '../../images/products/dynamail-mac-icon-128@2x.png';
 
 const styles = (theme) => ({
   icon: {
@@ -49,7 +50,7 @@ const About = (props) => {
 
   const appVersion = window.remote.app.getVersion();
   const appJson = window.remote.getGlobal('appJson');
-  const utmSource = isMas() ? 'singlebox_app' : 'juli_app';
+  const utmSource = isMas() ? `${appJson.id}_app` : 'juli_app';
 
   const versions = [
     { name: 'WebCatalog Engine', version: appVersion },
@@ -62,7 +63,11 @@ const About = (props) => {
     <div>
       <DialogContent className={classes.dialogContent}>
         <img
-          src={isMas() ? singleboxIconPng : `file://${window.iconPath}`}
+          src={(() => {
+            if (appJson.id === 'singlebox') return singleboxIconPng;
+            if (appJson.id === 'dynamail') return dynamailIconPng;
+            return `file://${window.iconPath}`;
+          })()}
           alt={appJson.name}
           className={classes.icon}
         />
@@ -87,13 +92,25 @@ const About = (props) => {
         {isMas() ? (
           <>
             <Button
-              onClick={() => requestOpenInBrowser(`https://singlebox.app?utm_source=${utmSource}`)}
+              onClick={() => {
+                if (appJson.id === 'singlebox') {
+                  requestOpenInBrowser(`https://singlebox.app?utm_source=${utmSource}`);
+                } else if (appJson.id === 'dynamail') {
+                  requestOpenInBrowser(`https://dynamail.app?utm_source=${utmSource}`);
+                }
+              }}
             >
               Website
             </Button>
             <br />
             <Button
-              onClick={() => requestOpenInBrowser(`https://singlebox.app/help?utm_source=${utmSource}`)}
+              onClick={() => {
+                if (appJson.id === 'singlebox') {
+                  requestOpenInBrowser(`https://singlebox.app/help?utm_source=${utmSource}`);
+                } else if (appJson.id === 'dynamail') {
+                  requestOpenInBrowser(`https://dynamail.app/help?utm_source=${utmSource}`);
+                }
+              }}
             >
               Help
             </Button>

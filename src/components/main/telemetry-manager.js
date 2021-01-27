@@ -1,6 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 
 import connectComponent from '../../helpers/connect-component';
@@ -8,13 +9,12 @@ import isMas from '../../helpers/is-mas';
 
 import amplitude from '../../amplitude';
 
-const TelemetryManager = () => {
+const TelemetryManager = ({ registered }) => {
   // run after setUserProperties
   // https://blog.logrocket.com/post-hooks-guide-react-call-order
   useEffect(() => {
-    const appJson = window.remote.getGlobal('appJson');
     amplitude.getInstance().setUserProperties({
-      registered: Boolean(appJson.registered),
+      registered,
       isMas: isMas(),
     });
     amplitude.getInstance().logEvent('webcatalog-engine: start app');
@@ -29,13 +29,21 @@ const TelemetryManager = () => {
     return () => {
       window.ipcRenderer.removeListener('log-focus', logFocus);
     };
-  }, []);
+  }, [registered]);
   return null;
 };
 
-TelemetryManager.propTypes = {};
+TelemetryManager.defaultProps = {
+  registered: false,
+};
 
-const mapStateToProps = () => ({});
+TelemetryManager.propTypes = {
+  registered: PropTypes.bool,
+};
+
+const mapStateToProps = (state) => ({
+  registered: window.remote.getGlobal('appJson').registered || state.preferences.iapPurchased,
+});
 
 export default connectComponent(
   TelemetryManager,
