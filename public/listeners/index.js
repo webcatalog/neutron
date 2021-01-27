@@ -232,21 +232,27 @@ const loadListeners = () => {
       dialog.showMessageBox(win, {
         type: 'info',
         message: `To unlock all features & add unlimited number of workspaces, please purchase ${appJson.name} Plus.`,
-        buttons: ['Later', 'Purchase...'],
-        cancelId: 0,
-        defaultId: 1,
+        buttons: ['Purchase...', 'Restore Purchase', 'Later'],
+        cancelId: 2,
+        defaultId: 0,
       })
         .then(({ response }) => {
-          if (response === 1) {
-            const productIdentifier = '';
-            inAppPurchase.purchaseProduct(productIdentifier, 1).then((isProductValid) => {
+          const productIdentifier = 'dynamail_plus';
+          if (response === 0) {
+            inAppPurchase.purchaseProduct(productIdentifier).then((isProductValid) => {
               if (!isProductValid) {
+                // eslint-disable-next-line no-console
                 console.log('The product is not valid.');
                 return;
               }
 
+              // eslint-disable-next-line no-console
               console.log('The payment has been added to the payment queue.');
             });
+          }
+
+          if (response === 1) {
+            inAppPurchase.restoreCompletedTransactions();
           }
         })
         .catch(console.log); // eslint-disable-line no-console
@@ -316,7 +322,8 @@ const loadListeners = () => {
 
   ipcMain.on('request-create-workspace', (e, workspaceObj = {}) => {
     const { registered } = global.appJson;
-    if (!registered) {
+    const iapPurchased = isMas() ? getPreference('iapPurchased') : false;
+    if (!registered && !iapPurchased) {
       const workspaces = getWorkspaces();
 
       const maxWorkspaceNum = 2;

@@ -372,23 +372,6 @@ const Main = ({
                 <WorkspaceSelector
                   id="add"
                   onClick={() => {
-                    if (appJson.id === 'dynamail') {
-                      const template = [
-                        {
-                          label: 'Add Gmail Workspace',
-                          click: () => requestCreateWorkspace(),
-                        },
-                        {
-                          label: 'Add Custom Workspace',
-                          click: () => requestShowAddWorkspaceWindow(),
-                        },
-                      ];
-
-                      const menu = window.remote.Menu.buildFromTemplate(template);
-                      menu.popup(window.remote.getCurrentWindow());
-                      return;
-                    }
-
                     if (!appJson.url) {
                       requestShowAddWorkspaceWindow();
                       return;

@@ -405,7 +405,7 @@ const Preferences = ({
         </Typography>
         <Paper elevation={0} className={classes.paper}>
           <List disablePadding dense>
-            {appJson.url && (
+            {appJson.url && !isMas() && (
               <>
                 <ListItem
                   button
@@ -1390,8 +1390,12 @@ const Preferences = ({
         </Typography>
         <Paper elevation={0} className={classes.paper}>
           <List disablePadding dense>
-            <ListItemDefaultBrowser />
-            <Divider />
+            {appJson.id !== 'dynamail' && (
+              <>
+                <ListItemDefaultBrowser />
+                <Divider />
+              </>
+            )}
             <ListItemDefaultMailClient />
             <Divider />
             <ListItem>
@@ -1726,7 +1730,7 @@ const Preferences = ({
             <ListItem
               button
               onClick={() => {
-                const url = isMas() ? 'macappstore://apps.apple.com/us/app/dynamail-for-gmail/id1550739756' : `https://dynamail.app?utm_source=${utmSource}`;
+                const url = isMas() ? 'macappstore://apps.apple.com/app/dynamail-for-gmail/id1550739756' : `https://dynamail.app?utm_source=${utmSource}`;
                 requestOpenInBrowser(url);
               }}
               className={classes.listItemPromotion}
@@ -1791,8 +1795,17 @@ const Preferences = ({
                   <ChevronRightIcon color="action" />
                 </ListItem>
                 <Divider />
-                <ListItem button onClick={() => requestOpenInBrowser('macappstore://apps.apple.com/app/id1548853763?action=write-review')}>
-                  <ListItemText primary="Rate Singlebox on Mac App Store" />
+                <ListItem
+                  button
+                  onClick={() => {
+                    if (appJson.id === 'singlebox') {
+                      requestOpenInBrowser('macappstore://apps.apple.com/app/id1548853763?action=write-review');
+                    } else if (appJson.id === 'dynamail') {
+                      requestOpenInBrowser('macappstore://apps.apple.com/app/id1550739756?action=write-review');
+                    }
+                  }}
+                >
+                  <ListItemText primary={`Rate ${appJson.name} on Mac App Store`} />
                   <ChevronRightIcon color="action" />
                 </ListItem>
               </>
@@ -1953,7 +1966,7 @@ const mapStateToProps = (state) => ({
   pauseNotificationsByScheduleFrom: state.preferences.pauseNotificationsByScheduleFrom,
   pauseNotificationsByScheduleTo: state.preferences.pauseNotificationsByScheduleTo,
   pauseNotificationsMuteAudio: state.preferences.pauseNotificationsMuteAudio,
-  registered: window.remote.getGlobal('appJson').registered,
+  registered: window.remote.getGlobal('appJson').registered || state.preferences.iapPurchased,
   rememberLastPageVisited: state.preferences.rememberLastPageVisited,
   runInBackground: state.preferences.runInBackground,
   searchEngine: state.preferences.searchEngine,
