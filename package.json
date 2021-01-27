@@ -1,7 +1,7 @@
 {
   "name": "Singlebox",
   "description": "AppView template for WebCatalog",
-  "version": "14.5.0",
+  "version": "14.6.0",
   "minimumWebCatalogVersion": "28.0.0-rc",
   "engines": {
     "node": ">=12.0.0 <13.0.0"
@@ -24,7 +24,7 @@
   "author": "Quang Lam <quang.lam@webcatalog.app>",
   "dependencies": {
     "@cliqz/adblocker-electron": "1.20.0",
-    "@sentry/electron": "2.1.0",
+    "@sentry/electron": "2.2.0",
     "auto-launch": "5.0.5",
     "cheerio": "1.0.0-rc.5",
     "darkreader": "4.9.22",
@@ -33,7 +33,7 @@
     "electron-settings": "4.0.2",
     "electron-window-state": "5.0.3",
     "ext-name": "5.0.0",
-    "follow-redirects": "1.13.1",
+    "follow-redirects": "1.13.2",
     "fs-extra": "9.1.0",
     "is-url": "1.2.4",
     "jimp": "0.16.1",
@@ -56,7 +56,7 @@
     "@elastic/react-search-ui": "1.5.0",
     "@elastic/react-search-ui-views": "1.5.0",
     "@elastic/search-ui-app-search-connector": "1.5.0",
-    "@electron/get": "1.12.2",
+    "@electron/get": "1.12.3",
     "@material-ui/core": "4.11.3",
     "@material-ui/icons": "4.11.2",
     "@material-ui/pickers": "3.2.10",
@@ -73,7 +73,7 @@
     "cross-env": "7.0.3",
     "date-fns": "2.16.1",
     "del": "6.0.0",
-    "electron": "11.2.0",
+    "electron": "11.2.1",
     "electron-builder": "22.10.4",
     "eslint": "6.8.0",
     "eslint-config-airbnb": "18.2.1",
