@@ -44,43 +44,49 @@ const AddWorkspace = ({
   classes,
   mode,
   onUpdateMode,
-}) => (
-  <div className={classes.root}>
-    {mode === 'catalog' && <Home />}
-    {mode === 'custom' && <Form />}
+}) => {
+  const appJsonId = window.remote.getGlobal('appJson').id;
 
-    <Paper elevation={1} square className={classes.paper}>
-      <BottomNavigation
-        showLabels
-        value={mode}
-        onChange={(e, value) => {
-          // custom workspace is disabled in free version of Singlebox
-          onUpdateMode(value);
-        }}
-        classes={{ root: classes.bottomNavigation }}
-      >
-        <BottomNavigationAction
-          label="Catalog"
-          value="catalog"
-          icon={<ViewListIcon />}
-          classes={{
-            wrapper: classes.bottomNavigationActionWrapper,
-            label: classes.bottomNavigationActionLabel,
-          }}
-        />
-        <BottomNavigationAction
-          label="Custom Workspace"
-          value="custom"
-          icon={<CreateIcon />}
-          classes={{
-            wrapper: classes.bottomNavigationActionWrapper,
-            label: classes.bottomNavigationActionLabel,
-          }}
-        />
-      </BottomNavigation>
-    </Paper>
-  </div>
-);
+  return (
+    <div className={classes.root}>
+      {mode === 'catalog' && <Home />}
+      {mode === 'custom' && <Form />}
+
+      {appJsonId !== 'panmail' && (
+        <Paper elevation={1} square className={classes.paper}>
+          <BottomNavigation
+            showLabels
+            value={mode}
+            onChange={(e, value) => {
+              // custom workspace is disabled in free version of Singlebox
+              onUpdateMode(value);
+            }}
+            classes={{ root: classes.bottomNavigation }}
+          >
+            <BottomNavigationAction
+              label="Catalog"
+              value="catalog"
+              icon={<ViewListIcon />}
+              classes={{
+                wrapper: classes.bottomNavigationActionWrapper,
+                label: classes.bottomNavigationActionLabel,
+              }}
+            />
+            <BottomNavigationAction
+              label="Custom Workspace"
+              value="custom"
+              icon={<CreateIcon />}
+              classes={{
+                wrapper: classes.bottomNavigationActionWrapper,
+                label: classes.bottomNavigationActionLabel,
+              }}
+            />
+          </BottomNavigation>
+        </Paper>
+      )}
+    </div>
+  );
+};
 
 AddWorkspace.propTypes = {
   classes: PropTypes.object.isRequired,

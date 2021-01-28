@@ -105,6 +105,10 @@ if (!gotTheLock) {
         return;
       }
 
+      if (appJson.id === 'panmail' && payment.productIdentifier !== 'panmail_plus') {
+        return;
+      }
+
       switch (transaction.transactionState) {
         case 'purchasing':
           // eslint-disable-next-line no-console

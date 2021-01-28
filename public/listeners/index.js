@@ -237,7 +237,7 @@ const loadListeners = () => {
         defaultId: 0,
       })
         .then(({ response }) => {
-          const productIdentifier = 'dynamail_plus';
+          const productIdentifier = `${appJson.id}_plus`;
           if (response === 0) {
             inAppPurchase.purchaseProduct(productIdentifier).then((isProductValid) => {
               if (!isProductValid) {
