@@ -89,6 +89,7 @@ import webcatalogIconPng from '../../images/products/webcatalog-mac-icon-128@2x.
 import singleboxIconPng from '../../images/products/singlebox-mac-icon-128@2x.png';
 import translatiumIconPng from '../../images/products/translatium-mac-icon-128@2x.png';
 import dynamailIconPng from '../../images/products/dynamail-mac-icon-128@2x.png';
+import panmailIconPng from '../../images/products/panmail-mac-icon-128@2x.png';
 
 const styles = (theme) => ({
   root: {
@@ -1390,7 +1391,7 @@ const Preferences = ({
         </Typography>
         <Paper elevation={0} className={classes.paper}>
           <List disablePadding dense>
-            {appJson.id !== 'dynamail' && (
+            {appJson.id !== 'dynamail' && appJson.id !== 'panmail' && (
               <>
                 <ListItemDefaultBrowser />
                 <Divider />
@@ -1752,6 +1753,32 @@ const Preferences = ({
               </div>
               <ChevronRightIcon color="action" />
             </ListItem>
+            <Divider />
+            <ListItem
+              button
+              onClick={() => {
+                const url = isMas() ? 'macappstore://apps.apple.com/us/app/panmail/id1551178702' : `https://panmail.app?utm_source=${utmSource}`;
+                requestOpenInBrowser(url);
+              }}
+              className={classes.listItemPromotion}
+            >
+              <div className={classes.promotionBlock}>
+                <div className={classes.promotionLeft}>
+                  <img src={panmailIconPng} alt="Panmail" className={classes.appIcon} />
+                </div>
+                <div className={classes.promotionRight}>
+                  <div>
+                    <Typography variant="body1" className={classes.appTitle}>
+                      Panmail
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      All Your Email Apps in One
+                    </Typography>
+                  </div>
+                </div>
+              </div>
+              <ChevronRightIcon color="action" />
+            </ListItem>
           </List>
         </Paper>
 
@@ -1774,6 +1801,8 @@ const Preferences = ({
                       requestOpenInBrowser(`https://singlebox.app?utm_source=${utmSource}`);
                     } else if (appJson.id === 'dynamail') {
                       requestOpenInBrowser(`https://dynamail.app?utm_source=${utmSource}`);
+                    } else if (appJson.id === 'panmail') {
+                      requestOpenInBrowser(`https://panmail.app?utm_source=${utmSource}`);
                     }
                   }}
                 >
@@ -1788,6 +1817,8 @@ const Preferences = ({
                       requestOpenInBrowser(`https://singlebox.app/help?utm_source=${utmSource}`);
                     } else if (appJson.id === 'dynamail') {
                       requestOpenInBrowser(`https://dynamail.app/help?utm_source=${utmSource}`);
+                    } else if (appJson.id === 'panmail') {
+                      requestOpenInBrowser(`https://panmail.app/help?utm_source=${utmSource}`);
                     }
                   }}
                 >
@@ -1799,9 +1830,27 @@ const Preferences = ({
                   button
                   onClick={() => {
                     if (appJson.id === 'singlebox') {
+                      requestOpenInBrowser('macappstore://apps.apple.com/app/id1548853763');
+                    } else if (appJson.id === 'dynamail') {
+                      requestOpenInBrowser('macappstore://apps.apple.com/app/id1550739756');
+                    } else if (appJson.id === 'panmail') {
+                      requestOpenInBrowser('macappstore://apps.apple.com/app/id1551178702');
+                    }
+                  }}
+                >
+                  <ListItemText primary="Mac App Store" />
+                  <ChevronRightIcon color="action" />
+                </ListItem>
+                <Divider />
+                <ListItem
+                  button
+                  onClick={() => {
+                    if (appJson.id === 'singlebox') {
                       requestOpenInBrowser('macappstore://apps.apple.com/app/id1548853763?action=write-review');
                     } else if (appJson.id === 'dynamail') {
                       requestOpenInBrowser('macappstore://apps.apple.com/app/id1550739756?action=write-review');
+                    } else if (appJson.id === 'panmail') {
+                      requestOpenInBrowser('macappstore://apps.apple.com/app/id1551178702?action=write-review');
                     }
                   }}
                 >
