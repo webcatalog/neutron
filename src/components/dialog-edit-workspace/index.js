@@ -288,8 +288,8 @@ const EditWorkspace = ({
               if (!homeUrlError && isMailApp) {
                 return 'Email app detected.';
               }
-              if (!homeUrl && window.remote.getGlobal('appJson').url) {
-                return `Defaults to ${window.remote.getGlobal('appJson').url}.`;
+              if (!homeUrl && appJson.url) {
+                return `Defaults to ${appJson.url}.`;
               }
               return homeUrlError;
             })()}
