@@ -28,6 +28,8 @@ import checkLicense from '../../helpers/check-license';
 import roundTime from '../../helpers/round-time';
 import isMas from '../../helpers/is-mas';
 
+import appJson from '../../constants/app-json';
+
 import {
   requestOpenInBrowser,
   requestRequestReloadWorkspaceDialog,
@@ -149,7 +151,6 @@ const Preferences = ({
   formInternalUrlRule,
   formJsCodeInjection,
 }) => {
-  const appJson = window.remote.getGlobal('appJson');
   const utmSource = isMas() ? `${appJson.id}_app` : 'juli_app';
   const workspaceId = window.remote.getGlobal('workspacePreferencesWorkspaceId');
 

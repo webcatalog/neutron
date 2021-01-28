@@ -15,6 +15,8 @@ import { requestShowAppMenu } from '../../senders';
 
 import connectComponent from '../../helpers/connect-component';
 
+import appJson from '../../constants/app-json';
+
 const TOOLBAR_HEIGHT = 28;
 const BUTTON_WIDTH = 46;
 
@@ -250,7 +252,7 @@ EnhancedAppBar.propTypes = {
 
 const mapStateToProps = (state, ownProps) => ({
   isMaximized: state.general.isMaximized,
-  title: ownProps.title || ((window.mode === 'main' || window.mode === 'menubar') && state.general.title ? state.general.title : window.remote.getGlobal('appJson').name),
+  title: ownProps.title || ((window.mode === 'main' || window.mode === 'menubar') && state.general.title ? state.general.title : appJson.name),
   sidebar: state.preferences.sidebar,
   sidebarSize: state.preferences.sidebarSize,
 });

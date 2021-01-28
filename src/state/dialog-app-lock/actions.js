@@ -6,6 +6,7 @@ import {
   OPEN_DIALOG_APP_LOCK,
   CLOSE_DIALOG_APP_LOCK,
 } from '../../constants/actions';
+import appJson from '../../constants/app-json';
 
 import validate from '../../helpers/validate';
 import hasErrors from '../../helpers/has-errors';
@@ -36,7 +37,6 @@ export const open = () => (dispatch) => {
         })
           .then(({ response }) => {
             if (response === 1) {
-              const appJson = window.remote.getGlobal('appJson');
               const utmSource = isMas() ? `${appJson.id}_app` : 'juli_app';
               window.remote.shell.openExternal(`https://help.webcatalog.app/article/29-what-are-the-requirements-to-use-app-lock-feature-on-linux?utm_source=${utmSource}`);
             }

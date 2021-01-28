@@ -7,6 +7,8 @@ import { useEffect } from 'react';
 import connectComponent from '../../helpers/connect-component';
 import isMas from '../../helpers/is-mas';
 
+import appJson from '../../constants/app-json';
+
 import amplitude from '../../amplitude';
 
 const TelemetryManager = ({ registered }) => {
@@ -42,7 +44,7 @@ TelemetryManager.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  registered: window.remote.getGlobal('appJson').registered || state.preferences.iapPurchased,
+  registered: appJson.registered || state.preferences.iapPurchased,
 });
 
 export default connectComponent(

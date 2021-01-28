@@ -27,6 +27,8 @@ import connectComponent from '../../helpers/connect-component';
 import getAvatarText from '../../helpers/get-avatar-text';
 import getMailtoUrl from '../../helpers/get-mailto-url';
 
+import appJson from '../../constants/app-json';
+
 import {
   getIconFromInternet,
   getIconFromSwiftype,
@@ -285,8 +287,8 @@ const EditWorkspace = ({
             if (!homeUrlError && isMailApp) {
               return 'Email app detected.';
             }
-            if (!homeUrl && window.remote.getGlobal('appJson').url) {
-              return `Defaults to ${window.remote.getGlobal('appJson').url}.`;
+            if (!homeUrl && appJson.url) {
+              return `Defaults to ${appJson.url}.`;
             }
             return homeUrlError;
           })()}

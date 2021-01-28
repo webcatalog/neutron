@@ -15,6 +15,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 import connectComponent from '../../helpers/connect-component';
 
+import appJson from '../../constants/app-json';
+
 import AppCard from './app-card';
 import SubmitAppCard from './submit-app-card';
 import NoConnection from './no-connection';
@@ -85,7 +87,7 @@ const Home = ({ classes }) => {
     { field: 'type', values: ['Singlesite'], type: 'all' },
     { field: 'widevine', values: [0], type: 'all' },
   ];
-  const appJsonId = window.remote.getGlobal('appJson').id;
+  const appJsonId = appJson.id;
   if (appJsonId.startsWith('group-')) {
     const groupId = appJsonId.substring('group-'.length);
     filters.push({ field: 'group_id', values: [groupId], type: 'all' });

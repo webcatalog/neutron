@@ -14,10 +14,11 @@ import connectComponent from '../../helpers/connect-component';
 import getWorkspacesAsList from '../../helpers/get-workspaces-as-list';
 import getMailtoUrl from '../../helpers/get-mailto-url';
 
+import appJson from '../../constants/app-json';
+
 import { requestLoadUrl } from '../../senders';
 
 const OpenUrlWith = ({ workspaces }) => {
-  const appJson = window.remote.getGlobal('appJson');
   const incomingUrl = window.remote.getGlobal('incomingUrl');
   const isMailtoUrl = incomingUrl.startsWith('mailto:');
 
