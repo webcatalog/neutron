@@ -1,7 +1,7 @@
 {
   "name": "Singlebox",
   "description": "AppView template for WebCatalog",
-  "version": "14.6.1",
+  "version": "14.6.2",
   "minimumWebCatalogVersion": "28.0.0-rc",
   "engines": {
     "node": ">=12.0.0 <13.0.0"
@@ -27,7 +27,7 @@
     "@sentry/electron": "2.2.0",
     "auto-launch": "5.0.5",
     "cheerio": "1.0.0-rc.5",
-    "darkreader": "4.9.22",
+    "darkreader": "4.9.27",
     "electron-context-menu": "2.4.0",
     "electron-is-dev": "1.2.0",
     "electron-settings": "4.0.2",
