@@ -92,6 +92,9 @@ const Home = ({ classes }) => {
     const groupId = appJsonId.substring('group-'.length);
     filters.push({ field: 'group_id', values: [groupId], type: 'all' });
   }
+  if (appJsonId === 'panmail') {
+    filters.push({ field: 'sub_category', values: ['Email'], type: 'all' });
+  }
 
   return (
     <SearchProvider
@@ -116,11 +119,13 @@ const Home = ({ classes }) => {
       }}
     >
       <div className={classes.homeContainer}>
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <SearchBox />
+        {appJsonId !== 'panmail' && (
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <SearchBox />
+            </Grid>
           </Grid>
-        </Grid>
+        )}
         <div
           className={classes.scrollContainer}
         >

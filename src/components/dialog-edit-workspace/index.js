@@ -270,29 +270,31 @@ const EditWorkspace = ({
           value={name}
           onChange={(e) => onUpdateForm({ name: e.target.value })}
         />
-        <TextField
-          label="Home URL"
-          error={Boolean(homeUrlError)}
-          placeholder="Optional"
-          fullWidth
-          margin="dense"
-          variant="outlined"
-          className={classes.textField}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          value={homeUrl}
-          onChange={(e) => onUpdateForm({ homeUrl: e.target.value })}
-          helperText={(() => {
-            if (!homeUrlError && isMailApp) {
-              return 'Email app detected.';
-            }
-            if (!homeUrl && appJson.url) {
-              return `Defaults to ${appJson.url}.`;
-            }
-            return homeUrlError;
-          })()}
-        />
+        {appJson.id !== 'panmail' && (
+          <TextField
+            label="Home URL"
+            error={Boolean(homeUrlError)}
+            placeholder="Optional"
+            fullWidth
+            margin="dense"
+            variant="outlined"
+            className={classes.textField}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            value={homeUrl}
+            onChange={(e) => onUpdateForm({ homeUrl: e.target.value })}
+            helperText={(() => {
+              if (!homeUrlError && isMailApp) {
+                return 'Email app detected.';
+              }
+              if (!homeUrl && window.remote.getGlobal('appJson').url) {
+                return `Defaults to ${window.remote.getGlobal('appJson').url}.`;
+              }
+              return homeUrlError;
+            })()}
+          />
+        )}
         <div className={classes.avatarFlex}>
           <div className={classes.avatarLeft}>
             {renderAvatar(
@@ -420,16 +422,20 @@ const EditWorkspace = ({
                 <Typography variant="caption" className={classes.caption}>
                   PNG, JPEG, GIF, TIFF or BMP.
                 </Typography>
-                <Button
-                  variant="outlined"
-                  size="small"
-                  className={classes.buttonBot}
-                  disabled={Boolean(homeUrlError || downloadingIcon)}
-                  onClick={() => onGetIconFromInternet(true)}
-                >
-                  {downloadingIcon ? 'Downloading...' : 'Download Icon from URL'}
-                </Button>
-                <br />
+                {appJson.id !== 'panmail' && (
+                  <>
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      className={classes.buttonBot}
+                      disabled={Boolean(homeUrlError || downloadingIcon)}
+                      onClick={() => onGetIconFromInternet(true)}
+                    >
+                      {downloadingIcon ? 'Downloading...' : 'Download Icon from URL'}
+                    </Button>
+                    <br />
+                  </>
+                )}
                 <Button
                   variant="outlined"
                   size="small"

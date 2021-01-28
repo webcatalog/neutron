@@ -49,7 +49,7 @@ const defaultPreferences = {
   cssCodeInjection: null,
   customUserAgent: null,
   // default Dark Reader settings from its Chrome extension */
-  darkReader: appJson.id === 'dynamail',
+  darkReader: appJson.id === 'dynamail' || appJson.id === 'panmail',
   darkReaderBrightness: 100,
   darkReaderContrast: 100,
   darkReaderGrayscale: 0,

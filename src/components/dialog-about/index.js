@@ -17,6 +17,7 @@ import { requestOpenInBrowser } from '../../senders';
 
 import singleboxIconPng from '../../images/products/singlebox-mac-icon-128@2x.png';
 import dynamailIconPng from '../../images/products/dynamail-mac-icon-128@2x.png';
+import panmailIconPng from '../../images/products/panmail-mac-icon-128@2x.png';
 
 const styles = (theme) => ({
   icon: {
@@ -67,6 +68,7 @@ const About = (props) => {
           src={(() => {
             if (appJson.id === 'singlebox') return singleboxIconPng;
             if (appJson.id === 'dynamail') return dynamailIconPng;
+            if (appJson.id === 'panmail') return panmailIconPng;
             return `file://${window.iconPath}`;
           })()}
           alt={appJson.name}
@@ -95,9 +97,25 @@ const About = (props) => {
             <Button
               onClick={() => {
                 if (appJson.id === 'singlebox') {
+                  requestOpenInBrowser('macappstore://apps.apple.com/app/id1548853763');
+                } else if (appJson.id === 'dynamail') {
+                  requestOpenInBrowser('macappstore://apps.apple.com/app/id1550739756');
+                } else if (appJson.id === 'panmail') {
+                  requestOpenInBrowser('macappstore://apps.apple.com/app/id1551178702');
+                }
+              }}
+            >
+              Mac App Store
+            </Button>
+            <br />
+            <Button
+              onClick={() => {
+                if (appJson.id === 'singlebox') {
                   requestOpenInBrowser(`https://singlebox.app?utm_source=${utmSource}`);
                 } else if (appJson.id === 'dynamail') {
                   requestOpenInBrowser(`https://dynamail.app?utm_source=${utmSource}`);
+                } else if (appJson.id === 'panmail') {
+                  requestOpenInBrowser(`https://panmail.app?utm_source=${utmSource}`);
                 }
               }}
             >
@@ -110,6 +128,8 @@ const About = (props) => {
                   requestOpenInBrowser(`https://singlebox.app/help?utm_source=${utmSource}`);
                 } else if (appJson.id === 'dynamail') {
                   requestOpenInBrowser(`https://dynamail.app/help?utm_source=${utmSource}`);
+                } else if (appJson.id === 'panmail') {
+                  requestOpenInBrowser(`https://panmail.app/help?utm_source=${utmSource}`);
                 }
               }}
             >
