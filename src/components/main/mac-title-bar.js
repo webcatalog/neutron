@@ -7,6 +7,9 @@ import classnames from 'classnames';
 
 import connectComponent from '../../helpers/connect-component';
 import getUrlFromText from '../../helpers/get-url-from-text';
+import isMacOs11 from '../../helpers/is-mac-os-11';
+
+import appJson from '../../constants/app-json';
 
 import {
   requestLoadUrl,
@@ -14,7 +17,7 @@ import {
 
 const styles = (theme) => {
   // big sur increases title bar height
-  const titleBarHeight = window.remote.getGlobal('isMacOs11') ? 28 : 22;
+  const titleBarHeight = isMacOs11() ? 28 : 22;
   return {
     root: {
       background: theme.palette.type === 'dark' ? '#2a2b2c' : 'linear-gradient(top, #e4e4e4, #cecece)',
@@ -74,7 +77,7 @@ const FakeTitleBar = (props) => {
         }
       } : null}
     >
-      {(window.mode === 'main' || window.mode === 'menubar') && title ? title : window.remote.getGlobal('appJson').name}
+      {(window.mode === 'main' || window.mode === 'menubar') && title ? title : appJson.name}
     </div>
   );
 };

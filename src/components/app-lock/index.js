@@ -20,6 +20,8 @@ import LockIcon from '@material-ui/icons/Lock';
 
 import connectComponent from '../../helpers/connect-component';
 
+import appJson from '../../constants/app-json';
+
 import { updateForm, validateForm } from '../../state/app-lock/actions';
 
 import {
@@ -139,7 +141,7 @@ const AppLock = ({
       </div>
       <div className={classes.rightCorner}>
         <Typography variant="body2" color="textSecondary">
-          {`Ref ID: ${window.remote.getGlobal('appJson').id}`}
+          {`Ref ID: ${appJson.id}`}
         </Typography>
       </div>
       <div className={classes.centering}>

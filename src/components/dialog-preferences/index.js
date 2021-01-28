@@ -45,6 +45,8 @@ import checkLicense from '../../helpers/check-license';
 import roundTime from '../../helpers/round-time';
 import isMas from '../../helpers/is-mas';
 
+import appJson from '../../constants/app-json';
+
 import {
   requestCheckForUpdates,
   requestClearBrowsingData,
@@ -250,7 +252,6 @@ const Preferences = ({
   useSystemTitleBar,
   warnBeforeQuitting,
 }) => {
-  const appJson = window.remote.getGlobal('appJson');
   const utmSource = isMas() ? `${appJson.id}_app` : 'juli_app';
   const canPromptTouchId = window.process.platform === 'darwin'
     && window.remote.systemPreferences.canPromptTouchID();
@@ -2015,7 +2016,7 @@ const mapStateToProps = (state) => ({
   pauseNotificationsByScheduleFrom: state.preferences.pauseNotificationsByScheduleFrom,
   pauseNotificationsByScheduleTo: state.preferences.pauseNotificationsByScheduleTo,
   pauseNotificationsMuteAudio: state.preferences.pauseNotificationsMuteAudio,
-  registered: window.remote.getGlobal('appJson').registered || state.preferences.iapPurchased,
+  registered: appJson.registered || state.preferences.iapPurchased,
   rememberLastPageVisited: state.preferences.rememberLastPageVisited,
   runInBackground: state.preferences.runInBackground,
   searchEngine: state.preferences.searchEngine,

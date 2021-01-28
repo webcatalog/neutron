@@ -13,6 +13,8 @@ import CreateIcon from '@material-ui/icons/Create';
 
 import connectComponent from '../../helpers/connect-component';
 
+import appJson from '../../constants/app-json';
+
 import { updateMode } from '../../state/dialog-add-workspace/actions';
 
 import Home from './home';
@@ -45,7 +47,7 @@ const AddWorkspace = ({
   mode,
   onUpdateMode,
 }) => {
-  const appJsonId = window.remote.getGlobal('appJson').id;
+  const appJsonId = appJson.id;
 
   return (
     <div className={classes.root}>

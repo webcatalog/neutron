@@ -18,6 +18,8 @@ import getWorkspacesAsList from './helpers/get-workspaces-as-list';
 
 import { getReactInitialStateAsync } from './invokers';
 
+import appJson from './constants/app-json';
+
 const DialogAbout = React.lazy(() => import('./components/dialog-about'));
 const DialogAddWorkspace = React.lazy(() => import('./components/dialog-add-workspace'));
 const DialogAuth = React.lazy(() => import('./components/dialog-auth'));
@@ -109,7 +111,7 @@ const runApp = () => {
       } else if (window.mode === 'add-workspace') {
         document.title = 'Add Custom Workspace';
       } else {
-        document.title = window.remote.getGlobal('appJson').name;
+        document.title = appJson.name;
       }
 
       if (window.mode !== 'main'

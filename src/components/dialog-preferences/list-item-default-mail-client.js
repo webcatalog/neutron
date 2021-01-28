@@ -12,10 +12,11 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 import connectComponent from '../../helpers/connect-component';
 
+import appJson from '../../constants/app-json';
+
 import { requestOpenInBrowser } from '../../senders';
 
 const ListItemDefaultMailClient = () => {
-  const appJson = window.remote.getGlobal('appJson');
   const [isDefault, setIsDefault] = useState(false);
   const appId = `webcatalog-${appJson.id}`;
 

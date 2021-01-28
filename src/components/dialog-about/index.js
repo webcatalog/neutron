@@ -11,6 +11,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import connectComponent from '../../helpers/connect-component';
 import isMas from '../../helpers/is-mas';
 
+import appJson from '../../constants/app-json';
+
 import { requestOpenInBrowser } from '../../senders';
 
 import singleboxIconPng from '../../images/products/singlebox-mac-icon-128@2x.png';
@@ -50,7 +52,6 @@ const About = (props) => {
   } = props;
 
   const appVersion = window.remote.app.getVersion();
-  const appJson = window.remote.getGlobal('appJson');
   const utmSource = isMas() ? `${appJson.id}_app` : 'juli_app';
 
   const versions = [

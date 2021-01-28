@@ -22,6 +22,9 @@ import { sortableContainer, sortableElement } from 'react-sortable-hoc';
 
 import connectComponent from '../../helpers/connect-component';
 import getWorkspacesAsList from '../../helpers/get-workspaces-as-list';
+import isMacOs11 from '../../helpers/is-mac-os-11';
+
+import appJson from '../../constants/app-json';
 
 import arrowWhite from '../../images/arrow-white.png';
 import arrowBlack from '../../images/arrow-black.png';
@@ -63,7 +66,7 @@ const arrayMove = (array, from, to) => {
 
 const styles = (theme) => {
   // big sur increases title bar height
-  const titleBarHeight = window.remote.getGlobal('isMacOs11') ? 28 : 22;
+  const titleBarHeight = isMacOs11() ? 28 : 22;
 
   return {
     outerRoot: {
@@ -328,7 +331,6 @@ const Main = ({
   titleBar,
   workspaces,
 }) => {
-  const appJson = window.remote.getGlobal('appJson');
   const workspacesList = getWorkspacesAsList(workspaces);
   const showMacTitleBar = window.process.platform === 'darwin' && titleBar && !isFullScreen;
   const isSidebarExpanded = sidebarSize === 'expanded';

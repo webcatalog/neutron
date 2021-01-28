@@ -16,12 +16,14 @@ import {
   requestRemoveWorkspacePicture,
 } from '../../senders';
 
+import appJson from '../../constants/app-json';
+
 import swiftype from '../../swiftype';
 
 const getValidationRules = () => ({
   homeUrl: {
     fieldName: 'Home URL',
-    required: !window.remote.getGlobal('appJson').url,
+    required: !appJson.url,
     lessStrictUrl: true,
   },
 });
@@ -71,7 +73,6 @@ export const getIconFromInternet = () => (dispatch, getState) => {
     downloadingIcon: true,
   });
 
-  const appJson = window.remote.getGlobal('appJson');
   getWebsiteIconUrlAsync(homeUrl || appJson.url)
     .then((iconUrl) => {
       const { form } = getState().dialogEditWorkspace;
@@ -112,7 +113,6 @@ export const getIconFromSwiftype = () => (dispatch, getState) => {
     downloadingIcon: true,
   });
 
-  const appJson = window.remote.getGlobal('appJson');
   getWebsiteIconUrlFromSwifttypeAsync(homeUrl || appJson.url, name)
     .then((iconUrl) => {
       const { form } = getState().dialogEditWorkspace;

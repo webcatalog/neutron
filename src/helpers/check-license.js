@@ -6,9 +6,9 @@ import {
   requestShowRequireLicenseDialog,
   getPreference,
 } from '../senders';
+import appJson from '../constants/app-json';
 
 const checkLicense = () => {
-  const appJson = window.remote.getGlobal('appJson');
   const iapPurchased = isMas() ? getPreference('iapPurchased') : false;
 
   if (!appJson.registered && !iapPurchased) {
