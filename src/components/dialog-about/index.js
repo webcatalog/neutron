@@ -102,6 +102,8 @@ const About = (props) => {
                   requestOpenInBrowser('macappstore://apps.apple.com/app/id1550739756');
                 } else if (appJson.id === 'panmail') {
                   requestOpenInBrowser('macappstore://apps.apple.com/app/id1551178702');
+                } else if (appJson.id === 'pantext') {
+                  requestOpenInBrowser('macappstore://apps.apple.com/app/id1551183766');
                 }
               }}
             >
@@ -116,6 +118,8 @@ const About = (props) => {
                   requestOpenInBrowser(`https://dynamail.app?utm_source=${utmSource}`);
                 } else if (appJson.id === 'panmail') {
                   requestOpenInBrowser(`https://panmail.app?utm_source=${utmSource}`);
+                } else if (appJson.id === 'pantext') {
+                  requestOpenInBrowser(`https://pantext.app?utm_source=${utmSource}`);
                 }
               }}
             >
@@ -130,6 +134,8 @@ const About = (props) => {
                   requestOpenInBrowser(`https://dynamail.app/help?utm_source=${utmSource}`);
                 } else if (appJson.id === 'panmail') {
                   requestOpenInBrowser(`https://panmail.app/help?utm_source=${utmSource}`);
+                } else if (appJson.id === 'pantext') {
+                  requestOpenInBrowser(`https://pantext.app/help?utm_source=${utmSource}`);
                 }
               }}
             >

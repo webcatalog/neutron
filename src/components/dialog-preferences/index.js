@@ -92,6 +92,7 @@ import singleboxIconPng from '../../images/products/singlebox-mac-icon-128@2x.pn
 import translatiumIconPng from '../../images/products/translatium-mac-icon-128@2x.png';
 import dynamailIconPng from '../../images/products/dynamail-mac-icon-128@2x.png';
 import panmailIconPng from '../../images/products/panmail-mac-icon-128@2x.png';
+import pantextIconPng from '../../images/products/pantext-mac-icon-128@2x.png';
 
 const styles = (theme) => ({
   root: {
@@ -1780,6 +1781,32 @@ const Preferences = ({
               </div>
               <ChevronRightIcon color="action" />
             </ListItem>
+            <Divider />
+            <ListItem
+              button
+              onClick={() => {
+                const url = isMas() ? 'macappstore://apps.apple.com/us/app/pantext-all-in-one-messenger/id1551183766' : `https://pantext.app?utm_source=${utmSource}`;
+                requestOpenInBrowser(url);
+              }}
+              className={classes.listItemPromotion}
+            >
+              <div className={classes.promotionBlock}>
+                <div className={classes.promotionLeft}>
+                  <img src={pantextIconPng} alt="Pantext" className={classes.appIcon} />
+                </div>
+                <div className={classes.promotionRight}>
+                  <div>
+                    <Typography variant="body1" className={classes.appTitle}>
+                      Pantext
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      All Your Messaging Apps in One
+                    </Typography>
+                  </div>
+                </div>
+              </div>
+              <ChevronRightIcon color="action" />
+            </ListItem>
           </List>
         </Paper>
 
@@ -1804,6 +1831,8 @@ const Preferences = ({
                       requestOpenInBrowser(`https://dynamail.app?utm_source=${utmSource}`);
                     } else if (appJson.id === 'panmail') {
                       requestOpenInBrowser(`https://panmail.app?utm_source=${utmSource}`);
+                    } else if (appJson.id === 'pantext') {
+                      requestOpenInBrowser(`https://pantext.app?utm_source=${utmSource}`);
                     }
                   }}
                 >
@@ -1820,6 +1849,8 @@ const Preferences = ({
                       requestOpenInBrowser(`https://dynamail.app/help?utm_source=${utmSource}`);
                     } else if (appJson.id === 'panmail') {
                       requestOpenInBrowser(`https://panmail.app/help?utm_source=${utmSource}`);
+                    } else if (appJson.id === 'pantext') {
+                      requestOpenInBrowser(`https://pantext.app/help?utm_source=${utmSource}`);
                     }
                   }}
                 >
@@ -1836,6 +1867,8 @@ const Preferences = ({
                       requestOpenInBrowser('macappstore://apps.apple.com/app/id1550739756');
                     } else if (appJson.id === 'panmail') {
                       requestOpenInBrowser('macappstore://apps.apple.com/app/id1551178702');
+                    } else if (appJson.id === 'pantext') {
+                      requestOpenInBrowser('macappstore://apps.apple.com/app/id1551183766');
                     }
                   }}
                 >
@@ -1852,6 +1885,8 @@ const Preferences = ({
                       requestOpenInBrowser('macappstore://apps.apple.com/app/id1550739756?action=write-review');
                     } else if (appJson.id === 'panmail') {
                       requestOpenInBrowser('macappstore://apps.apple.com/app/id1551178702?action=write-review');
+                    } else if (appJson.id === 'pantext') {
+                      requestOpenInBrowser('macappstore://apps.apple.com/app/id1551183766?action=write-review');
                     }
                   }}
                 >
