@@ -40,6 +40,7 @@ const ContextMenuBuilder = require('./context-menu-builder');
 const sendToAllWindows = require('./send-to-all-windows');
 const getViewBounds = require('./get-view-bounds');
 const customizedFetch = require('./customized-fetch');
+const isMas = require('./is-mas');
 
 const views = {};
 let shouldMuteAudio;
@@ -645,7 +646,7 @@ const addView = (browserWindow, workspace) => {
     const globalPreferences = getPreferences();
     const workspacePreferences = getWorkspacePreferences(workspace.id);
     const downloadPath = workspacePreferences.downloadPath || globalPreferences.downloadPath;
-    const askForDownloadPath = (workspacePreferences.askForDownloadPath != null
+    const askForDownloadPath = isMas() || (workspacePreferences.askForDownloadPath != null
       ? workspacePreferences.askForDownloadPath
       : globalPreferences.askForDownloadPath) || global.forceSaveAs;
     // use for "save image as..." feature
