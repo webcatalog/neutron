@@ -40,6 +40,7 @@ const ContextMenuBuilder = require('./context-menu-builder');
 const sendToAllWindows = require('./send-to-all-windows');
 const getViewBounds = require('./get-view-bounds');
 const customizedFetch = require('./customized-fetch');
+const isMas = require('./is-mas');
 
 const views = {};
 let shouldMuteAudio;
@@ -317,6 +318,14 @@ const addView = (browserWindow, workspace) => {
     // strip account info when logging out
     if (nextUrl.startsWith('https://accounts.google.com/Logout')) {
       removeWorkspaceAccountInfo(workspace.id);
+    }
+
+    // prevent users from accessing pricing pages
+    // to comply with MAS Guideline 3.1.1 - Business - Payments - In-App Purchase
+    if (isMas()) {
+      if (nextUrl.includes('fastmail.com/pricing')) {
+        e.preventDefault();
+      }
     }
   });
 
