@@ -109,6 +109,10 @@ if (!gotTheLock) {
         return;
       }
 
+      if (appJson.id === 'pantext' && payment.productIdentifier !== 'pantext_plus') {
+        return;
+      }
+
       switch (transaction.transactionState) {
         case 'purchasing':
           // eslint-disable-next-line no-console
