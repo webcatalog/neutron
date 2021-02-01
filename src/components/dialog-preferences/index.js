@@ -1185,41 +1185,45 @@ const Preferences = ({
         </Typography>
         <Paper elevation={0} className={classes.paper}>
           <List disablePadding dense>
-            <ListItem
-              button
-              onClick={() => {
-                window.remote.dialog.showOpenDialog(window.remote.getCurrentWindow(), {
-                  properties: ['openDirectory'],
-                })
-                  .then(({ canceled, filePaths }) => {
-                    if (!canceled && filePaths && filePaths.length > 0) {
-                      requestSetPreference('downloadPath', filePaths[0]);
-                    }
-                  })
-                  .catch(console.log); // eslint-disable-line
-              }}
-            >
-              <ListItemText
-                primary="Download Location"
-                secondary={downloadPath}
-              />
-              <ChevronRightIcon color="action" />
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListItemText primary="Ask where to save each file before downloading" />
-              <ListItemSecondaryAction>
-                <Switch
-                  edge="end"
-                  color="primary"
-                  checked={askForDownloadPath}
-                  onChange={(e) => {
-                    requestSetPreference('askForDownloadPath', e.target.checked);
+            {!isMas() && (
+              <>
+                <ListItem
+                  button
+                  onClick={() => {
+                    window.remote.dialog.showOpenDialog(window.remote.getCurrentWindow(), {
+                      properties: ['openDirectory'],
+                    })
+                      .then(({ canceled, filePaths }) => {
+                        if (!canceled && filePaths && filePaths.length > 0) {
+                          requestSetPreference('downloadPath', filePaths[0]);
+                        }
+                      })
+                      .catch(console.log); // eslint-disable-line
                   }}
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
-            <Divider />
+                >
+                  <ListItemText
+                    primary="Download Location"
+                    secondary={downloadPath}
+                  />
+                  <ChevronRightIcon color="action" />
+                </ListItem>
+                <Divider />
+                <ListItem>
+                  <ListItemText primary="Ask where to save each file before downloading" />
+                  <ListItemSecondaryAction>
+                    <Switch
+                      edge="end"
+                      color="primary"
+                      checked={askForDownloadPath}
+                      onChange={(e) => {
+                        requestSetPreference('askForDownloadPath', e.target.checked);
+                      }}
+                    />
+                  </ListItemSecondaryAction>
+                </ListItem>
+                <Divider />
+              </>
+            )}
             <ListItem>
               <ListItemText primary={`Reveal the file in ${getFileManagerName()} when it is downloaded`} />
               <ListItemSecondaryAction>
