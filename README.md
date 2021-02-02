@@ -24,6 +24,7 @@ cd webcatalog-engine
 
 For the app to be fully functional, set these environment variables:
 ```
+ELECTRON_APP_SENTRY_DSN=
 REACT_APP_AMPLITUDE_API_KEY=
 REACT_APP_SWIFTYPE_HOST_ID=
 REACT_APP_SWIFTYPE_SEARCH_KEY=
