@@ -10,7 +10,7 @@ const {
   disable: disableDarkMode,
   setFetchMethod: setFetchMethodDarkMode,
 } = require('darkreader');
-const nodeFetch = require('node-fetch');
+const nodeFetch = require('node-fetch').default;
 
 const loadDarkReader = (workspaceId) => {
   const shouldUseDarkColor = ipcRenderer.sendSync('get-should-use-dark-colors');

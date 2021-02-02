@@ -20,7 +20,7 @@ Object.keys(packageJson.dependencies)
 
 const getPreloadScriptsConfig = () => {
   const entry = {
-    'preload-view': path.join(__dirname, 'main-src', 'libs', 'view-preload.js'),
+    'view-preload': path.join(__dirname, 'main-src', 'libs', 'view-preload.js'),
   };
 
   fs.readdirSync(path.join(__dirname, 'main-src', 'windows'))
@@ -28,8 +28,6 @@ const getPreloadScriptsConfig = () => {
     .forEach((fileName) => {
       entry[fileName.replace('.js', '')] = path.join(__dirname, 'main-src', 'windows', fileName);
     });
-
-  console.log(entry);
 
   const plugins = [];
   return {
@@ -62,12 +60,13 @@ const getElectronMainConfig = () => {
     }),
   ];
 
-  const patterns = [
-    {
-      from: path.join(__dirname, 'main-src', 'images'),
-      to: path.join(__dirname, 'build', 'images'),
-    },
-  ];
+  const patterns = [];
+  if (process.platform === 'win32') {
+    patterns.push({
+      from: path.join(__dirname, 'node_modules', 'regedit', 'vbs'),
+      to: path.join(__dirname, 'build', 'vbs'),
+    });
+  }
   plugins.push(new CopyPlugin({ patterns }));
 
   return {
@@ -88,6 +87,9 @@ const getElectronMainConfig = () => {
     },
     devtool: 'source-map',
     plugins,
+    optimization: {
+      minimize: false,
+    },
   };
 };
 

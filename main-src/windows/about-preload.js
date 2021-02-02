@@ -7,5 +7,9 @@ require('./shared-preload');
 
 const path = require('path');
 
-window.iconPath = path.join(__dirname, '..', 'icon.png')
+const iconPngPath = process.env.NODE_ENV === 'production'
+  ? path.resolve(__dirname, 'icon.png')
+  : path.resolve(__dirname, '..', 'public', 'icon.png');
+
+window.iconPath = iconPngPath
   .replace('app.asar', 'app.asar.unpacked');

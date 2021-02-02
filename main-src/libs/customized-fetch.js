@@ -1,7 +1,8 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-const fetch = require('node-fetch');
+// https://github.com/node-fetch/node-fetch/issues/450#issuecomment-387045223
+const fetch = require('node-fetch').default;
 const ProxyAgent = require('proxy-agent');
 
 // somehow, ELECTRON_RUN_AS_NODE is set to '1' instead of 'true' as specified
