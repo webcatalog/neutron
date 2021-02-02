@@ -12,7 +12,7 @@
     "build": "react-scripts build && webpack",
     "webpack": "webpack",
     "eject": "react-scripts eject",
-    "lint": "eslint ./public ./src ./build-*.js --ext js",
+    "lint": "eslint ./main-src ./src ./build-*.js --ext js",
     "start": "react-scripts start",
     "electron-dev": "concurrently \"cross-env BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\" -k",
     "electron-dev:mas": "REACT_APP_FORCE_MAS=1 yarn electron-dev",
