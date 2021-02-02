@@ -17,7 +17,7 @@ const isDev = require('electron-is-dev');
 const { REACT_PATH } = require('../constants/paths');
 const { setPreference, getPreference } = require('../libs/preferences');
 const isKdeAsync = require('../libs/is-kde-async');
-const appJson = require('../app.json');
+const appJson = require('../constants/app-json');
 
 let win;
 let mb = {};

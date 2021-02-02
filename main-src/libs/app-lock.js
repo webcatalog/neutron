@@ -10,7 +10,7 @@ const { ipcMain, systemPreferences } = require('electron');
 const sendToAllWindows = require('./send-to-all-windows');
 const { createMenu } = require('./menu');
 
-const appJson = require('../app.json');
+const appJson = require('../constants/app-json');
 
 const getAppLockStatusAsync = async () => {
   // keytar is incompatible with Linux arm64

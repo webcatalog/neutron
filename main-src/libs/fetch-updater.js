@@ -5,7 +5,7 @@ const { dialog } = require('electron');
 const semver = require('semver');
 
 const packageJson = require('../../package.json');
-const appJson = require('../app.json');
+const appJson = require('../constants/app-json');
 
 const mainWindow = require('../windows/main');
 const preferencesWindow = require('../windows/preferences');

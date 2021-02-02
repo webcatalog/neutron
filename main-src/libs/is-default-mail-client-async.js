@@ -7,7 +7,7 @@ const {
 
 const isWindows10 = require('./is-windows-10');
 
-const appJson = require('../app.json');
+const appJson = require('../constants/app-json');
 
 const isDefaultMailClientAsync = () => new Promise((resolve) => {
   // Electron protocol API doesn't work with Windows 10

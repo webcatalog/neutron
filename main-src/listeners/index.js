@@ -89,7 +89,7 @@ const notificationsWindow = require('../windows/notifications');
 const preferencesWindow = require('../windows/preferences');
 const workspacePreferencesWindow = require('../windows/workspace-preferences');
 
-const appJson = require('../app.json');
+const appJson = require('../constants/app-json');
 
 const loadListeners = () => {
   ipcMain.on('request-open-in-browser', (e, url) => {

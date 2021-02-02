@@ -16,7 +16,7 @@ const tmp = require('tmp');
 const sendToAllWindows = require('./send-to-all-windows');
 const downloadAsync = require('./download-async');
 
-const appJson = require('../app.json');
+const appJson = require('../constants/app-json');
 
 const ACCOUNT_PICTURE_PATH_UUID_NAMESPACE = '777ebe80-28ec-11eb-b7fe-6be41598616a';
 

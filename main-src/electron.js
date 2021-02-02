@@ -16,7 +16,7 @@ const fs = require('fs-extra');
 const isDev = require('electron-is-dev');
 const settings = require('electron-settings');
 
-const appJson = require('./app.json');
+const appJson = require('./constants/app-json');
 
 // run before anything else
 // WebCatalog Engine 13.x and lower uses default Electron user data path

@@ -13,7 +13,7 @@ const isWindows10 = require('./is-windows-10');
 
 const MAILTO_URLS = require('../constants/mailto-urls');
 
-const appJson = require('../app.json');
+const appJson = require('../constants/app-json');
 
 const getDefaultDownloadsPath = () => app.getPath('downloads');
 

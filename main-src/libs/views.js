@@ -18,7 +18,7 @@ const unusedFilename = require('unused-filename');
 const pupa = require('pupa');
 const extName = require('ext-name');
 
-const appJson = require('../app.json');
+const appJson = require('../constants/app-json');
 
 const { getPreference, getPreferences } = require('./preferences');
 const {

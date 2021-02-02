@@ -42,7 +42,7 @@ const extractHostname = require('./extract-hostname');
 const promptSetAsDefaultMailClient = require('./prompt-set-as-default-email-client');
 const MAILTO_URLS = require('../constants/mailto-urls');
 
-const appJson = require('../app.json');
+const appJson = require('../constants/app-json');
 
 // isRecreate: whether workspace is created to replace another workspace
 const createWorkspaceView = (workspaceObj = {}) => {

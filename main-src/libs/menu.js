@@ -8,7 +8,7 @@ const {
   shell,
 } = require('electron');
 
-const appJson = require('../app.json');
+const appJson = require('../constants/app-json');
 
 const goToUrlWindow = require('../windows/go-to-url');
 const mainWindow = require('../windows/main');

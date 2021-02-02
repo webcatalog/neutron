@@ -14,7 +14,7 @@ const {
   getPreference,
 } = require('./preferences');
 
-const appJson = require('../app.json');
+const appJson = require('../constants/app-json');
 
 const mainWindow = require('../windows/main');
 

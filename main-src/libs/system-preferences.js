@@ -11,7 +11,7 @@ const { captureException } = require('@sentry/electron');
 
 const sendToAllWindows = require('./send-to-all-windows');
 
-const appJson = require('../app.json');
+const appJson = require('../constants/app-json');
 
 const checkAutoLauncherStatusAsync = () => {
   // check if autolauncher is still functioning on Linux
