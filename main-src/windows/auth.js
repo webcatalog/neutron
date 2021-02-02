@@ -27,7 +27,7 @@ const create = (id) => {
       enableRemoteModule: true,
       contextIsolation: false,
       nodeIntegration: true,
-      preload: path.join(__dirname, '..', 'preload', 'auth.js'),
+      preload: path.join(__dirname, 'auth-preload.js'),
     },
   });
   wins[id].setMenuBarVisibility(false);

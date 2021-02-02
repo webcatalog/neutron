@@ -1,10 +1,6 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-const { desktopCapturer } = require('electron');
+window.mode = 'add-workspace';
 
-window.desktopCapturer = desktopCapturer;
-
-window.mode = 'display-media';
-
-require('./shared');
+require('./shared-preload');

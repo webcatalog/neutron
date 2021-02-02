@@ -10,13 +10,13 @@ let win;
 
 const get = () => win;
 
-const create = (url) => {
-  global.incomingUrl = url;
+const create = (workspaceId) => {
+  global.workspacePreferencesWorkspaceId = workspaceId;
 
   win = new BrowserWindow({
     backgroundColor: '#FFF',
-    width: 400,
-    height: 530,
+    width: 760,
+    height: 600,
     resizable: false,
     maximizable: false,
     minimizable: true,
@@ -27,13 +27,14 @@ const create = (url) => {
       enableRemoteModule: true,
       contextIsolation: false,
       nodeIntegration: true,
-      preload: path.join(__dirname, '..', 'preload', 'open-url-with.js'),
+      preload: path.join(__dirname, 'workspace-preferences-preload.js'),
     },
   });
   win.setMenuBarVisibility(false);
 
   win.on('closed', () => {
     win = null;
+    global.workspacePreferencesWorkspaceId = null;
   });
 
   win.once('ready-to-show', () => {
@@ -43,12 +44,14 @@ const create = (url) => {
   win.loadURL(REACT_PATH);
 };
 
-const show = (url) => {
+const show = (workspaceId) => {
   if (win == null) {
-    create(url);
-  } else {
+    create(workspaceId);
+  } else if (workspaceId !== global.workspacePreferencesWorkspaceId) {
     win.close();
-    create(url);
+    create(workspaceId);
+  } else {
+    win.show();
   }
 };
 

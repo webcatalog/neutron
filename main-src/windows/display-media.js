@@ -32,7 +32,7 @@ const create = (workspaceId) => {
       enableRemoteModule: true,
       contextIsolation: false,
       nodeIntegration: true,
-      preload: path.join(__dirname, '..', 'preload', 'display-media.js'),
+      preload: path.join(__dirname, 'display-media-preload.js'),
     },
   });
   win.setMenuBarVisibility(false);

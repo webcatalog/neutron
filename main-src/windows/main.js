@@ -145,7 +145,7 @@ const createAsync = () => new Promise((resolve) => {
           contextIsolation: false,
           nodeIntegration: true,
           webSecurity: !isDev,
-          preload: path.join(__dirname, '..', 'preload', 'menubar.js'),
+          preload: path.join(__dirname, 'menubar-preload.js'),
         },
       },
     });
@@ -195,7 +195,7 @@ const createAsync = () => new Promise((resolve) => {
       contextIsolation: false,
       nodeIntegration: true,
       webSecurity: !isDev,
-      preload: path.join(__dirname, '..', 'preload', 'main.js'),
+      preload: path.join(__dirname, 'main-preload.js'),
     },
   };
   // winOpts.icon cannot be set to undefined

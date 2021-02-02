@@ -250,7 +250,7 @@ const addView = (browserWindow, workspace) => {
     enableRemoteModule: false,
     scrollBounce: true,
     session: ses,
-    preload: path.join(__dirname, '..', 'preload', 'view.js'),
+    preload: path.join(__dirname, 'view-preload.js'),
   };
   const view = new BrowserView({
     webPreferences: sharedWebPreferences,

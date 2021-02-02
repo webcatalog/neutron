@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 const { BrowserWindow } = require('electron');
 const path = require('path');
+const isDev = require('electron-is-dev');
 
 const { REACT_PATH } = require('../constants/paths');
 
@@ -10,13 +11,11 @@ let win;
 
 const get = () => win;
 
-const create = (workspaceId) => {
-  global.workspacePreferencesWorkspaceId = workspaceId;
-
+const create = () => {
   win = new BrowserWindow({
     backgroundColor: '#FFF',
-    width: 760,
-    height: 600,
+    width: 400,
+    height: 450,
     resizable: false,
     maximizable: false,
     minimizable: true,
@@ -27,14 +26,14 @@ const create = (workspaceId) => {
       enableRemoteModule: true,
       contextIsolation: false,
       nodeIntegration: true,
-      preload: path.join(__dirname, '..', 'preload', 'workspace-preferences.js'),
+      webSecurity: !isDev,
+      preload: path.join(__dirname, 'about-preload.js'),
     },
   });
   win.setMenuBarVisibility(false);
 
   win.on('closed', () => {
     win = null;
-    global.workspacePreferencesWorkspaceId = null;
   });
 
   win.once('ready-to-show', () => {
@@ -44,12 +43,9 @@ const create = (workspaceId) => {
   win.loadURL(REACT_PATH);
 };
 
-const show = (workspaceId) => {
+const show = () => {
   if (win == null) {
-    create(workspaceId);
-  } else if (workspaceId !== global.workspacePreferencesWorkspaceId) {
-    win.close();
-    create(workspaceId);
+    create();
   } else {
     win.show();
   }

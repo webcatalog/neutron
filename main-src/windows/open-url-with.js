@@ -3,7 +3,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 const { BrowserWindow } = require('electron');
 const path = require('path');
-const isDev = require('electron-is-dev');
 
 const { REACT_PATH } = require('../constants/paths');
 
@@ -11,11 +10,13 @@ let win;
 
 const get = () => win;
 
-const create = () => {
+const create = (url) => {
+  global.incomingUrl = url;
+
   win = new BrowserWindow({
     backgroundColor: '#FFF',
     width: 400,
-    height: 450,
+    height: 530,
     resizable: false,
     maximizable: false,
     minimizable: true,
@@ -26,8 +27,7 @@ const create = () => {
       enableRemoteModule: true,
       contextIsolation: false,
       nodeIntegration: true,
-      webSecurity: !isDev,
-      preload: path.join(__dirname, '..', 'preload', 'about.js'),
+      preload: path.join(__dirname, 'open-url-with-preload.js'),
     },
   });
   win.setMenuBarVisibility(false);
@@ -43,11 +43,12 @@ const create = () => {
   win.loadURL(REACT_PATH);
 };
 
-const show = () => {
+const show = (url) => {
   if (win == null) {
-    create();
+    create(url);
   } else {
-    win.show();
+    win.close();
+    create(url);
   }
 };
 

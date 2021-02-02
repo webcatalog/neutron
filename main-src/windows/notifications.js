@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 const { BrowserWindow } = require('electron');
 const path = require('path');
+const isDev = require('electron-is-dev');
 
 const { REACT_PATH } = require('../constants/paths');
 
@@ -10,13 +11,11 @@ let win;
 
 const get = () => win;
 
-const create = (scrollTo) => {
-  global.preferencesScrollTo = scrollTo;
-
+const create = () => {
   win = new BrowserWindow({
     backgroundColor: '#FFF',
-    width: 760,
-    height: 640,
+    width: 400,
+    height: 600,
     resizable: false,
     maximizable: false,
     minimizable: true,
@@ -27,14 +26,14 @@ const create = (scrollTo) => {
       enableRemoteModule: true,
       contextIsolation: false,
       nodeIntegration: true,
-      preload: path.join(__dirname, '..', 'preload', 'preferences.js'),
+      webSecurity: !isDev,
+      preload: path.join(__dirname, 'notifications-preload.js'),
     },
   });
   win.setMenuBarVisibility(false);
 
   win.on('closed', () => {
     win = null;
-    global.preferencesScrollTo = null;
   });
 
   win.once('ready-to-show', () => {
@@ -44,12 +43,9 @@ const create = (scrollTo) => {
   win.loadURL(REACT_PATH);
 };
 
-const show = (scrollTo) => {
+const show = () => {
   if (win == null) {
-    create(scrollTo);
-  } else if (scrollTo !== global.preferencesScrollTo) {
-    win.close();
-    create(scrollTo);
+    create();
   } else {
     win.show();
   }

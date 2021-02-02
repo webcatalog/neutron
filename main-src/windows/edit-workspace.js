@@ -11,11 +11,13 @@ let win;
 
 const get = () => win;
 
-const create = () => {
+const create = (id) => {
+  global.editWorkspaceId = id;
+
   win = new BrowserWindow({
     backgroundColor: '#FFF',
-    width: 400,
-    height: 600,
+    width: 420,
+    height: 700,
     resizable: false,
     maximizable: false,
     minimizable: true,
@@ -27,13 +29,14 @@ const create = () => {
       contextIsolation: false,
       nodeIntegration: true,
       webSecurity: !isDev,
-      preload: path.join(__dirname, '..', 'preload', 'notifications.js'),
+      preload: path.join(__dirname, 'edit-workspace-preload.js'),
     },
   });
   win.setMenuBarVisibility(false);
 
   win.on('closed', () => {
     win = null;
+    global.editWorkspaceId = null;
   });
 
   win.once('ready-to-show', () => {
@@ -43,9 +46,12 @@ const create = () => {
   win.loadURL(REACT_PATH);
 };
 
-const show = () => {
+const show = (id) => {
   if (win == null) {
-    create();
+    create(id);
+  } else if (id !== global.editWorkspaceId) {
+    win.close();
+    create(id);
   } else {
     win.show();
   }

@@ -3,7 +3,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 const { BrowserWindow } = require('electron');
 const path = require('path');
-const isDev = require('electron-is-dev');
 
 const { REACT_PATH } = require('../constants/paths');
 
@@ -11,13 +10,13 @@ let win;
 
 const get = () => win;
 
-const create = (id) => {
-  global.editWorkspaceId = id;
+const create = (scrollTo) => {
+  global.preferencesScrollTo = scrollTo;
 
   win = new BrowserWindow({
     backgroundColor: '#FFF',
-    width: 420,
-    height: 700,
+    width: 760,
+    height: 640,
     resizable: false,
     maximizable: false,
     minimizable: true,
@@ -28,15 +27,14 @@ const create = (id) => {
       enableRemoteModule: true,
       contextIsolation: false,
       nodeIntegration: true,
-      webSecurity: !isDev,
-      preload: path.join(__dirname, '..', 'preload', 'edit-workspace.js'),
+      preload: path.join(__dirname, 'preferences-preload.js'),
     },
   });
   win.setMenuBarVisibility(false);
 
   win.on('closed', () => {
     win = null;
-    global.editWorkspaceId = null;
+    global.preferencesScrollTo = null;
   });
 
   win.once('ready-to-show', () => {
@@ -46,12 +44,12 @@ const create = (id) => {
   win.loadURL(REACT_PATH);
 };
 
-const show = (id) => {
+const show = (scrollTo) => {
   if (win == null) {
-    create(id);
-  } else if (id !== global.editWorkspaceId) {
+    create(scrollTo);
+  } else if (scrollTo !== global.preferencesScrollTo) {
     win.close();
-    create(id);
+    create(scrollTo);
   } else {
     win.show();
   }
