@@ -67,7 +67,9 @@ const getElectronMainConfig = () => {
       to: path.join(__dirname, 'build', 'vbs'),
     });
   }
-  plugins.push(new CopyPlugin({ patterns }));
+  if (patterns.length > 0) {
+    plugins.push(new CopyPlugin({ patterns }));
+  }
 
   return {
     mode: 'production',
