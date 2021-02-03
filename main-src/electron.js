@@ -24,7 +24,11 @@ const appJson = require('./constants/app-json');
 // to keep the app backward compatible
 const useLegacyUserDataPath = appJson.opts && appJson.opts.legacyUserData;
 if (!useLegacyUserDataPath) {
-  const userDataPath = path.join(app.getPath('appData'), 'WebCatalog', 'webcatalog-engine-data', appJson.id);
+  const slug = appJson.opts && appJson.opts.slug;
+  // append name slug to user data dir name (if available)
+  // to make it easier for pro users to identify
+  // as custom app id (custom-xxx) is computer-generated & not easy to look at
+  const userDataPath = path.join(app.getPath('appData'), 'WebCatalog', 'webcatalog-engine-data', slug ? `${appJson.id}-${slug}` : appJson.id);
   fs.ensureDirSync(userDataPath);
   app.setPath('userData', userDataPath);
 }
