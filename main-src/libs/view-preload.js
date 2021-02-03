@@ -12,6 +12,8 @@ const {
 } = require('darkreader');
 const nodeFetch = require('node-fetch').default;
 
+const isMas = require('./is-mas');
+
 const loadDarkReader = (workspaceId) => {
   const shouldUseDarkColor = ipcRenderer.sendSync('get-should-use-dark-colors');
   const workspaceDarkReader = ipcRenderer.sendSync('get-workspace-preference', workspaceId, 'darkReader');
@@ -124,6 +126,19 @@ const handleLoaded = async (event) => {
     try {
       const node = document.createElement('style');
       node.innerHTML = cssCodeInjection;
+      document.body.appendChild(node);
+    } catch (err) {
+      /* eslint-disable no-console */
+      console.log(err);
+      /* eslint-enable no-console */
+    }
+  }
+
+  // hide FastMail to comply with MAS guidelines
+  if (isMas() && window.location.hostname.includes('fastmail.com')) {
+    try {
+      const node = document.createElement('style');
+      node.innerHTML = 'a[href="/pricing/"] { display: none !important; }';
       document.body.appendChild(node);
     } catch (err) {
       /* eslint-disable no-console */
