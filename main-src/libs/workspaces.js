@@ -9,7 +9,7 @@ const {
   v1: uuidv1,
   v5: uuidv5,
 } = require('uuid');
-const Jimp = require('jimp');
+const Jimp = process.env.NODE_ENV === 'production' ? require('jimp').default : require('jimp');
 const isUrl = require('is-url');
 const tmp = require('tmp');
 
