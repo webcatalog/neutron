@@ -97,17 +97,7 @@ const About = (props) => {
         {isMas() ? (
           <>
             <Button
-              onClick={() => {
-                if (appJson.id === 'singlebox') {
-                  requestOpenInBrowser('macappstore://apps.apple.com/app/id1548853763');
-                } else if (appJson.id === 'dynamail') {
-                  requestOpenInBrowser('macappstore://apps.apple.com/app/id1550739756');
-                } else if (appJson.id === 'panmail') {
-                  requestOpenInBrowser('macappstore://apps.apple.com/app/id1551178702');
-                } else if (appJson.id === 'pantext') {
-                  requestOpenInBrowser('macappstore://apps.apple.com/app/id1551183766');
-                }
-              }}
+              onClick={() => requestOpenInBrowser(`macappstore://apps.apple.com/app/id${appJson.macAppStoreId}`)}
             >
               Mac App Store
             </Button>

@@ -35,6 +35,7 @@ import NavigationBar from './navigation-bar';
 import MacTitleBar from './mac-title-bar';
 import DraggableRegion from './draggable-region';
 import TelemetryManager from './telemetry-manager';
+import RatingButton from './rating-button';
 
 import {
   requestCreateWorkspace,
@@ -402,6 +403,10 @@ const Main = ({
               <div
                 className={classnames(classes.end, isSidebarExpanded && classes.endExpanded)}
               >
+                <RatingButton
+                  className={classnames(!isSidebarExpanded && classes.iconButton)}
+                  size="small"
+                />
                 <IconButton
                   title="Notifications"
                   aria-label="Notifications"

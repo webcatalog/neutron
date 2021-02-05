@@ -77,6 +77,8 @@ const defaultPreferences = {
   proxyPacScript: '',
   proxyRules: '',
   proxyType: 'none',
+  ratingDidRate: false,
+  ratingLastClicked: 0,
   rememberLastPageVisited: false,
   runInBackground: false,
   searchEngine: 'google',

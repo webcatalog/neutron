@@ -35,6 +35,8 @@ import {
   requestShowPreferencesWindow,
 } from '../../senders';
 
+import RatingButton from './rating-button';
+
 const styles = (theme) => ({
   root: {
     width: '100%',
@@ -227,6 +229,10 @@ const NavigationBar = ({
         />
       </div>
       <div>
+        <RatingButton
+          className={classes.iconButton}
+          iconClassName={classes.icon}
+        />
         <IconButton
           title="Notifications"
           aria-label="Notifications"

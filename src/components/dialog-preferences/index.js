@@ -1864,17 +1864,7 @@ const Preferences = ({
                 <Divider />
                 <ListItem
                   button
-                  onClick={() => {
-                    if (appJson.id === 'singlebox') {
-                      requestOpenInBrowser('macappstore://apps.apple.com/app/id1548853763');
-                    } else if (appJson.id === 'dynamail') {
-                      requestOpenInBrowser('macappstore://apps.apple.com/app/id1550739756');
-                    } else if (appJson.id === 'panmail') {
-                      requestOpenInBrowser('macappstore://apps.apple.com/app/id1551178702');
-                    } else if (appJson.id === 'pantext') {
-                      requestOpenInBrowser('macappstore://apps.apple.com/app/id1551183766');
-                    }
-                  }}
+                  onClick={() => requestOpenInBrowser(`macappstore://apps.apple.com/app/id${appJson.macAppStoreId}`)}
                 >
                   <ListItemText primary="Mac App Store" />
                   <ChevronRightIcon color="action" />
@@ -1882,17 +1872,7 @@ const Preferences = ({
                 <Divider />
                 <ListItem
                   button
-                  onClick={() => {
-                    if (appJson.id === 'singlebox') {
-                      requestOpenInBrowser('macappstore://apps.apple.com/app/id1548853763?action=write-review');
-                    } else if (appJson.id === 'dynamail') {
-                      requestOpenInBrowser('macappstore://apps.apple.com/app/id1550739756?action=write-review');
-                    } else if (appJson.id === 'panmail') {
-                      requestOpenInBrowser('macappstore://apps.apple.com/app/id1551178702?action=write-review');
-                    } else if (appJson.id === 'pantext') {
-                      requestOpenInBrowser('macappstore://apps.apple.com/app/id1551183766?action=write-review');
-                    }
-                  }}
+                  onClick={() => requestOpenInBrowser(`macappstore://apps.apple.com/app/id${appJson.macAppStoreId}?action=write-review`)}
                 >
                   <ListItemText primary={`Rate ${appJson.name} on Mac App Store`} />
                   <ChevronRightIcon color="action" />
@@ -1907,6 +1887,14 @@ const Preferences = ({
                 <Divider />
                 <ListItem button onClick={() => requestOpenInBrowser(`https://help.webcatalog.app?utm_source=${utmSource}`)}>
                   <ListItemText primary="WebCatalog Help" />
+                  <ChevronRightIcon color="action" />
+                </ListItem>
+                <Divider />
+                <ListItem
+                  button
+                  onClick={() => requestOpenInBrowser('https://alternativeto.net/software/webcatalog/about/')}
+                >
+                  <ListItemText primary="Rate WebCatalog on AlternativeTo" />
                   <ChevronRightIcon color="action" />
                 </ListItem>
                 <Divider />
