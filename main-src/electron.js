@@ -402,6 +402,7 @@ if (!gotTheLock) {
       titleBar,
       trayIcon,
       useSystemTitleBar,
+      windowButtons,
     } = getPreferences();
 
     if (customUserAgent) {
@@ -427,6 +428,7 @@ if (!gotTheLock) {
     global.trayIcon = trayIcon;
     global.navigationBar = navigationBar;
     global.useSystemTitleBar = useSystemTitleBar;
+    global.windowButtons = windowButtons;
     global.MAILTO_URLS = MAILTO_URLS;
 
     commonInit();
