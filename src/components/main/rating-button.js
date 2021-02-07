@@ -24,9 +24,8 @@ const RatingButton = ({
   size,
 }) => {
   // for WebCatalog builds
-  // if user has interacted with the dialog, avoid showing this again
-  // as users might have a lot of apps so this might be too disturbing
-  if (!isMas() && ratingDidRate) {
+  // hide this button
+  if (!isMas()) {
     return null;
   }
 
@@ -48,7 +47,7 @@ const RatingButton = ({
           window.remote.dialog.showMessageBox(window.remote.getCurrentWindow(), {
             type: 'question',
             buttons: [
-              isMas() ? `Rate ${appJson.name} on Mac App Store` : 'Rate WebCatalog on AlternativeTo',
+              `Rate ${appJson.name} on Mac App Store`,
               'Later',
             ],
             message: isMas() ? `Enjoying ${appJson.name}?` : `Enjoying ${appJson.name} on WebCatalog?`,
@@ -59,21 +58,9 @@ const RatingButton = ({
             if (response === 0) {
               requestSetPreference('ratingLastClicked', Date.now());
               requestSetPreference('ratingDidRate', true);
-              if (isMas()) {
-                requestOpenInBrowser(`macappstore://apps.apple.com/app/id${appJson.macAppStoreId}?action=write-review`);
-              } else {
-                requestOpenInBrowser('https://alternativeto.net/software/webcatalog/about/');
-              }
+              requestOpenInBrowser(`macappstore://apps.apple.com/app/id${appJson.macAppStoreId}?action=write-review`);
             } else {
               requestSetPreference('ratingLastClicked', Date.now());
-
-              // for WebCatalog builds
-              // if user has interacted with the dialog, set ratingDidRate to true
-              // so we don't show the the button ever again
-              // as users might have a lot of apps so this might be too disturbing
-              if (!isMas()) {
-                requestSetPreference('ratingDidRate', true);
-              }
             }
           }).catch(console.log); // eslint-disable-line
         }}
