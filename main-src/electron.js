@@ -102,8 +102,6 @@ if (!gotTheLock) {
     const iapPurchased = getPreference('iapPurchased');
     if (iapPurchased) return;
 
-    //  && payment.productIdentifier !== 'dynamail_plus'
-
     // Check each transaction.
     transactions.forEach((transaction) => {
       const { payment } = transaction;
