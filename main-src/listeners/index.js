@@ -233,12 +233,12 @@ const loadListeners = () => {
       const productIdentifier = `${appJson.id}_plus`;
 
       // get price
-      getIapFormattedPriceAsync(productIdentifier, '14.99 USD')
+      getIapFormattedPriceAsync(productIdentifier)
         .then((formattedPrice) => {
           dialog.showMessageBox(win, {
             type: 'info',
-            message: `To unlock all features & add unlimited number of workspaces, please upgrade to ${appJson.name} Plus.`,
-            buttons: [`Purchase (${formattedPrice})...`, 'Restore Purchase', 'Later'],
+            message: `Upgrade to ${appJson.name} Plus (${formattedPrice ? `${formattedPrice}, ` : ''}one-time payment) to unlock all features & add unlimited number of workspaces.`,
+            buttons: [`Purchase${formattedPrice ? `(${formattedPrice})` : ''}...`, 'Restore Purchase', 'Later'],
             cancelId: 2,
             defaultId: 0,
           })

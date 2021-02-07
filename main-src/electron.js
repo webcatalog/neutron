@@ -447,7 +447,7 @@ if (!gotTheLock) {
         // pre-cache pricing for (Pantext|Panmail|Dynamail|...) Plus
         if (isMas() && !appJson.registered && !getPreference('iapPurchased')) {
           const productIdentifier = `${appJson.id}_plus`;
-          getIapFormattedPriceAsync(productIdentifier, '14.99 USD');
+          getIapFormattedPriceAsync(productIdentifier);
         }
       });
   });

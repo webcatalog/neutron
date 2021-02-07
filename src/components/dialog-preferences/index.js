@@ -263,9 +263,9 @@ const Preferences = ({
     && window.remote.systemPreferences.canPromptTouchID();
   const registered = appJson.registered || iapPurchased;
 
-  const [formattedPrice, setFormattedPrice] = useState('14.99 USD');
+  const [formattedPrice, setFormattedPrice] = useState(null);
   useEffect(() => {
-    getIapFormattedPriceAsync(`${appJson.id}_plus`, '14.99 USD')
+    getIapFormattedPriceAsync(`${appJson.id}_plus`)
       .then((value) => {
         setFormattedPrice(value);
       });
@@ -416,7 +416,7 @@ const Preferences = ({
           <Paper elevation={0} className={classes.paper}>
             <List disablePadding dense>
               <ListItem button onClick={null} disabled>
-                <ListItemText primary={registered ? `${appJson.name} Plus is activated.` : `Upgrade to ${appJson.name} Plus (${formattedPrice}, one-time payment) to unlock all features & add unlimited number of workspaces.`} />
+                <ListItemText primary={registered ? `${appJson.name} Plus is activated.` : `Upgrade to ${appJson.name} Plus (${formattedPrice ? `${formattedPrice}, ` : ''}one-time payment) to unlock all features & add unlimited number of workspaces.`} />
               </ListItem>
               {!registered && (
                 <>

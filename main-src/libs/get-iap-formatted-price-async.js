@@ -5,9 +5,7 @@ const { inAppPurchase } = require('electron');
 
 const cached = {};
 
-const getIapFormattedPriceAsync = (
-  productIdentifier, defaultPrice,
-) => {
+const getIapFormattedPriceAsync = (productIdentifier) => {
   if (cached[productIdentifier]) {
     return Promise.resolve(cached[productIdentifier]);
   }
@@ -20,8 +18,7 @@ const getIapFormattedPriceAsync = (
       cached[productIdentifier] = products[0].formattedPrice;
       return products[0].formattedPrice;
     })
-    .catch(() => null)
-    .then((retrievedPrice) => retrievedPrice || defaultPrice);
+    .catch(() => null);
 };
 
 module.exports = getIapFormattedPriceAsync;

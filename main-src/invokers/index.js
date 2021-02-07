@@ -72,7 +72,7 @@ const loadInvokers = () => {
   ipcMain.handle('is-default-browser', () => isDefaultBrowserAsync());
   ipcMain.handle('is-default-mail-client', () => isDefaultMailClientAsync());
 
-  ipcMain.handle('get-iap-formatted-price', (e, productIdentifier, defaultPrice) => getIapFormattedPriceAsync(productIdentifier, defaultPrice));
+  ipcMain.handle('get-iap-formatted-price', (e, productIdentifier) => getIapFormattedPriceAsync(productIdentifier));
 };
 
 module.exports = loadInvokers;
