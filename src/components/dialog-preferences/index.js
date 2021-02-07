@@ -265,13 +265,13 @@ const Preferences = ({
 
   const [formattedPrice, setFormattedPrice] = useState(isMas() ? null : '30 USD');
   useEffect(() => {
-    if (isMas()) {
+    if (isMas() && !registered) {
       getIapFormattedPriceAsync(`${appJson.id}_plus`)
         .then((value) => {
           setFormattedPrice(value);
         });
     }
-  }, [appJson, setFormattedPrice]);
+  }, [appJson, setFormattedPrice, registered]);
 
   const sections = {
     licensing: {
