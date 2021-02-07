@@ -88,7 +88,7 @@ const title = (state = '', action) => {
   }
 };
 
-const locked = (state = Boolean(window.remote.getGlobal('locked')), action) => {
+const locked = (state = false, action) => {
   switch (action.type) {
     case UPDATE_LOCKED: return action.locked;
     default: return state;

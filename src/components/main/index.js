@@ -334,7 +334,7 @@ const Main = ({
   const appJson = getStaticGlobal('appJson');
   const workspacesList = getWorkspacesAsList(workspaces);
   const showMacTitleBar = window.process.platform === 'darwin' && titleBar && !isFullScreen;
-  const windowButtons = window.remote.getGlobal('windowButtons');
+  const windowButtons = getStaticGlobal('windowButtons');
   const isSidebarExpanded = sidebarSize === 'expanded';
 
   return (

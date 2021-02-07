@@ -4,10 +4,9 @@
 
 // cached it to improve performance
 // https://github.com/electron/electron/issues/1258
-let val;
-const isMacOs11 = () => {
-  if (!val) val = window.remote.getGlobal('isMacOs11');
-  return val;
-};
+
+import getStaticGlobal from './get-static-global';
+
+const isMacOs11 = () => getStaticGlobal('isMacOs11');
 
 export default isMacOs11;

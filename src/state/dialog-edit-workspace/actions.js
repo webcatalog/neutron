@@ -156,7 +156,7 @@ export const save = () => (dispatch, getState) => {
     return dispatch(updateForm(validatedChanges));
   }
 
-  const id = window.remote.getGlobal('editWorkspaceId');
+  const id = getStaticGlobal('editWorkspaceId');
   const homeUrl = (() => {
     if (form.homeUrl) {
       const url = form.homeUrl.trim();

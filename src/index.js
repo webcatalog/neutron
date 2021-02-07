@@ -74,7 +74,7 @@ const runApp = () => {
       } else if (window.mode === 'preferences') {
         document.title = 'Preferences';
       } else if (window.mode === 'workspace-preferences') {
-        const workspaceId = window.remote.getGlobal('workspacePreferencesWorkspaceId');
+        const workspaceId = getStaticGlobal('workspacePreferencesWorkspaceId');
         const workspaceList = getWorkspacesAsList(initialState.workspaces);
         const workspace = initialState.workspaces[workspaceId];
         workspaceList.some((item, index) => {
@@ -88,7 +88,7 @@ const runApp = () => {
 
         document.title = `Configure Workspace "${getWorkspaceName(workspace)}"`;
       } else if (window.mode === 'edit-workspace') {
-        const editWorkspaceId = window.remote.getGlobal('editWorkspaceId');
+        const editWorkspaceId = getStaticGlobal('editWorkspaceId');
         const workspaceList = getWorkspacesAsList(initialState.workspaces);
         const workspace = initialState.workspaces[editWorkspaceId];
         workspaceList.some((item, index) => {

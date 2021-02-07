@@ -10,7 +10,7 @@ const cached = {};
 
 const getStaticGlobal = (key) => {
   if (!cached[key]) {
-    cached[key] = window.remote.getGlobal('MAILTO_URLS');
+    cached[key] = window.remote.getGlobal(key);
   }
 
   return cached[key];

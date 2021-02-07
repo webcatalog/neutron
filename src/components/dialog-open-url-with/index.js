@@ -19,7 +19,7 @@ import { requestLoadUrl } from '../../senders';
 
 const OpenUrlWith = ({ workspaces }) => {
   const appJson = getStaticGlobal('appJson');
-  const incomingUrl = window.remote.getGlobal('incomingUrl');
+  const incomingUrl = getStaticGlobal('incomingUrl');
   const isMailtoUrl = incomingUrl.startsWith('mailto:');
 
   const renderWorkspace = (workspace, i) => {

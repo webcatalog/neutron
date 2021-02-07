@@ -345,7 +345,7 @@ const Preferences = ({
   };
 
   useEffect(() => {
-    const scrollTo = window.remote.getGlobal('preferencesScrollTo');
+    const scrollTo = getStaticGlobal('preferencesScrollTo');
     if (!scrollTo) return;
     sections[scrollTo].ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });

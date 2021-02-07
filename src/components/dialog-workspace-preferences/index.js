@@ -152,7 +152,7 @@ const Preferences = ({
 }) => {
   const appJson = getStaticGlobal('appJson');
   const utmSource = isMas() ? `${appJson.id}_app` : 'juli_app';
-  const workspaceId = window.remote.getGlobal('workspacePreferencesWorkspaceId');
+  const workspaceId = getStaticGlobal('workspacePreferencesWorkspaceId');
 
   const sections = {
     extensions: {
