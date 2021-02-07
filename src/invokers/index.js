@@ -8,3 +8,5 @@ export const validateAppLockPasswordAsync = (inputPassword) => window.ipcRendere
 export const deleteAppLockPasswordAsync = (inputPassword) => window.ipcRenderer.invoke('delete-app-lock-password', inputPassword);
 export const setAppLockPasswordAsync = (inputPassword, newPassword) => window.ipcRenderer.invoke('set-app-lock-password', inputPassword, newPassword);
 export const setAppLockTouchIdAsync = (inputPassword, useTouchId) => window.ipcRenderer.invoke('set-app-lock-touch-id', inputPassword, useTouchId);
+export const isDefaultBrowserAsync = () => window.ipcRenderer.invoke('is-default-browser-async');
+export const isDefaultMailClientAsync = () => window.ipcRenderer.invoke('is-default-mail-client-async');

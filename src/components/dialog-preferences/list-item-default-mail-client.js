@@ -15,36 +15,21 @@ import connectComponent from '../../helpers/connect-component';
 import appJson from '../../constants/app-json';
 
 import { requestOpenInBrowser } from '../../senders';
+import { isDefaultMailClientAsync } from '../../invokers';
 
 const ListItemDefaultMailClient = () => {
   const [isDefault, setIsDefault] = useState(false);
-  const appId = `webcatalog-${appJson.id}`;
 
   const isWindows10 = window.process.platform === 'win32' && semver.gt(window.remote.require('os').release(), '10.0.0');
 
   const recheckIsDefault = useCallback(
     () => {
-      // Electron protocol API doesn't work with Windows 10
-      // So check with regedit
-      if (isWindows10) {
-        // https://stackoverflow.com/questions/32354861/how-to-find-the-default-browser-via-the-registry-on-windows-10
-        const protocolName = 'mailto';
-        const userChoicePath = `HKCU\\SOFTWARE\\Microsoft\\Windows\\Shell\\Associations\\URLAssociations\\${protocolName}\\UserChoice`;
-        window.regedit.list([userChoicePath], (err, result) => {
-          try {
-            setIsDefault(!err && result[userChoicePath].values.ProgId.value === appId);
-          } catch (tryErr) {
-            // eslint-disable-next-line no-console
-            console.log(tryErr);
-            setIsDefault(false);
-          }
+      isDefaultMailClientAsync()
+        .then((result) => {
+          setIsDefault(result);
         });
-        return;
-      }
-
-      setIsDefault(window.remote.app.isDefaultProtocolClient('mailto'));
     },
-    [isWindows10, appId],
+    [],
   );
 
   // recheck every 1 minutes
