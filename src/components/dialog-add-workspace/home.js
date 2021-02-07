@@ -14,8 +14,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import connectComponent from '../../helpers/connect-component';
-
-import appJson from '../../constants/app-json';
+import getStaticGlobal from '../../helpers/get-static-global';
 
 import AppCard from './app-card';
 import SubmitAppCard from './submit-app-card';
@@ -87,6 +86,7 @@ const Home = ({ classes }) => {
     { field: 'type', values: ['Singlesite'], type: 'all' },
     { field: 'widevine', values: [0], type: 'all' },
   ];
+  const appJson = getStaticGlobal('appJson');
   const appJsonId = appJson.id;
   if (appJsonId.startsWith('group-')) {
     const groupId = appJsonId.substring('group-'.length);

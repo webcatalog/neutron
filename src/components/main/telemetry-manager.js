@@ -6,12 +6,13 @@ import { useEffect } from 'react';
 
 import connectComponent from '../../helpers/connect-component';
 import isMas from '../../helpers/is-mas';
-
-import appJson from '../../constants/app-json';
+import getStaticGlobal from '../../helpers/get-static-global';
 
 import amplitude from '../../amplitude';
 
-const TelemetryManager = ({ registered }) => {
+const TelemetryManager = ({ iapPurchased }) => {
+  const appJson = getStaticGlobal('appJson');
+  const registered = appJson.registered || iapPurchased;
   // run after setUserProperties
   // https://blog.logrocket.com/post-hooks-guide-react-call-order
   useEffect(() => {
@@ -36,15 +37,15 @@ const TelemetryManager = ({ registered }) => {
 };
 
 TelemetryManager.defaultProps = {
-  registered: false,
+  iapPurchased: false,
 };
 
 TelemetryManager.propTypes = {
-  registered: PropTypes.bool,
+  iapPurchased: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({
-  registered: appJson.registered || state.preferences.iapPurchased,
+  iapPurchased: state.preferences.iapPurchased,
 });
 
 export default connectComponent(

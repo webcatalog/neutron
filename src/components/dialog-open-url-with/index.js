@@ -13,12 +13,12 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import connectComponent from '../../helpers/connect-component';
 import getWorkspacesAsList from '../../helpers/get-workspaces-as-list';
 import getMailtoUrl from '../../helpers/get-mailto-url';
-
-import appJson from '../../constants/app-json';
+import getStaticGlobal from '../../helpers/get-static-global';
 
 import { requestLoadUrl } from '../../senders';
 
 const OpenUrlWith = ({ workspaces }) => {
+  const appJson = getStaticGlobal('appJson');
   const incomingUrl = window.remote.getGlobal('incomingUrl');
   const isMailtoUrl = incomingUrl.startsWith('mailto:');
 

@@ -19,8 +19,7 @@ import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import LockIcon from '@material-ui/icons/Lock';
 
 import connectComponent from '../../helpers/connect-component';
-
-import appJson from '../../constants/app-json';
+import getStaticGlobal from '../../helpers/get-static-global';
 
 import { updateForm, validateForm } from '../../state/app-lock/actions';
 
@@ -114,6 +113,7 @@ const AppLock = ({
   password,
   passwordError,
 }) => {
+  const appJson = getStaticGlobal('appJson');
   const [revealPassword, setRevealPassword] = useState(false);
   const [useTouchId, setUseTouchId] = useState(false);
 

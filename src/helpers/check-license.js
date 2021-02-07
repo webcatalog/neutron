@@ -6,9 +6,10 @@ import {
   requestShowRequireLicenseDialog,
   getPreference,
 } from '../senders';
-import appJson from '../constants/app-json';
+import getStaticGlobal from './get-static-global';
 
 const checkLicense = () => {
+  const appJson = getStaticGlobal('appJson');
   const iapPurchased = isMas() ? getPreference('iapPurchased') : false;
 
   if (!appJson.registered && !iapPurchased) {

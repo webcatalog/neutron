@@ -11,14 +11,14 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 import connectComponent from '../../helpers/connect-component';
-
-import appJson from '../../constants/app-json';
+import getStaticGlobal from '../../helpers/get-static-global';
 
 import { requestOpenInBrowser } from '../../senders';
 
 import { isDefaultBrowserAsync } from '../../invokers';
 
 const ListItemDefaultBrowser = () => {
+  const appJson = getStaticGlobal('appJson');
   const [isDefault, setIsDefault] = useState(false);
 
   const isWindows10 = window.process.platform === 'win32' && semver.gt(window.remote.require('os').release(), '10.0.0');

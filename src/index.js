@@ -15,10 +15,11 @@ import configureStore from './state';
 import AppWrapper from './components/app-wrapper';
 
 import getWorkspacesAsList from './helpers/get-workspaces-as-list';
+import getStaticGlobal from './helpers/get-static-global';
 
 import { getReactInitialStateAsync } from './invokers';
 
-import appJson from './constants/app-json';
+const appJson = getStaticGlobal('appJson');
 
 const DialogAbout = React.lazy(() => import('./components/dialog-about'));
 const DialogAddWorkspace = React.lazy(() => import('./components/dialog-add-workspace'));

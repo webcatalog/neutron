@@ -23,8 +23,7 @@ import { sortableContainer, sortableElement } from 'react-sortable-hoc';
 import connectComponent from '../../helpers/connect-component';
 import getWorkspacesAsList from '../../helpers/get-workspaces-as-list';
 import isMacOs11 from '../../helpers/is-mac-os-11';
-
-import appJson from '../../constants/app-json';
+import getStaticGlobal from '../../helpers/get-static-global';
 
 import arrowWhite from '../../images/arrow-white.png';
 import arrowBlack from '../../images/arrow-black.png';
@@ -332,6 +331,7 @@ const Main = ({
   titleBar,
   workspaces,
 }) => {
+  const appJson = getStaticGlobal('appJson');
   const workspacesList = getWorkspacesAsList(workspaces);
   const showMacTitleBar = window.process.platform === 'darwin' && titleBar && !isFullScreen;
   const windowButtons = window.remote.getGlobal('windowButtons');

@@ -10,7 +10,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 
 import connectComponent from '../../helpers/connect-component';
 import isMas from '../../helpers/is-mas';
-import appJson from '../../constants/app-json';
+import getStaticGlobal from '../../helpers/get-static-global';
 import {
   requestOpenInBrowser,
   requestSetPreference,
@@ -37,6 +37,7 @@ const RatingButton = ({
   const now = Date.now();
 
   if (now > ratingLastClicked + gap) {
+    const appJson = getStaticGlobal('appJson');
     return (
       <IconButton
         title="Rate the App"

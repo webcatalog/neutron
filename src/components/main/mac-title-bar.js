@@ -8,8 +8,7 @@ import classnames from 'classnames';
 import connectComponent from '../../helpers/connect-component';
 import getUrlFromText from '../../helpers/get-url-from-text';
 import isMacOs11 from '../../helpers/is-mac-os-11';
-
-import appJson from '../../constants/app-json';
+import getStaticGlobal from '../../helpers/get-static-global';
 
 import {
   requestLoadUrl,
@@ -52,6 +51,7 @@ const FakeTitleBar = (props) => {
 
   if (window.process.platform !== 'darwin') return null;
 
+  const appJson = getStaticGlobal('appJson');
   return (
     <div
       className={classnames(classes.root, window.mode === 'menubar' && classes.rootMenubar)}

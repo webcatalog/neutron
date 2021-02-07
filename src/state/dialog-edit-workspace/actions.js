@@ -9,6 +9,7 @@ import {
 import hasErrors from '../../helpers/has-errors';
 import isUrl from '../../helpers/is-url';
 import validate from '../../helpers/validate';
+import getStaticGlobal from '../../helpers/get-static-global';
 
 import {
   requestSetWorkspace,
@@ -16,14 +17,12 @@ import {
   requestRemoveWorkspacePicture,
 } from '../../senders';
 
-import appJson from '../../constants/app-json';
-
 import swiftype from '../../swiftype';
 
 const getValidationRules = () => ({
   homeUrl: {
     fieldName: 'Home URL',
-    required: !appJson.url,
+    required: !getStaticGlobal('appJson').url,
     lessStrictUrl: true,
   },
 });
