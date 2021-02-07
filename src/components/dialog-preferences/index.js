@@ -1735,32 +1735,6 @@ const Preferences = ({
             <ListItem
               button
               onClick={() => {
-                const url = isMas() ? 'macappstore://apps.apple.com/app/singlebox/id1548853763' : `https://singlebox.app?utm_source=${utmSource}`;
-                requestOpenInBrowser(url);
-              }}
-              className={classes.listItemPromotion}
-            >
-              <div className={classes.promotionBlock}>
-                <div className={classes.promotionLeft}>
-                  <img src={singleboxIconPng} alt="Singlebox" className={classes.appIcon} />
-                </div>
-                <div className={classes.promotionRight}>
-                  <div>
-                    <Typography variant="body1" className={classes.appTitle}>
-                      Singlebox
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary">
-                      Smart Browser for Busy People
-                    </Typography>
-                  </div>
-                </div>
-              </div>
-              <ChevronRightIcon color="action" />
-            </ListItem>
-            <Divider />
-            <ListItem
-              button
-              onClick={() => {
                 const url = isMas() ? 'macappstore://apps.apple.com/app/translatium/id1547052291' : `https://translatium.app?utm_source=${utmSource}`;
                 requestOpenInBrowser(url);
               }}
@@ -1787,22 +1761,48 @@ const Preferences = ({
             <ListItem
               button
               onClick={() => {
-                const url = isMas() ? 'macappstore://apps.apple.com/app/dynamail-for-gmail/id1550739756' : `https://dynamail.app?utm_source=${utmSource}`;
+                const url = isMas() ? 'macappstore://apps.apple.com/app/singlebox/id1548853763' : `https://singlebox.app?utm_source=${utmSource}`;
                 requestOpenInBrowser(url);
               }}
               className={classes.listItemPromotion}
             >
               <div className={classes.promotionBlock}>
                 <div className={classes.promotionLeft}>
-                  <img src={dynamailIconPng} alt="Dynamail" className={classes.appIcon} />
+                  <img src={singleboxIconPng} alt="Singlebox" className={classes.appIcon} />
                 </div>
                 <div className={classes.promotionRight}>
                   <div>
                     <Typography variant="body1" className={classes.appTitle}>
-                      Dynamail
+                      Singlebox
                     </Typography>
                     <Typography variant="body2" color="textSecondary">
-                      Best Way to Use Gmail on Mac
+                      Smart Browser for Busy People
+                    </Typography>
+                  </div>
+                </div>
+              </div>
+              <ChevronRightIcon color="action" />
+            </ListItem>
+            <Divider />
+            <ListItem
+              button
+              onClick={() => {
+                const url = isMas() ? 'macappstore://apps.apple.com/us/app/pantext-all-in-one-messenger/id1551183766' : `https://pantext.app?utm_source=${utmSource}`;
+                requestOpenInBrowser(url);
+              }}
+              className={classes.listItemPromotion}
+            >
+              <div className={classes.promotionBlock}>
+                <div className={classes.promotionLeft}>
+                  <img src={pantextIconPng} alt="Pantext" className={classes.appIcon} />
+                </div>
+                <div className={classes.promotionRight}>
+                  <div>
+                    <Typography variant="body1" className={classes.appTitle}>
+                      Pantext
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      All Your Messaging Apps in One
                     </Typography>
                   </div>
                 </div>
@@ -1839,22 +1839,22 @@ const Preferences = ({
             <ListItem
               button
               onClick={() => {
-                const url = isMas() ? 'macappstore://apps.apple.com/us/app/pantext-all-in-one-messenger/id1551183766' : `https://pantext.app?utm_source=${utmSource}`;
+                const url = isMas() ? 'macappstore://apps.apple.com/app/dynamail-for-gmail/id1550739756' : `https://dynamail.app?utm_source=${utmSource}`;
                 requestOpenInBrowser(url);
               }}
               className={classes.listItemPromotion}
             >
               <div className={classes.promotionBlock}>
                 <div className={classes.promotionLeft}>
-                  <img src={pantextIconPng} alt="Pantext" className={classes.appIcon} />
+                  <img src={dynamailIconPng} alt="Dynamail" className={classes.appIcon} />
                 </div>
                 <div className={classes.promotionRight}>
                   <div>
                     <Typography variant="body1" className={classes.appTitle}>
-                      Pantext
+                      Dynamail
                     </Typography>
                     <Typography variant="body2" color="textSecondary">
-                      All Your Messaging Apps in One
+                      Best Way to Use Gmail on Mac
                     </Typography>
                   </div>
                 </div>
