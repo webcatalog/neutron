@@ -185,9 +185,10 @@ const createAsync = () => new Promise((resolve) => {
     minHeight: 100,
     minWidth: 400,
     title: global.appJson.name,
-    titleBarStyle: 'hidden',
+    // show traffic light buttons on macOS if global.windowButtons = true
+    titleBarStyle: global.windowButtons ? 'hidden' : 'default',
+    frame: (process.platform === 'darwin' && global.windowButtons) || global.useSystemTitleBar,
     show: false,
-    frame: process.platform === 'darwin' || global.useSystemTitleBar,
     webPreferences: {
       enableRemoteModule: true,
       contextIsolation: false,

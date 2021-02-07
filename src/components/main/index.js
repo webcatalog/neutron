@@ -334,6 +334,7 @@ const Main = ({
 }) => {
   const workspacesList = getWorkspacesAsList(workspaces);
   const showMacTitleBar = window.process.platform === 'darwin' && titleBar && !isFullScreen;
+  const windowButtons = window.remote.getGlobal('windowButtons');
   const isSidebarExpanded = sidebarSize === 'expanded';
 
   return (
@@ -349,7 +350,7 @@ const Main = ({
             )}
           >
             <div className={classes.sidebarRoot}>
-              {window.process.platform === 'darwin' && !(isFullScreen || showMacTitleBar || window.mode === 'menubar') && (
+              {window.process.platform === 'darwin' && !(isFullScreen || showMacTitleBar || window.mode === 'menubar' || !windowButtons) && (
                 <div className={classes.sidebarDraggableArea} />
               )}
               <div className={classes.sidebarTop}>

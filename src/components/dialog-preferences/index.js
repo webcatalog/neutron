@@ -252,6 +252,7 @@ const Preferences = ({
   useHardwareAcceleration,
   useSystemTitleBar,
   warnBeforeQuitting,
+  windowButtons,
 }) => {
   const utmSource = isMas() ? `${appJson.id}_app` : 'juli_app';
   const canPromptTouchId = window.process.platform === 'darwin'
@@ -699,6 +700,28 @@ const Preferences = ({
                       onChange={(e) => {
                         requestSetPreference('titleBar', e.target.checked);
                         requestRealignActiveWorkspace();
+                      }}
+                    />
+                  </ListItemSecondaryAction>
+                </ListItem>
+              </>
+            )}
+            {window.process.platform === 'darwin' && (
+              <>
+                <Divider />
+                <ListItem>
+                  <ListItemText
+                    primary="Show window buttons"
+                    secondary={'Show "traffic light" (red/orange/green) buttons.'}
+                  />
+                  <ListItemSecondaryAction>
+                    <Switch
+                      edge="end"
+                      color="primary"
+                      checked={windowButtons}
+                      onChange={(e) => {
+                        requestSetPreference('windowButtons', e.target.checked);
+                        enqueueRequestRestartSnackbar();
                       }}
                     />
                   </ListItemSecondaryAction>
@@ -2011,6 +2034,7 @@ Preferences.propTypes = {
   useHardwareAcceleration: PropTypes.bool.isRequired,
   useSystemTitleBar: PropTypes.bool.isRequired,
   warnBeforeQuitting: PropTypes.bool.isRequired,
+  windowButtons: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -2063,6 +2087,7 @@ const mapStateToProps = (state) => ({
   useHardwareAcceleration: state.preferences.useHardwareAcceleration,
   useSystemTitleBar: state.preferences.useSystemTitleBar,
   warnBeforeQuitting: state.preferences.warnBeforeQuitting,
+  windowButtons: state.preferences.windowButtons,
 });
 
 const actionCreators = {

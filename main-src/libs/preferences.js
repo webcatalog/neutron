@@ -58,7 +58,6 @@ const defaultPreferences = {
   // default Dark Reader settings from its Chrome extension */
   downloadPath: getDefaultDownloadsPath(),
   hibernateUnusedWorkspacesAtLaunch: false,
-  hideMenuBar: false,
   iapPurchased: false,
   ignoreCertificateErrors: false,
   internalUrlRule: '',
@@ -105,6 +104,7 @@ const defaultPreferences = {
   // system title bar pref is required for the app have the native border
   useSystemTitleBar: process.platform === 'win32' && !isWindows10(),
   warnBeforeQuitting: false,
+  windowButtons: true, // traffic light buttons on macOS
 };
 
 let cachedPreferences = null;
