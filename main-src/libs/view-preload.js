@@ -10,7 +10,7 @@ const {
   disable: disableDarkMode,
   setFetchMethod: setFetchMethodDarkMode,
 } = require('darkreader');
-const nodeFetch = require('node-fetch').default;
+const nodeFetch = require('node-fetch/lib').default;
 
 const isMas = require('./is-mas');
 
