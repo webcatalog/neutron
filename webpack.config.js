@@ -89,9 +89,6 @@ const getElectronMainConfig = () => {
     },
     devtool: 'source-map',
     plugins,
-    optimization: {
-      minimize: false,
-    },
   };
 };
 
