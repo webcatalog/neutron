@@ -263,12 +263,14 @@ const Preferences = ({
     && window.remote.systemPreferences.canPromptTouchID();
   const registered = appJson.registered || iapPurchased;
 
-  const [formattedPrice, setFormattedPrice] = useState(null);
+  const [formattedPrice, setFormattedPrice] = useState(isMas() ? null : '30 USD');
   useEffect(() => {
-    getIapFormattedPriceAsync(`${appJson.id}_plus`)
-      .then((value) => {
-        setFormattedPrice(value);
-      });
+    if (isMas()) {
+      getIapFormattedPriceAsync(`${appJson.id}_plus`)
+        .then((value) => {
+          setFormattedPrice(value);
+        });
+    }
   }, [appJson, setFormattedPrice]);
 
   const sections = {
@@ -276,6 +278,7 @@ const Preferences = ({
       text: 'Licensing',
       Icon: CheckCircleOutlineIcon,
       ref: useRef(),
+      hidden: isMas() && appJson.id === 'singlebox',
     },
     general: {
       text: 'General',
@@ -392,43 +395,28 @@ const Preferences = ({
         </List>
       </div>
       <div className={classes.inner}>
-        <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle} ref={sections.licensing.ref}>
-          Licensing
-        </Typography>
-        {!isMas() ? (
-          <Paper elevation={0} className={classes.paper}>
-            <List disablePadding dense>
-              <ListItem button onClick={null} disabled>
-                <ListItemText primary={registered ? 'WebCatalog Plus is activated.' : 'WebCatalog Basic'} />
-              </ListItem>
-              {!registered && (
-                <>
-                  <Divider />
-                  <ListItem button onClick={checkLicense}>
-                    <ListItemText primary="Upgrade to WebCatalog Plus" />
-                    <ChevronRightIcon color="action" />
-                  </ListItem>
-                </>
-              )}
-            </List>
-          </Paper>
-        ) : (
-          <Paper elevation={0} className={classes.paper}>
-            <List disablePadding dense>
-              <ListItem button onClick={null} disabled>
-                <ListItemText primary={registered ? `${appJson.name} Plus is activated.` : `Upgrade to ${appJson.name} Plus (${formattedPrice ? `${formattedPrice}, ` : ''}one-time payment) to unlock all features & add unlimited number of workspaces.`} />
-              </ListItem>
-              {!registered && (
-                <>
-                  <Divider />
-                  <ListItem button onClick={checkLicense}>
-                    <ListItemText primary={`Upgrade to ${appJson.name} Plus`} />
-                    <ChevronRightIcon color="action" />
-                  </ListItem>
-                </>
-              )}
-            </List>
-          </Paper>
+        {isMas() && appJson.id === 'singlebox' ? null : (
+          <>
+            <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle} ref={sections.licensing.ref}>
+              Licensing
+            </Typography>
+            <Paper elevation={0} className={classes.paper}>
+              <List disablePadding dense>
+                <ListItem button onClick={null} disabled>
+                  <ListItemText primary={registered ? `${isMas() ? appJson.name : 'WebCatalog'} Plus is activated.` : `Upgrade to ${isMas() ? appJson.name : 'WebCatalog'} Plus (${formattedPrice ? `${formattedPrice}, ` : ''}one-time payment) to unlock all features & add unlimited number of workspaces.`} />
+                </ListItem>
+                {!registered && (
+                  <>
+                    <Divider />
+                    <ListItem button onClick={checkLicense}>
+                      <ListItemText primary={`Upgrade to ${isMas() ? appJson.name : 'WebCatalog'} Plus`} />
+                      <ChevronRightIcon color="action" />
+                    </ListItem>
+                  </>
+                )}
+              </List>
+            </Paper>
+          </>
         )}
 
         <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.general.ref}>
@@ -1944,7 +1932,7 @@ const Preferences = ({
                   button
                   onClick={() => requestOpenInBrowser('https://alternativeto.net/software/webcatalog/about/')}
                 >
-                  <ListItemText primary="Rate WebCatalog on AlternativeTo" />
+                  <ListItemText primary="Review WebCatalog on AlternativeTo" />
                   <ChevronRightIcon color="action" />
                 </ListItem>
                 <Divider />
