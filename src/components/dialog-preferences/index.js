@@ -44,8 +44,7 @@ import connectComponent from '../../helpers/connect-component';
 import checkLicense from '../../helpers/check-license';
 import roundTime from '../../helpers/round-time';
 import isMas from '../../helpers/is-mas';
-
-import appJson from '../../constants/app-json';
+import getStaticGlobal from '../../helpers/get-static-global';
 
 import {
   requestCheckForUpdates,
@@ -232,7 +231,7 @@ const Preferences = ({
   pauseNotificationsByScheduleFrom,
   pauseNotificationsByScheduleTo,
   pauseNotificationsMuteAudio,
-  registered,
+  iapPurchased,
   rememberLastPageVisited,
   runInBackground,
   searchEngine,
@@ -254,9 +253,11 @@ const Preferences = ({
   warnBeforeQuitting,
   windowButtons,
 }) => {
+  const appJson = getStaticGlobal('appJson');
   const utmSource = isMas() ? `${appJson.id}_app` : 'juli_app';
   const canPromptTouchId = window.process.platform === 'darwin'
     && window.remote.systemPreferences.canPromptTouchID();
+  const registered = appJson.registered || iapPurchased;
 
   const sections = {
     licensing: {
@@ -344,7 +345,7 @@ const Preferences = ({
   };
 
   useEffect(() => {
-    const scrollTo = window.remote.getGlobal('preferencesScrollTo');
+    const scrollTo = getStaticGlobal('preferencesScrollTo');
     if (!scrollTo) return;
     sections[scrollTo].ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
@@ -1975,7 +1976,7 @@ Preferences.defaultProps = {
   customUserAgent: null,
   internalUrlRule: null,
   jsCodeInjection: null,
-  registered: false,
+  iapPurchased: false,
 };
 
 Preferences.propTypes = {
@@ -2014,7 +2015,7 @@ Preferences.propTypes = {
   pauseNotificationsByScheduleFrom: PropTypes.string.isRequired,
   pauseNotificationsByScheduleTo: PropTypes.string.isRequired,
   pauseNotificationsMuteAudio: PropTypes.bool.isRequired,
-  registered: PropTypes.bool,
+  iapPurchased: PropTypes.bool,
   rememberLastPageVisited: PropTypes.bool.isRequired,
   runInBackground: PropTypes.bool.isRequired,
   searchEngine: PropTypes.string.isRequired,
@@ -2067,7 +2068,7 @@ const mapStateToProps = (state) => ({
   pauseNotificationsByScheduleFrom: state.preferences.pauseNotificationsByScheduleFrom,
   pauseNotificationsByScheduleTo: state.preferences.pauseNotificationsByScheduleTo,
   pauseNotificationsMuteAudio: state.preferences.pauseNotificationsMuteAudio,
-  registered: appJson.registered || state.preferences.iapPurchased,
+  iapPurchased: state.preferences.iapPurchased,
   rememberLastPageVisited: state.preferences.rememberLastPageVisited,
   runInBackground: state.preferences.runInBackground,
   searchEngine: state.preferences.searchEngine,

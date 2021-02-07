@@ -12,8 +12,7 @@ import ViewListIcon from '@material-ui/icons/ViewList';
 import CreateIcon from '@material-ui/icons/Create';
 
 import connectComponent from '../../helpers/connect-component';
-
-import appJson from '../../constants/app-json';
+import getStaticGlobal from '../../helpers/get-static-global';
 
 import { updateMode } from '../../state/dialog-add-workspace/actions';
 
@@ -47,6 +46,7 @@ const AddWorkspace = ({
   mode,
   onUpdateMode,
 }) => {
+  const appJson = getStaticGlobal('appJson');
   const appJsonId = appJson.id;
 
   return (

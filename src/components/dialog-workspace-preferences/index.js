@@ -27,8 +27,7 @@ import connectComponent from '../../helpers/connect-component';
 import checkLicense from '../../helpers/check-license';
 import roundTime from '../../helpers/round-time';
 import isMas from '../../helpers/is-mas';
-
-import appJson from '../../constants/app-json';
+import getStaticGlobal from '../../helpers/get-static-global';
 
 import {
   requestOpenInBrowser,
@@ -151,8 +150,9 @@ const Preferences = ({
   formInternalUrlRule,
   formJsCodeInjection,
 }) => {
+  const appJson = getStaticGlobal('appJson');
   const utmSource = isMas() ? `${appJson.id}_app` : 'juli_app';
-  const workspaceId = window.remote.getGlobal('workspacePreferencesWorkspaceId');
+  const workspaceId = getStaticGlobal('workspacePreferencesWorkspaceId');
 
   const sections = {
     extensions: {

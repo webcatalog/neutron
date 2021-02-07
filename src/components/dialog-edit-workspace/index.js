@@ -26,8 +26,7 @@ import CheckIcon from '@material-ui/icons/Check';
 import connectComponent from '../../helpers/connect-component';
 import getAvatarText from '../../helpers/get-avatar-text';
 import getMailtoUrl from '../../helpers/get-mailto-url';
-
-import appJson from '../../constants/app-json';
+import getStaticGlobal from '../../helpers/get-static-global';
 
 import {
   getIconFromInternet,
@@ -174,6 +173,8 @@ const EditWorkspace = ({
   shouldUseDarkColors,
   transparentBackground,
 }) => {
+  const appJson = getStaticGlobal('appJson');
+
   let namePlaceholder = 'Optional';
   if (accountInfo) {
     if (accountInfo.name && accountInfo.email) {

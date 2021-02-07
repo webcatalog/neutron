@@ -15,6 +15,7 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 
 import connectComponent from '../helpers/connect-component';
+import getStaticGlobal from '../helpers/get-static-global';
 
 import WindowsTitleBar from './shared/windows-title-bar';
 import AppLock from './app-lock';
@@ -53,7 +54,7 @@ const AppWrapper = ({
 
   const theme = createMuiTheme(themeObj);
 
-  const showWindowsTitleBar = window.process.platform !== 'darwin' && !isFullScreen && !window.remote.getGlobal('useSystemTitleBar');
+  const showWindowsTitleBar = window.process.platform !== 'darwin' && !isFullScreen && !getStaticGlobal('useSystemTitleBar');
 
   return (
     <MuiThemeProvider theme={theme}>

@@ -14,8 +14,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import { requestShowAppMenu } from '../../senders';
 
 import connectComponent from '../../helpers/connect-component';
-
-import appJson from '../../constants/app-json';
+import getStaticGlobal from '../../helpers/get-static-global';
 
 const TOOLBAR_HEIGHT = 28;
 const BUTTON_WIDTH = 46;
@@ -250,12 +249,15 @@ EnhancedAppBar.propTypes = {
   title: PropTypes.string,
 };
 
-const mapStateToProps = (state, ownProps) => ({
-  isMaximized: state.general.isMaximized,
-  title: ownProps.title || ((window.mode === 'main' || window.mode === 'menubar') && state.general.title ? state.general.title : appJson.name),
-  sidebar: state.preferences.sidebar,
-  sidebarSize: state.preferences.sidebarSize,
-});
+const mapStateToProps = (state, ownProps) => {
+  const appJson = getStaticGlobal('appJson');
+  return {
+    isMaximized: state.general.isMaximized,
+    title: ownProps.title || ((window.mode === 'main' || window.mode === 'menubar') && state.general.title ? state.general.title : appJson.name),
+    sidebar: state.preferences.sidebar,
+    sidebarSize: state.preferences.sidebarSize,
+  };
+};
 
 export default connectComponent(
   EnhancedAppBar,

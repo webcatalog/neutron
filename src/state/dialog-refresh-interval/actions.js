@@ -12,6 +12,7 @@ import {
   requestRequestReloadWorkspaceDialog,
 } from '../../senders';
 import roundTime from '../../helpers/round-time';
+import getStaticGlobal from '../../helpers/get-static-global';
 
 import { updateForm as updateFormDialogWorkspacePreferences } from '../dialog-workspace-preferences/actions';
 
@@ -62,7 +63,7 @@ export const save = () => (dispatch, getState) => {
     dispatch(updateFormDialogWorkspacePreferences({
       autoRefreshInterval,
     }));
-    const workspaceId = window.remote.getGlobal('workspacePreferencesWorkspaceId');
+    const workspaceId = getStaticGlobal('workspacePreferencesWorkspaceId');
     requestRequestReloadWorkspaceDialog(workspaceId);
   } else {
     requestSetPreference('autoRefreshInterval', autoRefreshInterval);

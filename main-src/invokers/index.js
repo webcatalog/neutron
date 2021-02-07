@@ -39,6 +39,7 @@ const loadInvokers = () => {
       },
       general: {
         shouldUseDarkColors: nativeTheme.shouldUseDarkColors,
+        locked: global.locked,
       },
     };
     return Promise.resolve(initialState);

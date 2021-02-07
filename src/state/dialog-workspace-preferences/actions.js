@@ -10,13 +10,15 @@ import {
   requestReloadViewDarkReader,
 } from '../../senders';
 
+import getStaticGlobal from '../../helpers/get-static-global';
+
 export const updateForm = (changes) => (dispatch, getState) => {
   dispatch({
     type: UPDATE_WORKSPACE_PREFERENCES_DIALOG,
     changes,
   });
 
-  const workspaceId = window.remote.getGlobal('workspacePreferencesWorkspaceId');
+  const workspaceId = getStaticGlobal('workspacePreferencesWorkspaceId');
   const preferences = getState().dialogWorkspacePreferences.form;
   requestSetWorkspace(workspaceId, { preferences });
 

@@ -9,6 +9,7 @@ import {
 import hasErrors from '../../helpers/has-errors';
 import isUrl from '../../helpers/is-url';
 import validate from '../../helpers/validate';
+import getStaticGlobal from '../../helpers/get-static-global';
 
 import {
   requestSetWorkspace,
@@ -16,14 +17,12 @@ import {
   requestRemoveWorkspacePicture,
 } from '../../senders';
 
-import appJson from '../../constants/app-json';
-
 import swiftype from '../../swiftype';
 
 const getValidationRules = () => ({
   homeUrl: {
     fieldName: 'Home URL',
-    required: !appJson.url,
+    required: !getStaticGlobal('appJson').url,
     lessStrictUrl: true,
   },
 });
@@ -73,7 +72,7 @@ export const getIconFromInternet = () => (dispatch, getState) => {
     downloadingIcon: true,
   });
 
-  getWebsiteIconUrlAsync(homeUrl || appJson.url)
+  getWebsiteIconUrlAsync(homeUrl || getStaticGlobal('appJson').url)
     .then((iconUrl) => {
       const { form } = getState().dialogEditWorkspace;
       if (form.homeUrl === homeUrl) {
@@ -113,7 +112,7 @@ export const getIconFromSwiftype = () => (dispatch, getState) => {
     downloadingIcon: true,
   });
 
-  getWebsiteIconUrlFromSwifttypeAsync(homeUrl || appJson.url, name)
+  getWebsiteIconUrlFromSwifttypeAsync(homeUrl || getStaticGlobal('appJson').url, name)
     .then((iconUrl) => {
       const { form } = getState().dialogEditWorkspace;
       if (form.homeUrl === homeUrl) {
@@ -157,7 +156,7 @@ export const save = () => (dispatch, getState) => {
     return dispatch(updateForm(validatedChanges));
   }
 
-  const id = window.remote.getGlobal('editWorkspaceId');
+  const id = getStaticGlobal('editWorkspaceId');
   const homeUrl = (() => {
     if (form.homeUrl) {
       const url = form.homeUrl.trim();

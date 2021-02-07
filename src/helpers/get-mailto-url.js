@@ -2,13 +2,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import extractHostname from './extract-hostname';
-
-let MAILTO_URLS;
+import getStaticGlobal from './get-static-global';
 
 const getMailtoUrl = (url) => {
-  if (!MAILTO_URLS) {
-    MAILTO_URLS = window.remote.getGlobal('MAILTO_URLS');
-  }
+  const MAILTO_URLS = getStaticGlobal('MAILTO_URLS');
 
   const extractedHostname = extractHostname(url);
   if (extractedHostname in MAILTO_URLS) {
