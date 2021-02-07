@@ -72,7 +72,7 @@ export const getIconFromInternet = () => (dispatch, getState) => {
     downloadingIcon: true,
   });
 
-  getWebsiteIconUrlAsync(homeUrl || appJson.url)
+  getWebsiteIconUrlAsync(homeUrl || getStaticGlobal('appJson').url)
     .then((iconUrl) => {
       const { form } = getState().dialogEditWorkspace;
       if (form.homeUrl === homeUrl) {
@@ -112,7 +112,7 @@ export const getIconFromSwiftype = () => (dispatch, getState) => {
     downloadingIcon: true,
   });
 
-  getWebsiteIconUrlFromSwifttypeAsync(homeUrl || appJson.url, name)
+  getWebsiteIconUrlFromSwifttypeAsync(homeUrl || getStaticGlobal('appJson').url, name)
     .then((iconUrl) => {
       const { form } = getState().dialogEditWorkspace;
       if (form.homeUrl === homeUrl) {
