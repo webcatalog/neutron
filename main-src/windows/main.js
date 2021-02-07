@@ -122,7 +122,7 @@ const createAsync = () => new Promise((resolve) => {
     // icon template is not supported on Windows & Linux
     const iconPath = process.env.NODE_ENV === 'production'
       ? path.resolve(__dirname, 'menubar-icon.png')
-      : path.resolve(__dirname, '..', 'public', 'menubar-icon.png');
+      : path.resolve(__dirname, '..', '..', 'public', 'menubar-icon.png');
     menubarTray.setImage(iconPath);
 
     mb = menubar({
@@ -202,7 +202,7 @@ const createAsync = () => new Promise((resolve) => {
   if (process.platform === 'linux') {
     winOpts.icon = process.env.NODE_ENV === 'production'
       ? path.resolve(__dirname, 'dock-icon.png')
-      : path.resolve(__dirname, '..', 'public', 'dock-icon.png');
+      : path.resolve(__dirname, '..', '..', 'public', 'dock-icon.png');
   }
   win = new BrowserWindow(winOpts);
 
