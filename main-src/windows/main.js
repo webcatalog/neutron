@@ -326,7 +326,7 @@ const createAsync = () => new Promise((resolve) => {
     // icon template is not supported on Windows & Linux
     const iconPath = process.env.NODE_ENV === 'production'
       ? path.resolve(__dirname, 'menubar-icon.png')
-      : path.resolve(__dirname, '..', 'public', 'menubar-icon.png');
+      : path.resolve(__dirname, '..', '..', 'public', 'menubar-icon.png');
     tray.setImage(iconPath);
     tray.on('click', () => {
       if (win == null) {
