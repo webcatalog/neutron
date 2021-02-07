@@ -10,14 +10,13 @@ const isWindows10 = require('./is-windows-10');
 
 const appJson = require('../constants/app-json');
 
-const isDefaultMailClientAsync = () => new Promise((resolve) => {
+const isDefaultBrowserAsync = () => new Promise((resolve) => {
   // Electron protocol API doesn't work with Windows 10
   // So check with regedit
   if (isWindows10()) {
-    // https://stackoverflow.com/questions/32354861/how-to-find-the-default-browser-via-the-registry-on-windows-10
-    const protocolName = 'mailto';
+  // https://stackoverflow.com/questions/32354861/how-to-find-the-default-browser-via-the-registry-on-windows-10
+    const protocolName = 'http'; // https works as well
     const userChoicePath = `HKCU\\SOFTWARE\\Microsoft\\Windows\\Shell\\Associations\\URLAssociations\\${protocolName}\\UserChoice`;
-    // eslint-disable-next-line global-require
     regedit.list([userChoicePath], (err, result) => {
       try {
         resolve(!err && result[userChoicePath].values.ProgId.value === appJson.id);
@@ -30,7 +29,7 @@ const isDefaultMailClientAsync = () => new Promise((resolve) => {
     return;
   }
 
-  resolve(app.isDefaultProtocolClient('mailto'));
+  resolve(app.isDefaultProtocolClient('http'));
 });
 
-module.exports = isDefaultMailClientAsync;
+module.exports = isDefaultBrowserAsync;

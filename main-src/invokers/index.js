@@ -24,6 +24,9 @@ const {
   setAppLockTouchIdAsync,
 } = require('../libs/app-lock');
 
+const isDefaultBrowserAsync = require('../libs/is-default-browser-async');
+const isDefaultMailClientAsync = require('../libs/is-default-mail-client-async');
+
 const loadInvokers = () => {
   ipcMain.handle('get-react-initial-state', () => {
     const initialState = {
@@ -62,6 +65,9 @@ const loadInvokers = () => {
     setWorkspaceBadgeCount(e.sender.workspaceId, num, mainWindow.get());
   });
   // END for Browser
+
+  ipcMain.handle('is-default-browser', () => isDefaultBrowserAsync());
+  ipcMain.handle('is-default-mail-client', () => isDefaultMailClientAsync());
 };
 
 module.exports = loadInvokers;
