@@ -69,6 +69,7 @@ const extractHostname = require('./libs/extract-hostname');
 const { getAppLockStatusAsync, unlockAppUsingTouchId } = require('./libs/app-lock');
 const isMacOs11 = require('./libs/is-mac-os-11');
 const isMas = require('./libs/is-mas');
+const getIapFormattedPriceAsync = require('./libs/get-iap-formatted-price-async');
 const promptSetAsDefaultMailClient = require('./libs/prompt-set-as-default-email-client');
 
 const MAILTO_URLS = require('./constants/mailto-urls');
@@ -101,19 +102,13 @@ if (!gotTheLock) {
     const iapPurchased = getPreference('iapPurchased');
     if (iapPurchased) return;
 
+    //  && payment.productIdentifier !== 'dynamail_plus'
+
     // Check each transaction.
     transactions.forEach((transaction) => {
       const { payment } = transaction;
 
-      if (appJson.id === 'dynamail' && payment.productIdentifier !== 'dynamail_plus') {
-        return;
-      }
-
-      if (appJson.id === 'panmail' && payment.productIdentifier !== 'panmail_plus') {
-        return;
-      }
-
-      if (appJson.id === 'pantext' && payment.productIdentifier !== 'pantext_plus') {
+      if (payment.productIdentifier !== `${appJson.id}_plus`) {
         return;
       }
 
@@ -441,7 +436,7 @@ if (!gotTheLock) {
           handleArgv(process.argv);
         }
 
-        if (autoCheckForUpdates) {
+        if (!isMas() && autoCheckForUpdates) {
           // only notify user about update again after one week
           const lastShowNewUpdateDialog = getPreference('lastShowNewUpdateDialog');
           const updateInterval = 7 * 24 * 60 * 60 * 1000; // one week
@@ -449,6 +444,12 @@ if (!gotTheLock) {
           if (now - lastShowNewUpdateDialog > updateInterval) {
             fetchUpdater.checkForUpdates(true);
           }
+        }
+
+        // pre-cache pricing for (Pantext|Panmail|Dynamail|...) Plus
+        if (isMas() && !appJson.registered && !getPreference('iapPurchased')) {
+          const productIdentifier = `${appJson.id}_plus`;
+          getIapFormattedPriceAsync(productIdentifier, '14.99 USD');
         }
       });
   });

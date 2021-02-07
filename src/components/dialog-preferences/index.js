@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import semver from 'semver';
 import classnames from 'classnames';
@@ -60,6 +60,10 @@ import {
   requestShowNotificationsWindow,
   enqueueRequestRestartSnackbar,
 } from '../../senders';
+
+import {
+  getIapFormattedPriceAsync,
+} from '../../invokers';
 
 import { open as openDialogAppLock } from '../../state/dialog-app-lock/actions';
 import { open as openDialogCodeInjection } from '../../state/dialog-code-injection/actions';
@@ -259,12 +263,19 @@ const Preferences = ({
     && window.remote.systemPreferences.canPromptTouchID();
   const registered = appJson.registered || iapPurchased;
 
+  const [formattedPrice, setFormattedPrice] = useState('14.99 USD');
+  useEffect(() => {
+    getIapFormattedPriceAsync(`${appJson.id}_plus`, '14.99 USD')
+      .then((value) => {
+        setFormattedPrice(value);
+      });
+  }, [appJson, setFormattedPrice]);
+
   const sections = {
     licensing: {
       text: 'Licensing',
       Icon: CheckCircleOutlineIcon,
       ref: useRef(),
-      hidden: isMas(),
     },
     general: {
       text: 'General',
@@ -381,28 +392,43 @@ const Preferences = ({
         </List>
       </div>
       <div className={classes.inner}>
-        {!isMas() && (
-          <>
-            <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle} ref={sections.licensing.ref}>
-              Licensing
-            </Typography>
-            <Paper elevation={0} className={classes.paper}>
-              <List disablePadding dense>
-                <ListItem button onClick={null} disabled>
-                  <ListItemText primary={registered ? 'WebCatalog Plus is activated.' : 'WebCatalog Basic'} />
-                </ListItem>
-                {!registered && (
-                  <>
-                    <Divider />
-                    <ListItem button onClick={checkLicense}>
-                      <ListItemText primary="Upgrade to WebCatalog Plus" />
-                      <ChevronRightIcon color="action" />
-                    </ListItem>
-                  </>
-                )}
-              </List>
-            </Paper>
-          </>
+        <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle} ref={sections.licensing.ref}>
+          Licensing
+        </Typography>
+        {!isMas() ? (
+          <Paper elevation={0} className={classes.paper}>
+            <List disablePadding dense>
+              <ListItem button onClick={null} disabled>
+                <ListItemText primary={registered ? 'WebCatalog Plus is activated.' : 'WebCatalog Basic'} />
+              </ListItem>
+              {!registered && (
+                <>
+                  <Divider />
+                  <ListItem button onClick={checkLicense}>
+                    <ListItemText primary="Upgrade to WebCatalog Plus" />
+                    <ChevronRightIcon color="action" />
+                  </ListItem>
+                </>
+              )}
+            </List>
+          </Paper>
+        ) : (
+          <Paper elevation={0} className={classes.paper}>
+            <List disablePadding dense>
+              <ListItem button onClick={null} disabled>
+                <ListItemText primary={registered ? `${appJson.name} Plus is activated.` : `Upgrade to ${appJson.name} Plus (${formattedPrice}, one-time payment) to unlock all features & add unlimited number of workspaces.`} />
+              </ListItem>
+              {!registered && (
+                <>
+                  <Divider />
+                  <ListItem button onClick={checkLicense}>
+                    <ListItemText primary={`Upgrade to ${appJson.name} Plus`} />
+                    <ChevronRightIcon color="action" />
+                  </ListItem>
+                </>
+              )}
+            </List>
+          </Paper>
         )}
 
         <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.general.ref}>
