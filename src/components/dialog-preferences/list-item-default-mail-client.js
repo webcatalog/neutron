@@ -30,7 +30,7 @@ const ListItemDefaultMailClient = () => {
         // https://stackoverflow.com/questions/32354861/how-to-find-the-default-browser-via-the-registry-on-windows-10
         const protocolName = 'mailto';
         const userChoicePath = `HKCU\\SOFTWARE\\Microsoft\\Windows\\Shell\\Associations\\URLAssociations\\${protocolName}\\UserChoice`;
-        window.remote.require('regedit').list([userChoicePath], (err, result) => {
+        window.regedit.list([userChoicePath], (err, result) => {
           try {
             setIsDefault(!err && result[userChoicePath].values.ProgId.value === appId);
           } catch (tryErr) {

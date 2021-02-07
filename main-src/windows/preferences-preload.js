@@ -4,3 +4,5 @@
 window.mode = 'preferences';
 
 require('./shared-preload');
+
+window.regedit = require('regedit');
