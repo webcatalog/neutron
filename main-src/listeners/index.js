@@ -238,7 +238,7 @@ const loadListeners = () => {
           dialog.showMessageBox(win, {
             type: 'info',
             message: `Upgrade to ${appJson.name} Plus (${formattedPrice ? `${formattedPrice}, ` : ''}one-time payment) to unlock all features & add unlimited number of workspaces.`,
-            buttons: [`Purchase${formattedPrice ? `(${formattedPrice})` : ''}...`, 'Restore Purchase', 'Later'],
+            buttons: [`Purchase${formattedPrice ? ` (${formattedPrice})` : ''}...`, 'Restore Purchase', 'Later'],
             cancelId: 2,
             defaultId: 0,
           })
