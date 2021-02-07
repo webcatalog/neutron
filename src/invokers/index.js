@@ -10,3 +10,4 @@ export const setAppLockPasswordAsync = (inputPassword, newPassword) => window.ip
 export const setAppLockTouchIdAsync = (inputPassword, useTouchId) => window.ipcRenderer.invoke('set-app-lock-touch-id', inputPassword, useTouchId);
 export const isDefaultBrowserAsync = () => window.ipcRenderer.invoke('is-default-browser');
 export const isDefaultMailClientAsync = () => window.ipcRenderer.invoke('is-default-mail-client');
+export const getIapFormattedPriceAsync = (productIdentifier) => window.ipcRenderer.invoke('get-iap-formatted-price', productIdentifier);

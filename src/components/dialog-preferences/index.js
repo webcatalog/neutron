@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import semver from 'semver';
 import classnames from 'classnames';
@@ -60,6 +60,10 @@ import {
   requestShowNotificationsWindow,
   enqueueRequestRestartSnackbar,
 } from '../../senders';
+
+import {
+  getIapFormattedPriceAsync,
+} from '../../invokers';
 
 import { open as openDialogAppLock } from '../../state/dialog-app-lock/actions';
 import { open as openDialogCodeInjection } from '../../state/dialog-code-injection/actions';
@@ -259,12 +263,22 @@ const Preferences = ({
     && window.remote.systemPreferences.canPromptTouchID();
   const registered = appJson.registered || iapPurchased;
 
+  const [formattedPrice, setFormattedPrice] = useState(isMas() ? null : '30 USD');
+  useEffect(() => {
+    if (isMas() && !registered) {
+      getIapFormattedPriceAsync(`${appJson.id}_plus`)
+        .then((value) => {
+          setFormattedPrice(value);
+        });
+    }
+  }, [appJson, setFormattedPrice, registered]);
+
   const sections = {
     licensing: {
       text: 'Licensing',
       Icon: CheckCircleOutlineIcon,
       ref: useRef(),
-      hidden: isMas(),
+      hidden: isMas() && appJson.id === 'singlebox',
     },
     general: {
       text: 'General',
@@ -381,7 +395,7 @@ const Preferences = ({
         </List>
       </div>
       <div className={classes.inner}>
-        {!isMas() && (
+        {isMas() && appJson.id === 'singlebox' ? null : (
           <>
             <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle} ref={sections.licensing.ref}>
               Licensing
@@ -389,13 +403,13 @@ const Preferences = ({
             <Paper elevation={0} className={classes.paper}>
               <List disablePadding dense>
                 <ListItem button onClick={null} disabled>
-                  <ListItemText primary={registered ? 'WebCatalog Plus is activated.' : 'WebCatalog Basic'} />
+                  <ListItemText primary={registered ? `${isMas() ? appJson.name : 'WebCatalog'} Plus is activated.` : `Upgrade to ${isMas() ? appJson.name : 'WebCatalog'} Plus (${formattedPrice ? `${formattedPrice}, ` : ''}one-time payment) to unlock all features & add unlimited number of workspaces.`} />
                 </ListItem>
                 {!registered && (
                   <>
                     <Divider />
                     <ListItem button onClick={checkLicense}>
-                      <ListItemText primary="Upgrade to WebCatalog Plus" />
+                      <ListItemText primary={`Upgrade to ${isMas() ? appJson.name : 'WebCatalog'} Plus`} />
                       <ChevronRightIcon color="action" />
                     </ListItem>
                   </>
@@ -1709,32 +1723,6 @@ const Preferences = ({
             <ListItem
               button
               onClick={() => {
-                const url = isMas() ? 'macappstore://apps.apple.com/app/singlebox/id1548853763' : `https://singlebox.app?utm_source=${utmSource}`;
-                requestOpenInBrowser(url);
-              }}
-              className={classes.listItemPromotion}
-            >
-              <div className={classes.promotionBlock}>
-                <div className={classes.promotionLeft}>
-                  <img src={singleboxIconPng} alt="Singlebox" className={classes.appIcon} />
-                </div>
-                <div className={classes.promotionRight}>
-                  <div>
-                    <Typography variant="body1" className={classes.appTitle}>
-                      Singlebox
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary">
-                      Smart Browser for Busy People
-                    </Typography>
-                  </div>
-                </div>
-              </div>
-              <ChevronRightIcon color="action" />
-            </ListItem>
-            <Divider />
-            <ListItem
-              button
-              onClick={() => {
                 const url = isMas() ? 'macappstore://apps.apple.com/app/translatium/id1547052291' : `https://translatium.app?utm_source=${utmSource}`;
                 requestOpenInBrowser(url);
               }}
@@ -1761,22 +1749,48 @@ const Preferences = ({
             <ListItem
               button
               onClick={() => {
-                const url = isMas() ? 'macappstore://apps.apple.com/app/dynamail-for-gmail/id1550739756' : `https://dynamail.app?utm_source=${utmSource}`;
+                const url = isMas() ? 'macappstore://apps.apple.com/app/singlebox/id1548853763' : `https://singlebox.app?utm_source=${utmSource}`;
                 requestOpenInBrowser(url);
               }}
               className={classes.listItemPromotion}
             >
               <div className={classes.promotionBlock}>
                 <div className={classes.promotionLeft}>
-                  <img src={dynamailIconPng} alt="Dynamail" className={classes.appIcon} />
+                  <img src={singleboxIconPng} alt="Singlebox" className={classes.appIcon} />
                 </div>
                 <div className={classes.promotionRight}>
                   <div>
                     <Typography variant="body1" className={classes.appTitle}>
-                      Dynamail
+                      Singlebox
                     </Typography>
                     <Typography variant="body2" color="textSecondary">
-                      Best Way to Use Gmail on Mac
+                      Smart Browser for Busy People
+                    </Typography>
+                  </div>
+                </div>
+              </div>
+              <ChevronRightIcon color="action" />
+            </ListItem>
+            <Divider />
+            <ListItem
+              button
+              onClick={() => {
+                const url = isMas() ? 'macappstore://apps.apple.com/us/app/pantext-all-in-one-messenger/id1551183766' : `https://pantext.app?utm_source=${utmSource}`;
+                requestOpenInBrowser(url);
+              }}
+              className={classes.listItemPromotion}
+            >
+              <div className={classes.promotionBlock}>
+                <div className={classes.promotionLeft}>
+                  <img src={pantextIconPng} alt="Pantext" className={classes.appIcon} />
+                </div>
+                <div className={classes.promotionRight}>
+                  <div>
+                    <Typography variant="body1" className={classes.appTitle}>
+                      Pantext
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      All Your Messaging Apps in One
                     </Typography>
                   </div>
                 </div>
@@ -1813,22 +1827,22 @@ const Preferences = ({
             <ListItem
               button
               onClick={() => {
-                const url = isMas() ? 'macappstore://apps.apple.com/us/app/pantext-all-in-one-messenger/id1551183766' : `https://pantext.app?utm_source=${utmSource}`;
+                const url = isMas() ? 'macappstore://apps.apple.com/app/dynamail-for-gmail/id1550739756' : `https://dynamail.app?utm_source=${utmSource}`;
                 requestOpenInBrowser(url);
               }}
               className={classes.listItemPromotion}
             >
               <div className={classes.promotionBlock}>
                 <div className={classes.promotionLeft}>
-                  <img src={pantextIconPng} alt="Pantext" className={classes.appIcon} />
+                  <img src={dynamailIconPng} alt="Dynamail" className={classes.appIcon} />
                 </div>
                 <div className={classes.promotionRight}>
                   <div>
                     <Typography variant="body1" className={classes.appTitle}>
-                      Pantext
+                      Dynamail
                     </Typography>
                     <Typography variant="body2" color="textSecondary">
-                      All Your Messaging Apps in One
+                      Best Way to Use Gmail on Mac
                     </Typography>
                   </div>
                 </div>
@@ -1918,7 +1932,7 @@ const Preferences = ({
                   button
                   onClick={() => requestOpenInBrowser('https://alternativeto.net/software/webcatalog/about/')}
                 >
-                  <ListItemText primary="Rate WebCatalog on AlternativeTo" />
+                  <ListItemText primary="Review WebCatalog on AlternativeTo" />
                   <ChevronRightIcon color="action" />
                 </ListItem>
                 <Divider />

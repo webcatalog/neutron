@@ -79,6 +79,7 @@ const fetchUpdater = require('../libs/fetch-updater');
 const getWebsiteIconUrlAsync = require('../libs/get-website-icon-url-async');
 const getViewBounds = require('../libs/get-view-bounds');
 const isMas = require('../libs/is-mas');
+const getIapFormattedPriceAsync = require('../libs/get-iap-formatted-price-async');
 
 const aboutWindow = require('../windows/about');
 const addWorkspaceWindow = require('../windows/add-workspace');
@@ -229,33 +230,38 @@ const loadListeners = () => {
     const win = workspacePreferencesWindow.get() || preferencesWindow.get();
 
     if (isMas()) {
-      dialog.showMessageBox(win, {
-        type: 'info',
-        message: `To unlock all features & add unlimited number of workspaces, please purchase ${appJson.name} Plus.`,
-        buttons: ['Purchase...', 'Restore Purchase', 'Later'],
-        cancelId: 2,
-        defaultId: 0,
-      })
-        .then(({ response }) => {
-          const productIdentifier = `${appJson.id}_plus`;
-          if (response === 0) {
-            inAppPurchase.purchaseProduct(productIdentifier).then((isProductValid) => {
-              if (!isProductValid) {
-                // eslint-disable-next-line no-console
-                console.log('The product is not valid.');
-                return;
+      const productIdentifier = `${appJson.id}_plus`;
+
+      // get price
+      getIapFormattedPriceAsync(productIdentifier)
+        .then((formattedPrice) => {
+          dialog.showMessageBox(win, {
+            type: 'info',
+            message: `Upgrade to ${appJson.name} Plus (${formattedPrice ? `${formattedPrice}, ` : ''}one-time payment) to unlock all features & add unlimited number of workspaces.`,
+            buttons: [`Purchase${formattedPrice ? `(${formattedPrice})` : ''}...`, 'Restore Purchase', 'Later'],
+            cancelId: 2,
+            defaultId: 0,
+          })
+            .then(({ response }) => {
+              if (response === 0) {
+                inAppPurchase.purchaseProduct(productIdentifier).then((isProductValid) => {
+                  if (!isProductValid) {
+                    // eslint-disable-next-line no-console
+                    console.log('The product is not valid.');
+                    return;
+                  }
+
+                  // eslint-disable-next-line no-console
+                  console.log('The payment has been added to the payment queue.');
+                });
               }
 
-              // eslint-disable-next-line no-console
-              console.log('The payment has been added to the payment queue.');
-            });
-          }
-
-          if (response === 1) {
-            inAppPurchase.restoreCompletedTransactions();
-          }
-        })
-        .catch(console.log); // eslint-disable-line no-console
+              if (response === 1) {
+                inAppPurchase.restoreCompletedTransactions();
+              }
+            })
+            .catch(console.log); // eslint-disable-line no-console
+        });
       return;
     }
 
