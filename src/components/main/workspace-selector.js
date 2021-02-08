@@ -138,7 +138,7 @@ const WorkspaceSelector = ({
   const shortcutTip = order < 9 && id !== 'add'
     ? `${window.process.platform === 'darwin' ? '⌘' : 'Ctrl+'}${order + 1}` : null;
 
-  const fullName = (() => {
+  const userDefinedName = (() => {
     if (name) return name;
     if (accountInfo) {
       if (accountInfo.name && accountInfo.email) {
@@ -148,6 +148,11 @@ const WorkspaceSelector = ({
         return accountInfo.name;
       }
     }
+    return null;
+  })();
+
+  const fullName = (() => {
+    if (userDefinedName) return userDefinedName;
     return `Workspace ${order + 1}`;
   })();
 
@@ -246,7 +251,7 @@ const WorkspaceSelector = ({
               return null;
             })()}
           >
-            {selectedIconType === 'text' && getAvatarText(id, fullName, order)}
+            {selectedIconType === 'text' && getAvatarText(id, userDefinedName, order)}
             {selectedIconType === 'image' && (
               <img
                 alt="Icon"
