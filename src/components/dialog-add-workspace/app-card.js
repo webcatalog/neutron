@@ -106,7 +106,7 @@ const AppCard = (props) => {
                 label: 'Clone',
                 click: () => {
                   onUpdateForm({
-                    name, homeUrl: url, picturePath: icon,
+                    name, homeUrl: url, internetIcon: icon,
                   });
                   onUpdateMode('custom');
                 },
