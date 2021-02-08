@@ -96,6 +96,7 @@ import translatiumIconPng from '../../images/products/translatium-mac-icon-128@2
 import dynamailIconPng from '../../images/products/dynamail-mac-icon-128@2x.png';
 import panmailIconPng from '../../images/products/panmail-mac-icon-128@2x.png';
 import pantextIconPng from '../../images/products/pantext-mac-icon-128@2x.png';
+import cloveryIconPng from '../../images/products/clovery-mac-icon-128@2x.png';
 
 const styles = (theme) => ({
   root: {
@@ -1765,6 +1766,32 @@ const Preferences = ({
                     </Typography>
                     <Typography variant="body2" color="textSecondary">
                       Smart Browser for Busy People
+                    </Typography>
+                  </div>
+                </div>
+              </div>
+              <ChevronRightIcon color="action" />
+            </ListItem>
+            <Divider />
+            <ListItem
+              button
+              onClick={() => {
+                const url = isMas() ? 'macappstore://apps.apple.com/us/app/clovery-for-google-apps/id1552618413' : `https://clovery.app?utm_source=${utmSource}`;
+                requestOpenInBrowser(url);
+              }}
+              className={classes.listItemPromotion}
+            >
+              <div className={classes.promotionBlock}>
+                <div className={classes.promotionLeft}>
+                  <img src={cloveryIconPng} alt="Clovery" className={classes.appIcon} />
+                </div>
+                <div className={classes.promotionRight}>
+                  <div>
+                    <Typography variant="body1" className={classes.appTitle}>
+                      Clovery
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      All Google Apps in One
                     </Typography>
                   </div>
                 </div>

@@ -29,6 +29,8 @@ const isDefaultMailClientAsync = require('../libs/is-default-mail-client-async')
 
 const getIapFormattedPriceAsync = require('../libs/get-iap-formatted-price-async');
 
+const appJson = require('../constants/app-json');
+
 const loadInvokers = () => {
   ipcMain.handle('get-react-initial-state', () => {
     const initialState = {
@@ -73,6 +75,8 @@ const loadInvokers = () => {
   ipcMain.handle('is-default-mail-client', () => isDefaultMailClientAsync());
 
   ipcMain.handle('get-iap-formatted-price', (e, productIdentifier) => getIapFormattedPriceAsync(productIdentifier));
+
+  ipcMain.handle('get-app-json', () => appJson);
 };
 
 module.exports = loadInvokers;

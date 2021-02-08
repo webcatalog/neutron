@@ -192,50 +192,60 @@ const handleLoaded = async (event) => {
   }
 
   // tie Google account info with workspace
-  if (window.location.hostname.includes('google.com')) {
-    let success = false;
-    const getAccountInfoAsync = () => Promise.resolve()
-      .then(() => {
-        if (success) return;
+  ipcRenderer.invoke('get-app-json')
+    .then((appJson) => {
+      if (appJson.id === 'clovery' || appJson.id === 'clovery') {
+        // the whole app uses same Google account
         // eslint-disable-next-line no-console
-        console.log('Getting Google account info...');
-        const pictureUrl = document.querySelector('img.gb_fb')
-          .getAttribute('data-srcset')
-          .split(',')
-          .pop()
-          .trim()
-          .split(' ')[0];
-        const name = document.querySelector('.gb_nb').innerText;
-        const email = document.querySelector('.gb_ob').innerText;
-        ipcRenderer.send('request-set-workspace-account-info', workspaceId, {
-          pictureUrl,
-          name,
-          email,
-        });
-        // eslint-disable-next-line no-console
-        console.log('Google account info retrieved.', {
-          pictureUrl,
-          name,
-          email,
-        });
-        success = true;
-      })
-      // eslint-disable-next-line no-console
-      .catch(console.log);
-    // run once immediately
-    getAccountInfoAsync();
-    // run again after 30 seconds, 1 minute, every 5 minutes
-    // as the script fails if the page is not fully loaded
-    setTimeout(() => {
-      getAccountInfoAsync();
-    }, 30 * 1000);
-    setTimeout(() => {
-      getAccountInfoAsync();
-    }, 60 * 1000);
-    setInterval(() => {
-      getAccountInfoAsync();
-    }, 5 * 60 * 1000);
-  }
+        console.log('Skip retrieving Google account for workspace');
+        return;
+      }
+
+      if (window.location.hostname.includes('google.com')) {
+        let success = false;
+        const getAccountInfoAsync = () => Promise.resolve()
+          .then(() => {
+            if (success) return;
+            // eslint-disable-next-line no-console
+            console.log('Getting Google account info...');
+            const pictureUrl = document.querySelector('img.gb_fb')
+              .getAttribute('data-srcset')
+              .split(',')
+              .pop()
+              .trim()
+              .split(' ')[0];
+            const name = document.querySelector('.gb_nb').innerText;
+            const email = document.querySelector('.gb_ob').innerText;
+            ipcRenderer.send('request-set-workspace-account-info', workspaceId, {
+              pictureUrl,
+              name,
+              email,
+            });
+            // eslint-disable-next-line no-console
+            console.log('Google account info retrieved.', {
+              pictureUrl,
+              name,
+              email,
+            });
+            success = true;
+          })
+          // eslint-disable-next-line no-console
+          .catch(console.log);
+        // run once immediately
+        getAccountInfoAsync();
+        // run again after 30 seconds, 1 minute, every 5 minutes
+        // as the script fails if the page is not fully loaded
+        setTimeout(() => {
+          getAccountInfoAsync();
+        }, 30 * 1000);
+        setTimeout(() => {
+          getAccountInfoAsync();
+        }, 60 * 1000);
+        setInterval(() => {
+          getAccountInfoAsync();
+        }, 5 * 60 * 1000);
+      }
+    });
 
   // Discord doesn't use document.title to show message count
   // but use favicon
