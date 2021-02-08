@@ -172,7 +172,7 @@ const createAsync = () => new Promise((resolve) => {
   const { wasOpenedAsHidden } = app.getLoginItemSettings();
 
   const mainWindowState = windowStateKeeper({
-    defaultWidth: 800,
+    defaultWidth: 1024,
     defaultHeight: 768,
   });
 
