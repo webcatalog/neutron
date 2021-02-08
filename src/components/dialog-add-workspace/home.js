@@ -92,6 +92,9 @@ const Home = ({ classes }) => {
     const groupId = appJsonId.substring('group-'.length);
     filters.push({ field: 'group_id', values: [groupId], type: 'all' });
   }
+  if (appJsonId === 'clovery') {
+    filters.push({ field: 'group_id', values: ['google'], type: 'all' });
+  }
   if (appJsonId === 'panmail') {
     filters.push({ field: 'sub_category', values: ['Email'], type: 'all' });
   }

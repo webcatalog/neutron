@@ -84,7 +84,7 @@ const defaultPreferences = {
   sentry: false,
   // branded apps (like Google/Microsoft) share browsing data by default
   // https://github.com/webcatalog/webcatalog-app/issues/986
-  shareWorkspaceBrowsingData: appJson.id.startsWith('group-'),
+  shareWorkspaceBrowsingData: appJson.id.startsWith('group-') || appJson.id === 'clovery',
   sidebar: shouldShowSidebar,
   sidebarSize: 'compact',
   sidebarTips: 'shortcut',
