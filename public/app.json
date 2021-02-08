@@ -1,6 +1,7 @@
 {
-    "id": "clovery",
-    "name": "Clovery",
+    "id": "dynacal",
+    "name": "DynaCal",
+    "url": "https://calendar.google.com",
     "macAppStoreId": "1552618413",
-    "registered": true
+    "registered": false
 }

@@ -552,7 +552,12 @@ const createMenu = async () => {
     },
     { type: 'separator' },
     {
-      label: `Add ${appJson.id === 'dynamail' ? 'Gmail' : appJson.name} Workspace`,
+      label: (() => {
+        let standardWorkspaceName = appJson.name;
+        if (appJson.id === 'dynamail') standardWorkspaceName = 'Gmail';
+        if (appJson.id === 'dynacal') standardWorkspaceName = 'Google Calendar';
+        return `Add ${standardWorkspaceName} Workspace`;
+      })(),
       click: () => {
         createWorkspaceView();
         createMenu();
