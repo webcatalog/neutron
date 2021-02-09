@@ -251,7 +251,7 @@ const addView = (browserWindow, workspace) => {
     },
     (details, callback) => {
       if (details && details.responseHeaders && details.responseHeaders['Content-Security-Policy']) {
-        details.responseHeaders['Content-Security-Policy'][0] = "default-src * 'unsafe-inline' 'unsafe-eval'; script-src * 'unsafe-inline' 'unsafe-eval'; connect-src * 'unsafe-inline'; img-src * data: blob: 'unsafe-inline'; frame-src *; style-src * 'unsafe-inline';";
+        delete details.responseHeaders['Content-Security-Policy'];
       }
       callback(details);
     },
