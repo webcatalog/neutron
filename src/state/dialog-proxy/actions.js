@@ -97,6 +97,7 @@ export const save = () => (dispatch, getState) => {
   requestSetPreference('proxyType', form.proxyType);
   enqueueRequestRestartSnackbar();
 
-  window.remote.getCurrentWindow().close();
+  dispatch(close());
+
   return null;
 };
