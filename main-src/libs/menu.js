@@ -569,6 +569,7 @@ const createMenu = async () => {
       label: appJson.url ? 'Add Custom Workspace' : 'Add Workspace',
       click: () => ipcMain.emit('request-show-add-workspace-window'),
       enabled: !global.locked,
+      visible: appJson.id !== 'dynacal' && appJson.id !== 'dynamail',
     },
   );
 

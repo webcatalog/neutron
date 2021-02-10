@@ -119,6 +119,7 @@ const initCachedPreferences = () => {
     telemetry: false,
     sentry: false,
   };
+
   if (!isMas() && fs.existsSync(sharedPreferencesPath)) {
     sharedPreferences = {
       ...sharedPreferences,
@@ -134,6 +135,13 @@ const initCachedPreferences = () => {
 
   // disable menu bar mode on Windows/Linux
   if (process.platform !== 'darwin') {
+    cachedPreferences.attachToMenubar = false;
+  }
+
+  // this feature used to be free on MAS
+  // so we need this code to deactivate it for free users
+  // note: this feature is always free witH WebCatalog
+  if (isMas() && !appJson.registered && !cachedPreferences.iapPurchased) {
     cachedPreferences.attachToMenubar = false;
   }
 };

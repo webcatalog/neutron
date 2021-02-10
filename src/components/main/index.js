@@ -382,7 +382,7 @@ const Main = ({
                     }
                     requestCreateWorkspace();
                   }}
-                  onContextMenu={!appJson.url ? null : (e) => {
+                  onContextMenu={!appJson.url || appJson.id === 'dynacal' || appJson.id === 'dynamail' ? null : (e) => {
                     e.preventDefault();
                     const template = [
                       {
