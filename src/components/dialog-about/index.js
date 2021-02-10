@@ -107,33 +107,13 @@ const About = (props) => {
             </Button>
             <br />
             <Button
-              onClick={() => {
-                if (appJson.id === 'singlebox') {
-                  requestOpenInBrowser(`https://singlebox.app?utm_source=${utmSource}`);
-                } else if (appJson.id === 'dynamail') {
-                  requestOpenInBrowser(`https://dynamail.app?utm_source=${utmSource}`);
-                } else if (appJson.id === 'panmail') {
-                  requestOpenInBrowser(`https://panmail.app?utm_source=${utmSource}`);
-                } else if (appJson.id === 'pantext') {
-                  requestOpenInBrowser(`https://pantext.app?utm_source=${utmSource}`);
-                }
-              }}
+              onClick={() => requestOpenInBrowser(`https://${appJson.id}.app?utm_source=${utmSource}`)}
             >
               Website
             </Button>
             <br />
             <Button
-              onClick={() => {
-                if (appJson.id === 'singlebox') {
-                  requestOpenInBrowser(`https://singlebox.app/help?utm_source=${utmSource}`);
-                } else if (appJson.id === 'dynamail') {
-                  requestOpenInBrowser(`https://dynamail.app/help?utm_source=${utmSource}`);
-                } else if (appJson.id === 'panmail') {
-                  requestOpenInBrowser(`https://panmail.app/help?utm_source=${utmSource}`);
-                } else if (appJson.id === 'pantext') {
-                  requestOpenInBrowser(`https://pantext.app/help?utm_source=${utmSource}`);
-                }
-              }}
+              onClick={() => requestOpenInBrowser(`https://${appJson.id}.app/help?utm_source=${utmSource}`)}
             >
               Help
             </Button>
