@@ -512,6 +512,11 @@ const Preferences = ({
                       color="primary"
                       checked={attachToMenubar}
                       onChange={(e) => {
+                        // this feature is free with WebCatalog
+                        // but not free in MAS apps
+                        if (isMas() && !checkLicense()) {
+                          return;
+                        }
                         requestSetPreference('attachToMenubar', e.target.checked);
                         enqueueRequestRestartSnackbar();
                       }}
@@ -1437,14 +1442,18 @@ const Preferences = ({
         </Typography>
         <Paper elevation={0} className={classes.paper}>
           <List disablePadding dense>
-            {appJson.id !== 'dynamail' && appJson.id !== 'panmail' && (
+            {appJson.id !== 'dynacal' && appJson.id !== 'dynamail' && appJson.id !== 'panmail' && (
               <>
                 <ListItemDefaultBrowser />
                 <Divider />
               </>
             )}
-            <ListItemDefaultMailClient />
-            <Divider />
+            {appJson.id !== 'dynacal' && (
+              <>
+                <ListItemDefaultMailClient />
+                <Divider />
+              </>
+            )}
             <ListItem>
               <ListItemText primary="Open at login" />
               <Select
@@ -1810,12 +1819,12 @@ const Preferences = ({
             >
               <div className={classes.promotionBlock}>
                 <div className={classes.promotionLeft}>
-                  <img src={pantextIconPng} alt="Pantext" className={classes.appIcon} />
+                  <img src={pantextIconPng} alt="PanText" className={classes.appIcon} />
                 </div>
                 <div className={classes.promotionRight}>
                   <div>
                     <Typography variant="body1" className={classes.appTitle}>
-                      Pantext
+                      PanText
                     </Typography>
                     <Typography variant="body2" color="textSecondary">
                       All Your Messaging Apps in One
@@ -1836,12 +1845,12 @@ const Preferences = ({
             >
               <div className={classes.promotionBlock}>
                 <div className={classes.promotionLeft}>
-                  <img src={panmailIconPng} alt="Panmail" className={classes.appIcon} />
+                  <img src={panmailIconPng} alt="PanMail" className={classes.appIcon} />
                 </div>
                 <div className={classes.promotionRight}>
                   <div>
                     <Typography variant="body1" className={classes.appTitle}>
-                      Panmail
+                      PanMail
                     </Typography>
                     <Typography variant="body2" color="textSecondary">
                       All Your Email Apps in One
