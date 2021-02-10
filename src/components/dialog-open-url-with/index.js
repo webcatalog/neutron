@@ -24,6 +24,20 @@ const OpenUrlWith = ({ workspaces }) => {
 
   const renderWorkspace = (workspace, i) => {
     if (isMailtoUrl && !getMailtoUrl(workspace.homeUrl || appJson.url)) return null;
+
+    const fullName = (() => {
+      if (workspace.name) return workspace.name;
+      if (workspace.accountInfo) {
+        if (workspace.accountInfo.name && workspace.accountInfo.email) {
+          return `${workspace.accountInfo.name} (${workspace.accountInfo.email})`;
+        }
+        if (workspace.accountInfo.name) {
+          return workspace.accountInfo.name;
+        }
+      }
+      return `Workspace ${i + 1}`;
+    })();
+
     return (
       <ListItem
         button
@@ -35,7 +49,7 @@ const OpenUrlWith = ({ workspaces }) => {
         }}
       >
         <ListItemText
-          primary={workspace.name || `Workspace ${i + 1}`}
+          primary={fullName}
           secondary={`#${i + 1}`}
         />
         <ChevronRightIcon color="action" />
