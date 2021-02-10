@@ -114,17 +114,24 @@ const initCachedPreferences = () => {
   // telemetry & sentry pref
   // so that privacy consent prefs
   // can be shared across WebCatalog and WebCatalog-Engine-based apps
-  const sharedPreferencesPath = path.join(app.getPath('home'), '.webcatalog', 'shared-preferences.json');
   let sharedPreferences = {
     telemetry: false,
     sentry: false,
   };
 
-  if (!isMas() && fs.existsSync(sharedPreferencesPath)) {
-    sharedPreferences = {
-      ...sharedPreferences,
-      ...fs.readJsonSync(sharedPreferencesPath),
-    };
+  // ignore this if error occurs
+  // so the more important initialization process can proceed
+  try {
+    const sharedPreferencesPath = path.join(app.getPath('home'), '.webcatalog', 'shared-preferences.json');
+    if (!isMas() && fs.existsSync(sharedPreferencesPath)) {
+      sharedPreferences = {
+        ...sharedPreferences,
+        ...fs.readJsonSync(sharedPreferencesPath),
+      };
+    }
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(err);
   }
 
   cachedPreferences = {
@@ -156,7 +163,9 @@ const getPreferences = () => {
       initCachedPreferences();
     }
     return cachedPreferences;
-  } catch {
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(err);
     return defaultPreferences;
   }
 };
@@ -171,7 +180,9 @@ const getPreference = (name) => {
       initCachedPreferences();
     }
     return cachedPreferences[name];
-  } catch {
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(err);
     return defaultPreferences[name];
   }
 };
