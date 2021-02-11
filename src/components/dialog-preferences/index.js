@@ -46,6 +46,7 @@ import roundTime from '../../helpers/round-time';
 import isMas from '../../helpers/is-mas';
 import isWindowsStore from '../../helpers/is-windows-store';
 import getStaticGlobal from '../../helpers/get-static-global';
+import getUtmSource from '../../helpers/get-utm-source';
 
 import {
   requestCheckForUpdates,
@@ -261,7 +262,7 @@ const Preferences = ({
   windowButtons,
 }) => {
   const appJson = getStaticGlobal('appJson');
-  const utmSource = isMas() ? `${appJson.id}_app` : 'juli_app';
+  const utmSource = getUtmSource();
   const canPromptTouchId = window.process.platform === 'darwin'
     && window.remote.systemPreferences.canPromptTouchID();
   const registered = appJson.registered || iapPurchased;

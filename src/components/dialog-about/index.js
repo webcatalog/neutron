@@ -12,6 +12,7 @@ import connectComponent from '../../helpers/connect-component';
 import isMas from '../../helpers/is-mas';
 import isWindowsStore from '../../helpers/is-windows-store';
 import getStaticGlobal from '../../helpers/get-static-global';
+import getUtmSource from '../../helpers/get-utm-source';
 
 import { requestOpenInBrowser } from '../../senders';
 
@@ -56,7 +57,7 @@ const About = (props) => {
 
   const appJson = getStaticGlobal('appJson');
   const appVersion = window.remote.app.getVersion();
-  const utmSource = isMas() ? `${appJson.id}_app` : 'juli_app';
+  const utmSource = getUtmSource();
 
   const versions = [
     { name: 'WebCatalog Engine', version: appVersion },
