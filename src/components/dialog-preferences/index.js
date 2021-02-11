@@ -44,6 +44,7 @@ import connectComponent from '../../helpers/connect-component';
 import checkLicense from '../../helpers/check-license';
 import roundTime from '../../helpers/round-time';
 import isMas from '../../helpers/is-mas';
+import isWindowsStore from '../../helpers/is-windows-store';
 import getStaticGlobal from '../../helpers/get-static-global';
 
 import {
@@ -280,7 +281,7 @@ const Preferences = ({
       text: 'Licensing',
       Icon: CheckCircleOutlineIcon,
       ref: useRef(),
-      hidden: isMas() && appJson.id === 'singlebox',
+      hidden: isWindowsStore() || (isMas() && appJson.id === 'singlebox'),
     },
     general: {
       text: 'General',
@@ -374,30 +375,31 @@ const Preferences = ({
     <div className={classes.root}>
       <div className={classes.sidebar}>
         <List dense>
-          {Object.keys(sections).map((sectionKey, i) => {
-            const {
-              Icon, text, ref, hidden,
-            } = sections[sectionKey];
-            if (hidden) return null;
-            return (
-              <React.Fragment key={sectionKey}>
-                {i > 0 && !isMas() && <Divider />}
-                {i > 1 && isMas() && <Divider />}
-                <ListItem button onClick={() => ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-                  <ListItemIcon>
-                    <Icon />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={text}
-                  />
-                </ListItem>
-              </React.Fragment>
-            );
-          })}
+          {Object.keys(sections)
+            .filter((sectionKey) => !sections[sectionKey].hidden)
+            .map((sectionKey, i) => {
+              const {
+                Icon, text, ref,
+              } = sections[sectionKey];
+              return (
+                <React.Fragment key={sectionKey}>
+                  {i > 0 && !isMas() && <Divider />}
+                  {i > 1 && isMas() && <Divider />}
+                  <ListItem button onClick={() => ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+                    <ListItemIcon>
+                      <Icon />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={text}
+                    />
+                  </ListItem>
+                </React.Fragment>
+              );
+            })}
         </List>
       </div>
       <div className={classes.inner}>
-        {isMas() && appJson.id === 'singlebox' ? null : (
+        {isWindowsStore() || (isMas() && appJson.id === 'singlebox') ? null : (
           <>
             <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle} ref={sections.licensing.ref}>
               Licensing
@@ -426,7 +428,7 @@ const Preferences = ({
         </Typography>
         <Paper elevation={0} className={classes.paper}>
           <List disablePadding dense>
-            {appJson.url && !isMas() && (
+            {appJson.url && !isMas() && !isWindowsStore() && (
               <>
                 <ListItem
                   button
@@ -1390,7 +1392,7 @@ const Preferences = ({
               <ListItemText primary="Clear browsing data" secondary="Clear cookies, cache, and more" />
               <ChevronRightIcon color="action" />
             </ListItem>
-            {isMas() && (
+            {(isMas() || isWindowsStore()) && (
               <>
                 <Divider />
                 <ListItem>
@@ -1629,7 +1631,7 @@ const Preferences = ({
           </List>
         </Paper>
 
-        {!isMas() && (
+        {!isMas() && !isWindowsStore() && (
           <>
             <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.updates.ref}>
               Updates
@@ -1925,76 +1927,106 @@ const Preferences = ({
               <ChevronRightIcon color="action" />
             </ListItem>
             <Divider />
-            {isMas() ? (
-              <>
-                <ListItem
-                  button
-                  onClick={() => requestOpenInBrowser(`https://${appJson.id}.app?utm_source=${utmSource}`)}
-                >
-                  <ListItemText primary="Website" />
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-                <Divider />
-                <ListItem
-                  button
-                  onClick={() => requestOpenInBrowser(`https://${appJson.id}.app/help?utm_source=${utmSource}`)}
-                >
-                  <ListItemText primary="Help" />
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-                <Divider />
-                <ListItem
-                  button
-                  onClick={() => requestOpenInBrowser(`macappstore://apps.apple.com/app/id${appJson.macAppStoreId}`)}
-                >
-                  <ListItemText primary="Mac App Store" />
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-                <Divider />
-                <ListItem
-                  button
-                  onClick={() => requestOpenInBrowser(`macappstore://apps.apple.com/app/id${appJson.macAppStoreId}?action=write-review`)}
-                >
-                  <ListItemText primary={`Rate ${appJson.name} on Mac App Store`} />
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-              </>
-            ) : (
-              <>
-                <ListItem button onClick={() => requestOpenInBrowser(`https://webcatalog.app?utm_source=${utmSource}`)}>
-                  <ListItemText primary="WebCatalog Website" />
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-                <Divider />
-                <ListItem button onClick={() => requestOpenInBrowser(`https://help.webcatalog.app?utm_source=${utmSource}`)}>
-                  <ListItemText primary="WebCatalog Help" />
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-                <Divider />
-                <ListItem
-                  button
-                  onClick={() => requestOpenInBrowser('https://alternativeto.net/software/webcatalog/about/')}
-                >
-                  <ListItemText primary="Review WebCatalog on AlternativeTo" />
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-                <Divider />
-                <ListItem button onClick={() => requestOpenInBrowser('https://twitter.com/webcatalog_app')}>
-                  <ListItemText primary="Twitter" />
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-                <Divider />
-                <ListItem button onClick={() => requestOpenInBrowser('https://www.linkedin.com/company/webcatalogapp')}>
-                  <ListItemText primary="LinkedIn" />
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-                <Divider />
-                <ListItem button onClick={() => requestOpenInBrowser('https://github.com/webcatalog')}>
-                  <ListItemText primary="GitHub" />
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-              </>
-            )}
+            {(() => {
+              if (isWindowsStore() || isMas()) {
+                return (
+                  <>
+                    <ListItem
+                      button
+                      onClick={() => requestOpenInBrowser(`https://${appJson.id}.app?utm_source=${utmSource}`)}
+                    >
+                      <ListItemText primary="Website" />
+                      <ChevronRightIcon color="action" />
+                    </ListItem>
+                    <Divider />
+                    <ListItem
+                      button
+                      onClick={() => requestOpenInBrowser(`https://${appJson.id}.app/help?utm_source=${utmSource}`)}
+                    >
+                      <ListItemText primary="Help" />
+                      <ChevronRightIcon color="action" />
+                    </ListItem>
+                    {isWindowsStore() && (
+                      <>
+                        <Divider />
+                        <ListItem
+                          button
+                          onClick={() => requestOpenInBrowser(`ms-windows-store://pdp/?ProductId=${appJson.microsoftStoreId}`)}
+                        >
+                          <ListItemText primary="Microsoft Store" />
+                          <ChevronRightIcon color="action" />
+                        </ListItem>
+                        <Divider />
+                        <ListItem
+                          button
+                          onClick={() => requestOpenInBrowser(`ms-windows-store://review/?ProductId=${appJson.microsoftStoreId}`)}
+                        >
+                          <ListItemText primary={`Rate ${appJson.name} on Microsoft Store`} />
+                          <ChevronRightIcon color="action" />
+                        </ListItem>
+                      </>
+                    )}
+                    {isMas() && (
+                      <>
+                        <Divider />
+                        <ListItem
+                          button
+                          onClick={() => requestOpenInBrowser(`macappstore://apps.apple.com/app/id${appJson.macAppStoreId}`)}
+                        >
+                          <ListItemText primary="Mac App Store" />
+                          <ChevronRightIcon color="action" />
+                        </ListItem>
+                        <Divider />
+                        <ListItem
+                          button
+                          onClick={() => requestOpenInBrowser(`macappstore://apps.apple.com/app/id${appJson.macAppStoreId}?action=write-review`)}
+                        >
+                          <ListItemText primary={`Rate ${appJson.name} on Mac App Store`} />
+                          <ChevronRightIcon color="action" />
+                        </ListItem>
+                      </>
+                    )}
+                  </>
+                );
+              }
+
+              return (
+                <>
+                  <ListItem button onClick={() => requestOpenInBrowser(`https://webcatalog.app?utm_source=${utmSource}`)}>
+                    <ListItemText primary="WebCatalog Website" />
+                    <ChevronRightIcon color="action" />
+                  </ListItem>
+                  <Divider />
+                  <ListItem button onClick={() => requestOpenInBrowser(`https://help.webcatalog.app?utm_source=${utmSource}`)}>
+                    <ListItemText primary="WebCatalog Help" />
+                    <ChevronRightIcon color="action" />
+                  </ListItem>
+                  <Divider />
+                  <ListItem
+                    button
+                    onClick={() => requestOpenInBrowser('https://alternativeto.net/software/webcatalog/about/')}
+                  >
+                    <ListItemText primary="Review WebCatalog on AlternativeTo" />
+                    <ChevronRightIcon color="action" />
+                  </ListItem>
+                  <Divider />
+                  <ListItem button onClick={() => requestOpenInBrowser('https://twitter.com/webcatalog_app')}>
+                    <ListItemText primary="Twitter" />
+                    <ChevronRightIcon color="action" />
+                  </ListItem>
+                  <Divider />
+                  <ListItem button onClick={() => requestOpenInBrowser('https://www.linkedin.com/company/webcatalogapp')}>
+                    <ListItemText primary="LinkedIn" />
+                    <ChevronRightIcon color="action" />
+                  </ListItem>
+                  <Divider />
+                  <ListItem button onClick={() => requestOpenInBrowser('https://github.com/webcatalog')}>
+                    <ListItemText primary="GitHub" />
+                    <ChevronRightIcon color="action" />
+                  </ListItem>
+                </>
+              );
+            })()}
             <Divider />
             <ListItem>
               <ListItemText primary="Warn before quitting" />

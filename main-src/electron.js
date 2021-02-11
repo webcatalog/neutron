@@ -71,8 +71,10 @@ const extractHostname = require('./libs/extract-hostname');
 const { getAppLockStatusAsync, unlockAppUsingTouchId } = require('./libs/app-lock');
 const isMacOs11 = require('./libs/is-mac-os-11');
 const isMas = require('./libs/is-mas');
+const isWindowsStore = require('./libs/is-windows-store');
 const getIapFormattedPriceAsync = require('./libs/get-iap-formatted-price-async');
 const promptSetAsDefaultMailClient = require('./libs/prompt-set-as-default-email-client');
+const registryInstaller = require('./libs/registry-installer');
 
 const MAILTO_URLS = require('./constants/mailto-urls');
 
@@ -366,6 +368,16 @@ if (!gotTheLock) {
         mainWindow.get().on('focus', () => {
           win.send('log-focus');
         });
+      })
+      .then(() => {
+        if (isWindowsStore()) {
+          // add suffix windows-store to avoid conflict with WebCatalog app
+          const registryAppId = `webcatalog-${appJson.id}-windows-store`;
+          return registryInstaller.installAsync(registryAppId, appJson.name, process.execPath)
+            // eslint-disable-next-line no-console
+            .catch(console.log);
+        }
+        return null;
       })
       .then(() => {
         // trigger whenTrulyReady;
