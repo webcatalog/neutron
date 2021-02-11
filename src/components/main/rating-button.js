@@ -10,6 +10,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 
 import connectComponent from '../../helpers/connect-component';
 import isMas from '../../helpers/is-mas';
+import isWindowsStore from '../../helpers/is-windows-store';
 import getStaticGlobal from '../../helpers/get-static-global';
 import {
   requestOpenInBrowser,
@@ -25,7 +26,7 @@ const RatingButton = ({
 }) => {
   // for WebCatalog builds
   // hide this button
-  if (!isMas()) {
+  if (!isMas() && !isWindowsStore()) {
     return null;
   }
 
@@ -59,7 +60,11 @@ const RatingButton = ({
             if (response === 0) {
               requestSetPreference('ratingLastClicked', Date.now());
               requestSetPreference('ratingDidRate', true);
-              requestOpenInBrowser(`macappstore://apps.apple.com/app/id${appJson.macAppStoreId}?action=write-review`);
+              if (isMas()) {
+                requestOpenInBrowser(`macappstore://apps.apple.com/app/id${appJson.macAppStoreId}?action=write-review`);
+              } else if (isWindowsStore()) {
+                requestOpenInBrowser(`ms-windows-store://review/?ProductId=${appJson.microsoftStoreId}`);
+              }
             } else {
               requestSetPreference('ratingLastClicked', Date.now());
             }

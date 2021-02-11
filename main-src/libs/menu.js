@@ -14,6 +14,7 @@ const goToUrlWindow = require('../windows/go-to-url');
 const mainWindow = require('../windows/main');
 
 const isMas = require('./is-mas');
+const isWindowsStore = require('./is-windows-store');
 const getViewBounds = require('./get-view-bounds');
 const {
   setPreference,
@@ -92,17 +93,16 @@ const createMenu = async () => {
     },
   ] : [];
 
-  const licensingMenuItems = isMas() ? [] : [
+  const licensingMenuItems = (isMas() || isWindowsStore()) ? [] : [
     { type: 'separator' },
     {
       label: registered ? 'WebCatalog Plus' : 'WebCatalog Basic',
-      visible: !isMas() && true,
       enabled: false,
       click: null,
     },
     {
       label: 'Upgrade...',
-      visible: !isMas() && !registered,
+      visible: !registered,
       click: registered ? null : () => ipcMain.emit('request-show-require-license-dialog'),
     },
   ];
@@ -450,7 +450,7 @@ const createMenu = async () => {
     },
     {
       role: 'help',
-      submenu: isMas() ? [
+      submenu: (isMas() || isWindowsStore()) ? [
         {
           label: 'Help',
           click: () => shell.openExternal('https://singlebox.app/help?utm_source=singlebox_app'),

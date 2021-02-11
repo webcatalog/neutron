@@ -319,7 +319,7 @@ if (!gotTheLock) {
 
         ipcMain.emit('request-update-pause-notifications-info');
 
-        if (isMas() && !privacyConsentAsked) {
+        if ((isMas() || isWindowsStore()) && !privacyConsentAsked) {
           dialog.showMessageBox(mainWindow.get(), {
             type: 'question',
             buttons: ['Allow', 'Don\'t Allow'],
@@ -448,7 +448,7 @@ if (!gotTheLock) {
           handleArgv(process.argv);
         }
 
-        if (!isMas() && autoCheckForUpdates) {
+        if (!isMas() && !isWindowsStore() && autoCheckForUpdates) {
           // only notify user about update again after one week
           const lastShowNewUpdateDialog = getPreference('lastShowNewUpdateDialog');
           const updateInterval = 7 * 24 * 60 * 60 * 1000; // one week
