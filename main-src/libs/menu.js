@@ -123,11 +123,11 @@ const createMenu = async () => {
         {
           label: 'Check for Updates...',
           click: () => ipcMain.emit('request-check-for-updates'),
-          visible: !process.mas && !process.env.REACT_APP_FORCE_MAS,
+          visible: !isMas() && !isWindowsStore(),
         },
         {
           type: 'separator',
-          visible: !process.mas && !process.env.REACT_APP_FORCE_MAS,
+          visible: !isMas() && !isWindowsStore(),
         },
         {
           label: 'Preferences...',
