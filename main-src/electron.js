@@ -371,8 +371,9 @@ if (!gotTheLock) {
       })
       .then(() => {
         if (isWindowsStore()) {
-          // add suffix windows-store to avoid conflict with WebCatalog app
-          const registryAppId = `webcatalog-${appJson.id}-windows-store`;
+          // add prefix '-appx' to avoid conflict with WebCatalog app
+          // as WebCatalog uses pattern `webcatalog-${appJson.id}`
+          const registryAppId = `webcatalog-appx-${appJson.id}`;
           return registryInstaller.installAsync(registryAppId, appJson.name, process.execPath)
             // eslint-disable-next-line no-console
             .catch(console.log);

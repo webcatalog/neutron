@@ -49,11 +49,11 @@ const RatingButton = ({
           window.remote.dialog.showMessageBox(window.remote.getCurrentWindow(), {
             type: 'question',
             buttons: [
-              `Rate ${appJson.name} on Mac App Store`,
+              `Rate ${appJson.name} on ${isMas() ? 'Mac App Store' : 'Microsoft Store'}`,
               'Later',
             ],
-            message: isMas() ? `Enjoying ${appJson.name}?` : `Enjoying ${appJson.name} on WebCatalog?`,
-            detail: `If you enjoy using ${isMas() ? appJson.name : 'WebCatalog'}, would you mind taking a moment to review it?`,
+            message: `Enjoying ${appJson.name}?`,
+            detail: `If you enjoy using ${appJson.name}, would you mind taking a moment to review it?`,
             cancelId: 1,
             defaultId: 0,
           }).then(({ response }) => {
