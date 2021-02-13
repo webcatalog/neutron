@@ -206,6 +206,24 @@ const loadListeners = () => {
   });
 
   ipcMain.on('request-restart', () => {
+    // app.relaunch() is not supported in MAS build
+    // calling it would crash th app
+    if (isMas()) {
+      dialog.showMessageBox({
+        type: 'question',
+        buttons: ['Quit Now', 'Later'],
+        message: 'You need to quit and then manually restart the app for the changes to take affect.',
+        cancelId: 1,
+      })
+        .then(({ response }) => {
+          if (response === 0) {
+            app.quit();
+          }
+        })
+        .catch(console.log); // eslint-disable-line no-console
+      return;
+    }
+
     app.relaunch();
     app.exit(0);
   });
