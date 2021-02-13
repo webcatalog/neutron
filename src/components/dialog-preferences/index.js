@@ -530,7 +530,7 @@ const Preferences = ({
                 <Switch
                   edge="end"
                   color="primary"
-                  checked={alwaysOnTop}
+                  checked={!attachToMenubar ? false : alwaysOnTop}
                   disabled={!attachToMenubar}
                   onChange={(e) => {
                     requestSetPreference('alwaysOnTop', e.target.checked);
