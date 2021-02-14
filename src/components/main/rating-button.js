@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 import IconButton from '@material-ui/core/IconButton';
 
-import FavoriteIcon from '@material-ui/icons/Favorite';
+import RateReviewIcon from '@material-ui/icons/RateReview';
 
 import connectComponent from '../../helpers/connect-component';
 import isMas from '../../helpers/is-mas';
@@ -71,7 +71,7 @@ const RatingButton = ({
           }).catch(console.log); // eslint-disable-line
         }}
       >
-        <FavoriteIcon className={iconClassName} />
+        <RateReviewIcon className={iconClassName} />
       </IconButton>
     );
   }
