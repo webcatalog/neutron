@@ -10,7 +10,9 @@ import DialogContent from '@material-ui/core/DialogContent';
 
 import connectComponent from '../../helpers/connect-component';
 import isMas from '../../helpers/is-mas';
+import isWindowsStore from '../../helpers/is-windows-store';
 import getStaticGlobal from '../../helpers/get-static-global';
+import getUtmSource from '../../helpers/get-utm-source';
 
 import { requestOpenInBrowser } from '../../senders';
 
@@ -55,7 +57,7 @@ const About = (props) => {
 
   const appJson = getStaticGlobal('appJson');
   const appVersion = window.remote.app.getVersion();
-  const utmSource = isMas() ? `${appJson.id}_app` : 'juli_app';
+  const utmSource = getUtmSource();
 
   const versions = [
     { name: 'WebCatalog Engine', version: appVersion },
@@ -85,7 +87,7 @@ const About = (props) => {
           variant="body2"
           className={classes.version}
         >
-          {isMas() ? `Version ${appVersion}` : 'Powered by WebCatalog'}
+          {(isMas() || isWindowsStore()) ? `Version ${appVersion}` : 'Powered by WebCatalog'}
         </Typography>
         <div className={classes.versionSmallContainer}>
           {versions.map(({ name, version }) => (
@@ -98,7 +100,7 @@ const About = (props) => {
           ))}
         </div>
 
-        {isMas() ? (
+        {isMas() && (
           <>
             <Button
               onClick={() => requestOpenInBrowser(`macappstore://apps.apple.com/app/id${appJson.macAppStoreId}`)}
@@ -106,6 +108,22 @@ const About = (props) => {
               Mac App Store
             </Button>
             <br />
+          </>
+        )}
+
+        {isWindowsStore() && (
+          <>
+            <Button
+              onClick={() => requestOpenInBrowser(`ms-windows-store://pdp/?ProductId=${appJson.microsoftStoreId}`)}
+            >
+              Microsoft Store
+            </Button>
+            <br />
+          </>
+        )}
+
+        {(isMas() || isWindowsStore()) ? (
+          <>
             <Button
               onClick={() => requestOpenInBrowser(`https://${appJson.id}.app?utm_source=${utmSource}`)}
             >

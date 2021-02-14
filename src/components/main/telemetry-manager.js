@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 
 import connectComponent from '../../helpers/connect-component';
 import isMas from '../../helpers/is-mas';
+import isWindowsStore from '../../helpers/is-windows-store';
 import getStaticGlobal from '../../helpers/get-static-global';
 
 import amplitude from '../../amplitude';
@@ -18,7 +19,11 @@ const TelemetryManager = ({ iapPurchased }) => {
   useEffect(() => {
     amplitude.getInstance().setUserProperties({
       registered,
-      isMas: isMas(),
+      distributionChannel: (() => {
+        if (isMas()) return 'macAppStore';
+        if (isWindowsStore()) return 'windowsStore';
+        return 'webcatalog';
+      })(),
     });
     amplitude.getInstance().logEvent('webcatalog-engine: start app');
 

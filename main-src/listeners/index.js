@@ -80,6 +80,7 @@ const getWebsiteIconUrlAsync = require('../libs/get-website-icon-url-async');
 const getViewBounds = require('../libs/get-view-bounds');
 const isMas = require('../libs/is-mas');
 const getIapFormattedPriceAsync = require('../libs/get-iap-formatted-price-async');
+const getUtmSource = require('../libs/get-utm-source');
 
 const aboutWindow = require('../windows/about');
 const addWorkspaceWindow = require('../windows/add-workspace');
@@ -244,7 +245,7 @@ const loadListeners = () => {
   });
 
   ipcMain.on('request-show-require-license-dialog', () => {
-    const utmSource = isMas() ? `${appJson.id}_app` : 'juli_app';
+    const utmSource = getUtmSource();
     const win = workspacePreferencesWindow.get() || preferencesWindow.get();
 
     if (isMas()) {

@@ -10,6 +10,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 
 import connectComponent from '../../helpers/connect-component';
 import isMas from '../../helpers/is-mas';
+import isWindowsStore from '../../helpers/is-windows-store';
 import getStaticGlobal from '../../helpers/get-static-global';
 import {
   requestOpenInBrowser,
@@ -25,7 +26,7 @@ const RatingButton = ({
 }) => {
   // for WebCatalog builds
   // hide this button
-  if (!isMas()) {
+  if (!isMas() && !isWindowsStore()) {
     return null;
   }
 
@@ -48,18 +49,22 @@ const RatingButton = ({
           window.remote.dialog.showMessageBox(window.remote.getCurrentWindow(), {
             type: 'question',
             buttons: [
-              `Rate ${appJson.name} on Mac App Store`,
+              `Rate ${appJson.name} on ${isMas() ? 'Mac App Store' : 'Microsoft Store'}`,
               'Later',
             ],
-            message: isMas() ? `Enjoying ${appJson.name}?` : `Enjoying ${appJson.name} on WebCatalog?`,
-            detail: `If you enjoy using ${isMas() ? appJson.name : 'WebCatalog'}, would you mind taking a moment to review it?`,
+            message: `Enjoying ${appJson.name}?`,
+            detail: `If you enjoy using ${appJson.name}, would you mind taking a moment to review it?`,
             cancelId: 1,
             defaultId: 0,
           }).then(({ response }) => {
             if (response === 0) {
               requestSetPreference('ratingLastClicked', Date.now());
               requestSetPreference('ratingDidRate', true);
-              requestOpenInBrowser(`macappstore://apps.apple.com/app/id${appJson.macAppStoreId}?action=write-review`);
+              if (isMas()) {
+                requestOpenInBrowser(`macappstore://apps.apple.com/app/id${appJson.macAppStoreId}?action=write-review`);
+              } else if (isWindowsStore()) {
+                requestOpenInBrowser(`ms-windows-store://review/?ProductId=${appJson.microsoftStoreId}`);
+              }
             } else {
               requestSetPreference('ratingLastClicked', Date.now());
             }

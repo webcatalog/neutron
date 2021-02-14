@@ -71,8 +71,10 @@ const extractHostname = require('./libs/extract-hostname');
 const { getAppLockStatusAsync, unlockAppUsingTouchId } = require('./libs/app-lock');
 const isMacOs11 = require('./libs/is-mac-os-11');
 const isMas = require('./libs/is-mas');
+const isWindowsStore = require('./libs/is-windows-store');
 const getIapFormattedPriceAsync = require('./libs/get-iap-formatted-price-async');
 const promptSetAsDefaultMailClient = require('./libs/prompt-set-as-default-email-client');
+const registryInstaller = require('./libs/registry-installer');
 
 const MAILTO_URLS = require('./constants/mailto-urls');
 
@@ -317,7 +319,7 @@ if (!gotTheLock) {
 
         ipcMain.emit('request-update-pause-notifications-info');
 
-        if (isMas() && !privacyConsentAsked) {
+        if ((isMas() || isWindowsStore()) && !privacyConsentAsked) {
           dialog.showMessageBox(mainWindow.get(), {
             type: 'question',
             buttons: ['Allow', 'Don\'t Allow'],
@@ -366,6 +368,17 @@ if (!gotTheLock) {
         mainWindow.get().on('focus', () => {
           win.send('log-focus');
         });
+      })
+      .then(() => {
+        if (isWindowsStore()) {
+          // add prefix '-appx' to avoid conflict with WebCatalog app
+          // as WebCatalog uses pattern `webcatalog-${appJson.id}`
+          const registryAppId = `webcatalog-appx-${appJson.id}`;
+          return registryInstaller.installAsync(registryAppId, appJson.name, process.execPath)
+            // eslint-disable-next-line no-console
+            .catch(console.log);
+        }
+        return null;
       })
       .then(() => {
         // trigger whenTrulyReady;
@@ -436,7 +449,7 @@ if (!gotTheLock) {
           handleArgv(process.argv);
         }
 
-        if (!isMas() && autoCheckForUpdates) {
+        if (!isMas() && !isWindowsStore() && autoCheckForUpdates) {
           // only notify user about update again after one week
           const lastShowNewUpdateDialog = getPreference('lastShowNewUpdateDialog');
           const updateInterval = 7 * 24 * 60 * 60 * 1000; // one week

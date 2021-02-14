@@ -9,8 +9,7 @@ import {
 
 import validate from '../../helpers/validate';
 import hasErrors from '../../helpers/has-errors';
-import isMas from '../../helpers/is-mas';
-import getStaticGlobal from '../../helpers/get-static-global';
+import getUtmSource from '../../helpers/get-utm-source';
 
 import {
   deleteAppLockPasswordAsync,
@@ -37,8 +36,7 @@ export const open = () => (dispatch) => {
         })
           .then(({ response }) => {
             if (response === 1) {
-              const appJson = getStaticGlobal('appJson');
-              const utmSource = isMas() ? `${appJson.id}_app` : 'juli_app';
+              const utmSource = getUtmSource();
               window.remote.shell.openExternal(`https://help.webcatalog.app/article/29-what-are-the-requirements-to-use-app-lock-feature-on-linux?utm_source=${utmSource}`);
             }
           })

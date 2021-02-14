@@ -9,6 +9,7 @@ const fs = require('fs-extra');
 const sendToAllWindows = require('./send-to-all-windows');
 const extractHostname = require('./extract-hostname');
 const isMas = require('./is-mas');
+const isWindowsStore = require('./is-windows-store');
 const isWindows10 = require('./is-windows-10');
 
 const MAILTO_URLS = require('../constants/mailto-urls');
@@ -123,7 +124,7 @@ const initCachedPreferences = () => {
   // so the more important initialization process can proceed
   try {
     const sharedPreferencesPath = path.join(app.getPath('home'), '.webcatalog', 'shared-preferences.json');
-    if (!isMas() && fs.existsSync(sharedPreferencesPath)) {
+    if (!isMas() && !isWindowsStore() && fs.existsSync(sharedPreferencesPath)) {
       sharedPreferences = {
         ...sharedPreferences,
         ...fs.readJsonSync(sharedPreferencesPath),
