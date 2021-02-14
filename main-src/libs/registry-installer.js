@@ -39,108 +39,118 @@ const getKeysToDelete = (appId) => {
   return keys;
 };
 
-const getRegistryConfig = (appId, appName, installPath) => ({
-  'HKCU\\Software\\RegisteredApplications': {
-    [appId]: {
-      value: `Software\\Clients\\StartMenuInternet\\${appId}\\Capabilities`,
-      type: 'REG_SZ',
-    },
-  },
-  [`HKCU\\Software\\Classes\\${appId}`]: {
-    'default': {
-      value: `${appName} Browser Document`,
-      type: 'REG_DEFAULT',
-    },
-  },
-  [`HKCU\\Software\\Classes\\${appId}\\Application`]: {
-    'ApplicationIcon': {
-      value: installPath + ',0',
-      type: 'REG_SZ',
-    },
-    'ApplicationName': {
-      value: appName,
-      type: 'REG_SZ',
-    },
-    'AppUserModelId': {
+const getRegistryConfig = (appId, appName, installPath, opts) => {
+  const urlAssociations = {};
+  if (opts && opts.canSetAsDefaultBrowser) {
+    // eslint-disable-next-line dot-notation
+    urlAssociations['http'] = {
       value: appId,
       type: 'REG_SZ',
-    },
-  },
-  [`HKCU\\Software\\Classes\\${appId}\\DefaulIcon`]: {
-    'ApplicationIcon': {
-      value: installPath + ',0',
+    };
+    // eslint-disable-next-line dot-notation
+    urlAssociations['https'] = {
+      value: appId,
       type: 'REG_SZ',
-    },
-  },
-  [`HKCU\\Software\\Classes\\${appId}\\shell\\open\\command`]: {
-    'default': {
-      value: '"' + installPath + '" "%1"',
-      type: 'REG_DEFAULT',
-    },
-  },
-  /*
-  'HKCU\\Software\\Classes\\.htm\\OpenWithProgIds': {
-      'Singlebox': {
-      value: 'Empty',
+    };
+  }
+  if (opts && opts.canSetAsDefaultEmailClient) {
+    // eslint-disable-next-line dot-notation
+    urlAssociations['mailto'] = {
+      value: appId,
       type: 'REG_SZ',
-      }
-  },
-  'HKCU\\Software\\Classes\\.html\\OpenWithProgIds': {
-      'Singlebox': {
-      value: 'Empty',
-      type: 'REG_SZ',
+    };
+  }
+
+  return {
+    'HKCU\\Software\\RegisteredApplications': {
+      [appId]: {
+        value: `Software\\Clients\\StartMenuInternet\\${appId}\\Capabilities`,
+        type: 'REG_SZ',
       },
-  },
-  'HKCU\\Software\\Clients\\StartMenuInternet\\Singlebox\\Capabilities\\FileAssociations': {
-      '.htm': {
-      value: 'Singlebox',
-      type: 'REG_SZ',
+    },
+    [`HKCU\\Software\\Classes\\${appId}`]: {
+      'default': {
+        value: `${appName} Browser Document`,
+        type: 'REG_DEFAULT',
       },
-      '.html': {
-      value: 'Singlebox',
-      type: 'REG_SZ',
+    },
+    [`HKCU\\Software\\Classes\\${appId}\\Application`]: {
+      'ApplicationIcon': {
+        value: installPath + ',0',
+        type: 'REG_SZ',
       },
-  },
-  */
-  [`HKCU\\Software\\Clients\\StartMenuInternet\\${appId}\\Capabilities\\StartMenu`]: {
-    'StartMenuInternet': {
-      value: appId,
-      type: 'REG_SZ',
+      'ApplicationName': {
+        value: appName,
+        type: 'REG_SZ',
+      },
+      'AppUserModelId': {
+        value: appId,
+        type: 'REG_SZ',
+      },
     },
-  },
-  [`HKCU\\Software\\Clients\\StartMenuInternet\\${appId}\\Capabilities\\URLAssociations`]: {
-    'http': {
-      value: appId,
-      type: 'REG_SZ',
+    [`HKCU\\Software\\Classes\\${appId}\\DefaulIcon`]: {
+      'ApplicationIcon': {
+        value: installPath + ',0',
+        type: 'REG_SZ',
+      },
     },
-    'https': {
-      value: appId,
-      type: 'REG_SZ',
+    [`HKCU\\Software\\Classes\\${appId}\\shell\\open\\command`]: {
+      'default': {
+        value: '"' + installPath + '" "%1"',
+        type: 'REG_DEFAULT',
+      },
     },
-    'mailto': {
-      value: appId,
-      type: 'REG_SZ',
+    /*
+    'HKCU\\Software\\Classes\\.htm\\OpenWithProgIds': {
+        'Singlebox': {
+        value: 'Empty',
+        type: 'REG_SZ',
+        }
     },
-  },
-  [`HKCU\\Software\\Clients\\StartMenuInternet\\${appId}\\DefaultIcon`]: {
-    'default': {
-      value: installPath + ',0',
-      type: 'REG_DEFAULT',
+    'HKCU\\Software\\Classes\\.html\\OpenWithProgIds': {
+        'Singlebox': {
+        value: 'Empty',
+        type: 'REG_SZ',
+        },
     },
-  },
-  [`HKCU\\Software\\Clients\\StartMenuInternet\\${appId}\\InstallInfo`]: {
-    'IconsVisible': {
-      value: 1,
-      type: 'REG_DWORD',
+    'HKCU\\Software\\Clients\\StartMenuInternet\\Singlebox\\Capabilities\\FileAssociations': {
+        '.htm': {
+        value: 'Singlebox',
+        type: 'REG_SZ',
+        },
+        '.html': {
+        value: 'Singlebox',
+        type: 'REG_SZ',
+        },
     },
-  },
-  [`HKCU\\Software\\Clients\\StartMenuInternet\\${appId}\\shell\\open\\command`]: {
-    'default': {
-      value: installPath,
-      type: 'REG_DEFAULT',
+    */
+    [`HKCU\\Software\\Clients\\StartMenuInternet\\${appId}\\Capabilities\\StartMenu`]: {
+      'StartMenuInternet': {
+        value: appId,
+        type: 'REG_SZ',
+      },
     },
-  },
-});
+    [`HKCU\\Software\\Clients\\StartMenuInternet\\${appId}\\Capabilities\\URLAssociations`]: urlAssociations,
+    [`HKCU\\Software\\Clients\\StartMenuInternet\\${appId}\\DefaultIcon`]: {
+      'default': {
+        value: installPath + ',0',
+        type: 'REG_DEFAULT',
+      },
+    },
+    [`HKCU\\Software\\Clients\\StartMenuInternet\\${appId}\\InstallInfo`]: {
+      'IconsVisible': {
+        value: 1,
+        type: 'REG_DWORD',
+      },
+    },
+    [`HKCU\\Software\\Clients\\StartMenuInternet\\${appId}\\shell\\open\\command`]: {
+      'default': {
+        value: installPath,
+        type: 'REG_DEFAULT',
+      },
+    },
+  };
+};
 
 const deleteKeyAsync = (key) => new Promise((resolve, reject) => {
   regedit.deleteKey(key, (err) => {
