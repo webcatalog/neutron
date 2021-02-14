@@ -1737,7 +1737,12 @@ const Preferences = ({
             <ListItem
               button
               onClick={() => {
-                const url = isMas() ? 'macappstore://apps.apple.com/app/translatium/id1547052291' : `https://translatium.app?utm_source=${utmSource}`;
+                let url = `https://translatium.app?utm_source=${utmSource}`;
+                if (isMas()) {
+                  url = 'macappstore://apps.apple.com/app/translatium/id1547052291';
+                } else if (isWindowsStore()) {
+                  url = 'ms-windows-store://pdp/?productid=9MWPG56JKS38';
+                }
                 requestOpenInBrowser(url);
               }}
               className={classes.listItemPromotion}
@@ -1763,7 +1768,12 @@ const Preferences = ({
             <ListItem
               button
               onClick={() => {
-                const url = isMas() ? 'macappstore://apps.apple.com/app/singlebox/id1548853763' : `https://singlebox.app?utm_source=${utmSource}`;
+                let url = `https://singlebox.app?utm_source=${utmSource}`;
+                if (isMas()) {
+                  url = 'macappstore://apps.apple.com/app/singlebox/id1548853763';
+                } else if (isWindowsStore()) {
+                  url = 'ms-windows-store://pdp/?productid=9NQ0MV0GXJ2B';
+                }
                 requestOpenInBrowser(url);
               }}
               className={classes.listItemPromotion}
@@ -1789,7 +1799,12 @@ const Preferences = ({
             <ListItem
               button
               onClick={() => {
-                const url = isMas() ? 'macappstore://apps.apple.com/us/app/clovery-for-google-apps/id1552618413' : `https://clovery.app?utm_source=${utmSource}`;
+                let url = `https://clovery.app?utm_source=${utmSource}`;
+                if (isMas()) {
+                  url = 'macappstore://apps.apple.com/us/app/clovery-for-google-apps/id1552618413';
+                } else if (isWindowsStore()) {
+                  url = 'ms-windows-store://pdp/?productid=9NT71213J864';
+                }
                 requestOpenInBrowser(url);
               }}
               className={classes.listItemPromotion}
@@ -1815,7 +1830,12 @@ const Preferences = ({
             <ListItem
               button
               onClick={() => {
-                const url = isMas() ? 'macappstore://apps.apple.com/us/app/pantext-all-in-one-messenger/id1551183766' : `https://pantext.app?utm_source=${utmSource}`;
+                let url = `https://pantext.app?utm_source=${utmSource}`;
+                if (isMas()) {
+                  url = 'macappstore://apps.apple.com/us/app/pantext-all-in-one-messenger/id1551183766';
+                } else if (isWindowsStore()) {
+                  url = 'ms-windows-store://pdp/?productid=9NH85V7VL3RN';
+                }
                 requestOpenInBrowser(url);
               }}
               className={classes.listItemPromotion}
@@ -1841,7 +1861,12 @@ const Preferences = ({
             <ListItem
               button
               onClick={() => {
-                const url = isMas() ? 'macappstore://apps.apple.com/us/app/panmail/id1551178702' : `https://panmail.app?utm_source=${utmSource}`;
+                let url = `https://panmail.app?utm_source=${utmSource}`;
+                if (isMas()) {
+                  url = 'macappstore://apps.apple.com/us/app/panmail/id1551178702';
+                } else if (isWindowsStore()) {
+                  url = 'ms-windows-store://pdp/?productid=9N4TTMNHP3C4';
+                }
                 requestOpenInBrowser(url);
               }}
               className={classes.listItemPromotion}
@@ -1867,7 +1892,12 @@ const Preferences = ({
             <ListItem
               button
               onClick={() => {
-                const url = isMas() ? 'macappstore://apps.apple.com/app/dynamail-for-gmail/id1550739756' : `https://dynamail.app?utm_source=${utmSource}`;
+                let url = `https://dynamail.app?utm_source=${utmSource}`;
+                if (isMas()) {
+                  url = 'macappstore://apps.apple.com/app/dynamail-for-gmail/id1550739756';
+                } else if (isWindowsStore()) {
+                  url = 'ms-windows-store://pdp/?productid=9N57L5VQTB21';
+                }
                 requestOpenInBrowser(url);
               }}
               className={classes.listItemPromotion}
@@ -1893,7 +1923,12 @@ const Preferences = ({
             <ListItem
               button
               onClick={() => {
-                const url = isMas() ? 'macappstore://apps.apple.com/us/app/dynacal-for-google-calendar/id1552616851' : `https://dynacal.app?utm_source=${utmSource}`;
+                let url = `https://dynacal.app?utm_source=${utmSource}`;
+                if (isMas()) {
+                  url = 'macappstore://apps.apple.com/us/app/dynacal-for-google-calendar/id1552616851';
+                } else if (isWindowsStore()) {
+                  url = 'ms-windows-store://pdp/?productid=9PJZLC1W2SB5';
+                }
                 requestOpenInBrowser(url);
               }}
               className={classes.listItemPromotion}
