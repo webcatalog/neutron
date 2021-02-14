@@ -428,7 +428,7 @@ if (!gotTheLock) {
     }
 
     global.isMacOs11 = isMacOs11();
-    global.attachToMenubar = process.platform === 'darwin' && attachToMenubar;
+    global.attachToMenubar = attachToMenubar;
     global.runInBackground = process.platform !== 'darwin' && runInBackground;
     global.sidebar = sidebar;
     global.sidebarSize = sidebarSize;
