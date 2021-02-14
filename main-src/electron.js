@@ -370,11 +370,16 @@ if (!gotTheLock) {
         });
       })
       .then(() => {
-        if (isWindowsStore()) {
+        if (isWindowsStore()
+          && (appJson.canSetAsDefaultBrowser || appJson.canSetAsDefaultEmailClient)) {
           // add prefix '-appx' to avoid conflict with WebCatalog app
           // as WebCatalog uses pattern `webcatalog-${appJson.id}`
           const registryAppId = `webcatalog-appx-${appJson.id}`;
-          return registryInstaller.installAsync(registryAppId, appJson.name, process.execPath)
+          const opts = {
+            canSetAsDefaultBrowser: Boolean(appJson.canSetAsDefaultBrowser),
+            canSetAsDefaultEmailClient: Boolean(appJson.canSetAsDefaultEmailClient),
+          };
+          return registryInstaller.installAsync(registryAppId, appJson.name, process.execPath, opts)
             // eslint-disable-next-line no-console
             .catch(console.log);
         }
