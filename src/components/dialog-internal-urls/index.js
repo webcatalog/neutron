@@ -16,8 +16,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 
 import connectComponent from '../../helpers/connect-component';
-import isMas from '../../helpers/is-mas';
 import getStaticGlobal from '../../helpers/get-static-global';
+import getUtmSource from '../../helpers/get-utm-source';
 
 import { close, updateForm, save } from '../../state/dialog-internal-urls/actions';
 
@@ -34,7 +34,7 @@ const DialogInternalUrls = ({
   open,
 }) => {
   const appJson = getStaticGlobal('appJson');
-  const utmSource = isMas() ? `${appJson.id}_app` : 'juli_app';
+  const utmSource = getUtmSource();
 
   return (
     <Dialog

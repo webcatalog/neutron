@@ -382,11 +382,16 @@ const Main = ({
                     }
                     requestCreateWorkspace();
                   }}
-                  onContextMenu={!appJson.url ? null : (e) => {
+                  onContextMenu={!appJson.url || appJson.id === 'dynacal' || appJson.id === 'dynamail' ? null : (e) => {
                     e.preventDefault();
                     const template = [
                       {
-                        label: `Add ${appJson.id === 'dynamail' ? 'Gmail' : appJson.name} Workspace`,
+                        label: (() => {
+                          let standardWorkspaceName = appJson.name;
+                          if (appJson.id === 'dynamail') standardWorkspaceName = 'Gmail';
+                          if (appJson.id === 'dynacal') standardWorkspaceName = 'Google Calendar';
+                          return `Add ${standardWorkspaceName} Workspace`;
+                        })(),
                         click: () => requestCreateWorkspace(),
                       },
                       {

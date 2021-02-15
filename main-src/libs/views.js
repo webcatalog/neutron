@@ -241,6 +241,22 @@ const addView = (browserWindow, workspace) => {
     ses.setSpellCheckerLanguages(spellcheckLanguages);
   }
 
+  // ad security header for DarkReader on Overcast
+  // VM76 darkreader.js:3704 Refused to apply inline style because
+  // it violates the following Content Security Policy directive:
+  // a nonce ('nonce-...') is required to enable inline execution.
+  ses.webRequest.onHeadersReceived(
+    {
+      urls: ['*://*.overcast.fm/*'], // only need this for Overcast.fm (at least for now)
+    },
+    (details, callback) => {
+      if (details && details.responseHeaders && details.responseHeaders['Content-Security-Policy']) {
+        delete details.responseHeaders['Content-Security-Policy'];
+      }
+      callback(details);
+    },
+  );
+
   const sharedWebPreferences = {
     spellcheck,
     nativeWindowOpen: true,

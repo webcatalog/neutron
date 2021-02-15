@@ -9,6 +9,7 @@ const fs = require('fs-extra');
 const sendToAllWindows = require('./send-to-all-windows');
 const extractHostname = require('./extract-hostname');
 const isMas = require('./is-mas');
+const isWindowsStore = require('./is-windows-store');
 const isWindows10 = require('./is-windows-10');
 
 const MAILTO_URLS = require('../constants/mailto-urls');
@@ -50,7 +51,7 @@ const defaultPreferences = {
   cssCodeInjection: null,
   customUserAgent: null,
   // default Dark Reader settings from its Chrome extension */
-  darkReader: appJson.id === 'dynamail' || appJson.id === 'panmail',
+  darkReader: appJson.id === 'clovery' || appJson.id === 'dynacal' || appJson.id === 'dynamail' || appJson.id === 'panmail',
   darkReaderBrightness: 100,
   darkReaderContrast: 100,
   darkReaderGrayscale: 0,
@@ -84,7 +85,7 @@ const defaultPreferences = {
   sentry: false,
   // branded apps (like Google/Microsoft) share browsing data by default
   // https://github.com/webcatalog/webcatalog-app/issues/986
-  shareWorkspaceBrowsingData: appJson.id.startsWith('group-'),
+  shareWorkspaceBrowsingData: appJson.id.startsWith('group-') || appJson.id === 'clovery',
   sidebar: shouldShowSidebar,
   sidebarSize: 'compact',
   sidebarTips: 'shortcut',
@@ -114,16 +115,24 @@ const initCachedPreferences = () => {
   // telemetry & sentry pref
   // so that privacy consent prefs
   // can be shared across WebCatalog and WebCatalog-Engine-based apps
-  const sharedPreferencesPath = path.join(app.getPath('home'), '.webcatalog', 'shared-preferences.json');
   let sharedPreferences = {
     telemetry: false,
     sentry: false,
   };
-  if (!isMas() && fs.existsSync(sharedPreferencesPath)) {
-    sharedPreferences = {
-      ...sharedPreferences,
-      ...fs.readJsonSync(sharedPreferencesPath),
-    };
+
+  // ignore this if error occurs
+  // so the more important initialization process can proceed
+  try {
+    const sharedPreferencesPath = path.join(app.getPath('home'), '.webcatalog', 'shared-preferences.json');
+    if (!isMas() && !isWindowsStore() && fs.existsSync(sharedPreferencesPath)) {
+      sharedPreferences = {
+        ...sharedPreferences,
+        ...fs.readJsonSync(sharedPreferencesPath),
+      };
+    }
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(err);
   }
 
   cachedPreferences = {
@@ -132,8 +141,10 @@ const initCachedPreferences = () => {
     ...sharedPreferences,
   };
 
-  // disable menu bar mode on Windows/Linux
-  if (process.platform !== 'darwin') {
+  // this feature used to be free on MAS
+  // so we need this code to deactivate it for free users
+  // note: this feature is always free witH WebCatalog
+  if (isMas() && !appJson.registered && !cachedPreferences.iapPurchased) {
     cachedPreferences.attachToMenubar = false;
   }
 };
@@ -148,7 +159,9 @@ const getPreferences = () => {
       initCachedPreferences();
     }
     return cachedPreferences;
-  } catch {
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(err);
     return defaultPreferences;
   }
 };
@@ -163,7 +176,9 @@ const getPreference = (name) => {
       initCachedPreferences();
     }
     return cachedPreferences[name];
-  } catch {
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(err);
     return defaultPreferences[name];
   }
 };

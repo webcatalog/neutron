@@ -80,6 +80,7 @@ const getWebsiteIconUrlAsync = require('../libs/get-website-icon-url-async');
 const getViewBounds = require('../libs/get-view-bounds');
 const isMas = require('../libs/is-mas');
 const getIapFormattedPriceAsync = require('../libs/get-iap-formatted-price-async');
+const getUtmSource = require('../libs/get-utm-source');
 
 const aboutWindow = require('../windows/about');
 const addWorkspaceWindow = require('../windows/add-workspace');
@@ -206,6 +207,24 @@ const loadListeners = () => {
   });
 
   ipcMain.on('request-restart', () => {
+    // app.relaunch() is not supported in MAS build
+    // calling it would crash th app
+    if (isMas()) {
+      dialog.showMessageBox({
+        type: 'question',
+        buttons: ['Quit Now', 'Later'],
+        message: 'You need to quit and then manually restart the app for the changes to take affect.',
+        cancelId: 1,
+      })
+        .then(({ response }) => {
+          if (response === 0) {
+            app.quit();
+          }
+        })
+        .catch(console.log); // eslint-disable-line no-console
+      return;
+    }
+
     app.relaunch();
     app.exit(0);
   });
@@ -226,7 +245,7 @@ const loadListeners = () => {
   });
 
   ipcMain.on('request-show-require-license-dialog', () => {
-    const utmSource = isMas() ? `${appJson.id}_app` : 'juli_app';
+    const utmSource = getUtmSource();
     const win = workspacePreferencesWindow.get() || preferencesWindow.get();
 
     if (isMas()) {

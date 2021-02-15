@@ -12,9 +12,11 @@ const preferencesWindow = require('../windows/preferences');
 
 const customizedFetch = require('./customized-fetch');
 const { setPreference } = require('./preferences');
+const isMas = require('./is-mas');
+const isWindowsStore = require('./is-windows-store');
 
 const checkForUpdates = (silent) => {
-  if (process.mas || process.env.REACT_APP_FORCE_MAS) {
+  if (isMas() || isWindowsStore()) {
     return;
   }
 

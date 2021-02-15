@@ -44,7 +44,9 @@ import connectComponent from '../../helpers/connect-component';
 import checkLicense from '../../helpers/check-license';
 import roundTime from '../../helpers/round-time';
 import isMas from '../../helpers/is-mas';
+import isWindowsStore from '../../helpers/is-windows-store';
 import getStaticGlobal from '../../helpers/get-static-global';
+import getUtmSource from '../../helpers/get-utm-source';
 
 import {
   requestCheckForUpdates,
@@ -91,11 +93,13 @@ import DialogRefreshInterval from '../dialog-refresh-interval';
 import SnackbarTrigger from '../shared/snackbar-trigger';
 
 import webcatalogIconPng from '../../images/products/webcatalog-mac-icon-128@2x.png';
-import singleboxIconPng from '../../images/products/singlebox-mac-icon-128@2x.png';
 import translatiumIconPng from '../../images/products/translatium-mac-icon-128@2x.png';
+import singleboxIconPng from '../../images/products/singlebox-mac-icon-128@2x.png';
+import cloveryIconPng from '../../images/products/clovery-mac-icon-128@2x.png';
 import dynamailIconPng from '../../images/products/dynamail-mac-icon-128@2x.png';
-import panmailIconPng from '../../images/products/panmail-mac-icon-128@2x.png';
+import dynacalIconPng from '../../images/products/dynacal-mac-icon-128@2x.png';
 import pantextIconPng from '../../images/products/pantext-mac-icon-128@2x.png';
+import panmailIconPng from '../../images/products/panmail-mac-icon-128@2x.png';
 
 const styles = (theme) => ({
   root: {
@@ -258,7 +262,7 @@ const Preferences = ({
   windowButtons,
 }) => {
   const appJson = getStaticGlobal('appJson');
-  const utmSource = isMas() ? `${appJson.id}_app` : 'juli_app';
+  const utmSource = getUtmSource();
   const canPromptTouchId = window.process.platform === 'darwin'
     && window.remote.systemPreferences.canPromptTouchID();
   const registered = appJson.registered || iapPurchased;
@@ -278,7 +282,7 @@ const Preferences = ({
       text: 'Licensing',
       Icon: CheckCircleOutlineIcon,
       ref: useRef(),
-      hidden: isMas() && appJson.id === 'singlebox',
+      hidden: isWindowsStore() || (isMas() && appJson.id === 'singlebox'),
     },
     general: {
       text: 'General',
@@ -372,30 +376,31 @@ const Preferences = ({
     <div className={classes.root}>
       <div className={classes.sidebar}>
         <List dense>
-          {Object.keys(sections).map((sectionKey, i) => {
-            const {
-              Icon, text, ref, hidden,
-            } = sections[sectionKey];
-            if (hidden) return null;
-            return (
-              <React.Fragment key={sectionKey}>
-                {i > 0 && !isMas() && <Divider />}
-                {i > 1 && isMas() && <Divider />}
-                <ListItem button onClick={() => ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-                  <ListItemIcon>
-                    <Icon />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={text}
-                  />
-                </ListItem>
-              </React.Fragment>
-            );
-          })}
+          {Object.keys(sections)
+            .filter((sectionKey) => !sections[sectionKey].hidden)
+            .map((sectionKey, i) => {
+              const {
+                Icon, text, ref,
+              } = sections[sectionKey];
+              return (
+                <React.Fragment key={sectionKey}>
+                  {i > 0 && !isMas() && <Divider />}
+                  {i > 1 && isMas() && <Divider />}
+                  <ListItem button onClick={() => ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+                    <ListItemIcon>
+                      <Icon />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={text}
+                    />
+                  </ListItem>
+                </React.Fragment>
+              );
+            })}
         </List>
       </div>
       <div className={classes.inner}>
-        {isMas() && appJson.id === 'singlebox' ? null : (
+        {isWindowsStore() || (isMas() && appJson.id === 'singlebox') ? null : (
           <>
             <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle} ref={sections.licensing.ref}>
               Licensing
@@ -424,7 +429,7 @@ const Preferences = ({
         </Typography>
         <Paper elevation={0} className={classes.paper}>
           <List disablePadding dense>
-            {appJson.url && !isMas() && (
+            {appJson.url && !isMas() && !isWindowsStore() && (
               <>
                 <ListItem
                   button
@@ -496,46 +501,47 @@ const Preferences = ({
                 })}
               </Select>
             </ListItem>
-            {window.process.platform === 'darwin' && (
-              <>
-                <Divider />
-                <ListItem>
-                  <ListItemText
-                    primary="Attach to menu bar"
-                    secondary="Tip: Right-click on app icon to access context menu."
-                  />
-                  <ListItemSecondaryAction>
-                    <Switch
-                      edge="end"
-                      color="primary"
-                      checked={attachToMenubar}
-                      onChange={(e) => {
-                        requestSetPreference('attachToMenubar', e.target.checked);
-                        enqueueRequestRestartSnackbar();
-                      }}
-                    />
-                  </ListItemSecondaryAction>
-                </ListItem>
-                <ListItem>
-                  <ListItemText
-                    primary="Keep attached window always on top"
-                    secondary="The window won't be hidden even when you click outside."
-                  />
-                  <ListItemSecondaryAction>
-                    <Switch
-                      edge="end"
-                      color="primary"
-                      checked={alwaysOnTop}
-                      disabled={!attachToMenubar}
-                      onChange={(e) => {
-                        requestSetPreference('alwaysOnTop', e.target.checked);
-                        enqueueRequestRestartSnackbar();
-                      }}
-                    />
-                  </ListItemSecondaryAction>
-                </ListItem>
-              </>
-            )}
+            <Divider />
+            <ListItem>
+              <ListItemText
+                primary={window.process.platform === 'win32' ? 'Attach to taskbar' : 'Attach to menu bar'}
+                secondary="Tip: Right-click on app icon to access context menu."
+              />
+              <ListItemSecondaryAction>
+                <Switch
+                  edge="end"
+                  color="primary"
+                  checked={attachToMenubar}
+                  onChange={(e) => {
+                    // this feature is free with WebCatalog
+                    // but not free in MAS apps
+                    if (isMas() && !checkLicense()) {
+                      return;
+                    }
+                    requestSetPreference('attachToMenubar', e.target.checked);
+                    enqueueRequestRestartSnackbar();
+                  }}
+                />
+              </ListItemSecondaryAction>
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                primary="Keep attached window always on top"
+                secondary="The window won't be hidden even when you click outside."
+              />
+              <ListItemSecondaryAction>
+                <Switch
+                  edge="end"
+                  color="primary"
+                  checked={!attachToMenubar ? false : alwaysOnTop}
+                  disabled={!attachToMenubar}
+                  onChange={(e) => {
+                    requestSetPreference('alwaysOnTop', e.target.checked);
+                    enqueueRequestRestartSnackbar();
+                  }}
+                />
+              </ListItemSecondaryAction>
+            </ListItem>
             {window.process.platform !== 'darwin' && (
               <>
                 <Divider />
@@ -548,7 +554,8 @@ const Preferences = ({
                     <Switch
                       edge="end"
                       color="primary"
-                      checked={runInBackground}
+                      checked={attachToMenubar || runInBackground}
+                      disabled={attachToMenubar}
                       onChange={(e) => {
                         requestSetPreference('runInBackground', e.target.checked);
                         enqueueRequestRestartSnackbar();
@@ -1383,7 +1390,7 @@ const Preferences = ({
               <ListItemText primary="Clear browsing data" secondary="Clear cookies, cache, and more" />
               <ChevronRightIcon color="action" />
             </ListItem>
-            {isMas() && (
+            {(isMas() || isWindowsStore()) && (
               <>
                 <Divider />
                 <ListItem>
@@ -1435,14 +1442,18 @@ const Preferences = ({
         </Typography>
         <Paper elevation={0} className={classes.paper}>
           <List disablePadding dense>
-            {appJson.id !== 'dynamail' && appJson.id !== 'panmail' && (
+            {appJson.id !== 'dynacal' && appJson.id !== 'dynamail' && appJson.id !== 'panmail' && (
               <>
                 <ListItemDefaultBrowser />
                 <Divider />
               </>
             )}
-            <ListItemDefaultMailClient />
-            <Divider />
+            {appJson.id !== 'dynacal' && (
+              <>
+                <ListItemDefaultMailClient />
+                <Divider />
+              </>
+            )}
             <ListItem>
               <ListItemText primary="Open at login" />
               <Select
@@ -1618,7 +1629,7 @@ const Preferences = ({
           </List>
         </Paper>
 
-        {!isMas() && (
+        {!isMas() && !isWindowsStore() && (
           <>
             <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.updates.ref}>
               Updates
@@ -1723,7 +1734,12 @@ const Preferences = ({
             <ListItem
               button
               onClick={() => {
-                const url = isMas() ? 'macappstore://apps.apple.com/app/translatium/id1547052291' : `https://translatium.app?utm_source=${utmSource}`;
+                let url = `https://translatium.app?utm_source=${utmSource}`;
+                if (isMas()) {
+                  url = 'macappstore://apps.apple.com/app/translatium/id1547052291';
+                } else if (isWindowsStore()) {
+                  url = 'ms-windows-store://pdp/?productid=9MWPG56JKS38';
+                }
                 requestOpenInBrowser(url);
               }}
               className={classes.listItemPromotion}
@@ -1749,7 +1765,12 @@ const Preferences = ({
             <ListItem
               button
               onClick={() => {
-                const url = isMas() ? 'macappstore://apps.apple.com/app/singlebox/id1548853763' : `https://singlebox.app?utm_source=${utmSource}`;
+                let url = `https://singlebox.app?utm_source=${utmSource}`;
+                if (isMas()) {
+                  url = 'macappstore://apps.apple.com/app/singlebox/id1548853763';
+                } else if (isWindowsStore()) {
+                  url = 'ms-windows-store://pdp/?productid=9NQ0MV0GXJ2B';
+                }
                 requestOpenInBrowser(url);
               }}
               className={classes.listItemPromotion}
@@ -1775,19 +1796,55 @@ const Preferences = ({
             <ListItem
               button
               onClick={() => {
-                const url = isMas() ? 'macappstore://apps.apple.com/us/app/pantext-all-in-one-messenger/id1551183766' : `https://pantext.app?utm_source=${utmSource}`;
+                let url = `https://clovery.app?utm_source=${utmSource}`;
+                if (isMas()) {
+                  url = 'macappstore://apps.apple.com/us/app/clovery-for-google-apps/id1552618413';
+                } else if (isWindowsStore()) {
+                  url = 'ms-windows-store://pdp/?productid=9NT71213J864';
+                }
                 requestOpenInBrowser(url);
               }}
               className={classes.listItemPromotion}
             >
               <div className={classes.promotionBlock}>
                 <div className={classes.promotionLeft}>
-                  <img src={pantextIconPng} alt="Pantext" className={classes.appIcon} />
+                  <img src={cloveryIconPng} alt="Clovery" className={classes.appIcon} />
                 </div>
                 <div className={classes.promotionRight}>
                   <div>
                     <Typography variant="body1" className={classes.appTitle}>
-                      Pantext
+                      Clovery
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      All Google Apps in One
+                    </Typography>
+                  </div>
+                </div>
+              </div>
+              <ChevronRightIcon color="action" />
+            </ListItem>
+            <Divider />
+            <ListItem
+              button
+              onClick={() => {
+                let url = `https://pantext.app?utm_source=${utmSource}`;
+                if (isMas()) {
+                  url = 'macappstore://apps.apple.com/us/app/pantext-all-in-one-messenger/id1551183766';
+                } else if (isWindowsStore()) {
+                  url = 'ms-windows-store://pdp/?productid=9NH85V7VL3RN';
+                }
+                requestOpenInBrowser(url);
+              }}
+              className={classes.listItemPromotion}
+            >
+              <div className={classes.promotionBlock}>
+                <div className={classes.promotionLeft}>
+                  <img src={pantextIconPng} alt="PanText" className={classes.appIcon} />
+                </div>
+                <div className={classes.promotionRight}>
+                  <div>
+                    <Typography variant="body1" className={classes.appTitle}>
+                      PanText
                     </Typography>
                     <Typography variant="body2" color="textSecondary">
                       All Your Messaging Apps in One
@@ -1801,19 +1858,24 @@ const Preferences = ({
             <ListItem
               button
               onClick={() => {
-                const url = isMas() ? 'macappstore://apps.apple.com/us/app/panmail/id1551178702' : `https://panmail.app?utm_source=${utmSource}`;
+                let url = `https://panmail.app?utm_source=${utmSource}`;
+                if (isMas()) {
+                  url = 'macappstore://apps.apple.com/us/app/panmail/id1551178702';
+                } else if (isWindowsStore()) {
+                  url = 'ms-windows-store://pdp/?productid=9N4TTMNHP3C4';
+                }
                 requestOpenInBrowser(url);
               }}
               className={classes.listItemPromotion}
             >
               <div className={classes.promotionBlock}>
                 <div className={classes.promotionLeft}>
-                  <img src={panmailIconPng} alt="Panmail" className={classes.appIcon} />
+                  <img src={panmailIconPng} alt="PanMail" className={classes.appIcon} />
                 </div>
                 <div className={classes.promotionRight}>
                   <div>
                     <Typography variant="body1" className={classes.appTitle}>
-                      Panmail
+                      PanMail
                     </Typography>
                     <Typography variant="body2" color="textSecondary">
                       All Your Email Apps in One
@@ -1827,22 +1889,58 @@ const Preferences = ({
             <ListItem
               button
               onClick={() => {
-                const url = isMas() ? 'macappstore://apps.apple.com/app/dynamail-for-gmail/id1550739756' : `https://dynamail.app?utm_source=${utmSource}`;
+                let url = `https://dynamail.app?utm_source=${utmSource}`;
+                if (isMas()) {
+                  url = 'macappstore://apps.apple.com/app/dynamail-for-gmail/id1550739756';
+                } else if (isWindowsStore()) {
+                  url = 'ms-windows-store://pdp/?productid=9N57L5VQTB21';
+                }
                 requestOpenInBrowser(url);
               }}
               className={classes.listItemPromotion}
             >
               <div className={classes.promotionBlock}>
                 <div className={classes.promotionLeft}>
-                  <img src={dynamailIconPng} alt="Dynamail" className={classes.appIcon} />
+                  <img src={dynamailIconPng} alt="DynaMail" className={classes.appIcon} />
                 </div>
                 <div className={classes.promotionRight}>
                   <div>
                     <Typography variant="body1" className={classes.appTitle}>
-                      Dynamail
+                      DynaMail
                     </Typography>
                     <Typography variant="body2" color="textSecondary">
-                      Best Way to Use Gmail on Mac
+                      Best Way to Use Gmail on Mac & PC
+                    </Typography>
+                  </div>
+                </div>
+              </div>
+              <ChevronRightIcon color="action" />
+            </ListItem>
+            <Divider />
+            <ListItem
+              button
+              onClick={() => {
+                let url = `https://dynacal.app?utm_source=${utmSource}`;
+                if (isMas()) {
+                  url = 'macappstore://apps.apple.com/us/app/dynacal-for-google-calendar/id1552616851';
+                } else if (isWindowsStore()) {
+                  url = 'ms-windows-store://pdp/?productid=9PJZLC1W2SB5';
+                }
+                requestOpenInBrowser(url);
+              }}
+              className={classes.listItemPromotion}
+            >
+              <div className={classes.promotionBlock}>
+                <div className={classes.promotionLeft}>
+                  <img src={dynacalIconPng} alt="DynaCal" className={classes.appIcon} />
+                </div>
+                <div className={classes.promotionRight}>
+                  <div>
+                    <Typography variant="body1" className={classes.appTitle}>
+                      DynaCal
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      Best Way to Use Google Calendar on Mac & PC
                     </Typography>
                   </div>
                 </div>
@@ -1862,96 +1960,106 @@ const Preferences = ({
               <ChevronRightIcon color="action" />
             </ListItem>
             <Divider />
-            {isMas() ? (
-              <>
-                <ListItem
-                  button
-                  onClick={() => {
-                    if (appJson.id === 'singlebox') {
-                      requestOpenInBrowser(`https://singlebox.app?utm_source=${utmSource}`);
-                    } else if (appJson.id === 'dynamail') {
-                      requestOpenInBrowser(`https://dynamail.app?utm_source=${utmSource}`);
-                    } else if (appJson.id === 'panmail') {
-                      requestOpenInBrowser(`https://panmail.app?utm_source=${utmSource}`);
-                    } else if (appJson.id === 'pantext') {
-                      requestOpenInBrowser(`https://pantext.app?utm_source=${utmSource}`);
-                    }
-                  }}
-                >
-                  <ListItemText primary="Website" />
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-                <Divider />
-                <ListItem
-                  button
-                  onClick={() => {
-                    if (appJson.id === 'singlebox') {
-                      requestOpenInBrowser(`https://singlebox.app/help?utm_source=${utmSource}`);
-                    } else if (appJson.id === 'dynamail') {
-                      requestOpenInBrowser(`https://dynamail.app/help?utm_source=${utmSource}`);
-                    } else if (appJson.id === 'panmail') {
-                      requestOpenInBrowser(`https://panmail.app/help?utm_source=${utmSource}`);
-                    } else if (appJson.id === 'pantext') {
-                      requestOpenInBrowser(`https://pantext.app/help?utm_source=${utmSource}`);
-                    }
-                  }}
-                >
-                  <ListItemText primary="Help" />
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-                <Divider />
-                <ListItem
-                  button
-                  onClick={() => requestOpenInBrowser(`macappstore://apps.apple.com/app/id${appJson.macAppStoreId}`)}
-                >
-                  <ListItemText primary="Mac App Store" />
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-                <Divider />
-                <ListItem
-                  button
-                  onClick={() => requestOpenInBrowser(`macappstore://apps.apple.com/app/id${appJson.macAppStoreId}?action=write-review`)}
-                >
-                  <ListItemText primary={`Rate ${appJson.name} on Mac App Store`} />
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-              </>
-            ) : (
-              <>
-                <ListItem button onClick={() => requestOpenInBrowser(`https://webcatalog.app?utm_source=${utmSource}`)}>
-                  <ListItemText primary="WebCatalog Website" />
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-                <Divider />
-                <ListItem button onClick={() => requestOpenInBrowser(`https://help.webcatalog.app?utm_source=${utmSource}`)}>
-                  <ListItemText primary="WebCatalog Help" />
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-                <Divider />
-                <ListItem
-                  button
-                  onClick={() => requestOpenInBrowser('https://alternativeto.net/software/webcatalog/about/')}
-                >
-                  <ListItemText primary="Review WebCatalog on AlternativeTo" />
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-                <Divider />
-                <ListItem button onClick={() => requestOpenInBrowser('https://twitter.com/webcatalog_app')}>
-                  <ListItemText primary="Twitter" />
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-                <Divider />
-                <ListItem button onClick={() => requestOpenInBrowser('https://www.linkedin.com/company/webcatalogapp')}>
-                  <ListItemText primary="LinkedIn" />
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-                <Divider />
-                <ListItem button onClick={() => requestOpenInBrowser('https://github.com/webcatalog')}>
-                  <ListItemText primary="GitHub" />
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-              </>
-            )}
+            {(() => {
+              if (isWindowsStore() || isMas()) {
+                return (
+                  <>
+                    <ListItem
+                      button
+                      onClick={() => requestOpenInBrowser(`https://${appJson.id}.app?utm_source=${utmSource}`)}
+                    >
+                      <ListItemText primary="Website" />
+                      <ChevronRightIcon color="action" />
+                    </ListItem>
+                    <Divider />
+                    <ListItem
+                      button
+                      onClick={() => requestOpenInBrowser(`https://${appJson.id}.app/help?utm_source=${utmSource}`)}
+                    >
+                      <ListItemText primary="Help" />
+                      <ChevronRightIcon color="action" />
+                    </ListItem>
+                    {isWindowsStore() && (
+                      <>
+                        <Divider />
+                        <ListItem
+                          button
+                          onClick={() => requestOpenInBrowser(`ms-windows-store://pdp/?ProductId=${appJson.microsoftStoreId}`)}
+                        >
+                          <ListItemText primary="Microsoft Store" />
+                          <ChevronRightIcon color="action" />
+                        </ListItem>
+                        <Divider />
+                        <ListItem
+                          button
+                          onClick={() => requestOpenInBrowser(`ms-windows-store://review/?ProductId=${appJson.microsoftStoreId}`)}
+                        >
+                          <ListItemText primary={`Rate ${appJson.name} on Microsoft Store`} />
+                          <ChevronRightIcon color="action" />
+                        </ListItem>
+                      </>
+                    )}
+                    {isMas() && (
+                      <>
+                        <Divider />
+                        <ListItem
+                          button
+                          onClick={() => requestOpenInBrowser(`macappstore://apps.apple.com/app/id${appJson.macAppStoreId}`)}
+                        >
+                          <ListItemText primary="Mac App Store" />
+                          <ChevronRightIcon color="action" />
+                        </ListItem>
+                        <Divider />
+                        <ListItem
+                          button
+                          onClick={() => requestOpenInBrowser(`macappstore://apps.apple.com/app/id${appJson.macAppStoreId}?action=write-review`)}
+                        >
+                          <ListItemText primary={`Rate ${appJson.name} on Mac App Store`} />
+                          <ChevronRightIcon color="action" />
+                        </ListItem>
+                      </>
+                    )}
+                  </>
+                );
+              }
+
+              return (
+                <>
+                  <ListItem button onClick={() => requestOpenInBrowser(`https://webcatalog.app?utm_source=${utmSource}`)}>
+                    <ListItemText primary="WebCatalog Website" />
+                    <ChevronRightIcon color="action" />
+                  </ListItem>
+                  <Divider />
+                  <ListItem button onClick={() => requestOpenInBrowser(`https://help.webcatalog.app?utm_source=${utmSource}`)}>
+                    <ListItemText primary="WebCatalog Help" />
+                    <ChevronRightIcon color="action" />
+                  </ListItem>
+                  <Divider />
+                  <ListItem
+                    button
+                    onClick={() => requestOpenInBrowser('https://alternativeto.net/software/webcatalog/about/')}
+                  >
+                    <ListItemText primary="Review WebCatalog on AlternativeTo" />
+                    <ChevronRightIcon color="action" />
+                  </ListItem>
+                  <Divider />
+                  <ListItem button onClick={() => requestOpenInBrowser('https://twitter.com/webcatalog_app')}>
+                    <ListItemText primary="Twitter" />
+                    <ChevronRightIcon color="action" />
+                  </ListItem>
+                  <Divider />
+                  <ListItem button onClick={() => requestOpenInBrowser('https://www.linkedin.com/company/webcatalogapp')}>
+                    <ListItemText primary="LinkedIn" />
+                    <ChevronRightIcon color="action" />
+                  </ListItem>
+                  <Divider />
+                  <ListItem button onClick={() => requestOpenInBrowser('https://github.com/webcatalog')}>
+                    <ListItemText primary="GitHub" />
+                    <ChevronRightIcon color="action" />
+                  </ListItem>
+                </>
+              );
+            })()}
             <Divider />
             <ListItem>
               <ListItemText primary="Warn before quitting" />

@@ -1,6 +1,8 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+require('source-map-support').install();
+
 const {
   app,
   dialog,
@@ -69,8 +71,10 @@ const extractHostname = require('./libs/extract-hostname');
 const { getAppLockStatusAsync, unlockAppUsingTouchId } = require('./libs/app-lock');
 const isMacOs11 = require('./libs/is-mac-os-11');
 const isMas = require('./libs/is-mas');
+const isWindowsStore = require('./libs/is-windows-store');
 const getIapFormattedPriceAsync = require('./libs/get-iap-formatted-price-async');
 const promptSetAsDefaultMailClient = require('./libs/prompt-set-as-default-email-client');
+const registryInstaller = require('./libs/registry-installer');
 
 const MAILTO_URLS = require('./constants/mailto-urls');
 
@@ -315,7 +319,7 @@ if (!gotTheLock) {
 
         ipcMain.emit('request-update-pause-notifications-info');
 
-        if (isMas() && !privacyConsentAsked) {
+        if ((isMas() || isWindowsStore()) && !privacyConsentAsked) {
           dialog.showMessageBox(mainWindow.get(), {
             type: 'question',
             buttons: ['Allow', 'Don\'t Allow'],
@@ -366,6 +370,22 @@ if (!gotTheLock) {
         });
       })
       .then(() => {
+        if (isWindowsStore()
+          && (appJson.canSetAsDefaultBrowser || appJson.canSetAsDefaultEmailClient)) {
+          // add prefix '-appx' to avoid conflict with WebCatalog app
+          // as WebCatalog uses pattern `webcatalog-${appJson.id}`
+          const registryAppId = `webcatalog-appx-${appJson.id}`;
+          const opts = {
+            canSetAsDefaultBrowser: Boolean(appJson.canSetAsDefaultBrowser),
+            canSetAsDefaultEmailClient: Boolean(appJson.canSetAsDefaultEmailClient),
+          };
+          return registryInstaller.installAsync(registryAppId, appJson.name, process.execPath, opts)
+            // eslint-disable-next-line no-console
+            .catch(console.log);
+        }
+        return null;
+      })
+      .then(() => {
         // trigger whenTrulyReady;
         ipcMain.emit('truly-ready');
 
@@ -413,7 +433,7 @@ if (!gotTheLock) {
     }
 
     global.isMacOs11 = isMacOs11();
-    global.attachToMenubar = process.platform === 'darwin' && attachToMenubar;
+    global.attachToMenubar = attachToMenubar;
     global.runInBackground = process.platform !== 'darwin' && runInBackground;
     global.sidebar = sidebar;
     global.sidebarSize = sidebarSize;
@@ -434,7 +454,7 @@ if (!gotTheLock) {
           handleArgv(process.argv);
         }
 
-        if (!isMas() && autoCheckForUpdates) {
+        if (!isMas() && !isWindowsStore() && autoCheckForUpdates) {
           // only notify user about update again after one week
           const lastShowNewUpdateDialog = getPreference('lastShowNewUpdateDialog');
           const updateInterval = 7 * 24 * 60 * 60 * 1000; // one week
@@ -444,7 +464,7 @@ if (!gotTheLock) {
           }
         }
 
-        // pre-cache pricing for (Pantext|Panmail|Dynamail|...) Plus
+        // pre-cache pricing for (PanText|PanMail|DynaMail|...) Plus
         if (isMas() && !appJson.registered && !getPreference('iapPurchased')) {
           const productIdentifier = `${appJson.id}_plus`;
           getIapFormattedPriceAsync(productIdentifier);
