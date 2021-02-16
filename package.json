@@ -1,7 +1,7 @@
 {
   "name": "Singlebox",
   "description": "AppView template for WebCatalog",
-  "version": "15.9.2",
+  "version": "15.9.3",
   "minimumWebCatalogVersion": "28.4.0",
   "engines": {
     "node": ">=12.0.0 <13.0.0"
@@ -25,7 +25,7 @@
   "repository": "https://github.com/webcatalog/webcatalog-engine",
   "author": "WebCatalog Ltd <contact@webcatalog.app>",
   "dependencies": {
-    "keytar": "7.3.0",
+    "keytar": "7.4.0",
     "node-mac-permissions": "2.2.0"
   },
   "devDependencies": {
