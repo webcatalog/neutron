@@ -7,8 +7,7 @@ on:
 
 jobs:
   build:
-    # runs-on: macos-latest
-    runs-on: [self-hosted, Windows, X64]
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v2
