@@ -152,8 +152,6 @@ const initCachedPreferences = () => {
   if (isMas() && !appJson.registered && !cachedPreferences.iapPurchased) {
     cachedPreferences.attachToMenubar = false;
   }
-
-  console.log(cachedPreferences);
 };
 
 const getPreferences = () => {
