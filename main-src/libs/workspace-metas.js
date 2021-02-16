@@ -44,7 +44,7 @@ const setWorkspaceBadgeCount = (workspaceId, badgeCount, browserWindow) => {
         browserWindow.setOverlayIcon(
           process.env.NODE_ENV === 'production'
             ? path.resolve(__dirname, 'overlay-icon.png')
-            : path.resolve(__dirname, '..', 'public', 'overlay-icon.png'),
+            : path.resolve(__dirname, '..', '..', 'public', 'overlay-icon.png'),
           `You have ${count} new messages.`,
         );
       } else {
