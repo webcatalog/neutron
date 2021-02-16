@@ -111,35 +111,40 @@ const defaultPreferences = {
 let cachedPreferences = null;
 
 const initCachedPreferences = () => {
+  cachedPreferences = {
+    ...defaultPreferences,
+    ...settings.getSync(`preferences.${v}`),
+  };
+
   // shared-preferences.json includes:
   // telemetry & sentry pref
   // so that privacy consent prefs
   // can be shared across WebCatalog and WebCatalog-Engine-based apps
-  let sharedPreferences = {
-    telemetry: false,
-    sentry: false,
-  };
-
   // ignore this if error occurs
   // so the more important initialization process can proceed
-  try {
-    const sharedPreferencesPath = path.join(app.getPath('home'), '.webcatalog', 'shared-preferences.json');
-    if (!isMas() && !isWindowsStore() && fs.existsSync(sharedPreferencesPath)) {
-      sharedPreferences = {
-        ...sharedPreferences,
-        ...fs.readJsonSync(sharedPreferencesPath),
-      };
-    }
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.log(err);
-  }
+  if (!isMas() && !isWindowsStore()) {
+    const sharedPreferences = {
+      telemetry: false,
+      sentry: false,
+    };
 
-  cachedPreferences = {
-    ...defaultPreferences,
-    ...settings.getSync(`preferences.${v}`),
-    ...sharedPreferences,
-  };
+    try {
+      const sharedPreferencesPath = path.join(app.getPath('home'), '.webcatalog', 'shared-preferences.json');
+      if (fs.existsSync(sharedPreferencesPath)) {
+        const jsonContent = fs.readJsonSync(sharedPreferencesPath);
+        sharedPreferences.telemetry = Boolean(jsonContent.telemetry);
+        sharedPreferences.sentry = Boolean(jsonContent.sentry);
+      }
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.log(err);
+    }
+
+    cachedPreferences = {
+      ...cachedPreferences,
+      ...sharedPreferences,
+    };
+  }
 
   // this feature used to be free on MAS
   // so we need this code to deactivate it for free users
