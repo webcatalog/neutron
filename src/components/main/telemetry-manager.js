@@ -11,12 +11,14 @@ import getStaticGlobal from '../../helpers/get-static-global';
 
 import amplitude from '../../amplitude';
 
-const TelemetryManager = ({ iapPurchased }) => {
+const TelemetryManager = ({ iapPurchased, telemetry }) => {
   const appJson = getStaticGlobal('appJson');
   const registered = appJson.registered || iapPurchased;
+
   // run after setUserProperties
   // https://blog.logrocket.com/post-hooks-guide-react-call-order
   useEffect(() => {
+    amplitude.getInstance().setOptOut(!telemetry);
     amplitude.getInstance().setUserProperties({
       registered,
       distributionChannel: (() => {
@@ -37,20 +39,24 @@ const TelemetryManager = ({ iapPurchased }) => {
     return () => {
       window.ipcRenderer.removeListener('log-focus', logFocus);
     };
-  }, [registered]);
+  }, [registered, telemetry]);
+
   return null;
 };
 
 TelemetryManager.defaultProps = {
   iapPurchased: false,
+  telemetry: false,
 };
 
 TelemetryManager.propTypes = {
   iapPurchased: PropTypes.bool,
+  telemetry: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({
   iapPurchased: state.preferences.iapPurchased,
+  telemetry: state.preferences.telemetry,
 });
 
 export default connectComponent(

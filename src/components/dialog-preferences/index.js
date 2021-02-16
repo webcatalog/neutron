@@ -1423,7 +1423,6 @@ const Preferences = ({
                       checked={telemetry}
                       onChange={(e) => {
                         requestSetPreference('telemetry', e.target.checked);
-                        enqueueRequestRestartSnackbar();
                       }}
                     />
                   </ListItemSecondaryAction>
