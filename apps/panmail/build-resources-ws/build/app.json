@@ -1,0 +1,11 @@
+{
+    "id": "panmail",
+    "name": "PanMail",
+    "microsoftStoreId": "9N4TTMNHP3C4",
+    "registered": true,
+    "canSetAsDefaultBrowser": false,
+    "canSetAsDefaultEmailClient": true,
+    "opts": {
+        "legacyUserData": true
+    }
+}

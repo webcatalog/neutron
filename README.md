@@ -1,0 +1,1 @@
+Build Pipelines for Microsft Store (Windows Store) Releases of WebCatalog-Engine-based Apps

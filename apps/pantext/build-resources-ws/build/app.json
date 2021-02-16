@@ -1,0 +1,11 @@
+{
+    "id": "pantext",
+    "name": "PanText",
+    "registered": true,
+    "microsoftStoreId": "9NH85V7VL3RN",
+    "canSetAsDefaultBrowser": true,
+    "canSetAsDefaultEmailClient": true,
+    "opts": {
+        "legacyUserData": true
+    }
+}

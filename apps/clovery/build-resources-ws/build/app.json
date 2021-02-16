@@ -1,0 +1,11 @@
+{
+    "id": "clovery",
+    "name": "Clovery",
+    "microsoftStoreId": "9NT71213J864",
+    "registered": true,
+    "canSetAsDefaultBrowser": true,
+    "canSetAsDefaultEmailClient": true,
+    "opts": {
+        "legacyUserData": true
+    }
+}

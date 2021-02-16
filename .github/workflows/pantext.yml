@@ -1,0 +1,49 @@
+name: PanText
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  build:
+    # runs-on: macos-latest
+    runs-on: [self-hosted, Windows, X64]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Get WebCatalog Engine version
+      run: echo WEBCATALOG_ENGINE_VERSION=$(type webcatalog-engine-version) | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+    - uses: actions/checkout@v2
+      with:
+        repository: 'webcatalog/webcatalog-engine'
+        ref: v${{ env.WEBCATALOG_ENGINE_VERSION }}
+        path: 'webcatalog-engine'
+        fetch-depth: 1
+        submodules: false
+    - name: Set up Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+    - name: Get tag name
+      run: echo ($env:GITHUB_REF.replace('refs/tags/', 'CI_BUILD_TAG=')) | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+      if: startsWith(github.ref, 'refs/tags/')
+    - name: Build PanText
+      run: |
+        cp apps/pantext/config.json webcatalog-engine/
+        cp -r apps/pantext/build-resources-ws webcatalog-engine
+        cp build-windows-store.js webcatalog-engine
+        cd webcatalog-engine
+        yarn --prefer-offline --network-timeout 600000
+        yarn lint
+        yarn build
+        node build-windows-store.js
+      env:
+        CI: true
+        CI_PULL_REQUEST: ${{ github.event_name == 'pull_request' }}
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        REACT_APP_AMPLITUDE_API_KEY: ${{ secrets.REACT_APP_AMPLITUDE_API_KEY }}
+        REACT_APP_SWIFTYPE_HOST_ID: ${{ secrets.REACT_APP_SWIFTYPE_HOST_ID }}
+        REACT_APP_SWIFTYPE_SEARCH_KEY: ${{ secrets.REACT_APP_SWIFTYPE_SEARCH_KEY }}
+        REACT_APP_SWIFTYPE_ENGINE_NAME: ${{ secrets.REACT_APP_SWIFTYPE_ENGINE_NAME }}
+      if: startsWith(github.ref, 'refs/tags/')

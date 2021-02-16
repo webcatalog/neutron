@@ -1,0 +1,12 @@
+{
+    "id": "dynacal",
+    "name": "DynaCal",
+    "url": "https://calendar.google.com",
+    "microsoftStoreId": "9PJZLC1W2SB5",
+    "registered": true,
+    "canSetAsDefaultBrowser": false,
+    "canSetAsDefaultEmailClient": false,
+    "opts": {
+        "legacyUserData": true
+    }
+}
