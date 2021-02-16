@@ -368,10 +368,6 @@ const Preferences = ({
     sections[scrollTo].ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 
-  // keytar is incompatible with Linux arm64
-  // details: https://github.com/atom/node-keytar/issues/318
-  const appLockCompatible = !(window.process.platform === 'linux' && window.process.arch === 'arm64');
-
   return (
     <div className={classes.root}>
       <div className={classes.sidebar}>
@@ -1302,24 +1298,22 @@ const Preferences = ({
         </Typography>
         <Paper elevation={0} className={classes.paper}>
           <List disablePadding dense>
-            {appLockCompatible && (
-              <ListItem
-                button
-                onClick={() => {
-                  if (!checkLicense()) {
-                    return;
-                  }
+            <ListItem
+              button
+              onClick={() => {
+                if (!checkLicense()) {
+                  return;
+                }
 
-                  onOpenDialogAppLock();
-                }}
-              >
-                <ListItemText
-                  primary="App Lock"
-                  secondary={`Protect this app from unauthorized access with password${canPromptTouchId ? ' or Touch ID' : ''}.`}
-                />
-                <ChevronRightIcon color="action" />
-              </ListItem>
-            )}
+                onOpenDialogAppLock();
+              }}
+            >
+              <ListItemText
+                primary="App Lock"
+                secondary={`Protect this app from unauthorized access with password${canPromptTouchId ? ' or Touch ID' : ''}.`}
+              />
+              <ChevronRightIcon color="action" />
+            </ListItem>
             <Divider />
             <ListItem>
               <ListItemText primary="Remember last page visited" />
