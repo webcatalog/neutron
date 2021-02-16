@@ -15,10 +15,11 @@ const TelemetryManager = ({ iapPurchased, telemetry }) => {
   const appJson = getStaticGlobal('appJson');
   const registered = appJson.registered || iapPurchased;
 
-  // run after setUserProperties
-  // https://blog.logrocket.com/post-hooks-guide-react-call-order
   useEffect(() => {
     amplitude.getInstance().setOptOut(!telemetry);
+  }, [telemetry]);
+
+  useEffect(() => {
     amplitude.getInstance().setUserProperties({
       registered,
       distributionChannel: (() => {
@@ -27,6 +28,11 @@ const TelemetryManager = ({ iapPurchased, telemetry }) => {
         return 'webcatalog';
       })(),
     });
+  }, [registered]);
+
+  // run after setUserProperties
+  // https://blog.logrocket.com/post-hooks-guide-react-call-order
+  useEffect(() => {
     amplitude.getInstance().logEvent('webcatalog-engine: start app');
 
     // this is important to track usage correctly
@@ -39,7 +45,7 @@ const TelemetryManager = ({ iapPurchased, telemetry }) => {
     return () => {
       window.ipcRenderer.removeListener('log-focus', logFocus);
     };
-  }, [registered, telemetry]);
+  }, []);
 
   return null;
 };
