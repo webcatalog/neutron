@@ -3,9 +3,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 /* eslint-disable global-require */
 const { ipcMain, systemPreferences } = require('electron');
-// do not call require('keytar') here
-// it would prevent the app from starting on Linux arm64
-// details: https://github.com/atom/node-keytar/issues/318
 
 const sendToAllWindows = require('./send-to-all-windows');
 const { createMenu } = require('./menu');
@@ -13,16 +10,6 @@ const { createMenu } = require('./menu');
 const appJson = require('../constants/app-json');
 
 const getAppLockStatusAsync = async () => {
-  // keytar is incompatible with Linux arm64
-  // details: https://github.com/atom/node-keytar/issues/318
-  if (process.platform === 'linux' && process.arch === 'arm64') {
-    return {
-      supported: false,
-      useTouchId: false,
-      hasPassword: false,
-    };
-  }
-
   try {
     const currentPassword = await require('keytar').getPassword(appJson.id, 'app-lock-password');
     const useTouchId = process.platform === 'darwin' && systemPreferences.canPromptTouchID()
@@ -46,24 +33,12 @@ const getAppLockStatusAsync = async () => {
 };
 
 const validateAppLockPasswordAsync = async (inputPassword) => {
-  // keytar is incompatible with Linux arm64
-  // details: https://github.com/atom/node-keytar/issues/318
-  if (process.platform === 'linux' && process.arch === 'arm64') {
-    return false;
-  }
-
   const currentPassword = await require('keytar').getPassword(appJson.id, 'app-lock-password');
   if (currentPassword && inputPassword !== currentPassword) return false;
   return true;
 };
 
 const deleteAppLockPasswordAsync = async (inputPassword) => {
-  // keytar is incompatible with Linux arm64
-  // details: https://github.com/atom/node-keytar/issues/318
-  if (process.platform === 'linux' && process.arch === 'arm64') {
-    return Promise.resolve();
-  }
-
   const validPassword = await validateAppLockPasswordAsync(inputPassword);
   if (!validPassword) return null;
   return require('keytar').deletePassword(appJson.id, 'app-lock-password')
@@ -75,12 +50,6 @@ const deleteAppLockPasswordAsync = async (inputPassword) => {
 };
 
 const setAppLockPasswordAsync = async (inputPassword, newPassword) => {
-  // keytar is incompatible with Linux arm64
-  // details: https://github.com/atom/node-keytar/issues/318
-  if (process.platform === 'linux' && process.arch === 'arm64') {
-    return Promise.resolve();
-  }
-
   const validPassword = await validateAppLockPasswordAsync(inputPassword);
   if (!validPassword) return null;
   return require('keytar').setPassword(appJson.id, 'app-lock-password', newPassword)
@@ -92,12 +61,6 @@ const setAppLockPasswordAsync = async (inputPassword, newPassword) => {
 };
 
 const setAppLockTouchIdAsync = async (inputPassword, useTouchId) => {
-  // keytar is incompatible with Linux arm64
-  // details: https://github.com/atom/node-keytar/issues/318
-  if (process.platform === 'linux' && process.arch === 'arm64') {
-    return Promise.resolve();
-  }
-
   const validPassword = await validateAppLockPasswordAsync(inputPassword);
   if (!validPassword) return null;
   if (useTouchId) {
