@@ -343,7 +343,7 @@ const Preferences = ({
       text: 'Updates',
       Icon: SystemUpdateAltIcon,
       ref: useRef(),
-      hidden: isMas(),
+      hidden: isMas() || isWindowsStore(),
     },
     reset: {
       text: 'Reset',
@@ -1697,7 +1697,7 @@ const Preferences = ({
         </Typography>
         <Paper elevation={0} className={classes.paper}>
           <List disablePadding dense>
-            {!isMas() && (
+            {!isMas() && !isWindowsStore() && (
               <>
                 <ListItem
                   button
