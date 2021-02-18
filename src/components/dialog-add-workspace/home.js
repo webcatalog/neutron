@@ -15,6 +15,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 import connectComponent from '../../helpers/connect-component';
 import getStaticGlobal from '../../helpers/get-static-global';
+import isWindowsStore from '../../helpers/is-windows-store';
 
 import AppCard from './app-card';
 import SubmitAppCard from './submit-app-card';
@@ -97,6 +98,13 @@ const Home = ({ classes }) => {
   }
   if (appJsonId === 'panmail') {
     filters.push({ field: 'sub_category', values: ['Email'], type: 'all' });
+  }
+  // hide Google Play in MS builds to comply with Microsoft's requirements
+  // "The app enables in-app purchase of digital goods or services,
+  // but does not use the Microsoft Store in-app purchase API.
+  // Location where issue was found: Google Play Store""
+  if (isWindowsStore()) {
+    filters.push({ field: 'id', values: ['google-play'], type: 'none' });
   }
 
   return (
