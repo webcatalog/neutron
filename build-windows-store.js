@@ -31,6 +31,24 @@ const packageJsonContent = fs.readJSONSync(packageJsonPath);
 packageJsonContent.name = configJson.productName;
 fs.writeJSONSync(packageJsonPath, packageJsonContent, { spaces: '  ' });
 
+const protocols = [];
+if (configJson.setAsDefaultBrowser) {
+  protocols.push({
+    name: 'HTTPS Protocol',
+    schemes: ['https'],
+  });
+  protocols.push({
+    name: 'HTTP Protocol',
+    schemes: ['http'],
+  });
+}
+if (configJson.setAsDefaultEmailClient) {
+  protocols.push({
+    name: 'Mailto Protocol',
+    schemes: ['mailto'],
+  });
+}
+
 const opts = {
   targets,
   config: {
@@ -50,6 +68,7 @@ const opts = {
     directories: {
       buildResources: 'build-resources-ws',
     },
+    protocols,
     appx: {
       identityName: configJson.identityName,
       publisher: configJson.publisher,
