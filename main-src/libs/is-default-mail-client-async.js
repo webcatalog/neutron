@@ -7,10 +7,17 @@ const {
 const regedit = require('regedit');
 
 const isWindows10 = require('./is-windows-10');
+const isWindowsStore = require('./is-windows-store');
 
 const appJson = require('../constants/app-json');
 
 const isDefaultMailClientAsync = () => new Promise((resolve) => {
+  // not supported in MS APPX version
+  if (isWindowsStore()) {
+    resolve(true);
+    return;
+  }
+
   // Electron protocol API doesn't work with Windows 10
   // So check with regedit
   if (isWindows10()) {
