@@ -74,7 +74,6 @@ const isMas = require('./libs/is-mas');
 const isWindowsStore = require('./libs/is-windows-store');
 const getIapFormattedPriceAsync = require('./libs/get-iap-formatted-price-async');
 const promptSetAsDefaultMailClient = require('./libs/prompt-set-as-default-email-client');
-const registryInstaller = require('./libs/registry-installer');
 
 const MAILTO_URLS = require('./constants/mailto-urls');
 
@@ -368,22 +367,6 @@ if (!gotTheLock) {
         mainWindow.get().on('focus', () => {
           win.send('log-focus');
         });
-      })
-      .then(() => {
-        if (isWindowsStore()
-          && (appJson.canSetAsDefaultBrowser || appJson.canSetAsDefaultEmailClient)) {
-          // add prefix '-appx' to avoid conflict with WebCatalog app
-          // as WebCatalog uses pattern `webcatalog-${appJson.id}`
-          const registryAppId = `webcatalog-appx-${appJson.id}`;
-          const opts = {
-            canSetAsDefaultBrowser: Boolean(appJson.canSetAsDefaultBrowser),
-            canSetAsDefaultEmailClient: Boolean(appJson.canSetAsDefaultEmailClient),
-          };
-          return registryInstaller.installAsync(registryAppId, appJson.name, process.execPath, opts)
-            // eslint-disable-next-line no-console
-            .catch(console.log);
-        }
-        return null;
       })
       .then(() => {
         // trigger whenTrulyReady;
