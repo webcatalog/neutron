@@ -10,6 +10,9 @@ import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
+import amplitude from '../../amplitude';
+import { trackAddWorkspaceAsync } from '../../firebase/functions';
+
 import connectComponent from '../../helpers/connect-component';
 import isUrl from '../../helpers/is-url';
 import extractHostname from '../../helpers/extract-hostname';
@@ -131,6 +134,10 @@ const AppCard = (props) => {
               picture: icon,
               catalogId: id,
             });
+
+            // only track installs for apps in the catalog
+            // tracking is only for ranking purpose
+            trackAddWorkspaceAsync(amplitude.getInstance().options.deviceId, id);
 
             // don't close window, only hide it
             // 1. it's faster for users (normally people add multiple workspaces at once to set up)
