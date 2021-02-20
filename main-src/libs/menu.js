@@ -16,6 +16,7 @@ const mainWindow = require('../windows/main');
 const isMas = require('./is-mas');
 const isWindowsStore = require('./is-windows-store');
 const getViewBounds = require('./get-view-bounds');
+const getUtmSource = require('./get-utm-source');
 const {
   setPreference,
   getPreference,
@@ -56,6 +57,7 @@ const createMenu = async () => {
   const workspaces = getWorkspaces();
   const hasWorkspaces = Object.keys(workspaces).length > 0;
   const { registered } = appJson;
+  const utmSource = getUtmSource();
 
   const handleZoomIn = (menuItem, browserWindow) => {
     // if item is called in popup window
@@ -453,20 +455,20 @@ const createMenu = async () => {
       submenu: (isMas() || isWindowsStore()) ? [
         {
           label: 'Help',
-          click: () => shell.openExternal('https://singlebox.app/help?utm_source=singlebox_app'),
+          click: () => shell.openExternal(`https://${appJson.id}.app/help?utm_source=${utmSource}`),
         },
         {
           label: 'Website',
-          click: () => shell.openExternal('https://singlebox.app?utm_source=singlebox_app'),
+          click: () => shell.openExternal(`https://${appJson.id}.app?utm_source=${utmSource}`),
         },
       ] : [
         {
           label: 'WebCatalog Help',
-          click: () => shell.openExternal('https://help.webcatalog.app?utm_source=juli_app'),
+          click: () => shell.openExternal(`https://help.webcatalog.app?utm_source=${utmSource}`),
         },
         {
           label: 'WebCatalog Website',
-          click: () => shell.openExternal('https://webcatalog.app?utm_source=juli_app'),
+          click: () => shell.openExternal(`https://webcatalog.app?utm_source=${utmSource}`),
         },
       ],
     },
