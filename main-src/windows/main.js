@@ -18,6 +18,7 @@ const { REACT_PATH } = require('../constants/paths');
 const { setPreference, getPreference } = require('../libs/preferences');
 const isKdeAsync = require('../libs/is-kde-async');
 const isMas = require('../libs/is-mas');
+const isWindowsStore = require('../libs/is-windows-store');
 const appJson = require('../constants/app-json');
 
 let win;
@@ -66,11 +67,15 @@ const createAsync = () => new Promise((resolve) => {
         label: `About ${appJson.name}`,
         click: () => ipcMain.emit('request-show-about-window'),
       },
-      { type: 'separator' },
       ...lockMenuItems,
+      {
+        type: 'separator',
+        visible: !isMas() && !isWindowsStore(),
+      },
       {
         label: 'Check for Updates...',
         click: () => ipcMain.emit('request-check-for-updates'),
+        visible: !isMas() && !isWindowsStore(),
       },
       {
         type: 'separator',
