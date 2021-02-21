@@ -1904,7 +1904,7 @@ const Preferences = ({
                       DynaMail
                     </Typography>
                     <Typography variant="body2" color="textSecondary">
-                      Best Way to Use Gmail on Mac & PC
+                      The Best Gmail Client
                     </Typography>
                   </div>
                 </div>
@@ -1935,7 +1935,7 @@ const Preferences = ({
                           DynaCal
                         </Typography>
                         <Typography variant="body2" color="textSecondary">
-                          Best Way to Use Google Calendar on Mac & PC
+                          The Best Google Calendar Client
                         </Typography>
                       </div>
                     </div>
