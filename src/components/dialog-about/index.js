@@ -14,7 +14,10 @@ import isWindowsStore from '../../helpers/is-windows-store';
 import getStaticGlobal from '../../helpers/get-static-global';
 import getUtmSource from '../../helpers/get-utm-source';
 
-import { requestOpenInBrowser } from '../../senders';
+import {
+  requestOpenInBrowser,
+  requestShowOpenSourceNoticesWindow,
+} from '../../senders';
 
 import singleboxIconPng from '../../images/products/singlebox-mac-icon-128@2x.png';
 import cloveryIconPng from '../../images/products/clovery-mac-icon-128@2x.png';
@@ -151,6 +154,13 @@ const About = (props) => {
             </Button>
           </>
         )}
+
+        <br />
+        <Button
+          onClick={() => requestShowOpenSourceNoticesWindow()}
+        >
+          Open Source Notices
+        </Button>
       </DialogContent>
     </div>
   );

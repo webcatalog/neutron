@@ -49,6 +49,7 @@ import getStaticGlobal from '../../helpers/get-static-global';
 import getUtmSource from '../../helpers/get-utm-source';
 
 import {
+  enqueueRequestRestartSnackbar,
   requestCheckForUpdates,
   requestClearBrowsingData,
   requestOpenInBrowser,
@@ -60,7 +61,7 @@ import {
   requestShowAboutWindow,
   requestShowNotification,
   requestShowNotificationsWindow,
-  enqueueRequestRestartSnackbar,
+  requestShowOpenSourceNoticesWindow,
 } from '../../senders';
 
 import {
@@ -2031,32 +2032,29 @@ const Preferences = ({
                     <ListItemText primary="WebCatalog Help" />
                     <ChevronRightIcon color="action" />
                   </ListItem>
-                  <Divider />
-                  <ListItem
-                    button
-                    onClick={() => requestOpenInBrowser('https://alternativeto.net/software/webcatalog/about/')}
-                  >
-                    <ListItemText primary="Review WebCatalog on AlternativeTo" />
-                    <ChevronRightIcon color="action" />
-                  </ListItem>
-                  <Divider />
-                  <ListItem button onClick={() => requestOpenInBrowser('https://twitter.com/webcatalog_app')}>
-                    <ListItemText primary="Twitter" />
-                    <ChevronRightIcon color="action" />
-                  </ListItem>
-                  <Divider />
-                  <ListItem button onClick={() => requestOpenInBrowser('https://www.linkedin.com/company/webcatalogapp')}>
-                    <ListItemText primary="LinkedIn" />
-                    <ChevronRightIcon color="action" />
-                  </ListItem>
-                  <Divider />
-                  <ListItem button onClick={() => requestOpenInBrowser('https://github.com/webcatalog')}>
-                    <ListItemText primary="GitHub" />
-                    <ChevronRightIcon color="action" />
-                  </ListItem>
                 </>
               );
             })()}
+            <Divider />
+            <ListItem button onClick={requestShowOpenSourceNoticesWindow}>
+              <ListItemText primary="Open Source Notices" />
+              <ChevronRightIcon color="action" />
+            </ListItem>
+            <Divider />
+            <ListItem button onClick={() => requestOpenInBrowser('https://twitter.com/webcatalog_app')}>
+              <ListItemText primary="Twitter" />
+              <ChevronRightIcon color="action" />
+            </ListItem>
+            <Divider />
+            <ListItem button onClick={() => requestOpenInBrowser('https://www.linkedin.com/company/webcatalogapp')}>
+              <ListItemText primary="LinkedIn" />
+              <ChevronRightIcon color="action" />
+            </ListItem>
+            <Divider />
+            <ListItem button onClick={() => requestOpenInBrowser('https://github.com/webcatalog')}>
+              <ListItemText primary="GitHub" />
+              <ChevronRightIcon color="action" />
+            </ListItem>
             <Divider />
             <ListItem>
               <ListItemText primary="Warn before quitting" />
