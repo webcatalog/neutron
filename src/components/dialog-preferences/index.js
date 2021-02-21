@@ -283,7 +283,7 @@ const Preferences = ({
       text: 'Licensing',
       Icon: CheckCircleOutlineIcon,
       ref: useRef(),
-      hidden: isWindowsStore() || (isMas() && appJson.id === 'singlebox'),
+      hidden: (isWindowsStore() || isMas()) && appJson.registered,
     },
     general: {
       text: 'General',
@@ -381,8 +381,7 @@ const Preferences = ({
               } = sections[sectionKey];
               return (
                 <React.Fragment key={sectionKey}>
-                  {i > 0 && !isMas() && <Divider />}
-                  {i > 1 && isMas() && <Divider />}
+                  {i > 0 && <Divider />}
                   <ListItem button onClick={() => ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
                     <ListItemIcon>
                       <Icon />
@@ -397,7 +396,7 @@ const Preferences = ({
         </List>
       </div>
       <div className={classes.inner}>
-        {isWindowsStore() || (isMas() && appJson.id === 'singlebox') ? null : (
+        {(isWindowsStore() || isMas()) && appJson.registered ? null : (
           <>
             <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle} ref={sections.licensing.ref}>
               Licensing
