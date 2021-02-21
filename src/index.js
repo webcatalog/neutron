@@ -28,6 +28,7 @@ const DialogDisplayMedia = React.lazy(() => import('./components/dialog-display-
 const DialogEditWorkspace = React.lazy(() => import('./components/dialog-edit-workspace'));
 const DialogGoToUrl = React.lazy(() => import('./components/dialog-go-to-url'));
 const DialogNotifications = React.lazy(() => import('./components/dialog-notifications'));
+const DialogOpenSourceNotices = React.lazy(() => import('./components/dialog-open-source-notices'));
 const DialogOpenUrlWith = React.lazy(() => import('./components/dialog-open-url-with'));
 const DialogPreferences = React.lazy(() => import('./components/dialog-preferences'));
 const DialogWorkspacePreferences = React.lazy(() => import('./components/dialog-workspace-preferences'));
@@ -42,6 +43,7 @@ const App = () => {
     case 'edit-workspace': return <DialogEditWorkspace />;
     case 'go-to-url': return <DialogGoToUrl />;
     case 'notifications': return <DialogNotifications />;
+    case 'open-source-notices': return <DialogOpenSourceNotices />;
     case 'open-url-with': return <DialogOpenUrlWith />;
     case 'preferences': return <DialogPreferences />;
     case 'workspace-preferences': return <DialogWorkspacePreferences />;
@@ -111,6 +113,8 @@ const runApp = () => {
         document.title = 'Go to URL';
       } else if (window.mode === 'add-workspace') {
         document.title = 'Add Custom Workspace';
+      } else if (window.mode === 'open-source-notices') {
+        document.title = 'Open Source Notices';
       } else {
         document.title = appJson.name;
       }

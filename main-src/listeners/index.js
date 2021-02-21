@@ -88,6 +88,7 @@ const displayMediaWindow = require('../windows/display-media');
 const editWorkspaceWindow = require('../windows/edit-workspace');
 const mainWindow = require('../windows/main');
 const notificationsWindow = require('../windows/notifications');
+const openSourceNoticesWindow = require('../windows/open-source-notices');
 const preferencesWindow = require('../windows/preferences');
 const workspacePreferencesWindow = require('../windows/workspace-preferences');
 
@@ -167,6 +168,10 @@ const loadListeners = () => {
 
   ipcMain.on('request-show-about-window', () => {
     aboutWindow.show();
+  });
+
+  ipcMain.on('request-show-open-source-notices-window', () => {
+    openSourceNoticesWindow.show();
   });
 
   ipcMain.on('request-show-preferences-window', (e, scrollTo) => {
