@@ -997,7 +997,13 @@ const setActiveView = (browserWindow, id) => {
 };
 
 const realignActiveView = (browserWindow, activeId) => {
-  const view = browserWindow.getBrowserView();
+  let view = browserWindow.getBrowserView();
+
+  if (!view) {
+    view = getView(activeId);
+    browserWindow.setBrowserView(view);
+  }
+
   if (view && view.webContents) {
     const contentSize = browserWindow.getContentSize();
     if (getWorkspaceMeta(activeId).didFailLoad) {

@@ -24,7 +24,6 @@ const appJson = require('../constants/app-json');
 let win;
 let mb = {};
 let tray;
-let minimizedView;
 
 const get = () => {
   if (global.attachToMenubar) return mb.window;
@@ -268,20 +267,21 @@ const createAsync = () => new Promise((resolve) => {
     .then((isKde) => {
       if (!isKde) return;
       win.on('minimize', () => {
-        minimizedView = win.getBrowserView();
         win.setBrowserView(null);
-      });
-      win.on('restore', () => {
-        if (minimizedView != null) {
-          win.setBrowserView(minimizedView);
-          minimizedView = null;
-        }
       });
     });
 
+  win.on('restore', () => {
+    // we need this because:
+    // In KDE, we call setBrowserView(null) when the app is minimized so we need restore it
+    // also, this is to an attemp fix a bug on Windows which causes BrowserView not to show up
+    // after the window is minimizing for some time
+    // https://github.com/webcatalog/webcatalog-app/issues/1359
+    ipcMain.emit('request-realign-active-workspace');
+  });
+
   win.on('closed', () => {
     win = null;
-    minimizedView = null;
   });
 
   win.on('focus', () => {
