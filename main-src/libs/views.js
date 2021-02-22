@@ -997,7 +997,15 @@ const setActiveView = (browserWindow, id) => {
 };
 
 const realignActiveView = (browserWindow, activeId) => {
-  const view = browserWindow.getBrowserView();
+  const attachedView = browserWindow.getBrowserView();
+  const view = getView(activeId);
+
+  // if attachedView refers to same active object
+  // then we can skip this to avoid flickering
+  if (attachedView !== view) {
+    browserWindow.setBrowserView(view);
+  }
+
   if (view && view.webContents) {
     const contentSize = browserWindow.getContentSize();
     if (getWorkspaceMeta(activeId).didFailLoad) {
