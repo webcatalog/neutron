@@ -96,6 +96,7 @@ import SnackbarTrigger from '../shared/snackbar-trigger';
 import webcatalogIconPng from '../../images/products/webcatalog-mac-icon-128@2x.png';
 import translatiumIconPng from '../../images/products/translatium-mac-icon-128@2x.png';
 import singleboxIconPng from '../../images/products/singlebox-mac-icon-128@2x.png';
+import squeezerIconPng from '../../images/products/squeezer-mac-icon-128@2x.png';
 import cloveryIconPng from '../../images/products/clovery-mac-icon-128@2x.png';
 import dynamailIconPng from '../../images/products/dynamail-mac-icon-128@2x.png';
 import dynacalIconPng from '../../images/products/dynacal-mac-icon-128@2x.png';
@@ -1779,6 +1780,39 @@ const Preferences = ({
                         </Typography>
                         <Typography variant="body2" color="textSecondary">
                           Smart Browser for Busy People
+                        </Typography>
+                      </div>
+                    </div>
+                  </div>
+                  <ChevronRightIcon color="action" />
+                </ListItem>
+              </>
+            )}
+            {!isWindowsStore() && (
+              <>
+                <Divider />
+                <ListItem
+                  button
+                  onClick={() => {
+                    let url = `https://squeezer.app?utm_source=${utmSource}`;
+                    if (isMas()) {
+                      url = 'macappstore://apps.apple.com/us/app/squeezer-image-compression/id1554751184';
+                    }
+                    requestOpenInBrowser(url);
+                  }}
+                  className={classes.listItemPromotion}
+                >
+                  <div className={classes.promotionBlock}>
+                    <div className={classes.promotionLeft}>
+                      <img src={squeezerIconPng} alt="Squeezer" className={classes.appIcon} />
+                    </div>
+                    <div className={classes.promotionRight}>
+                      <div>
+                        <Typography variant="body1" className={classes.appTitle}>
+                          Squeezer
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary">
+                          Compress, Resize, Convert Images
                         </Typography>
                       </div>
                     </div>
