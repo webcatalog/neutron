@@ -1427,6 +1427,7 @@ const Preferences = ({
             <Divider />
             <ListItem button onClick={() => requestOpenInBrowser(`https://webcatalog.app/privacy?utm_source=${utmSource}`)}>
               <ListItemText primary="Privacy Policy" />
+              <ChevronRightIcon color="action" />
             </ListItem>
           </List>
         </Paper>
@@ -1436,13 +1437,13 @@ const Preferences = ({
         </Typography>
         <Paper elevation={0} className={classes.paper}>
           <List disablePadding dense>
-            {!isWindowsStore() && appJson.id !== 'dynacal' && appJson.id !== 'dynamail' && appJson.id !== 'panmail' && (
+            {appJson.id !== 'dynacal' && appJson.id !== 'dynamail' && appJson.id !== 'panmail' && (
               <>
                 <ListItemDefaultBrowser />
                 <Divider />
               </>
             )}
-            {!isWindowsStore() && appJson.id !== 'dynacal' && (
+            {appJson.id !== 'dynacal' && (
               <>
                 <ListItemDefaultMailClient />
                 <Divider />

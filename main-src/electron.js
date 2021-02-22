@@ -70,6 +70,7 @@ const sendToAllWindows = require('./libs/send-to-all-windows');
 const extractHostname = require('./libs/extract-hostname');
 const { getAppLockStatusAsync, unlockAppUsingTouchId } = require('./libs/app-lock');
 const isMacOs11 = require('./libs/is-mac-os-11');
+const isWindows10 = require('./libs/is-windows-10');
 const isMas = require('./libs/is-mas');
 const isWindowsStore = require('./libs/is-windows-store');
 const getIapFormattedPriceAsync = require('./libs/get-iap-formatted-price-async');
@@ -416,6 +417,7 @@ if (!gotTheLock) {
     }
 
     global.isMacOs11 = isMacOs11();
+    global.isWindows10 = isWindows10();
     global.attachToMenubar = attachToMenubar;
     global.runInBackground = process.platform !== 'darwin' && runInBackground;
     global.sidebar = sidebar;
