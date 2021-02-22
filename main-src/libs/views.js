@@ -997,10 +997,12 @@ const setActiveView = (browserWindow, id) => {
 };
 
 const realignActiveView = (browserWindow, activeId) => {
-  let view = browserWindow.getBrowserView();
+  const attachedView = browserWindow.getBrowserView();
+  const view = getView(activeId);
 
-  if (!view) {
-    view = getView(activeId);
+  // if attachedView refers to same active object
+  // then we can skip this to avoid flickering
+  if (attachedView !== view) {
     browserWindow.setBrowserView(view);
   }
 
