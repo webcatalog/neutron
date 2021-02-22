@@ -62,7 +62,6 @@ const { createMenu } = require('./libs/menu');
 const {
   addView,
   reloadViewsDarkReader,
-  destroyAllViews,
 } = require('./libs/views');
 const fetchUpdater = require('./libs/fetch-updater');
 const { getWorkspaces, setWorkspace } = require('./libs/workspaces');
@@ -466,11 +465,6 @@ if (!gotTheLock) {
         win.forceClose = true;
         // fix https://github.com/webcatalog/webcatalog-app/issues/1141
         win.setBrowserView(null);
-
-        // https://github.com/webcatalog/webcatalog-app/issues/1141
-        // the bug seems to only occur when there's BrowserView opened
-        // so destroy all BrowserViews before exiting
-        destroyAllViews();
       }
     };
 

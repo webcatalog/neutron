@@ -1101,7 +1101,6 @@ const reloadView = (id) => {
   }
 };
 
-// to be run before-quit
 const destroyAllViews = () => {
   Object.keys(views)
     .filter((id) => views[id] != null)
