@@ -1437,7 +1437,7 @@ const Preferences = ({
         </Typography>
         <Paper elevation={0} className={classes.paper}>
           <List disablePadding dense>
-            {appJson.id !== 'dynacal' && appJson.id !== 'dynamail' && appJson.id !== 'panmail' && (
+            {!isWindowsStore() && appJson.id !== 'dynacal' && appJson.id !== 'dynamail' && appJson.id !== 'panmail' && (
               <>
                 <ListItemDefaultBrowser />
                 <Divider />
