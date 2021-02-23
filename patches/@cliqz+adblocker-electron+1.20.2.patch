@@ -1,0 +1,32 @@
+diff --git a/node_modules/@cliqz/adblocker-electron/dist/cjs/adblocker.js b/node_modules/@cliqz/adblocker-electron/dist/cjs/adblocker.js
+index 06c620c..867569f 100644
+--- a/node_modules/@cliqz/adblocker-electron/dist/cjs/adblocker.js
++++ b/node_modules/@cliqz/adblocker-electron/dist/cjs/adblocker.js
+@@ -21,7 +21,10 @@ exports.ElectronBlocker = exports.BlockingContext = exports.fromElectronDetails
+ const electron_1 = require("electron");
+ const tldts_experimental_1 = require("tldts-experimental");
+ const adblocker_1 = require("@cliqz/adblocker");
+-const PRELOAD_PATH = require.resolve('@cliqz/adblocker-electron-preload');
++const path = require('path');
++const PRELOAD_PATH = process.env.NODE_ENV === 'production'
++    ? path.resolve(__dirname, 'adblocker-electron-preload.js')
++    : require.resolve('@cliqz/adblocker-electron-preload');
+ // https://stackoverflow.com/questions/48854265/why-do-i-see-an-electron-security-warning-after-updating-my-electron-project-t
+ process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
+ /**
+diff --git a/node_modules/@cliqz/adblocker-electron/dist/es6/adblocker.js b/node_modules/@cliqz/adblocker-electron/dist/es6/adblocker.js
+index 6f23303..66876ba 100644
+--- a/node_modules/@cliqz/adblocker-electron/dist/es6/adblocker.js
++++ b/node_modules/@cliqz/adblocker-electron/dist/es6/adblocker.js
+@@ -8,7 +8,10 @@
+ import { ipcMain } from 'electron';
+ import { parse } from 'tldts-experimental';
+ import { FiltersEngine, Request } from '@cliqz/adblocker';
+-const PRELOAD_PATH = require.resolve('@cliqz/adblocker-electron-preload');
++import path from 'path';
++const PRELOAD_PATH = process.env.NODE_ENV === 'production'
++    ? path.resolve(__dirname, 'adblocker-electron-preload.js')
++    : require.resolve('@cliqz/adblocker-electron-preload');
+ // https://stackoverflow.com/questions/48854265/why-do-i-see-an-electron-security-warning-after-updating-my-electron-project-t
+ process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
+ /**
