@@ -21,6 +21,7 @@ Object.keys(packageJson.dependencies)
 const getPreloadScriptsConfig = () => {
   const entry = {
     'view-preload': path.join(__dirname, 'main-src', 'libs', 'view-preload.js'),
+    'adblocker-electron-preload': path.join(__dirname, 'node_modules', '@cliqz', 'adblocker-electron-preload', 'dist', 'es6', 'preload.js'),
   };
 
   fs.readdirSync(path.join(__dirname, 'main-src', 'windows'))
@@ -46,6 +47,9 @@ const getPreloadScriptsConfig = () => {
     },
     devtool: 'source-map',
     plugins,
+    // optimization: {
+    //   minimize: false,
+    // },
   };
 };
 
@@ -89,6 +93,9 @@ const getElectronMainConfig = () => {
     },
     devtool: 'source-map',
     plugins,
+    // optimization: {
+    //   minimize: false,
+    // },
   };
 };
 
