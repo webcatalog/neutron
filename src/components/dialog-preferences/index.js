@@ -1915,38 +1915,40 @@ const Preferences = ({
               </div>
               <ChevronRightIcon color="action" />
             </ListItem>
-            <Divider />
-            <ListItem
-              button
-              onClick={() => {
-                let url = `https://dynamail.app?utm_source=${utmSource}`;
-                if (isMas()) {
-                  url = 'macappstore://apps.apple.com/app/dynamail-for-gmail/id1550739756';
-                } else if (isWindowsStore()) {
-                  url = 'ms-windows-store://pdp/?productid=9N57L5VQTB21';
-                }
-                requestOpenInBrowser(url);
-              }}
-              className={classes.listItemPromotion}
-            >
-              <div className={classes.promotionBlock}>
-                <div className={classes.promotionLeft}>
-                  <img src={dynamailIconPng} alt="DynaMail" className={classes.appIcon} />
-                </div>
-                <div className={classes.promotionRight}>
-                  <div>
-                    <Typography variant="body1" className={classes.appTitle}>
-                      DynaMail
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary">
-                      The Best Gmail Client
-                    </Typography>
+            {isMas() && (
+              <>
+                <Divider />
+                <ListItem
+                  button
+                  onClick={() => {
+                    let url = `https://dynamail.app?utm_source=${utmSource}`;
+                    if (isMas()) {
+                      url = 'macappstore://apps.apple.com/app/dynamail-for-gmail/id1550739756';
+                    }
+                    requestOpenInBrowser(url);
+                  }}
+                  className={classes.listItemPromotion}
+                >
+                  <div className={classes.promotionBlock}>
+                    <div className={classes.promotionLeft}>
+                      <img src={dynamailIconPng} alt="DynaMail" className={classes.appIcon} />
+                    </div>
+                    <div className={classes.promotionRight}>
+                      <div>
+                        <Typography variant="body1" className={classes.appTitle}>
+                          DynaMail
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary">
+                          Gmail Client
+                        </Typography>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-              <ChevronRightIcon color="action" />
-            </ListItem>
-            {!isWindowsStore() && (
+                  <ChevronRightIcon color="action" />
+                </ListItem>
+              </>
+            )}
+            {isMas() && (
               <>
                 <Divider />
                 <ListItem
@@ -1970,7 +1972,7 @@ const Preferences = ({
                           DynaCal
                         </Typography>
                         <Typography variant="body2" color="textSecondary">
-                          The Best Google Calendar Client
+                          Google Calendar Client
                         </Typography>
                       </div>
                     </div>
