@@ -1924,8 +1924,6 @@ const Preferences = ({
                     let url = `https://dynamail.app?utm_source=${utmSource}`;
                     if (isMas()) {
                       url = 'macappstore://apps.apple.com/app/dynamail-for-gmail/id1550739756';
-                    } else if (isWindowsStore()) {
-                      url = 'ms-windows-store://pdp/?productid=9N57L5VQTB21';
                     }
                     requestOpenInBrowser(url);
                   }}
@@ -1941,7 +1939,7 @@ const Preferences = ({
                           DynaMail
                         </Typography>
                         <Typography variant="body2" color="textSecondary">
-                          The Best Gmail Client
+                          Gmail Client
                         </Typography>
                       </div>
                     </div>
@@ -1974,7 +1972,7 @@ const Preferences = ({
                           DynaCal
                         </Typography>
                         <Typography variant="body2" color="textSecondary">
-                          The Best Google Calendar Client
+                          Google Calendar Client
                         </Typography>
                       </div>
                     </div>
