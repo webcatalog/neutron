@@ -356,6 +356,7 @@ const Preferences = ({
       text: 'More Apps',
       Icon: StorefrontIcon,
       ref: useRef(),
+      hidden: !isMas() && !isWindowsStore(),
     },
     miscs: {
       text: 'Miscellaneous',
@@ -1694,77 +1695,48 @@ const Preferences = ({
           additional code, or resources to add functionality
           or significantly change the app from what
           we see during the review process. */}
-        <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle} ref={sections.moreApps.ref}>
-          More Apps
-        </Typography>
-        <Paper elevation={0} className={classes.paper}>
-          <List disablePadding dense>
-            {!isMas() && !isWindowsStore() && (
-              <>
-                <ListItem
-                  button
-                  onClick={() => requestOpenInBrowser('https://webcatalog.app?utm_source=webcatalog_app')}
-                  className={classes.listItemPromotion}
-                >
-                  <div className={classes.promotionBlock}>
-                    <div className={classes.promotionLeft}>
-                      <img src={webcatalogIconPng} alt="WebCatalog" className={classes.appIcon} />
-                    </div>
-                    <div className={classes.promotionRight}>
-                      <div>
-                        <Typography variant="body1" className={classes.appTitle}>
-                          WebCatalog
-                        </Typography>
-                        <Typography variant="body2" color="textSecondary">
-                          Turn Any Websites Into Desktop Apps
-                        </Typography>
+        {(isMas() || isWindowsStore()) && (
+          <>
+            <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle} ref={sections.moreApps.ref}>
+              More Apps
+            </Typography>
+            <Paper elevation={0} className={classes.paper}>
+              <List disablePadding dense>
+                {!isMas() && !isWindowsStore() && (
+                  <>
+                    <ListItem
+                      button
+                      onClick={() => requestOpenInBrowser('https://webcatalog.app?utm_source=webcatalog_app')}
+                      className={classes.listItemPromotion}
+                    >
+                      <div className={classes.promotionBlock}>
+                        <div className={classes.promotionLeft}>
+                          <img src={webcatalogIconPng} alt="WebCatalog" className={classes.appIcon} />
+                        </div>
+                        <div className={classes.promotionRight}>
+                          <div>
+                            <Typography variant="body1" className={classes.appTitle}>
+                              WebCatalog
+                            </Typography>
+                            <Typography variant="body2" color="textSecondary">
+                              Turn Any Websites Into Desktop Apps
+                            </Typography>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-                <Divider />
-              </>
-            )}
-            <ListItem
-              button
-              onClick={() => {
-                let url = `https://translatium.app?utm_source=${utmSource}`;
-                if (isMas()) {
-                  url = 'macappstore://apps.apple.com/app/translatium/id1547052291';
-                } else if (isWindowsStore()) {
-                  url = 'ms-windows-store://pdp/?productid=9MWPG56JKS38';
-                }
-                requestOpenInBrowser(url);
-              }}
-              className={classes.listItemPromotion}
-            >
-              <div className={classes.promotionBlock}>
-                <div className={classes.promotionLeft}>
-                  <img src={translatiumIconPng} alt="Translatium" className={classes.appIcon} />
-                </div>
-                <div className={classes.promotionRight}>
-                  <div>
-                    <Typography variant="body1" className={classes.appTitle}>
-                      Translatium
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary">
-                      Translate 100+ Languages Instantly
-                    </Typography>
-                  </div>
-                </div>
-              </div>
-              <ChevronRightIcon color="action" />
-            </ListItem>
-            {!isWindowsStore() && (
-              <>
-                <Divider />
+                      <ChevronRightIcon color="action" />
+                    </ListItem>
+                    <Divider />
+                  </>
+                )}
                 <ListItem
                   button
                   onClick={() => {
-                    let url = `https://singlebox.app?utm_source=${utmSource}`;
+                    let url = `https://translatium.app?utm_source=${utmSource}`;
                     if (isMas()) {
-                      url = 'macappstore://apps.apple.com/app/singlebox/id1548853763';
+                      url = 'macappstore://apps.apple.com/app/translatium/id1547052291';
+                    } else if (isWindowsStore()) {
+                      url = 'ms-windows-store://pdp/?productid=9MWPG56JKS38';
                     }
                     requestOpenInBrowser(url);
                   }}
@@ -1772,32 +1744,96 @@ const Preferences = ({
                 >
                   <div className={classes.promotionBlock}>
                     <div className={classes.promotionLeft}>
-                      <img src={singleboxIconPng} alt="Singlebox" className={classes.appIcon} />
+                      <img src={translatiumIconPng} alt="Translatium" className={classes.appIcon} />
                     </div>
                     <div className={classes.promotionRight}>
                       <div>
                         <Typography variant="body1" className={classes.appTitle}>
-                          Singlebox
+                          Translatium
                         </Typography>
                         <Typography variant="body2" color="textSecondary">
-                          Smart Browser for Busy People
+                          Translate 100+ Languages Instantly
                         </Typography>
                       </div>
                     </div>
                   </div>
                   <ChevronRightIcon color="action" />
                 </ListItem>
-              </>
-            )}
-            {!isWindowsStore() && (
-              <>
+                {!isWindowsStore() && (
+                  <>
+                    <Divider />
+                    <ListItem
+                      button
+                      onClick={() => {
+                        let url = `https://singlebox.app?utm_source=${utmSource}`;
+                        if (isMas()) {
+                          url = 'macappstore://apps.apple.com/app/singlebox/id1548853763';
+                        }
+                        requestOpenInBrowser(url);
+                      }}
+                      className={classes.listItemPromotion}
+                    >
+                      <div className={classes.promotionBlock}>
+                        <div className={classes.promotionLeft}>
+                          <img src={singleboxIconPng} alt="Singlebox" className={classes.appIcon} />
+                        </div>
+                        <div className={classes.promotionRight}>
+                          <div>
+                            <Typography variant="body1" className={classes.appTitle}>
+                              Singlebox
+                            </Typography>
+                            <Typography variant="body2" color="textSecondary">
+                              Smart Browser for Busy People
+                            </Typography>
+                          </div>
+                        </div>
+                      </div>
+                      <ChevronRightIcon color="action" />
+                    </ListItem>
+                  </>
+                )}
+                {!isWindowsStore() && (
+                  <>
+                    <Divider />
+                    <ListItem
+                      button
+                      onClick={() => {
+                        let url = `https://squeezer.app?utm_source=${utmSource}`;
+                        if (isMas()) {
+                          url = 'macappstore://apps.apple.com/us/app/squeezer-image-compression/id1554751184';
+                        }
+                        requestOpenInBrowser(url);
+                      }}
+                      className={classes.listItemPromotion}
+                    >
+                      <div className={classes.promotionBlock}>
+                        <div className={classes.promotionLeft}>
+                          <img src={squeezerIconPng} alt="Squeezer" className={classes.appIcon} />
+                        </div>
+                        <div className={classes.promotionRight}>
+                          <div>
+                            <Typography variant="body1" className={classes.appTitle}>
+                              Squeezer
+                            </Typography>
+                            <Typography variant="body2" color="textSecondary">
+                              Compress, Resize, Convert Images
+                            </Typography>
+                          </div>
+                        </div>
+                      </div>
+                      <ChevronRightIcon color="action" />
+                    </ListItem>
+                  </>
+                )}
                 <Divider />
                 <ListItem
                   button
                   onClick={() => {
-                    let url = `https://squeezer.app?utm_source=${utmSource}`;
+                    let url = `https://clovery.app?utm_source=${utmSource}`;
                     if (isMas()) {
-                      url = 'macappstore://apps.apple.com/us/app/squeezer-image-compression/id1554751184';
+                      url = 'macappstore://apps.apple.com/us/app/clovery-for-google-apps/id1552618413';
+                    } else if (isWindowsStore()) {
+                      url = 'ms-windows-store://pdp/?productid=9NT71213J864';
                     }
                     requestOpenInBrowser(url);
                   }}
@@ -1805,125 +1841,30 @@ const Preferences = ({
                 >
                   <div className={classes.promotionBlock}>
                     <div className={classes.promotionLeft}>
-                      <img src={squeezerIconPng} alt="Squeezer" className={classes.appIcon} />
+                      <img src={cloveryIconPng} alt="Clovery" className={classes.appIcon} />
                     </div>
                     <div className={classes.promotionRight}>
                       <div>
                         <Typography variant="body1" className={classes.appTitle}>
-                          Squeezer
+                          Clovery
                         </Typography>
                         <Typography variant="body2" color="textSecondary">
-                          Compress, Resize, Convert Images
+                          All Google Apps in One
                         </Typography>
                       </div>
                     </div>
                   </div>
                   <ChevronRightIcon color="action" />
                 </ListItem>
-              </>
-            )}
-            <Divider />
-            <ListItem
-              button
-              onClick={() => {
-                let url = `https://clovery.app?utm_source=${utmSource}`;
-                if (isMas()) {
-                  url = 'macappstore://apps.apple.com/us/app/clovery-for-google-apps/id1552618413';
-                } else if (isWindowsStore()) {
-                  url = 'ms-windows-store://pdp/?productid=9NT71213J864';
-                }
-                requestOpenInBrowser(url);
-              }}
-              className={classes.listItemPromotion}
-            >
-              <div className={classes.promotionBlock}>
-                <div className={classes.promotionLeft}>
-                  <img src={cloveryIconPng} alt="Clovery" className={classes.appIcon} />
-                </div>
-                <div className={classes.promotionRight}>
-                  <div>
-                    <Typography variant="body1" className={classes.appTitle}>
-                      Clovery
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary">
-                      All Google Apps in One
-                    </Typography>
-                  </div>
-                </div>
-              </div>
-              <ChevronRightIcon color="action" />
-            </ListItem>
-            <Divider />
-            <ListItem
-              button
-              onClick={() => {
-                let url = `https://pantext.app?utm_source=${utmSource}`;
-                if (isMas()) {
-                  url = 'macappstore://apps.apple.com/us/app/pantext-all-in-one-messenger/id1551183766';
-                } else if (isWindowsStore()) {
-                  url = 'ms-windows-store://pdp/?productid=9NH85V7VL3RN';
-                }
-                requestOpenInBrowser(url);
-              }}
-              className={classes.listItemPromotion}
-            >
-              <div className={classes.promotionBlock}>
-                <div className={classes.promotionLeft}>
-                  <img src={pantextIconPng} alt="PanText" className={classes.appIcon} />
-                </div>
-                <div className={classes.promotionRight}>
-                  <div>
-                    <Typography variant="body1" className={classes.appTitle}>
-                      PanText
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary">
-                      All Your Messaging Apps in One
-                    </Typography>
-                  </div>
-                </div>
-              </div>
-              <ChevronRightIcon color="action" />
-            </ListItem>
-            <Divider />
-            <ListItem
-              button
-              onClick={() => {
-                let url = `https://panmail.app?utm_source=${utmSource}`;
-                if (isMas()) {
-                  url = 'macappstore://apps.apple.com/us/app/panmail/id1551178702';
-                } else if (isWindowsStore()) {
-                  url = 'ms-windows-store://pdp/?productid=9N4TTMNHP3C4';
-                }
-                requestOpenInBrowser(url);
-              }}
-              className={classes.listItemPromotion}
-            >
-              <div className={classes.promotionBlock}>
-                <div className={classes.promotionLeft}>
-                  <img src={panmailIconPng} alt="PanMail" className={classes.appIcon} />
-                </div>
-                <div className={classes.promotionRight}>
-                  <div>
-                    <Typography variant="body1" className={classes.appTitle}>
-                      PanMail
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary">
-                      All Your Email Apps in One
-                    </Typography>
-                  </div>
-                </div>
-              </div>
-              <ChevronRightIcon color="action" />
-            </ListItem>
-            {isMas() && (
-              <>
                 <Divider />
                 <ListItem
                   button
                   onClick={() => {
-                    let url = `https://dynamail.app?utm_source=${utmSource}`;
+                    let url = `https://pantext.app?utm_source=${utmSource}`;
                     if (isMas()) {
-                      url = 'macappstore://apps.apple.com/app/dynamail-for-gmail/id1550739756';
+                      url = 'macappstore://apps.apple.com/us/app/pantext-all-in-one-messenger/id1551183766';
+                    } else if (isWindowsStore()) {
+                      url = 'ms-windows-store://pdp/?productid=9NH85V7VL3RN';
                     }
                     requestOpenInBrowser(url);
                   }}
@@ -1931,32 +1872,30 @@ const Preferences = ({
                 >
                   <div className={classes.promotionBlock}>
                     <div className={classes.promotionLeft}>
-                      <img src={dynamailIconPng} alt="DynaMail" className={classes.appIcon} />
+                      <img src={pantextIconPng} alt="PanText" className={classes.appIcon} />
                     </div>
                     <div className={classes.promotionRight}>
                       <div>
                         <Typography variant="body1" className={classes.appTitle}>
-                          DynaMail
+                          PanText
                         </Typography>
                         <Typography variant="body2" color="textSecondary">
-                          Gmail Client
+                          All Your Messaging Apps in One
                         </Typography>
                       </div>
                     </div>
                   </div>
                   <ChevronRightIcon color="action" />
                 </ListItem>
-              </>
-            )}
-            {isMas() && (
-              <>
                 <Divider />
                 <ListItem
                   button
                   onClick={() => {
-                    let url = `https://dynacal.app?utm_source=${utmSource}`;
+                    let url = `https://panmail.app?utm_source=${utmSource}`;
                     if (isMas()) {
-                      url = 'macappstore://apps.apple.com/us/app/dynacal-for-google-calendar/id1552616851';
+                      url = 'macappstore://apps.apple.com/us/app/panmail/id1551178702';
+                    } else if (isWindowsStore()) {
+                      url = 'ms-windows-store://pdp/?productid=9N4TTMNHP3C4';
                     }
                     requestOpenInBrowser(url);
                   }}
@@ -1964,25 +1903,91 @@ const Preferences = ({
                 >
                   <div className={classes.promotionBlock}>
                     <div className={classes.promotionLeft}>
-                      <img src={dynacalIconPng} alt="DynaCal" className={classes.appIcon} />
+                      <img src={panmailIconPng} alt="PanMail" className={classes.appIcon} />
                     </div>
                     <div className={classes.promotionRight}>
                       <div>
                         <Typography variant="body1" className={classes.appTitle}>
-                          DynaCal
+                          PanMail
                         </Typography>
                         <Typography variant="body2" color="textSecondary">
-                          Google Calendar Client
+                          All Your Email Apps in One
                         </Typography>
                       </div>
                     </div>
                   </div>
                   <ChevronRightIcon color="action" />
                 </ListItem>
-              </>
-            )}
-          </List>
-        </Paper>
+                {isMas() && (
+                  <>
+                    <Divider />
+                    <ListItem
+                      button
+                      onClick={() => {
+                        let url = `https://dynamail.app?utm_source=${utmSource}`;
+                        if (isMas()) {
+                          url = 'macappstore://apps.apple.com/app/dynamail-for-gmail/id1550739756';
+                        }
+                        requestOpenInBrowser(url);
+                      }}
+                      className={classes.listItemPromotion}
+                    >
+                      <div className={classes.promotionBlock}>
+                        <div className={classes.promotionLeft}>
+                          <img src={dynamailIconPng} alt="DynaMail" className={classes.appIcon} />
+                        </div>
+                        <div className={classes.promotionRight}>
+                          <div>
+                            <Typography variant="body1" className={classes.appTitle}>
+                              DynaMail
+                            </Typography>
+                            <Typography variant="body2" color="textSecondary">
+                              Gmail Client
+                            </Typography>
+                          </div>
+                        </div>
+                      </div>
+                      <ChevronRightIcon color="action" />
+                    </ListItem>
+                  </>
+                )}
+                {isMas() && (
+                  <>
+                    <Divider />
+                    <ListItem
+                      button
+                      onClick={() => {
+                        let url = `https://dynacal.app?utm_source=${utmSource}`;
+                        if (isMas()) {
+                          url = 'macappstore://apps.apple.com/us/app/dynacal-for-google-calendar/id1552616851';
+                        }
+                        requestOpenInBrowser(url);
+                      }}
+                      className={classes.listItemPromotion}
+                    >
+                      <div className={classes.promotionBlock}>
+                        <div className={classes.promotionLeft}>
+                          <img src={dynacalIconPng} alt="DynaCal" className={classes.appIcon} />
+                        </div>
+                        <div className={classes.promotionRight}>
+                          <div>
+                            <Typography variant="body1" className={classes.appTitle}>
+                              DynaCal
+                            </Typography>
+                            <Typography variant="body2" color="textSecondary">
+                              Google Calendar Client
+                            </Typography>
+                          </div>
+                        </div>
+                      </div>
+                      <ChevronRightIcon color="action" />
+                    </ListItem>
+                  </>
+                )}
+              </List>
+            </Paper>
+          </>
+        )}
 
         <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.miscs.ref}>
           Miscellaneous
@@ -2076,21 +2081,15 @@ const Preferences = ({
               <ListItemText primary="Open Source Notices" />
               <ChevronRightIcon color="action" />
             </ListItem>
-            <Divider />
-            <ListItem button onClick={() => requestOpenInBrowser('https://twitter.com/webcatalog_app')}>
-              <ListItemText primary="Twitter" />
-              <ChevronRightIcon color="action" />
-            </ListItem>
-            <Divider />
-            <ListItem button onClick={() => requestOpenInBrowser('https://www.linkedin.com/company/webcatalogapp')}>
-              <ListItemText primary="LinkedIn" />
-              <ChevronRightIcon color="action" />
-            </ListItem>
-            <Divider />
-            <ListItem button onClick={() => requestOpenInBrowser('https://github.com/webcatalog')}>
-              <ListItemText primary="GitHub" />
-              <ChevronRightIcon color="action" />
-            </ListItem>
+            {!isMas() && !isWindowsStore() && (
+              <>
+                <Divider />
+                <ListItem button onClick={() => requestOpenInBrowser('https://twitter.com/webcatalog_app')}>
+                  <ListItemText primary="Find Us on Twitter" />
+                  <ChevronRightIcon color="action" />
+                </ListItem>
+              </>
+            )}
             <Divider />
             <ListItem>
               <ListItemText primary="Warn before quitting" />
