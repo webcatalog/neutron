@@ -144,8 +144,8 @@ const initCachedPreferences = () => {
 
   // this feature used to be free on MAS
   // so we need this code to deactivate it for free users
-  // note: this feature is always free witH WebCatalog
-  if (isMas() && !appJson.registered && !cachedPreferences.iapPurchased) {
+  // note: this feature is always free with WebCatalog
+  if (isMas() && !appJson.iapPurchased && !cachedPreferences.iapPurchased) {
     cachedPreferences.attachToMenubar = false;
   }
 };

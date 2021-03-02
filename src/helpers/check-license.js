@@ -12,7 +12,7 @@ const checkLicense = () => {
   const appJson = getStaticGlobal('appJson');
   const iapPurchased = isMas() ? getPreference('iapPurchased') : false;
 
-  if (!appJson.registered && !iapPurchased) {
+  if (!appJson.iapPurchased && !iapPurchased) {
     requestShowRequireLicenseDialog();
     return false;
   }

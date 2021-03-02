@@ -351,9 +351,8 @@ const loadListeners = () => {
   });
 
   ipcMain.on('request-create-workspace', (e, workspaceObj = {}) => {
-    const { registered } = global.appJson;
     const iapPurchased = isMas() ? getPreference('iapPurchased') : false;
-    if (!registered && !iapPurchased) {
+    if (!global.appJson.iapPurchased && !iapPurchased) {
       const workspaces = getWorkspaces();
 
       const maxWorkspaceNum = 2;

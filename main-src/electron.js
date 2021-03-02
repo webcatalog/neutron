@@ -431,7 +431,7 @@ if (!gotTheLock) {
         }
 
         // pre-cache pricing for (PanText|PanMail|DynaMail|...) Plus
-        if (isMas() && !appJson.registered && !getPreference('iapPurchased')) {
+        if (isMas() && !appJson.iapPurchased && !getPreference('iapPurchased')) {
           const productIdentifier = `${appJson.id}_plus`;
           getIapFormattedPriceAsync(productIdentifier);
         }

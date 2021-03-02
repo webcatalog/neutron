@@ -263,24 +263,24 @@ const Preferences = ({
   const utmSource = getUtmSource();
   const canPromptTouchId = window.process.platform === 'darwin'
     && window.remote.systemPreferences.canPromptTouchID();
-  const registered = appJson.registered || iapPurchased;
+  const iapPurchased = appJson.iapPurchased || iapPurchased;
 
   const [formattedPrice, setFormattedPrice] = useState(isMas() ? null : '30 USD');
   useEffect(() => {
-    if (isMas() && !registered) {
+    if (isMas() && !iapPurchased) {
       getIapFormattedPriceAsync(`${appJson.id}_plus`)
         .then((value) => {
           setFormattedPrice(value);
         });
     }
-  }, [appJson, setFormattedPrice, registered]);
+  }, [appJson, setFormattedPrice, iapPurchased]);
 
   const sections = {
     licensing: {
       text: 'Licensing',
       Icon: CheckCircleOutlineIcon,
       ref: useRef(),
-      hidden: (isWindowsStore() || isMas()) && appJson.registered,
+      hidden: (isWindowsStore() || isMas()) && appJson.iapPurchased,
     },
     general: {
       text: 'General',
@@ -389,7 +389,7 @@ const Preferences = ({
         </List>
       </div>
       <div className={classes.inner}>
-        {(isWindowsStore() || isMas()) && appJson.registered ? null : (
+        {(isWindowsStore() || isMas()) && appJson.iapPurchased ? null : (
           <>
             <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle} ref={sections.licensing.ref}>
               Licensing
@@ -397,9 +397,9 @@ const Preferences = ({
             <Paper elevation={0} className={classes.paper}>
               <List disablePadding dense>
                 <ListItem button onClick={null} disabled>
-                  <ListItemText primary={registered ? `${isMas() ? appJson.name : 'WebCatalog'} Plus is activated.` : `Upgrade to ${isMas() ? appJson.name : 'WebCatalog'} Plus (${formattedPrice ? `${formattedPrice}, ` : ''}one-time payment) to unlock all features & add unlimited number of workspaces.`} />
+                  <ListItemText primary={iapPurchased ? `${isMas() ? appJson.name : 'WebCatalog'} Plus is activated.` : `Upgrade to ${isMas() ? appJson.name : 'WebCatalog'} Plus (${formattedPrice ? `${formattedPrice}, ` : ''}one-time payment) to unlock all features & add unlimited number of workspaces.`} />
                 </ListItem>
-                {!registered && (
+                {!iapPurchased && (
                   <>
                     <Divider />
                     <ListItem button onClick={checkLicense}>

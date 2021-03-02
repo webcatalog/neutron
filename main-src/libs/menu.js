@@ -56,7 +56,6 @@ const getWorkspaceName = (workspace) => {
 const createMenu = async () => {
   const workspaces = getWorkspaces();
   const hasWorkspaces = Object.keys(workspaces).length > 0;
-  const { registered } = appJson;
   const utmSource = getUtmSource();
 
   const handleZoomIn = (menuItem, browserWindow) => {
@@ -95,20 +94,6 @@ const createMenu = async () => {
     },
   ] : [];
 
-  const licensingMenuItems = (isMas() || isWindowsStore()) ? [] : [
-    { type: 'separator' },
-    {
-      label: registered ? 'WebCatalog Plus' : 'WebCatalog Basic',
-      enabled: false,
-      click: null,
-    },
-    {
-      label: 'Upgrade...',
-      visible: !registered,
-      click: registered ? null : () => ipcMain.emit('request-show-require-license-dialog'),
-    },
-  ];
-
   const muteApp = getPreference('muteApp');
 
   const template = [
@@ -120,7 +105,6 @@ const createMenu = async () => {
           click: () => ipcMain.emit('request-show-about-window'),
         },
         { type: 'separator' },
-        ...licensingMenuItems,
         ...lockMenuItems,
         {
           label: 'Check for Updates...',
