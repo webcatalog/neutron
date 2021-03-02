@@ -9,7 +9,6 @@ const {
   ipcMain,
   nativeTheme,
   protocol,
-  session,
   BrowserWindow,
   inAppPurchase,
 } = require('electron');
