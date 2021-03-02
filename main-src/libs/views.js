@@ -200,10 +200,6 @@ const addView = (browserWindow, workspace) => {
   firstLoadPreferences = firstLoadPreferences || getPreferences();
   const {
     blockAds,
-    proxyBypassRules,
-    proxyPacScript,
-    proxyRules,
-    proxyType,
     rememberLastPageVisited,
     shareWorkspaceBrowsingData,
     spellcheck,
@@ -211,21 +207,9 @@ const addView = (browserWindow, workspace) => {
     unreadCountBadge,
   } = firstLoadPreferences;
 
-  // configure session, proxy & ad blocker
+  // configure session & ad blocker
   const ses = session.fromPartition(shareWorkspaceBrowsingData ? 'persist:shared' : `persist:${workspace.id}`);
 
-  // proxy
-  if (proxyType === 'rules') {
-    ses.setProxy({
-      proxyRules,
-      proxyBypassRules,
-    });
-  } else if (proxyType === 'pacScript') {
-    ses.setProxy({
-      proxyPacScript,
-      proxyBypassRules,
-    });
-  }
   // blocker
   if (blockAds) {
     ElectronBlocker.fromPrebuiltAdsAndTracking(customizedFetch, {
