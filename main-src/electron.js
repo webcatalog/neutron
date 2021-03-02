@@ -9,7 +9,6 @@ const {
   ipcMain,
   nativeTheme,
   protocol,
-  session,
   BrowserWindow,
   inAppPurchase,
 } = require('electron');
@@ -270,26 +269,9 @@ if (!gotTheLock) {
       .then(() => {
         const {
           hibernateUnusedWorkspacesAtLaunch,
-          proxyBypassRules,
-          proxyPacScript,
-          proxyRules,
-          proxyType,
           themeSource,
           privacyConsentAsked,
         } = getPreferences();
-
-        // configure proxy for default session
-        if (proxyType === 'rules') {
-          session.defaultSession.setProxy({
-            proxyRules,
-            proxyBypassRules,
-          });
-        } else if (proxyType === 'pacScript') {
-          session.defaultSession.setProxy({
-            proxyPacScript,
-            proxyBypassRules,
-          });
-        }
 
         nativeTheme.themeSource = themeSource;
 
