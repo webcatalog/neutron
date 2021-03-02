@@ -263,17 +263,17 @@ const Preferences = ({
   const utmSource = getUtmSource();
   const canPromptTouchId = window.process.platform === 'darwin'
     && window.remote.systemPreferences.canPromptTouchID();
-  const iapPurchased = appJson.iapPurchased || iapPurchased;
+  const combinedIapPurchased = appJson.iapPurchased || iapPurchased;
 
   const [formattedPrice, setFormattedPrice] = useState(isMas() ? null : '30 USD');
   useEffect(() => {
-    if (isMas() && !iapPurchased) {
+    if (isMas() && !combinedIapPurchased) {
       getIapFormattedPriceAsync(`${appJson.id}_plus`)
         .then((value) => {
           setFormattedPrice(value);
         });
     }
-  }, [appJson, setFormattedPrice, iapPurchased]);
+  }, [appJson, setFormattedPrice, combinedIapPurchased]);
 
   const sections = {
     licensing: {
@@ -397,9 +397,9 @@ const Preferences = ({
             <Paper elevation={0} className={classes.paper}>
               <List disablePadding dense>
                 <ListItem button onClick={null} disabled>
-                  <ListItemText primary={iapPurchased ? `${isMas() ? appJson.name : 'WebCatalog'} Plus is activated.` : `Upgrade to ${isMas() ? appJson.name : 'WebCatalog'} Plus (${formattedPrice ? `${formattedPrice}, ` : ''}one-time payment) to unlock all features & add unlimited number of workspaces.`} />
+                  <ListItemText primary={combinedIapPurchased ? `${isMas() ? appJson.name : 'WebCatalog'} Plus is activated.` : `Upgrade to ${isMas() ? appJson.name : 'WebCatalog'} Plus (${formattedPrice ? `${formattedPrice}, ` : ''}one-time payment) to unlock all features & add unlimited number of workspaces.`} />
                 </ListItem>
-                {!iapPurchased && (
+                {!combinedIapPurchased && (
                   <>
                     <Divider />
                     <ListItem button onClick={checkLicense}>
