@@ -105,3 +105,6 @@ export const signalOnlineStatusChanged = (online) => window.ipcRenderer.send('on
 export const requestLockApp = () => window.ipcRenderer.send('request-lock-app');
 export const requestUnlockApp = (password) => window.ipcRenderer.send('request-unlock-app', password);
 export const requestUnlockAppUsingTouchId = () => window.ipcRenderer.send('request-unlock-app-using-touch-id');
+
+// Firebase
+export const requestCheckAuthJson = () => window.ipcRenderer.send('request-check-auth-json');

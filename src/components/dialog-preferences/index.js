@@ -20,6 +20,7 @@ import Slider from '@material-ui/core/Slider';
 import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
 
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import BuildIcon from '@material-ui/icons/Build';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -44,6 +45,7 @@ import checkLicense from '../../helpers/check-license';
 import roundTime from '../../helpers/round-time';
 import isMas from '../../helpers/is-mas';
 import isWindowsStore from '../../helpers/is-windows-store';
+import isBundled from '../../helpers/is-bundled';
 import getStaticGlobal from '../../helpers/get-static-global';
 import getUtmSource from '../../helpers/get-utm-source';
 
@@ -99,6 +101,8 @@ import dynamailIconPng from '../../images/products/dynamail-mac-icon-128@2x.png'
 import dynacalIconPng from '../../images/products/dynacal-mac-icon-128@2x.png';
 import pantextIconPng from '../../images/products/pantext-mac-icon-128@2x.png';
 import panmailIconPng from '../../images/products/panmail-mac-icon-128@2x.png';
+
+import SectionAccount from './section-account';
 
 const styles = (theme) => ({
   root: {
@@ -276,11 +280,17 @@ const Preferences = ({
   }, [appJson, setFormattedPrice, combinedIapPurchased]);
 
   const sections = {
+    account: {
+      text: 'Account',
+      Icon: AccountCircleIcon,
+      ref: useRef(),
+      hidden: !isBundled(),
+    },
     licensing: {
       text: 'Licensing',
       Icon: CheckCircleOutlineIcon,
       ref: useRef(),
-      hidden: (isWindowsStore() || isMas()) && appJson.iapPurchased,
+      hidden: isBundled() || appJson.iapPurchased,
     },
     general: {
       text: 'General',
@@ -347,7 +357,7 @@ const Preferences = ({
       text: 'More Apps',
       Icon: StorefrontIcon,
       ref: useRef(),
-      hidden: !isMas() && !isWindowsStore(),
+      hidden: isBundled(),
     },
     miscs: {
       text: 'Miscellaneous',
@@ -389,7 +399,18 @@ const Preferences = ({
         </List>
       </div>
       <div className={classes.inner}>
-        {(isWindowsStore() || isMas()) && appJson.iapPurchased ? null : (
+        {(!isBundled()) ? null : (
+          <>
+            <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle} ref={sections.account.ref}>
+              Account
+            </Typography>
+            <Paper elevation={0} className={classes.paper}>
+              <SectionAccount />
+            </Paper>
+          </>
+        )}
+
+        {(isBundled() || appJson.iapPurchased) ? null : (
           <>
             <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle} ref={sections.licensing.ref}>
               Licensing
@@ -1604,7 +1625,7 @@ const Preferences = ({
           </List>
         </Paper>
 
-        {!isMas() && !isWindowsStore() && (
+        {isBundled() && (
           <>
             <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.updates.ref}>
               Updates
@@ -1674,7 +1695,7 @@ const Preferences = ({
           additional code, or resources to add functionality
           or significantly change the app from what
           we see during the review process. */}
-        {(isMas() || isWindowsStore()) && (
+        {!isBundled() && (
           <>
             <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle} ref={sections.moreApps.ref}>
               More Apps
@@ -1979,7 +2000,7 @@ const Preferences = ({
             </ListItem>
             <Divider />
             {(() => {
-              if (isWindowsStore() || isMas()) {
+              if (!isBundled()) {
                 return (
                   <>
                     <ListItem
@@ -2060,7 +2081,7 @@ const Preferences = ({
               <ListItemText primary="Open Source Notices" />
               <ChevronRightIcon color="action" />
             </ListItem>
-            {!isMas() && !isWindowsStore() && (
+            {isBundled() && (
               <>
                 <Divider />
                 <ListItem button onClick={() => requestOpenInBrowser('https://twitter.com/webcatalog_app')}>
