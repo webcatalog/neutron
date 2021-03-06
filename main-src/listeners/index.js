@@ -79,6 +79,7 @@ const fetchUpdater = require('../libs/fetch-updater');
 const getWebsiteIconUrlAsync = require('../libs/get-website-icon-url-async');
 const getViewBounds = require('../libs/get-view-bounds');
 const isMas = require('../libs/is-mas');
+const isBundled = require('../libs/is-bundled');
 const getIapFormattedPriceAsync = require('../libs/get-iap-formatted-price-async');
 const getUtmSource = require('../libs/get-utm-source');
 
@@ -249,9 +250,28 @@ const loadListeners = () => {
     .catch(console.log); // eslint-disable-line
   });
 
-  ipcMain.on('request-show-require-license-dialog', () => {
+  ipcMain.on('request-show-require-license-dialog', (e, reason = 'Your current plan does not include this feature') => {
     const utmSource = getUtmSource();
-    const win = workspacePreferencesWindow.get() || preferencesWindow.get();
+    const win = workspacePreferencesWindow.get() || preferencesWindow.get() || mainWindow.get();
+
+    if (isBundled()) {
+      dialog.showMessageBox(win, {
+        type: 'info',
+        message: `${reason}. Please upgrade to continue.`,
+        buttons: ['Upgrade Now...', 'Learn More...', 'Later'],
+        cancelId: 2,
+        defaultId: 0,
+      })
+        .then(({ response }) => {
+          if (response === 0) {
+            shell.openExternal(`https://accounts.webcatalog.app/settings/billing?utm_source=${utmSource}`);
+          } else if (response === 1) {
+            shell.openExternal(`https://webcatalog.app/pricing?utm_source=${utmSource}`);
+          }
+        })
+        .catch(console.log); // eslint-disable-line
+      return;
+    }
 
     if (isMas()) {
       const productIdentifier = `${appJson.id}_plus`;
@@ -286,22 +306,7 @@ const loadListeners = () => {
             })
             .catch(console.log); // eslint-disable-line no-console
         });
-      return;
     }
-
-    dialog.showMessageBox(win, {
-      type: 'info',
-      message: 'You\'re currently running the free version of WebCatalog. To unlock all features & add unlimited number of workspaces, please purchase WebCatalog Plus (30 USD) from our store and open WebCatalog app to activate it.',
-      buttons: ['OK', 'Learn More...'],
-      cancelId: 0,
-      defaultId: 0,
-    })
-      .then(({ response }) => {
-        if (response === 1) {
-          shell.openExternal(`https://webcatalog.app/pricing?utm_source=${utmSource}`);
-        }
-      })
-      .catch(console.log); // eslint-disable-line no-console
   });
 
   // Notifications

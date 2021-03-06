@@ -42,7 +42,6 @@ const init = () => {
         win.send('auth-json-changed', authInfo);
       }
     } catch (err) {
-      console.log(err);
       captureException(err);
       const win = mainWindow.get() || preferencesWindow.get() || workspacePreferencesWindow.get();
       if (win) {

@@ -24,7 +24,6 @@ import ExtensionIcon from '@material-ui/icons/Extension';
 import PowerIcon from '@material-ui/icons/Power';
 
 import connectComponent from '../../helpers/connect-component';
-import checkLicense from '../../helpers/check-license';
 import roundTime from '../../helpers/round-time';
 import isMas from '../../helpers/is-mas';
 import getStaticGlobal from '../../helpers/get-static-global';
@@ -40,6 +39,7 @@ import { open as openDialogCustomUserAgent } from '../../state/dialog-custom-use
 import { open as openDialogInternalUrls } from '../../state/dialog-internal-urls/actions';
 import { open as openDialogRefreshInterval } from '../../state/dialog-refresh-interval/actions';
 import { updateForm } from '../../state/dialog-workspace-preferences/actions';
+import { checkPlan } from '../../state/user/actions';
 
 import autoRefreshIntervals from '../../constants/auto-refresh-intervals';
 
@@ -130,6 +130,8 @@ const Preferences = ({
   downloadPath,
   internalUrlRule,
   jsCodeInjection,
+
+  onCheckPlan,
   onOpenDialogCodeInjection,
   onOpenDialogCustomUserAgent,
   onOpenDialogInternalUrls,
@@ -211,25 +213,8 @@ const Preferences = ({
           <List disablePadding dense>
             <ListItem>
               <ListItemText
-                primary="Create dark themes for web pages on the fly"
-                secondary={(
-                  <>
-                    <span>Powered by </span>
-                    <span
-                      role="link"
-                      tabIndex={0}
-                      className={classes.link}
-                      onClick={() => requestOpenInBrowser('https://darkreader.org/')}
-                      onKeyDown={(e) => {
-                        if (e.key !== 'Enter') return;
-                        requestOpenInBrowser('https://darkreader.org/');
-                      }}
-                    >
-                      Dark Reader
-                    </span>
-                    <span>.</span>
-                  </>
-                )}
+                primary="Dark Reader"
+                secondary="Create and customize dark theme on the fly."
               />
               <Select
                 value={formDarkReader != null ? formDarkReader : 'global'}
@@ -565,7 +550,7 @@ const Preferences = ({
             <ListItem
               button
               onClick={() => {
-                if (!checkLicense()) return;
+                if (!onCheckPlan()) return;
                 onOpenDialogCodeInjection('js');
               }}
             >
@@ -585,7 +570,7 @@ const Preferences = ({
             <ListItem
               button
               onClick={() => {
-                if (!checkLicense()) return;
+                if (!onCheckPlan()) return;
                 onOpenDialogCodeInjection('css');
               }}
             >
@@ -667,6 +652,8 @@ Preferences.propTypes = {
   downloadPath: PropTypes.string.isRequired,
   internalUrlRule: PropTypes.string,
   jsCodeInjection: PropTypes.string,
+
+  onCheckPlan: PropTypes.func.isRequired,
   onOpenDialogCodeInjection: PropTypes.func.isRequired,
   onOpenDialogCustomUserAgent: PropTypes.func.isRequired,
   onOpenDialogInternalUrls: PropTypes.func.isRequired,
@@ -720,6 +707,7 @@ const mapStateToProps = (state) => ({
 });
 
 const actionCreators = {
+  checkPlan,
   openDialogCodeInjection,
   openDialogCustomUserAgent,
   openDialogInternalUrls,

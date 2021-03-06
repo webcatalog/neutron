@@ -41,7 +41,6 @@ import WidgetsIcon from '@material-ui/icons/Widgets';
 import { TimePicker } from '@material-ui/pickers';
 
 import connectComponent from '../../helpers/connect-component';
-import checkLicense from '../../helpers/check-license';
 import roundTime from '../../helpers/round-time';
 import isMas from '../../helpers/is-mas';
 import isWindowsStore from '../../helpers/is-windows-store';
@@ -75,6 +74,7 @@ import { open as openDialogCustomUserAgent } from '../../state/dialog-custom-use
 import { open as openDialogInternalUrls } from '../../state/dialog-internal-urls/actions';
 import { open as openDialogSpellcheckLanguages } from '../../state/dialog-spellcheck-languages/actions';
 import { open as openDialogRefreshInterval } from '../../state/dialog-refresh-interval/actions';
+import { checkPlan } from '../../state/user/actions';
 
 import hunspellLanguagesMap from '../../constants/hunspell-languages';
 import searchEngines from '../../constants/search-engines';
@@ -229,6 +229,7 @@ const Preferences = ({
   internalUrlRule,
   jsCodeInjection,
   navigationBar,
+  onCheckPlan,
   onOpenDialogAppLock,
   onOpenDialogCodeInjection,
   onOpenDialogCustomUserAgent,
@@ -423,7 +424,7 @@ const Preferences = ({
                 {!combinedIapPurchased && (
                   <>
                     <Divider />
-                    <ListItem button onClick={checkLicense}>
+                    <ListItem button onClick={() => onCheckPlan()}>
                       <ListItemText primary={`Upgrade to ${isMas() ? appJson.name : 'WebCatalog'} Plus`} />
                       <ChevronRightIcon color="action" />
                     </ListItem>
@@ -525,7 +526,7 @@ const Preferences = ({
                   onChange={(e) => {
                     // this feature is free with WebCatalog
                     // but not free in MAS apps
-                    if (isMas() && !checkLicense()) {
+                    if (isMas() && !onCheckPlan()) {
                       return;
                     }
                     requestSetPreference('attachToMenubar', e.target.checked);
@@ -771,24 +772,6 @@ const Preferences = ({
             <ListItem>
               <ListItemText
                 primary="Block ads &amp; trackers"
-                secondary={(
-                  <>
-                    <span>Powered by </span>
-                    <span
-                      role="link"
-                      tabIndex={0}
-                      className={classes.link}
-                      onClick={() => requestOpenInBrowser('https://cliqz.com/en/whycliqz/adblocking')}
-                      onKeyDown={(e) => {
-                        if (e.key !== 'Enter') return;
-                        requestOpenInBrowser('https://cliqz.com/en/whycliqz/adblocking');
-                      }}
-                    >
-                      Cliqz
-                    </span>
-                    <span>.</span>
-                  </>
-                )}
               />
               <ListItemSecondaryAction>
                 <Switch
@@ -796,7 +779,7 @@ const Preferences = ({
                   color="primary"
                   checked={blockAds}
                   onChange={(e) => {
-                    if (!checkLicense()) {
+                    if (!onCheckPlan() && !blockAds) {
                       return;
                     }
 
@@ -809,25 +792,8 @@ const Preferences = ({
             <Divider />
             <ListItem>
               <ListItemText
-                primary="Create dark themes for web pages on the fly"
-                secondary={(
-                  <>
-                    <span>Powered by </span>
-                    <span
-                      role="link"
-                      tabIndex={0}
-                      className={classes.link}
-                      onClick={() => requestOpenInBrowser('https://darkreader.org/')}
-                      onKeyDown={(e) => {
-                        if (e.key !== 'Enter') return;
-                        requestOpenInBrowser('https://darkreader.org/');
-                      }}
-                    >
-                      Dark Reader
-                    </span>
-                    <span>.</span>
-                  </>
-                )}
+                primary="Dark Reader"
+                secondary="Create and customize dark theme on the fly."
               />
               <ListItemSecondaryAction>
                 <Switch
@@ -1303,7 +1269,7 @@ const Preferences = ({
             <ListItem
               button
               onClick={() => {
-                if (!checkLicense()) {
+                if (!onCheckPlan()) {
                   return;
                 }
 
@@ -1490,7 +1456,7 @@ const Preferences = ({
             <ListItem
               button
               onClick={() => {
-                if (!checkLicense()) return;
+                if (!onCheckPlan()) return;
                 onOpenDialogCodeInjection('js');
               }}
             >
@@ -1505,7 +1471,7 @@ const Preferences = ({
             <ListItem
               button
               onClick={() => {
-                if (!checkLicense()) return;
+                if (!onCheckPlan()) return;
                 onOpenDialogCodeInjection('css');
               }}
             >
@@ -2153,6 +2119,7 @@ Preferences.propTypes = {
   internalUrlRule: PropTypes.string,
   jsCodeInjection: PropTypes.string,
   navigationBar: PropTypes.bool.isRequired,
+  onCheckPlan: PropTypes.func.isRequired,
   onOpenDialogAppLock: PropTypes.func.isRequired,
   onOpenDialogCodeInjection: PropTypes.func.isRequired,
   onOpenDialogCustomUserAgent: PropTypes.func.isRequired,
@@ -2242,6 +2209,7 @@ const mapStateToProps = (state) => ({
 });
 
 const actionCreators = {
+  checkPlan,
   openDialogAppLock,
   openDialogCodeInjection,
   openDialogCustomUserAgent,

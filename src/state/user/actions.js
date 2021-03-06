@@ -8,10 +8,19 @@ import firebase, { db } from '../../firebase';
 import defaultAvatarPng from '../../images/default-avatar.png';
 
 import {
+  requestShowRequireLicenseDialog,
+} from '../../senders';
+import getStaticGlobal from '../../helpers/get-static-global';
+import isBundled from '../../helpers/is-bundled';
+import isMas from '../../helpers/is-mas';
+
+import {
   SET_USER_STATE,
   SET_PUBLIC_PROFILE,
   CLEAR_USER_STATE,
 } from '../../constants/actions';
+
+import { getCurrentPlan } from './utils';
 
 export const clearUserState = () => (dispatch) => {
   dispatch(({
@@ -24,10 +33,15 @@ export const updateUserState = (updatedState) => ({
   updatedState,
 });
 
-export const setPublicProfile = (publicProfile) => ({
-  type: SET_PUBLIC_PROFILE,
-  publicProfile,
-});
+export const setPublicProfile = (publicProfile) => (dispatch) => {
+  const { currentUser } = firebase.auth();
+  window.localStorage.setItem(`billingPlan-${currentUser.uid}`, publicProfile.billingPlan);
+
+  dispatch({
+    type: SET_PUBLIC_PROFILE,
+    publicProfile,
+  });
+};
 
 export const updateUserAsync = () => async (dispatch, getState) => {
   const { currentUser } = firebase.auth();
@@ -45,6 +59,10 @@ export const updateUserAsync = () => async (dispatch, getState) => {
       || gravatar.url(currentUser.email, { s: '192', r: 'pg', d: 'retro' }, true)
       || defaultAvatarPng,
     providerData: currentUser.providerData,
+    publicProfile: {
+      ...currentUserState.publicProfile,
+      billingPlan: window.localStorage.getItem(`billingPlan-${currentUser.uid}`) || 'basic',
+    },
   }));
 
   return Promise.resolve()
@@ -66,4 +84,28 @@ export const updateUserAsync = () => async (dispatch, getState) => {
     })
     // eslint-disable-next-line no-console
     .catch(console.log);
+};
+
+const defaultVerify = (state) => {
+  if (isBundled()) {
+    const currentPlan = getCurrentPlan(state.user);
+    return currentPlan !== 'basic';
+  }
+
+  const appJson = getStaticGlobal('appJson');
+  const iapPurchased = isMas() ? state.preferences.iapPurchased : false;
+  return appJson.iapPurchased || iapPurchased;
+};
+
+export const checkPlan = (reason, verify = defaultVerify) => (
+  dispatch, getState,
+) => {
+  const state = getState();
+
+  if (!verify(state)) {
+    requestShowRequireLicenseDialog(reason);
+    return false;
+  }
+
+  return true;
 };

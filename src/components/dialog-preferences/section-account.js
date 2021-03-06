@@ -10,6 +10,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
+import Divider from '@material-ui/core/Divider';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
@@ -45,6 +46,7 @@ const SectionAccount = ({
               secondary={billingPlans[currentPlan].name}
             />
           </ListItem>
+          <Divider />
           <ListItem button onClick={() => requestOpenInBrowser('https://accounts.webcatalog.app/settings')}>
             <ListItemText primary="Manage Your Account" />
             <ChevronRightIcon color="action" />
