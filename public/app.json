@@ -1,7 +1,8 @@
 {
     "id": "pantext",
     "name": "PanText",
+    "url": "https://captive.apple.com",
     "macAppStoreId": "1551183766",
     "microsoftStoreId": "9NH85V7VL3RN",
-    "registered": true
+    "iapPurchased": true
 }

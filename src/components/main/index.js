@@ -36,8 +36,10 @@ import DraggableRegion from './draggable-region';
 import TelemetryManager from './telemetry-manager';
 import RatingButton from './rating-button';
 
+import { createWorkspace } from '../../state/workspaces/actions';
+import { checkPlan } from '../../state/user/actions';
+
 import {
-  requestCreateWorkspace,
   requestHibernateWorkspace,
   requestReload,
   requestRemoveWorkspace,
@@ -325,6 +327,8 @@ const Main = ({
   isLoading,
   muteApp,
   navigationBar,
+  onCreateWorkspace,
+  onCheckPlan,
   shouldPauseNotifications,
   sidebar,
   sidebarSize,
@@ -380,7 +384,7 @@ const Main = ({
                       requestShowAddWorkspaceWindow();
                       return;
                     }
-                    requestCreateWorkspace();
+                    onCreateWorkspace();
                   }}
                   onContextMenu={!appJson.url || appJson.id === 'dynacal' || appJson.id === 'dynamail' ? null : (e) => {
                     e.preventDefault();
@@ -392,7 +396,7 @@ const Main = ({
                           if (appJson.id === 'dynacal') standardWorkspaceName = 'Google Calendar';
                           return `Add ${standardWorkspaceName} Workspace`;
                         })(),
-                        click: () => requestCreateWorkspace(),
+                        click: () => onCreateWorkspace(),
                       },
                       {
                         label: 'Add Custom Workspace',
@@ -416,7 +420,11 @@ const Main = ({
                 <IconButton
                   title="Notifications"
                   aria-label="Notifications"
-                  onClick={requestShowNotificationsWindow}
+                  onClick={() => {
+                    if (onCheckPlan()) {
+                      requestShowNotificationsWindow();
+                    }
+                  }}
                   className={classnames(!isSidebarExpanded && classes.iconButton)}
                   size="small"
                 >
@@ -529,6 +537,8 @@ Main.propTypes = {
   isLoading: PropTypes.bool,
   muteApp: PropTypes.bool.isRequired,
   navigationBar: PropTypes.bool.isRequired,
+  onCreateWorkspace: PropTypes.func.isRequired,
+  onCheckPlan: PropTypes.func.isRequired,
   shouldPauseNotifications: PropTypes.bool.isRequired,
   sidebar: PropTypes.bool.isRequired,
   sidebarSize: PropTypes.oneOf(['compact', 'expanded']).isRequired,
@@ -561,9 +571,14 @@ const mapStateToProps = (state) => {
   };
 };
 
+const actionCreators = {
+  createWorkspace,
+  checkPlan,
+};
+
 export default connectComponent(
   Main,
   mapStateToProps,
-  null,
+  actionCreators,
   styles,
 );

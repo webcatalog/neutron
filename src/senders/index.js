@@ -15,7 +15,7 @@ export const requestOpenInBrowser = (url) => window.ipcRenderer.send('request-op
 export const requestLoadUrl = (url, id) => window.ipcRenderer.send('request-load-url', url, id);
 export const requestShowMessageBox = (message, type) => window.ipcRenderer.send('request-show-message-box', message, type);
 export const requestShowAppMenu = (x, y) => window.ipcRenderer.send('request-show-app-menu', x, y);
-export const requestShowRequireLicenseDialog = () => window.ipcRenderer.send('request-show-require-license-dialog');
+export const requestShowRequireLicenseDialog = (reason) => window.ipcRenderer.send('request-show-require-license-dialog', reason);
 
 export const requestGoHome = () => window.ipcRenderer.send('request-go-home');
 export const requestGoBack = () => window.ipcRenderer.send('request-go-back');
@@ -105,3 +105,9 @@ export const signalOnlineStatusChanged = (online) => window.ipcRenderer.send('on
 export const requestLockApp = () => window.ipcRenderer.send('request-lock-app');
 export const requestUnlockApp = (password) => window.ipcRenderer.send('request-unlock-app', password);
 export const requestUnlockAppUsingTouchId = () => window.ipcRenderer.send('request-unlock-app-using-touch-id');
+
+// Firebase
+export const requestCheckAuthJson = () => window.ipcRenderer.send('request-check-auth-json');
+
+// Billing Plan (sync renderer with main)
+export const requestSetBillingPlan = (billingPlan) => window.ipcRenderer.send('request-set-billing-plan', billingPlan);

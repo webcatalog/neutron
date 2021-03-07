@@ -52,6 +52,7 @@ if (!isDev && getPreference('sentry')) {
 
 const loadListeners = require('./listeners');
 const loadInvokers = require('./invokers');
+const initAuthJsonWatcher = require('./libs/auth-json-watcher').init;
 
 const authWindow = require('./windows/auth');
 const mainWindow = require('./windows/main');
@@ -361,6 +362,8 @@ if (!gotTheLock) {
   };
 
   app.on('ready', () => {
+    initAuthJsonWatcher();
+
     // https://github.com/electron/electron/issues/23757
     protocol.registerFileProtocol('file', (request, callback) => {
       const pathname = decodeURI(request.url.replace('file:///', ''));
@@ -431,7 +434,7 @@ if (!gotTheLock) {
         }
 
         // pre-cache pricing for (PanText|PanMail|DynaMail|...) Plus
-        if (isMas() && !appJson.registered && !getPreference('iapPurchased')) {
+        if (isMas() && !appJson.iapPurchased && !getPreference('iapPurchased')) {
           const productIdentifier = `${appJson.id}_plus`;
           getIapFormattedPriceAsync(productIdentifier);
         }

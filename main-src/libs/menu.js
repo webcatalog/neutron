@@ -9,6 +9,7 @@ const {
 } = require('electron');
 
 const appJson = require('../constants/app-json');
+const billingPlans = require('../constants/billing-plans');
 
 const goToUrlWindow = require('../windows/go-to-url');
 const mainWindow = require('../windows/main');
@@ -38,6 +39,11 @@ const {
   getView,
 } = require('./views');
 
+const {
+  getBillingPlan,
+  checkPlan,
+} = require('./billing-plan-management');
+
 let menu;
 
 const getWorkspaceName = (workspace) => {
@@ -56,7 +62,6 @@ const getWorkspaceName = (workspace) => {
 const createMenu = async () => {
   const workspaces = getWorkspaces();
   const hasWorkspaces = Object.keys(workspaces).length > 0;
-  const { registered } = appJson;
   const utmSource = getUtmSource();
 
   const handleZoomIn = (menuItem, browserWindow) => {
@@ -95,20 +100,6 @@ const createMenu = async () => {
     },
   ] : [];
 
-  const licensingMenuItems = (isMas() || isWindowsStore()) ? [] : [
-    { type: 'separator' },
-    {
-      label: registered ? 'WebCatalog Plus' : 'WebCatalog Basic',
-      enabled: false,
-      click: null,
-    },
-    {
-      label: 'Upgrade...',
-      visible: !registered,
-      click: registered ? null : () => ipcMain.emit('request-show-require-license-dialog'),
-    },
-  ];
-
   const muteApp = getPreference('muteApp');
 
   const template = [
@@ -120,7 +111,6 @@ const createMenu = async () => {
           click: () => ipcMain.emit('request-show-about-window'),
         },
         { type: 'separator' },
-        ...licensingMenuItems,
         ...lockMenuItems,
         {
           label: 'Check for Updates...',
@@ -140,7 +130,11 @@ const createMenu = async () => {
         { type: 'separator' },
         {
           label: 'Notifications...',
-          click: () => ipcMain.emit('request-show-notifications-window'),
+          click: () => {
+            if (checkPlan()) {
+              ipcMain.emit('request-show-notifications-window');
+            }
+          },
           accelerator: 'CmdOrCtrl+Shift+N',
           enabled: !global.locked,
         },
@@ -561,8 +555,24 @@ const createMenu = async () => {
         return `Add ${standardWorkspaceName} Workspace`;
       })(),
       click: () => {
-        createWorkspaceView();
-        createMenu();
+        const currentPlan = getBillingPlan();
+        const isMultisite = !appJson.url;
+        const limit = isMultisite
+          ? billingPlans[currentPlan].workspacesPerMultisiteApp
+          : billingPlans[currentPlan].workspacesPerSinglesiteApp;
+
+        const canContinue = checkPlan(
+          `Your current plan only allows you to add up to ${limit} workspaces per ${isMultisite ? 'multisite' : 'singlesite'} app`,
+          () => {
+            const workspaceCount = Object.keys(getWorkspaces()).length;
+            return !(limit !== 'Unlimited' && workspaceCount >= limit);
+          },
+        );
+
+        if (canContinue) {
+          createWorkspaceView();
+          createMenu();
+        }
       },
       visible: Boolean(appJson.url),
       enabled: !global.locked,
