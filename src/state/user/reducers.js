@@ -35,7 +35,10 @@ const user = (state = initialState, action) => {
     case SET_PUBLIC_PROFILE: {
       return {
         ...state,
-        publicProfile: { ...action.publicProfile },
+        publicProfile: {
+          ...state.publicProfile,
+          ...action.publicProfile,
+        },
       };
     }
 

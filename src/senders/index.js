@@ -108,3 +108,6 @@ export const requestUnlockAppUsingTouchId = () => window.ipcRenderer.send('reque
 
 // Firebase
 export const requestCheckAuthJson = () => window.ipcRenderer.send('request-check-auth-json');
+
+// Billing Plan (sync renderer with main)
+export const requestSetBillingPlan = (billingPlan) => window.ipcRenderer.send('request-set-billing-plan', billingPlan);

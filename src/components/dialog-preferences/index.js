@@ -1031,7 +1031,14 @@ const Preferences = ({
         </Typography>
         <Paper elevation={0} className={classes.paper}>
           <List disablePadding dense>
-            <ListItem button onClick={requestShowNotificationsWindow}>
+            <ListItem
+              button
+              onClick={() => {
+                if (onCheckPlan()) {
+                  requestShowNotificationsWindow();
+                }
+              }}
+            >
               <ListItemText primary="Control notifications" />
               <ChevronRightIcon color="action" />
             </ListItem>

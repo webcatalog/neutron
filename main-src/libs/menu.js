@@ -9,6 +9,7 @@ const {
 } = require('electron');
 
 const appJson = require('../constants/app-json');
+const billingPlans = require('../constants/billing-plans');
 
 const goToUrlWindow = require('../windows/go-to-url');
 const mainWindow = require('../windows/main');
@@ -37,6 +38,11 @@ const {
 const {
   getView,
 } = require('./views');
+
+const {
+  getBillingPlan,
+  checkPlan,
+} = require('./billing-plan-management');
 
 let menu;
 
@@ -124,7 +130,11 @@ const createMenu = async () => {
         { type: 'separator' },
         {
           label: 'Notifications...',
-          click: () => ipcMain.emit('request-show-notifications-window'),
+          click: () => {
+            if (checkPlan()) {
+              ipcMain.emit('request-show-notifications-window');
+            }
+          },
           accelerator: 'CmdOrCtrl+Shift+N',
           enabled: !global.locked,
         },
@@ -545,8 +555,24 @@ const createMenu = async () => {
         return `Add ${standardWorkspaceName} Workspace`;
       })(),
       click: () => {
-        createWorkspaceView();
-        createMenu();
+        const currentPlan = getBillingPlan();
+        const isMultisite = !appJson.url;
+        const limit = isMultisite
+          ? billingPlans[currentPlan].workspacesPerMultisiteApp
+          : billingPlans[currentPlan].workspacesPerSinglesiteApp;
+
+        const canContinue = checkPlan(
+          `Your current plan only allows you to add up to ${limit} workspaces per ${isMultisite ? 'multisite' : 'singlesite'} app`,
+          () => {
+            const workspaceCount = Object.keys(getWorkspaces()).length;
+            return !(limit !== 'Unlimited' && workspaceCount >= limit);
+          },
+        );
+
+        if (canContinue) {
+          createWorkspaceView();
+          createMenu();
+        }
       },
       visible: Boolean(appJson.url),
       enabled: !global.locked,

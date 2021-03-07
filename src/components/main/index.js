@@ -37,6 +37,7 @@ import TelemetryManager from './telemetry-manager';
 import RatingButton from './rating-button';
 
 import { createWorkspace } from '../../state/workspaces/actions';
+import { checkPlan } from '../../state/user/actions';
 
 import {
   requestHibernateWorkspace,
@@ -327,6 +328,7 @@ const Main = ({
   muteApp,
   navigationBar,
   onCreateWorkspace,
+  onCheckPlan,
   shouldPauseNotifications,
   sidebar,
   sidebarSize,
@@ -418,7 +420,11 @@ const Main = ({
                 <IconButton
                   title="Notifications"
                   aria-label="Notifications"
-                  onClick={requestShowNotificationsWindow}
+                  onClick={() => {
+                    if (onCheckPlan()) {
+                      requestShowNotificationsWindow();
+                    }
+                  }}
                   className={classnames(!isSidebarExpanded && classes.iconButton)}
                   size="small"
                 >
@@ -532,6 +538,7 @@ Main.propTypes = {
   muteApp: PropTypes.bool.isRequired,
   navigationBar: PropTypes.bool.isRequired,
   onCreateWorkspace: PropTypes.func.isRequired,
+  onCheckPlan: PropTypes.func.isRequired,
   shouldPauseNotifications: PropTypes.bool.isRequired,
   sidebar: PropTypes.bool.isRequired,
   sidebarSize: PropTypes.oneOf(['compact', 'expanded']).isRequired,
@@ -566,6 +573,7 @@ const mapStateToProps = (state) => {
 
 const actionCreators = {
   createWorkspace,
+  checkPlan,
 };
 
 export default connectComponent(

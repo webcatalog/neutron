@@ -8,7 +8,6 @@ const {
   ipcMain,
   nativeTheme,
   shell,
-  inAppPurchase,
 } = require('electron');
 
 const {
@@ -73,15 +72,17 @@ const {
   unlockAppUsingTouchId,
 } = require('../libs/app-lock');
 
+const {
+  setBillingPlan,
+  showRequireLicenseDialog,
+} = require('../libs/billing-plan-management');
+
 const { createMenu, showMenu } = require('../libs/menu');
 const sendToAllWindows = require('../libs/send-to-all-windows');
 const fetchUpdater = require('../libs/fetch-updater');
 const getWebsiteIconUrlAsync = require('../libs/get-website-icon-url-async');
 const getViewBounds = require('../libs/get-view-bounds');
 const isMas = require('../libs/is-mas');
-const isBundled = require('../libs/is-bundled');
-const getIapFormattedPriceAsync = require('../libs/get-iap-formatted-price-async');
-const getUtmSource = require('../libs/get-utm-source');
 
 const aboutWindow = require('../windows/about');
 const addWorkspaceWindow = require('../windows/add-workspace');
@@ -251,62 +252,7 @@ const loadListeners = () => {
   });
 
   ipcMain.on('request-show-require-license-dialog', (e, reason = 'Your current plan does not include this feature') => {
-    const utmSource = getUtmSource();
-    const win = workspacePreferencesWindow.get() || preferencesWindow.get() || mainWindow.get();
-
-    if (isBundled()) {
-      dialog.showMessageBox(win, {
-        type: 'info',
-        message: `${reason}. Please upgrade to continue.`,
-        buttons: ['Upgrade Now...', 'Learn More...', 'Later'],
-        cancelId: 2,
-        defaultId: 0,
-      })
-        .then(({ response }) => {
-          if (response === 0) {
-            shell.openExternal(`https://accounts.webcatalog.app/settings/billing?utm_source=${utmSource}`);
-          } else if (response === 1) {
-            shell.openExternal(`https://webcatalog.app/pricing?utm_source=${utmSource}`);
-          }
-        })
-        .catch(console.log); // eslint-disable-line
-      return;
-    }
-
-    if (isMas()) {
-      const productIdentifier = `${appJson.id}_plus`;
-
-      // get price
-      getIapFormattedPriceAsync(productIdentifier)
-        .then((formattedPrice) => {
-          dialog.showMessageBox(win, {
-            type: 'info',
-            message: `Upgrade to ${appJson.name} Plus (${formattedPrice ? `${formattedPrice}, ` : ''}one-time payment) to unlock all features & add unlimited number of workspaces.`,
-            buttons: [`Purchase${formattedPrice ? ` (${formattedPrice})` : ''}...`, 'Restore Purchase', 'Later'],
-            cancelId: 2,
-            defaultId: 0,
-          })
-            .then(({ response }) => {
-              if (response === 0) {
-                inAppPurchase.purchaseProduct(productIdentifier).then((isProductValid) => {
-                  if (!isProductValid) {
-                    // eslint-disable-next-line no-console
-                    console.log('The product is not valid.');
-                    return;
-                  }
-
-                  // eslint-disable-next-line no-console
-                  console.log('The payment has been added to the payment queue.');
-                });
-              }
-
-              if (response === 1) {
-                inAppPurchase.restoreCompletedTransactions();
-              }
-            })
-            .catch(console.log); // eslint-disable-line no-console
-        });
-    }
+    showRequireLicenseDialog(reason);
   });
 
   // Notifications
@@ -620,6 +566,10 @@ const loadListeners = () => {
 
   ipcMain.on('create-menu', () => {
     createMenu();
+  });
+
+  ipcMain.on('request-set-billing-plan', (e, billingPlan) => {
+    setBillingPlan(billingPlan);
   });
 };
 

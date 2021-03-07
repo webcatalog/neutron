@@ -9,6 +9,7 @@ import defaultAvatarPng from '../../images/default-avatar.png';
 
 import {
   requestShowRequireLicenseDialog,
+  requestSetBillingPlan,
 } from '../../senders';
 import getStaticGlobal from '../../helpers/get-static-global';
 import isBundled from '../../helpers/is-bundled';
@@ -41,6 +42,7 @@ export const setPublicProfile = (publicProfile) => (dispatch) => {
     type: SET_PUBLIC_PROFILE,
     publicProfile,
   });
+  requestSetBillingPlan(publicProfile.billingPlan);
 };
 
 export const updateUserAsync = () => async (dispatch, getState) => {
@@ -59,10 +61,9 @@ export const updateUserAsync = () => async (dispatch, getState) => {
       || gravatar.url(currentUser.email, { s: '192', r: 'pg', d: 'retro' }, true)
       || defaultAvatarPng,
     providerData: currentUser.providerData,
-    publicProfile: {
-      ...currentUserState.publicProfile,
-      billingPlan: window.localStorage.getItem(`billingPlan-${currentUser.uid}`) || 'basic',
-    },
+  }));
+  dispatch(setPublicProfile({
+    billingPlan: window.localStorage.getItem(`billingPlan-${currentUser.uid}`) || 'basic',
   }));
 
   return Promise.resolve()
