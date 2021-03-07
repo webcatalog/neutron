@@ -77,8 +77,8 @@ const styles = (theme) => ({
     fontSize: '24px',
   },
   avatarPicture: {
-    height: 36,
-    width: 36,
+    height: '100%',
+    width: '100%',
   },
   textAvatar: {
     background: theme.palette.type === 'dark' ? theme.palette.common.white : theme.palette.common.black,
