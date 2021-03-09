@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import { ThemeProvider as MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
@@ -19,41 +19,13 @@ import getStaticGlobal from '../helpers/get-static-global';
 
 import WindowsTitleBar from './shared/windows-title-bar';
 import AppLock from './app-lock';
-import AuthManager from './auth-manager';
-
-import { clearUserState, updateUserAsync } from '../state/user/actions';
-
-import firebase from '../firebase';
-
-import { requestCheckAuthJson } from '../senders';
 
 const AppWrapper = ({
   children,
   shouldUseDarkColors,
   isFullScreen,
   locked,
-  onClearUserState,
-  onUpdateUserAsync,
 }) => {
-  // docs: https://github.com/firebase/firebaseui-web-react
-  // Listen to the Firebase Auth state and set the local state.
-  useEffect(() => {
-    const unregisterAuthObserver = firebase.auth().onAuthStateChanged((user) => {
-      if (!user) {
-        onClearUserState();
-        return;
-      }
-
-      onUpdateUserAsync();
-    });
-    // Make sure we un-register Firebase observers when the component unmounts.
-    return () => unregisterAuthObserver();
-  }, [onClearUserState, onUpdateUserAsync]);
-
-  useEffect(() => {
-    requestCheckAuthJson();
-  }, []);
-
   const themeObj = {
     typography: {
       fontFamily: '"Roboto",-apple-system,BlinkMacSystemFont,"Segoe UI",Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif',
@@ -99,7 +71,6 @@ const AppWrapper = ({
           <div style={{ height: showWindowsTitleBar ? 'calc(100vh - 32px)' : '100vh' }}>
             {locked ? <AppLock /> : children}
           </div>
-          <AuthManager />
         </div>
       </MuiPickersUtilsProvider>
     </MuiThemeProvider>
@@ -115,8 +86,6 @@ AppWrapper.propTypes = {
   isFullScreen: PropTypes.bool.isRequired,
   locked: PropTypes.bool.isRequired,
   shouldUseDarkColors: PropTypes.bool.isRequired,
-  onClearUserState: PropTypes.func.isRequired,
-  onUpdateUserAsync: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -125,14 +94,9 @@ const mapStateToProps = (state) => ({
   shouldUseDarkColors: state.general.shouldUseDarkColors,
 });
 
-const actionCreators = {
-  clearUserState,
-  updateUserAsync,
-};
-
 export default connectComponent(
   AppWrapper,
   mapStateToProps,
-  actionCreators,
+  null,
   null,
 );

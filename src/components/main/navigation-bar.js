@@ -23,7 +23,6 @@ import getUrlFromText from '../../helpers/get-url-from-text';
 import searchEngines from '../../constants/search-engines';
 
 import { updateAddressBarInfo } from '../../state/general/actions';
-import { checkPlan } from '../../state/user/actions';
 
 import {
   requestGoBack,
@@ -112,7 +111,6 @@ const NavigationBar = ({
   hasWorkspaces,
   muteApp,
   onUpdateAddressBarInfo,
-  onCheckPlan,
   searchEngine,
   shouldPauseNotifications,
   sidebar,
@@ -238,11 +236,7 @@ const NavigationBar = ({
         <IconButton
           title="Notifications"
           aria-label="Notifications"
-          onClick={() => {
-            if (onCheckPlan()) {
-              requestShowNotificationsWindow();
-            }
-          }}
+          onClick={requestShowNotificationsWindow}
           className={classes.iconButton}
         >
           {shouldPauseNotifications
@@ -287,7 +281,6 @@ NavigationBar.propTypes = {
   hasWorkspaces: PropTypes.bool.isRequired,
   muteApp: PropTypes.bool.isRequired,
   onUpdateAddressBarInfo: PropTypes.func.isRequired,
-  onCheckPlan: PropTypes.func.isRequired,
   searchEngine: PropTypes.string.isRequired,
   shouldPauseNotifications: PropTypes.bool.isRequired,
   sidebar: PropTypes.bool.isRequired,
@@ -311,7 +304,6 @@ const mapStateToProps = (state) => ({
 
 const actionCreators = {
   updateAddressBarInfo,
-  checkPlan,
 };
 
 export default connectComponent(

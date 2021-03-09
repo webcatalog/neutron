@@ -5,7 +5,7 @@ const path = require('path');
 
 const REACT_PATH = process.env.NODE_ENV === 'production'
   ? `file://${path.resolve(__dirname, 'index.html')}`
-  : 'http://localhost:3001';
+  : 'http://localhost:3000';
 
 module.exports = {
   REACT_PATH,

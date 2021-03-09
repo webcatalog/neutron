@@ -30,8 +30,6 @@ import {
   signalOnlineStatusChanged,
 } from '../senders';
 
-import firebase from '../firebase';
-
 const loadListeners = (store) => {
   if (window.mode === 'main') {
     // automatically reload page when wifi/network is connected
@@ -128,36 +126,6 @@ const loadListeners = (store) => {
 
   window.ipcRenderer.on('set-locked', (e, locked) => {
     store.dispatch(updateLocked(locked));
-  });
-
-  window.ipcRenderer.on('auth-json-changed', (e, authInfo) => {
-    if (!authInfo) {
-      return firebase.auth().signOut();
-    }
-
-    return Promise.resolve()
-      .then(() => {
-        const { currentUser } = firebase.auth();
-        if (currentUser && currentUser.uid !== authInfo.uid) {
-          return firebase.auth().signOut();
-        }
-        return null;
-      })
-      .then(() => {
-        const url = 'https://functions.webcatalog.app/get-auth-token';
-        const data = new URLSearchParams();
-        data.append('token', authInfo.authToken);
-
-        return window.fetch(url, {
-          method: 'post',
-          body: data,
-        })
-          .then((res) => res.json())
-          .then((result) => result.token);
-      })
-      .then((token) => firebase.auth().signInWithCustomToken(token))
-      // eslint-disable-next-line no-console
-      .catch(console.log);
   });
 };
 

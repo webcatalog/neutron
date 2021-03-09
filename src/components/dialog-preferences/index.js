@@ -20,7 +20,6 @@ import Slider from '@material-ui/core/Slider';
 import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
 
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import BuildIcon from '@material-ui/icons/Build';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -41,10 +40,10 @@ import WidgetsIcon from '@material-ui/icons/Widgets';
 import { TimePicker } from '@material-ui/pickers';
 
 import connectComponent from '../../helpers/connect-component';
+import checkLicense from '../../helpers/check-license';
 import roundTime from '../../helpers/round-time';
 import isMas from '../../helpers/is-mas';
 import isWindowsStore from '../../helpers/is-windows-store';
-import isBundled from '../../helpers/is-bundled';
 import getStaticGlobal from '../../helpers/get-static-global';
 import getUtmSource from '../../helpers/get-utm-source';
 
@@ -74,7 +73,6 @@ import { open as openDialogCustomUserAgent } from '../../state/dialog-custom-use
 import { open as openDialogInternalUrls } from '../../state/dialog-internal-urls/actions';
 import { open as openDialogSpellcheckLanguages } from '../../state/dialog-spellcheck-languages/actions';
 import { open as openDialogRefreshInterval } from '../../state/dialog-refresh-interval/actions';
-import { checkPlan } from '../../state/user/actions';
 
 import hunspellLanguagesMap from '../../constants/hunspell-languages';
 import searchEngines from '../../constants/search-engines';
@@ -101,8 +99,6 @@ import dynamailIconPng from '../../images/products/dynamail-mac-icon-128@2x.png'
 import dynacalIconPng from '../../images/products/dynacal-mac-icon-128@2x.png';
 import pantextIconPng from '../../images/products/pantext-mac-icon-128@2x.png';
 import panmailIconPng from '../../images/products/panmail-mac-icon-128@2x.png';
-
-import SectionAccount from './section-account';
 
 const styles = (theme) => ({
   root: {
@@ -229,7 +225,6 @@ const Preferences = ({
   internalUrlRule,
   jsCodeInjection,
   navigationBar,
-  onCheckPlan,
   onOpenDialogAppLock,
   onOpenDialogCodeInjection,
   onOpenDialogCustomUserAgent,
@@ -268,30 +263,24 @@ const Preferences = ({
   const utmSource = getUtmSource();
   const canPromptTouchId = window.process.platform === 'darwin'
     && window.remote.systemPreferences.canPromptTouchID();
-  const combinedIapPurchased = appJson.iapPurchased || iapPurchased;
+  const registered = appJson.registered || iapPurchased;
 
   const [formattedPrice, setFormattedPrice] = useState(isMas() ? null : '30 USD');
   useEffect(() => {
-    if (isMas() && !combinedIapPurchased) {
+    if (isMas() && !registered) {
       getIapFormattedPriceAsync(`${appJson.id}_plus`)
         .then((value) => {
           setFormattedPrice(value);
         });
     }
-  }, [appJson, setFormattedPrice, combinedIapPurchased]);
+  }, [appJson, setFormattedPrice, registered]);
 
   const sections = {
-    account: {
-      text: 'Account',
-      Icon: AccountCircleIcon,
-      ref: useRef(),
-      hidden: !isBundled(),
-    },
     licensing: {
       text: 'Licensing',
       Icon: CheckCircleOutlineIcon,
       ref: useRef(),
-      hidden: isBundled() || appJson.iapPurchased,
+      hidden: (isWindowsStore() || isMas()) && appJson.registered,
     },
     general: {
       text: 'General',
@@ -358,7 +347,7 @@ const Preferences = ({
       text: 'More Apps',
       Icon: StorefrontIcon,
       ref: useRef(),
-      hidden: isBundled(),
+      hidden: !isMas() && !isWindowsStore(),
     },
     miscs: {
       text: 'Miscellaneous',
@@ -400,18 +389,7 @@ const Preferences = ({
         </List>
       </div>
       <div className={classes.inner}>
-        {(!isBundled()) ? null : (
-          <>
-            <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle} ref={sections.account.ref}>
-              Account
-            </Typography>
-            <Paper elevation={0} className={classes.paper}>
-              <SectionAccount />
-            </Paper>
-          </>
-        )}
-
-        {(isBundled() || appJson.iapPurchased) ? null : (
+        {(isWindowsStore() || isMas()) && appJson.registered ? null : (
           <>
             <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle} ref={sections.licensing.ref}>
               Licensing
@@ -419,12 +397,12 @@ const Preferences = ({
             <Paper elevation={0} className={classes.paper}>
               <List disablePadding dense>
                 <ListItem button onClick={null} disabled>
-                  <ListItemText primary={combinedIapPurchased ? `${isMas() ? appJson.name : 'WebCatalog'} Plus is activated.` : `Upgrade to ${isMas() ? appJson.name : 'WebCatalog'} Plus (${formattedPrice ? `${formattedPrice}, ` : ''}one-time payment) to unlock all features & add unlimited number of workspaces.`} />
+                  <ListItemText primary={registered ? `${isMas() ? appJson.name : 'WebCatalog'} Plus is activated.` : `Upgrade to ${isMas() ? appJson.name : 'WebCatalog'} Plus (${formattedPrice ? `${formattedPrice}, ` : ''}one-time payment) to unlock all features & add unlimited number of workspaces.`} />
                 </ListItem>
-                {!combinedIapPurchased && (
+                {!registered && (
                   <>
                     <Divider />
-                    <ListItem button onClick={() => onCheckPlan()}>
+                    <ListItem button onClick={checkLicense}>
                       <ListItemText primary={`Upgrade to ${isMas() ? appJson.name : 'WebCatalog'} Plus`} />
                       <ChevronRightIcon color="action" />
                     </ListItem>
@@ -526,7 +504,7 @@ const Preferences = ({
                   onChange={(e) => {
                     // this feature is free with WebCatalog
                     // but not free in MAS apps
-                    if (isMas() && !onCheckPlan()) {
+                    if (isMas() && !checkLicense()) {
                       return;
                     }
                     requestSetPreference('attachToMenubar', e.target.checked);
@@ -772,6 +750,24 @@ const Preferences = ({
             <ListItem>
               <ListItemText
                 primary="Block ads &amp; trackers"
+                secondary={(
+                  <>
+                    <span>Powered by </span>
+                    <span
+                      role="link"
+                      tabIndex={0}
+                      className={classes.link}
+                      onClick={() => requestOpenInBrowser('https://cliqz.com/en/whycliqz/adblocking')}
+                      onKeyDown={(e) => {
+                        if (e.key !== 'Enter') return;
+                        requestOpenInBrowser('https://cliqz.com/en/whycliqz/adblocking');
+                      }}
+                    >
+                      Cliqz
+                    </span>
+                    <span>.</span>
+                  </>
+                )}
               />
               <ListItemSecondaryAction>
                 <Switch
@@ -779,7 +775,7 @@ const Preferences = ({
                   color="primary"
                   checked={blockAds}
                   onChange={(e) => {
-                    if (!onCheckPlan() && !blockAds) {
+                    if (!checkLicense()) {
                       return;
                     }
 
@@ -792,8 +788,25 @@ const Preferences = ({
             <Divider />
             <ListItem>
               <ListItemText
-                primary="Dark Reader"
-                secondary="Create and customize dark theme on the fly."
+                primary="Create dark themes for web pages on the fly"
+                secondary={(
+                  <>
+                    <span>Powered by </span>
+                    <span
+                      role="link"
+                      tabIndex={0}
+                      className={classes.link}
+                      onClick={() => requestOpenInBrowser('https://darkreader.org/')}
+                      onKeyDown={(e) => {
+                        if (e.key !== 'Enter') return;
+                        requestOpenInBrowser('https://darkreader.org/');
+                      }}
+                    >
+                      Dark Reader
+                    </span>
+                    <span>.</span>
+                  </>
+                )}
               />
               <ListItemSecondaryAction>
                 <Switch
@@ -1031,14 +1044,7 @@ const Preferences = ({
         </Typography>
         <Paper elevation={0} className={classes.paper}>
           <List disablePadding dense>
-            <ListItem
-              button
-              onClick={() => {
-                if (onCheckPlan()) {
-                  requestShowNotificationsWindow();
-                }
-              }}
-            >
+            <ListItem button onClick={requestShowNotificationsWindow}>
               <ListItemText primary="Control notifications" />
               <ChevronRightIcon color="action" />
             </ListItem>
@@ -1276,7 +1282,7 @@ const Preferences = ({
             <ListItem
               button
               onClick={() => {
-                if (!onCheckPlan()) {
+                if (!checkLicense()) {
                   return;
                 }
 
@@ -1463,7 +1469,7 @@ const Preferences = ({
             <ListItem
               button
               onClick={() => {
-                if (!onCheckPlan()) return;
+                if (!checkLicense()) return;
                 onOpenDialogCodeInjection('js');
               }}
             >
@@ -1478,7 +1484,7 @@ const Preferences = ({
             <ListItem
               button
               onClick={() => {
-                if (!onCheckPlan()) return;
+                if (!checkLicense()) return;
                 onOpenDialogCodeInjection('css');
               }}
             >
@@ -1598,7 +1604,7 @@ const Preferences = ({
           </List>
         </Paper>
 
-        {isBundled() && (
+        {!isMas() && !isWindowsStore() && (
           <>
             <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.updates.ref}>
               Updates
@@ -1668,7 +1674,7 @@ const Preferences = ({
           additional code, or resources to add functionality
           or significantly change the app from what
           we see during the review process. */}
-        {!isBundled() && (
+        {(isMas() || isWindowsStore()) && (
           <>
             <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle} ref={sections.moreApps.ref}>
               More Apps
@@ -1973,7 +1979,7 @@ const Preferences = ({
             </ListItem>
             <Divider />
             {(() => {
-              if (!isBundled()) {
+              if (isWindowsStore() || isMas()) {
                 return (
                   <>
                     <ListItem
@@ -2054,7 +2060,7 @@ const Preferences = ({
               <ListItemText primary="Open Source Notices" />
               <ChevronRightIcon color="action" />
             </ListItem>
-            {isBundled() && (
+            {!isMas() && !isWindowsStore() && (
               <>
                 <Divider />
                 <ListItem button onClick={() => requestOpenInBrowser('https://twitter.com/webcatalog_app')}>
@@ -2126,7 +2132,6 @@ Preferences.propTypes = {
   internalUrlRule: PropTypes.string,
   jsCodeInjection: PropTypes.string,
   navigationBar: PropTypes.bool.isRequired,
-  onCheckPlan: PropTypes.func.isRequired,
   onOpenDialogAppLock: PropTypes.func.isRequired,
   onOpenDialogCodeInjection: PropTypes.func.isRequired,
   onOpenDialogCustomUserAgent: PropTypes.func.isRequired,
@@ -2216,7 +2221,6 @@ const mapStateToProps = (state) => ({
 });
 
 const actionCreators = {
-  checkPlan,
   openDialogAppLock,
   openDialogCodeInjection,
   openDialogCustomUserAgent,

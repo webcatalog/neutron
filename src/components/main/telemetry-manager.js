@@ -11,9 +11,9 @@ import getStaticGlobal from '../../helpers/get-static-global';
 
 import amplitude from '../../amplitude';
 
-const TelemetryManager = ({ telemetry, iapPurchased }) => {
+const TelemetryManager = ({ iapPurchased, telemetry }) => {
   const appJson = getStaticGlobal('appJson');
-  const combinedIapPurchased = appJson.iapPurchased || iapPurchased;
+  const registered = appJson.registered || iapPurchased;
 
   useEffect(() => {
     amplitude.getInstance().setOptOut(!telemetry);
@@ -21,20 +21,14 @@ const TelemetryManager = ({ telemetry, iapPurchased }) => {
 
   useEffect(() => {
     amplitude.getInstance().setUserProperties({
-      billingPlan: (() => {
-        if (isMas() || isWindowsStore()) {
-          if (combinedIapPurchased) return 'standalone-plus';
-          return 'standalone';
-        }
-        return 'basic';
-      })(),
+      registered,
       distributionChannel: (() => {
         if (isMas()) return 'macAppStore';
         if (isWindowsStore()) return 'windowsStore';
         return 'webcatalog';
       })(),
     });
-  }, [combinedIapPurchased]);
+  }, [registered]);
 
   // run after setUserProperties
   // https://blog.logrocket.com/post-hooks-guide-react-call-order

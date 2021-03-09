@@ -12,9 +12,9 @@ import validate from '../../helpers/validate';
 import isUrl from '../../helpers/is-url';
 import hasErrors from '../../helpers/has-errors';
 
-import swiftype from '../../swiftype';
+import { requestCreateWorkspace } from '../../senders';
 
-import { createWorkspace } from '../workspaces/actions';
+import swiftype from '../../swiftype';
 
 const getValidationRules = () => ({
   name: {
@@ -158,14 +158,14 @@ export const save = () => (dispatch, getState) => {
   const url = form.homeUrl.trim();
   const homeUrl = isUrl(url) ? url : `http://${url}`;
 
-  dispatch(createWorkspace({
+  requestCreateWorkspace({
     name: form.name,
     homeUrl,
     picture: form.internetIcon || form.picturePath,
     transparentBackground: Boolean(form.transparentBackground),
     preferredIconType: form.preferredIconType,
     backgroundColor: form.backgroundColor,
-  }));
+  });
 
   // don't close window, only hide it
   // 1. it's faster for users (normally people add multiple workspaces at once to set up)
