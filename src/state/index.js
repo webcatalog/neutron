@@ -25,7 +25,6 @@ import general from './general/reducers';
 import notifications from './notifications/reducers';
 import preferences from './preferences/reducers';
 import systemPreferences from './system-preferences/reducers';
-import user from './user/reducers';
 import workspaceMetas from './workspace-metas/reducers';
 import workspaces from './workspaces/reducers';
 
@@ -49,7 +48,6 @@ const rootReducer = combineReducers({
   notifications,
   preferences,
   systemPreferences,
-  user,
   workspaceMetas,
   workspaces,
 });

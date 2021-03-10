@@ -7,19 +7,13 @@ import {
   getPreference,
 } from '../senders';
 import getStaticGlobal from './get-static-global';
-import isBundled from './is-bundled';
 
-const checkLicense = (reason) => {
-  if (isBundled()) {
-    requestShowRequireLicenseDialog(reason);
-    return false;
-  }
-
+const checkLicense = () => {
   const appJson = getStaticGlobal('appJson');
   const iapPurchased = isMas() ? getPreference('iapPurchased') : false;
 
-  if (!appJson.iapPurchased && !iapPurchased) {
-    requestShowRequireLicenseDialog(reason);
+  if (!appJson.registered && !iapPurchased) {
+    requestShowRequireLicenseDialog();
     return false;
   }
   return true;

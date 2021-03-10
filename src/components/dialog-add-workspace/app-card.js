@@ -16,9 +16,9 @@ import { trackAddWorkspaceAsync } from '../../firebase/functions';
 import connectComponent from '../../helpers/connect-component';
 import isUrl from '../../helpers/is-url';
 import extractHostname from '../../helpers/extract-hostname';
+import { requestCreateWorkspace } from '../../senders';
 
 import { updateForm, updateMode } from '../../state/dialog-add-workspace/actions';
-import { createWorkspace } from '../../state/workspaces/actions';
 
 const styles = (theme) => ({
   card: {
@@ -78,7 +78,6 @@ const AppCard = (props) => {
     icon128,
     id,
     name,
-    onCreateWorkspace,
     onUpdateForm,
     onUpdateMode,
     url,
@@ -129,7 +128,7 @@ const AppCard = (props) => {
           variant="contained"
           disableElevation
           onClick={() => {
-            onCreateWorkspace({
+            requestCreateWorkspace({
               name,
               homeUrl: url,
               picture: icon,
@@ -163,14 +162,12 @@ AppCard.propTypes = {
   icon: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  onCreateWorkspace: PropTypes.func.isRequired,
   onUpdateForm: PropTypes.func.isRequired,
   onUpdateMode: PropTypes.func.isRequired,
   url: PropTypes.string.isRequired,
 };
 
 const actionCreators = {
-  createWorkspace,
   updateForm,
   updateMode,
 };
