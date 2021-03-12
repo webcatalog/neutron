@@ -335,6 +335,11 @@ const handleLoaded = async (event) => {
     }
   });
 
+  // Printing
+  ipcRenderer.on('request-print', () => {
+    window.print();
+  });
+
   // eslint-disable-next-line no-console
   console.log('Preload script is loaded...');
 
