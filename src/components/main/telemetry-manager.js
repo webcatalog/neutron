@@ -21,7 +21,7 @@ const TelemetryManager = ({ iapPurchased, telemetry }) => {
 
   useEffect(() => {
     amplitude.getInstance().setUserProperties({
-      registered,
+      pricing: registered ? 'plus' : 'basic', // PRO plan to be added
       distributionChannel: (() => {
         if (isMas()) return 'macAppStore';
         if (isWindowsStore()) return 'windowsStore';

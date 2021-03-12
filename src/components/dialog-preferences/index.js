@@ -397,13 +397,13 @@ const Preferences = ({
             <Paper elevation={0} className={classes.paper}>
               <List disablePadding dense>
                 <ListItem button onClick={null} disabled>
-                  <ListItemText primary={registered ? `${isMas() ? appJson.name : 'WebCatalog'} Plus is activated.` : `Upgrade to ${isMas() ? appJson.name : 'WebCatalog'} Plus (${formattedPrice ? `${formattedPrice}, ` : ''}one-time payment) to unlock all features & add unlimited number of workspaces.`} />
+                  <ListItemText primary={registered ? `${isMas() ? `${appJson.name} Plus` : 'WebCatalog Lifetime'} is activated.` : `Upgrade to ${isMas() ? `${appJson.name} Plus` : 'WebCatalog Lifetime'} (${formattedPrice ? `${formattedPrice}, ` : ''}one-time payment) to unlock all features & add unlimited number of workspaces.`} />
                 </ListItem>
                 {!registered && (
                   <>
                     <Divider />
                     <ListItem button onClick={checkLicense}>
-                      <ListItemText primary={`Upgrade to ${isMas() ? appJson.name : 'WebCatalog'} Plus`} />
+                      <ListItemText primary={`Upgrade to ${isMas() ? `${appJson.name} Plus` : 'WebCatalog Lifetime'}`} />
                       <ChevronRightIcon color="action" />
                     </ListItem>
                   </>
