@@ -3,12 +3,13 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 const {
   Notification,
+  ShareMenu,
   app,
   dialog,
+  inAppPurchase,
   ipcMain,
   nativeTheme,
   shell,
-  inAppPurchase,
 } = require('electron');
 
 const {
@@ -616,6 +617,22 @@ const loadListeners = () => {
 
   ipcMain.on('create-menu', () => {
     createMenu();
+  });
+
+  ipcMain.on('request-show-share-menu', () => {
+    const win = mainWindow.get();
+    if (win) {
+      const view = win.getBrowserView();
+      if (view && view.webContents) {
+        const url = view.webContents.getURL();
+        if (url) {
+          const shareMenu = new ShareMenu({
+            urls: [url],
+          });
+          shareMenu.popup(win);
+        }
+      }
+    }
   });
 };
 

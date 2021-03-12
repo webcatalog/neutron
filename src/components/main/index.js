@@ -11,6 +11,7 @@ import 'simplebar/dist/simplebar.min.css';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
+import SvgIcon from '@material-ui/core/SvgIcon';
 
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import NotificationsPausedIcon from '@material-ui/icons/NotificationsPaused';
@@ -49,6 +50,7 @@ import {
   requestShowEditWorkspaceWindow,
   requestShowNotificationsWindow,
   requestShowPreferencesWindow,
+  requestShowShareMenu,
   requestShowWorkspacePreferencesWindow,
   requestWakeUpWorkspace,
 } from '../../senders';
@@ -413,6 +415,19 @@ const Main = ({
                   className={classnames(!isSidebarExpanded && classes.iconButton)}
                   size="small"
                 />
+                {window.process.platform === 'darwin' && workspacesList.length > 0 && (
+                  <IconButton
+                    title="Share"
+                    aria-label="Share"
+                    onClick={() => requestShowShareMenu()}
+                    className={classnames(!isSidebarExpanded && classes.iconButton)}
+                    size="small"
+                  >
+                    <SvgIcon>
+                      <path fill="currentColor" d="M12,1L8,5H11V14H13V5H16M18,23H6C4.89,23 4,22.1 4,21V9A2,2 0 0,1 6,7H9V9H6V21H18V9H15V7H18A2,2 0 0,1 20,9V21A2,2 0 0,1 18,23Z" />
+                    </SvgIcon>
+                  </IconButton>
+                )}
                 <IconButton
                   title="Notifications"
                   aria-label="Notifications"
