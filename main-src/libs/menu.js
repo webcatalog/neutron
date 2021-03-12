@@ -175,8 +175,17 @@ const createMenu = async () => {
       label: 'File',
       submenu: [
         {
-          role: 'shareMenu',
-          sharingItem: {},
+          label: 'Print...',
+          accelerator: 'CmdOrCtrl+P',
+          click: () => {
+            const win = mainWindow.get();
+
+            if (win != null) {
+              const contents = win.getBrowserView().webContents;
+              contents.send('request-print');
+            }
+          },
+          enabled: !global.locked && hasWorkspaces,
         },
       ],
     },
@@ -584,25 +593,40 @@ const createMenu = async () => {
     },
   );
 
-  try {
-    const win = mainWindow.get();
-    if (win) {
-      const view = win.getBrowserView();
-      if (view && view.webContents) {
-        const url = view.webContents.getURL();
-        if (url) {
-          template[1].submenu[0] = {
-            role: 'shareMenu',
-            sharingItem: {
-              urls: [url],
-            },
-          };
+  if (process.platform === 'darwin') {
+    template[1].submenu.unshift({
+      type: 'separator',
+    });
+    template[1].submenu.unshift({
+      role: 'shareMenu',
+      sharingItem: {},
+    });
+
+    if (!global.locked && hasWorkspaces) {
+      try {
+        const win = mainWindow.get();
+        if (win) {
+          const view = win.getBrowserView();
+          if (view && view.webContents) {
+            const url = view.webContents.getURL();
+            if (url) {
+              template[1].submenu[1] = {
+                type: 'separator',
+              };
+              template[1].submenu[0] = {
+                role: 'shareMenu',
+                sharingItem: {
+                  urls: [url],
+                },
+              };
+            }
+          }
         }
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.log(err);
       }
     }
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.log(err);
   }
 
   menu = Menu.buildFromTemplate(template);
