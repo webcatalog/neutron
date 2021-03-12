@@ -98,7 +98,7 @@ const createMenu = async () => {
   const licensingMenuItems = (isMas() || isWindowsStore()) ? [] : [
     { type: 'separator' },
     {
-      label: registered ? 'WebCatalog Plus' : 'WebCatalog Basic',
+      label: registered ? 'WebCatalog Lifetime' : 'WebCatalog Basic',
       enabled: false,
       click: null,
     },
