@@ -41,6 +41,8 @@ const sendToAllWindows = require('./send-to-all-windows');
 const getViewBounds = require('./get-view-bounds');
 const customizedFetch = require('./customized-fetch');
 const isMas = require('./is-mas');
+const isWindowsStore = require('./is-windows-store');
+const getUtmSource = require('./get-utm-source');
 
 const views = {};
 let shouldMuteAudio;
@@ -793,6 +795,8 @@ const addView = (browserWindow, workspace) => {
   view.webContents.on('context-menu', (e, info) => {
     contextMenuBuilder.buildMenuForElement(info)
       .then((menu) => {
+        const utmSource = getUtmSource();
+
         if (info.linkURL && info.linkURL.length > 0) {
           menu.append(new MenuItem({ type: 'separator' }));
 
@@ -887,19 +891,26 @@ const addView = (browserWindow, workspace) => {
               {
                 label: 'Check for Updates',
                 click: () => ipcMain.emit('request-check-for-updates'),
+                visible: !isMas() && !isWindowsStore(),
               },
               {
                 label: 'Preferences...',
                 click: () => ipcMain.emit('request-show-preferences-window'),
               },
               { type: 'separator' },
-              {
+              !isMas() && !isWindowsStore() ? {
                 label: 'WebCatalog Help',
                 click: () => shell.openExternal('https://help.webcatalog.app?utm_source=juli_app'),
+              } : {
+                label: 'Help',
+                click: () => shell.openExternal(`https://${appJson.id}.app/help?utm_source=${utmSource}`),
               },
-              {
+              !isMas() && !isWindowsStore() ? {
                 label: 'WebCatalog Website',
                 click: () => shell.openExternal('https://webcatalog.app?utm_source=juli_app'),
+              } : {
+                label: 'Website',
+                click: () => shell.openExternal(`https://${appJson.id}.app?utm_source=${utmSource}`),
               },
               { type: 'separator' },
               {
