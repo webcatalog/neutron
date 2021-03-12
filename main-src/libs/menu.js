@@ -172,6 +172,15 @@ const createMenu = async () => {
       ],
     },
     {
+      label: 'File',
+      submenu: [
+        {
+          role: 'shareMenu',
+          sharingItem: {},
+        },
+      ],
+    },
+    {
       label: 'Edit',
       submenu: [
         { role: 'undo' },
@@ -481,7 +490,7 @@ const createMenu = async () => {
       .sort((a, b) => a.order - b.order)
       .forEach((workspace, i) => {
         const label = getWorkspaceName(workspace);
-        template[4].submenu.push({
+        template[5].submenu.push({
           label,
           type: 'checkbox',
           checked: workspace.active,
@@ -493,7 +502,7 @@ const createMenu = async () => {
           accelerator: i < 9 ? `CmdOrCtrl+${i + 1}` : null,
         });
 
-        template[2].submenu[template[2].submenu.length - 1].submenu.push({
+        template[3].submenu[template[3].submenu.length - 1].submenu.push({
           label,
           click: () => {
             const v = getView(workspace.id);
@@ -503,7 +512,7 @@ const createMenu = async () => {
       });
   }
 
-  template[4].submenu.push(
+  template[5].submenu.push(
     { type: 'separator' },
     {
       label: 'Select Next Workspace',
@@ -574,6 +583,27 @@ const createMenu = async () => {
       visible: appJson.id !== 'dynacal' && appJson.id !== 'dynamail',
     },
   );
+
+  try {
+    const win = mainWindow.get();
+    if (win) {
+      const view = win.getBrowserView();
+      if (view && view.webContents) {
+        const url = view.webContents.getURL();
+        if (url) {
+          template[1].submenu[0] = {
+            role: 'shareMenu',
+            sharingItem: {
+              urls: [url],
+            },
+          };
+        }
+      }
+    }
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(err);
+  }
 
   menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);

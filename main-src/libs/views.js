@@ -191,6 +191,11 @@ const isInternalUrl = (url, currentInternalUrls) => {
   return Boolean(matchedInternalUrl);
 };
 
+const updateAddress = (url) => {
+  sendToAllWindows('update-address', url, false);
+  ipcMain.emit('create-menu');
+};
+
 const addView = (browserWindow, workspace) => {
   if (views[workspace.id] != null) return;
 
@@ -361,7 +366,7 @@ const addView = (browserWindow, workspace) => {
     if (!workspaceObj) return;
 
     if (workspaceObj.active) {
-      sendToAllWindows('update-address', view.webContents.getURL(), false);
+      updateAddress(view.webContents.getURL());
     }
 
     const currentUrl = view.webContents.getURL();
@@ -441,7 +446,7 @@ const addView = (browserWindow, workspace) => {
     if (workspaceObj.active) {
       sendToAllWindows('update-can-go-back', view.webContents.canGoBack());
       sendToAllWindows('update-can-go-forward', view.webContents.canGoForward());
-      sendToAllWindows('update-address', url, false);
+      updateAddress(url);
     }
   });
 
@@ -455,7 +460,7 @@ const addView = (browserWindow, workspace) => {
     if (workspaceObj.active) {
       sendToAllWindows('update-can-go-back', view.webContents.canGoBack());
       sendToAllWindows('update-can-go-forward', view.webContents.canGoForward());
-      sendToAllWindows('update-address', url, false);
+      updateAddress(url);
     }
   });
 
@@ -857,6 +862,19 @@ const addView = (browserWindow, workspace) => {
 
         menu.append(new MenuItem({ type: 'separator' }));
 
+        const sharedUrl = info.linkURL || view.webContents.getURL();
+        if (sharedUrl) {
+          menu.append(
+            new MenuItem({
+              role: 'shareMenu',
+              sharingItem: {
+                urls: [sharedUrl],
+              },
+            }),
+          );
+          menu.append(new MenuItem({ type: 'separator' }));
+        }
+
         menu.append(
           new MenuItem({
             label: 'More',
@@ -974,7 +992,7 @@ const setActiveView = (browserWindow, id) => {
       view.webContents.focus();
     }
 
-    sendToAllWindows('update-address', view.webContents.getURL(), false);
+    updateAddress(view.webContents.getURL());
     sendToAllWindows('update-title', view.webContents.getTitle());
     browserWindow.setTitle(view.webContents.getTitle());
   }
