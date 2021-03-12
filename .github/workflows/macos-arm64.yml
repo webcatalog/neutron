@@ -39,9 +39,11 @@ jobs:
         key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
         restore-keys: |
           ${{ runner.os }}-yarn-
-    - run: bash build-keytar-arm64.sh
     # https://github.com/mui-org/material-ui/issues/12432
     - run: yarn --prefer-offline --network-timeout 600000
+    # to be removed when
+    # https://github.com/atom/node-keytar/issues/346 is resolved
+    - run: bash build-keytar-arm64.sh
     - run: yarn lint
     - run: brew install p7zip
     - run: yarn dist
@@ -51,6 +53,8 @@ jobs:
         REACT_APP_SWIFTYPE_SEARCH_KEY: ${{ secrets.REACT_APP_SWIFTYPE_SEARCH_KEY }}
         REACT_APP_SWIFTYPE_ENGINE_NAME: ${{ secrets.REACT_APP_SWIFTYPE_ENGINE_NAME }}
         ELECTRON_APP_SENTRY_DSN: ${{ secrets.ELECTRON_APP_SENTRY_DSN }}
+        # https://github.com/actions/virtual-environments/issues/2486#issuecomment-777773283
+        SDKROOT: /Library/Developer/CommandLineTools/SDKs/MacOSX11.1.sdk
     - name: Create Release
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
