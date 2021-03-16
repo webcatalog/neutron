@@ -490,40 +490,44 @@ const Preferences = ({
                 })}
               </Select>
             </ListItem>
+            {window.process.platform === 'darwin' && (
+              <>
+                <Divider />
+                <ListItem>
+                  <ListItemText
+                    primary="Attach to menu bar"
+                    secondary="Tip: Right-click on app icon to access context menu."
+                  />
+                  <ListItemSecondaryAction>
+                    <Switch
+                      edge="end"
+                      color="primary"
+                      checked={attachToMenubar}
+                      onChange={(e) => {
+                        // this feature is free with WebCatalog
+                        // but not free in MAS apps
+                        if (isMas() && !checkLicense()) {
+                          return;
+                        }
+                        requestSetPreference('attachToMenubar', e.target.checked);
+                        enqueueRequestRestartSnackbar();
+                      }}
+                    />
+                  </ListItemSecondaryAction>
+                </ListItem>
+              </>
+            )}
             <Divider />
             <ListItem>
               <ListItemText
-                primary={window.process.platform === 'win32' ? 'Attach to taskbar' : 'Attach to menu bar'}
-                secondary="Tip: Right-click on app icon to access context menu."
-              />
-              <ListItemSecondaryAction>
-                <Switch
-                  edge="end"
-                  color="primary"
-                  checked={attachToMenubar}
-                  onChange={(e) => {
-                    // this feature is free with WebCatalog
-                    // but not free in MAS apps
-                    if (isMas() && !checkLicense()) {
-                      return;
-                    }
-                    requestSetPreference('attachToMenubar', e.target.checked);
-                    enqueueRequestRestartSnackbar();
-                  }}
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
-            <ListItem>
-              <ListItemText
-                primary="Keep attached window always on top"
+                primary="Keep window always on top"
                 secondary="The window won't be hidden even when you click outside."
               />
               <ListItemSecondaryAction>
                 <Switch
                   edge="end"
                   color="primary"
-                  checked={!attachToMenubar ? false : alwaysOnTop}
-                  disabled={!attachToMenubar}
+                  checked={alwaysOnTop}
                   onChange={(e) => {
                     requestSetPreference('alwaysOnTop', e.target.checked);
                     enqueueRequestRestartSnackbar();
@@ -1443,7 +1447,7 @@ const Preferences = ({
                 className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
               >
                 <MenuItem dense value="yes">Yes</MenuItem>
-                {window.process.platform !== 'win32' && (
+                {window.process.platform === 'darwin' && (
                   <MenuItem dense value="yes-hidden">Yes, but minimized</MenuItem>
                 )}
                 <MenuItem dense value="no">No</MenuItem>

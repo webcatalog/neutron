@@ -44,7 +44,10 @@ const getSystemPreference = (name) => {
       // Electron app.getLoginItemSettings API only supports macOS & Windows
       if (process.platform === 'linux') {
         checkAutoLauncherStatusAsync();
-        return settings.getSync('systemPreferences.openAtLogin') || 'no';
+        if (settings.getSync('systemPreferences.openAtLogin').startsWith('yes')) {
+          return 'yes';
+        }
+        return 'no';
       }
 
       const loginItemSettings = app.getLoginItemSettings();
