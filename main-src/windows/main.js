@@ -195,6 +195,7 @@ const createAsync = () => new Promise((resolve) => {
     titleBarStyle: global.windowButtons ? 'hidden' : 'default',
     frame: (process.platform === 'darwin' && global.windowButtons) || global.useSystemTitleBar,
     show: false,
+    alwaysOnTop: getPreference('alwaysOnTop'),
     webPreferences: {
       enableRemoteModule: true,
       contextIsolation: false,
