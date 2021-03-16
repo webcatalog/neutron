@@ -100,8 +100,6 @@ import dynacalIconPng from '../../images/products/dynacal-mac-icon-128@2x.png';
 import pantextIconPng from '../../images/products/pantext-mac-icon-128@2x.png';
 import panmailIconPng from '../../images/products/panmail-mac-icon-128@2x.png';
 
-const P = 'darwin';
-
 const styles = (theme) => ({
   root: {
     padding: theme.spacing(2),
@@ -199,8 +197,8 @@ const styles = (theme) => ({
 });
 
 const getFileManagerName = () => {
-  if (P === 'darwin') return 'Finder';
-  if (P === 'win32') return 'File Explorer';
+  if (window.process.platform === 'darwin') return 'Finder';
+  if (window.process.platform === 'win32') return 'File Explorer';
   return 'file manager';
 };
 
@@ -263,7 +261,7 @@ const Preferences = ({
 }) => {
   const appJson = getStaticGlobal('appJson');
   const utmSource = getUtmSource();
-  const canPromptTouchId = P === 'darwin'
+  const canPromptTouchId = window.process.platform === 'darwin'
     && window.remote.systemPreferences.canPromptTouchID();
   const registered = appJson.registered || iapPurchased;
 
@@ -492,7 +490,7 @@ const Preferences = ({
                 })}
               </Select>
             </ListItem>
-            {P === 'darwin' && (
+            {window.process.platform === 'darwin' && (
               <>
                 <Divider />
                 <ListItem>
@@ -537,7 +535,7 @@ const Preferences = ({
                 />
               </ListItemSecondaryAction>
             </ListItem>
-            {P !== 'darwin' && (
+            {window.process.platform !== 'darwin' && (
               <>
                 <Divider />
                 <ListItem>
@@ -570,7 +568,7 @@ const Preferences = ({
           <List disablePadding dense>
             <ListItem>
               <ListItemText
-                primary={P === 'darwin' ? 'Show menu bar icon' : 'Show tray icon'}
+                primary={window.process.platform === 'darwin' ? 'Show menu bar icon' : 'Show tray icon'}
               />
               <ListItemSecondaryAction>
                 <Switch
@@ -692,8 +690,8 @@ const Preferences = ({
                   // must show sidebar or navigation bar on Linux
                   // if not, as user can't right-click on menu bar icon
                   // they can't access preferences or notifications
-                  checked={(P === 'linux' && attachToMenubar && !sidebar) || navigationBar}
-                  disabled={(P === 'linux' && attachToMenubar && !sidebar)}
+                  checked={(window.process.platform === 'linux' && attachToMenubar && !sidebar) || navigationBar}
+                  disabled={(window.process.platform === 'linux' && attachToMenubar && !sidebar)}
                   onChange={(e) => {
                     requestSetPreference('navigationBar', e.target.checked);
                     requestRealignActiveWorkspace();
@@ -701,7 +699,7 @@ const Preferences = ({
                 />
               </ListItemSecondaryAction>
             </ListItem>
-            {P === 'darwin' && (
+            {window.process.platform === 'darwin' && (
               <>
                 <Divider />
                 <ListItem>
@@ -723,7 +721,7 @@ const Preferences = ({
                 </ListItem>
               </>
             )}
-            {P === 'darwin' && (
+            {window.process.platform === 'darwin' && (
               <>
                 <Divider />
                 <ListItem>
@@ -1137,7 +1135,7 @@ const Preferences = ({
                 secondary={(() => {
                   // only show this message on macOS Catalina 10.15 & above
                   if (
-                    P === 'darwin'
+                    window.process.platform === 'darwin'
                     && semver.gte(window.remote.process.getSystemVersion(), '10.15.0')
                   ) {
                     return (
@@ -1205,7 +1203,7 @@ const Preferences = ({
                 />
               </ListItemSecondaryAction>
             </ListItem>
-            {P !== 'darwin' && (
+            {window.process.platform !== 'darwin' && (
               <>
                 <Divider />
                 <ListItem button onClick={onOpenDialogSpellcheckLanguages}>
@@ -1449,7 +1447,7 @@ const Preferences = ({
                 className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
               >
                 <MenuItem dense value="yes">Yes</MenuItem>
-                {P === 'darwin' && (
+                {window.process.platform === 'darwin' && (
                   <MenuItem dense value="yes-hidden">Yes, but minimized</MenuItem>
                 )}
                 <MenuItem dense value="no">No</MenuItem>
@@ -1533,7 +1531,7 @@ const Preferences = ({
                 />
               </ListItemSecondaryAction>
             </ListItem>
-            {P === 'darwin' && (
+            {window.process.platform === 'darwin' && (
               <>
                 <Divider />
                 <ListItem>
@@ -1569,7 +1567,7 @@ const Preferences = ({
                 </ListItem>
               </>
             )}
-            {P !== 'darwin' && (
+            {window.process.platform !== 'darwin' && (
               <>
                 <Divider />
                 <ListItem>
