@@ -100,6 +100,8 @@ import dynacalIconPng from '../../images/products/dynacal-mac-icon-128@2x.png';
 import pantextIconPng from '../../images/products/pantext-mac-icon-128@2x.png';
 import panmailIconPng from '../../images/products/panmail-mac-icon-128@2x.png';
 
+const P = 'darwin';
+
 const styles = (theme) => ({
   root: {
     padding: theme.spacing(2),
@@ -197,8 +199,8 @@ const styles = (theme) => ({
 });
 
 const getFileManagerName = () => {
-  if (window.process.platform === 'darwin') return 'Finder';
-  if (window.process.platform === 'win32') return 'File Explorer';
+  if (P === 'darwin') return 'Finder';
+  if (P === 'win32') return 'File Explorer';
   return 'file manager';
 };
 
@@ -261,7 +263,7 @@ const Preferences = ({
 }) => {
   const appJson = getStaticGlobal('appJson');
   const utmSource = getUtmSource();
-  const canPromptTouchId = window.process.platform === 'darwin'
+  const canPromptTouchId = P === 'darwin'
     && window.remote.systemPreferences.canPromptTouchID();
   const registered = appJson.registered || iapPurchased;
 
@@ -490,40 +492,44 @@ const Preferences = ({
                 })}
               </Select>
             </ListItem>
+            {P === 'darwin' && (
+              <>
+                <Divider />
+                <ListItem>
+                  <ListItemText
+                    primary="Attach to menu bar"
+                    secondary="Tip: Right-click on app icon to access context menu."
+                  />
+                  <ListItemSecondaryAction>
+                    <Switch
+                      edge="end"
+                      color="primary"
+                      checked={attachToMenubar}
+                      onChange={(e) => {
+                        // this feature is free with WebCatalog
+                        // but not free in MAS apps
+                        if (isMas() && !checkLicense()) {
+                          return;
+                        }
+                        requestSetPreference('attachToMenubar', e.target.checked);
+                        enqueueRequestRestartSnackbar();
+                      }}
+                    />
+                  </ListItemSecondaryAction>
+                </ListItem>
+              </>
+            )}
             <Divider />
             <ListItem>
               <ListItemText
-                primary={window.process.platform === 'win32' ? 'Attach to taskbar' : 'Attach to menu bar'}
-                secondary="Tip: Right-click on app icon to access context menu."
-              />
-              <ListItemSecondaryAction>
-                <Switch
-                  edge="end"
-                  color="primary"
-                  checked={attachToMenubar}
-                  onChange={(e) => {
-                    // this feature is free with WebCatalog
-                    // but not free in MAS apps
-                    if (isMas() && !checkLicense()) {
-                      return;
-                    }
-                    requestSetPreference('attachToMenubar', e.target.checked);
-                    enqueueRequestRestartSnackbar();
-                  }}
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
-            <ListItem>
-              <ListItemText
-                primary="Keep attached window always on top"
+                primary="Keep window always on top"
                 secondary="The window won't be hidden even when you click outside."
               />
               <ListItemSecondaryAction>
                 <Switch
                   edge="end"
                   color="primary"
-                  checked={!attachToMenubar ? false : alwaysOnTop}
-                  disabled={!attachToMenubar}
+                  checked={alwaysOnTop}
                   onChange={(e) => {
                     requestSetPreference('alwaysOnTop', e.target.checked);
                     enqueueRequestRestartSnackbar();
@@ -531,7 +537,7 @@ const Preferences = ({
                 />
               </ListItemSecondaryAction>
             </ListItem>
-            {window.process.platform !== 'darwin' && (
+            {P !== 'darwin' && (
               <>
                 <Divider />
                 <ListItem>
@@ -564,7 +570,7 @@ const Preferences = ({
           <List disablePadding dense>
             <ListItem>
               <ListItemText
-                primary={window.process.platform === 'darwin' ? 'Show menu bar icon' : 'Show tray icon'}
+                primary={P === 'darwin' ? 'Show menu bar icon' : 'Show tray icon'}
               />
               <ListItemSecondaryAction>
                 <Switch
@@ -686,8 +692,8 @@ const Preferences = ({
                   // must show sidebar or navigation bar on Linux
                   // if not, as user can't right-click on menu bar icon
                   // they can't access preferences or notifications
-                  checked={(window.process.platform === 'linux' && attachToMenubar && !sidebar) || navigationBar}
-                  disabled={(window.process.platform === 'linux' && attachToMenubar && !sidebar)}
+                  checked={(P === 'linux' && attachToMenubar && !sidebar) || navigationBar}
+                  disabled={(P === 'linux' && attachToMenubar && !sidebar)}
                   onChange={(e) => {
                     requestSetPreference('navigationBar', e.target.checked);
                     requestRealignActiveWorkspace();
@@ -695,7 +701,7 @@ const Preferences = ({
                 />
               </ListItemSecondaryAction>
             </ListItem>
-            {window.process.platform === 'darwin' && (
+            {P === 'darwin' && (
               <>
                 <Divider />
                 <ListItem>
@@ -717,7 +723,7 @@ const Preferences = ({
                 </ListItem>
               </>
             )}
-            {window.process.platform === 'darwin' && (
+            {P === 'darwin' && (
               <>
                 <Divider />
                 <ListItem>
@@ -1131,7 +1137,7 @@ const Preferences = ({
                 secondary={(() => {
                   // only show this message on macOS Catalina 10.15 & above
                   if (
-                    window.process.platform === 'darwin'
+                    P === 'darwin'
                     && semver.gte(window.remote.process.getSystemVersion(), '10.15.0')
                   ) {
                     return (
@@ -1199,7 +1205,7 @@ const Preferences = ({
                 />
               </ListItemSecondaryAction>
             </ListItem>
-            {window.process.platform !== 'darwin' && (
+            {P !== 'darwin' && (
               <>
                 <Divider />
                 <ListItem button onClick={onOpenDialogSpellcheckLanguages}>
@@ -1443,7 +1449,7 @@ const Preferences = ({
                 className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
               >
                 <MenuItem dense value="yes">Yes</MenuItem>
-                {window.process.platform !== 'win32' && (
+                {P === 'darwin' && (
                   <MenuItem dense value="yes-hidden">Yes, but minimized</MenuItem>
                 )}
                 <MenuItem dense value="no">No</MenuItem>
@@ -1527,7 +1533,7 @@ const Preferences = ({
                 />
               </ListItemSecondaryAction>
             </ListItem>
-            {window.process.platform === 'darwin' && (
+            {P === 'darwin' && (
               <>
                 <Divider />
                 <ListItem>
@@ -1563,7 +1569,7 @@ const Preferences = ({
                 </ListItem>
               </>
             )}
-            {window.process.platform !== 'darwin' && (
+            {P !== 'darwin' && (
               <>
                 <Divider />
                 <ListItem>
