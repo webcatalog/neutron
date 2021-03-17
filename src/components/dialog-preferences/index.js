@@ -490,12 +490,12 @@ const Preferences = ({
                 })}
               </Select>
             </ListItem>
-            {window.process.platform === 'darwin' && (
+            {window.process.platform !== 'linux' && (
               <>
                 <Divider />
                 <ListItem>
                   <ListItemText
-                    primary="Attach to menu bar"
+                    primary={window.process.platform === 'win32' ? 'Pin to system tray (notification area)' : 'Attach to menu bar'}
                     secondary="Tip: Right-click on app icon to access context menu."
                   />
                   <ListItemSecondaryAction>
@@ -568,7 +568,11 @@ const Preferences = ({
           <List disablePadding dense>
             <ListItem>
               <ListItemText
-                primary={window.process.platform === 'darwin' ? 'Show menu bar icon' : 'Show tray icon'}
+                primary={(() => {
+                  if (window.process.platform === 'darwin') { return 'Show menu bar icon'; }
+                  if (window.process.platform === 'win32') { return 'Show tray (notification area) icon'; }
+                  return 'Show tray icon';
+                })()}
               />
               <ListItemSecondaryAction>
                 <Switch
