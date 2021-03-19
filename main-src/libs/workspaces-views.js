@@ -36,6 +36,8 @@ const {
 } = require('./preferences');
 
 const mainWindow = require('../windows/main');
+const workspacePreferencesWindow = require('../windows/workspace-preferences');
+const editWorkspaceWindow = require('../windows/edit-workspace');
 
 const sendToAllWindows = require('./send-to-all-windows');
 const extractHostname = require('./extract-hostname');
@@ -134,6 +136,8 @@ const removeWorkspaceView = (id) => {
     setActiveWorkspaceView(getPreviousWorkspace(id).id);
   }
 
+  workspacePreferencesWindow.close(id);
+  editWorkspaceWindow.close(id);
   removeView(id);
   removeWorkspace(id);
 };

@@ -89,7 +89,7 @@ const runApp = () => {
         });
         initialState.dialogWorkspacePreferences = { form: workspace.preferences || {} };
 
-        document.title = `Configure ${getWorkspaceFriendlyName()} "${getWorkspaceName(workspace)}" (advanced)`;
+        document.title = `Edit ${getWorkspaceFriendlyName()} "${getWorkspaceName(workspace)}" (advanced)`;
       } else if (window.mode === 'edit-workspace') {
         const editWorkspaceId = getStaticGlobal('editWorkspaceId');
         const workspaceList = getWorkspacesAsList(initialState.workspaces);
@@ -103,7 +103,7 @@ const runApp = () => {
         });
         initialState.dialogEditWorkspace = { form: workspace };
 
-        document.title = `Configure ${getWorkspaceFriendlyName()} "${getWorkspaceName(workspace)}"`;
+        document.title = `Edit ${getWorkspaceFriendlyName()} "${getWorkspaceName(workspace)}"`;
       } else if (window.mode === 'open-url-with') {
         document.title = 'Open Link With';
       } else if (window.mode === 'notifications') {

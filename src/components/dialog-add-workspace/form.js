@@ -389,7 +389,7 @@ const AddWorkspaceCustom = ({
                   disabled={Boolean(!homeUrl || homeUrlError || downloadingIcon)}
                   onClick={() => onGetIconFromSwiftype(true)}
                 >
-                  {downloadingIcon ? 'Downloading...' : 'Download Icon from WebCatalog'}
+                  {downloadingIcon ? 'Downloading...' : 'Download Icon from Our Database'}
                 </Button>
                 <br />
                 <Button

@@ -52,7 +52,6 @@ import {
   requestShowNotificationsWindow,
   requestShowPreferencesWindow,
   requestShowShareMenu,
-  requestShowWorkspacePreferencesWindow,
   requestWakeUpWorkspace,
 } from '../../senders';
 
@@ -244,10 +243,6 @@ const SortableItem = sortableElement(({ value }) => {
           {
             label: `Edit ${getWorkspaceFriendlyName()}`,
             click: () => requestShowEditWorkspaceWindow(id),
-          },
-          {
-            label: `Configure ${getWorkspaceFriendlyName()}`,
-            click: () => requestShowWorkspacePreferencesWindow(id),
           },
           {
             label: `Remove ${getWorkspaceFriendlyName()}`,
