@@ -2,7 +2,7 @@
   "presets": [
     ["env", {
       "targets": {
-        "electron": "9"
+        "electron": "12"
       }
     }],
     "react"
