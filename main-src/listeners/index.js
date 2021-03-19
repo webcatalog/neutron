@@ -82,6 +82,7 @@ const getViewBounds = require('../libs/get-view-bounds');
 const isMas = require('../libs/is-mas');
 const getIapFormattedPriceAsync = require('../libs/get-iap-formatted-price-async');
 const getUtmSource = require('../libs/get-utm-source');
+const getWorkspaceFriendlyName = require('../libs/get-workspace-friendly-name');
 
 const aboutWindow = require('../windows/about');
 const addWorkspaceWindow = require('../windows/add-workspace');
@@ -240,7 +241,7 @@ const loadListeners = () => {
     dialog.showMessageBox(win, {
       type: 'question',
       buttons: ['Reload Now', 'Later'],
-      message: 'You need to reload the workspace for this change to take effect.',
+      message: `You need to reload the ${getWorkspaceFriendlyName().toLowerCase()} for this change to take effect.`,
       cancelId: 1,
     }).then(({ response }) => {
       if (response === 0) {
@@ -262,7 +263,7 @@ const loadListeners = () => {
         .then((formattedPrice) => {
           dialog.showMessageBox(win, {
             type: 'info',
-            message: `Upgrade to ${appJson.name} Plus (${formattedPrice ? `${formattedPrice}, ` : ''}one-time payment for lifetime use) to unlock all features & add unlimited number of workspaces.`,
+            message: `Upgrade to ${appJson.name} Plus (${formattedPrice ? `${formattedPrice}, ` : ''}one-time payment for lifetime use) to unlock all features & add unlimited number of ${getWorkspaceFriendlyName(true).toLowerCase()}.`,
             buttons: [`Purchase${formattedPrice ? ` (${formattedPrice})` : ''}...`, 'Restore Purchase', 'Later'],
             cancelId: 2,
             defaultId: 0,
@@ -292,7 +293,7 @@ const loadListeners = () => {
 
     dialog.showMessageBox(win, {
       type: 'info',
-      message: 'You\'re currently running the free version of WebCatalog. To unlock all features & add unlimited number of workspaces, please purchase WebCatalog Plus (30 USD) from our store and open WebCatalog app to activate it.',
+      message: `You're currently running the free version of WebCatalog. To unlock all features & add unlimited number of ${getWorkspaceFriendlyName(true).toLowerCase()}, please purchase WebCatalog Plus (30 USD) from our store and open WebCatalog app to activate it.`,
       buttons: ['OK', 'Learn More...'],
       cancelId: 0,
       defaultId: 0,
@@ -435,8 +436,8 @@ const loadListeners = () => {
 
     dialog.showMessageBox(mainWindow.get(), {
       type: 'question',
-      buttons: ['Remove Workspace', 'Cancel'],
-      message: 'Are you sure? All browsing data of this workspace will be wiped. This action cannot be undone.',
+      buttons: [`Remove ${getWorkspaceFriendlyName()}`, 'Cancel'],
+      message: `Are you sure? All browsing data of this ${getWorkspaceFriendlyName().toLowerCase()} will be wiped. This action cannot be undone.`,
       cancelId: 1,
     })
       .then(({ response }) => {

@@ -13,6 +13,7 @@ import CreateIcon from '@material-ui/icons/Create';
 
 import connectComponent from '../../helpers/connect-component';
 import getStaticGlobal from '../../helpers/get-static-global';
+import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
 
 import { updateMode } from '../../state/dialog-add-workspace/actions';
 
@@ -75,7 +76,7 @@ const AddWorkspace = ({
               }}
             />
             <BottomNavigationAction
-              label="Custom Workspace"
+              label={`Custom ${getWorkspaceFriendlyName()}`}
               value="custom"
               icon={<CreateIcon />}
               classes={{

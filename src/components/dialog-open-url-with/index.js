@@ -14,6 +14,7 @@ import connectComponent from '../../helpers/connect-component';
 import getWorkspacesAsList from '../../helpers/get-workspaces-as-list';
 import getMailtoUrl from '../../helpers/get-mailto-url';
 import getStaticGlobal from '../../helpers/get-static-global';
+import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
 
 import { requestLoadUrl } from '../../senders';
 
@@ -35,7 +36,7 @@ const OpenUrlWith = ({ workspaces }) => {
           return workspace.accountInfo.name;
         }
       }
-      return `Workspace ${i + 1}`;
+      return `${getWorkspaceFriendlyName()} ${i + 1}`;
     })();
 
     return (

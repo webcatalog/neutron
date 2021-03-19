@@ -18,6 +18,7 @@ const isDev = require('electron-is-dev');
 const settings = require('electron-settings');
 
 const appJson = require('./constants/app-json');
+const getWorkspaceFriendlyName = require('./libs/get-workspace-friendly-name');
 
 // run before anything else
 // WebCatalog Engine 13.x and lower uses default Electron user data path
@@ -210,7 +211,7 @@ if (!gotTheLock) {
           if (mailtoWorkspaces.length === 0) {
             ipcMain.emit(
               'request-show-message-box', null,
-              'None of your workspaces supports composing email messages.',
+              `None of your ${getWorkspaceFriendlyName().toLowerCase()} supports composing email messages.`,
               'error',
             );
             return null;

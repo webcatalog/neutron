@@ -46,6 +46,7 @@ import isMas from '../../helpers/is-mas';
 import isWindowsStore from '../../helpers/is-windows-store';
 import getStaticGlobal from '../../helpers/get-static-global';
 import getUtmSource from '../../helpers/get-utm-source';
+import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
 
 import {
   enqueueRequestRestartSnackbar,
@@ -397,7 +398,7 @@ const Preferences = ({
             <Paper elevation={0} className={classes.paper}>
               <List disablePadding dense>
                 <ListItem button onClick={null} disabled>
-                  <ListItemText primary={registered ? `${isMas() ? `${appJson.name} Plus` : 'WebCatalog Lifetime'} is activated.` : `Upgrade to ${isMas() ? `${appJson.name} Plus` : 'WebCatalog Lifetime'} (${formattedPrice ? `${formattedPrice}, ` : ''}one-time payment) to unlock all features & add unlimited number of workspaces.`} />
+                  <ListItemText primary={registered ? `${isMas() ? `${appJson.name} Plus` : 'WebCatalog Lifetime'} is activated.` : `Upgrade to ${isMas() ? `${appJson.name} Plus` : 'WebCatalog Lifetime'} (${formattedPrice ? `${formattedPrice}, ` : ''}one-time payment) to unlock all features & add unlimited number of ${getWorkspaceFriendlyName(true).toLowerCase()}.`} />
                 </ListItem>
                 {!registered && (
                   <>
@@ -591,7 +592,7 @@ const Preferences = ({
             <ListItem>
               <ListItemText
                 primary="Show sidebar"
-                secondary="Sidebar lets you switch easily between workspaces."
+                secondary={`Sidebar lets you switch easily between ${getWorkspaceFriendlyName(true).toLowerCase()}.`}
               />
               <ListItemSecondaryAction>
                 <Switch
@@ -658,20 +659,20 @@ const Preferences = ({
                     value="name+shortcut"
                     dense
                   >
-                    Workspace names &amp; keyboard shortcuts
+                    {`${getWorkspaceFriendlyName()} names &amp; keyboard shortcuts`}
                   </MenuItem>
                 )}
                 <MenuItem
                   value="shortcut"
                   dense
                 >
-                  Workspace keyboard shortcuts
+                  {`${getWorkspaceFriendlyName()} keyboard shortcuts`}
                 </MenuItem>
                 <MenuItem
                   value="name"
                   dense
                 >
-                  Workspace names
+                  {`${getWorkspaceFriendlyName()} names`}
                 </MenuItem>
                 <MenuItem
                   value="none"
@@ -1320,7 +1321,7 @@ const Preferences = ({
             </ListItem>
             <Divider />
             <ListItem>
-              <ListItemText primary="Share browsing data between workspaces" />
+              <ListItemText primary={`Share browsing data between ${getWorkspaceFriendlyName(true).toLowerCase()}`} />
               <ListItemSecondaryAction>
                 <Switch
                   edge="end"
@@ -1521,8 +1522,8 @@ const Preferences = ({
             <Divider />
             <ListItem>
               <ListItemText
-                primary="Hibernate unused workspaces at app launch"
-                secondary="Hibernate all workspaces at launch, except the last active workspace."
+                primary={`Hibernate unused ${getWorkspaceFriendlyName(true).toLowerCase()} at app launch`}
+                secondary={`Hibernate all ${getWorkspaceFriendlyName(true).toLowerCase()} at launch, except the last active ${getWorkspaceFriendlyName().toLowerCase()}.`}
               />
               <ListItemSecondaryAction>
                 <Switch
@@ -1658,7 +1659,7 @@ const Preferences = ({
                 window.remote.dialog.showMessageBox(window.remote.getCurrentWindow(), {
                   type: 'question',
                   buttons: ['Reset Now', 'Cancel'],
-                  message: 'Are you sure? All preferences will be restored to their original defaults. Browsing data & workspaces won\'t be affected. This action cannot be undone.',
+                  message: `Are you sure? All preferences will be restored to their original defaults. Browsing data & ${getWorkspaceFriendlyName(true).toLowerCase()} won't be affected. This action cannot be undone.`,
                   cancelId: 1,
                 }).then(({ response }) => {
                   if (response === 0) {

@@ -44,6 +44,7 @@ const customizedFetch = require('./customized-fetch');
 const isMas = require('./is-mas');
 const isWindowsStore = require('./is-windows-store');
 const getUtmSource = require('./get-utm-source');
+const getWorkspaceFriendlyName = require('./get-workspace-friendly-name');
 
 const views = {};
 let shouldMuteAudio;
@@ -831,7 +832,7 @@ const addView = (browserWindow, workspace) => {
           const workspaceLst = Object.values(workspaces).sort((a, b) => a.order - b.order);
 
           menu.append(new MenuItem({
-            label: 'Open Link in New Workspace',
+            label: `Open Link in New ${getWorkspaceFriendlyName()}`,
             click: () => {
               ipcMain.emit('request-open-url-in-workspace', null, info.linkURL);
             },
@@ -839,7 +840,7 @@ const addView = (browserWindow, workspace) => {
           menu.append(new MenuItem({ type: 'separator' }));
 
           workspaceLst.forEach((w) => {
-            const workspaceName = w.name || `Workspace ${w.order + 1}`;
+            const workspaceName = w.name || `${getWorkspaceFriendlyName()} ${w.order + 1}`;
             menu.append(new MenuItem({
               label: `Open Link in ${workspaceName}`,
               click: () => {
