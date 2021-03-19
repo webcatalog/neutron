@@ -11,6 +11,7 @@ import Badge from '@material-ui/core/Badge';
 import connectComponent from '../../helpers/connect-component';
 import getAvatarText from '../../helpers/get-avatar-text';
 import getUrlFromText from '../../helpers/get-url-from-text';
+import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
 
 import {
   requestOpenUrlInWorkspace,
@@ -178,7 +179,7 @@ const WorkspaceSelector = ({
 
   const hoverText = (() => {
     if (id === 'add') {
-      return 'Add Workspace';
+      return `Add ${getWorkspaceFriendlyName()}`;
     }
 
     if (fullName) {

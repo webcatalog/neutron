@@ -17,6 +17,7 @@ const isMas = require('./is-mas');
 const isWindowsStore = require('./is-windows-store');
 const getViewBounds = require('./get-view-bounds');
 const getUtmSource = require('./get-utm-source');
+const getWorkspaceFriendlyName = require('./get-workspace-friendly-name');
 const {
   setPreference,
   getPreference,
@@ -41,7 +42,7 @@ const {
 let menu;
 
 const getWorkspaceName = (workspace) => {
-  let workspaceName = `Workspace ${workspace.order + 1}`;
+  let workspaceName = `${getWorkspaceFriendlyName()} ${workspace.order + 1}`;
   if (workspace.name) workspaceName = workspace.name;
   else if (workspace.accountInfo) {
     if (workspace.accountInfo.name && workspace.accountInfo.email) {
@@ -439,7 +440,7 @@ const createMenu = async () => {
       ],
     },
     {
-      label: 'Workspaces',
+      label: getWorkspaceFriendlyName(true),
       submenu: [],
     },
     {
@@ -524,7 +525,7 @@ const createMenu = async () => {
   template[5].submenu.push(
     { type: 'separator' },
     {
-      label: 'Select Next Workspace',
+      label: `Select Next ${getWorkspaceFriendlyName()}`,
       click: () => {
         const currentActiveWorkspace = getActiveWorkspace();
         const nextWorkspace = getNextWorkspace(currentActiveWorkspace.id);
@@ -535,7 +536,7 @@ const createMenu = async () => {
       enabled: !global.locked && hasWorkspaces,
     },
     {
-      label: 'Select Previous Workspace',
+      label: `Select Previous ${getWorkspaceFriendlyName()}`,
       click: () => {
         const currentActiveWorkspace = getActiveWorkspace();
         const previousWorkspace = getPreviousWorkspace(currentActiveWorkspace.id);
@@ -547,7 +548,7 @@ const createMenu = async () => {
     },
     { type: 'separator' },
     {
-      label: 'Edit Current Workspace',
+      label: `Edit Current ${getWorkspaceFriendlyName()}`,
       click: () => {
         const activeWorkspace = getActiveWorkspace();
         ipcMain.emit('request-show-edit-workspace-window', null, activeWorkspace.id);
@@ -555,7 +556,7 @@ const createMenu = async () => {
       enabled: !global.locked && hasWorkspaces,
     },
     {
-      label: 'Configure Current Workspace',
+      label: `Configure Current ${getWorkspaceFriendlyName()}`,
       click: () => {
         const activeWorkspace = getActiveWorkspace();
         ipcMain.emit('request-show-workspace-preferences-window', null, activeWorkspace.id);
@@ -563,7 +564,7 @@ const createMenu = async () => {
       enabled: !global.locked && hasWorkspaces,
     },
     {
-      label: 'Remove Current Workspace',
+      label: `Remove Current ${getWorkspaceFriendlyName()}`,
       click: () => {
         const activeWorkspace = getActiveWorkspace();
         ipcMain.emit('request-remove-workspace', null, activeWorkspace.id);
@@ -576,7 +577,7 @@ const createMenu = async () => {
         let standardWorkspaceName = appJson.name;
         if (appJson.id === 'dynamail') standardWorkspaceName = 'Gmail';
         if (appJson.id === 'dynacal') standardWorkspaceName = 'Google Calendar';
-        return `Add ${standardWorkspaceName} Workspace`;
+        return `Add ${standardWorkspaceName} ${getWorkspaceFriendlyName()}`;
       })(),
       click: () => {
         createWorkspaceView();
@@ -586,7 +587,7 @@ const createMenu = async () => {
       enabled: !global.locked,
     },
     {
-      label: appJson.url ? 'Add Custom Workspace' : 'Add Workspace',
+      label: appJson.url ? `Add Custom ${getWorkspaceFriendlyName()}` : `Add ${getWorkspaceFriendlyName()}`,
       click: () => ipcMain.emit('request-show-add-workspace-window'),
       enabled: !global.locked,
       visible: appJson.id !== 'dynacal' && appJson.id !== 'dynamail',

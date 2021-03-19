@@ -25,6 +25,7 @@ import connectComponent from '../../helpers/connect-component';
 import getWorkspacesAsList from '../../helpers/get-workspaces-as-list';
 import isMacOs11 from '../../helpers/is-mac-os-11';
 import getStaticGlobal from '../../helpers/get-static-global';
+import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
 
 import arrowWhite from '../../images/arrow-white.png';
 import arrowBlack from '../../images/arrow-black.png';
@@ -241,15 +242,15 @@ const SortableItem = sortableElement(({ value }) => {
 
         const template = [
           {
-            label: 'Edit Workspace',
+            label: `Edit ${getWorkspaceFriendlyName()}`,
             click: () => requestShowEditWorkspaceWindow(id),
           },
           {
-            label: 'Configure Workspace',
+            label: `Configure ${getWorkspaceFriendlyName()}`,
             click: () => requestShowWorkspacePreferencesWindow(id),
           },
           {
-            label: 'Remove Workspace',
+            label: `Remove ${getWorkspaceFriendlyName()}`,
             click: () => requestRemoveWorkspace(id),
           },
           { type: 'separator' },
@@ -279,7 +280,7 @@ const SortableItem = sortableElement(({ value }) => {
 
         if (!active) {
           template.splice(1, 0, {
-            label: hibernated ? 'Wake Up Workspace' : 'Hibernate Workspace',
+            label: hibernated ? `Wake Up ${getWorkspaceFriendlyName()}` : `Hibernate ${getWorkspaceFriendlyName()}`,
             click: () => {
               if (hibernated) {
                 return requestWakeUpWorkspace(id);
@@ -392,12 +393,12 @@ const Main = ({
                           let standardWorkspaceName = appJson.name;
                           if (appJson.id === 'dynamail') standardWorkspaceName = 'Gmail';
                           if (appJson.id === 'dynacal') standardWorkspaceName = 'Google Calendar';
-                          return `Add ${standardWorkspaceName} Workspace`;
+                          return `Add ${standardWorkspaceName} ${getWorkspaceFriendlyName()}`;
                         })(),
                         click: () => requestCreateWorkspace(),
                       },
                       {
-                        label: 'Add Custom Workspace',
+                        label: `Add Custom ${getWorkspaceFriendlyName()}`,
                         click: () => requestShowAddWorkspaceWindow(),
                       },
                     ];

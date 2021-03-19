@@ -16,6 +16,7 @@ import AppWrapper from './components/app-wrapper';
 
 import getWorkspacesAsList from './helpers/get-workspaces-as-list';
 import getStaticGlobal from './helpers/get-static-global';
+import getWorkspaceFriendlyName from './helpers/get-workspace-friendly-name';
 
 import { getReactInitialStateAsync } from './invokers';
 
@@ -88,7 +89,7 @@ const runApp = () => {
         });
         initialState.dialogWorkspacePreferences = { form: workspace.preferences || {} };
 
-        document.title = `Configure Workspace "${getWorkspaceName(workspace)}"`;
+        document.title = `Configure ${getWorkspaceFriendlyName()} "${getWorkspaceName(workspace)}" (advanced)`;
       } else if (window.mode === 'edit-workspace') {
         const editWorkspaceId = getStaticGlobal('editWorkspaceId');
         const workspaceList = getWorkspacesAsList(initialState.workspaces);
@@ -102,7 +103,7 @@ const runApp = () => {
         });
         initialState.dialogEditWorkspace = { form: workspace };
 
-        document.title = `Edit Workspace "${getWorkspaceName(workspace)}"`;
+        document.title = `Configure ${getWorkspaceFriendlyName()} "${getWorkspaceName(workspace)}"`;
       } else if (window.mode === 'open-url-with') {
         document.title = 'Open Link With';
       } else if (window.mode === 'notifications') {
@@ -112,7 +113,7 @@ const runApp = () => {
       } else if (window.mode === 'go-to-url') {
         document.title = 'Go to URL';
       } else if (window.mode === 'add-workspace') {
-        document.title = 'Add Custom Workspace';
+        document.title = appJson.url ? `Add Custom ${getWorkspaceFriendlyName()}` : `Add ${getWorkspaceFriendlyName()}`;
       } else if (window.mode === 'open-source-notices') {
         document.title = 'Open Source Notices';
       } else {
