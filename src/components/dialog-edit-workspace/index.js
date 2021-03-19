@@ -35,6 +35,10 @@ import {
   save,
 } from '../../state/dialog-edit-workspace/actions';
 
+import {
+  requestShowWorkspacePreferencesWindow,
+} from '../../senders';
+
 import defaultWorkspaceImageLight from '../../images/default-workspace-image-light.png';
 import defaultWorkspaceImageDark from '../../images/default-workspace-image-dark.png';
 
@@ -444,7 +448,7 @@ const EditWorkspace = ({
                   disabled={Boolean(homeUrlError || downloadingIcon)}
                   onClick={() => onGetIconFromSwiftype(true)}
                 >
-                  {downloadingIcon ? 'Downloading...' : 'Download Icon from WebCatalog'}
+                  {downloadingIcon ? 'Downloading...' : 'Download Icon from Our Database'}
                 </Button>
                 <br />
                 <Button
@@ -512,6 +516,9 @@ const EditWorkspace = ({
         </List>
       </div>
       <div>
+        <Button variant="contained" disableElevation onClick={() => requestShowWorkspacePreferencesWindow(id)}>
+          Show Advanced Settings
+        </Button>
         <Button color="primary" variant="contained" className={classes.button} onClick={onSave}>
           Save
         </Button>

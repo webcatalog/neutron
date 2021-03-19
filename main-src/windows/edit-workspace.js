@@ -57,7 +57,19 @@ const show = (id) => {
   }
 };
 
+const close = (id) => {
+  if (!win) return;
+  if (id) {
+    if (id === global.editWorkspaceId) {
+      win.close();
+    }
+  } else {
+    win.close();
+  }
+};
+
 module.exports = {
+  close,
   get,
   create,
   show,

@@ -55,7 +55,19 @@ const show = (workspaceId) => {
   }
 };
 
+const close = (id) => {
+  if (!win) return;
+  if (id) {
+    if (id === global.workspacePreferencesWorkspaceId) {
+      win.close();
+    }
+  } else {
+    win.close();
+  }
+};
+
 module.exports = {
+  close,
   get,
   create,
   show,

@@ -556,14 +556,6 @@ const createMenu = async () => {
       enabled: !global.locked && hasWorkspaces,
     },
     {
-      label: `Configure Current ${getWorkspaceFriendlyName()}`,
-      click: () => {
-        const activeWorkspace = getActiveWorkspace();
-        ipcMain.emit('request-show-workspace-preferences-window', null, activeWorkspace.id);
-      },
-      enabled: !global.locked && hasWorkspaces,
-    },
-    {
       label: `Remove Current ${getWorkspaceFriendlyName()}`,
       click: () => {
         const activeWorkspace = getActiveWorkspace();
