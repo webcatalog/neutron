@@ -94,6 +94,7 @@ const createMenu = async () => {
       label: 'Lock',
       click: () => ipcMain.emit('request-lock-app'),
     },
+    { type: 'separator' },
   ] : [];
 
   const licensingMenuItems = (isMas() || isWindowsStore()) ? [] : [
@@ -108,6 +109,7 @@ const createMenu = async () => {
       visible: !registered,
       click: registered ? null : () => ipcMain.emit('request-show-require-license-dialog'),
     },
+    { type: 'separator' },
   ];
 
   const muteApp = getPreference('muteApp');

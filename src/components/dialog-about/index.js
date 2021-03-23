@@ -63,7 +63,6 @@ const About = (props) => {
   const utmSource = getUtmSource();
 
   const versions = [
-    { name: 'WebCatalog Engine', version: appVersion },
     { name: 'Electron', version: window.process.versions.electron },
     { name: 'Node', version: window.process.versions.node },
     { name: 'Chromium', version: window.process.versions.chrome },
@@ -90,7 +89,7 @@ const About = (props) => {
           variant="body2"
           className={classes.version}
         >
-          {(isMas() || isWindowsStore()) ? `Version ${appVersion}` : 'Powered by WebCatalog'}
+          {`Version ${appVersion}`}
         </Typography>
         <div className={classes.versionSmallContainer}>
           {versions.map(({ name, version }) => (
@@ -102,6 +101,14 @@ const About = (props) => {
             </Typography>
           ))}
         </div>
+        {!isMas() && !isWindowsStore() && (
+          <Typography
+            variant="body2"
+            className={classes.version}
+          >
+            Powered by WebCatalog
+          </Typography>
+        )}
 
         {isMas() && (
           <>
