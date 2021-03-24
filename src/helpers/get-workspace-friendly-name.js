@@ -7,7 +7,8 @@ import getStaticGlobal from './get-static-global';
 // in most apps, we call workspace "Account"
 // in Clover, we call workspace "Service"
 const getWorkspaceFriendlyName = (plural = false) => {
-  if (getStaticGlobal('appJson').id === 'clovery') {
+  const appJson = getStaticGlobal('appJson');
+  if (appJson.id === 'clovery' || appJson.id.startsWith('group-')) {
     if (plural) return 'Services';
     return 'Service';
   }

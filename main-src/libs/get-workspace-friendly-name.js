@@ -7,7 +7,7 @@ const appJson = require('../constants/app-json');
 // in most apps, we call workspace "Account"
 // in Clover, we call workspace "Service"
 const getWorkspaceFriendlyName = (plural = false) => {
-  if (appJson.id === 'clovery') {
+  if (appJson.id === 'clovery' || appJson.id.startsWith('group-')) {
     if (plural) return 'Services';
     return 'Service';
   }
