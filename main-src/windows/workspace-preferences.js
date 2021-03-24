@@ -15,10 +15,12 @@ const create = (workspaceId) => {
 
   win = new BrowserWindow({
     backgroundColor: '#FFF',
+    minWidth: 760,
+    minHeight: 640,
     width: 760,
-    height: 600,
-    resizable: false,
-    maximizable: false,
+    height: 640,
+    resizable: true,
+    maximizable: true,
     minimizable: true,
     fullscreenable: false,
     show: false,
