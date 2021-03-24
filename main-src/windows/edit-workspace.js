@@ -17,7 +17,7 @@ const create = (id) => {
   win = new BrowserWindow({
     backgroundColor: '#FFF',
     width: 420,
-    height: 700,
+    height: 720,
     resizable: false,
     maximizable: false,
     minimizable: true,
