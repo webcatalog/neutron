@@ -72,8 +72,7 @@ const styles = (theme) => ({
     color: theme.palette.text.primary,
   },
   inner: {
-    width: '100%',
-    maxWidth: 512,
+    width: 'calc(100% - 224px)',
     float: 'right',
   },
   link: {
