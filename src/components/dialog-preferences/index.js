@@ -1315,7 +1315,7 @@ const Preferences = ({
             </ListItem>
             <Divider />
             <ListItem>
-              <ListItemText primary={`Share browsing data between ${getWorkspaceFriendlyName(true).toLowerCase()}`} />
+              <ListItemText primary="Share browsing data between services & accounts" />
               <ListItemSecondaryAction>
                 <Switch
                   edge="end"
@@ -1869,37 +1869,41 @@ const Preferences = ({
                   </div>
                   <ChevronRightIcon color="action" />
                 </ListItem>
-                <Divider />
-                <ListItem
-                  button
-                  onClick={() => {
-                    let url = `https://panmail.app?utm_source=${utmSource}`;
-                    if (isMas()) {
-                      url = 'macappstore://apps.apple.com/us/app/panmail/id1551178702';
-                    } else if (isWindowsStore()) {
-                      url = 'ms-windows-store://pdp/?productid=9N4TTMNHP3C4';
-                    }
-                    requestOpenInBrowser(url);
-                  }}
-                  className={classes.listItemPromotion}
-                >
-                  <div className={classes.promotionBlock}>
-                    <div className={classes.promotionLeft}>
-                      <img src={panmailIconPng} alt="PanMail" className={classes.appIcon} />
-                    </div>
-                    <div className={classes.promotionRight}>
-                      <div>
-                        <Typography variant="body1" className={classes.appTitle}>
-                          PanMail
-                        </Typography>
-                        <Typography variant="body2" color="textSecondary">
-                          All Your Email Apps in One
-                        </Typography>
+                {!isWindowsStore() && (
+                  <>
+                    <Divider />
+                    <ListItem
+                      button
+                      onClick={() => {
+                        let url = `https://panmail.app?utm_source=${utmSource}`;
+                        if (isMas()) {
+                          url = 'macappstore://apps.apple.com/us/app/panmail/id1551178702';
+                        } else if (isWindowsStore()) {
+                          url = 'ms-windows-store://pdp/?productid=9N4TTMNHP3C4';
+                        }
+                        requestOpenInBrowser(url);
+                      }}
+                      className={classes.listItemPromotion}
+                    >
+                      <div className={classes.promotionBlock}>
+                        <div className={classes.promotionLeft}>
+                          <img src={panmailIconPng} alt="PanMail" className={classes.appIcon} />
+                        </div>
+                        <div className={classes.promotionRight}>
+                          <div>
+                            <Typography variant="body1" className={classes.appTitle}>
+                              PanMail
+                            </Typography>
+                            <Typography variant="body2" color="textSecondary">
+                              All Your Email Apps in One
+                            </Typography>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                  <ChevronRightIcon color="action" />
-                </ListItem>
+                      <ChevronRightIcon color="action" />
+                    </ListItem>
+                  </>
+                )}
                 {isMas() && (
                   <>
                     <Divider />

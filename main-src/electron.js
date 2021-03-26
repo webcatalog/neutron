@@ -382,6 +382,12 @@ if (!gotTheLock) {
       trayIcon,
       useSystemTitleBar,
       windowButtons,
+      blockAds,
+      rememberLastPageVisited,
+      shareWorkspaceBrowsingData,
+      spellcheck,
+      spellcheckLanguages,
+      unreadCountBadge,
     } = getPreferences();
 
     if (customUserAgent) {
@@ -410,6 +416,15 @@ if (!gotTheLock) {
     global.useSystemTitleBar = useSystemTitleBar;
     global.windowButtons = windowButtons;
     global.MAILTO_URLS = MAILTO_URLS;
+    // ensure that to change the preferences
+    // user needs to restart the app
+    // this is to ensure consistency between views
+    global.blockAds = blockAds;
+    global.rememberLastPageVisited = rememberLastPageVisited;
+    global.shareWorkspaceBrowsingData = shareWorkspaceBrowsingData;
+    global.spellcheck = spellcheck;
+    global.spellcheckLanguages = spellcheckLanguages;
+    global.unreadCountBadge = unreadCountBadge;
 
     commonInit();
 

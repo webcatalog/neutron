@@ -49,7 +49,6 @@ const getWorkspaceFriendlyName = require('./get-workspace-friendly-name');
 const views = {};
 let shouldMuteAudio;
 let shouldPauseNotifications;
-let firstLoadPreferences;
 
 /* electron-dl port start */
 // MIT License: https://github.com/sindresorhus/electron-dl/blob/master/license
@@ -203,24 +202,11 @@ const updateAddress = (url) => {
 const addView = (browserWindow, workspace) => {
   if (views[workspace.id] != null) return;
 
-  // ensure that to change the preferences
-  // user needs to restart the app
-  // this is to ensure consistency between views
-  firstLoadPreferences = firstLoadPreferences || getPreferences();
-  const {
-    blockAds,
-    rememberLastPageVisited,
-    shareWorkspaceBrowsingData,
-    spellcheck,
-    spellcheckLanguages,
-    unreadCountBadge,
-  } = firstLoadPreferences;
-
   // configure session & ad blocker
-  const ses = session.fromPartition(shareWorkspaceBrowsingData ? 'persist:shared' : `persist:${workspace.id}`);
+  const ses = session.fromPartition(global.shareWorkspaceBrowsingData ? 'persist:shared' : `persist:${workspace.id}`);
 
   // blocker
-  if (blockAds) {
+  if (global.blockAds) {
     ElectronBlocker.fromPrebuiltAdsAndTracking(customizedFetch, {
       path: path.join(app.getPath('userData'), 'adblocker.bin'),
       read: fsExtra.readFile,
@@ -230,8 +216,8 @@ const addView = (browserWindow, workspace) => {
     });
   }
   // spellchecker
-  if (spellcheck && process.platform !== 'darwin') {
-    ses.setSpellCheckerLanguages(spellcheckLanguages);
+  if (global.spellcheck && process.platform !== 'darwin') {
+    ses.setSpellCheckerLanguages(global.spellcheckLanguages);
   }
 
   // ad security header for DarkReader on Overcast
@@ -251,7 +237,7 @@ const addView = (browserWindow, workspace) => {
   );
 
   const sharedWebPreferences = {
-    spellcheck,
+    spellcheck: global.spellcheck,
     nativeWindowOpen: true,
     nodeIntegration: false,
     contextIsolation: true,
@@ -786,7 +772,7 @@ const addView = (browserWindow, workspace) => {
   view.webContents.session.on('will-download', willDownloadListener);
 
   // Unread count badge
-  if (unreadCountBadge) {
+  if (global.unreadCountBadge) {
     view.webContents.usePageTitle = true;
     view.webContents.on('page-title-updated', (e, title) => {
       if (!view.webContents.usePageTitle) return;
@@ -969,7 +955,7 @@ const addView = (browserWindow, workspace) => {
     });
   }
 
-  const initialUrl = (rememberLastPageVisited && workspace.lastUrl)
+  const initialUrl = (global.rememberLastPageVisited && workspace.lastUrl)
   || workspace.homeUrl || appJson.url;
   adjustUserAgentByUrl(view.webContents, initialUrl);
   if (initialUrl) {

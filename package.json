@@ -26,11 +26,11 @@
   "repository": "https://github.com/webcatalog/webcatalog-engine",
   "author": "WebCatalog Ltd <contact@webcatalog.app>",
   "dependencies": {
-    "keytar": "7.4.0",
+    "keytar": "7.5.0",
     "node-mac-permissions": "2.2.0"
   },
   "devDependencies": {
-    "@cliqz/adblocker-electron": "1.20.3",
+    "@cliqz/adblocker-electron": "1.20.4",
     "@date-io/date-fns": "1.3.13",
     "@elastic/app-search-javascript": "7.8.0",
     "@elastic/react-search-ui": "1.5.1",
@@ -71,7 +71,7 @@
     "eslint-plugin-header": "3.1.1",
     "eslint-plugin-import": "2.22.1",
     "eslint-plugin-jsx-a11y": "6.4.1",
-    "eslint-plugin-react": "7.22.0",
+    "eslint-plugin-react": "7.23.1",
     "eslint-plugin-react-hooks": "2.5.1",
     "ext-name": "5.0.0",
     "extract-zip": "2.0.1",
