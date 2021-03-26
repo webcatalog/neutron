@@ -5,10 +5,9 @@
 import getStaticGlobal from './get-static-global';
 
 // in most apps, we call workspace "Account"
-// in Clover, we call workspace "Service"
+// if data is shared between workspaces, we call workspace "Service"
 const getWorkspaceFriendlyName = (plural = false) => {
-  const appJson = getStaticGlobal('appJson');
-  if (appJson.id === 'clovery' || appJson.id.startsWith('group-')) {
+  if (getStaticGlobal('shareWorkspaceBrowsingData')) {
     if (plural) return 'Services';
     return 'Service';
   }

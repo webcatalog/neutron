@@ -1315,7 +1315,7 @@ const Preferences = ({
             </ListItem>
             <Divider />
             <ListItem>
-              <ListItemText primary={`Share browsing data between ${getWorkspaceFriendlyName(true).toLowerCase()}`} />
+              <ListItemText primary="Share browsing data between services & accounts" />
               <ListItemSecondaryAction>
                 <Switch
                   edge="end"
