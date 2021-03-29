@@ -10,7 +10,6 @@ const {
   ipcMain,
   session,
   shell,
-  dialog,
 } = require('electron');
 const path = require('path');
 const fsExtra = require('fs-extra');
@@ -664,6 +663,12 @@ const addView = (browserWindow, workspace) => {
       // for other platforms, always open the dir in file explorer
       openFolderWhenDone: globalPreferences.openFolderWhenDoneDownloading,
     };
+    const callback = () => {};
+
+    /* electron-dl port start */
+    // https://github.com/sindresorhus/electron-dl
+    downloadItems.add(item);
+    totalBytes += item.getTotalBytes();
 
     const directory = options.directory || app.getPath('downloads');
     let filePath;
@@ -676,28 +681,15 @@ const addView = (browserWindow, workspace) => {
       filePath = unusedFilename.sync(path.join(directory, name));
     }
 
-    if (options.saveAs) {
-      // item.setSaveDialogOptions({ defaultPath: filePath });
-      // use in-house code because somehow, setSaveDialogOptions is not working
+    const errorMessage = options.errorMessage || 'The download of {filename} was interrupted';
 
-      const selectedPath = dialog.showSaveDialogSync(null, { defaultPath: filePath });
-      if (!selectedPath) {
-        item.cancel();
-        event.preventDefault();
-        return;
-      }
-      item.setSavePath(selectedPath);
-    } else {
+    if (!options.saveAs) {
       item.setSavePath(filePath);
     }
 
-    const callback = () => {};
-    const errorMessage = options.errorMessage || 'The download of {filename} was interrupted';
-
-    /* electron-dl port start */
-    // https://github.com/sindresorhus/electron-dl
-    downloadItems.add(item);
-    totalBytes += item.getTotalBytes();
+    if (options.saveAs) {
+      item.setSaveDialogOptions({ defaultPath: filePath });
+    }
 
     if (typeof options.onStarted === 'function') {
       options.onStarted(item);
