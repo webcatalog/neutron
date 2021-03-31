@@ -1,5 +1,5 @@
 {
-  "name": "webcatalog-engine",
+  "name": "neutron",
   "description": "AppView template for WebCatalog",
   "version": "16.6.1",
   "minimumWebCatalogVersion": "28.4.0",
@@ -23,7 +23,7 @@
     "build-zip": "7z a -mm=Deflate -mx=9 -r dist/template.zip dist/template/.",
     "dist": "yarn build && yarn build-template && yarn build-zip && yarn build-json"
   },
-  "repository": "https://github.com/webcatalog/webcatalog-engine",
+  "repository": "https://github.com/webcatalog/neutron",
   "author": "WebCatalog Ltd <contact@webcatalog.app>",
   "dependencies": {
     "keytar": "7.6.0",

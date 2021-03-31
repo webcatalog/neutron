@@ -34,7 +34,7 @@ Promise.resolve()
       minimumWebCatalogVersion,
       sha256,
       zipFileName,
-      downloadUrl: `https://github.com/webcatalog/webcatalog-engine/releases/download/v${version}/${zipFileName}`,
+      downloadUrl: `https://github.com/webcatalog/neutron/releases/download/v${version}/${zipFileName}`,
     });
   })
   .then(() => {

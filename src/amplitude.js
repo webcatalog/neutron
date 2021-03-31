@@ -10,9 +10,9 @@ amplitude.getInstance().setVersionName(`engine@${window.remote.app.getVersion()}
 // we sync this with user pref in TelemetryManager
 amplitude.getInstance().setOptOut(true);
 
-// custom device id to unify uniques between webcatalog-app & webcatalog-engine
+// custom device id to unify uniques between webcatalog-app & neutron
 if (window.machineId) {
-  // share namespace between webcatalog-app & webcatalog-engine
+  // share namespace between webcatalog-app & neutron
   const DEVICE_ID_NAMESPACE = '4b7e2725-dced-4244-b5f5-2221316d272c';
   const deviceId = uuidv5(window.machineId, DEVICE_ID_NAMESPACE);
   amplitude.getInstance().setDeviceId(deviceId);
