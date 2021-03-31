@@ -23,7 +23,7 @@ const checkForUpdates = (silent) => {
   console.log('Checking for updates...'); // eslint-disable-line no-console
   // use in-house API
   // to avoid using GitHub API as it has rate limit (60 requests per hour)
-  // to avoid bugs with instead of https://github.com/webcatalog/webcatalog-engine/releases.atom
+  // to avoid bugs with instead of https://github.com/webcatalog/neutron/releases.atom
   // https://github.com/webcatalog/webcatalog-app/issues/890
   customizedFetch('https://webcatalog.app/juli/releases/latest.json')
     .then((res) => res.json())
