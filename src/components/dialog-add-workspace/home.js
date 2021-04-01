@@ -115,10 +115,10 @@ const Home = ({ classes }) => {
           resultsPerPage: 60,
           sortField: '',
           sortDirection: '',
-          filters,
         },
         alwaysSearchOnInitialLoad: true,
         searchQuery: {
+          filters,
           result_fields: {
             id: { raw: {} },
             name: { raw: {} },

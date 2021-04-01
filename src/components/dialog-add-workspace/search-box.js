@@ -156,7 +156,6 @@ const SearchBox = ({
                     setSearchTerm('', {
                       refresh: true,
                       debounce: 0,
-                      shouldClearFilters: false,
                     });
                   }}
                   disabled={isLoading}
