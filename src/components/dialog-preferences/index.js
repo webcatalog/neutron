@@ -90,7 +90,6 @@ import DialogRefreshInterval from '../dialog-refresh-interval';
 
 import SnackbarTrigger from '../shared/snackbar-trigger';
 
-import webcatalogIconPng from '../../images/products/webcatalog-mac-icon-128@2x.png';
 import translatiumIconPng from '../../images/products/translatium-mac-icon-128@2x.png';
 import singleboxIconPng from '../../images/products/singlebox-mac-icon-128@2x.png';
 import squeezerIconPng from '../../images/products/squeezer-mac-icon-128@2x.png';
@@ -1684,29 +1683,6 @@ const Preferences = ({
             </Typography>
             <Paper elevation={0} className={classes.paper}>
               <List disablePadding dense>
-                <ListItem
-                  button
-                  onClick={() => requestOpenInBrowser('https://webcatalog.app?utm_source=webcatalog_app')}
-                  className={classes.listItemPromotion}
-                >
-                  <div className={classes.promotionBlock}>
-                    <div className={classes.promotionLeft}>
-                      <img src={webcatalogIconPng} alt="WebCatalog" className={classes.appIcon} />
-                    </div>
-                    <div className={classes.promotionRight}>
-                      <div>
-                        <Typography variant="body1" className={classes.appTitle}>
-                          WebCatalog
-                        </Typography>
-                        <Typography variant="body2" color="textSecondary">
-                          Turn Any Websites Into Desktop Apps
-                        </Typography>
-                      </div>
-                    </div>
-                  </div>
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-                <Divider />
                 <ListItem
                   button
                   onClick={() => {
