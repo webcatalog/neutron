@@ -14,15 +14,11 @@ const {
   getPreference,
 } = require('./preferences');
 
-const isWindowsStore = require('./is-windows-store');
-
 const appJson = require('../constants/app-json');
 
 const mainWindow = require('../windows/main');
 
 const promptSetAsDefaultMailClient = () => {
-  // not supported in MS APPX version
-  if (isWindowsStore()) return;
   // ask to set as default mail client
   const skipAskingDefaultMailClient = getPreference('skipAskingDefaultMailClient');
   if (skipAskingDefaultMailClient) return;

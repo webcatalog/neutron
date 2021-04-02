@@ -3,11 +3,10 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import isMas from './is-mas';
-import isWindowsStore from './is-windows-store';
 import getStaticGlobal from './get-static-global';
 
 const getUtmSource = () => {
-  if (isMas() || isWindowsStore()) {
+  if (isMas()) {
     return `${getStaticGlobal('appJson').id}_app`;
   }
   return 'juli_app';
