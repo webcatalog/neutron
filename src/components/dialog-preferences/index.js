@@ -1992,7 +1992,12 @@ const Preferences = ({
                   <>
                     <ListItem
                       button
-                      onClick={() => requestOpenInBrowser(`https://${appJson.id}.app?utm_source=${utmSource}`)}
+                      onClick={() => {
+                        if (appJson.hostname) {
+                          return requestOpenInBrowser(`https://${appJson.hostname}?utm_source=${utmSource}`);
+                        }
+                        return requestOpenInBrowser(`https://${appJson.id}.app?utm_source=${utmSource}`);
+                      }}
                     >
                       <ListItemText primary="Website" />
                       <ChevronRightIcon color="action" />
@@ -2000,7 +2005,12 @@ const Preferences = ({
                     <Divider />
                     <ListItem
                       button
-                      onClick={() => requestOpenInBrowser(`https://${appJson.id}.app/help?utm_source=${utmSource}`)}
+                      onClick={() => {
+                        if (appJson.hostname) {
+                          return requestOpenInBrowser(`https://${appJson.hostname}/help?utm_source=${utmSource}`);
+                        }
+                        return requestOpenInBrowser(`https://${appJson.id}.app/help?utm_source=${utmSource}`);
+                      }}
                     >
                       <ListItemText primary="Help" />
                       <ChevronRightIcon color="action" />
