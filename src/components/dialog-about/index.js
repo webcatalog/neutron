@@ -10,7 +10,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 
 import connectComponent from '../../helpers/connect-component';
 import isMas from '../../helpers/is-mas';
-import isWindowsStore from '../../helpers/is-windows-store';
 import getStaticGlobal from '../../helpers/get-static-global';
 import getUtmSource from '../../helpers/get-utm-source';
 
@@ -103,7 +102,7 @@ const About = (props) => {
             </Typography>
           ))}
         </div>
-        {!isMas() && !isWindowsStore() && (
+        {!isMas() && (
           <Typography
             variant="body2"
             className={classes.version}
@@ -123,18 +122,7 @@ const About = (props) => {
           </>
         )}
 
-        {isWindowsStore() && (
-          <>
-            <Button
-              onClick={() => requestOpenInBrowser(`ms-windows-store://pdp/?ProductId=${appJson.microsoftStoreId}`)}
-            >
-              Microsoft Store
-            </Button>
-            <br />
-          </>
-        )}
-
-        {(isMas() || isWindowsStore()) ? (
+        {isMas() ? (
           <>
             <Button
               onClick={() => requestOpenInBrowser(`https://${appJson.id}.app?utm_source=${utmSource}`)}

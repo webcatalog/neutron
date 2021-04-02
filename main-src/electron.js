@@ -71,7 +71,6 @@ const { getAppLockStatusAsync, unlockAppUsingTouchId } = require('./libs/app-loc
 const isMacOs11 = require('./libs/is-mac-os-11');
 const isWindows10 = require('./libs/is-windows-10');
 const isMas = require('./libs/is-mas');
-const isWindowsStore = require('./libs/is-windows-store');
 const getIapFormattedPriceAsync = require('./libs/get-iap-formatted-price-async');
 const promptSetAsDefaultMailClient = require('./libs/prompt-set-as-default-email-client');
 
@@ -301,7 +300,7 @@ if (!gotTheLock) {
 
         ipcMain.emit('request-update-pause-notifications-info');
 
-        if ((isMas() || isWindowsStore()) && !privacyConsentAsked) {
+        if ((isMas()) && !privacyConsentAsked) {
           dialog.showMessageBox(mainWindow.get(), {
             type: 'question',
             buttons: ['Allow', 'Don\'t Allow'],
@@ -436,7 +435,7 @@ if (!gotTheLock) {
           handleArgv(process.argv);
         }
 
-        if (!isMas() && !isWindowsStore() && autoCheckForUpdates) {
+        if (!isMas() && autoCheckForUpdates) {
           // only notify user about update again after one week
           const lastShowNewUpdateDialog = getPreference('lastShowNewUpdateDialog');
           const updateInterval = 7 * 24 * 60 * 60 * 1000; // one week

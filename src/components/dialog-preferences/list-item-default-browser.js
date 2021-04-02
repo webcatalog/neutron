@@ -12,7 +12,6 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import connectComponent from '../../helpers/connect-component';
 import getStaticGlobal from '../../helpers/get-static-global';
 import isWindows10 from '../../helpers/is-windows-10';
-import isWindowsStore from '../../helpers/is-windows-store';
 
 import { requestOpenInBrowser } from '../../senders';
 
@@ -34,10 +33,6 @@ const ListItemDefaultBrowser = () => {
 
   // recheck every 1 minutes
   useEffect(() => {
-    // we cannot check default status in APPX environment
-    // so skip this altogether
-    if (isWindowsStore()) return () => {};
-
     recheckIsDefault();
     const timer = setInterval(() => {
       recheckIsDefault();
@@ -61,7 +56,7 @@ const ListItemDefaultBrowser = () => {
 
   // open ms-settings on Windows 10
   // as Windows 10 doesn't allow changing default app programmatically
-  if (isWindowsStore() || isWindows10()) {
+  if (isWindows10()) {
     return (
       // https://docs.microsoft.com/en-us/windows/uwp/launch-resume/launch-settings-app
       <ListItem button onClick={() => requestOpenInBrowser('ms-settings:defaultapps')}>

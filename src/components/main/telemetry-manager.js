@@ -6,7 +6,6 @@ import { useEffect } from 'react';
 
 import connectComponent from '../../helpers/connect-component';
 import isMas from '../../helpers/is-mas';
-import isWindowsStore from '../../helpers/is-windows-store';
 import getStaticGlobal from '../../helpers/get-static-global';
 
 import amplitude from '../../amplitude';
@@ -24,7 +23,6 @@ const TelemetryManager = ({ iapPurchased, telemetry }) => {
       pricing: registered ? 'plus' : 'basic', // PRO plan to be added
       distributionChannel: (() => {
         if (isMas()) return 'macAppStore';
-        if (isWindowsStore()) return 'windowsStore';
         return 'webcatalog';
       })(),
     });

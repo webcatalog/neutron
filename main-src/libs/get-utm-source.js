@@ -3,12 +3,11 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 const isMas = require('./is-mas');
-const isWindowsStore = require('./is-windows-store');
 
 const appJson = require('../constants/app-json');
 
 const getUtmSource = () => {
-  if (isMas() || isWindowsStore()) {
+  if (isMas()) {
     return `${appJson.id}_app`;
   }
   return 'juli_app';

@@ -14,7 +14,6 @@ const goToUrlWindow = require('../windows/go-to-url');
 const mainWindow = require('../windows/main');
 
 const isMas = require('./is-mas');
-const isWindowsStore = require('./is-windows-store');
 const getViewBounds = require('./get-view-bounds');
 const getUtmSource = require('./get-utm-source');
 const getWorkspaceFriendlyName = require('./get-workspace-friendly-name');
@@ -97,7 +96,7 @@ const createMenu = async () => {
     { type: 'separator' },
   ] : [];
 
-  const licensingMenuItems = (isMas() || isWindowsStore()) ? [] : [
+  const licensingMenuItems = (isMas()) ? [] : [
     { type: 'separator' },
     {
       label: registered ? 'WebCatalog Lifetime' : 'WebCatalog Basic',
@@ -128,11 +127,11 @@ const createMenu = async () => {
         {
           label: 'Check for Updates...',
           click: () => ipcMain.emit('request-check-for-updates'),
-          visible: !isMas() && !isWindowsStore(),
+          visible: !isMas(),
         },
         {
           type: 'separator',
-          visible: !isMas() && !isWindowsStore(),
+          visible: !isMas(),
         },
         {
           label: 'Preferences...',
@@ -473,7 +472,7 @@ const createMenu = async () => {
     },
     {
       role: 'help',
-      submenu: (isMas() || isWindowsStore()) ? [
+      submenu: (isMas()) ? [
         {
           label: 'Help',
           click: () => shell.openExternal(`https://${appJson.id}.app/help?utm_source=${utmSource}`),

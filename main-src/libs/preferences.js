@@ -9,7 +9,6 @@ const fs = require('fs-extra');
 const sendToAllWindows = require('./send-to-all-windows');
 const extractHostname = require('./extract-hostname');
 const isMas = require('./is-mas');
-const isWindowsStore = require('./is-windows-store');
 const isWindows10 = require('./is-windows-10');
 
 const MAILTO_URLS = require('../constants/mailto-urls');
@@ -118,7 +117,7 @@ const initCachedPreferences = () => {
   // can be shared across WebCatalog and WebCatalog-Engine-based apps
   // ignore this if error occurs
   // so the more important initialization process can proceed
-  if (!isMas() && !isWindowsStore()) {
+  if (!isMas()) {
     const sharedPreferences = {
       telemetry: false,
       sentry: false,
