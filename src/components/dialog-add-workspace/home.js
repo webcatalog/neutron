@@ -92,11 +92,11 @@ const Home = ({ classes }) => {
   if (appJsonId.startsWith('group-')) {
     const groupId = appJsonId.substring('group-'.length);
     filters.push({ field: 'group_id', values: [groupId], type: 'all' });
-  }
-  if (appJsonId === 'clovery') {
+  } else if (appJsonId === 'clovery') {
     filters.push({ field: 'group_id', values: ['google'], type: 'all' });
-  }
-  if (appJsonId === 'panmail') {
+  } else if (appJsonId === 'tulipa') {
+    filters.push({ field: 'group_id', values: ['microsoft'], type: 'all' });
+  } else if (appJsonId === 'panmail') {
     filters.push({ field: 'sub_category', values: ['Email'], type: 'all' });
   }
   // hide Google Play in MS builds to comply with Microsoft's requirements
