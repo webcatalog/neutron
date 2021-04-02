@@ -889,14 +889,24 @@ const addView = (browserWindow, workspace) => {
                 click: () => shell.openExternal('https://help.webcatalog.app?utm_source=juli_app'),
               } : {
                 label: 'Help',
-                click: () => shell.openExternal(`https://${appJson.id}.app/help?utm_source=${utmSource}`),
+                click: () => {
+                  if (appJson.hostname) {
+                    return shell.openExternal(`https://${appJson.hostname}/help?utm_source=${utmSource}`);
+                  }
+                  return shell.openExternal(`https://${appJson.id}.app/help?utm_source=${utmSource}`);
+                },
               },
               !isMas() ? {
                 label: 'WebCatalog Website',
                 click: () => shell.openExternal('https://webcatalog.app?utm_source=juli_app'),
               } : {
                 label: 'Website',
-                click: () => shell.openExternal(`https://${appJson.id}.app?utm_source=${utmSource}`),
+                click: () => {
+                  if (appJson.hostname) {
+                    return shell.openExternal(`https://${appJson.hostname}?utm_source=${utmSource}`);
+                  }
+                  return shell.openExternal(`https://${appJson.id}.app?utm_source=${utmSource}`);
+                },
               },
               { type: 'separator' },
               {

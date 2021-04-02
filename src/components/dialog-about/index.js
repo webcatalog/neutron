@@ -125,13 +125,23 @@ const About = (props) => {
         {isMas() ? (
           <>
             <Button
-              onClick={() => requestOpenInBrowser(`https://${appJson.id}.app?utm_source=${utmSource}`)}
+              onClick={() => {
+                if (appJson.hostname) {
+                  return requestOpenInBrowser(`https://${appJson.hostname}?utm_source=${utmSource}`);
+                }
+                return requestOpenInBrowser(`https://${appJson.id}.app?utm_source=${utmSource}`);
+              }}
             >
               Website
             </Button>
             <br />
             <Button
-              onClick={() => requestOpenInBrowser(`https://${appJson.id}.app/help?utm_source=${utmSource}`)}
+              onClick={() => {
+                if (appJson.hostname) {
+                  return requestOpenInBrowser(`https://${appJson.hostname}/help?utm_source=${utmSource}`);
+                }
+                return requestOpenInBrowser(`https://${appJson.id}.app/help?utm_source=${utmSource}`);
+              }}
             >
               Help
             </Button>

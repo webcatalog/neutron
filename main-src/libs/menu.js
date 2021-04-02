@@ -475,11 +475,21 @@ const createMenu = async () => {
       submenu: (isMas()) ? [
         {
           label: 'Help',
-          click: () => shell.openExternal(`https://${appJson.id}.app/help?utm_source=${utmSource}`),
+          click: () => {
+            if (appJson.hostname) {
+              return shell.openExternal(`https://${appJson.hostname}/help?utm_source=${utmSource}`);
+            }
+            return shell.openExternal(`https://${appJson.id}.app/help?utm_source=${utmSource}`);
+          },
         },
         {
           label: 'Website',
-          click: () => shell.openExternal(`https://${appJson.id}.app?utm_source=${utmSource}`),
+          click: () => {
+            if (appJson.hostname) {
+              return shell.openExternal(`https://${appJson.hostname}?utm_source=${utmSource}`);
+            }
+            return shell.openExternal(`https://${appJson.id}.app?utm_source=${utmSource}`);
+          },
         },
       ] : [
         {
