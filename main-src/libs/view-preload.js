@@ -194,7 +194,7 @@ const handleLoaded = async (event) => {
   // tie Google account info with workspace
   ipcRenderer.invoke('get-app-json')
     .then((appJson) => {
-      if (appJson.id === 'clovery' || appJson.id === 'clovery') {
+      if (appJson.id === 'clovery') {
         // the whole app uses same Google account
         // eslint-disable-next-line no-console
         console.log('Skip retrieving Google account for workspace');

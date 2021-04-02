@@ -96,6 +96,7 @@ import translatiumIconPng from '../../images/products/translatium-mac-icon-128@2
 import singleboxIconPng from '../../images/products/singlebox-mac-icon-128@2x.png';
 import squeezerIconPng from '../../images/products/squeezer-mac-icon-128@2x.png';
 import cloveryIconPng from '../../images/products/clovery-mac-icon-128@2x.png';
+import tulipaIconPng from '../../images/products/tulipa-mac-icon-128@2x.png';
 import dynamailIconPng from '../../images/products/dynamail-mac-icon-128@2x.png';
 import dynacalIconPng from '../../images/products/dynacal-mac-icon-128@2x.png';
 import pantextIconPng from '../../images/products/pantext-mac-icon-128@2x.png';
@@ -1832,6 +1833,35 @@ const Preferences = ({
                         </Typography>
                         <Typography variant="body2" color="textSecondary">
                           All Google Apps in One
+                        </Typography>
+                      </div>
+                    </div>
+                  </div>
+                  <ChevronRightIcon color="action" />
+                </ListItem>
+                <Divider />
+                <ListItem
+                  button
+                  onClick={() => {
+                    let url = `https://tulipaapp.com?utm_source=${utmSource}`;
+                    if (isMas()) {
+                      url = 'macappstore://apps.apple.com/us/app/tulipa-for-microsoft-apps/id1561301796';
+                    }
+                    requestOpenInBrowser(url);
+                  }}
+                  className={classes.listItemPromotion}
+                >
+                  <div className={classes.promotionBlock}>
+                    <div className={classes.promotionLeft}>
+                      <img src={tulipaIconPng} alt="Tulipa" className={classes.appIcon} />
+                    </div>
+                    <div className={classes.promotionRight}>
+                      <div>
+                        <Typography variant="body1" className={classes.appTitle}>
+                          Tulipa
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary">
+                          All Microsoft Apps in One
                         </Typography>
                       </div>
                     </div>
