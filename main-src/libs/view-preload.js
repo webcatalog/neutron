@@ -88,7 +88,7 @@ const handleLoaded = async (event) => {
   if (autoRefresh) {
     setTimeout(async () => {
       const isFocused = await ipcRenderer.invoke('get-web-contents-is-focused');
-      if (autoRefreshOnlyWhenInactive && isFocused()) {
+      if (autoRefreshOnlyWhenInactive && isFocused) {
         return;
       }
 
