@@ -102,6 +102,7 @@ const styles = (theme) => ({
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     textAlign: 'center',
+    width: 52,
   },
   badge: {
     lineHeight: '20px',
@@ -234,55 +235,53 @@ const WorkspaceSelector = ({
       }}
       title={hoverText}
     >
-      <div>
-        <Badge color="secondary" badgeContent={badgeCount} max={99} classes={{ badge: classes.badge }}>
-          <div
-            className={classnames(
-              classes.avatar,
-              selectedIconType === 'text' && classes.textAvatar,
-              transparentBackground && classes.transparentAvatar,
-            )}
-            style={(() => {
-              if (selectedIconType === 'text' && backgroundColor && !transparentBackground) {
-                return {
-                  backgroundColor,
-                  color: Color(backgroundColor).isDark() ? '#fff' : '#000',
-                };
-              }
-              return null;
-            })()}
-          >
-            {selectedIconType === 'text' && getAvatarText(id, userDefinedName, order)}
-            {selectedIconType === 'image' && (
-              <img
-                alt="Icon"
-                className={classnames(
-                  classes.avatarPicture,
-                )}
-                src={(() => {
-                  if (picturePath) return `file://${picturePath}`;
-                  return shouldUseDarkColors
-                    ? defaultWorkspaceImageLight : defaultWorkspaceImageDark;
-                })()}
-                draggable={false}
-              />
-            )}
-            {selectedIconType === 'accountInfo' && (
-              <img
-                alt="Icon"
-                className={classnames(
-                  classes.avatarPicture,
-                )}
-                src={`file://${accountInfo.picturePath}`}
-                draggable={false}
-              />
-            )}
-          </div>
-        </Badge>
-        {tipText && (
-          <p className={classes.shortcutText}>{tipText}</p>
-        )}
-      </div>
+      <Badge color="secondary" badgeContent={badgeCount} max={99} classes={{ badge: classes.badge }}>
+        <div
+          className={classnames(
+            classes.avatar,
+            selectedIconType === 'text' && classes.textAvatar,
+            transparentBackground && classes.transparentAvatar,
+          )}
+          style={(() => {
+            if (selectedIconType === 'text' && backgroundColor && !transparentBackground) {
+              return {
+                backgroundColor,
+                color: Color(backgroundColor).isDark() ? '#fff' : '#000',
+              };
+            }
+            return null;
+          })()}
+        >
+          {selectedIconType === 'text' && getAvatarText(id, userDefinedName, order)}
+          {selectedIconType === 'image' && (
+            <img
+              alt="Icon"
+              className={classnames(
+                classes.avatarPicture,
+              )}
+              src={(() => {
+                if (picturePath) return `file://${picturePath}`;
+                return shouldUseDarkColors
+                  ? defaultWorkspaceImageLight : defaultWorkspaceImageDark;
+              })()}
+              draggable={false}
+            />
+          )}
+          {selectedIconType === 'accountInfo' && (
+            <img
+              alt="Icon"
+              className={classnames(
+                classes.avatarPicture,
+              )}
+              src={`file://${accountInfo.picturePath}`}
+              draggable={false}
+            />
+          )}
+        </div>
+      </Badge>
+      {tipText && (
+        <div className={classes.shortcutText}>{tipText}</div>
+      )}
       {isExpanded && (
         <div className={classes.expandedText}>
           {hoverText}

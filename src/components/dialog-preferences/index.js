@@ -652,7 +652,7 @@ const Preferences = ({
                     value="name+shortcut"
                     dense
                   >
-                    {`${getWorkspaceFriendlyName()} names &amp; keyboard shortcuts`}
+                    {`${getWorkspaceFriendlyName()} names & keyboard shortcuts`}
                   </MenuItem>
                 )}
                 <MenuItem
