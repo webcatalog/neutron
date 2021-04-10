@@ -17,7 +17,7 @@ const create = (scrollTo) => {
     backgroundColor: '#FFF',
     minWidth: 760,
     minHeight: 640,
-    width: 760,
+    width: 800,
     height: 640,
     resizable: true,
     maximizable: true,

@@ -20,21 +20,19 @@ import Slider from '@material-ui/core/Slider';
 import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
 
-import BuildIcon from '@material-ui/icons/Build';
-import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import CodeIcon from '@material-ui/icons/Code';
-import ExtensionIcon from '@material-ui/icons/Extension';
 import LanguageIcon from '@material-ui/icons/Language';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+import PaletteIcon from '@material-ui/icons/Palette';
 import PowerIcon from '@material-ui/icons/Power';
 import RotateLeftIcon from '@material-ui/icons/RotateLeft';
 import SecurityIcon from '@material-ui/icons/Security';
 import StorefrontIcon from '@material-ui/icons/Storefront';
-import SystemUpdateAltIcon from '@material-ui/icons/SystemUpdateAlt';
-import VisibilityIcon from '@material-ui/icons/Visibility';
+import UpdateIcon from '@material-ui/icons/Update';
 import WidgetsIcon from '@material-ui/icons/Widgets';
 
 import { TimePicker } from '@material-ui/pickers';
@@ -277,7 +275,7 @@ const Preferences = ({
   const sections = {
     licensing: {
       text: 'Licensing',
-      Icon: CheckCircleOutlineIcon,
+      Icon: CheckCircleIcon,
       ref: useRef(),
       hidden: isMas() && appJson.registered,
     },
@@ -286,14 +284,9 @@ const Preferences = ({
       Icon: WidgetsIcon,
       ref: useRef(),
     },
-    view: {
-      text: 'View',
-      Icon: VisibilityIcon,
-      ref: useRef(),
-    },
-    extensions: {
-      text: 'Extensions',
-      Icon: ExtensionIcon,
+    appearance: {
+      text: 'Appearance',
+      Icon: PaletteIcon,
       ref: useRef(),
     },
     notifications: {
@@ -316,11 +309,6 @@ const Preferences = ({
       Icon: SecurityIcon,
       ref: useRef(),
     },
-    system: {
-      text: 'System',
-      Icon: BuildIcon,
-      ref: useRef(),
-    },
     developers: {
       text: 'Developers',
       Icon: CodeIcon,
@@ -333,7 +321,7 @@ const Preferences = ({
     },
     updates: {
       text: 'Updates',
-      Icon: SystemUpdateAltIcon,
+      Icon: UpdateIcon,
       ref: useRef(),
       hidden: isMas(),
     },
@@ -441,58 +429,28 @@ const Preferences = ({
               </>
             )}
             <ListItem>
-              <ListItemText primary="Theme" />
-              <Select
-                value={themeSource}
-                onChange={(e) => requestSetPreference('themeSource', e.target.value)}
-                variant="filled"
-                disableUnderline
-                margin="dense"
-                classes={{
-                  root: classes.select,
-                }}
-                className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
-              >
-                <MenuItem dense value="system">System default</MenuItem>
-                <MenuItem dense value="light">Light</MenuItem>
-                <MenuItem dense value="dark">Dark</MenuItem>
-              </Select>
-            </ListItem>
-            <Divider />
-            <ListItem>
               <ListItemText
-                primary="Search engine"
-                secondary="Search engine used in the address bar."
+                primary={(() => {
+                  if (window.process.platform === 'darwin') { return 'Show menu bar icon'; }
+                  return 'Show tray (notification area) icon';
+                })()}
               />
-              <Select
-                value={searchEngine}
-                onChange={(e) => requestSetPreference('searchEngine', e.target.value)}
-                variant="filled"
-                disableUnderline
-                margin="dense"
-                classes={{
-                  root: classes.select,
-                }}
-                className={classes.selectRoot}
-              >
-                {Object.keys(searchEngines).map((optKey) => {
-                  const opt = searchEngines[optKey];
-                  return (
-                    <MenuItem
-                      key={optKey}
-                      value={optKey}
-                      dense
-                    >
-                      {opt.name}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
+              <ListItemSecondaryAction>
+                <Switch
+                  edge="end"
+                  color="primary"
+                  checked={trayIcon || runInBackground || attachToMenubar}
+                  disabled={runInBackground || attachToMenubar}
+                  onChange={(e) => {
+                    requestSetPreference('trayIcon', e.target.checked);
+                    enqueueRequestRestartSnackbar();
+                  }}
+                />
+              </ListItemSecondaryAction>
             </ListItem>
-            <Divider />
             <ListItem>
               <ListItemText
-                primary={window.process.platform === 'darwin' ? 'Attach to menu bar' : 'Pin to system tray (notification area)'}
+                primary={window.process.platform === 'darwin' ? 'Attach window to menu bar' : 'Pin window to system tray (notification area)'}
                 secondary="Tip: Right-click on app icon to access context menu."
               />
               <ListItemSecondaryAction>
@@ -507,24 +465,6 @@ const Preferences = ({
                       return;
                     }
                     requestSetPreference('attachToMenubar', e.target.checked);
-                    enqueueRequestRestartSnackbar();
-                  }}
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListItemText
-                primary="Keep window always on top"
-                secondary="The window won't be hidden even when you click outside."
-              />
-              <ListItemSecondaryAction>
-                <Switch
-                  edge="end"
-                  color="primary"
-                  checked={alwaysOnTop}
-                  onChange={(e) => {
-                    requestSetPreference('alwaysOnTop', e.target.checked);
                     enqueueRequestRestartSnackbar();
                   }}
                 />
@@ -553,33 +493,235 @@ const Preferences = ({
                 </ListItem>
               </>
             )}
+            <Divider />
+            <ListItem>
+              <ListItemText
+                primary="Search engine"
+                secondary="Search engine used in the address bar and other contexts."
+              />
+              <Select
+                value={searchEngine}
+                onChange={(e) => requestSetPreference('searchEngine', e.target.value)}
+                variant="filled"
+                disableUnderline
+                margin="dense"
+                classes={{
+                  root: classes.select,
+                }}
+                className={classes.selectRoot}
+              >
+                {Object.keys(searchEngines).map((optKey) => {
+                  const opt = searchEngines[optKey];
+                  return (
+                    <MenuItem
+                      key={optKey}
+                      value={optKey}
+                      dense
+                    >
+                      {opt.name}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </ListItem>
+            <Divider />
+            <ListItem>
+              <ListItemText primary="Open at login" />
+              <Select
+                value={openAtLogin}
+                onChange={(e) => requestSetSystemPreference('openAtLogin', e.target.value)}
+                variant="filled"
+                disableUnderline
+                margin="dense"
+                classes={{
+                  root: classes.select,
+                }}
+                className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
+              >
+                <MenuItem dense value="yes">Yes</MenuItem>
+                {window.process.platform === 'darwin' && (
+                  <MenuItem dense value="yes-hidden">Yes, but minimized</MenuItem>
+                )}
+                <MenuItem dense value="no">No</MenuItem>
+              </Select>
+            </ListItem>
+            {appJson.id !== 'dynacal' && appJson.id !== 'dynamail' && appJson.id !== 'panmail' && (
+              <>
+                <Divider />
+                <ListItemDefaultBrowser />
+              </>
+            )}
+            {appJson.id !== 'dynacal' && (
+              <>
+                <Divider />
+                <ListItemDefaultMailClient />
+              </>
+            )}
           </List>
         </Paper>
 
-        <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.view.ref}>
-          View
+        <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.appearance.ref}>
+          Appearance
         </Typography>
         <Paper elevation={0} className={classes.paper}>
           <List disablePadding dense>
             <ListItem>
+              <ListItemText primary="Theme" />
+              <Select
+                value={themeSource}
+                onChange={(e) => requestSetPreference('themeSource', e.target.value)}
+                variant="filled"
+                disableUnderline
+                margin="dense"
+                classes={{
+                  root: classes.select,
+                }}
+                className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
+              >
+                <MenuItem dense value="system">System default</MenuItem>
+                <MenuItem dense value="light">Light</MenuItem>
+                <MenuItem dense value="dark">Dark</MenuItem>
+              </Select>
+            </ListItem>
+            <ListItem>
               <ListItemText
-                primary={(() => {
-                  if (window.process.platform === 'darwin') { return 'Show menu bar icon'; }
-                  return 'Show tray (notification area) icon';
-                })()}
+                primary="Dark Reader"
+                secondary="Create unofficial dark theme for every service & account."
               />
               <ListItemSecondaryAction>
                 <Switch
                   edge="end"
                   color="primary"
-                  checked={trayIcon || runInBackground || attachToMenubar}
-                  disabled={runInBackground || attachToMenubar}
+                  checked={darkReader}
                   onChange={(e) => {
-                    requestSetPreference('trayIcon', e.target.checked);
-                    enqueueRequestRestartSnackbar();
+                    requestSetPreference('darkReader', e.target.checked);
                   }}
                 />
               </ListItemSecondaryAction>
+            </ListItem>
+            <ListItem>
+              <ListItemText className={classes.sliderContainer}>
+                <Grid container spacing={2}>
+                  <Grid classes={{ item: classes.sliderTitleContainer }} item>
+                    <Typography id="brightness-slider" variant="body2" gutterBottom={false}>
+                      Brightness
+                    </Typography>
+                  </Grid>
+                  <Grid item xs>
+                    <Slider
+                      classes={{ markLabel: classes.sliderMarkLabel }}
+                      value={darkReaderBrightness - 100}
+                      disabled={!darkReader}
+                      aria-labelledby="brightness-slider"
+                      valueLabelDisplay="auto"
+                      step={5}
+                      valueLabelFormat={(val) => {
+                        if (val > 0) return `+${val}`;
+                        return val;
+                      }}
+                      marks={[
+                        {
+                          value: darkReaderBrightness - 100,
+                          label: `${darkReaderBrightness > 100 ? '+' : ''}${darkReaderBrightness - 100}`,
+                        },
+                      ]}
+                      min={-50}
+                      max={50}
+                      onChange={(e, value) => {
+                        requestSetPreference('darkReaderBrightness', value + 100);
+                      }}
+                    />
+                  </Grid>
+                </Grid>
+                <Grid container spacing={2}>
+                  <Grid classes={{ item: classes.sliderTitleContainer }} item>
+                    <Typography id="contrast-slider" variant="body2" gutterBottom={false}>
+                      Contrast
+                    </Typography>
+                  </Grid>
+                  <Grid item xs>
+                    <Slider
+                      classes={{ markLabel: classes.sliderMarkLabel }}
+                      value={darkReaderContrast - 100}
+                      disabled={!darkReader}
+                      aria-labelledby="contrast-slider"
+                      valueLabelDisplay="auto"
+                      step={5}
+                      valueLabelFormat={(val) => {
+                        if (val > 0) return `+${val}`;
+                        return val;
+                      }}
+                      marks={[
+                        {
+                          value: darkReaderContrast - 100,
+                          label: `${darkReaderContrast > 100 ? '+' : ''}${darkReaderContrast - 100}`,
+                        },
+                      ]}
+                      min={-50}
+                      max={50}
+                      onChange={(e, value) => {
+                        requestSetPreference('darkReaderContrast', value + 100);
+                      }}
+                    />
+                  </Grid>
+                </Grid>
+                <Grid container spacing={2}>
+                  <Grid classes={{ item: classes.sliderTitleContainer }} item>
+                    <Typography id="sepia-slider" variant="body2" gutterBottom={false}>
+                      Sepia
+                    </Typography>
+                  </Grid>
+                  <Grid item xs>
+                    <Slider
+                      classes={{ markLabel: classes.sliderMarkLabel }}
+                      value={darkReaderSepia}
+                      disabled={!darkReader}
+                      aria-labelledby="sepia-slider"
+                      valueLabelDisplay="auto"
+                      step={5}
+                      marks={[
+                        {
+                          value: darkReaderSepia,
+                          label: `${darkReaderSepia}`,
+                        },
+                      ]}
+                      min={0}
+                      max={100}
+                      onChange={(e, value) => {
+                        requestSetPreference('darkReaderSepia', value);
+                      }}
+                    />
+                  </Grid>
+                </Grid>
+                <Grid container spacing={2}>
+                  <Grid classes={{ item: classes.sliderTitleContainer }} item>
+                    <Typography id="grayscale-slider" variant="body2" gutterBottom={false}>
+                      Grayscale
+                    </Typography>
+                  </Grid>
+                  <Grid item xs>
+                    <Slider
+                      classes={{ markLabel: classes.sliderMarkLabel }}
+                      value={darkReaderGrayscale}
+                      disabled={!darkReader}
+                      aria-labelledby="grayscale-slider"
+                      valueLabelDisplay="auto"
+                      step={5}
+                      marks={[
+                        {
+                          value: darkReaderGrayscale,
+                          label: `${darkReaderGrayscale}`,
+                        },
+                      ]}
+                      min={0}
+                      max={100}
+                      onChange={(e, value) => {
+                        requestSetPreference('darkReaderGrayscale', value);
+                      }}
+                    />
+                  </Grid>
+                </Grid>
+              </ListItemText>
             </ListItem>
             <Divider />
             <ListItem>
@@ -741,303 +883,6 @@ const Preferences = ({
                 </ListItem>
               </>
             )}
-          </List>
-        </Paper>
-
-        <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.extensions.ref}>
-          Extensions
-        </Typography>
-        <Paper elevation={0} className={classes.paper}>
-          <List disablePadding dense>
-            <ListItem>
-              <ListItemText
-                primary="Block ads &amp; trackers"
-                secondary={(
-                  <>
-                    <span>Powered by </span>
-                    <span
-                      role="link"
-                      tabIndex={0}
-                      className={classes.link}
-                      onClick={() => requestOpenInBrowser('https://cliqz.com/en/whycliqz/adblocking')}
-                      onKeyDown={(e) => {
-                        if (e.key !== 'Enter') return;
-                        requestOpenInBrowser('https://cliqz.com/en/whycliqz/adblocking');
-                      }}
-                    >
-                      Cliqz
-                    </span>
-                    <span>.</span>
-                  </>
-                )}
-              />
-              <ListItemSecondaryAction>
-                <Switch
-                  edge="end"
-                  color="primary"
-                  checked={blockAds}
-                  onChange={(e) => {
-                    if (!checkLicense()) {
-                      return;
-                    }
-
-                    requestSetPreference('blockAds', e.target.checked);
-                    enqueueRequestRestartSnackbar();
-                  }}
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListItemText
-                primary="Create dark themes for web pages on the fly"
-                secondary={(
-                  <>
-                    <span>Powered by </span>
-                    <span
-                      role="link"
-                      tabIndex={0}
-                      className={classes.link}
-                      onClick={() => requestOpenInBrowser('https://darkreader.org/')}
-                      onKeyDown={(e) => {
-                        if (e.key !== 'Enter') return;
-                        requestOpenInBrowser('https://darkreader.org/');
-                      }}
-                    >
-                      Dark Reader
-                    </span>
-                    <span>.</span>
-                  </>
-                )}
-              />
-              <ListItemSecondaryAction>
-                <Switch
-                  edge="end"
-                  color="primary"
-                  checked={darkReader}
-                  onChange={(e) => {
-                    requestSetPreference('darkReader', e.target.checked);
-                  }}
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
-            <ListItem>
-              <ListItemText className={classes.sliderContainer}>
-                <Grid container spacing={2}>
-                  <Grid classes={{ item: classes.sliderTitleContainer }} item>
-                    <Typography id="brightness-slider" variant="body2" gutterBottom={false}>
-                      Brightness
-                    </Typography>
-                  </Grid>
-                  <Grid item xs>
-                    <Slider
-                      classes={{ markLabel: classes.sliderMarkLabel }}
-                      value={darkReaderBrightness - 100}
-                      disabled={!darkReader}
-                      aria-labelledby="brightness-slider"
-                      valueLabelDisplay="auto"
-                      step={5}
-                      valueLabelFormat={(val) => {
-                        if (val > 0) return `+${val}`;
-                        return val;
-                      }}
-                      marks={[
-                        {
-                          value: darkReaderBrightness - 100,
-                          label: `${darkReaderBrightness > 100 ? '+' : ''}${darkReaderBrightness - 100}`,
-                        },
-                      ]}
-                      min={-50}
-                      max={50}
-                      onChange={(e, value) => {
-                        requestSetPreference('darkReaderBrightness', value + 100);
-                      }}
-                    />
-                  </Grid>
-                </Grid>
-                <Grid container spacing={2}>
-                  <Grid classes={{ item: classes.sliderTitleContainer }} item>
-                    <Typography id="contrast-slider" variant="body2" gutterBottom={false}>
-                      Contrast
-                    </Typography>
-                  </Grid>
-                  <Grid item xs>
-                    <Slider
-                      classes={{ markLabel: classes.sliderMarkLabel }}
-                      value={darkReaderContrast - 100}
-                      disabled={!darkReader}
-                      aria-labelledby="contrast-slider"
-                      valueLabelDisplay="auto"
-                      step={5}
-                      valueLabelFormat={(val) => {
-                        if (val > 0) return `+${val}`;
-                        return val;
-                      }}
-                      marks={[
-                        {
-                          value: darkReaderContrast - 100,
-                          label: `${darkReaderContrast > 100 ? '+' : ''}${darkReaderContrast - 100}`,
-                        },
-                      ]}
-                      min={-50}
-                      max={50}
-                      onChange={(e, value) => {
-                        requestSetPreference('darkReaderContrast', value + 100);
-                      }}
-                    />
-                  </Grid>
-                </Grid>
-                <Grid container spacing={2}>
-                  <Grid classes={{ item: classes.sliderTitleContainer }} item>
-                    <Typography id="sepia-slider" variant="body2" gutterBottom={false}>
-                      Sepia
-                    </Typography>
-                  </Grid>
-                  <Grid item xs>
-                    <Slider
-                      classes={{ markLabel: classes.sliderMarkLabel }}
-                      value={darkReaderSepia}
-                      disabled={!darkReader}
-                      aria-labelledby="sepia-slider"
-                      valueLabelDisplay="auto"
-                      step={5}
-                      marks={[
-                        {
-                          value: darkReaderSepia,
-                          label: `${darkReaderSepia}`,
-                        },
-                      ]}
-                      min={0}
-                      max={100}
-                      onChange={(e, value) => {
-                        requestSetPreference('darkReaderSepia', value);
-                      }}
-                    />
-                  </Grid>
-                </Grid>
-                <Grid container spacing={2}>
-                  <Grid classes={{ item: classes.sliderTitleContainer }} item>
-                    <Typography id="grayscale-slider" variant="body2" gutterBottom={false}>
-                      Grayscale
-                    </Typography>
-                  </Grid>
-                  <Grid item xs>
-                    <Slider
-                      classes={{ markLabel: classes.sliderMarkLabel }}
-                      value={darkReaderGrayscale}
-                      disabled={!darkReader}
-                      aria-labelledby="grayscale-slider"
-                      valueLabelDisplay="auto"
-                      step={5}
-                      marks={[
-                        {
-                          value: darkReaderGrayscale,
-                          label: `${darkReaderGrayscale}`,
-                        },
-                      ]}
-                      min={0}
-                      max={100}
-                      onChange={(e, value) => {
-                        requestSetPreference('darkReaderGrayscale', value);
-                      }}
-                    />
-                  </Grid>
-                </Grid>
-              </ListItemText>
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListItemText
-                primary="Reload web pages automatically"
-              />
-              <ListItemSecondaryAction>
-                <Switch
-                  edge="end"
-                  color="primary"
-                  checked={autoRefresh}
-                  onChange={(e) => {
-                    requestSetPreference('autoRefresh', e.target.checked);
-                    enqueueRequestRestartSnackbar();
-                  }}
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
-            <ListItem>
-              <ListItemText primary="Reload every" classes={{ primary: classes.refreshEvery }} />
-              <Select
-                value={autoRefreshInterval}
-                onChange={(e) => {
-                  if (e.target.value === 'custom') {
-                    onOpenDialogRefreshInterval();
-                    return;
-                  }
-                  requestSetPreference('autoRefreshInterval', e.target.value);
-                  enqueueRequestRestartSnackbar();
-                }}
-                variant="filled"
-                disableUnderline
-                margin="dense"
-                classes={{
-                  root: classes.select,
-                }}
-                className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
-                disabled={!autoRefresh}
-              >
-                {autoRefreshIntervals.map((opt) => (
-                  <MenuItem key={opt.value} dense value={opt.value}>{opt.name}</MenuItem>
-                ))}
-                {(() => {
-                  const isCustom = autoRefreshIntervals
-                    .find((interval) => interval.value === autoRefreshInterval) == null;
-                  if (isCustom) {
-                    const time = roundTime(autoRefreshInterval);
-                    return (
-                      <MenuItem dense value={autoRefreshInterval}>
-                        {`${time.value} ${time.unit}`}
-                      </MenuItem>
-                    );
-                  }
-                  return null;
-                })()}
-                <MenuItem dense value="custom">Custom</MenuItem>
-              </Select>
-            </ListItem>
-            <ListItem>
-              <ListItemText
-                primary="Only reload on inactivity"
-                secondary={(
-                  <>
-                    <span>Keep certain apps from logging </span>
-                    <span>out automatically when you are away. </span>
-                    <span
-                      role="link"
-                      tabIndex={0}
-                      className={classes.link}
-                      onClick={() => requestOpenInBrowser(`https://help.webcatalog.app/article/25-how-to-prevent-apps-from-logging-me-out-on-inactivity?utm_source=${utmSource}`)}
-                      onKeyDown={(e) => {
-                        if (e.key !== 'Enter') return;
-                        requestOpenInBrowser(`https://help.webcatalog.app/article/25-how-to-prevent-apps-from-logging-me-out-on-inactivity?utm_source=${utmSource}`);
-                      }}
-                    >
-                      Learn more
-                    </span>
-                    <span>.</span>
-                  </>
-                )}
-              />
-              <ListItemSecondaryAction>
-                <Switch
-                  edge="end"
-                  color="primary"
-                  checked={autoRefreshOnlyWhenInactive}
-                  disabled={!autoRefresh}
-                  onChange={(e) => {
-                    requestSetPreference('autoRefreshOnlyWhenInactive', e.target.checked);
-                    enqueueRequestRestartSnackbar();
-                  }}
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
           </List>
         </Paper>
 
@@ -1281,6 +1126,11 @@ const Preferences = ({
         </Typography>
         <Paper elevation={0} className={classes.paper}>
           <List disablePadding dense>
+            <ListItem button onClick={requestClearBrowsingData}>
+              <ListItemText primary="Clear browsing data" secondary="Clear cookies, cache, and more" />
+              <ChevronRightIcon color="action" />
+            </ListItem>
+            <Divider />
             <ListItem
               button
               onClick={() => {
@@ -1296,6 +1146,27 @@ const Preferences = ({
                 secondary={`Protect this app from unauthorized access with password${canPromptTouchId ? ' or Touch ID' : ''}.`}
               />
               <ChevronRightIcon color="action" />
+            </ListItem>
+            <Divider />
+            <ListItem>
+              <ListItemText
+                primary="Block ads &amp; trackers"
+              />
+              <ListItemSecondaryAction>
+                <Switch
+                  edge="end"
+                  color="primary"
+                  checked={blockAds}
+                  onChange={(e) => {
+                    if (!checkLicense()) {
+                      return;
+                    }
+
+                    requestSetPreference('blockAds', e.target.checked);
+                    enqueueRequestRestartSnackbar();
+                  }}
+                />
+              </ListItemSecondaryAction>
             </ListItem>
             <Divider />
             <ListItem>
@@ -1362,11 +1233,6 @@ const Preferences = ({
                 />
               </ListItemSecondaryAction>
             </ListItem>
-            <Divider />
-            <ListItem button onClick={requestClearBrowsingData}>
-              <ListItemText primary="Clear browsing data" secondary="Clear cookies, cache, and more" />
-              <ChevronRightIcon color="action" />
-            </ListItem>
             {(isMas()) && (
               <>
                 <Divider />
@@ -1410,46 +1276,6 @@ const Preferences = ({
             <ListItem button onClick={() => requestOpenInBrowser(`https://webcatalog.app/privacy?utm_source=${utmSource}`)}>
               <ListItemText primary="Privacy Policy" />
               <ChevronRightIcon color="action" />
-            </ListItem>
-          </List>
-        </Paper>
-
-        <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.system.ref}>
-          System
-        </Typography>
-        <Paper elevation={0} className={classes.paper}>
-          <List disablePadding dense>
-            {appJson.id !== 'dynacal' && appJson.id !== 'dynamail' && appJson.id !== 'panmail' && (
-              <>
-                <ListItemDefaultBrowser />
-                <Divider />
-              </>
-            )}
-            {appJson.id !== 'dynacal' && (
-              <>
-                <ListItemDefaultMailClient />
-                <Divider />
-              </>
-            )}
-            <ListItem>
-              <ListItemText primary="Open at login" />
-              <Select
-                value={openAtLogin}
-                onChange={(e) => requestSetSystemPreference('openAtLogin', e.target.value)}
-                variant="filled"
-                disableUnderline
-                margin="dense"
-                classes={{
-                  root: classes.select,
-                }}
-                className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
-              >
-                <MenuItem dense value="yes">Yes</MenuItem>
-                {window.process.platform === 'darwin' && (
-                  <MenuItem dense value="yes-hidden">Yes, but minimized</MenuItem>
-                )}
-                <MenuItem dense value="no">No</MenuItem>
-              </Select>
             </ListItem>
           </List>
         </Paper>
@@ -1586,6 +1412,117 @@ const Preferences = ({
                 </ListItem>
               </>
             )}
+            <Divider />
+            <ListItem>
+              <ListItemText
+                primary="Keep window always on top"
+                secondary="The window won't be hidden even when you click outside."
+              />
+              <ListItemSecondaryAction>
+                <Switch
+                  edge="end"
+                  color="primary"
+                  checked={alwaysOnTop}
+                  onChange={(e) => {
+                    requestSetPreference('alwaysOnTop', e.target.checked);
+                    enqueueRequestRestartSnackbar();
+                  }}
+                />
+              </ListItemSecondaryAction>
+            </ListItem>
+            <Divider />
+            <ListItem>
+              <ListItemText
+                primary="Reload web pages automatically"
+              />
+              <ListItemSecondaryAction>
+                <Switch
+                  edge="end"
+                  color="primary"
+                  checked={autoRefresh}
+                  onChange={(e) => {
+                    requestSetPreference('autoRefresh', e.target.checked);
+                    enqueueRequestRestartSnackbar();
+                  }}
+                />
+              </ListItemSecondaryAction>
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="Reload every" classes={{ primary: classes.refreshEvery }} />
+              <Select
+                value={autoRefreshInterval}
+                onChange={(e) => {
+                  if (e.target.value === 'custom') {
+                    onOpenDialogRefreshInterval();
+                    return;
+                  }
+                  requestSetPreference('autoRefreshInterval', e.target.value);
+                  enqueueRequestRestartSnackbar();
+                }}
+                variant="filled"
+                disableUnderline
+                margin="dense"
+                classes={{
+                  root: classes.select,
+                }}
+                className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
+                disabled={!autoRefresh}
+              >
+                {autoRefreshIntervals.map((opt) => (
+                  <MenuItem key={opt.value} dense value={opt.value}>{opt.name}</MenuItem>
+                ))}
+                {(() => {
+                  const isCustom = autoRefreshIntervals
+                    .find((interval) => interval.value === autoRefreshInterval) == null;
+                  if (isCustom) {
+                    const time = roundTime(autoRefreshInterval);
+                    return (
+                      <MenuItem dense value={autoRefreshInterval}>
+                        {`${time.value} ${time.unit}`}
+                      </MenuItem>
+                    );
+                  }
+                  return null;
+                })()}
+                <MenuItem dense value="custom">Custom</MenuItem>
+              </Select>
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                primary="Only reload on inactivity"
+                secondary={(
+                  <>
+                    <span>Keep certain apps from logging </span>
+                    <span>out automatically when you are away. </span>
+                    <span
+                      role="link"
+                      tabIndex={0}
+                      className={classes.link}
+                      onClick={() => requestOpenInBrowser(`https://help.webcatalog.app/article/25-how-to-prevent-apps-from-logging-me-out-on-inactivity?utm_source=${utmSource}`)}
+                      onKeyDown={(e) => {
+                        if (e.key !== 'Enter') return;
+                        requestOpenInBrowser(`https://help.webcatalog.app/article/25-how-to-prevent-apps-from-logging-me-out-on-inactivity?utm_source=${utmSource}`);
+                      }}
+                    >
+                      Learn more
+                    </span>
+                    <span>.</span>
+                  </>
+                )}
+              />
+              <ListItemSecondaryAction>
+                <Switch
+                  edge="end"
+                  color="primary"
+                  checked={autoRefreshOnlyWhenInactive}
+                  disabled={!autoRefresh}
+                  onChange={(e) => {
+                    requestSetPreference('autoRefreshOnlyWhenInactive', e.target.checked);
+                    enqueueRequestRestartSnackbar();
+                  }}
+                />
+              </ListItemSecondaryAction>
+            </ListItem>
             <Divider />
             <ListItem>
               <ListItemText

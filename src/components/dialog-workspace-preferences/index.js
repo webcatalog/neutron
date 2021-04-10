@@ -20,7 +20,7 @@ import Typography from '@material-ui/core/Typography';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import CodeIcon from '@material-ui/icons/Code';
-import ExtensionIcon from '@material-ui/icons/Extension';
+import PaletteIcon from '@material-ui/icons/Palette';
 import PowerIcon from '@material-ui/icons/Power';
 
 import connectComponent from '../../helpers/connect-component';
@@ -154,9 +154,9 @@ const Preferences = ({
   const workspaceId = getStaticGlobal('workspacePreferencesWorkspaceId');
 
   const sections = {
-    extensions: {
-      text: 'Extensions',
-      Icon: ExtensionIcon,
+    appearance: {
+      text: 'Appearance',
+      Icon: PaletteIcon,
       ref: useRef(),
     },
     downloads: {
@@ -203,32 +203,15 @@ const Preferences = ({
         </List>
       </div>
       <div className={classes.inner}>
-        <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.extensions.ref}>
-          Extensions
+        <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.appearance.ref}>
+          Appearance
         </Typography>
         <Paper elevation={0} className={classes.paper}>
           <List disablePadding dense>
             <ListItem>
               <ListItemText
-                primary="Create dark themes for web pages on the fly"
-                secondary={(
-                  <>
-                    <span>Powered by </span>
-                    <span
-                      role="link"
-                      tabIndex={0}
-                      className={classes.link}
-                      onClick={() => requestOpenInBrowser('https://darkreader.org/')}
-                      onKeyDown={(e) => {
-                        if (e.key !== 'Enter') return;
-                        requestOpenInBrowser('https://darkreader.org/');
-                      }}
-                    >
-                      Dark Reader
-                    </span>
-                    <span>.</span>
-                  </>
-                )}
+                primary="Dark Reader"
+                secondary="Create unofficial dark theme for every service & account."
               />
               <Select
                 value={formDarkReader != null ? formDarkReader : 'global'}
@@ -370,122 +353,6 @@ const Preferences = ({
                 </ListItemText>
               </ListItem>
             )}
-            <Divider />
-            <ListItem>
-              <ListItemText
-                primary="Reload web pages automatically"
-              />
-              <Select
-                value={formAutoRefresh != null ? formAutoRefresh : 'global'}
-                onChange={(e) => {
-                  onUpdateForm({
-                    autoRefresh: e.target.value !== 'global' ? e.target.value : null,
-                  });
-                  requestRequestReloadWorkspaceDialog(workspaceId);
-                }}
-                variant="filled"
-                disableUnderline
-                margin="dense"
-                classes={{
-                  root: classes.select,
-                }}
-                className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
-              >
-                <MenuItem dense value="global">{`Same as global (${autoRefresh ? 'Yes' : 'No'})`}</MenuItem>
-                <MenuItem dense value>Yes</MenuItem>
-                <MenuItem dense value={false}>No</MenuItem>
-              </Select>
-            </ListItem>
-            {formAutoRefresh && (
-              <>
-                <ListItem>
-                  <ListItemText primary="Reload every" classes={{ primary: classes.refreshEvery }} />
-                  <Select
-                    value={formAutoRefreshInterval || autoRefreshInterval}
-                    onChange={(e) => {
-                      if (e.target.value === 'custom') {
-                        onOpenDialogRefreshInterval();
-                        return;
-                      }
-                      onUpdateForm({
-                        autoRefreshInterval: e.target.value,
-                      });
-                      requestRequestReloadWorkspaceDialog(workspaceId);
-                    }}
-                    variant="filled"
-                    disableUnderline
-                    margin="dense"
-                    classes={{
-                      root: classes.select,
-                    }}
-                    className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
-                  >
-                    {autoRefreshIntervals.map((opt) => (
-                      <MenuItem key={opt.value} dense value={opt.value}>{opt.name}</MenuItem>
-                    ))}
-                    {(() => {
-                      const val = formAutoRefreshInterval || autoRefreshInterval;
-                      const isCustom = autoRefreshIntervals
-                        .find((interval) => interval.value === val) == null;
-                      if (isCustom) {
-                        const time = roundTime(val);
-                        return (
-                          <MenuItem dense value={val}>
-                            {`${time.value} ${time.unit}`}
-                          </MenuItem>
-                        );
-                      }
-                      return null;
-                    })()}
-                    <MenuItem dense value="custom">Custom</MenuItem>
-                  </Select>
-                </ListItem>
-                <ListItem>
-                  <ListItemText
-                    primary="Only reload on inactivity"
-                    secondary={(
-                      <>
-                        <span>Keep certain apps from logging </span>
-                        <span>out automatically when you are away. </span>
-                        <span
-                          role="link"
-                          tabIndex={0}
-                          className={classes.link}
-                          onClick={() => requestOpenInBrowser(`https://help.webcatalog.app/article/25-how-to-prevent-apps-from-logging-me-out-on-inactivity?utm_source=${utmSource}`)}
-                          onKeyDown={(e) => {
-                            if (e.key !== 'Enter') return;
-                            requestOpenInBrowser(`https://help.webcatalog.app/article/25-how-to-prevent-apps-from-logging-me-out-on-inactivity?utm_source=${utmSource}`);
-                          }}
-                        >
-                          Learn more
-                        </span>
-                        <span>.</span>
-                      </>
-                    )}
-                  />
-                  <Select
-                    value={formAutoRefreshOnlyWhenInactive != null ? formAutoRefreshOnlyWhenInactive : 'global'}
-                    onChange={(e) => {
-                      onUpdateForm({
-                        autoRefreshOnlyWhenInactive: e.target.value !== 'global' ? e.target.value : null,
-                      });
-                      requestRequestReloadWorkspaceDialog(workspaceId);
-                    }}
-                    variant="filled"
-                    disableUnderline
-                    margin="dense"
-                    classes={{
-                      root: classes.select,
-                    }}
-                    className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
-                  >
-                    <MenuItem dense value="global">{`Same as global (${autoRefreshOnlyWhenInactive ? 'Yes' : 'No'})`}</MenuItem>
-                    <MenuItem dense value>Yes</MenuItem>
-                    <MenuItem dense value={false}>No</MenuItem>
-                  </Select>
-                </ListItem>
-              </>
-            )}
           </List>
         </Paper>
 
@@ -620,6 +487,122 @@ const Preferences = ({
               />
               <ChevronRightIcon color="action" />
             </ListItem>
+            <Divider />
+            <ListItem>
+              <ListItemText
+                primary="Reload web pages automatically"
+              />
+              <Select
+                value={formAutoRefresh != null ? formAutoRefresh : 'global'}
+                onChange={(e) => {
+                  onUpdateForm({
+                    autoRefresh: e.target.value !== 'global' ? e.target.value : null,
+                  });
+                  requestRequestReloadWorkspaceDialog(workspaceId);
+                }}
+                variant="filled"
+                disableUnderline
+                margin="dense"
+                classes={{
+                  root: classes.select,
+                }}
+                className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
+              >
+                <MenuItem dense value="global">{`Same as global (${autoRefresh ? 'Yes' : 'No'})`}</MenuItem>
+                <MenuItem dense value>Yes</MenuItem>
+                <MenuItem dense value={false}>No</MenuItem>
+              </Select>
+            </ListItem>
+            {formAutoRefresh && (
+              <>
+                <ListItem>
+                  <ListItemText primary="Reload every" classes={{ primary: classes.refreshEvery }} />
+                  <Select
+                    value={formAutoRefreshInterval || autoRefreshInterval}
+                    onChange={(e) => {
+                      if (e.target.value === 'custom') {
+                        onOpenDialogRefreshInterval();
+                        return;
+                      }
+                      onUpdateForm({
+                        autoRefreshInterval: e.target.value,
+                      });
+                      requestRequestReloadWorkspaceDialog(workspaceId);
+                    }}
+                    variant="filled"
+                    disableUnderline
+                    margin="dense"
+                    classes={{
+                      root: classes.select,
+                    }}
+                    className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
+                  >
+                    {autoRefreshIntervals.map((opt) => (
+                      <MenuItem key={opt.value} dense value={opt.value}>{opt.name}</MenuItem>
+                    ))}
+                    {(() => {
+                      const val = formAutoRefreshInterval || autoRefreshInterval;
+                      const isCustom = autoRefreshIntervals
+                        .find((interval) => interval.value === val) == null;
+                      if (isCustom) {
+                        const time = roundTime(val);
+                        return (
+                          <MenuItem dense value={val}>
+                            {`${time.value} ${time.unit}`}
+                          </MenuItem>
+                        );
+                      }
+                      return null;
+                    })()}
+                    <MenuItem dense value="custom">Custom</MenuItem>
+                  </Select>
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="Only reload on inactivity"
+                    secondary={(
+                      <>
+                        <span>Keep certain apps from logging </span>
+                        <span>out automatically when you are away. </span>
+                        <span
+                          role="link"
+                          tabIndex={0}
+                          className={classes.link}
+                          onClick={() => requestOpenInBrowser(`https://help.webcatalog.app/article/25-how-to-prevent-apps-from-logging-me-out-on-inactivity?utm_source=${utmSource}`)}
+                          onKeyDown={(e) => {
+                            if (e.key !== 'Enter') return;
+                            requestOpenInBrowser(`https://help.webcatalog.app/article/25-how-to-prevent-apps-from-logging-me-out-on-inactivity?utm_source=${utmSource}`);
+                          }}
+                        >
+                          Learn more
+                        </span>
+                        <span>.</span>
+                      </>
+                    )}
+                  />
+                  <Select
+                    value={formAutoRefreshOnlyWhenInactive != null ? formAutoRefreshOnlyWhenInactive : 'global'}
+                    onChange={(e) => {
+                      onUpdateForm({
+                        autoRefreshOnlyWhenInactive: e.target.value !== 'global' ? e.target.value : null,
+                      });
+                      requestRequestReloadWorkspaceDialog(workspaceId);
+                    }}
+                    variant="filled"
+                    disableUnderline
+                    margin="dense"
+                    classes={{
+                      root: classes.select,
+                    }}
+                    className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
+                  >
+                    <MenuItem dense value="global">{`Same as global (${autoRefreshOnlyWhenInactive ? 'Yes' : 'No'})`}</MenuItem>
+                    <MenuItem dense value>Yes</MenuItem>
+                    <MenuItem dense value={false}>No</MenuItem>
+                  </Select>
+                </ListItem>
+              </>
+            )}
           </List>
         </Paper>
       </div>
