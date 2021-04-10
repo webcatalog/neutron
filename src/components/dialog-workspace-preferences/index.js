@@ -211,7 +211,7 @@ const Preferences = ({
             <ListItem>
               <ListItemText
                 primary="Dark Reader"
-                secondary="Create unofficial dark themes for services & accounts."
+                secondary="Create unofficial dark theme for every service & account."
               />
               <Select
                 value={formDarkReader != null ? formDarkReader : 'global'}
