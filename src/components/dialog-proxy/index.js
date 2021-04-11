@@ -23,6 +23,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
 import connectComponent from '../../helpers/connect-component';
+import getUtmSource from '../../helpers/get-utm-source';
 
 import {
   close,
@@ -88,6 +89,8 @@ const DialogProxy = (props) => {
     proxyMode,
   } = props;
 
+  const utmSource = getUtmSource();
+
   const bypassRulesTextField = (
     <TextField
       margin="dense"
@@ -106,10 +109,10 @@ const DialogProxy = (props) => {
             role="link"
             tabIndex={0}
             className={classes.link}
-            onClick={() => requestOpenInBrowser('https://www.electronjs.org/docs/api/session#sessetproxyconfig')}
+            onClick={() => requestOpenInBrowser(`https://help.webcatalog.app/article/40-how-to-define-proxy-bypass-rules?utm_source=${utmSource}`)}
             onKeyDown={(e) => {
               if (e.key !== 'Enter') return;
-              requestOpenInBrowser('https://www.electronjs.org/docs/api/session#sessetproxyconfig');
+              requestOpenInBrowser(`https://help.webcatalog.app/article/40-how-to-define-proxy-bypass-rules?utm_source=${utmSource}`);
             }}
           >
             Learn more
