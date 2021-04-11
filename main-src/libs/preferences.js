@@ -72,6 +72,12 @@ const defaultPreferences = {
   pauseNotificationsByScheduleTo: getDefaultPauseNotificationsByScheduleTo(),
   pauseNotificationsMuteAudio: false,
   privacyConsentAsked: false,
+  proxyAddress: '',
+  proxyBypassRules: '',
+  proxyPacScript: '',
+  proxyPort: '',
+  proxyProtocol: 'socks5',
+  proxyMode: 'direct', // direct, pac_script, fixed_servers, system
   ratingDidRate: false,
   ratingLastClicked: 0,
   rememberLastPageVisited: false,

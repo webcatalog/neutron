@@ -475,7 +475,7 @@ const Main = ({
                     Try:
                     <ul className={classes.ul}>
                       <li>Checking the network cables, modem, and router.</li>
-                      <li>Checking the VPN and the firewall.</li>
+                      <li>Checking the VPN, the proxy and the firewall configurations.</li>
                       <li>Reconnecting to Wi-Fi.</li>
                     </ul>
                   </>

@@ -3,6 +3,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import isUrl from './is-url';
 import isRegExp from './is-reg-exp';
+import isHostname from './is-hostname';
+import isPort from './is-port';
 
 const kits = {
   required: (val, ruleVal, fieldName) => {
@@ -27,6 +29,18 @@ const kits = {
   },
   regExp: (val, ruleVal, fieldName) => {
     if (ruleVal && val && !isRegExp(val)) {
+      return '{fieldName} is not valid.'.replace('{fieldName}', fieldName);
+    }
+    return null;
+  },
+  hostname: (val, ruleVal, fieldName) => {
+    if (ruleVal && val && !isHostname(val)) {
+      return '{fieldName} is not valid.'.replace('{fieldName}', fieldName);
+    }
+    return null;
+  },
+  port: (val, ruleVal, fieldName) => {
+    if (ruleVal && val && !isPort(val)) {
       return '{fieldName} is not valid.'.replace('{fieldName}', fieldName);
     }
     return null;

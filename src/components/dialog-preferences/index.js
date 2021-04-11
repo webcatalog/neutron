@@ -30,6 +30,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import PaletteIcon from '@material-ui/icons/Palette';
 import PowerIcon from '@material-ui/icons/Power';
 import RotateLeftIcon from '@material-ui/icons/RotateLeft';
+import RouterIcon from '@material-ui/icons/Router';
 import SecurityIcon from '@material-ui/icons/Security';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 import UpdateIcon from '@material-ui/icons/Update';
@@ -69,6 +70,7 @@ import { open as openDialogAppLock } from '../../state/dialog-app-lock/actions';
 import { open as openDialogCodeInjection } from '../../state/dialog-code-injection/actions';
 import { open as openDialogCustomUserAgent } from '../../state/dialog-custom-user-agent/actions';
 import { open as openDialogInternalUrls } from '../../state/dialog-internal-urls/actions';
+import { open as openDialogProxy } from '../../state/dialog-proxy/actions';
 import { open as openDialogSpellcheckLanguages } from '../../state/dialog-spellcheck-languages/actions';
 import { open as openDialogRefreshInterval } from '../../state/dialog-refresh-interval/actions';
 
@@ -83,6 +85,7 @@ import DialogAppLock from '../dialog-app-lock';
 import DialogCodeInjection from '../dialog-code-injection';
 import DialogCustomUserAgent from '../dialog-custom-user-agent';
 import DialogInternalUrls from '../dialog-internal-urls';
+import DialogProxy from '../dialog-proxy';
 import DialogSpellcheckLanguages from '../dialog-spellcheck-languages';
 import DialogRefreshInterval from '../dialog-refresh-interval';
 
@@ -218,6 +221,7 @@ const Preferences = ({
   darkReaderSepia,
   downloadPath,
   hibernateUnusedWorkspacesAtLaunch,
+  iapPurchased,
   ignoreCertificateErrors,
   internalUrlRule,
   jsCodeInjection,
@@ -226,6 +230,7 @@ const Preferences = ({
   onOpenDialogCodeInjection,
   onOpenDialogCustomUserAgent,
   onOpenDialogInternalUrls,
+  onOpenDialogProxy,
   onOpenDialogRefreshInterval,
   onOpenDialogSpellcheckLanguages,
   openAtLogin,
@@ -234,15 +239,15 @@ const Preferences = ({
   pauseNotificationsByScheduleFrom,
   pauseNotificationsByScheduleTo,
   pauseNotificationsMuteAudio,
-  iapPurchased,
+  proxyMode,
   rememberLastPageVisited,
   runInBackground,
   searchEngine,
   sentry,
   shareWorkspaceBrowsingData,
   sidebar,
-  sidebarTips,
   sidebarSize,
+  sidebarTips,
   spellcheck,
   spellcheckLanguages,
   swipeToNavigate,
@@ -302,6 +307,11 @@ const Preferences = ({
     downloads: {
       text: 'Downloads',
       Icon: CloudDownloadIcon,
+      ref: useRef(),
+    },
+    network: {
+      text: 'Network',
+      Icon: RouterIcon,
       ref: useRef(),
     },
     privacy: {
@@ -1121,13 +1131,43 @@ const Preferences = ({
           </List>
         </Paper>
 
+        <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle} ref={sections.network.ref}>
+          Network
+        </Typography>
+        <Paper elevation={0} className={classes.paper}>
+          <List disablePadding dense>
+            <ListItem button onClick={onOpenDialogProxy}>
+              <ListItemText
+                primary="Proxy"
+                secondary={(() => {
+                  switch (proxyMode) {
+                    case 'fixed_servers': {
+                      return 'Using proxy server.';
+                    }
+                    case 'pac_script': {
+                      return 'Using PAC script (automatic proxy configuration script).';
+                    }
+                    case 'system': {
+                      return 'Using system proxy configurations.';
+                    }
+                    default: {
+                      return 'Not configured.';
+                    }
+                  }
+                })()}
+              />
+              <ChevronRightIcon color="action" />
+            </ListItem>
+          </List>
+        </Paper>
+
         <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.privacy.ref}>
           Privacy &amp; Security
         </Typography>
         <Paper elevation={0} className={classes.paper}>
           <List disablePadding dense>
             <ListItem button onClick={requestClearBrowsingData}>
-              <ListItemText primary="Clear browsing data" secondary="Clear cookies, cache, and more" />
+              <ListItemText primary="Clear browsing data" secondary="Clear cookies, cache, and more." />
               <ChevronRightIcon color="action" />
             </ListItem>
             <Divider />
@@ -2001,6 +2041,7 @@ const Preferences = ({
       <DialogCodeInjection />
       <DialogCustomUserAgent />
       <DialogSpellcheckLanguages />
+      <DialogProxy />
       <DialogInternalUrls />
       <DialogRefreshInterval />
       <SnackbarTrigger />
@@ -2011,9 +2052,9 @@ const Preferences = ({
 Preferences.defaultProps = {
   cssCodeInjection: null,
   customUserAgent: null,
+  iapPurchased: false,
   internalUrlRule: null,
   jsCodeInjection: null,
-  iapPurchased: false,
 };
 
 Preferences.propTypes = {
@@ -2035,6 +2076,7 @@ Preferences.propTypes = {
   darkReaderSepia: PropTypes.number.isRequired,
   downloadPath: PropTypes.string.isRequired,
   hibernateUnusedWorkspacesAtLaunch: PropTypes.bool.isRequired,
+  iapPurchased: PropTypes.bool,
   ignoreCertificateErrors: PropTypes.bool.isRequired,
   internalUrlRule: PropTypes.string,
   jsCodeInjection: PropTypes.string,
@@ -2043,6 +2085,7 @@ Preferences.propTypes = {
   onOpenDialogCodeInjection: PropTypes.func.isRequired,
   onOpenDialogCustomUserAgent: PropTypes.func.isRequired,
   onOpenDialogInternalUrls: PropTypes.func.isRequired,
+  onOpenDialogProxy: PropTypes.func.isRequired,
   onOpenDialogRefreshInterval: PropTypes.func.isRequired,
   onOpenDialogSpellcheckLanguages: PropTypes.func.isRequired,
   openAtLogin: PropTypes.oneOf(['yes', 'yes-hidden', 'no']).isRequired,
@@ -2051,7 +2094,7 @@ Preferences.propTypes = {
   pauseNotificationsByScheduleFrom: PropTypes.string.isRequired,
   pauseNotificationsByScheduleTo: PropTypes.string.isRequired,
   pauseNotificationsMuteAudio: PropTypes.bool.isRequired,
-  iapPurchased: PropTypes.bool,
+  proxyMode: PropTypes.oneOf(['direct', 'fixed_servers', 'pac_script', 'system']).isRequired,
   rememberLastPageVisited: PropTypes.bool.isRequired,
   runInBackground: PropTypes.bool.isRequired,
   searchEngine: PropTypes.string.isRequired,
@@ -2092,6 +2135,7 @@ const mapStateToProps = (state) => ({
   darkReaderSepia: state.preferences.darkReaderSepia,
   downloadPath: state.preferences.downloadPath,
   hibernateUnusedWorkspacesAtLaunch: state.preferences.hibernateUnusedWorkspacesAtLaunch,
+  iapPurchased: state.preferences.iapPurchased,
   ignoreCertificateErrors: state.preferences.ignoreCertificateErrors,
   internalUrlRule: state.preferences.internalUrlRule,
   isDefaultMailClient: state.general.isDefaultMailClient,
@@ -2104,7 +2148,7 @@ const mapStateToProps = (state) => ({
   pauseNotificationsByScheduleFrom: state.preferences.pauseNotificationsByScheduleFrom,
   pauseNotificationsByScheduleTo: state.preferences.pauseNotificationsByScheduleTo,
   pauseNotificationsMuteAudio: state.preferences.pauseNotificationsMuteAudio,
-  iapPurchased: state.preferences.iapPurchased,
+  proxyMode: state.preferences.proxyMode,
   rememberLastPageVisited: state.preferences.rememberLastPageVisited,
   runInBackground: state.preferences.runInBackground,
   searchEngine: state.preferences.searchEngine,
@@ -2132,6 +2176,7 @@ const actionCreators = {
   openDialogCodeInjection,
   openDialogCustomUserAgent,
   openDialogInternalUrls,
+  openDialogProxy,
   openDialogRefreshInterval,
   openDialogSpellcheckLanguages,
 };
