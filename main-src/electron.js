@@ -372,21 +372,25 @@ if (!gotTheLock) {
     const {
       attachToMenubar,
       autoCheckForUpdates,
+      blockAds,
       customUserAgent,
       navigationBar,
+      proxyBypassRules,
+      proxyPacScript,
+      proxyRules,
+      proxyType,
+      rememberLastPageVisited,
       runInBackground,
+      shareWorkspaceBrowsingData,
       sidebar,
       sidebarSize,
-      titleBar,
-      trayIcon,
-      useSystemTitleBar,
-      windowButtons,
-      blockAds,
-      rememberLastPageVisited,
-      shareWorkspaceBrowsingData,
       spellcheck,
       spellcheckLanguages,
+      titleBar,
+      trayIcon,
       unreadCountBadge,
+      useSystemTitleBar,
+      windowButtons,
     } = getPreferences();
 
     if (customUserAgent) {
@@ -424,6 +428,10 @@ if (!gotTheLock) {
     global.spellcheck = spellcheck;
     global.spellcheckLanguages = spellcheckLanguages;
     global.unreadCountBadge = unreadCountBadge;
+    global.proxyBypassRules = proxyBypassRules;
+    global.proxyPacScript = proxyPacScript;
+    global.proxyRules = proxyRules;
+    global.proxyType = proxyType;
 
     commonInit();
 

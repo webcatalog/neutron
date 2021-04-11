@@ -203,6 +203,18 @@ const addView = (browserWindow, workspace) => {
   // configure session & ad blocker
   const ses = session.fromPartition(global.shareWorkspaceBrowsingData ? 'persist:shared' : `persist:${workspace.id}`);
 
+  // proxy
+  if (global.proxyType === 'rules') {
+    ses.setProxy({
+      proxyRules: global.proxyRules,
+      proxyBypassRules: global.proxyBypassRules,
+    });
+  } else if (global.proxyType === 'pacScript') {
+    ses.setProxy({
+      proxyPacScript: global.proxyPacScript,
+      proxyBypassRules: global.proxyBypassRules,
+    });
+  }
   // blocker
   if (global.blockAds) {
     ElectronBlocker.fromPrebuiltAdsAndTracking(customizedFetch, {

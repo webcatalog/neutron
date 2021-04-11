@@ -30,6 +30,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import PaletteIcon from '@material-ui/icons/Palette';
 import PowerIcon from '@material-ui/icons/Power';
 import RotateLeftIcon from '@material-ui/icons/RotateLeft';
+import RouterIcon from '@material-ui/icons/Router';
 import SecurityIcon from '@material-ui/icons/Security';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 import UpdateIcon from '@material-ui/icons/Update';
@@ -69,6 +70,7 @@ import { open as openDialogAppLock } from '../../state/dialog-app-lock/actions';
 import { open as openDialogCodeInjection } from '../../state/dialog-code-injection/actions';
 import { open as openDialogCustomUserAgent } from '../../state/dialog-custom-user-agent/actions';
 import { open as openDialogInternalUrls } from '../../state/dialog-internal-urls/actions';
+import { open as openDialogProxy } from '../../state/dialog-proxy/actions';
 import { open as openDialogSpellcheckLanguages } from '../../state/dialog-spellcheck-languages/actions';
 import { open as openDialogRefreshInterval } from '../../state/dialog-refresh-interval/actions';
 
@@ -83,6 +85,7 @@ import DialogAppLock from '../dialog-app-lock';
 import DialogCodeInjection from '../dialog-code-injection';
 import DialogCustomUserAgent from '../dialog-custom-user-agent';
 import DialogInternalUrls from '../dialog-internal-urls';
+import DialogProxy from '../dialog-proxy';
 import DialogSpellcheckLanguages from '../dialog-spellcheck-languages';
 import DialogRefreshInterval from '../dialog-refresh-interval';
 
@@ -226,6 +229,7 @@ const Preferences = ({
   onOpenDialogCodeInjection,
   onOpenDialogCustomUserAgent,
   onOpenDialogInternalUrls,
+  onOpenDialogProxy,
   onOpenDialogRefreshInterval,
   onOpenDialogSpellcheckLanguages,
   openAtLogin,
@@ -302,6 +306,11 @@ const Preferences = ({
     downloads: {
       text: 'Downloads',
       Icon: CloudDownloadIcon,
+      ref: useRef(),
+    },
+    network: {
+      text: 'Network',
+      Icon: RouterIcon,
       ref: useRef(),
     },
     privacy: {
@@ -1117,6 +1126,18 @@ const Preferences = ({
                   }}
                 />
               </ListItemSecondaryAction>
+            </ListItem>
+          </List>
+        </Paper>
+
+        <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle} ref={sections.network.ref}>
+          Network
+        </Typography>
+        <Paper elevation={0} className={classes.paper}>
+          <List disablePadding dense>
+            <ListItem button onClick={onOpenDialogProxy}>
+              <ListItemText primary="Configure proxy settings (BETA)" />
+              <ChevronRightIcon color="action" />
             </ListItem>
           </List>
         </Paper>
@@ -2001,6 +2022,7 @@ const Preferences = ({
       <DialogCodeInjection />
       <DialogCustomUserAgent />
       <DialogSpellcheckLanguages />
+      <DialogProxy />
       <DialogInternalUrls />
       <DialogRefreshInterval />
       <SnackbarTrigger />
@@ -2043,6 +2065,7 @@ Preferences.propTypes = {
   onOpenDialogCodeInjection: PropTypes.func.isRequired,
   onOpenDialogCustomUserAgent: PropTypes.func.isRequired,
   onOpenDialogInternalUrls: PropTypes.func.isRequired,
+  onOpenDialogProxy: PropTypes.func.isRequired,
   onOpenDialogRefreshInterval: PropTypes.func.isRequired,
   onOpenDialogSpellcheckLanguages: PropTypes.func.isRequired,
   openAtLogin: PropTypes.oneOf(['yes', 'yes-hidden', 'no']).isRequired,
@@ -2132,6 +2155,7 @@ const actionCreators = {
   openDialogCodeInjection,
   openDialogCustomUserAgent,
   openDialogInternalUrls,
+  openDialogProxy,
   openDialogRefreshInterval,
   openDialogSpellcheckLanguages,
 };
