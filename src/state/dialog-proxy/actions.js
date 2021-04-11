@@ -17,19 +17,23 @@ import {
 
 export const open = () => (dispatch, getState) => {
   const {
+    proxyAddress,
     proxyBypassRules,
+    proxyMode,
     proxyPacScript,
-    proxyRules,
-    proxyType,
+    proxyPort,
+    proxyProtocol,
   } = getState().preferences;
 
   dispatch({
     type: DIALOG_PROXY_OPEN,
     form: {
+      proxyAddress,
       proxyBypassRules,
+      proxyMode,
       proxyPacScript,
-      proxyRules,
-      proxyType,
+      proxyPort,
+      proxyProtocol,
     },
   });
 };
@@ -38,16 +42,26 @@ export const close = () => ({
   type: DIALOG_PROXY_CLOSE,
 });
 
-const getValidationRules = (proxyType) => {
-  if (proxyType === 'rules') {
+const getValidationRules = (proxyMode) => {
+  if (proxyMode === 'fixed_servers') {
     return {
-      proxyRules: {
+      proxyProtocol: {
+        fieldName: 'Proxy protocol',
+        required: true,
+      },
+      proxyAddress: {
         fieldName: 'Proxy address',
         required: true,
+        hostname: true,
+      },
+      proxyPort: {
+        fieldName: 'Proxy port',
+        required: true,
+        port: true,
       },
     };
   }
-  if (proxyType === 'pacScript') {
+  if (proxyMode === 'pac_script') {
     return {
       proxyPacScript: {
         fieldName: 'Script URL',
@@ -64,10 +78,10 @@ export const updateForm = (changes) => (dispatch, getState) => {
   const { form } = state.dialogProxy;
 
   // revalidate all fields if proxy type changes
-  if (changes.proxyType) {
+  if (changes.proxyMode) {
     const validatedChanges = validate(
       { ...form, ...changes },
-      getValidationRules(changes.proxyType),
+      getValidationRules(changes.proxyMode),
     );
     dispatch({
       type: DIALOG_PROXY_FORM_UPDATE,
@@ -76,7 +90,7 @@ export const updateForm = (changes) => (dispatch, getState) => {
   } else {
     dispatch({
       type: DIALOG_PROXY_FORM_UPDATE,
-      changes: validate(changes, getValidationRules(form.proxyType)),
+      changes: validate(changes, getValidationRules(form.proxyMode)),
     });
   }
 };
@@ -86,15 +100,24 @@ export const save = () => (dispatch, getState) => {
 
   const { form } = state.dialogProxy;
 
-  const validatedChanges = validate(form, getValidationRules(form.proxyType));
+  const validatedChanges = validate(form, getValidationRules(form.proxyMode));
   if (hasErrors(validatedChanges)) {
     return dispatch(updateForm(validatedChanges));
   }
 
-  requestSetPreference('proxyRules', form.proxyRules);
-  requestSetPreference('proxyBypassRules', form.proxyBypassRules);
-  requestSetPreference('proxyPacScript', form.proxyPacScript);
-  requestSetPreference('proxyType', form.proxyType);
+  if (form.proxyMode === 'fixed_servers') {
+    requestSetPreference('proxyAddress', form.proxyAddress.trim());
+    requestSetPreference('proxyPort', form.proxyPort.trim());
+    requestSetPreference('proxyProtocol', form.proxyProtocol.trim());
+    requestSetPreference('proxyBypassRules', form.proxyBypassRules);
+  }
+
+  if (form.proxyMode === 'pac_script') {
+    requestSetPreference('proxyPacScript', form.proxyPacScript.trim());
+    requestSetPreference('proxyBypassRules', form.proxyBypassRules);
+  }
+
+  requestSetPreference('proxyMode', form.proxyMode);
   enqueueRequestRestartSnackbar();
 
   dispatch(close());

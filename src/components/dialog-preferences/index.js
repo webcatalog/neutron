@@ -221,6 +221,7 @@ const Preferences = ({
   darkReaderSepia,
   downloadPath,
   hibernateUnusedWorkspacesAtLaunch,
+  iapPurchased,
   ignoreCertificateErrors,
   internalUrlRule,
   jsCodeInjection,
@@ -238,15 +239,15 @@ const Preferences = ({
   pauseNotificationsByScheduleFrom,
   pauseNotificationsByScheduleTo,
   pauseNotificationsMuteAudio,
-  iapPurchased,
+  proxyMode,
   rememberLastPageVisited,
   runInBackground,
   searchEngine,
   sentry,
   shareWorkspaceBrowsingData,
   sidebar,
-  sidebarTips,
   sidebarSize,
+  sidebarTips,
   spellcheck,
   spellcheckLanguages,
   swipeToNavigate,
@@ -1136,7 +1137,25 @@ const Preferences = ({
         <Paper elevation={0} className={classes.paper}>
           <List disablePadding dense>
             <ListItem button onClick={onOpenDialogProxy}>
-              <ListItemText primary="Configure proxy settings (BETA)" />
+              <ListItemText
+                primary="Proxy"
+                secondary={(() => {
+                  switch (proxyMode) {
+                    case 'fixed_servers': {
+                      return 'Using proxy server.';
+                    }
+                    case 'pac_script': {
+                      return 'Using PAC script (automatic proxy configuration script).';
+                    }
+                    case 'system': {
+                      return 'Using system proxy configurations.';
+                    }
+                    default: {
+                      return 'Not configured.';
+                    }
+                  }
+                })()}
+              />
               <ChevronRightIcon color="action" />
             </ListItem>
           </List>
@@ -1148,7 +1167,7 @@ const Preferences = ({
         <Paper elevation={0} className={classes.paper}>
           <List disablePadding dense>
             <ListItem button onClick={requestClearBrowsingData}>
-              <ListItemText primary="Clear browsing data" secondary="Clear cookies, cache, and more" />
+              <ListItemText primary="Clear browsing data" secondary="Clear cookies, cache, and more." />
               <ChevronRightIcon color="action" />
             </ListItem>
             <Divider />
@@ -2033,9 +2052,9 @@ const Preferences = ({
 Preferences.defaultProps = {
   cssCodeInjection: null,
   customUserAgent: null,
+  iapPurchased: false,
   internalUrlRule: null,
   jsCodeInjection: null,
-  iapPurchased: false,
 };
 
 Preferences.propTypes = {
@@ -2057,6 +2076,7 @@ Preferences.propTypes = {
   darkReaderSepia: PropTypes.number.isRequired,
   downloadPath: PropTypes.string.isRequired,
   hibernateUnusedWorkspacesAtLaunch: PropTypes.bool.isRequired,
+  iapPurchased: PropTypes.bool,
   ignoreCertificateErrors: PropTypes.bool.isRequired,
   internalUrlRule: PropTypes.string,
   jsCodeInjection: PropTypes.string,
@@ -2074,7 +2094,7 @@ Preferences.propTypes = {
   pauseNotificationsByScheduleFrom: PropTypes.string.isRequired,
   pauseNotificationsByScheduleTo: PropTypes.string.isRequired,
   pauseNotificationsMuteAudio: PropTypes.bool.isRequired,
-  iapPurchased: PropTypes.bool,
+  proxyMode: PropTypes.oneOf(['direct', 'fixed_servers', 'pac_script', 'system']).isRequired,
   rememberLastPageVisited: PropTypes.bool.isRequired,
   runInBackground: PropTypes.bool.isRequired,
   searchEngine: PropTypes.string.isRequired,
@@ -2115,6 +2135,7 @@ const mapStateToProps = (state) => ({
   darkReaderSepia: state.preferences.darkReaderSepia,
   downloadPath: state.preferences.downloadPath,
   hibernateUnusedWorkspacesAtLaunch: state.preferences.hibernateUnusedWorkspacesAtLaunch,
+  iapPurchased: state.preferences.iapPurchased,
   ignoreCertificateErrors: state.preferences.ignoreCertificateErrors,
   internalUrlRule: state.preferences.internalUrlRule,
   isDefaultMailClient: state.general.isDefaultMailClient,
@@ -2127,7 +2148,7 @@ const mapStateToProps = (state) => ({
   pauseNotificationsByScheduleFrom: state.preferences.pauseNotificationsByScheduleFrom,
   pauseNotificationsByScheduleTo: state.preferences.pauseNotificationsByScheduleTo,
   pauseNotificationsMuteAudio: state.preferences.pauseNotificationsMuteAudio,
-  iapPurchased: state.preferences.iapPurchased,
+  proxyMode: state.preferences.proxyMode,
   rememberLastPageVisited: state.preferences.rememberLastPageVisited,
   runInBackground: state.preferences.runInBackground,
   searchEngine: state.preferences.searchEngine,

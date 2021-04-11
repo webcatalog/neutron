@@ -12,8 +12,10 @@ import {
 const formInitialState = {
   proxyBypassRules: '',
   proxyPacScript: '',
-  proxyRules: '',
-  proxyType: 'none',
+  proxyAddress: '',
+  proxyPort: '',
+  proxyProtocol: 'socks5',
+  proxyMode: 'direct',
 };
 const form = (state = formInitialState, action) => {
   switch (action.type) {

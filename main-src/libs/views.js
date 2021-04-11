@@ -204,15 +204,21 @@ const addView = (browserWindow, workspace) => {
   const ses = session.fromPartition(global.shareWorkspaceBrowsingData ? 'persist:shared' : `persist:${workspace.id}`);
 
   // proxy
-  if (global.proxyType === 'rules') {
+  if (global.proxyMode === 'fixed_servers') {
     ses.setProxy({
+      mode: 'fixed_servers',
       proxyRules: global.proxyRules,
       proxyBypassRules: global.proxyBypassRules,
     });
-  } else if (global.proxyType === 'pacScript') {
+  } else if (global.proxyMode === 'pac_script') {
     ses.setProxy({
+      mode: 'pac_script',
       proxyPacScript: global.proxyPacScript,
       proxyBypassRules: global.proxyBypassRules,
+    });
+  } else if (global.proxyMode === 'system') {
+    ses.setProxy({
+      mode: 'system',
     });
   }
   // blocker

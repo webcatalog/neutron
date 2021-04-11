@@ -5,16 +5,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
 import Divider from '@material-ui/core/Divider';
+import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import InputLabel from '@material-ui/core/InputLabel';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import MenuItem from '@material-ui/core/MenuItem';
 import Radio from '@material-ui/core/Radio';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogActions from '@material-ui/core/DialogActions';
+import Select from '@material-ui/core/Select';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 
 import connectComponent from '../../helpers/connect-component';
 
@@ -54,6 +60,13 @@ const styles = (theme) => ({
     marginLeft: theme.spacing(1),
   },
   radioLabel: theme.typography.body2,
+  addressContainer: {
+    display: 'flex',
+  },
+  addressTextField: {
+    flex: 1,
+    paddingRight: theme.spacing(1),
+  },
 });
 
 const DialogProxy = (props) => {
@@ -66,10 +79,45 @@ const DialogProxy = (props) => {
     proxyBypassRules,
     proxyPacScript,
     proxyPacScriptError,
-    proxyRules,
-    proxyRulesError,
-    proxyType,
+    proxyAddress,
+    proxyAddressError,
+    proxyPort,
+    proxyPortError,
+    proxyProtocol,
+    proxyProtocolError,
+    proxyMode,
   } = props;
+
+  const bypassRulesTextField = (
+    <TextField
+      margin="dense"
+      fullWidth
+      label="Bypass rules"
+      variant="outlined"
+      value={proxyBypassRules}
+      onChange={(e) => onUpdateForm({ proxyBypassRules: e.target.value })}
+      helperText={(
+        <>
+          <span>Rules indicating which URLs should bypass the proxy settings. </span>
+          <span>Set to </span>
+          <strong>&lt;local&gt;</strong>
+          <span> to bypass proxy server for local addresses. </span>
+          <span
+            role="link"
+            tabIndex={0}
+            className={classes.link}
+            onClick={() => requestOpenInBrowser('https://www.electronjs.org/docs/api/session#sessetproxyconfig')}
+            onKeyDown={(e) => {
+              if (e.key !== 'Enter') return;
+              requestOpenInBrowser('https://www.electronjs.org/docs/api/session#sessetproxyconfig');
+            }}
+          >
+            Learn more
+          </span>
+        </>
+      )}
+    />
+  );
 
   return (
     <Dialog
@@ -79,6 +127,14 @@ const DialogProxy = (props) => {
       maxWidth="sm"
     >
       <DialogContent>
+        <Typography variant="body2" gutterBottom>
+          The proxy configurations are only applied when you
+          access and visit your web services & accounts
+          , not when you use other parts of the app (e.g checking for updates,
+          accessing service catalog, etc).
+        </Typography>
+        <Divider />
+
         <List disablePadding dense>
           <ListItem>
             <div style={{ width: '100%' }}>
@@ -88,140 +144,106 @@ const DialogProxy = (props) => {
                 control={<Radio color="primary" size="small" />}
                 label="Use proxy server"
                 labelPlacement="end"
-                checked={proxyType === 'rules'}
-                value="rules"
-                onChange={(e) => onUpdateForm({ proxyType: e.target.value })}
+                checked={proxyMode === 'fixed_servers'}
+                value="fixed_servers"
+                onChange={(e) => onUpdateForm({ proxyMode: e.target.value })}
               />
-              <TextField
-                margin="dense"
-                fullWidth
-                label="Proxy address"
-                variant="outlined"
-                disabled={proxyType !== 'rules'}
-                value={proxyRules}
-                onChange={(e) => onUpdateForm({ proxyRules: e.target.value })}
-                error={Boolean(proxyRulesError)}
-                helperText={proxyRulesError || (
-                  <>
-                    <span>Example: socks5://bar.com. </span>
-                    <span
-                      role="link"
-                      tabIndex={0}
-                      className={classes.link}
-                      onClick={() => requestOpenInBrowser('https://www.npmjs.com/package/proxy-agent')}
-                      onKeyDown={(e) => {
-                        if (e.key !== 'Enter') return;
-                        requestOpenInBrowser('https://www.npmjs.com/package/proxy-agent');
-                      }}
+              {proxyMode === 'fixed_servers' && (
+                <>
+                  <FormControl variant="outlined" margin="dense" fullWidth error={Boolean(proxyProtocolError)}>
+                    <InputLabel id="demo-simple-select-error-label">Protocol</InputLabel>
+                    <Select
+                      value={proxyProtocol}
+                      onChange={(e) => onUpdateForm({ proxyProtocol: e.target.value })}
                     >
-                      Learn more
-                    </span>
-                  </>
-                )}
-              />
-              <TextField
-                margin="dense"
-                fullWidth
-                label="Bypass rules"
-                variant="outlined"
-                disabled={proxyType !== 'rules'}
-                value={proxyBypassRules}
-                onChange={(e) => onUpdateForm({ proxyBypassRules: e.target.value })}
-                helperText={(
-                  <>
-                    <span>Rules indicating which URLs should bypass the proxy settings. </span>
-                    <span>Set to </span>
-                    <strong>&lt;local&gt;</strong>
-                    <span> to bypass proxy server for local addresses. </span>
-                    <span
-                      role="link"
-                      tabIndex={0}
-                      className={classes.link}
-                      onClick={() => requestOpenInBrowser('https://www.electronjs.org/docs/api/session#sessetproxyconfig')}
-                      onKeyDown={(e) => {
-                        if (e.key !== 'Enter') return;
-                        requestOpenInBrowser('https://www.electronjs.org/docs/api/session#sessetproxyconfig');
-                      }}
-                    >
-                      Learn more
-                    </span>
-                  </>
-                )}
-              />
+                      {['socks5', 'socks4', 'https', 'http', 'ftp'].map((val) => (
+                        <MenuItem key={val} value={val}>{val}</MenuItem>
+                      ))}
+                    </Select>
+                    <FormHelperText>{Boolean(proxyProtocolError)}</FormHelperText>
+                  </FormControl>
+                  <div className={classes.addressContainer}>
+                    <TextField
+                      margin="dense"
+                      label="Address"
+                      variant="outlined"
+                      value={proxyAddress}
+                      onChange={(e) => onUpdateForm({ proxyAddress: e.target.value })}
+                      error={Boolean(proxyAddressError)}
+                      className={classes.addressTextField}
+                    />
+                    <TextField
+                      margin="dense"
+                      label="Port"
+                      variant="outlined"
+                      value={proxyPort}
+                      onChange={(e) => onUpdateForm({ proxyPort: e.target.value })}
+                      error={Boolean(proxyPortError)}
+                    />
+                  </div>
+                  {bypassRulesTextField}
+                </>
+              )}
             </div>
           </ListItem>
-          <Divider />
           <ListItem>
             <div style={{ width: '100%' }}>
-              <ListItemText primary="" />
               <FormControlLabel
                 classes={{ label: classes.radioLabel }}
                 control={<Radio color="primary" size="small" />}
-                label="Use automatic proxy configuration script (PAC)"
+                label="Use PAC script (automatic proxy configuration script)"
                 labelPlacement="end"
-                checked={proxyType === 'pacScript'}
-                value="pacScript"
-                onChange={(e) => onUpdateForm({ proxyType: e.target.value })}
+                checked={proxyMode === 'pac_script'}
+                value="pac_script"
+                onChange={(e) => onUpdateForm({ proxyMode: e.target.value })}
               />
-              <TextField
-                margin="dense"
-                fullWidth
-                label="Script URL"
-                variant="outlined"
-                disabled={proxyType !== 'pacScript'}
-                value={proxyPacScript}
-                onChange={(e) => onUpdateForm({ proxyPacScript: e.target.value })}
-                error={Boolean(proxyPacScriptError)}
-                helperText={proxyPacScriptError || (
-                  <>
-                    <span>Example: http://example.com/proxy.pac. </span>
-                    <span
-                      role="link"
-                      tabIndex={0}
-                      className={classes.link}
-                      onClick={() => requestOpenInBrowser('https://en.wikipedia.org/wiki/Proxy_auto-config')}
-                      onKeyDown={(e) => {
-                        if (e.key !== 'Enter') return;
-                        requestOpenInBrowser('https://en.wikipedia.org/wiki/Proxy_auto-config');
-                      }}
-                    >
-                      Learn more
-                    </span>
-                  </>
-                )}
-              />
-              <TextField
-                margin="dense"
-                fullWidth
-                label="Bypass rules"
-                variant="outlined"
-                disabled={proxyType !== 'pacScript'}
-                onChange={(e) => onUpdateForm({ proxyBypassRules: e.target.value })}
-                value={proxyBypassRules}
-                helperText={(
-                  <>
-                    <span>Rules indicating which URLs should bypass the proxy settings. </span>
-                    <span>Set to </span>
-                    <strong>&lt;local&gt;</strong>
-                    <span> to bypass proxy server for local addresses. </span>
-                    <span
-                      role="link"
-                      tabIndex={0}
-                      className={classes.link}
-                      onClick={() => requestOpenInBrowser('https://www.electronjs.org/docs/api/session#sessetproxyconfig')}
-                      onKeyDown={(e) => {
-                        if (e.key !== 'Enter') return;
-                        requestOpenInBrowser('https://www.electronjs.org/docs/api/session#sessetproxyconfig');
-                      }}
-                    >
-                      Learn more
-                    </span>
-                  </>
-                )}
+              {proxyMode === 'pac_script' && (
+                <>
+                  <TextField
+                    margin="dense"
+                    fullWidth
+                    label="Script URL"
+                    variant="outlined"
+                    disabled={proxyMode !== 'pac_script'}
+                    value={proxyPacScript}
+                    onChange={(e) => onUpdateForm({ proxyPacScript: e.target.value })}
+                    error={Boolean(proxyPacScriptError)}
+                    helperText={proxyPacScriptError || (
+                      <>
+                        <span>Example: http://example.com/proxy.pac. </span>
+                        <span
+                          role="link"
+                          tabIndex={0}
+                          className={classes.link}
+                          onClick={() => requestOpenInBrowser('https://en.wikipedia.org/wiki/Proxy_auto-config')}
+                          onKeyDown={(e) => {
+                            if (e.key !== 'Enter') return;
+                            requestOpenInBrowser('https://en.wikipedia.org/wiki/Proxy_auto-config');
+                          }}
+                        >
+                          Learn more
+                        </span>
+                      </>
+                    )}
+                  />
+                  {bypassRulesTextField}
+                </>
+              )}
+            </div>
+          </ListItem>
+          <ListItem>
+            <div style={{ width: '100%' }}>
+              <FormControlLabel
+                classes={{ label: classes.radioLabel }}
+                control={<Radio color="primary" size="small" />}
+                label="Use system proxy configurations"
+                labelPlacement="end"
+                checked={proxyMode === 'system'}
+                value="system"
+                onChange={(e) => onUpdateForm({ proxyMode: e.target.value })}
               />
             </div>
           </ListItem>
-          <Divider />
           <ListItem>
             <div style={{ width: '100%' }}>
               <ListItemText primary="" />
@@ -230,9 +252,9 @@ const DialogProxy = (props) => {
                 control={<Radio color="primary" size="small" />}
                 label="Do not use proxy (default)"
                 labelPlacement="end"
-                checked={proxyType !== 'rules' && proxyType !== 'pacScript'}
-                value="none"
-                onChange={(e) => onUpdateForm({ proxyType: e.target.value })}
+                checked={proxyMode !== 'fixed_servers' && proxyMode !== 'pac_script' && proxyMode !== 'system'}
+                value="direct"
+                onChange={(e) => onUpdateForm({ proxyMode: e.target.value })}
               />
             </div>
           </ListItem>
@@ -257,12 +279,15 @@ const DialogProxy = (props) => {
 
 DialogProxy.defaultProps = {
   open: false,
+  proxyAddress: '',
+  proxyAddressError: null,
   proxyBypassRules: '',
   proxyPacScript: '',
   proxyPacScriptError: null,
-  proxyRules: '',
-  proxyRulesError: null,
-  proxyType: 'none',
+  proxyPort: '',
+  proxyPortError: null,
+  proxyProtocol: 'socks5',
+  proxyProtocolError: null,
 };
 
 DialogProxy.propTypes = {
@@ -271,12 +296,16 @@ DialogProxy.propTypes = {
   onSave: PropTypes.func.isRequired,
   onUpdateForm: PropTypes.func.isRequired,
   open: PropTypes.bool,
+  proxyAddress: PropTypes.string,
+  proxyAddressError: PropTypes.string,
   proxyBypassRules: PropTypes.string,
+  proxyMode: PropTypes.oneOf(['direct', 'fixed_servers', 'pac_script', 'system']).isRequired,
   proxyPacScript: PropTypes.string,
   proxyPacScriptError: PropTypes.string,
-  proxyRules: PropTypes.string,
-  proxyRulesError: PropTypes.string,
-  proxyType: PropTypes.string,
+  proxyPort: PropTypes.string,
+  proxyPortError: PropTypes.string,
+  proxyProtocol: PropTypes.string,
+  proxyProtocolError: PropTypes.string,
 };
 
 const mapStateToProps = (state) => {
@@ -286,9 +315,13 @@ const mapStateToProps = (state) => {
       proxyBypassRules,
       proxyPacScript,
       proxyPacScriptError,
-      proxyRules,
-      proxyRulesError,
-      proxyType,
+      proxyAddress,
+      proxyAddressError,
+      proxyPort,
+      proxyPortError,
+      proxyProtocol,
+      proxyProtocolError,
+      proxyMode,
     },
   } = state.dialogProxy;
 
@@ -297,9 +330,13 @@ const mapStateToProps = (state) => {
     proxyBypassRules,
     proxyPacScript,
     proxyPacScriptError,
-    proxyRules,
-    proxyRulesError,
-    proxyType,
+    proxyAddress,
+    proxyAddressError,
+    proxyPort,
+    proxyPortError,
+    proxyProtocol,
+    proxyProtocolError,
+    proxyMode,
   };
 };
 

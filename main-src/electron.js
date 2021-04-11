@@ -376,9 +376,11 @@ if (!gotTheLock) {
       customUserAgent,
       navigationBar,
       proxyBypassRules,
+      proxyAddress,
+      proxyMode,
       proxyPacScript,
-      proxyRules,
-      proxyType,
+      proxyPort,
+      proxyProtocol,
       rememberLastPageVisited,
       runInBackground,
       shareWorkspaceBrowsingData,
@@ -430,8 +432,8 @@ if (!gotTheLock) {
     global.unreadCountBadge = unreadCountBadge;
     global.proxyBypassRules = proxyBypassRules;
     global.proxyPacScript = proxyPacScript;
-    global.proxyRules = proxyRules;
-    global.proxyType = proxyType;
+    global.proxyRules = `${proxyProtocol}://${proxyAddress}:${proxyPort || '80'}`;
+    global.proxyMode = proxyMode;
 
     commonInit();
 
