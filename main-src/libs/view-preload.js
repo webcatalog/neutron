@@ -46,10 +46,10 @@ const loadDarkReader = (workspaceId) => {
     // see https://github.com/webcatalog/webcatalog-app/issues/993
     setFetchMethodDarkMode((url) => nodeFetch(url));
     enableDarkMode({
-      darkReaderBrightness,
-      darkReaderContrast,
-      darkReaderGrayscale,
-      darkReaderSepia,
+      brightness: darkReaderBrightness,
+      contrast: darkReaderContrast,
+      grayscale: darkReaderGrayscale,
+      sepia: darkReaderSepia,
     });
   } else {
     disableDarkMode();
