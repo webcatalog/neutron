@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import AppSearchAPIConnector from '@elastic/search-ui-app-search-connector';
@@ -68,6 +68,8 @@ const connector = process.env.REACT_APP_SWIFTYPE_SEARCH_KEY ? new AppSearchAPICo
 }) : null;
 
 const Home = ({ classes }) => {
+  const scrollContainerRef = useRef(null);
+
   if (!connector) {
     return (
       <div className={classes.badConfigContainer}>
@@ -103,6 +105,13 @@ const Home = ({ classes }) => {
     <SearchProvider
       config={{
         apiConnector: connector,
+        onSearch: (state, queryConfig, next) => {
+          if (scrollContainerRef.current) {
+            scrollContainerRef.current.scrollTop = 0;
+          }
+
+          return next(state, queryConfig);
+        },
         initialState: {
           resultsPerPage: 60,
           sortField: '',
@@ -131,6 +140,7 @@ const Home = ({ classes }) => {
         )}
         <div
           className={classes.scrollContainer}
+          ref={scrollContainerRef}
         >
           <WithSearch
             mapContextToProps={({
