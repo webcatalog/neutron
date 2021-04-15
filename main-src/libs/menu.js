@@ -576,12 +576,7 @@ const createMenu = async () => {
     },
     { type: 'separator' },
     {
-      label: (() => {
-        let standardWorkspaceName = appJson.name;
-        if (appJson.id === 'dynamail') standardWorkspaceName = 'Gmail';
-        if (appJson.id === 'dynacal') standardWorkspaceName = 'Google Calendar';
-        return `Add ${standardWorkspaceName} ${getWorkspaceFriendlyName()}`;
-      })(),
+      label: `Add ${appJson.name} ${getWorkspaceFriendlyName()}`,
       click: () => {
         createWorkspaceView();
         createMenu();
@@ -593,7 +588,6 @@ const createMenu = async () => {
       label: appJson.url ? `Add Custom ${getWorkspaceFriendlyName()}` : `Add ${getWorkspaceFriendlyName()}`,
       click: () => ipcMain.emit('request-show-add-workspace-window'),
       enabled: !global.locked,
-      visible: appJson.id !== 'dynacal' && appJson.id !== 'dynamail',
     },
   );
 
