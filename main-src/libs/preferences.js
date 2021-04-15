@@ -50,7 +50,7 @@ const defaultPreferences = {
   cssCodeInjection: null,
   customUserAgent: null,
   // default Dark Reader settings from its Chrome extension */
-  darkReader: appJson.id === 'tulipa' || appJson.id === 'clovery' || appJson.id === 'dynacal' || appJson.id === 'dynamail' || appJson.id === 'panmail',
+  darkReader: appJson.id === 'tulipa' || appJson.id === 'clovery' || appJson.id === 'panmail',
   darkReaderBrightness: 100,
   darkReaderContrast: 100,
   darkReaderGrayscale: 0,

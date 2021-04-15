@@ -19,8 +19,6 @@ import {
 } from '../../senders';
 
 import cloveryIconPng from '../../images/products/clovery-mac-icon-128@2x.png';
-import dynacalIconPng from '../../images/products/dynacal-mac-icon-128@2x.png';
-import dynamailIconPng from '../../images/products/dynamail-mac-icon-128@2x.png';
 import panmailIconPng from '../../images/products/panmail-mac-icon-128@2x.png';
 import pantextIconPng from '../../images/products/pantext-mac-icon-128@2x.png';
 import singleboxIconPng from '../../images/products/singlebox-mac-icon-128@2x.png';
@@ -76,8 +74,6 @@ const About = (props) => {
             if (appJson.id === 'singlebox') return singleboxIconPng;
             if (appJson.id === 'clovery') return cloveryIconPng;
             if (appJson.id === 'tulipa') return tulipaIconPng;
-            if (appJson.id === 'dynamail') return dynamailIconPng;
-            if (appJson.id === 'dynacal') return dynacalIconPng;
             if (appJson.id === 'pantext') return pantextIconPng;
             if (appJson.id === 'panmail') return panmailIconPng;
             return `file://${window.iconPath}`;
