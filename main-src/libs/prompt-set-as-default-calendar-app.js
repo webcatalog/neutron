@@ -18,7 +18,7 @@ const appJson = require('../constants/app-json');
 
 const mainWindow = require('../windows/main');
 
-const promptSetAsDefaultMailClient = () => {
+const promptSetAsDefaultCalendarApp = () => {
   // ask to set as default mail client
   const skipAskingDefaultCalendarClient = getPreference('skipAskingDefaultCalendarClient');
   if (skipAskingDefaultCalendarClient) return;
@@ -51,4 +51,4 @@ const promptSetAsDefaultMailClient = () => {
     });
 };
 
-module.exports = promptSetAsDefaultMailClient;
+module.exports = promptSetAsDefaultCalendarApp;

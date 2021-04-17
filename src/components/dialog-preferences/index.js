@@ -80,6 +80,7 @@ import autoRefreshIntervals from '../../constants/auto-refresh-intervals';
 
 import ListItemDefaultMailClient from './list-item-default-mail-client';
 import ListItemDefaultBrowser from './list-item-default-browser';
+import ListItemDefaultCalendarApp from './list-item-default-calendar-app';
 
 import DialogAppLock from '../dialog-app-lock';
 import DialogCodeInjection from '../dialog-code-injection';
@@ -550,14 +551,16 @@ const Preferences = ({
                 <MenuItem dense value="no">No</MenuItem>
               </Select>
             </ListItem>
+            <Divider />
+            <ListItemDefaultMailClient />
             {appJson.id !== 'panmail' && (
               <>
+                <Divider />
+                <ListItemDefaultCalendarApp />
                 <Divider />
                 <ListItemDefaultBrowser />
               </>
             )}
-            <Divider />
-            <ListItemDefaultMailClient />
           </List>
         </Paper>
 

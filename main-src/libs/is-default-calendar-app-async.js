@@ -10,7 +10,7 @@ const isWindows10 = require('./is-windows-10');
 
 const appJson = require('../constants/app-json');
 
-const isDefaultCalendarClientAsync = () => new Promise((resolve) => {
+const isDefaultCalendarAppAsync = () => new Promise((resolve) => {
   // Electron protocol API doesn't work with Windows 10
   // So check with regedit
   if (isWindows10()) {
@@ -33,4 +33,4 @@ const isDefaultCalendarClientAsync = () => new Promise((resolve) => {
   resolve(app.isDefaultProtocolClient('webcal'));
 });
 
-module.exports = isDefaultCalendarClientAsync;
+module.exports = isDefaultCalendarAppAsync;

@@ -42,9 +42,9 @@ const editWorkspaceWindow = require('../windows/edit-workspace');
 const sendToAllWindows = require('./send-to-all-windows');
 const extractHostname = require('./extract-hostname');
 const promptSetAsDefaultMailClient = require('./prompt-set-as-default-email-client');
-const promptSetAsDefaultCalendarClient = require('./prompt-set-as-default-calendar-client');
+const promptSetAsDefaultCalendarApp = require('./prompt-set-as-default-calendar-app');
 const MAILTO_URLS = require('../constants/mailto-urls');
-const WEBCAL_URLS = require('../constants/mailto-urls');
+const WEBCAL_URLS = require('../constants/webcal-urls');
 
 const appJson = require('../constants/app-json');
 
@@ -78,7 +78,7 @@ const createWorkspaceView = (workspaceObj = {}) => {
 
   // ask to set as default calendar client
   if (extractHostname(workspaceObj.homeUrl || appJson.url) in WEBCAL_URLS) {
-    promptSetAsDefaultCalendarClient();
+    promptSetAsDefaultCalendarApp();
   }
 };
 
