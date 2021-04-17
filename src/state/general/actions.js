@@ -34,16 +34,6 @@ export const updateIsFullScreen = (isFullScreen) => ({
   isFullScreen,
 });
 
-export const updateIsDefaultMailClient = (isDefaultMailClient) => ({
-  type: UPDATE_IS_DEFAULT_MAIL_CLIENT,
-  isDefaultMailClient,
-});
-
-export const updateIsDefaultWebBrowser = (isDefaultWebBrowser) => ({
-  type: UPDATE_IS_DEFAULT_WEB_BROWSER,
-  isDefaultWebBrowser,
-});
-
 export const updateShouldUseDarkColors = (shouldUseDarkColors) => ({
   type: UPDATE_SHOULD_USE_DARK_COLORS,
   shouldUseDarkColors,

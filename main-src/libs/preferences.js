@@ -91,6 +91,7 @@ const defaultPreferences = {
   sidebarSize: 'compact',
   sidebarTips: 'shortcut',
   skipAskingDefaultMailClient: false,
+  skipAskingDefaultCalendarClient: false,
   spellcheck: true,
   spellcheckLanguages: ['en-US'],
   swipeToNavigate: true,

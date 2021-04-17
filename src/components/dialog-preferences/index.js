@@ -1980,8 +1980,6 @@ const mapStateToProps = (state) => ({
   iapPurchased: state.preferences.iapPurchased,
   ignoreCertificateErrors: state.preferences.ignoreCertificateErrors,
   internalUrlRule: state.preferences.internalUrlRule,
-  isDefaultMailClient: state.general.isDefaultMailClient,
-  isDefaultWebBrowser: state.general.isDefaultWebBrowser,
   jsCodeInjection: state.preferences.jsCodeInjection,
   navigationBar: state.preferences.navigationBar,
   openAtLogin: state.systemPreferences.openAtLogin,
