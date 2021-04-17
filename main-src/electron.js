@@ -75,6 +75,7 @@ const getIapFormattedPriceAsync = require('./libs/get-iap-formatted-price-async'
 const promptSetAsDefaultMailClient = require('./libs/prompt-set-as-default-email-client');
 
 const MAILTO_URLS = require('./constants/mailto-urls');
+const WEBCAL_URLS = require('./constants/webcal-urls');
 
 const gotTheLock = isMas() || app.requestSingleInstanceLock();
 
@@ -198,6 +199,34 @@ if (!gotTheLock) {
         const workspaces = Object.values(getWorkspaces());
 
         if (workspaces.length < 1) return null;
+
+        // handle mailto:
+        if (url.startsWith('webcal:')) {
+          const webcalWorkspaces = workspaces
+            .filter((workspace) => extractHostname(
+              workspace.homeUrl || appJson.url,
+            ) in WEBCAL_URLS);
+
+          // pick automically if there's only one choice
+          if (webcalWorkspaces.length === 0) {
+            ipcMain.emit(
+              'request-show-message-box', null,
+              `None of your ${getWorkspaceFriendlyName().toLowerCase()} supports accessing iCalendar files.`,
+              'error',
+            );
+            return null;
+          }
+          if (webcalWorkspaces.length === 1) {
+            const webcalUrl = WEBCAL_URLS[extractHostname(
+              webcalWorkspaces[0].homeUrl || appJson.url,
+            )];
+            const u = webcalUrl.replace('%s', url);
+            ipcMain.emit('request-load-url', null, u, webcalWorkspaces[0].id);
+            return null;
+          }
+
+          return openUrlWithWindow.show(url);
+        }
 
         // handle mailto:
         if (url.startsWith('mailto:')) {
@@ -421,6 +450,7 @@ if (!gotTheLock) {
     global.useSystemTitleBar = useSystemTitleBar;
     global.windowButtons = windowButtons;
     global.MAILTO_URLS = MAILTO_URLS;
+    global.WEBCAL_URLS = WEBCAL_URLS;
     // ensure that to change the preferences
     // user needs to restart the app
     // this is to ensure consistency between views

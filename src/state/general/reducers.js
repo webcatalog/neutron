@@ -7,8 +7,6 @@ import {
   UPDATE_ADDRESS_BAR_INFO,
   UPDATE_CAN_GO_BACK,
   UPDATE_CAN_GO_FORWARD,
-  UPDATE_IS_DEFAULT_MAIL_CLIENT,
-  UPDATE_IS_DEFAULT_WEB_BROWSER,
   UPDATE_IS_FULL_SCREEN,
   UPDATE_IS_MAXIMIZED,
   UPDATE_SHOULD_USE_DARK_COLORS,
@@ -42,20 +40,6 @@ const defaultIsFullScreen = window.remote.getCurrentWindow().isFullScreen();
 const isFullScreen = (state = defaultIsFullScreen, action) => {
   switch (action.type) {
     case UPDATE_IS_FULL_SCREEN: return action.isFullScreen;
-    default: return state;
-  }
-};
-
-const isDefaultMailClient = (state = window.remote.app.isDefaultProtocolClient('mailto'), action) => {
-  switch (action.type) {
-    case UPDATE_IS_DEFAULT_MAIL_CLIENT: return action.isDefaultMailClient;
-    default: return state;
-  }
-};
-
-const isDefaultWebBrowser = (state = window.remote.app.isDefaultProtocolClient('http'), action) => {
-  switch (action.type) {
-    case UPDATE_IS_DEFAULT_WEB_BROWSER: return action.isDefaultWebBrowser;
     default: return state;
   }
 };
@@ -100,8 +84,6 @@ export default combineReducers({
   addressEdited,
   canGoBack,
   canGoForward,
-  isDefaultMailClient,
-  isDefaultWebBrowser,
   isFullScreen,
   isMaximized,
   shouldUseDarkColors,

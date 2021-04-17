@@ -26,6 +26,7 @@ const {
 
 const isDefaultBrowserAsync = require('../libs/is-default-browser-async');
 const isDefaultMailClientAsync = require('../libs/is-default-mail-client-async');
+const isDefaultCalendarAppAsync = require('../libs/is-default-calendar-app-async');
 
 const getIapFormattedPriceAsync = require('../libs/get-iap-formatted-price-async');
 
@@ -73,6 +74,7 @@ const loadInvokers = () => {
 
   ipcMain.handle('is-default-browser', () => isDefaultBrowserAsync());
   ipcMain.handle('is-default-mail-client', () => isDefaultMailClientAsync());
+  ipcMain.handle('is-default-calendar-app', () => isDefaultCalendarAppAsync());
 
   ipcMain.handle('get-iap-formatted-price', (e, productIdentifier) => getIapFormattedPriceAsync(productIdentifier));
 

@@ -26,6 +26,7 @@ import CheckIcon from '@material-ui/icons/Check';
 import connectComponent from '../../helpers/connect-component';
 import getAvatarText from '../../helpers/get-avatar-text';
 import getMailtoUrl from '../../helpers/get-mailto-url';
+import getWebcalUrl from '../../helpers/get-webcal-url';
 import getStaticGlobal from '../../helpers/get-static-global';
 
 import {
@@ -166,6 +167,7 @@ const EditWorkspace = ({
   id,
   internetIcon,
   isMailApp,
+  isCalendarApp,
   name,
   onGetIconFromInternet,
   onGetIconFromSwiftype,
@@ -292,6 +294,9 @@ const EditWorkspace = ({
             helperText={(() => {
               if (!homeUrlError && isMailApp) {
                 return 'Email app detected.';
+              }
+              if (!homeUrlError && isCalendarApp) {
+                return 'Calendar app detected.';
               }
               if (!homeUrl && appJson.url) {
                 return `Defaults to ${appJson.url}.`;
@@ -549,6 +554,7 @@ EditWorkspace.propTypes = {
   id: PropTypes.string.isRequired,
   internetIcon: PropTypes.string,
   isMailApp: PropTypes.bool.isRequired,
+  isCalendarApp: PropTypes.bool.isRequired,
   name: PropTypes.string.isRequired,
   onGetIconFromInternet: PropTypes.func.isRequired,
   onGetIconFromSwiftype: PropTypes.func.isRequired,
@@ -573,6 +579,7 @@ const mapStateToProps = (state) => ({
   id: state.dialogEditWorkspace.form.id || '',
   internetIcon: state.dialogEditWorkspace.form.internetIcon,
   isMailApp: Boolean(getMailtoUrl(state.dialogEditWorkspace.form.homeUrl)),
+  isCalendarApp: Boolean(getWebcalUrl(state.dialogEditWorkspace.form.homeUrl)),
   name: state.dialogEditWorkspace.form.name || '',
   order: state.dialogEditWorkspace.form.order || 0,
   picturePath: state.dialogEditWorkspace.form.picturePath,

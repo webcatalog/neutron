@@ -5,8 +5,6 @@ import {
   UPDATE_ADDRESS_BAR_INFO,
   UPDATE_CAN_GO_BACK,
   UPDATE_CAN_GO_FORWARD,
-  UPDATE_IS_DEFAULT_MAIL_CLIENT,
-  UPDATE_IS_DEFAULT_WEB_BROWSER,
   UPDATE_IS_FULL_SCREEN,
   UPDATE_IS_MAXIMIZED,
   UPDATE_SHOULD_USE_DARK_COLORS,
@@ -32,16 +30,6 @@ export const updateCanGoForward = (canGoForward) => ({
 export const updateIsFullScreen = (isFullScreen) => ({
   type: UPDATE_IS_FULL_SCREEN,
   isFullScreen,
-});
-
-export const updateIsDefaultMailClient = (isDefaultMailClient) => ({
-  type: UPDATE_IS_DEFAULT_MAIL_CLIENT,
-  isDefaultMailClient,
-});
-
-export const updateIsDefaultWebBrowser = (isDefaultWebBrowser) => ({
-  type: UPDATE_IS_DEFAULT_WEB_BROWSER,
-  isDefaultWebBrowser,
 });
 
 export const updateShouldUseDarkColors = (shouldUseDarkColors) => ({
