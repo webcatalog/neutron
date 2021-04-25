@@ -383,9 +383,11 @@ if (!gotTheLock) {
         // trigger whenTrulyReady;
         ipcMain.emit('truly-ready');
 
-        if (appJson.url && MAILTO_URLS[extractHostname(appJson.url)]) {
-          promptSetAsDefaultMailClient();
-        }
+        setTimeout(() => {
+          if (appJson.url && MAILTO_URLS[extractHostname(appJson.url)]) {
+            promptSetAsDefaultMailClient();
+          }
+        }, 1000);
       });
   };
 

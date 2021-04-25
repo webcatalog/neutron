@@ -16,8 +16,6 @@ const {
 
 const appJson = require('../constants/app-json');
 
-const mainWindow = require('../windows/main');
-
 const promptSetAsDefaultMailClient = () => {
   // ask to set as default mail client
   const skipAskingDefaultMailClient = getPreference('skipAskingDefaultMailClient');
@@ -25,7 +23,7 @@ const promptSetAsDefaultMailClient = () => {
   isDefaultMailClientAsync()
     .then((isDefault) => {
       if (isDefault) return;
-      dialog.showMessageBox(mainWindow.get(), {
+      dialog.showMessageBox({
         type: 'info',
         message: `Do you want to set ${appJson.name} as your default email client?`,
         buttons: ['No', 'Yes'],
