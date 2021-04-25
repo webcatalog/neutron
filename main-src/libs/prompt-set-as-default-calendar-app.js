@@ -16,8 +16,6 @@ const {
 
 const appJson = require('../constants/app-json');
 
-const mainWindow = require('../windows/main');
-
 const promptSetAsDefaultCalendarApp = () => {
   // ask to set as default mail client
   const skipAskingDefaultCalendarClient = getPreference('skipAskingDefaultCalendarClient');
@@ -25,7 +23,7 @@ const promptSetAsDefaultCalendarApp = () => {
   isDefaultMailClientAsync()
     .then((isDefault) => {
       if (isDefault) return;
-      dialog.showMessageBox(mainWindow.get(), {
+      dialog.showMessageBox({
         type: 'info',
         message: `Do you want to set ${appJson.name} as your default calendar app?`,
         buttons: ['No', 'Yes'],

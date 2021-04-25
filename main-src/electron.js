@@ -73,6 +73,7 @@ const isWindows10 = require('./libs/is-windows-10');
 const isMas = require('./libs/is-mas');
 const getIapFormattedPriceAsync = require('./libs/get-iap-formatted-price-async');
 const promptSetAsDefaultMailClient = require('./libs/prompt-set-as-default-email-client');
+const promptSetAsDefaultCalendarApp = require('./libs/prompt-set-as-default-calendar-app');
 
 const MAILTO_URLS = require('./constants/mailto-urls');
 const WEBCAL_URLS = require('./constants/webcal-urls');
@@ -383,9 +384,13 @@ if (!gotTheLock) {
         // trigger whenTrulyReady;
         ipcMain.emit('truly-ready');
 
-        if (appJson.url && MAILTO_URLS[extractHostname(appJson.url)]) {
-          promptSetAsDefaultMailClient();
-        }
+        setTimeout(() => {
+          if (appJson.url && MAILTO_URLS[extractHostname(appJson.url)]) {
+            promptSetAsDefaultMailClient();
+          } else if (appJson.url && WEBCAL_URLS[extractHostname(appJson.url)]) {
+            promptSetAsDefaultCalendarApp();
+          }
+        }, 1000);
       });
   };
 

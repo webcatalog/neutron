@@ -72,12 +72,10 @@ const createWorkspaceView = (workspaceObj = {}) => {
   }
 
   // ask to set as default mail client
+  // ask to set as default calendar client
   if (extractHostname(workspaceObj.homeUrl || appJson.url) in MAILTO_URLS) {
     promptSetAsDefaultMailClient();
-  }
-
-  // ask to set as default calendar client
-  if (extractHostname(workspaceObj.homeUrl || appJson.url) in WEBCAL_URLS) {
+  } else if (extractHostname(workspaceObj.homeUrl || appJson.url) in WEBCAL_URLS) {
     promptSetAsDefaultCalendarApp();
   }
 };
