@@ -1851,15 +1851,15 @@
   dependencies:
     cross-spawn "^7.0.1"
 
-"@material-ui/core@4.11.3":
-  version "4.11.3"
-  resolved "https://registry.yarnpkg.com/@material-ui/core/-/core-4.11.3.tgz#f22e41775b0bd075e36a7a093d43951bf7f63850"
-  integrity sha512-Adt40rGW6Uds+cAyk3pVgcErpzU/qxc7KBR94jFHBYretU4AtWZltYcNsbeMn9tXL86jjVL1kuGcIHsgLgFGRw==
+"@material-ui/core@4.11.4":
+  version "4.11.4"
+  resolved "https://registry.yarnpkg.com/@material-ui/core/-/core-4.11.4.tgz#4fb9fe5dec5dcf780b687e3a40cff78b2b9640a4"
+  integrity sha512-oqb+lJ2Dl9HXI9orc6/aN8ZIAMkeThufA5iZELf2LQeBn2NtjVilF5D2w7e9RpntAzDb4jK5DsVhkfOvFY/8fg==
   dependencies:
     "@babel/runtime" "^7.4.4"
-    "@material-ui/styles" "^4.11.3"
+    "@material-ui/styles" "^4.11.4"
     "@material-ui/system" "^4.11.3"
-    "@material-ui/types" "^5.1.0"
+    "@material-ui/types" "5.1.0"
     "@material-ui/utils" "^4.11.2"
     "@types/react-transition-group" "^4.2.0"
     clsx "^1.0.4"
@@ -1888,14 +1888,14 @@
     react-transition-group "^4.0.0"
     rifm "^0.7.0"
 
-"@material-ui/styles@^4.11.3":
-  version "4.11.3"
-  resolved "https://registry.yarnpkg.com/@material-ui/styles/-/styles-4.11.3.tgz#1b8d97775a4a643b53478c895e3f2a464e8916f2"
-  integrity sha512-HzVzCG+PpgUGMUYEJ2rTEmQYeonGh41BYfILNFb/1ueqma+p1meSdu4RX6NjxYBMhf7k+jgfHFTTz+L1SXL/Zg==
+"@material-ui/styles@^4.11.4":
+  version "4.11.4"
+  resolved "https://registry.yarnpkg.com/@material-ui/styles/-/styles-4.11.4.tgz#eb9dfccfcc2d208243d986457dff025497afa00d"
+  integrity sha512-KNTIZcnj/zprG5LW0Sao7zw+yG3O35pviHzejMdcSGCdWbiO8qzRgOYL8JAxAsWBKOKYwVZxXtHWaB5T2Kvxew==
   dependencies:
     "@babel/runtime" "^7.4.4"
     "@emotion/hash" "^0.8.0"
-    "@material-ui/types" "^5.1.0"
+    "@material-ui/types" "5.1.0"
     "@material-ui/utils" "^4.11.2"
     clsx "^1.0.4"
     csstype "^2.5.2"
@@ -1920,7 +1920,7 @@
     csstype "^2.5.2"
     prop-types "^15.7.2"
 
-"@material-ui/types@^5.1.0":
+"@material-ui/types@5.1.0":
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/@material-ui/types/-/types-5.1.0.tgz#efa1c7a0b0eaa4c7c87ac0390445f0f88b0d88f2"
   integrity sha512-7cqRjrY50b8QzRSYyhSpx4WRw2YuO0KKIGQEVk5J8uoz2BanawykgZGoWEqKm7pVIbzFDN0SpPcVV4IhOFkl8A==
@@ -2032,10 +2032,10 @@
     "@sentry/utils" "5.27.6"
     tslib "^1.9.3"
 
-"@sentry/electron@2.4.0":
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/@sentry/electron/-/electron-2.4.0.tgz#b45e5c8922b1c895f7ad39e4e775588a4e33bdf0"
-  integrity sha512-xA+cdcVms8JCR2Oc/gSSKbuQ/KQQ+u1DCZ6klxgMF1qzdHkaXuj+t+9leIuiHyYCs1RlKfF/Fd8I+ieGigSrtw==
+"@sentry/electron@2.4.1":
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/@sentry/electron/-/electron-2.4.1.tgz#7d60b0dc2ef85339929306b1a699df35e1af7473"
+  integrity sha512-M64IcWySOhi5+1sOEOj7Ta8QoIMBZ71T1F4PI6d8nYBP8sq2nVccCzsRsszYxV1Lk7B02GHq64K6dgRj9a3L8w==
   dependencies:
     "@sentry/browser" "5.27.6"
     "@sentry/core" "5.27.6"
@@ -2043,7 +2043,7 @@
     "@sentry/node" "5.27.6"
     "@sentry/types" "5.27.6"
     "@sentry/utils" "5.27.6"
-    tslib "^1.9.3"
+    tslib "^2.1.0"
 
 "@sentry/hub@5.27.6":
   version "5.27.6"
@@ -2840,10 +2840,10 @@ alphanum-sort@^1.0.0:
   resolved "https://registry.yarnpkg.com/alphanum-sort/-/alphanum-sort-1.0.2.tgz#97a1119649b211ad33691d9f9f486a8ec9fbe0a3"
   integrity sha1-l6ERlkmyEa0zaR2fn0hqjsn74KM=
 
-amplitude-js@8.1.0:
-  version "8.1.0"
-  resolved "https://registry.yarnpkg.com/amplitude-js/-/amplitude-js-8.1.0.tgz#1d5b95f5fbe660cbf78e403d1d18d78c18a9e5ec"
-  integrity sha512-S52cbLElI2qO3qqREYHsg1UBbEsq7bM6mpc62dF/m8eT3XgiOKs11nVBnVYk5JwmSgjIxw2pMgVdLYZ7833GSw==
+amplitude-js@8.2.1:
+  version "8.2.1"
+  resolved "https://registry.yarnpkg.com/amplitude-js/-/amplitude-js-8.2.1.tgz#99f1a0fabf97ef7a30dc901bae9d71bec2929257"
+  integrity sha512-jp8lm/koTNRceO16RCTlQg9+gUbxip1esod+d0oApBCJYpxuABec2bLHXv/OkVYICvnUWoiz17AZLxiaX/aK4Q==
   dependencies:
     "@amplitude/ua-parser-js" "0.7.24"
     "@amplitude/utils" "^1.0.5"
@@ -6070,10 +6070,10 @@ electron-builder@22.10.5:
     update-notifier "^5.1.0"
     yargs "^16.2.0"
 
-electron-context-menu@2.5.1:
-  version "2.5.1"
-  resolved "https://registry.yarnpkg.com/electron-context-menu/-/electron-context-menu-2.5.1.tgz#8f4c5e65f648fb3574ecd05de2a1296bd2194bc5"
-  integrity sha512-06IahxlIKsiuGaLtPa6mhzWFTfg6nC7btbt85mQVXpvlDuiZwgwI34hYQSNTUqwDoCHpfhE5Qx2GdAsJtpSbeg==
+electron-context-menu@2.5.2:
+  version "2.5.2"
+  resolved "https://registry.yarnpkg.com/electron-context-menu/-/electron-context-menu-2.5.2.tgz#7f2383f011d0d53f282300e0d80b44e2f64c16a7"
+  integrity sha512-1cEQR6fA9ktFsRBc+eXPwvrOgAPytUD7rUV4iBAA5zTrLAPKokJ23xeMjcK2fjrDPrlFRBxcLz0KP+GUhMrSCQ==
   dependencies:
     cli-truncate "^2.1.0"
     electron-dl "^3.1.0"
@@ -6142,10 +6142,10 @@ electron-window-state@5.0.3:
     jsonfile "^4.0.0"
     mkdirp "^0.5.1"
 
-electron@12.0.5:
-  version "12.0.5"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-12.0.5.tgz#005cf4375d2ee4563f5e75dc4da4ef871846a8be"
-  integrity sha512-z0xYB3sPr0qZcDrHUUWqooPKe3yUzBDxQcgQe3f2TLstA84JIFXBoaIJCPh/fJW0+JdF/ZFVeK2SNgLhYtRV+Q==
+electron@12.0.6:
+  version "12.0.6"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-12.0.6.tgz#2d72fa5a7db553dca3a771b22aa13a676122b4af"
+  integrity sha512-+fqhpdG6Fd6LzsizMdaSPC1I8tfsMT8/7fsYBgABED3hEWdus/rt6CQ54P3/EWZyQebtyHR6HXtlofUqKMV3KQ==
   dependencies:
     "@electron/get" "^1.0.1"
     "@types/node" "^14.6.2"
@@ -7150,7 +7150,12 @@ flush-write-stream@^1.0.0:
     inherits "^2.0.3"
     readable-stream "^2.3.6"
 
-follow-redirects@1.13.3, follow-redirects@^1.0.0, follow-redirects@^1.10.0:
+follow-redirects@1.14.0:
+  version "1.14.0"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.14.0.tgz#f5d260f95c5f8c105894491feee5dc8993b402fe"
+  integrity sha512-0vRwd7RKQBTt+mgu87mtYeofLFZpTas2S9zY+jIeuLJMNvudIgF52nr19q40HOwH5RrhWIPuj9puybzSJiRrVg==
+
+follow-redirects@^1.0.0, follow-redirects@^1.10.0:
   version "1.13.3"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.13.3.tgz#e5598ad50174c1bc4e872301e82ac2cd97f90267"
   integrity sha512-DUgl6+HDzB0iEptNQEXLx/KhTmDb8tZUHSeLqpnjpknR70H0nC2t9N73BK6fN4hOvJ84pKlIQVQ4k5FFlBedKA==
@@ -9387,10 +9392,10 @@ jsx-ast-utils@^2.2.1, jsx-ast-utils@^2.2.3:
     array-includes "^3.1.2"
     object.assign "^4.1.2"
 
-keytar@7.6.0:
-  version "7.6.0"
-  resolved "https://registry.yarnpkg.com/keytar/-/keytar-7.6.0.tgz#498e796443cb543d31722099443f29d7b5c44100"
-  integrity sha512-H3cvrTzWb11+iv0NOAnoNAPgEapVZnYLVHZQyxmh7jdmVfR/c0jNNFEZ6AI38W/4DeTGTaY66ZX4Z1SbfKPvCQ==
+keytar@7.7.0:
+  version "7.7.0"
+  resolved "https://registry.yarnpkg.com/keytar/-/keytar-7.7.0.tgz#3002b106c01631aa79b1aa9ee0493b94179bbbd2"
+  integrity sha512-YEY9HWqThQc5q5xbXbRwsZTh2PJ36OSYRjSv3NN2xf5s5dpLTjEZnC2YikR29OaVybf9nQ0dJ/80i40RS97t/A==
   dependencies:
     node-addon-api "^3.0.0"
     prebuild-install "^6.0.0"
@@ -13193,18 +13198,18 @@ simple-swizzle@^0.2.2:
   dependencies:
     is-arrayish "^0.3.1"
 
-simplebar-react@2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/simplebar-react/-/simplebar-react-2.3.0.tgz#c5fdd4042a7c603687684407fa7b20e9dc1f8fab"
-  integrity sha512-ZhWEe4UkshSJ9xPG1F/W58UMJdA3fzgtXGrYsya3hxdMbIYoKUKEhdBsqdMoeaLGyn/5dbMPqDLinkLeg0W0cQ==
+simplebar-react@2.3.2:
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/simplebar-react/-/simplebar-react-2.3.2.tgz#53dba9dddecb0f60db335645af64fdaeafac0d2a"
+  integrity sha512-5SGnsqwxNzyxjgbpjtszq8P9eaZi6S1kxKEt4uEgEups/fff7Aeu4S/LnxP7MrggJZbtc84AC0TNpKot1qMY1A==
   dependencies:
     prop-types "^15.6.1"
-    simplebar "^5.3.0"
+    simplebar "^5.3.2"
 
-simplebar@5.3.0, simplebar@^5.3.0:
-  version "5.3.0"
-  resolved "https://registry.yarnpkg.com/simplebar/-/simplebar-5.3.0.tgz#857de63296401ed0c3026845514fe5db69795be5"
-  integrity sha512-LgrGdIWpwHLLlI9HqfnGql62H/iZlF0KDZ7w3ZNbd2ZLwh9NKsODLHPzQgUlqQ8aZe7Y6/1xJMXK1PU5e810+w==
+simplebar@5.3.2, simplebar@^5.3.2:
+  version "5.3.2"
+  resolved "https://registry.yarnpkg.com/simplebar/-/simplebar-5.3.2.tgz#4a3c07493f029056396f231d64bfbb8c6c9dd940"
+  integrity sha512-z43AVhLPoERlilEi+4o4ED4yHAckhEw0uCeR9SUS0fh07PjUfPtfMcGed8P8zb0YO3t+w2tUe1/RJnV4y0wjeA==
   dependencies:
     can-use-dom "^0.1.0"
     core-js "^3.0.1"
@@ -14152,7 +14157,7 @@ tslib@^1.8.1, tslib@^1.9.0, tslib@^1.9.3:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
 
-tslib@^2.0.3:
+tslib@^2.0.3, tslib@^2.1.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.2.0.tgz#fb2c475977e35e241311ede2693cee1ec6698f5c"
   integrity sha512-gS9GVHRU+RGn5KQM2rllAlR3dU6m7AcpJKdtH8gFvQiC4Otgk98XnmMU+nZenHt/+VhnBPWwgrJsyrdcw6i23w==

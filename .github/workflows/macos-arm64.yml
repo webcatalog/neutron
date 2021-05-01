@@ -42,8 +42,6 @@ jobs:
     # https://github.com/mui-org/material-ui/issues/12432
     - run: yarn --prefer-offline --network-timeout 600000
     # to be removed when
-    # https://github.com/atom/node-keytar/issues/346 is resolved
-    - run: bash build-keytar-arm64.sh
     - run: yarn lint
     - run: brew install p7zip
     - run: yarn dist
