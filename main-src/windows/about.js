@@ -4,6 +4,7 @@
 const { BrowserWindow } = require('electron');
 const path = require('path');
 const isDev = require('electron-is-dev');
+const contextMenu = require('electron-context-menu');
 
 const { REACT_PATH } = require('../constants/paths');
 
@@ -31,6 +32,7 @@ const create = () => {
     },
   });
   win.setMenuBarVisibility(false);
+  contextMenu({ window: win });
 
   win.on('closed', () => {
     win = null;

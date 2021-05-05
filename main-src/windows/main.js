@@ -13,6 +13,7 @@ const windowStateKeeper = require('electron-window-state');
 const { menubar } = require('menubar');
 const path = require('path');
 const isDev = require('electron-is-dev');
+const contextMenu = require('electron-context-menu');
 
 const { REACT_PATH } = require('../constants/paths');
 const { setPreference, getPreference } = require('../libs/preferences');
@@ -42,7 +43,7 @@ const createAsync = () => new Promise((resolve) => {
       },
     ] : [];
 
-    const contextMenu = Menu.buildFromTemplate([
+    const trayContextMenu = Menu.buildFromTemplate([
       {
         label: `Open ${appJson.name}`,
         click: () => {
@@ -107,7 +108,7 @@ const createAsync = () => new Promise((resolve) => {
       },
     ]);
 
-    (global.attachToMenubar ? mb.tray : tray).popUpContextMenu(contextMenu);
+    (global.attachToMenubar ? mb.tray : tray).popUpContextMenu(trayContextMenu);
   };
 
   if (global.attachToMenubar) {
@@ -155,6 +156,7 @@ const createAsync = () => new Promise((resolve) => {
 
     mb.on('after-create-window', () => {
       menubarWindowState.manage(mb.window);
+      contextMenu({ window: mb.window });
 
       mb.window.on('focus', () => {
         const view = mb.window.getBrowserView();
@@ -212,6 +214,8 @@ const createAsync = () => new Promise((resolve) => {
       : path.resolve(__dirname, '..', '..', 'public', 'dock-icon.png');
   }
   win = new BrowserWindow(winOpts);
+
+  contextMenu({ window: win });
 
   mainWindowState.manage(win);
 
