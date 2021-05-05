@@ -42,6 +42,7 @@ import connectComponent from '../../helpers/connect-component';
 import checkLicense from '../../helpers/check-license';
 import roundTime from '../../helpers/round-time';
 import isMas from '../../helpers/is-mas';
+import isStandalone from '../../helpers/is-standalone';
 import getStaticGlobal from '../../helpers/get-static-global';
 import getUtmSource from '../../helpers/get-utm-source';
 import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
@@ -92,6 +93,7 @@ import DialogRefreshInterval from '../dialog-refresh-interval';
 
 import SnackbarTrigger from '../shared/snackbar-trigger';
 
+import webcatalogIconPng from '../../images/products/webcatalog-mac-icon-128@2x.png';
 import translatiumIconPng from '../../images/products/translatium-mac-icon-128@2x.png';
 import cloveryIconPng from '../../images/products/clovery-mac-icon-128@2x.png';
 import pantextIconPng from '../../images/products/pantext-mac-icon-128@2x.png';
@@ -263,7 +265,7 @@ const Preferences = ({
     && window.remote.systemPreferences.canPromptTouchID();
   const registered = appJson.registered || iapPurchased;
 
-  const [formattedPrice, setFormattedPrice] = useState(isMas() ? null : '30 USD');
+  const [formattedPrice, setFormattedPrice] = useState(isMas() ? null : `${isStandalone ? 20 : 30} USD`);
   useEffect(() => {
     if (isMas() && !registered) {
       getIapFormattedPriceAsync(`${appJson.id}_plus`)
@@ -340,7 +342,7 @@ const Preferences = ({
       text: 'More Apps',
       Icon: StorefrontIcon,
       ref: useRef(),
-      hidden: !isMas(),
+      hidden: !isMas() && !isStandalone(),
     },
     miscs: {
       text: 'Miscellaneous',
@@ -390,13 +392,13 @@ const Preferences = ({
             <Paper elevation={0} className={classes.paper}>
               <List disablePadding dense>
                 <ListItem button onClick={null} disabled>
-                  <ListItemText primary={registered ? `${isMas() ? `${appJson.name} Plus` : 'WebCatalog Lifetime'} is activated.` : `Upgrade to ${isMas() ? `${appJson.name} Plus` : 'WebCatalog Lifetime'} (${formattedPrice ? `${formattedPrice}, ` : ''}one-time payment for lifetime use) to unlock all features & add unlimited number of ${getWorkspaceFriendlyName(true).toLowerCase()}.`} />
+                  <ListItemText primary={registered ? `${isMas() || isStandalone() ? `${appJson.name} Plus` : 'WebCatalog Lifetime'} is activated.` : `Upgrade to ${isMas() || isStandalone() ? `${appJson.name} Plus` : 'WebCatalog Lifetime'} (${formattedPrice ? `${formattedPrice}, ` : ''}one-time payment for lifetime use) to unlock all features & add unlimited number of ${getWorkspaceFriendlyName(true).toLowerCase()}.`} />
                 </ListItem>
                 {!registered && (
                   <>
                     <Divider />
                     <ListItem button onClick={checkLicense}>
-                      <ListItemText primary={`Upgrade to ${isMas() ? `${appJson.name} Plus` : 'WebCatalog Lifetime'}`} />
+                      <ListItemText primary={`Upgrade to ${isMas() || isStandalone() ? `${appJson.name} Plus` : 'WebCatalog Lifetime'}`} />
                       <ChevronRightIcon color="action" />
                     </ListItem>
                   </>
@@ -411,7 +413,7 @@ const Preferences = ({
         </Typography>
         <Paper elevation={0} className={classes.paper}>
           <List disablePadding dense>
-            {appJson.url && !isMas() && (
+            {appJson.url && !isMas() && !isStandalone() && (
               <>
                 <ListItem
                   button
@@ -1267,7 +1269,7 @@ const Preferences = ({
                 />
               </ListItemSecondaryAction>
             </ListItem>
-            {(isMas()) && (
+            {(isMas() || isStandalone()) && (
               <>
                 <Divider />
                 <ListItem>
@@ -1647,13 +1649,43 @@ const Preferences = ({
           additional code, or resources to add functionality
           or significantly change the app from what
           we see during the review process. */}
-        {(isMas()) && (
+        {(isMas() || isStandalone()) && (
           <>
             <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle} ref={sections.moreApps.ref}>
               More Apps
             </Typography>
             <Paper elevation={0} className={classes.paper}>
               <List disablePadding dense>
+                {!isMas() && (
+                  <>
+                    <ListItem
+                      button
+                      onClick={() => {
+                        const url = `https://webcatalog.app?utm_source=${utmSource}`;
+                        requestOpenInBrowser(url);
+                      }}
+                      className={classes.listItemPromotion}
+                    >
+                      <div className={classes.promotionBlock}>
+                        <div className={classes.promotionLeft}>
+                          <img src={webcatalogIconPng} alt="WebCatalog" className={classes.appIcon} />
+                        </div>
+                        <div className={classes.promotionRight}>
+                          <div>
+                            <Typography variant="body1" className={classes.appTitle}>
+                              WebCatalog
+                            </Typography>
+                            <Typography variant="body2" color="textSecondary">
+                              Turn Any Websites Into Real Desktop Apps
+                            </Typography>
+                          </div>
+                        </div>
+                      </div>
+                      <ChevronRightIcon color="action" />
+                    </ListItem>
+                    <Divider />
+                  </>
+                )}
                 <ListItem
                   button
                   onClick={() => {
@@ -1833,6 +1865,38 @@ const Preferences = ({
                 );
               }
 
+              if (isStandalone()) {
+                return (
+                  <>
+                    <ListItem
+                      button
+                      onClick={() => {
+                        if (appJson.hostname) {
+                          return requestOpenInBrowser(`https://${appJson.hostname}?utm_source=${utmSource}`);
+                        }
+                        return requestOpenInBrowser(`https://${appJson.id}.app?utm_source=${utmSource}`);
+                      }}
+                    >
+                      <ListItemText primary="Website" />
+                      <ChevronRightIcon color="action" />
+                    </ListItem>
+                    <Divider />
+                    <ListItem
+                      button
+                      onClick={() => {
+                        if (appJson.hostname) {
+                          return requestOpenInBrowser(`https://${appJson.hostname}/help?utm_source=${utmSource}`);
+                        }
+                        return requestOpenInBrowser(`https://${appJson.id}.app/help?utm_source=${utmSource}`);
+                      }}
+                    >
+                      <ListItemText primary="Help" />
+                      <ChevronRightIcon color="action" />
+                    </ListItem>
+                  </>
+                );
+              }
+
               return (
                 <>
                   <ListItem button onClick={() => requestOpenInBrowser(`https://webcatalog.app?utm_source=${utmSource}`)}>
@@ -1852,7 +1916,7 @@ const Preferences = ({
               <ListItemText primary="Open Source Notices" />
               <ChevronRightIcon color="action" />
             </ListItem>
-            {!isMas() && (
+            {!isMas() && !isStandalone() && (
               <>
                 <Divider />
                 <ListItem button onClick={() => requestOpenInBrowser('https://twitter.com/webcatalog_app')}>
