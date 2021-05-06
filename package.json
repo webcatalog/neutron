@@ -64,6 +64,7 @@
     "electron-builder": "22.11.1",
     "electron-context-menu": "3.0.0",
     "electron-is-dev": "2.0.0",
+    "electron-notarize": "1.0.0",
     "electron-settings": "4.0.2",
     "electron-updater": "4.3.8",
     "electron-window-state": "5.0.3",
