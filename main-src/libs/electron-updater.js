@@ -7,6 +7,9 @@ const { autoUpdater } = require('electron-updater');
 const sendToAllWindows = require('./send-to-all-windows');
 const { createMenu } = require('./menu');
 const { getPreference } = require('./preferences');
+const getUtmSource = require('./get-utm-source');
+
+const appJson = require('../constants/app-json');
 
 const mainWindow = require('../windows/main');
 
@@ -33,7 +36,8 @@ autoUpdater.on('update-available', (info) => {
     })
       .then(({ response }) => {
         if (response === 1) {
-          shell.openExternal('https://webcatalog.app/release-notes?utm_source=webcatalog_app');
+          const utmSource = getUtmSource();
+          shell.openExternal(`https://${appJson.hostname}/release-notes?utm_source=${utmSource}`);
         }
       })
       .catch(console.log); // eslint-disable-line
@@ -125,7 +129,8 @@ autoUpdater.on('update-downloaded', (info) => {
   dialog.showMessageBox(dialogOpts)
     .then(({ response }) => {
       if (response === 2) {
-        shell.openExternal('https://webcatalog.app/release-notes?utm_source=webcatalog_app');
+        const utmSource = getUtmSource();
+        shell.openExternal(`https://${appJson.hostname}/release-notes?utm_source=${utmSource}`);
       } else if (response === 0) {
         // Fix autoUpdater.quitAndInstall() does not quit immediately
         // https://github.com/electron/electron/issues/3583
