@@ -567,7 +567,9 @@ const loadListeners = () => {
       // check for updates
       global.updateSilent = Boolean(isSilent);
       autoUpdater.checkForUpdates();
+      return;
     }
+
     fetchUpdater.checkForUpdates();
   });
 
