@@ -43,6 +43,7 @@ const customizedFetch = require('./customized-fetch');
 const isMas = require('./is-mas');
 const getUtmSource = require('./get-utm-source');
 const getWorkspaceFriendlyName = require('./get-workspace-friendly-name');
+const isStandalone = require('./is-standalone');
 
 const views = {};
 let shouldMuteAudio;
@@ -902,7 +903,7 @@ const addView = (browserWindow, workspace) => {
                 click: () => ipcMain.emit('request-show-preferences-window'),
               },
               { type: 'separator' },
-              !isMas() ? {
+              (!isMas() && !isStandalone()) ? {
                 label: 'WebCatalog Help',
                 click: () => shell.openExternal('https://help.webcatalog.app?utm_source=juli_app'),
               } : {
@@ -914,7 +915,7 @@ const addView = (browserWindow, workspace) => {
                   return shell.openExternal(`https://${appJson.id}.app/help?utm_source=${utmSource}`);
                 },
               },
-              !isMas() ? {
+              (!isMas() && !isStandalone()) ? {
                 label: 'WebCatalog Website',
                 click: () => shell.openExternal('https://webcatalog.app?utm_source=juli_app'),
               } : {

@@ -362,7 +362,8 @@ const loadListeners = () => {
   ipcMain.on('request-create-workspace', (e, workspaceObj = {}) => {
     const { registered } = global.appJson;
     const iapPurchased = isMas() ? getPreference('iapPurchased') : false;
-    if (!registered && !iapPurchased) {
+    const standaloneRegistered = isStandalone() ? getPreference('standaloneRegistered') : false;
+    if (!registered && !iapPurchased && !standaloneRegistered) {
       const workspaces = getWorkspaces();
 
       const maxWorkspaceNum = 2;
@@ -545,7 +546,28 @@ const loadListeners = () => {
     }
   });
 
-  ipcMain.on('request-check-for-updates', () => {
+  ipcMain.on('request-check-for-updates', (e, isSilent) => {
+    if (isStandalone()) {
+      // eslint-disable-next-line global-require
+      const { autoUpdater } = require('electron-updater');
+      // https://github.com/electron-userland/electron-builder/issues/4028
+      if (!autoUpdater.isUpdaterActive()) return;
+
+      // restart & apply updates
+      if (global.updaterObj && global.updaterObj.status === 'update-downloaded') {
+        setImmediate(() => {
+          app.removeAllListeners('window-all-closed');
+          if (mainWindow.get() != null) {
+            mainWindow.get().close();
+          }
+          autoUpdater.quitAndInstall(false);
+        });
+      }
+
+      // check for updates
+      global.updateSilent = Boolean(isSilent);
+      autoUpdater.checkForUpdates();
+    }
     fetchUpdater.checkForUpdates();
   });
 

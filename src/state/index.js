@@ -27,8 +27,10 @@ import general from './general/reducers';
 import notifications from './notifications/reducers';
 import preferences from './preferences/reducers';
 import systemPreferences from './system-preferences/reducers';
+import updater from './updater/reducers';
 import workspaceMetas from './workspace-metas/reducers';
 import workspaces from './workspaces/reducers';
+
 import loadListeners from '../listeners';
 
 const rootReducer = combineReducers({
@@ -51,6 +53,7 @@ const rootReducer = combineReducers({
   notifications,
   preferences,
   systemPreferences,
+  updater,
   workspaceMetas,
   workspaces,
 });

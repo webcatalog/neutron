@@ -4,9 +4,10 @@
 
 import isMas from './is-mas';
 import getStaticGlobal from './get-static-global';
+import isStandalone from './is-standalone';
 
 const getUtmSource = () => {
-  if (isMas()) {
+  if (isMas() || isStandalone()) {
     return `${getStaticGlobal('appJson').id}_app`;
   }
   return 'juli_app';
