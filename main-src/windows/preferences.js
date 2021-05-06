@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 const { BrowserWindow } = require('electron');
 const path = require('path');
+const contextMenu = require('electron-context-menu');
 
 const { REACT_PATH } = require('../constants/paths');
 
@@ -33,6 +34,7 @@ const create = (scrollTo) => {
     },
   });
   win.setMenuBarVisibility(false);
+  contextMenu({ window: win });
 
   win.on('closed', () => {
     win = null;

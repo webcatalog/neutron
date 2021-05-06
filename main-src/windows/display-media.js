@@ -6,6 +6,7 @@ const {
   ipcMain,
 } = require('electron');
 const path = require('path');
+const contextMenu = require('electron-context-menu');
 
 const { REACT_PATH } = require('../constants/paths');
 
@@ -36,6 +37,7 @@ const create = (workspaceId) => {
     },
   });
   win.setMenuBarVisibility(false);
+  contextMenu({ window: win });
 
   const onClose = () => {
     const view = getView(global.displayMediaRequestedWorkspaceId);

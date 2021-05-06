@@ -37,6 +37,7 @@ const {
 const {
   getView,
 } = require('./views');
+const isStandalone = require('./is-standalone');
 
 let menu;
 
@@ -96,20 +97,44 @@ const createMenu = async () => {
     { type: 'separator' },
   ] : [];
 
-  const licensingMenuItems = (isMas()) ? [] : [
-    { type: 'separator' },
-    {
-      label: registered ? 'WebCatalog Lifetime' : 'WebCatalog Basic',
-      enabled: false,
-      click: null,
-    },
-    {
-      label: 'Upgrade...',
-      visible: !registered,
-      click: registered ? null : () => ipcMain.emit('request-show-require-license-dialog'),
-    },
-    { type: 'separator' },
-  ];
+  const licensingMenuItems = (() => {
+    if (isMas()) {
+      return [];
+    }
+
+    if (isStandalone()) {
+      const standaloneRegistered = getPreference('standaloneRegistered');
+      return [
+        { type: 'separator' },
+        {
+          label: standaloneRegistered ? `${appJson.name} Plus` : `${appJson.name} Basic`,
+          enabled: false,
+          click: null,
+        },
+        {
+          label: 'Upgrade...',
+          visible: !standaloneRegistered,
+          click: standaloneRegistered ? null : () => ipcMain.emit('request-show-require-license-dialog'),
+        },
+        { type: 'separator' },
+      ];
+    }
+
+    return [
+      { type: 'separator' },
+      {
+        label: registered ? 'WebCatalog Lifetime' : 'WebCatalog Basic',
+        enabled: false,
+        click: null,
+      },
+      {
+        label: 'Upgrade...',
+        visible: !registered,
+        click: registered ? null : () => ipcMain.emit('request-show-require-license-dialog'),
+      },
+      { type: 'separator' },
+    ];
+  })();
 
   const muteApp = getPreference('muteApp');
 
@@ -472,7 +497,7 @@ const createMenu = async () => {
     },
     {
       role: 'help',
-      submenu: (isMas()) ? [
+      submenu: (isMas() || isStandalone()) ? [
         {
           label: 'Help',
           click: () => {

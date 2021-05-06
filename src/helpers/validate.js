@@ -5,6 +5,7 @@ import isUrl from './is-url';
 import isRegExp from './is-reg-exp';
 import isHostname from './is-hostname';
 import isPort from './is-port';
+import isValidLicenseKey from './is-valid-license-key';
 
 const kits = {
   required: (val, ruleVal, fieldName) => {
@@ -41,6 +42,12 @@ const kits = {
   },
   port: (val, ruleVal, fieldName) => {
     if (ruleVal && val && !isPort(val)) {
+      return '{fieldName} is not valid.'.replace('{fieldName}', fieldName);
+    }
+    return null;
+  },
+  licenseKey: (val, ruleVal, fieldName) => {
+    if (ruleVal && val && !isValidLicenseKey(val)) {
       return '{fieldName} is not valid.'.replace('{fieldName}', fieldName);
     }
     return null;

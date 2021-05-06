@@ -77,6 +77,12 @@ const promptSetAsDefaultCalendarApp = require('./libs/prompt-set-as-default-cale
 
 const MAILTO_URLS = require('./constants/mailto-urls');
 const WEBCAL_URLS = require('./constants/webcal-urls');
+const isStandalone = require('./libs/is-standalone');
+
+if (isStandalone()) {
+  // eslint-disable-next-line global-require
+  require('./libs/electron-updater');
+}
 
 const gotTheLock = isMas() || app.requestSingleInstanceLock();
 
@@ -330,7 +336,7 @@ if (!gotTheLock) {
 
         ipcMain.emit('request-update-pause-notifications-info');
 
-        if ((isMas()) && !privacyConsentAsked) {
+        if ((isMas() || isStandalone()) && !privacyConsentAsked) {
           dialog.showMessageBox(mainWindow.get(), {
             type: 'question',
             buttons: ['Allow', 'Don\'t Allow'],
@@ -480,7 +486,9 @@ if (!gotTheLock) {
           handleArgv(process.argv);
         }
 
-        if (!isMas() && autoCheckForUpdates) {
+        if (isStandalone()) {
+          ipcMain.emit('request-check-for-updates', null, true);
+        } else if (!isMas() && autoCheckForUpdates) {
           // only notify user about update again after one week
           const lastShowNewUpdateDialog = getPreference('lastShowNewUpdateDialog');
           const updateInterval = 7 * 24 * 60 * 60 * 1000; // one week

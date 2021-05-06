@@ -80,6 +80,7 @@ const fetchUpdater = require('../libs/fetch-updater');
 const getWebsiteIconUrlAsync = require('../libs/get-website-icon-url-async');
 const getViewBounds = require('../libs/get-view-bounds');
 const isMas = require('../libs/is-mas');
+const isStandalone = require('../libs/is-standalone');
 const getIapFormattedPriceAsync = require('../libs/get-iap-formatted-price-async');
 const getUtmSource = require('../libs/get-utm-source');
 const getWorkspaceFriendlyName = require('../libs/get-workspace-friendly-name');
@@ -88,6 +89,7 @@ const aboutWindow = require('../windows/about');
 const addWorkspaceWindow = require('../windows/add-workspace');
 const displayMediaWindow = require('../windows/display-media');
 const editWorkspaceWindow = require('../windows/edit-workspace');
+const licenseRegistrationWindow = require('../windows/license-registration');
 const mainWindow = require('../windows/main');
 const notificationsWindow = require('../windows/notifications');
 const openSourceNoticesWindow = require('../windows/open-source-notices');
@@ -255,6 +257,11 @@ const loadListeners = () => {
     const utmSource = getUtmSource();
     const win = workspacePreferencesWindow.get() || preferencesWindow.get();
 
+    if (isStandalone()) {
+      licenseRegistrationWindow.show();
+      return;
+    }
+
     if (isMas()) {
       const productIdentifier = `${appJson.id}_plus`;
 
@@ -355,7 +362,8 @@ const loadListeners = () => {
   ipcMain.on('request-create-workspace', (e, workspaceObj = {}) => {
     const { registered } = global.appJson;
     const iapPurchased = isMas() ? getPreference('iapPurchased') : false;
-    if (!registered && !iapPurchased) {
+    const standaloneRegistered = isStandalone() ? getPreference('standaloneRegistered') : false;
+    if (!registered && !iapPurchased && !standaloneRegistered) {
       const workspaces = getWorkspaces();
 
       const maxWorkspaceNum = 2;
@@ -538,7 +546,28 @@ const loadListeners = () => {
     }
   });
 
-  ipcMain.on('request-check-for-updates', () => {
+  ipcMain.on('request-check-for-updates', (e, isSilent) => {
+    if (isStandalone()) {
+      // eslint-disable-next-line global-require
+      const { autoUpdater } = require('electron-updater');
+      // https://github.com/electron-userland/electron-builder/issues/4028
+      if (!autoUpdater.isUpdaterActive()) return;
+
+      // restart & apply updates
+      if (global.updaterObj && global.updaterObj.status === 'update-downloaded') {
+        setImmediate(() => {
+          app.removeAllListeners('window-all-closed');
+          if (mainWindow.get() != null) {
+            mainWindow.get().close();
+          }
+          autoUpdater.quitAndInstall(false);
+        });
+      }
+
+      // check for updates
+      global.updateSilent = Boolean(isSilent);
+      autoUpdater.checkForUpdates();
+    }
     fetchUpdater.checkForUpdates();
   });
 

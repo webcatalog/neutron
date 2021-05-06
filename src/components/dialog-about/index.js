@@ -21,8 +21,7 @@ import {
 import cloveryIconPng from '../../images/products/clovery-mac-icon-128@2x.png';
 import panmailIconPng from '../../images/products/panmail-mac-icon-128@2x.png';
 import pantextIconPng from '../../images/products/pantext-mac-icon-128@2x.png';
-import singleboxIconPng from '../../images/products/singlebox-mac-icon-128@2x.png';
-import tulipaIconPng from '../../images/products/tulipa-mac-icon-128@2x.png';
+import isStandalone from '../../helpers/is-standalone';
 
 const styles = (theme) => ({
   icon: {
@@ -71,10 +70,8 @@ const About = (props) => {
       <DialogContent className={classes.dialogContent}>
         <img
           src={(() => {
-            if (appJson.id === 'singlebox') return singleboxIconPng;
             if (appJson.id === 'clovery') return cloveryIconPng;
-            if (appJson.id === 'tulipa') return tulipaIconPng;
-            if (appJson.id === 'pantext') return pantextIconPng;
+            if (appJson.id === 'pantext' || appJson.id === 'singlebox') return pantextIconPng;
             if (appJson.id === 'panmail') return panmailIconPng;
             return `file://${window.iconPath}`;
           })()}
@@ -98,7 +95,7 @@ const About = (props) => {
             </Typography>
           ))}
         </div>
-        {!isMas() && (
+        {!isMas() && !isStandalone() && (
           <Typography
             variant="body2"
             className={classes.version}
@@ -118,7 +115,7 @@ const About = (props) => {
           </>
         )}
 
-        {isMas() ? (
+        {(isMas() || isStandalone()) ? (
           <>
             <Button
               onClick={() => {

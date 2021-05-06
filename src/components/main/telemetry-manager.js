@@ -9,10 +9,11 @@ import isMas from '../../helpers/is-mas';
 import getStaticGlobal from '../../helpers/get-static-global';
 
 import amplitude from '../../amplitude';
+import isStandalone from '../../helpers/is-standalone';
 
-const TelemetryManager = ({ iapPurchased, telemetry }) => {
+const TelemetryManager = ({ iapPurchased, telemetry, standaloneRegistered }) => {
   const appJson = getStaticGlobal('appJson');
-  const registered = appJson.registered || iapPurchased;
+  const registered = appJson.registered || iapPurchased || standaloneRegistered;
 
   useEffect(() => {
     amplitude.getInstance().setOptOut(!telemetry);
@@ -22,6 +23,7 @@ const TelemetryManager = ({ iapPurchased, telemetry }) => {
     amplitude.getInstance().setUserProperties({
       pricing: registered ? 'plus' : 'basic', // PRO plan to be added
       distributionChannel: (() => {
+        if (isStandalone()) return 'standalone';
         if (isMas()) return 'macAppStore';
         return 'webcatalog';
       })(),
@@ -50,16 +52,19 @@ const TelemetryManager = ({ iapPurchased, telemetry }) => {
 
 TelemetryManager.defaultProps = {
   iapPurchased: false,
+  standaloneRegistered: false,
   telemetry: false,
 };
 
 TelemetryManager.propTypes = {
   iapPurchased: PropTypes.bool,
+  standaloneRegistered: PropTypes.bool,
   telemetry: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({
-  iapPurchased: state.preferences.iapPurchased,
+  iapPurchased: isMas() && state.preferences.iapPurchased,
+  standaloneRegistered: isStandalone() && state.preferences.standaloneRegistered,
   telemetry: state.preferences.telemetry,
 });
 

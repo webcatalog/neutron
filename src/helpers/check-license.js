@@ -7,12 +7,18 @@ import {
   getPreference,
 } from '../senders';
 import getStaticGlobal from './get-static-global';
+import isStandalone from './is-standalone';
 
-const checkLicense = () => {
+const isPlus = () => {
   const appJson = getStaticGlobal('appJson');
   const iapPurchased = isMas() ? getPreference('iapPurchased') : false;
+  const standaloneRegistered = isStandalone() ? getPreference('standaloneRegistered') : false;
 
-  if (!appJson.registered && !iapPurchased) {
+  return appJson.registered || iapPurchased || standaloneRegistered;
+};
+
+const checkLicense = () => {
+  if (!isPlus()) {
     requestShowRequireLicenseDialog();
     return false;
   }

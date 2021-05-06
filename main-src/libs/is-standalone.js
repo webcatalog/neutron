@@ -1,16 +1,8 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-
 const appJson = require('../constants/app-json');
-const isStandalone = require('./is-standalone');
-const isMas = require('./is-mas');
 
-const getUtmSource = () => {
-  if (isMas() || isStandalone()) {
-    return `${appJson.id}_app`;
-  }
-  return 'juli_app';
-};
+const isStandalone = () => Boolean(appJson.standalone || process.env.REACT_APP_FORCE_STANDALONE);
 
-module.exports = getUtmSource;
+module.exports = isStandalone;
