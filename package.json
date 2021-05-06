@@ -1,7 +1,7 @@
 {
   "name": "neutron",
   "description": "AppView template for WebCatalog",
-  "version": "17.0.0-alpha",
+  "version": "17.0.0-alpha.2",
   "minimumWebCatalogVersion": "31.3.0",
   "engines": {
     "node": ">=14.0.0 <15.0.0"
@@ -100,8 +100,8 @@
     "redux-thunk": "2.3.0",
     "regedit": "3.0.3",
     "semver": "7.3.5",
-    "simplebar": "5.3.2",
-    "simplebar-react": "2.3.2",
+    "simplebar": "5.3.3",
+    "simplebar-react": "2.3.3",
     "source-map-support": "0.5.19",
     "tmp": "0.2.1",
     "unused-filename": "2.1.0",
