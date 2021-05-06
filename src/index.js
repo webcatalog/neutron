@@ -28,6 +28,7 @@ const DialogAuth = React.lazy(() => import('./components/dialog-auth'));
 const DialogDisplayMedia = React.lazy(() => import('./components/dialog-display-media'));
 const DialogEditWorkspace = React.lazy(() => import('./components/dialog-edit-workspace'));
 const DialogGoToUrl = React.lazy(() => import('./components/dialog-go-to-url'));
+const DialogLicenseRegistration = React.lazy(() => import('./components/dialog-license-registration'));
 const DialogNotifications = React.lazy(() => import('./components/dialog-notifications'));
 const DialogOpenSourceNotices = React.lazy(() => import('./components/dialog-open-source-notices'));
 const DialogOpenUrlWith = React.lazy(() => import('./components/dialog-open-url-with'));
@@ -43,6 +44,7 @@ const App = () => {
     case 'display-media': return <DialogDisplayMedia />;
     case 'edit-workspace': return <DialogEditWorkspace />;
     case 'go-to-url': return <DialogGoToUrl />;
+    case 'license-registration': return <DialogLicenseRegistration />;
     case 'notifications': return <DialogNotifications />;
     case 'open-source-notices': return <DialogOpenSourceNotices />;
     case 'open-url-with': return <DialogOpenUrlWith />;
@@ -116,6 +118,8 @@ const runApp = () => {
         document.title = appJson.url ? `Add Custom ${getWorkspaceFriendlyName()}` : `Add ${getWorkspaceFriendlyName()}`;
       } else if (window.mode === 'open-source-notices') {
         document.title = 'Open Source Notices';
+      } else if (window.mode === 'license-registration') {
+        document.title = 'License Registration';
       } else {
         document.title = appJson.name;
       }

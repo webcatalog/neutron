@@ -265,13 +265,16 @@ const Preferences = ({
     && window.remote.systemPreferences.canPromptTouchID();
   const registered = appJson.registered || iapPurchased;
 
-  const [formattedPrice, setFormattedPrice] = useState(isMas() ? null : `${isStandalone ? 20 : 30} USD`);
+  const [formattedPrice, setFormattedPrice] = useState(null);
   useEffect(() => {
     if (isMas() && !registered) {
       getIapFormattedPriceAsync(`${appJson.id}_plus`)
         .then((value) => {
           setFormattedPrice(value);
         });
+    } else if (isStandalone()) {
+      if (appJson.id === 'panmail') setFormattedPrice('15 USD');
+      else setFormattedPrice('20 USD');
     }
   }, [appJson, setFormattedPrice, registered]);
 

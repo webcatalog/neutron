@@ -17,6 +17,7 @@ import dialogCustomUserAgent from './dialog-custom-user-agent/reducers';
 import dialogEditWorkspace from './dialog-edit-workspace/reducers';
 import dialogGoToUrl from './dialog-go-to-url/reducers';
 import dialogInternalUrls from './dialog-internal-urls/reducers';
+import dialogLicenseRegistration from './dialog-license-registration/reducers';
 import dialogProxy from './dialog-proxy/reducers';
 import dialogRefreshInterval from './dialog-refresh-interval/reducers';
 import dialogSpellcheckLanguages from './dialog-spellcheck-languages/reducers';
@@ -28,7 +29,6 @@ import preferences from './preferences/reducers';
 import systemPreferences from './system-preferences/reducers';
 import workspaceMetas from './workspace-metas/reducers';
 import workspaces from './workspaces/reducers';
-
 import loadListeners from '../listeners';
 
 const rootReducer = combineReducers({
@@ -41,6 +41,7 @@ const rootReducer = combineReducers({
   dialogEditWorkspace,
   dialogGoToUrl,
   dialogInternalUrls,
+  dialogLicenseRegistration,
   dialogProxy,
   dialogRefreshInterval,
   dialogSpellcheckLanguages,

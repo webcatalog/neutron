@@ -80,6 +80,7 @@ const fetchUpdater = require('../libs/fetch-updater');
 const getWebsiteIconUrlAsync = require('../libs/get-website-icon-url-async');
 const getViewBounds = require('../libs/get-view-bounds');
 const isMas = require('../libs/is-mas');
+const isStandalone = require('../libs/is-standalone');
 const getIapFormattedPriceAsync = require('../libs/get-iap-formatted-price-async');
 const getUtmSource = require('../libs/get-utm-source');
 const getWorkspaceFriendlyName = require('../libs/get-workspace-friendly-name');
@@ -88,6 +89,7 @@ const aboutWindow = require('../windows/about');
 const addWorkspaceWindow = require('../windows/add-workspace');
 const displayMediaWindow = require('../windows/display-media');
 const editWorkspaceWindow = require('../windows/edit-workspace');
+const licenseRegistrationWindow = require('../windows/license-registration');
 const mainWindow = require('../windows/main');
 const notificationsWindow = require('../windows/notifications');
 const openSourceNoticesWindow = require('../windows/open-source-notices');
@@ -254,6 +256,11 @@ const loadListeners = () => {
   ipcMain.on('request-show-require-license-dialog', () => {
     const utmSource = getUtmSource();
     const win = workspacePreferencesWindow.get() || preferencesWindow.get();
+
+    if (isStandalone()) {
+      licenseRegistrationWindow.show();
+      return;
+    }
 
     if (isMas()) {
       const productIdentifier = `${appJson.id}_plus`;
