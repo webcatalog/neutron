@@ -60,6 +60,7 @@ const About = (props) => {
   const utmSource = getUtmSource();
 
   const versions = [
+    { name: 'Neutron', version: appVersion },
     { name: 'Electron', version: window.process.versions.electron },
     { name: 'Node', version: window.process.versions.node },
     { name: 'Chromium', version: window.process.versions.chrome },
@@ -71,7 +72,7 @@ const About = (props) => {
         <img
           src={(() => {
             if (appJson.id === 'clovery') return cloveryIconPng;
-            if (appJson.id === 'pantext' || appJson.id === 'singlebox') return pantextIconPng;
+            if (appJson.id === 'pantext' || appJson.id === 'pantext-plus') return pantextIconPng;
             if (appJson.id === 'panmail') return panmailIconPng;
             return `file://${window.iconPath}`;
           })()}

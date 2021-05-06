@@ -282,6 +282,7 @@ const Preferences = ({
   sidebarTips,
   spellcheck,
   spellcheckLanguages,
+  standaloneRegistered,
   swipeToNavigate,
   telemetry,
   themeSource,
@@ -299,7 +300,7 @@ const Preferences = ({
   const utmSource = getUtmSource();
   const canPromptTouchId = window.process.platform === 'darwin'
     && window.remote.systemPreferences.canPromptTouchID();
-  const registered = appJson.registered || iapPurchased;
+  const registered = appJson.registered || iapPurchased || standaloneRegistered;
 
   const [formattedPrice, setFormattedPrice] = useState(null);
   useEffect(() => {
@@ -2041,6 +2042,7 @@ Preferences.defaultProps = {
   iapPurchased: false,
   internalUrlRule: null,
   jsCodeInjection: null,
+  standaloneRegistered: false,
   updaterInfo: null,
   updaterStatus: null,
 };
@@ -2094,6 +2096,7 @@ Preferences.propTypes = {
   sidebarTips: PropTypes.oneOf(['shortcut', 'name', 'none']).isRequired,
   spellcheck: PropTypes.bool.isRequired,
   spellcheckLanguages: PropTypes.arrayOf(PropTypes.string).isRequired,
+  standaloneRegistered: PropTypes.bool,
   swipeToNavigate: PropTypes.bool.isRequired,
   telemetry: PropTypes.bool.isRequired,
   themeSource: PropTypes.string.isRequired,
@@ -2149,6 +2152,7 @@ const mapStateToProps = (state) => ({
   sidebarTips: state.preferences.sidebarTips,
   spellcheck: state.preferences.spellcheck,
   spellcheckLanguages: state.preferences.spellcheckLanguages,
+  standaloneRegistered: state.preferences.standaloneRegistered,
   swipeToNavigate: state.preferences.swipeToNavigate,
   telemetry: state.preferences.telemetry,
   themeSource: state.preferences.themeSource,
