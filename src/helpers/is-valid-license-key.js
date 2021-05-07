@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import md5 from 'blueimp-md5';
+import getStaticGlobal from './get-static-global';
 
 const isValidLicenseKey = (licenseKey) => {
   try {
@@ -11,6 +12,13 @@ const isValidLicenseKey = (licenseKey) => {
     const quantity = parts[0];
     const time = parts[1];
     const md5Str = parts.slice(2).join('').toUpperCase();
+
+    // allow user to activate PanText Plus with legacy Singlebox license
+    if (getStaticGlobal('appJson').id === 'pantext'
+      && md5(process.env.REACT_APP_LICENSE_SECRET_SINGLEBOX_LEGACY + quantity + time).toUpperCase()
+        === md5Str) {
+      return true;
+    }
 
     return md5(process.env.REACT_APP_LICENSE_SECRET + quantity + time).toUpperCase()
       === md5Str;
