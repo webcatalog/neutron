@@ -18,7 +18,7 @@ const isDev = require('electron-is-dev');
 const settings = require('electron-settings');
 
 const appJson = require('./constants/app-json');
-const getWorkspaceFriendlyName = require('./libs/get-workspace-friendly-name');
+const isMas = require('./libs/is-mas');
 
 // run before anything else
 // WebCatalog Engine 13.x and lower uses default Electron user data path
@@ -33,6 +33,15 @@ if (!useLegacyUserDataPath) {
   const userDataPath = path.join(app.getPath('appData'), 'WebCatalog', 'webcatalog-engine-data', slug ? `${appJson.id}-${slug}` : appJson.id);
   fs.ensureDirSync(userDataPath);
   app.setPath('userData', userDataPath);
+}
+
+// Singlebox is renamed to "PanText Plus"
+// we set userDataPath to legacy Singlebox path (if already exists) for backward compatibility
+if (isMas() && appJson.id === 'pantext-plus') {
+  const singleboxUserDataPath = path.join(app.getPath('appData'), 'Singlebox');
+  if (fs.existsSync(singleboxUserDataPath)) {
+    app.setPath('userData', singleboxUserDataPath);
+  }
 }
 
 settings.configure({
@@ -70,10 +79,10 @@ const extractHostname = require('./libs/extract-hostname');
 const { getAppLockStatusAsync, unlockAppUsingTouchId } = require('./libs/app-lock');
 const isMacOs11 = require('./libs/is-mac-os-11');
 const isWindows10 = require('./libs/is-windows-10');
-const isMas = require('./libs/is-mas');
 const getIapFormattedPriceAsync = require('./libs/get-iap-formatted-price-async');
 const promptSetAsDefaultMailClient = require('./libs/prompt-set-as-default-email-client');
 const promptSetAsDefaultCalendarApp = require('./libs/prompt-set-as-default-calendar-app');
+const getWorkspaceFriendlyName = require('./libs/get-workspace-friendly-name');
 
 const MAILTO_URLS = require('./constants/mailto-urls');
 const WEBCAL_URLS = require('./constants/webcal-urls');

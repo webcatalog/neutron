@@ -5,7 +5,6 @@ const settings = require('electron-settings');
 const { app, nativeTheme, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs-extra');
-const semver = require('semver');
 
 const sendToAllWindows = require('./send-to-all-windows');
 const extractHostname = require('./extract-hostname');
@@ -40,7 +39,6 @@ const v = '2018.2';
 const shouldShowSidebar = !appJson.url || Boolean(MAILTO_URLS[extractHostname(appJson.url)]);
 
 const defaultPreferences = {
-  allowPrerelease: isStandalone() && Boolean(semver.prerelease(app.getVersion())),
   allowNodeInJsCodeInjection: false,
   alwaysOnTop: false, // for menubar
   askForDownloadPath: true,
