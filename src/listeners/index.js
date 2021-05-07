@@ -23,6 +23,7 @@ import {
 import {
   updatePauseNotificationsInfo,
 } from '../state/notifications/actions';
+import { updateUpdater } from '../state/updater/actions';
 
 import {
   getShouldUseDarkColors,
@@ -126,6 +127,10 @@ const loadListeners = (store) => {
 
   window.ipcRenderer.on('set-locked', (e, locked) => {
     store.dispatch(updateLocked(locked));
+  });
+
+  window.ipcRenderer.on('update-updater', (e, updaterObj) => {
+    store.dispatch(updateUpdater(updaterObj));
   });
 };
 

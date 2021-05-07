@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 const {
+  BrowserWindow,
   Notification,
   ShareMenu,
   app,
@@ -557,9 +558,10 @@ const loadListeners = () => {
       if (global.updaterObj && global.updaterObj.status === 'update-downloaded') {
         setImmediate(() => {
           app.removeAllListeners('window-all-closed');
-          if (mainWindow.get() != null) {
-            mainWindow.get().close();
-          }
+          const wins = BrowserWindow.getAllWindows();
+          wins.forEach((win) => {
+            win.close();
+          });
           autoUpdater.quitAndInstall(false);
         });
       }
