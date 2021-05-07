@@ -1,7 +1,12 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-const { app, dialog, shell } = require('electron');
+const {
+  app,
+  dialog,
+  shell,
+  BrowserWindow,
+} = require('electron');
 const { autoUpdater } = require('electron-updater');
 
 const sendToAllWindows = require('./send-to-all-windows');
@@ -10,8 +15,6 @@ const { getPreference } = require('./preferences');
 const getUtmSource = require('./get-utm-source');
 
 const appJson = require('../constants/app-json');
-
-const mainWindow = require('../windows/main');
 
 global.updateSilent = true;
 
@@ -137,9 +140,10 @@ autoUpdater.on('update-downloaded', (info) => {
         // https://github.com/electron-userland/electron-builder/issues/1604
         setImmediate(() => {
           app.removeAllListeners('window-all-closed');
-          if (mainWindow.get() != null) {
-            mainWindow.get().close();
-          }
+          const wins = BrowserWindow.getAllWindows();
+          wins.forEach((win) => {
+            win.close();
+          });
           autoUpdater.quitAndInstall(false);
         });
       }
