@@ -234,7 +234,6 @@ const getUpdaterDesc = (status, info) => {
 };
 
 const Preferences = ({
-  allowPrerelease,
   alwaysOnTop,
   askForDownloadPath,
   attachToMenubar,
@@ -1641,23 +1640,6 @@ const Preferences = ({
                     />
                     <ChevronRightIcon color="action" />
                   </ListItem>
-                  <Divider />
-                  <ListItem>
-                    <ListItemText
-                      primary="Receive pre-release updates"
-                    />
-                    <ListItemSecondaryAction>
-                      <Switch
-                        edge="end"
-                        color="primary"
-                        checked={allowPrerelease}
-                        onChange={(e) => {
-                          requestSetPreference('allowPrerelease', e.target.checked);
-                          enqueueRequestRestartSnackbar();
-                        }}
-                      />
-                    </ListItemSecondaryAction>
-                  </ListItem>
                 </List>
               </Paper>
             ) : (
@@ -2048,7 +2030,6 @@ Preferences.defaultProps = {
 };
 
 Preferences.propTypes = {
-  allowPrerelease: PropTypes.bool.isRequired,
   alwaysOnTop: PropTypes.bool.isRequired,
   askForDownloadPath: PropTypes.bool.isRequired,
   attachToMenubar: PropTypes.bool.isRequired,
@@ -2112,7 +2093,6 @@ Preferences.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  allowPrerelease: state.preferences.allowPrerelease,
   alwaysOnTop: state.preferences.alwaysOnTop,
   askForDownloadPath: state.preferences.askForDownloadPath,
   attachToMenubar: state.preferences.attachToMenubar,

@@ -11,7 +11,6 @@ const { autoUpdater } = require('electron-updater');
 
 const sendToAllWindows = require('./send-to-all-windows');
 const { createMenu } = require('./menu');
-const { getPreference } = require('./preferences');
 const getUtmSource = require('./get-utm-source');
 
 const appJson = require('../constants/app-json');
@@ -150,8 +149,3 @@ autoUpdater.on('update-downloaded', (info) => {
     })
     .catch(console.log); // eslint-disable-line
 });
-
-app.whenReady()
-  .then(() => {
-    autoUpdater.allowPrerelease = getPreference('allowPrerelease');
-  });
