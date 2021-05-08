@@ -281,6 +281,7 @@ const addView = (browserWindow, workspace) => {
   // https://github.com/webcatalog/webcatalog-app/issues/455
   // https://github.com/meetfranz/franz/issues/1720#issuecomment-566460763
   const fakedEdgeUaStr = `${app.userAgentFallback} Edge/18.18875`;
+  const fakedSafariUaStr = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15';
   const adjustUserAgentByUrl = (contents, url, occasion) => {
     const currentUaStr = contents.userAgent;
 
@@ -299,6 +300,16 @@ const addView = (browserWindow, workspace) => {
         contents.userAgent = fakedEdgeUaStr;
         // eslint-disable-next-line no-console
         console.log('Changed user agent to', fakedEdgeUaStr, 'for web compatibility URL: ', url, 'when', occasion);
+        return true;
+      }
+    } else if (navigatedDomain === 'meet.google.com') {
+      // Google uses special code for Chromium-based browsers
+      // when screensharing (not working with Electron)
+      // so change user-agent to Safari to make it work
+      if (currentUaStr !== fakedSafariUaStr) {
+        contents.userAgent = fakedSafariUaStr;
+        // eslint-disable-next-line no-console
+        console.log('Changed user agent to', fakedSafariUaStr, 'for web compatibility URL: ', url, 'when', occasion);
         return true;
       }
     } else if (currentUaStr !== app.userAgentFallback) {
