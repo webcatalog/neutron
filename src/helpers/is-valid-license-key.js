@@ -13,9 +13,9 @@ const isValidLicenseKey = (licenseKey) => {
     const time = parts[1];
     const md5Str = parts.slice(2).join('').toUpperCase();
 
-    // allow user to activate PanText Plus with legacy Singlebox license
-    if (getStaticGlobal('appJson').id === 'pantext'
-      && md5(process.env.REACT_APP_LICENSE_SECRET_SINGLEBOX_LEGACY + quantity + time).toUpperCase()
+    // allow user to activate Singlebox Plus with legacy Singlebox license
+    if (getStaticGlobal('appJson').id === 'singlebox'
+      && md5(process.env.REACT_APP_LICENSE_SECRET_LEGACY + quantity + time).toUpperCase()
         === md5Str) {
       return true;
     }

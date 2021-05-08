@@ -33,14 +33,16 @@ if (!useLegacyUserDataPath) {
   const userDataPath = path.join(app.getPath('appData'), 'WebCatalog', 'webcatalog-engine-data', slug ? `${appJson.id}-${slug}` : appJson.id);
   fs.ensureDirSync(userDataPath);
   app.setPath('userData', userDataPath);
-}
-
-// Singlebox is renamed to "PanText Plus"
-// we set userDataPath to legacy Singlebox path (if already exists) for backward compatibility
-if (isMas() && appJson.id === 'pantext-plus') {
-  const singleboxUserDataPath = path.join(app.getPath('appData'), 'Singlebox');
-  if (fs.existsSync(singleboxUserDataPath)) {
-    app.setPath('userData', singleboxUserDataPath);
+} else if (isMas() && appJson.id === 'singlebox-plus') {
+  // Singlebox (paid MAS) is renamed to "Singlebox Plus"
+  // we set userDataPath to legacy Singlebox path (if already exists) for backward compatibility
+  const legacyUserDataPath = path.join(app.getPath('appData'), 'Singlebox');
+  app.setPath('userData', legacyUserDataPath);
+  // PanText is renamed to Singlebox
+} else if (appJson.id === 'singlebox') {
+  const legacyUserDataPath = path.join(app.getPath('appData'), 'PanText');
+  if (fs.existsSync(legacyUserDataPath)) {
+    app.setPath('userData', legacyUserDataPath);
   }
 }
 
@@ -507,7 +509,7 @@ if (!gotTheLock) {
           }
         }
 
-        // pre-cache pricing for (PanText|PanMail|...) Plus
+        // pre-cache pricing for (Singlebox|PanMail|...) Plus
         if (isMas() && !appJson.registered && !getPreference('iapPurchased')) {
           const productIdentifier = `${appJson.id}_plus`;
           getIapFormattedPriceAsync(productIdentifier);

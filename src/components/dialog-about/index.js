@@ -20,7 +20,7 @@ import {
 
 import cloveryIconPng from '../../images/products/clovery-mac-icon-128@2x.png';
 import panmailIconPng from '../../images/products/panmail-mac-icon-128@2x.png';
-import pantextIconPng from '../../images/products/pantext-mac-icon-128@2x.png';
+import singleboxIconPng from '../../images/products/singlebox-mac-icon-128@2x.png';
 import isStandalone from '../../helpers/is-standalone';
 
 const styles = (theme) => ({
@@ -72,7 +72,7 @@ const About = (props) => {
         <img
           src={(() => {
             if (appJson.id === 'clovery') return cloveryIconPng;
-            if (appJson.id === 'pantext' || appJson.id === 'pantext-plus') return pantextIconPng;
+            if (appJson.id === 'singlebox' || appJson.id === 'singlebox-plus') return singleboxIconPng;
             if (appJson.id === 'panmail') return panmailIconPng;
             return `file://${window.iconPath}`;
           })()}

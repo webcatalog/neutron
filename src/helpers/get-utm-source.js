@@ -8,7 +8,9 @@ import isStandalone from './is-standalone';
 
 const getUtmSource = () => {
   if (isMas() || isStandalone()) {
-    return `${getStaticGlobal('appJson').id}_app`;
+    const appId = getStaticGlobal('appJson').id;
+    if (appId === 'singlebox-plus') return 'singlebox_app';
+    return `${appId}_app`;
   }
   return 'juli_app';
 };
