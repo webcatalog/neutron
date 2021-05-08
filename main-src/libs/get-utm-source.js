@@ -8,6 +8,7 @@ const isMas = require('./is-mas');
 
 const getUtmSource = () => {
   if (isMas() || isStandalone()) {
+    if (appJson.id === 'singlebox-plus') return 'singlebox_app';
     return `${appJson.id}_app`;
   }
   return 'juli_app';
