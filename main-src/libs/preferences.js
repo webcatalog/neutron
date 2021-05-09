@@ -57,6 +57,14 @@ const defaultPreferences = {
   darkReaderGrayscale: 0,
   darkReaderSepia: 0,
   // default Dark Reader settings from its Chrome extension */
+  /* Font Settings (same as Chrome/Edge) */
+  defaultFontFamilyStandard: 'Times',
+  defaultFontFamilySerif: 'Times',
+  defaultFontFamilySansSerif: 'Helvetica',
+  defaultFontFamilyMonospace: 'Courier',
+  defaultFontSize: 16,
+  defaultFontSizeMinimum: 0,
+  /* Font Settings (same as Chrome/Edge) */
   downloadPath: getDefaultDownloadsPath(),
   hibernateUnusedWorkspacesAtLaunch: false,
   iapPurchased: false,
