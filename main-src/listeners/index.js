@@ -264,11 +264,8 @@ const loadListeners = () => {
     }
 
     if (isMas()) {
-      // backward compatible
-      const productIdentifier = appJson.id === 'singlebox' ? 'pantext_plus' : `${appJson.id}_plus`;
-
       // get price
-      getIapFormattedPriceAsync(productIdentifier)
+      getIapFormattedPriceAsync(appJson.iapProductIdentifier)
         .then((formattedPrice) => {
           dialog.showMessageBox(win, {
             type: 'info',
@@ -279,7 +276,9 @@ const loadListeners = () => {
           })
             .then(({ response }) => {
               if (response === 0) {
-                inAppPurchase.purchaseProduct(productIdentifier).then((isProductValid) => {
+                inAppPurchase.purchaseProduct(
+                  appJson.iapProductIdentifier,
+                ).then((isProductValid) => {
                   if (!isProductValid) {
                     // eslint-disable-next-line no-console
                     console.log('The product is not valid.');

@@ -1,7 +1,8 @@
 {
-    "id": "singlebox-plus",
+    "id": "singlebox",
     "name": "Singlebox",
     "hostname": "singlebox.app",
     "macAppStoreId": "1561301796",
-    "registered": false
+    "registered": false,
+    "iapProductIdentifier": "pantext_plus"
 }

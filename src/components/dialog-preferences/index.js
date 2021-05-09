@@ -304,9 +304,7 @@ const Preferences = ({
   const [formattedPrice, setFormattedPrice] = useState(null);
   useEffect(() => {
     if (isMas() && !registered) {
-      // backward compatible
-      const plusPlanProductIdentifier = appJson.id === 'singlebox' ? 'pantext_plus' : `${appJson.id}_plus`;
-      getIapFormattedPriceAsync(plusPlanProductIdentifier)
+      getIapFormattedPriceAsync(appJson.iapProductIdentifier)
         .then((value) => {
           setFormattedPrice(value);
         });

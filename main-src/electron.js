@@ -128,8 +128,7 @@ if (!gotTheLock) {
       const { payment } = transaction;
 
       // backward compatible
-      const plusPlanProductIdentifier = appJson.id === 'singlebox' ? 'pantext_plus' : `${appJson.id}_plus`;
-      if (payment.productIdentifier !== plusPlanProductIdentifier) {
+      if (payment.productIdentifier !== appJson.iapProductIdentifier) {
         return;
       }
 
@@ -513,9 +512,7 @@ if (!gotTheLock) {
 
         // pre-cache pricing for (Singlebox|PanMail|...) Plus
         if (isMas() && !appJson.registered && !getPreference('iapPurchased')) {
-          // backward compatible
-          const plusPlanProductIdentifier = appJson.id === 'singlebox' ? 'pantext_plus' : `${appJson.id}_plus`;
-          getIapFormattedPriceAsync(plusPlanProductIdentifier);
+          getIapFormattedPriceAsync(appJson.iapProductIdentifier);
         }
       });
   });
