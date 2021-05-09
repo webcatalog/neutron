@@ -264,7 +264,8 @@ const loadListeners = () => {
     }
 
     if (isMas()) {
-      const productIdentifier = `${appJson.id}_plus`;
+      // backward compatible
+      const productIdentifier = appJson.id === 'singlebox' ? 'pantext_plus' : `${appJson.id}_plus`;
 
       // get price
       getIapFormattedPriceAsync(productIdentifier)
