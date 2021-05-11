@@ -141,6 +141,8 @@ autoUpdater.on('update-downloaded', (info) => {
           app.removeAllListeners('window-all-closed');
           const wins = BrowserWindow.getAllWindows();
           wins.forEach((win) => {
+            // https://github.com/electron-userland/electron-builder/issues/1604#issuecomment-372091881
+            win.removeAllListeners('close');
             win.close();
           });
           autoUpdater.quitAndInstall(false);
