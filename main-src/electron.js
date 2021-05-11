@@ -127,7 +127,8 @@ if (!gotTheLock) {
     transactions.forEach((transaction) => {
       const { payment } = transaction;
 
-      if (payment.productIdentifier !== `${appJson.id}_plus`) {
+      // backward compatible
+      if (payment.productIdentifier !== appJson.iapProductIdentifier) {
         return;
       }
 
@@ -511,8 +512,7 @@ if (!gotTheLock) {
 
         // pre-cache pricing for (Singlebox|PanMail|...) Plus
         if (isMas() && !appJson.registered && !getPreference('iapPurchased')) {
-          const productIdentifier = `${appJson.id}_plus`;
-          getIapFormattedPriceAsync(productIdentifier);
+          getIapFormattedPriceAsync(appJson.iapProductIdentifier);
         }
       });
   });

@@ -307,7 +307,7 @@ const Preferences = ({
   const [formattedPrice, setFormattedPrice] = useState(null);
   useEffect(() => {
     if (isMas() && !registered) {
-      getIapFormattedPriceAsync(`${appJson.id}_plus`)
+      getIapFormattedPriceAsync(appJson.iapProductIdentifier)
         .then((value) => {
           setFormattedPrice(value);
         });
