@@ -97,7 +97,6 @@ import webcatalogIconPng from '../../images/products/webcatalog-mac-icon-128@2x.
 import translatiumIconPng from '../../images/products/translatium-mac-icon-128@2x.png';
 import cloveryIconPng from '../../images/products/clovery-mac-icon-128@2x.png';
 import singleboxIconPng from '../../images/products/singlebox-mac-icon-128@2x.png';
-import panmailIconPng from '../../images/products/panmail-mac-icon-128@2x.png';
 
 const styles = (theme) => ({
   root: {
@@ -1826,35 +1825,6 @@ const Preferences = ({
                         </Typography>
                         <Typography variant="body2" color="textSecondary">
                           All Google Apps in One
-                        </Typography>
-                      </div>
-                    </div>
-                  </div>
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-                <Divider />
-                <ListItem
-                  button
-                  onClick={() => {
-                    let url = `https://panmail.app?utm_source=${utmSource}`;
-                    if (isMas()) {
-                      url = 'macappstore://apps.apple.com/us/app/panmail/id1551178702';
-                    }
-                    requestOpenInBrowser(url);
-                  }}
-                  className={classes.listItemPromotion}
-                >
-                  <div className={classes.promotionBlock}>
-                    <div className={classes.promotionLeft}>
-                      <img src={panmailIconPng} alt="PanMail" className={classes.appIcon} />
-                    </div>
-                    <div className={classes.promotionRight}>
-                      <div>
-                        <Typography variant="body1" className={classes.appTitle}>
-                          PanMail
-                        </Typography>
-                        <Typography variant="body2" color="textSecondary">
-                          Cloud-based Email Client
                         </Typography>
                       </div>
                     </div>

@@ -19,7 +19,6 @@ import {
 } from '../../senders';
 
 import cloveryIconPng from '../../images/products/clovery-mac-icon-128@2x.png';
-import panmailIconPng from '../../images/products/panmail-mac-icon-128@2x.png';
 import singleboxIconPng from '../../images/products/singlebox-mac-icon-128@2x.png';
 import isStandalone from '../../helpers/is-standalone';
 
@@ -73,7 +72,6 @@ const About = (props) => {
           src={(() => {
             if (appJson.id === 'clovery') return cloveryIconPng;
             if (appJson.id === 'singlebox' || appJson.id === 'singlebox-plus') return singleboxIconPng;
-            if (appJson.id === 'panmail') return panmailIconPng;
             return `file://${window.iconPath}`;
           })()}
           alt={appJson.name}
