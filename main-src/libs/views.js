@@ -253,6 +253,15 @@ const addView = (browserWindow, workspace) => {
     },
   );
 
+  const {
+    defaultFontFamilyMonospace,
+    defaultFontFamilySansSerif,
+    defaultFontFamilySerif,
+    defaultFontFamilyStandard,
+    defaultFontSize,
+    defaultFontSizeMinimum,
+  } = getPreferences();
+
   const sharedWebPreferences = {
     spellcheck: global.spellcheck,
     nativeWindowOpen: true,
@@ -263,6 +272,14 @@ const addView = (browserWindow, workspace) => {
     scrollBounce: true,
     session: ses,
     preload: path.join(__dirname, 'view-preload.js'),
+    defaultFontFamily: {
+      standard: defaultFontFamilyStandard,
+      serif: defaultFontFamilySerif,
+      sansSerif: defaultFontFamilySansSerif,
+      monospace: defaultFontFamilyMonospace,
+    },
+    defaultFontSize,
+    minimumFontSize: defaultFontSizeMinimum,
   };
   const view = new BrowserView({
     webPreferences: sharedWebPreferences,
