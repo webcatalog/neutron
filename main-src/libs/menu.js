@@ -584,6 +584,19 @@ const createMenu = async () => {
     },
     { type: 'separator' },
     {
+      label: `Set Current URL as ${getWorkspaceFriendlyName()}'s Home Page`,
+      click: () => {
+        const activeWorkspace = getActiveWorkspace();
+        const v = getView(activeWorkspace.id);
+        const currentUrl = v.webContents.getURL();
+        ipcMain.emit('request-set-workspace', null, activeWorkspace.id, {
+          homeUrl: currentUrl,
+        });
+      },
+      enabled: !global.locked && hasWorkspaces,
+    },
+    { type: 'separator' },
+    {
       label: `Edit Current ${getWorkspaceFriendlyName()}`,
       click: () => {
         const activeWorkspace = getActiveWorkspace();
