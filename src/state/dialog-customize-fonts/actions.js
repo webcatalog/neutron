@@ -15,7 +15,7 @@ import validate from '../../helpers/validate';
 import hasErrors from '../../helpers/has-errors';
 
 export const open = () => (dispatch, getState) => {
-  const { 
+  const {
     preferences: {
       defaultFontFamilyStandard,
       defaultFontFamilySerif,
@@ -23,7 +23,7 @@ export const open = () => (dispatch, getState) => {
       defaultFontFamilyMonospace,
       defaultFontSize,
       defaultFontSizeMinimum,
-    }
+    },
   } = getState();
 
   dispatch({
