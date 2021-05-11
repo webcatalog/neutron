@@ -899,6 +899,25 @@ const addView = (browserWindow, workspace) => {
 
         menu.append(new MenuItem({ type: 'separator' }));
 
+        const currentUrl = info.linkURL || view.webContents.getURL();
+        if (currentUrl) {
+          menu.append(
+            new MenuItem({
+              label: info.linkURL
+                ? `Set URL as ${getWorkspaceFriendlyName()}'s Home Page`
+                : `Set Current URL as ${getWorkspaceFriendlyName()}'s Home Page`,
+              click: () => {
+                setWorkspace(workspace.id, {
+                  homeUrl: currentUrl,
+                });
+              },
+            }),
+          );
+          menu.append(new MenuItem({ type: 'separator' }));
+        }
+
+        menu.append(new MenuItem({ type: 'separator' }));
+
         const sharedUrl = info.linkURL || view.webContents.getURL();
         if (sharedUrl) {
           menu.append(
