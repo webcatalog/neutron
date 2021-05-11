@@ -14,6 +14,7 @@ import dialogAppLock from './dialog-app-lock/reducers';
 import dialogAuth from './dialog-auth/reducers';
 import dialogCodeInjection from './dialog-code-injection/reducers';
 import dialogCustomUserAgent from './dialog-custom-user-agent/reducers';
+import dialogCustomizeFonts from './dialog-customize-fonts/reducers';
 import dialogEditWorkspace from './dialog-edit-workspace/reducers';
 import dialogGoToUrl from './dialog-go-to-url/reducers';
 import dialogInternalUrls from './dialog-internal-urls/reducers';
@@ -40,6 +41,7 @@ const rootReducer = combineReducers({
   dialogAuth,
   dialogCodeInjection,
   dialogCustomUserAgent,
+  dialogCustomizeFonts,
   dialogEditWorkspace,
   dialogGoToUrl,
   dialogInternalUrls,

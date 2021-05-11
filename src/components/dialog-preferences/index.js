@@ -70,10 +70,11 @@ import {
 import { open as openDialogAppLock } from '../../state/dialog-app-lock/actions';
 import { open as openDialogCodeInjection } from '../../state/dialog-code-injection/actions';
 import { open as openDialogCustomUserAgent } from '../../state/dialog-custom-user-agent/actions';
+import { open as openDialogCustomizeFonts } from '../../state/dialog-customize-fonts/actions';
 import { open as openDialogInternalUrls } from '../../state/dialog-internal-urls/actions';
 import { open as openDialogProxy } from '../../state/dialog-proxy/actions';
-import { open as openDialogSpellcheckLanguages } from '../../state/dialog-spellcheck-languages/actions';
 import { open as openDialogRefreshInterval } from '../../state/dialog-refresh-interval/actions';
+import { open as openDialogSpellcheckLanguages } from '../../state/dialog-spellcheck-languages/actions';
 
 import hunspellLanguagesMap from '../../constants/hunspell-languages';
 import searchEngines from '../../constants/search-engines';
@@ -86,10 +87,11 @@ import ListItemDefaultCalendarApp from './list-item-default-calendar-app';
 import DialogAppLock from '../dialog-app-lock';
 import DialogCodeInjection from '../dialog-code-injection';
 import DialogCustomUserAgent from '../dialog-custom-user-agent';
+import DialogCustomizeFonts from '../dialog-customize-fonts';
 import DialogInternalUrls from '../dialog-internal-urls';
 import DialogProxy from '../dialog-proxy';
-import DialogSpellcheckLanguages from '../dialog-spellcheck-languages';
 import DialogRefreshInterval from '../dialog-refresh-interval';
+import DialogSpellcheckLanguages from '../dialog-spellcheck-languages';
 
 import SnackbarTrigger from '../shared/snackbar-trigger';
 
@@ -97,7 +99,6 @@ import webcatalogIconPng from '../../images/products/webcatalog-mac-icon-128@2x.
 import translatiumIconPng from '../../images/products/translatium-mac-icon-128@2x.png';
 import cloveryIconPng from '../../images/products/clovery-mac-icon-128@2x.png';
 import singleboxIconPng from '../../images/products/singlebox-mac-icon-128@2x.png';
-import panmailIconPng from '../../images/products/panmail-mac-icon-128@2x.png';
 
 const styles = (theme) => ({
   root: {
@@ -250,6 +251,7 @@ const Preferences = ({
   darkReaderContrast,
   darkReaderGrayscale,
   darkReaderSepia,
+  defaultFontSize,
   downloadPath,
   hibernateUnusedWorkspacesAtLaunch,
   iapPurchased,
@@ -260,6 +262,7 @@ const Preferences = ({
   onOpenDialogAppLock,
   onOpenDialogCodeInjection,
   onOpenDialogCustomUserAgent,
+  onOpenDialogCustomizeFonts,
   onOpenDialogInternalUrls,
   onOpenDialogProxy,
   onOpenDialogRefreshInterval,
@@ -928,6 +931,46 @@ const Preferences = ({
                 </ListItem>
               </>
             )}
+            <Divider />
+            <ListItem>
+              <ListItemText primary="Font size" />
+              <Select
+                value={defaultFontSize}
+                onChange={(e) => {
+                  requestSetPreference('defaultFontSize', e.target.value);
+                  enqueueRequestRestartSnackbar();
+                }}
+                variant="filled"
+                disableUnderline
+                margin="dense"
+                classes={{
+                  root: classes.select,
+                }}
+                className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
+              >
+                {[
+                  { value: 9, label: 'Very Small' },
+                  { value: 12, label: 'Small' },
+                  { value: 16, label: 'Medium (Recommended)' },
+                  { value: 20, label: 'Large' },
+                  { value: 24, label: 'Very Large' },
+                ].map((item) => (
+                  <MenuItem key={item.value} dense value={item.value}>{item.label}</MenuItem>
+                ))}
+                {[9, 12, 16, 20, 24].indexOf(defaultFontSize) < 0 && (
+                  <MenuItem
+                    value={defaultFontSize}
+                    dense
+                  >
+                    Custom
+                  </MenuItem>
+                )}
+              </Select>
+            </ListItem>
+            <ListItem button onClick={onOpenDialogCustomizeFonts}>
+              <ListItemText primary="Customize fonts" />
+              <ChevronRightIcon color="action" />
+            </ListItem>
           </List>
         </Paper>
 
@@ -1832,35 +1875,6 @@ const Preferences = ({
                   </div>
                   <ChevronRightIcon color="action" />
                 </ListItem>
-                <Divider />
-                <ListItem
-                  button
-                  onClick={() => {
-                    let url = `https://panmail.app?utm_source=${utmSource}`;
-                    if (isMas()) {
-                      url = 'macappstore://apps.apple.com/us/app/panmail/id1551178702';
-                    }
-                    requestOpenInBrowser(url);
-                  }}
-                  className={classes.listItemPromotion}
-                >
-                  <div className={classes.promotionBlock}>
-                    <div className={classes.promotionLeft}>
-                      <img src={panmailIconPng} alt="PanMail" className={classes.appIcon} />
-                    </div>
-                    <div className={classes.promotionRight}>
-                      <div>
-                        <Typography variant="body1" className={classes.appTitle}>
-                          PanMail
-                        </Typography>
-                        <Typography variant="body2" color="textSecondary">
-                          Cloud-based Email Client
-                        </Typography>
-                      </div>
-                    </div>
-                  </div>
-                  <ChevronRightIcon color="action" />
-                </ListItem>
               </List>
             </Paper>
           </>
@@ -2013,6 +2027,7 @@ const Preferences = ({
       <DialogProxy />
       <DialogInternalUrls />
       <DialogRefreshInterval />
+      <DialogCustomizeFonts />
       <SnackbarTrigger />
     </div>
   );
@@ -2046,6 +2061,7 @@ Preferences.propTypes = {
   darkReaderContrast: PropTypes.number.isRequired,
   darkReaderGrayscale: PropTypes.number.isRequired,
   darkReaderSepia: PropTypes.number.isRequired,
+  defaultFontSize: PropTypes.number.isRequired,
   downloadPath: PropTypes.string.isRequired,
   hibernateUnusedWorkspacesAtLaunch: PropTypes.bool.isRequired,
   iapPurchased: PropTypes.bool,
@@ -2056,6 +2072,7 @@ Preferences.propTypes = {
   onOpenDialogAppLock: PropTypes.func.isRequired,
   onOpenDialogCodeInjection: PropTypes.func.isRequired,
   onOpenDialogCustomUserAgent: PropTypes.func.isRequired,
+  onOpenDialogCustomizeFonts: PropTypes.func.isRequired,
   onOpenDialogInternalUrls: PropTypes.func.isRequired,
   onOpenDialogProxy: PropTypes.func.isRequired,
   onOpenDialogRefreshInterval: PropTypes.func.isRequired,
@@ -2108,6 +2125,7 @@ const mapStateToProps = (state) => ({
   darkReaderContrast: state.preferences.darkReaderContrast,
   darkReaderGrayscale: state.preferences.darkReaderGrayscale,
   darkReaderSepia: state.preferences.darkReaderSepia,
+  defaultFontSize: state.preferences.defaultFontSize,
   downloadPath: state.preferences.downloadPath,
   hibernateUnusedWorkspacesAtLaunch: state.preferences.hibernateUnusedWorkspacesAtLaunch,
   iapPurchased: state.preferences.iapPurchased,
@@ -2151,6 +2169,7 @@ const actionCreators = {
   openDialogAppLock,
   openDialogCodeInjection,
   openDialogCustomUserAgent,
+  openDialogCustomizeFonts,
   openDialogInternalUrls,
   openDialogProxy,
   openDialogRefreshInterval,
