@@ -6,8 +6,6 @@ const {
   nativeTheme,
 } = require('electron');
 
-const fontList = require('font-list');
-
 const { getPreferences } = require('../libs/preferences');
 const { getSystemPreferences } = require('../libs/system-preferences');
 const { getWorkspaces } = require('../libs/workspaces');
@@ -81,8 +79,6 @@ const loadInvokers = () => {
   ipcMain.handle('get-iap-formatted-price', (e, productIdentifier) => getIapFormattedPriceAsync(productIdentifier));
 
   ipcMain.handle('get-app-json', () => appJson);
-
-  ipcMain.handle('get-font-list', () => fontList.getFonts({ disableQuoting: true }));
 };
 
 module.exports = loadInvokers;

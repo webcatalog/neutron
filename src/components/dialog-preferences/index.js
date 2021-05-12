@@ -968,7 +968,7 @@ const Preferences = ({
               </Select>
             </ListItem>
             <ListItem button onClick={onOpenDialogCustomizeFonts}>
-              <ListItemText primary="Customize fonts" />
+              <ListItemText primary="Advanced font size settings" />
               <ChevronRightIcon color="action" />
             </ListItem>
           </List>

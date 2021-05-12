@@ -17,24 +17,18 @@ import hasErrors from '../../helpers/has-errors';
 export const open = () => (dispatch, getState) => {
   const {
     preferences: {
-      defaultFontFamilyStandard,
-      defaultFontFamilySerif,
-      defaultFontFamilySansSerif,
-      defaultFontFamilyMonospace,
       defaultFontSize,
       defaultFontSizeMinimum,
+      defaultFontSizeMonospace,
     },
   } = getState();
 
   dispatch({
     type: OPEN_DIALOG_CUSTOMIZE_FONTS,
     form: {
-      defaultFontFamilyStandard,
-      defaultFontFamilySerif,
-      defaultFontFamilySansSerif,
-      defaultFontFamilyMonospace,
       defaultFontSize,
       defaultFontSizeMinimum,
+      defaultFontSizeMonospace,
     },
   });
 };
@@ -59,12 +53,9 @@ export const save = () => (dispatch, getState) => {
     return;
   }
 
-  requestSetPreference('defaultFontFamilyMonospace', form.defaultFontFamilyMonospace);
-  requestSetPreference('defaultFontFamilySansSerif', form.defaultFontFamilySansSerif);
-  requestSetPreference('defaultFontFamilySerif', form.defaultFontFamilySerif);
-  requestSetPreference('defaultFontFamilyStandard', form.defaultFontFamilyStandard);
   requestSetPreference('defaultFontSize', form.defaultFontSize);
   requestSetPreference('defaultFontSizeMinimum', form.defaultFontSizeMinimum);
+  requestSetPreference('defaultFontSizeMonospace', form.defaultFontSizeMonospace);
 
   dispatch(close());
   enqueueRequestRestartSnackbar();
