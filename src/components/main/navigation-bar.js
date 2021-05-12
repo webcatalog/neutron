@@ -21,6 +21,7 @@ import VolumeOffIcon from '@material-ui/icons/VolumeOff';
 
 import connectComponent from '../../helpers/connect-component';
 import getUrlFromText from '../../helpers/get-url-from-text';
+import getStaticGlobal from '../../helpers/get-static-global';
 
 import searchEngines from '../../constants/search-engines';
 
@@ -45,7 +46,7 @@ const styles = (theme) => ({
     width: '100%',
     height: 36,
     backgroundColor: theme.palette.background.paper,
-    borderBottom: '1px solid rgba(0, 0, 0, 0.2)',
+    borderBottom: `1px solid ${theme.palette.divider}`,
     display: 'flex',
     alignItems: 'center',
     paddingLeft: theme.spacing(1),
@@ -56,7 +57,7 @@ const styles = (theme) => ({
     WebkitAppRegion: 'drag',
   },
   rootWithTrafficLights: {
-    paddingLeft: 68 + theme.spacing(1),
+    paddingLeft: 68,
   },
   center: {
     flex: 1,
@@ -309,7 +310,11 @@ const mapStateToProps = (state) => ({
   canGoBack: state.general.canGoBack,
   canGoForward: state.general.canGoForward,
   draggable: window.process.platform === 'darwin' && !state.preferences.titleBar,
-  hasTrafficLights: window.process.platform === 'darwin' && !state.preferences.titleBar && !state.preferences.sidebar,
+  hasTrafficLights: window.process.platform === 'darwin'
+    && getStaticGlobal('windowButtons')
+    && window.mode !== 'menubar'
+    && !state.preferences.titleBar
+    && !state.general.isFullScreen,
   hasWorkspaces: Object.keys(state.workspaces).length > 0,
   muteApp: state.preferences.muteApp,
   searchEngine: state.preferences.searchEngine,
