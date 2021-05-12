@@ -1059,6 +1059,8 @@ const setActiveView = (browserWindow, id) => {
 
     updateAddress(view.webContents.getURL());
     sendToAllWindows('update-title', view.webContents.getTitle());
+    sendToAllWindows('update-can-go-back', view.webContents.canGoBack());
+    sendToAllWindows('update-can-go-forward', view.webContents.canGoForward());
     browserWindow.setTitle(view.webContents.getTitle());
   }
 };
