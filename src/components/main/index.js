@@ -25,6 +25,7 @@ import connectComponent from '../../helpers/connect-component';
 import getWorkspacesAsList from '../../helpers/get-workspaces-as-list';
 import getStaticGlobal from '../../helpers/get-static-global';
 import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
+import isMacOs11 from '../../helpers/is-mac-os-11';
 
 import arrowWhite from '../../images/arrow-white.png';
 import arrowBlack from '../../images/arrow-black.png';
@@ -65,136 +66,148 @@ const arrayMove = (array, from, to) => {
   return newArray;
 };
 
-const styles = (theme) => ({
-  outerRoot: {
-    display: 'flex',
-    flexDirection: 'column',
-    height: '100%',
-    width: '100%',
-    overflow: 'hidden',
-  },
-  root: {
-    display: 'flex',
-    flexDirection: 'row',
-    flex: 1,
-    width: '100%',
-    overflow: 'hidden',
-  },
-  sidebarUpperRoot: {
-    display: 'flex',
-    height: '100%',
-    width: 68,
-    backgroundColor: theme.palette.background.paper,
-    borderRight: '1px solid',
-    borderRightColor: theme.palette.divider,
-    overflowX: 'hidden',
-  },
-  sidebarUpperRootWide: {
-    width: 256,
-  },
-  sidebarRoot: {
-    flex: 1,
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    paddingBottom: theme.spacing(1),
-    boxSizing: 'border-box',
-  },
-  sidebarTop: {
-    flex: 1,
-    width: '100%',
-    WebkitAppRegion: 'drag',
-    WebkitUserSelect: 'none',
-    paddingBottom: theme.spacing(5),
-  },
-  innerContentRoot: {
-    flex: 1,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: theme.spacing(1),
-  },
-  contentRoot: {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    width: '100%',
-  },
-  arrow: {
-    height: 202,
-    width: 150,
-    position: 'absolute',
-    top: window.process.platform === 'darwin' ? 50 : 60,
-    left: 76,
-    backgroundImage: `url('${theme.palette.type === 'dark' ? arrowWhite : arrowBlack}')`,
-    backgroundSize: '150px 202px',
-  },
-  arrowWithNavBar: {
-    top: window.process.platform === 'darwin' ? 80 : 90,
-  },
-  arrowExpanded: {
-    left: 264,
-  },
-  avatar: {
-    fontFamily: theme.typography.fontFamily,
-    display: 'inline-block',
-    height: 36,
-    width: 36,
-    background: theme.palette.type === 'dark' ? theme.palette.common.white : theme.palette.common.black,
-    borderRadius: 4,
-    color: theme.palette.getContrastText(theme.palette.type === 'dark' ? theme.palette.common.white : theme.palette.common.black),
-    lineHeight: '36px',
-    textAlign: 'center',
-    fontWeight: 400,
-    textTransform: 'uppercase',
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    border: theme.palette.type === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)',
-    fontSize: '24px',
-  },
-  inlineBlock: {
-    display: 'inline-block',
-    fontSize: '18px',
-    color: theme.palette.type === 'dark' ? theme.palette.common.white : theme.palette.common.black,
-    whiteSpace: 'nowrap',
-  },
-  tip: {
-    position: 'absolute',
-    top: 112,
-    left: 180,
-    fontFamily: theme.typography.fontFamily,
-    userSelect: 'none',
-  },
-  tipExpanded: {
-    left: 368,
-  },
-  tip2: {
-    fontFamily: theme.typography.fontFamily,
-    userSelect: 'none',
-  },
-  grabbing: {
-    cursor: 'grabbing !important',
-    pointerEvents: 'auto !important',
-  },
-  end: {
-    display: 'flex',
-    flexDirection: 'column',
-    width: '100%',
-  },
-  endExpanded: {
-    display: 'block',
-    padding: theme.spacing(1),
-  },
-  ul: {
-    marginTop: 0,
-    marginBottom: '1.5rem',
-  },
-  iconButton: {
-    width: '100%',
-    borderRadius: 0,
-  },
-});
+const styles = (theme) => {
+  // big sur increases title bar height
+  const titleBarHeight = isMacOs11() ? 28 : 22;
+
+  return {
+    outerRoot: {
+      display: 'flex',
+      flexDirection: 'column',
+      height: '100%',
+      width: '100%',
+      overflow: 'hidden',
+    },
+    root: {
+      display: 'flex',
+      flexDirection: 'row',
+      flex: 1,
+      width: '100%',
+      overflow: 'hidden',
+    },
+    sidebarUpperRoot: {
+      display: 'flex',
+      height: '100%',
+      width: 68,
+      backgroundColor: theme.palette.background.paper,
+      borderRight: '1px solid',
+      borderRightColor: theme.palette.divider,
+      overflowX: 'hidden',
+    },
+    sidebarUpperRootWide: {
+      width: 256,
+    },
+    sidebarRoot: {
+      flex: 1,
+      width: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      paddingBottom: theme.spacing(1),
+      boxSizing: 'border-box',
+    },
+    sidebarDraggableArea: {
+      width: '100%',
+      height: titleBarHeight,
+      minHeight: titleBarHeight,
+      WebkitAppRegion: 'drag',
+      WebkitUserSelect: 'none',
+    },
+    sidebarTop: {
+      flex: 1,
+      width: '100%',
+      WebkitAppRegion: 'drag',
+      WebkitUserSelect: 'none',
+      paddingBottom: theme.spacing(5),
+    },
+    innerContentRoot: {
+      flex: 1,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: theme.spacing(1),
+    },
+    contentRoot: {
+      flex: 1,
+      display: 'flex',
+      flexDirection: 'column',
+      width: '100%',
+    },
+    arrow: {
+      height: 202,
+      width: 150,
+      position: 'absolute',
+      top: window.process.platform === 'darwin' ? 50 : 60,
+      left: 76,
+      backgroundImage: `url('${theme.palette.type === 'dark' ? arrowWhite : arrowBlack}')`,
+      backgroundSize: '150px 202px',
+    },
+    arrowWithNavBar: {
+      top: window.process.platform === 'darwin' ? 80 : 90,
+    },
+    arrowExpanded: {
+      left: 264,
+    },
+    avatar: {
+      fontFamily: theme.typography.fontFamily,
+      display: 'inline-block',
+      height: 36,
+      width: 36,
+      background: theme.palette.type === 'dark' ? theme.palette.common.white : theme.palette.common.black,
+      borderRadius: 4,
+      color: theme.palette.getContrastText(theme.palette.type === 'dark' ? theme.palette.common.white : theme.palette.common.black),
+      lineHeight: '36px',
+      textAlign: 'center',
+      fontWeight: 400,
+      textTransform: 'uppercase',
+      marginLeft: theme.spacing(1),
+      marginRight: theme.spacing(1),
+      border: theme.palette.type === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)',
+      fontSize: '24px',
+    },
+    inlineBlock: {
+      display: 'inline-block',
+      fontSize: '18px',
+      color: theme.palette.type === 'dark' ? theme.palette.common.white : theme.palette.common.black,
+      whiteSpace: 'nowrap',
+    },
+    tip: {
+      position: 'absolute',
+      top: 112,
+      left: 180,
+      fontFamily: theme.typography.fontFamily,
+      userSelect: 'none',
+    },
+    tipExpanded: {
+      left: 368,
+    },
+    tip2: {
+      fontFamily: theme.typography.fontFamily,
+      userSelect: 'none',
+    },
+    grabbing: {
+      cursor: 'grabbing !important',
+      pointerEvents: 'auto !important',
+    },
+    end: {
+      display: 'flex',
+      flexDirection: 'column',
+      width: '100%',
+    },
+    endExpanded: {
+      display: 'block',
+      padding: theme.spacing(1),
+    },
+    ul: {
+      marginTop: 0,
+      marginBottom: '1.5rem',
+    },
+    iconButton: {
+      width: '100%',
+      borderRadius: 0,
+    },
+  };
+};
 
 const SortableItem = sortableElement(({ value }) => {
   const { workspace, index } = value;
@@ -339,6 +352,9 @@ const Main = ({
             )}
           >
             <div className={classes.sidebarRoot}>
+              {window.process.platform === 'darwin' && !isFullScreen && !showMacTitleBar && !navigationBar && (
+                <div className={classes.sidebarDraggableArea} />
+              )}
               <div className={classes.sidebarTop}>
                 <SortableContainer
                   distance={10}
