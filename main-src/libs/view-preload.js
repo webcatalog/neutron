@@ -15,10 +15,13 @@ const nodeFetch = require('node-fetch/lib').default;
 
 const isMas = require('./is-mas');
 
+const getRecipe = require('./get-recipe');
+
 contextBridge.exposeInMainWorld(
   'webcatalog',
   {
-    setBadge: (count = 0) => ipcRenderer.invoke('set-web-contents-badge', count),
+    setBadgeCount: (count = 0) => ipcRenderer.invoke('set-web-contents-badge', count),
+    clearSiteData: () => ipcRenderer.invoked('flush-web-contents-app-data'),
   },
 );
 
@@ -142,6 +145,19 @@ const handleLoaded = async (event) => {
     }
   }
 
+  try {
+    const recipe = getRecipe(window.location.href);
+    if (recipe) {
+      // eslint-disable-next-line no-console
+      console.log('loaded recipe', recipe.id);
+      webFrame.executeJavaScript(recipe.code);
+    }
+  } catch (err) {
+    /* eslint-disable no-console */
+    console.log(err);
+    /* eslint-enable no-console */
+  }
+
   // hide FastMail to comply with MAS guidelines
   if (isMas() && window.location.hostname.includes('fastmail.com')) {
     try {
@@ -166,38 +182,6 @@ const handleLoaded = async (event) => {
       document.body.removeChild(linkPreview);
     }
   });
-
-  // overwrite gmail email discard button
-  if (window.location.href.startsWith('https://mail.google.com')) {
-    const node = document.createElement('script');
-    node.innerHTML = 'window.close = () => { window.location.href = \'https://mail.google.com\' }';
-    document.body.appendChild(node);
-  }
-
-  // Fix WhatsApp requires Google Chrome 49+ bug
-  // https://github.com/meetfranz/recipe-whatsapp/blob/master/webview.js
-  if (window.location.hostname.includes('web.whatsapp.com')) {
-    setTimeout(() => {
-      const elem = document.querySelector('.landing-title.version-title');
-      if (elem && elem.innerText.toLowerCase().includes('google chrome')) {
-        window.location.reload();
-      }
-    }, 1000);
-
-    window.addEventListener('beforeunload', async () => {
-      try {
-        ipcRenderer.invoked('flush-web-contents-app-data');
-        const registrations = await window.navigator.serviceWorker.getRegistrations();
-
-        registrations.forEach((r) => {
-          r.unregister();
-          console.log('ServiceWorker unregistered'); // eslint-disable-line no-console
-        });
-      } catch (err) {
-        console.err(err); // eslint-disable-line no-console
-      }
-    });
-  }
 
   // tie Google account info with workspace
   ipcRenderer.invoke('get-app-json')
@@ -254,40 +238,6 @@ const handleLoaded = async (event) => {
         }, 5 * 60 * 1000);
       }
     });
-
-  // Discord doesn't use document.title to show message count
-  // but use favicon
-  // so we get the number from the UI and update it whenever favicon changes
-  if (window.location.hostname.includes('discord.com')) {
-    const updateTitle = () => {
-      // eslint-disable-next-line no-console
-      console.log('updating badge');
-      let total = 0;
-      try {
-        const numberBadges = [...document.querySelector('nav').querySelectorAll('[class^="numberBadge-"]')].map((el) => parseInt(el.innerText, 10));
-        numberBadges.forEach((num) => { total += num; });
-      } catch (err) {
-        // eslint-disable-next-line no-console
-        console.log(err);
-      }
-      ipcRenderer.invoke('set-web-contents-badge', total);
-    };
-
-    let interval = setInterval(() => {
-      if (document.querySelector('nav')) {
-        // https://blog.sessionstack.com/how-javascript-works-tracking-changes-in-the-dom-using-mutationobserver-86adc7446401
-        const mutationObserver = new window.MutationObserver(() => {
-          updateTitle();
-        });
-        mutationObserver.observe(document.querySelector('link[rel=icon]'), {
-          attributes: true,
-        });
-        updateTitle();
-        clearInterval(interval);
-        interval = null;
-      }
-    }, 1000);
-  }
 
   const initialShouldPauseNotifications = ipcRenderer.sendSync('get-pause-notifications-info') != null;
   webFrame.executeJavaScript(`

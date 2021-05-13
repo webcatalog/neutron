@@ -99,4 +99,35 @@ const getElectronMainConfig = () => {
   };
 };
 
-module.exports = [getElectronMainConfig(), getPreloadScriptsConfig()];
+const getRecipeConfig = () => {
+  const plugins = [];
+  const entry = {};
+
+  fs.readdirSync(path.join(__dirname, 'main-src', 'libs', 'recipes'))
+    .forEach((fileName) => {
+      entry[fileName.replace('.js', '')] = path.join(__dirname, 'main-src', 'libs', 'recipes', fileName);
+    });
+
+  return {
+    mode: 'production',
+    node: {
+      global: false,
+      __filename: false,
+      __dirname: false,
+    },
+    externals,
+    entry,
+    target: 'web',
+    output: {
+      path: path.join(__dirname, 'build', 'recipes'),
+      filename: '[name].js',
+    },
+    // devtool: 'source-map',
+    plugins,
+    // optimization: {
+    //   minimize: false,
+    // },
+  };
+};
+
+module.exports = [getElectronMainConfig(), getPreloadScriptsConfig(), getRecipeConfig()];
