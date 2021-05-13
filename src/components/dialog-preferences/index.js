@@ -1415,7 +1415,6 @@ const Preferences = ({
             <ListItem
               button
               onClick={() => {
-                if (!checkLicense()) return;
                 onOpenDialogCodeInjection('js');
               }}
             >
@@ -1430,7 +1429,6 @@ const Preferences = ({
             <ListItem
               button
               onClick={() => {
-                if (!checkLicense()) return;
                 onOpenDialogCodeInjection('css');
               }}
             >

@@ -24,7 +24,6 @@ import PaletteIcon from '@material-ui/icons/Palette';
 import PowerIcon from '@material-ui/icons/Power';
 
 import connectComponent from '../../helpers/connect-component';
-import checkLicense from '../../helpers/check-license';
 import roundTime from '../../helpers/round-time';
 import isMas from '../../helpers/is-mas';
 import getStaticGlobal from '../../helpers/get-static-global';
@@ -431,7 +430,6 @@ const Preferences = ({
             <ListItem
               button
               onClick={() => {
-                if (!checkLicense()) return;
                 onOpenDialogCodeInjection('js');
               }}
             >
@@ -451,7 +449,6 @@ const Preferences = ({
             <ListItem
               button
               onClick={() => {
-                if (!checkLicense()) return;
                 onOpenDialogCodeInjection('css');
               }}
             >
