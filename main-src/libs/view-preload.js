@@ -15,7 +15,7 @@ const nodeFetch = require('node-fetch/lib').default;
 
 const isMas = require('./is-mas');
 
-const { getRecipe } = require('./recipes');
+const getRecipe = require('./get-recipe');
 
 contextBridge.exposeInMainWorld(
   'webcatalog',

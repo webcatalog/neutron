@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 const fs = require('fs');
 const path = require('path');
-const extractHostname = require('../extract-hostname');
+const extractHostname = require('./extract-hostname');
 
 const mapper = {
   'discord.com': 'discord',
@@ -22,12 +22,10 @@ const getRecipe = (url) => {
   if (recipeId) {
     return {
       id: recipeId,
-      code: fs.readFileSync(path.join(__dirname, `${recipeId}.js`), 'utf8'),
+      code: fs.readFileSync(path.join(__dirname, 'recipes', `${recipeId}.js`), 'utf8'),
     };
   }
   return null;
 };
 
-module.exports = {
-  getRecipe,
-};
+module.exports = getRecipe;
