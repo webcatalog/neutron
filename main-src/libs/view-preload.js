@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 const {
+  contextBridge,
   ipcRenderer,
   webFrame,
 } = require('electron');
@@ -13,6 +14,13 @@ const {
 const nodeFetch = require('node-fetch/lib').default;
 
 const isMas = require('./is-mas');
+
+contextBridge.exposeInMainWorld(
+  'webcatalog',
+  {
+    setBadge: (count = 0) => ipcRenderer.invoke('set-web-contents-badge', count),
+  },
+);
 
 const loadDarkReader = (workspaceId) => {
   const shouldUseDarkColor = ipcRenderer.sendSync('get-should-use-dark-colors');
