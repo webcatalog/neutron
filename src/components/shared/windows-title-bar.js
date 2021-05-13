@@ -182,7 +182,11 @@ const EnhancedAppBar = ({
                 onClick={(e) => {
                   e.stopPropagation();
                   const browserWindow = window.remote.getCurrentWindow();
-                  browserWindow.minimize();
+                  if (window.mode === 'menubar') {
+                    browserWindow.hide();
+                  } else {
+                    browserWindow.minimize();
+                  }
                 }}
               >
                 <div className={classnames(classes.windowsIcon, classes.windowsIconMinimize)} />

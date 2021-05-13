@@ -158,6 +158,10 @@ const createAsync = () => new Promise((resolve) => {
       menubarWindowState.manage(mb.window);
       contextMenu({ window: mb.window });
 
+      mb.window.on('show', () => {
+        ipcMain.emit('request-realign-active-workspace');
+      });
+
       mb.window.on('focus', () => {
         const view = mb.window.getBrowserView();
         if (view && view.webContents) {
