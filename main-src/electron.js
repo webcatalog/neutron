@@ -582,7 +582,7 @@ if (!gotTheLock) {
     const win = mainWindow.get();
     if (win != null) {
       if (win.isMinimized()) win.restore();
-      win.focus();
+      win.show();
     }
 
     // handle protocols on Windows & Linux
