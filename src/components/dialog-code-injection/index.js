@@ -21,6 +21,8 @@ import 'ace-builds/src-noconflict/theme-monokai';
 
 import connectComponent from '../../helpers/connect-component';
 
+import { requestOpenInBrowser } from '../../senders';
+
 import { updateForm, save, close } from '../../state/dialog-code-injection/actions';
 
 const styles = (theme) => ({
@@ -78,16 +80,21 @@ const CodeInjection = ({
       <div className={classes.actions}>
         <div className={classes.actionsLeft}>
           {codeInjectionType === 'js' && (
-            <FormControlLabel
-              control={(
-                <Switch
-                  checked={allowNodeInJsCodeInjection}
-                  onChange={(e) => onUpdateForm({ allowNodeInJsCodeInjection: e.target.checked })}
-                  color="primary"
-                />
-              )}
-              label="Allow access to Node.JS & Electron APIs"
-            />
+            <>
+              <Button variant="text" onClick={() => requestOpenInBrowser('https://github.com/webcatalog/webcatalog-app/wiki/WebCatalog-APIs')}>
+                WebCatalog API Documentation
+              </Button>
+              <FormControlLabel
+                control={(
+                  <Switch
+                    checked={allowNodeInJsCodeInjection}
+                    onChange={(e) => onUpdateForm({ allowNodeInJsCodeInjection: e.target.checked })}
+                    color="primary"
+                  />
+                )}
+                label="Allow access to Node.JS & Electron APIs"
+              />
+            </>
           )}
         </div>
         <div className={classes.actionsRight}>
