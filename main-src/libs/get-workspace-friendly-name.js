@@ -4,8 +4,10 @@
 
 // in most apps, we call workspace "Account"
 // in Clover, we call workspace "Service"
+const appJson = require('../constants/app-json');
+
 const getWorkspaceFriendlyName = (plural = false) => {
-  if (global.shareWorkspaceBrowsingData) {
+  if (!appJson.url && global.shareWorkspaceBrowsingData) {
     if (plural) return 'Services';
     return 'Service';
   }
