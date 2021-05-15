@@ -1303,7 +1303,7 @@ const Preferences = ({
             </ListItem>
             <Divider />
             <ListItem>
-              <ListItemText primary="Share browsing data between services & accounts" />
+              <ListItemText primary="Share browsing data & login details between services & accounts" />
               <ListItemSecondaryAction>
                 <Switch
                   edge="end"

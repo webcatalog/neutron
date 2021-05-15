@@ -314,6 +314,7 @@ const mapStateToProps = (state) => ({
     && getStaticGlobal('windowButtons')
     && window.mode !== 'menubar'
     && !state.preferences.titleBar
+    && !state.preferences.sidebar
     && !state.general.isFullScreen,
   hasWorkspaces: Object.keys(state.workspaces).length > 0,
   muteApp: state.preferences.muteApp,

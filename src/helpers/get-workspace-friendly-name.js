@@ -7,7 +7,7 @@ import getStaticGlobal from './get-static-global';
 // in most apps, we call workspace "Account"
 // if data is shared between workspaces, we call workspace "Service"
 const getWorkspaceFriendlyName = (plural = false) => {
-  if (getStaticGlobal('shareWorkspaceBrowsingData')) {
+  if (!getStaticGlobal('appJson').url && getStaticGlobal('shareWorkspaceBrowsingData')) {
     if (plural) return 'Services';
     return 'Service';
   }
