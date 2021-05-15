@@ -113,6 +113,9 @@ const styles = (theme) => {
       WebkitAppRegion: 'drag',
       WebkitUserSelect: 'none',
     },
+    sidebarDraggableAreaWithNavigationBar: {
+      height: 36,
+    },
     sidebarTop: {
       flex: 1,
       width: '100%',
@@ -340,8 +343,6 @@ const Main = ({
   return (
     <div className={classes.outerRoot}>
       {showMacTitleBar && <MacTitleBar />}
-      {navigationBar && <NavigationBar />}
-      <FindInPage />
       <DraggableRegion />
       <div className={classes.root}>
         {sidebar && (
@@ -352,8 +353,13 @@ const Main = ({
             )}
           >
             <div className={classes.sidebarRoot}>
-              {window.process.platform === 'darwin' && !isFullScreen && !showMacTitleBar && !navigationBar && (
-                <div className={classes.sidebarDraggableArea} />
+              {window.process.platform === 'darwin' && !isFullScreen && !showMacTitleBar && (
+                <div
+                  className={classnames(
+                    classes.sidebarDraggableArea,
+                    navigationBar && classes.sidebarDraggableAreaWithNavigationBar,
+                  )}
+                />
               )}
               <div className={classes.sidebarTop}>
                 <SortableContainer
@@ -456,6 +462,8 @@ const Main = ({
           </ScrollbarContainer>
         )}
         <div className={classes.contentRoot}>
+          {navigationBar && <NavigationBar />}
+          <FindInPage />
           <div className={classes.innerContentRoot}>
             {didFailLoad && !isLoading && (
               <div>
@@ -517,7 +525,7 @@ const Main = ({
                   <div className={classes.tip2}>
                     <span className={classes.inlineBlock}>
                       <span>Click </span>
-                      <strong>Workspaces &gt; Add Workspace</strong>
+                      <strong>{`${getWorkspaceFriendlyName(true)} > Add ${getWorkspaceFriendlyName()}`}</strong>
                       <span> to get started!</span>
                     </span>
                   </div>
