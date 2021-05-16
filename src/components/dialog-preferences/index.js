@@ -19,6 +19,7 @@ import Select from '@material-ui/core/Select';
 import Slider from '@material-ui/core/Slider';
 import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
+import Radio from '@material-ui/core/Radio';
 
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -192,6 +193,13 @@ const styles = (theme) => ({
   appTitle: {},
   appIcon: {
     height: 64,
+  },
+  listItemModePicker: {
+    paddingLeft: theme.spacing(1),
+  },
+  modePicker: {
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1.5),
   },
 });
 
@@ -474,6 +482,53 @@ const Preferences = ({
                 >
                   <ListItemText primary="App URL" secondary={appJson.url} />
                   <ChevronRightIcon color="action" />
+                </ListItem>
+                <Divider />
+              </>
+            )}
+            {(appJson.id.startsWith('group-') || appJson.id === 'clovery') && (
+              <>
+                <ListItem disableGutters className={classes.listItemModePicker}>
+                  <div className={classes.modePicker}>
+                    <Grid container spacing={2}>
+                      <Grid item>
+                        <Radio
+                          checked={shareWorkspaceBrowsingData}
+                          onChange={(e) => {
+                            requestSetPreference('shareWorkspaceBrowsingData', e.target.checked);
+                            enqueueRequestRestartSnackbar();
+                          }}
+                        />
+                      </Grid>
+                      <Grid item xs>
+                        <Typography variant="body1" gutterBottom={false}>
+                          Single Account Mode
+                        </Typography>
+                        <Typography variant="body2" gutterBottom={false}>
+                          Use same login credentials across added services.
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                    <Grid container spacing={2}>
+                      <Grid item>
+                        <Radio
+                          checked={!shareWorkspaceBrowsingData}
+                          onChange={(e) => {
+                            requestSetPreference('shareWorkspaceBrowsingData', !e.target.checked);
+                            enqueueRequestRestartSnackbar();
+                          }}
+                        />
+                      </Grid>
+                      <Grid item xs>
+                        <Typography variant="body1" gutterBottom={false}>
+                          Multiple Account Mode
+                        </Typography>
+                        <Typography variant="body2" gutterBottom={false}>
+                          Use different login credentials for each added service.
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                  </div>
                 </ListItem>
                 <Divider />
               </>
@@ -1301,21 +1356,25 @@ const Preferences = ({
                 />
               </ListItemSecondaryAction>
             </ListItem>
-            <Divider />
-            <ListItem>
-              <ListItemText primary="Share browsing data & login details between services & accounts" />
-              <ListItemSecondaryAction>
-                <Switch
-                  edge="end"
-                  color="primary"
-                  checked={shareWorkspaceBrowsingData}
-                  onChange={(e) => {
-                    requestSetPreference('shareWorkspaceBrowsingData', e.target.checked);
-                    enqueueRequestRestartSnackbar();
-                  }}
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
+            {!appJson.id.startsWith('group-') && appJson.id !== 'clovery' && (
+              <>
+                <Divider />
+                <ListItem>
+                  <ListItemText primary="Share browsing data & login credentials between services & accounts" />
+                  <ListItemSecondaryAction>
+                    <Switch
+                      edge="end"
+                      color="primary"
+                      checked={shareWorkspaceBrowsingData}
+                      onChange={(e) => {
+                        requestSetPreference('shareWorkspaceBrowsingData', e.target.checked);
+                        enqueueRequestRestartSnackbar();
+                      }}
+                    />
+                  </ListItemSecondaryAction>
+                </ListItem>
+              </>
+            )}
             <Divider />
             <ListItem>
               <ListItemText
