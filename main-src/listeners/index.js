@@ -301,7 +301,7 @@ const loadListeners = () => {
 
     dialog.showMessageBox(win, {
       type: 'info',
-      message: `You're currently running the free version of WebCatalog. To unlock all features & add unlimited number of ${getWorkspaceFriendlyName(true).toLowerCase()}, please purchase WebCatalog Lifetime from our store and open WebCatalog app to activate it.`,
+      message: `You're currently running the free version of WebCatalog. To unlock all features & add unlimited number of ${getWorkspaceFriendlyName(true).toLowerCase()}, please purchase WebCatalog Lifetime from our website and open WebCatalog app to activate it.`,
       buttons: ['OK', 'Learn More...'],
       cancelId: 0,
       defaultId: 0,

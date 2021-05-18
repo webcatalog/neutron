@@ -51,7 +51,6 @@ const DialogLicenseRegistration = ({
 }) => {
   const appJson = getStaticGlobal('appJson');
   const utmSource = getUtmSource();
-  const formattedPrice = appJson.id === 'panmail' ? '15 USD' : '20 USD';
 
   return (
     <div className={classes.root}>
@@ -76,9 +75,7 @@ const DialogLicenseRegistration = ({
           blocking ads & trackers and more.
           To remove the limitations, please purchase&nbsp;
           {appJson.name}
-          &nbsp;Plus (
-          {formattedPrice}
-          ) from our store.
+          &nbsp;Plus from our website.
         </DialogContentText>
         <TextField
           autoFocus
@@ -91,7 +88,7 @@ const DialogLicenseRegistration = ({
           placeholder="0-0000000000000-00000000-00000000-00000000-00000000"
           error={Boolean(licenseKeyError)}
           variant="outlined"
-          helperText={licenseKeyError || `If you have already purchased ${appJson.name} Plus from our store, you should have received a license key via email to enter above.`}
+          helperText={licenseKeyError || `If you have already purchased ${appJson.name} Plus from our website, you should have received a license key via email to enter above.`}
         />
 
         <DialogContentText className={classes.helpContent}>
