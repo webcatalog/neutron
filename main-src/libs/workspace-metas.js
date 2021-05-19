@@ -30,7 +30,7 @@ const refreshBadgeCount = (browserWindow) => {
   if (getPreference('unreadCountBadge')) {
     const metas = getWorkspaceMetas();
     Object.values(metas).forEach((m) => {
-      if (m && m.badgeCount) {
+      if (m && m.badgeCount && typeof m.badgeCount === 'number' && !Number.isNaN(m.badgeCount)) {
         count += m.badgeCount;
       }
     });
