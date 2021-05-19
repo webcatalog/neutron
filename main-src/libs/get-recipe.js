@@ -14,6 +14,7 @@ const mapper = {
   'mail.yahoo.com': 'yahoo-mail',
   'instagram.com': 'instagram',
   'feedly.com': 'feedly',
+  'voice.google.com': 'google-voice',
 };
 
 const getRecipe = (url) => {
