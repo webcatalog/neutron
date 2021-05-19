@@ -4,6 +4,7 @@
 const { app } = require('electron');
 const path = require('path');
 const sendToAllWindows = require('./send-to-all-windows');
+const { getPreference } = require('./preferences');
 
 // to keep workspace variables (meta) that
 // are not saved to disk
@@ -23,18 +24,21 @@ const setWorkspaceMeta = (id, opts) => {
   sendToAllWindows('set-workspace-meta', id, getWorkspaceMeta(id));
 };
 
-const setWorkspaceBadgeCount = (workspaceId, badgeCount, browserWindow) => {
-  setWorkspaceMeta(workspaceId, {
-    badgeCount,
-  });
-
+const refreshBadgeCount = (browserWindow) => {
   let count = 0;
-  const metas = getWorkspaceMetas();
-  Object.values(metas).forEach((m) => {
-    if (m && m.badgeCount) {
-      count += m.badgeCount;
-    }
-  });
+
+  if (getPreference('unreadCountBadge')) {
+    const metas = getWorkspaceMetas();
+    Object.values(metas).forEach((m) => {
+      if (m && m.badgeCount && typeof m.badgeCount === 'number' && !Number.isNaN(m.badgeCount)) {
+        count += m.badgeCount;
+      }
+    });
+  }
+
+  if (typeof count === 'number' && !Number.isNaN(count)) {
+    count = 0;
+  }
 
   app.badgeCount = count;
 
@@ -54,9 +58,18 @@ const setWorkspaceBadgeCount = (workspaceId, badgeCount, browserWindow) => {
   }
 };
 
+const setWorkspaceBadgeCount = (workspaceId, badgeCount, browserWindow) => {
+  setWorkspaceMeta(workspaceId, {
+    badgeCount,
+  });
+
+  refreshBadgeCount(browserWindow);
+};
+
 module.exports = {
   getWorkspaceMeta,
   getWorkspaceMetas,
   setWorkspaceMeta,
   setWorkspaceBadgeCount,
+  refreshBadgeCount,
 };

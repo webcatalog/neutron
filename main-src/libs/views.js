@@ -107,7 +107,7 @@ const getBadgeCountFromTitle = (title) => {
     const matches = badgeRules[i].exec(strippedTitle);
     const incStr = matches ? matches[1] : '';
     const inc = parseInt(incStr, 10);
-    if (inc) return inc;
+    if (inc && typeof inc === 'number' && !Number.isNaN(inc)) return inc;
   }
   return 0;
 };
@@ -802,7 +802,7 @@ const addView = (browserWindow, workspace) => {
   view.webContents.session.on('will-download', willDownloadListener);
 
   // Unread count badge
-  if (global.unreadCountBadge) {
+  if (getPreference('unreadCountBadge')) {
     view.webContents.usePageTitle = true;
     view.webContents.on('page-title-updated', (e, title) => {
       if (!view.webContents.usePageTitle) return;

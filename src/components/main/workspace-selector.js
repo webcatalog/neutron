@@ -235,7 +235,12 @@ const WorkspaceSelector = ({
       }}
       title={hoverText}
     >
-      <Badge color="secondary" badgeContent={badgeCount} max={99} classes={{ badge: classes.badge }}>
+      <Badge
+        color="secondary"
+        badgeContent={typeof badgeCount === 'number' && !Number.isNaN(badgeCount) ? badgeCount : 0}
+        max={99}
+        classes={{ badge: classes.badge }}
+      >
         <div
           className={classnames(
             classes.avatar,
@@ -327,7 +332,8 @@ WorkspaceSelector.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => ({
-  badgeCount: state.workspaceMetas[ownProps.id] ? state.workspaceMetas[ownProps.id].badgeCount : 0,
+  badgeCount: state.preferences.unreadCountBadge && state.workspaceMetas[ownProps.id]
+    ? state.workspaceMetas[ownProps.id].badgeCount : 0,
   searchEngine: state.preferences.searchEngine,
   shouldUseDarkColors: state.general.shouldUseDarkColors,
   sidebarSize: state.preferences.sidebarSize,

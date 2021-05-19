@@ -1101,7 +1101,6 @@ const Preferences = ({
                   checked={unreadCountBadge}
                   onChange={(e) => {
                     requestSetPreference('unreadCountBadge', e.target.checked);
-                    enqueueRequestRestartSnackbar();
                   }}
                 />
               </ListItemSecondaryAction>
