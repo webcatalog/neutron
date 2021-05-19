@@ -41,6 +41,7 @@ const {
 const {
   getWorkspaceMeta,
   getWorkspaceMetas,
+  refreshBadgeCount,
 } = require('../libs/workspace-metas');
 
 const {
@@ -668,6 +669,13 @@ const loadListeners = () => {
           shareMenu.popup(win);
         }
       }
+    }
+  });
+
+  ipcMain.on('request-refresh-badge-count', () => {
+    const win = mainWindow.get();
+    if (win) {
+      refreshBadgeCount(win);
     }
   });
 };

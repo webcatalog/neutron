@@ -222,6 +222,10 @@ const setPreference = (name, value) => {
     ipcMain.emit('request-set-views-audio-prefs');
     ipcMain.emit('create-menu');
   }
+
+  if (name === 'unreadCountBadge') {
+    ipcMain.emit('request-refresh-badge-count');
+  }
 };
 
 const resetPreferences = () => {

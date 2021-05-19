@@ -20,7 +20,14 @@ const getRecipe = require('./get-recipe');
 contextBridge.exposeInMainWorld(
   'webcatalog',
   {
-    setBadgeCount: (count = 0) => ipcRenderer.invoke('set-web-contents-badge', count),
+    setBadgeCount: (count = 0) => {
+      if (typeof count !== 'number') {
+        // eslint-disable-next-line no-console
+        console.log('webcatalog.setBadgeCount() only accepts number as input');
+        return;
+      }
+      ipcRenderer.invoke('set-web-contents-badge', count);
+    },
     clearSiteData: () => ipcRenderer.invoked('flush-web-contents-app-data'),
   },
 );

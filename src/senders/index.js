@@ -87,6 +87,7 @@ export const requestSetViewsAudioPrefs = () => window.ipcRenderer.send('request-
 // Workspace Meta
 export const getWorkspaceMeta = (id) => window.ipcRenderer.sendSync('get-workspace-meta', id);
 export const getWorkspaceMetas = () => window.ipcRenderer.sendSync('get-workspace-metas');
+export const requestBadgeCount = () => window.ipcRenderer.send('refresh-badge-count');
 
 // Find In Page
 export const requestFindInPage = (text, forward) => window.ipcRenderer.send('request-find-in-page', text, forward);

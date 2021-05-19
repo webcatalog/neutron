@@ -16,8 +16,7 @@ window.addEventListener('load', () => {
       }
     }
 
-    // eslint-disable-next-line no-restricted-properties
-    if (window.isNaN(count)) {
+    if (typeof count !== 'number' || Number.isNaN(count)) {
       count = 0;
     }
 

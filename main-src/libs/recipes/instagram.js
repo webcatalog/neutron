@@ -12,8 +12,7 @@ window.addEventListener('load', () => {
       count = parseInt(element.innerText, 10);
     }
 
-    // eslint-disable-next-line no-restricted-properties
-    if (window.isNaN(count)) {
+    if (typeof count !== 'number' || Number.isNaN(count)) {
       count = 0;
     }
 

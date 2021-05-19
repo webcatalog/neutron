@@ -442,7 +442,6 @@ if (!gotTheLock) {
       spellcheckLanguages,
       titleBar,
       trayIcon,
-      unreadCountBadge,
       useSystemTitleBar,
       windowButtons,
     } = getPreferences();
@@ -482,7 +481,6 @@ if (!gotTheLock) {
     global.shareWorkspaceBrowsingData = shareWorkspaceBrowsingData;
     global.spellcheck = spellcheck;
     global.spellcheckLanguages = spellcheckLanguages;
-    global.unreadCountBadge = unreadCountBadge;
     global.proxyBypassRules = proxyBypassRules;
     global.proxyPacScript = proxyPacScript;
     global.proxyRules = `${proxyProtocol}://${proxyAddress}:${proxyPort || '80'}`;
