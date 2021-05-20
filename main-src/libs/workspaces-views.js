@@ -134,7 +134,7 @@ const removeWorkspaceView = (id) => {
     const win = mainWindow.get();
     if (win) {
       win.setBrowserView(null);
-      win.setTitle(appJson.name);
+      win.refreshTitle('');
       sendToAllWindows('update-title', '');
     }
   } else if (countWorkspaces() > 1 && getWorkspace(id).active) {

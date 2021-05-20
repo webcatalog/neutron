@@ -5,6 +5,7 @@ const { app } = require('electron');
 const path = require('path');
 const sendToAllWindows = require('./send-to-all-windows');
 const { getPreference } = require('./preferences');
+const mainWindow = require('../windows/main');
 
 // to keep workspace variables (meta) that
 // are not saved to disk
@@ -40,6 +41,7 @@ const refreshBadgeCount = (browserWindow) => {
     count = 0;
   }
 
+  global.badgeCount = count;
   app.badgeCount = count;
 
   if (process.platform === 'win32') {
@@ -56,6 +58,8 @@ const refreshBadgeCount = (browserWindow) => {
       }
     }
   }
+
+  mainWindow.get().refreshTitle();
 };
 
 const setWorkspaceBadgeCount = (workspaceId, badgeCount, browserWindow) => {

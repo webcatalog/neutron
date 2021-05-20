@@ -501,7 +501,7 @@ const addView = (browserWindow, workspace) => {
     if (workspaceObj.active) {
       sendToAllWindows('update-title', title);
       if (browserWindow && !browserWindow.isDestroyed()) {
-        browserWindow.setTitle(title);
+        browserWindow.refreshTitle(title);
       }
     }
   });
@@ -1061,7 +1061,7 @@ const setActiveView = (browserWindow, id) => {
     sendToAllWindows('update-title', view.webContents.getTitle());
     sendToAllWindows('update-can-go-back', view.webContents.canGoBack());
     sendToAllWindows('update-can-go-forward', view.webContents.canGoForward());
-    browserWindow.setTitle(view.webContents.getTitle());
+    browserWindow.refreshTitle(view.webContents.getTitle());
   }
 };
 
