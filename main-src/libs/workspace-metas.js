@@ -5,7 +5,6 @@ const { app } = require('electron');
 const path = require('path');
 const sendToAllWindows = require('./send-to-all-windows');
 const { getPreference } = require('./preferences');
-const setWindowTitle = require('./set-window-title');
 const mainWindow = require('../windows/main');
 
 // to keep workspace variables (meta) that
@@ -60,7 +59,7 @@ const refreshBadgeCount = (browserWindow) => {
     }
   }
 
-  setWindowTitle(mainWindow.get());
+  mainWindow.get().refreshTitle();
 };
 
 const setWorkspaceBadgeCount = (workspaceId, badgeCount, browserWindow) => {

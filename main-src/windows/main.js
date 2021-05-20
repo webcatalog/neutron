@@ -24,6 +24,7 @@ const appJson = require('../constants/app-json');
 let win;
 let mb = {};
 let tray;
+let cachedBrowserViewTitle = '';
 
 const get = () => {
   if (global.attachToMenubar) return mb.window;
@@ -31,6 +32,30 @@ const get = () => {
 };
 
 const createAsync = () => new Promise((resolve) => {
+  const refreshTitle = (browserWindow, _browserViewTitle) => {
+    let browserViewTitle = cachedBrowserViewTitle;
+    if (typeof _browserViewTitle === 'string') {
+      browserViewTitle = _browserViewTitle;
+      cachedBrowserViewTitle = _browserViewTitle;
+    }
+
+    let { badgeCount } = global;
+    if (typeof badgeCount !== 'number' || Number.isNaN(badgeCount)) {
+      badgeCount = 0;
+    }
+
+    let prefixTitle = app.name;
+    if (badgeCount > 0) {
+      prefixTitle = `${app.name} (${badgeCount})`;
+    }
+
+    if (browserViewTitle !== '') {
+      browserWindow.setTitle(`${prefixTitle} - ${browserViewTitle}`);
+    } else {
+      browserWindow.setTitle(prefixTitle);
+    }
+  };
+
   const handleTrayRightClick = () => {
     const muteApp = getPreference('muteApp');
     const lockMenuItems = Boolean(global.appLock) && !global.locked ? [
@@ -155,6 +180,10 @@ const createAsync = () => new Promise((resolve) => {
     });
 
     mb.on('after-create-window', () => {
+      mb.window.refreshTitle = (...args) => {
+        refreshTitle(mb.window, ...args);
+      };
+
       menubarWindowState.manage(mb.window);
       contextMenu({ window: mb.window });
 
@@ -218,6 +247,10 @@ const createAsync = () => new Promise((resolve) => {
       : path.resolve(__dirname, '..', '..', 'public', 'dock-icon.png');
   }
   win = new BrowserWindow(winOpts);
+
+  win.refreshTitle = (...args) => {
+    refreshTitle(win, ...args);
+  };
 
   contextMenu({ window: win });
 

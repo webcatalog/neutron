@@ -44,7 +44,6 @@ const isMas = require('./is-mas');
 const getUtmSource = require('./get-utm-source');
 const getWorkspaceFriendlyName = require('./get-workspace-friendly-name');
 const isStandalone = require('./is-standalone');
-const setWindowTitle = require('./set-window-title');
 
 const views = {};
 let shouldMuteAudio;
@@ -502,7 +501,7 @@ const addView = (browserWindow, workspace) => {
     if (workspaceObj.active) {
       sendToAllWindows('update-title', title);
       if (browserWindow && !browserWindow.isDestroyed()) {
-        setWindowTitle(browserWindow, title);
+        browserWindow.refreshTitle(title);
       }
     }
   });
@@ -1062,7 +1061,7 @@ const setActiveView = (browserWindow, id) => {
     sendToAllWindows('update-title', view.webContents.getTitle());
     sendToAllWindows('update-can-go-back', view.webContents.canGoBack());
     sendToAllWindows('update-can-go-forward', view.webContents.canGoForward());
-    setWindowTitle(browserWindow, view.webContents.getTitle());
+    browserWindow.refreshTitle(view.webContents.getTitle());
   }
 };
 
