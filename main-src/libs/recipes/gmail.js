@@ -6,9 +6,11 @@ window.addEventListener('load', () => {
   const getBadgeCount = () => {
     let count = 0;
 
-    if (document.getElementsByClassName('J-Ke n0').length > 0) {
-      if (document.getElementsByClassName('J-Ke n0')[0].getAttribute('aria-label') != null) {
-        count = parseInt(document.getElementsByClassName('J-Ke n0')[0].getAttribute('aria-label').replace(/[^0-9.]/g, ''), 10);
+    const sidebarItemNodes = document.getElementsByClassName('J-Ke n0');
+    if (sidebarItemNodes.length > 0) {
+      const primaryBadgeNode = sidebarItemNodes[0].parentNode.nextSibling;
+      if (primaryBadgeNode) {
+        count = parseInt(primaryBadgeNode.innerText, 10);
       }
     }
 
