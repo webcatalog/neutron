@@ -38,7 +38,7 @@ const refreshBadgeCount = (browserWindow) => {
     });
   }
 
-  if (typeof count === 'number' && !Number.isNaN(count)) {
+  if (typeof count !== 'number' || Number.isNaN(count)) {
     count = 0;
   }
 
