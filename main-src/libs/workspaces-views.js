@@ -43,6 +43,7 @@ const sendToAllWindows = require('./send-to-all-windows');
 const extractHostname = require('./extract-hostname');
 const promptSetAsDefaultMailClient = require('./prompt-set-as-default-email-client');
 const promptSetAsDefaultCalendarApp = require('./prompt-set-as-default-calendar-app');
+const setWindowTitle = require('./set-window-title');
 const MAILTO_URLS = require('../constants/mailto-urls');
 const WEBCAL_URLS = require('../constants/webcal-urls');
 
@@ -134,7 +135,7 @@ const removeWorkspaceView = (id) => {
     const win = mainWindow.get();
     if (win) {
       win.setBrowserView(null);
-      win.setTitle(appJson.name);
+      setWindowTitle(win);
       sendToAllWindows('update-title', '');
     }
   } else if (countWorkspaces() > 1 && getWorkspace(id).active) {
