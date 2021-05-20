@@ -8,7 +8,7 @@ window.addEventListener('load', () => {
 
     const sidebarItemNodes = document.getElementsByClassName('J-Ke n0');
     if (sidebarItemNodes.length > 0) {
-      const primaryBadgeNode = sidebarItemNodes[0].parentNode.nextSibling;
+      const primaryBadgeNode = sidebarItemNodes[0].parentNode.nextSibling; // .bsU
       if (primaryBadgeNode) {
         count = parseInt(primaryBadgeNode.innerText, 10);
       }
