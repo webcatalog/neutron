@@ -507,6 +507,7 @@ const addView = (browserWindow, workspace) => {
   });
 
   const handleNewWindow = (e, nextUrl, frameName, disposition, options) => {
+    console.log('handleNewWindow', nextUrl);
     const appUrl = getWorkspace(workspace.id).homeUrl || appJson.url;
     const appDomain = extractDomain(appUrl);
     const currentUrl = e.sender.getURL();
@@ -583,7 +584,8 @@ const addView = (browserWindow, workspace) => {
 
     // load in same window
     if (
-      (appDomain.endsWith('slack.com') && nextDomain.endsWith('slack.com'))
+      // https://app.slack.com/free-willy/: Slack call -> should still be opened in new window
+      (appDomain.endsWith('slack.com') && nextDomain.endsWith('slack.com') && !nextUrl.startsWith('https://app.slack.com/free-willy/'))
       // Google: Add account
       || nextDomain === 'accounts.google.com'
       // Google: Switch account

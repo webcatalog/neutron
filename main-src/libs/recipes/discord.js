@@ -5,7 +5,7 @@ window.addEventListener('load', () => {
   const getBadgeCount = () => {
     // eslint-disable-next-line no-console
     console.log('updating badge');
-    let total = Math.floor(Math.random() * 100);
+    let total = 0;
     try {
       const numberBadges = [...document.querySelector('nav').querySelectorAll('[class^="numberBadge-"]')].map((el) => parseInt(el.innerText, 10));
       numberBadges.forEach((num) => {
