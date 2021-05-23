@@ -1,7 +1,7 @@
 {
-    "id": "clovery",
-    "name": "Clovery",
-    "hostname": "clovery.app",
+    "id": "singlebox",
+    "name": "Singlebox",
+    "hostname": "singlebox.app",
     "macAppStoreId": "1561301796",
     "registered": false,
     "iapProductIdentifier": "pantext_plus"
