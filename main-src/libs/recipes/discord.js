@@ -19,18 +19,11 @@ window.addEventListener('load', () => {
     window.webcatalog.setBadgeCount(total);
   };
 
-  let interval = setInterval(() => {
-    if (document.querySelector('nav')) {
-      // https://blog.sessionstack.com/how-javascript-works-tracking-changes-in-the-dom-using-mutationobserver-86adc7446401
-      const mutationObserver = new window.MutationObserver(() => {
-        updateTitle();
-      });
-      mutationObserver.observe(document.querySelector('link[rel=icon]'), {
-        attributes: true,
-      });
-      updateTitle();
-      clearInterval(interval);
-      interval = null;
-    }
-  }, 1000);
+  const mutationObserver = new window.MutationObserver(() => {
+    updateTitle();
+  });
+  mutationObserver.observe(document.querySelector('link[rel=icon]'), {
+    attributes: true,
+  });
+  updateTitle();
 });
