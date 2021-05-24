@@ -156,6 +156,7 @@ Promise.resolve()
   // https://github.com/castlabs/electron-releases/wiki/EVS
   .then(() => {
     if (process.platform === 'linux') return null;
+    if (process.platform === 'win32' && arch === 'arm64') return null;
     return Promise.resolve()
       .then(() => {
         const cmd = `python3 -m castlabs_evs.vmp sign-pkg "${getPackageDirPath()}"`;
