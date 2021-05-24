@@ -213,7 +213,7 @@ Promise.resolve()
         path.join(TEMPLATE_PATH, 'evs', 'Electron Framework.sig'),
       ));
     }
-    if (process.platform === 'win32') {
+    if (process.platform === 'win32' && arch === 'x64') {
       tasks.push(fs.copy(
         path.join(dotAppPath, `${appName}.exe.sig`),
         path.join(TEMPLATE_PATH, 'evs', 'app.exe.sig'),

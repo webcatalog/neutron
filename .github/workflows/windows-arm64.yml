@@ -42,15 +42,15 @@ jobs:
     # https://github.com/mui-org/material-ui/issues/12432
     - run: yarn --prefer-offline --network-timeout 600000
     - run: yarn lint
-    - name: Set up Castlabs EVS
-      run: |
-        python3 -m pip install --upgrade castlabs-evs
-        python3 -m castlabs_evs.account reauth -A $CASTLABS_EVS_ACCOUNT_NAME -P $CASTLABS_EVS_PASSWORD
-      shell: bash
-      env:
-        EVS_NO_ASK: 1
-        CASTLABS_EVS_ACCOUNT_NAME: ${{ secrets.CASTLABS_EVS_ACCOUNT_NAME }}
-        CASTLABS_EVS_PASSWORD: ${{ secrets.CASTLABS_EVS_PASSWORD }}
+    # - name: Set up Castlabs EVS
+    #   run: |
+    #     python3 -m pip install --upgrade castlabs-evs
+    #     python3 -m castlabs_evs.account reauth -A $CASTLABS_EVS_ACCOUNT_NAME -P $CASTLABS_EVS_PASSWORD
+    #   shell: bash
+    #   env:
+    #     EVS_NO_ASK: 1
+    #     CASTLABS_EVS_ACCOUNT_NAME: ${{ secrets.CASTLABS_EVS_ACCOUNT_NAME }}
+    #     CASTLABS_EVS_PASSWORD: ${{ secrets.CASTLABS_EVS_PASSWORD }}
     - run: yarn dist
       env:
         REACT_APP_AMPLITUDE_API_KEY: ${{ secrets.REACT_APP_AMPLITUDE_API_KEY }}
