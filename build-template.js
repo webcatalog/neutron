@@ -6,6 +6,9 @@ const path = require('path');
 const fs = require('fs-extra');
 const tmp = require('tmp');
 const builder = require('electron-builder');
+const { exec } = require('child_process');
+
+const packageJson = require('./package.json');
 
 const platform = process.env.TEMPLATE_PLATFORM || process.platform;
 const arch = process.env.TEMPLATE_ARCH || 'x64';
@@ -23,12 +26,31 @@ const DIST_PATH = path.join(__dirname, 'dist');
 const APP_PATH = tmp.dirSync().name;
 const TEMPLATE_PATH = path.join(DIST_PATH, 'template');
 
-const getDotAppPath = () => {
+const execAsync = (cmd, opts = {}) => new Promise((resolve, reject) => {
+  exec(cmd, opts, (e, stdout, stderr) => {
+    if (e instanceof Error) {
+      reject(e);
+      return;
+    }
+
+    if (stderr) {
+      reject(new Error(stderr));
+      return;
+    }
+
+    resolve(stdout);
+  });
+});
+
+// The path/to/package-directroy means the path to the directory that contains your
+// .app or .exe, NOT the path to the .app or .exe themselves.
+// You can pass multiple paths to sign several packages in one go.
+const getPackageDirPath = () => {
   if (platform === 'darwin') {
     if (arch === 'arm64') {
-      return path.join(APP_PATH, 'mac-arm64', `${appName}.app`);
+      return path.join(APP_PATH, 'mac-arm64');
     }
-    return path.join(APP_PATH, 'mac', `${appName}.app`);
+    return path.join(APP_PATH, 'mac');
   }
   if (platform === 'linux') {
     if (arch === 'arm64') {
@@ -43,6 +65,13 @@ const getDotAppPath = () => {
     return path.join(APP_PATH, 'win-unpacked');
   }
   throw Error('Unsupported platform');
+};
+
+const getDotAppPath = () => {
+  if (platform === 'darwin') {
+    return path.join(getPackageDirPath(), `${appName}.app`);
+  }
+  return getPackageDirPath();
 };
 
 let targets;
@@ -70,6 +99,7 @@ Promise.resolve()
   .then(() => {
     console.log('Creating Juli app at', APP_PATH);
 
+    const electronVersion = packageJson.devDependencies.electron;
     const opts = {
       targets,
       config: {
@@ -103,10 +133,32 @@ Promise.resolve()
           'build/dock-icon@5x.png',
           'package.json',
         ],
+        // use https://github.com/castlabs/electron-releases/releases
+        // to support widevinedrm
+        // https://github.com/castlabs/electron-releases/issues/70#issuecomment-731360649
+        electronDownload: {
+          version: `${electronVersion}-wvvmp`,
+          mirror: 'https://github.com/castlabs/electron-releases/releases/download/v',
+        },
       },
     };
 
     return builder.build(opts);
+  })
+  // sign with Castlabs EVS
+  // https://github.com/castlabs/electron-releases/wiki/EVS
+  .then(() => {
+    const cmd = `python3 -m castlabs_evs.vmp sign-pkg "${getPackageDirPath()}"`;
+    console.log('Running:', cmd);
+    return execAsync(cmd)
+      .then((result) => console.log(result));
+  })
+  .then(() => {
+    // verify
+    const cmd = `python3 -m castlabs_evs.vmp verify-pkg "${getPackageDirPath()}"`;
+    console.log('Running:', cmd);
+    return execAsync(cmd)
+      .then((result) => console.log(result));
   })
   .then(() => {
     // copy all neccessary to unpacked folder
