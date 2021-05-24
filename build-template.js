@@ -133,15 +133,21 @@ Promise.resolve()
           'build/dock-icon@5x.png',
           'package.json',
         ],
-        // use https://github.com/castlabs/electron-releases/releases
-        // to support widevinedrm
-        // https://github.com/castlabs/electron-releases/issues/70#issuecomment-731360649
-        electronDownload: {
-          version: `${electronVersion}-wvvmp`,
-          mirror: 'https://github.com/castlabs/electron-releases/releases/download/v',
-        },
       },
     };
+
+    if (process.platform === 'linux' && arch === 'arm64') {
+      console.log('Packaging using Electron@electron/electron');
+    } else {
+      console.log('Packaging using Electron@castlabs/electron-releases');
+      // use https://github.com/castlabs/electron-releases/releases
+      // to support widevinedrm
+      // https://github.com/castlabs/electron-releases/issues/70#issuecomment-731360649
+      opts.config.electronDownload = {
+        version: `${electronVersion}-wvvmp`,
+        mirror: 'https://github.com/castlabs/electron-releases/releases/download/v',
+      };
+    }
 
     return builder.build(opts);
   })
