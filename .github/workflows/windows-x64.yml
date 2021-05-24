@@ -45,7 +45,7 @@ jobs:
     - name: Set up Castlabs EVS
       run: |
         python3 -m pip install --upgrade castlabs-evs
-        python3 -m castlabs_evs.account reauth -A %CASTLABS_EVS_ACCOUNT_NAME% -P $CASTLABS_EVS_PASSWORD
+        python3 -m castlabs_evs.account reauth -A $CASTLABS_EVS_ACCOUNT_NAME -P $CASTLABS_EVS_PASSWORD
       shell: bash
       env:
         EVS_NO_ASK: 1

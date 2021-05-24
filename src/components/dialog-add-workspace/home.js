@@ -88,7 +88,9 @@ const Home = ({ classes }) => {
   const filters = [
     { field: 'type', values: ['Singlesite'], type: 'all' },
   ];
-  if (isMas()) { // widevine is not supported is mas-build
+  // widevine is not supported is mas-build
+  // widevine is not supported on ARM64 Linux & Windows
+  if (isMas() || (window.process.arch === 'arm64' && window.process.platform !== 'darwin')) {
     filters.push({ field: 'widevine', values: [0], type: 'all' });
   }
   const appJson = getStaticGlobal('appJson');

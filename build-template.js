@@ -136,7 +136,8 @@ Promise.resolve()
       },
     };
 
-    if (process.platform === 'linux' && arch === 'arm64') {
+    // arm64 is only supported on macOS
+    if (arch === 'arm64' && process.platform !== 'darwin') {
       console.log('Packaging using Electron@electron/electron');
     } else {
       console.log('Packaging using Electron@castlabs/electron-releases');
