@@ -151,14 +151,14 @@ Promise.resolve()
     if (process.platform === 'linux') return null;
     return Promise.resolve()
       .then(() => {
-        const cmd = `python3 -m castlabs_evs.vmp sign-pkg "${getPackageDirPath()}"`;
+        const cmd = `python -m castlabs_evs.vmp sign-pkg "${getPackageDirPath()}"`;
         console.log('Running:', cmd);
         return execAsync(cmd)
           .then((result) => console.log(result));
       })
       .then(() => {
         // verify
-        const cmd = `python3 -m castlabs_evs.vmp verify-pkg "${getPackageDirPath()}"`;
+        const cmd = `python -m castlabs_evs.vmp verify-pkg "${getPackageDirPath()}"`;
         console.log('Running:', cmd);
         return execAsync(cmd)
           .then((result) => console.log(result));
@@ -198,6 +198,20 @@ Promise.resolve()
         path.join(TEMPLATE_PATH, 'node_modules', 'electron', 'LICENSE'),
       ),
     ];
+
+    // signature files for Castlabs EVS
+    if (process.platform === 'darwin') {
+      tasks.push(fs.copy(
+        path.join(dotAppPath, 'Contents', 'LICENSE'),
+        path.join(TEMPLATE_PATH, 'evs', ''),
+      ));
+    }
+    if (process.platform === 'win32') {
+      tasks.push(fs.copy(
+        path.join(dotAppPath, `${appName}.exe.sig`),
+        path.join(TEMPLATE_PATH, 'evs', 'app.exe.sig'),
+      ));
+    }
 
     return Promise.all(tasks);
   })
