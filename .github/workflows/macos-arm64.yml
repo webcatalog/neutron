@@ -45,9 +45,9 @@ jobs:
     - run: yarn lint
     - run: brew install p7zip
     - name: Set up Castlabs EVS
-      run:
-        - python3 -m pip install --upgrade castlabs-evs
-        - python3 -m castlabs_evs.account reauth -A $CASTLABS_EVS_ACCOUNT_NAME -P $CASTLABS_EVS_PASSWORD
+      run: |
+        python3 -m pip install --upgrade castlabs-evs
+        python3 -m castlabs_evs.account reauth -A $CASTLABS_EVS_ACCOUNT_NAME -P $CASTLABS_EVS_PASSWORD
       env:
         EVS_NO_ASK: 1
         CASTLABS_EVS_ACCOUNT_NAME: ${{ secrets.CASTLABS_EVS_ACCOUNT_NAME }}
