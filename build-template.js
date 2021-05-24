@@ -155,8 +155,7 @@ Promise.resolve()
   // sign with Castlabs EVS
   // https://github.com/castlabs/electron-releases/wiki/EVS
   .then(() => {
-    if (process.platform === 'linux') return null;
-    if (process.platform === 'win32' && arch === 'arm64') return null;
+    if (process.platform === 'linux' || process.platform === 'win32') return null;
     return Promise.resolve()
       .then(() => {
         const cmd = `python3 -m castlabs_evs.vmp sign-pkg "${getPackageDirPath()}"`;
@@ -212,12 +211,6 @@ Promise.resolve()
       tasks.push(fs.copy(
         path.join(dotAppPath, 'Contents', 'Frameworks', 'Electron Framework.framework', 'Versions', 'A', 'Resources', 'Electron Framework.sig'),
         path.join(TEMPLATE_PATH, 'evs', 'Electron Framework.sig'),
-      ));
-    }
-    if (process.platform === 'win32' && arch === 'x64') {
-      tasks.push(fs.copy(
-        path.join(dotAppPath, `${appName}.exe.sig`),
-        path.join(TEMPLATE_PATH, 'evs', 'app.exe.sig'),
       ));
     }
 

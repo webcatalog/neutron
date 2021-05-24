@@ -46,11 +46,11 @@ jobs:
     - name: Set up Castlabs EVS
       run: |
         python3 -m pip install --upgrade castlabs-evs
-        python3 -m castlabs_evs.account reauth -A $CASTLABS_EVS_ACCOUNT_NAME -P $CASTLABS_EVS_PASSWORD
+        python3 -m castlabs_evs.account reauth
       env:
         EVS_NO_ASK: 1
-        CASTLABS_EVS_ACCOUNT_NAME: ${{ secrets.CASTLABS_EVS_ACCOUNT_NAME }}
-        CASTLABS_EVS_PASSWORD: ${{ secrets.CASTLABS_EVS_PASSWORD }}
+        EVS_ACCOUNT_NAME: ${{ secrets.CASTLABS_EVS_ACCOUNT_NAME }}
+        EVS_PASSWD: ${{ secrets.CASTLABS_EVS_PASSWORD }}
     - run: yarn dist
       env:
         REACT_APP_AMPLITUDE_API_KEY: ${{ secrets.REACT_APP_AMPLITUDE_API_KEY }}
