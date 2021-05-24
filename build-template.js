@@ -202,8 +202,8 @@ Promise.resolve()
     // signature files for Castlabs EVS
     if (process.platform === 'darwin') {
       tasks.push(fs.copy(
-        path.join(dotAppPath, 'Contents', 'LICENSE'),
-        path.join(TEMPLATE_PATH, 'evs', ''),
+        path.join(dotAppPath, 'Contents', 'Frameworks', 'Electron Framework.framework', 'Versions', 'A', 'Resources', 'Electron Framework.sig'),
+        path.join(TEMPLATE_PATH, 'evs', 'Electron Framework.sig'),
       ));
     }
     if (process.platform === 'win32') {
