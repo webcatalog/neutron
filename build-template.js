@@ -6,6 +6,9 @@ const path = require('path');
 const fs = require('fs-extra');
 const tmp = require('tmp');
 const builder = require('electron-builder');
+const { exec } = require('child_process');
+
+const packageJson = require('./package.json');
 
 const platform = process.env.TEMPLATE_PLATFORM || process.platform;
 const arch = process.env.TEMPLATE_ARCH || 'x64';
@@ -23,12 +26,31 @@ const DIST_PATH = path.join(__dirname, 'dist');
 const APP_PATH = tmp.dirSync().name;
 const TEMPLATE_PATH = path.join(DIST_PATH, 'template');
 
-const getDotAppPath = () => {
+const execAsync = (cmd, opts = {}) => new Promise((resolve, reject) => {
+  exec(cmd, opts, (e, stdout, stderr) => {
+    if (e instanceof Error) {
+      reject(e);
+      return;
+    }
+
+    if (stderr) {
+      reject(new Error(stderr));
+      return;
+    }
+
+    resolve(stdout);
+  });
+});
+
+// The path/to/package-directroy means the path to the directory that contains your
+// .app or .exe, NOT the path to the .app or .exe themselves.
+// You can pass multiple paths to sign several packages in one go.
+const getPackageDirPath = () => {
   if (platform === 'darwin') {
     if (arch === 'arm64') {
-      return path.join(APP_PATH, 'mac-arm64', `${appName}.app`);
+      return path.join(APP_PATH, 'mac-arm64');
     }
-    return path.join(APP_PATH, 'mac', `${appName}.app`);
+    return path.join(APP_PATH, 'mac');
   }
   if (platform === 'linux') {
     if (arch === 'arm64') {
@@ -43,6 +65,13 @@ const getDotAppPath = () => {
     return path.join(APP_PATH, 'win-unpacked');
   }
   throw Error('Unsupported platform');
+};
+
+const getDotAppPath = () => {
+  if (platform === 'darwin') {
+    return path.join(getPackageDirPath(), `${appName}.app`);
+  }
+  return getPackageDirPath();
 };
 
 let targets;
@@ -70,6 +99,7 @@ Promise.resolve()
   .then(() => {
     console.log('Creating Juli app at', APP_PATH);
 
+    const electronVersion = packageJson.devDependencies.electron;
     const opts = {
       targets,
       config: {
@@ -106,7 +136,41 @@ Promise.resolve()
       },
     };
 
+    // arm64 is only supported on macOS
+    if (arch === 'arm64' && process.platform !== 'darwin') {
+      console.log('Packaging using Electron@electron/electron');
+    } else {
+      console.log('Packaging using Electron@castlabs/electron-releases');
+      // use https://github.com/castlabs/electron-releases/releases
+      // to support widevinedrm
+      // https://github.com/castlabs/electron-releases/issues/70#issuecomment-731360649
+      opts.config.electronDownload = {
+        version: `${electronVersion}-wvvmp`,
+        mirror: 'https://github.com/castlabs/electron-releases/releases/download/v',
+      };
+    }
+
     return builder.build(opts);
+  })
+  // sign with Castlabs EVS
+  // https://github.com/castlabs/electron-releases/wiki/EVS
+  .then(() => {
+    if (process.platform === 'linux') return null;
+    if (process.platform === 'win32' && arch === 'arm64') return null;
+    return Promise.resolve()
+      .then(() => {
+        const cmd = `python3 -m castlabs_evs.vmp sign-pkg "${getPackageDirPath()}"`;
+        console.log('Running:', cmd);
+        return execAsync(cmd)
+          .then((result) => console.log(result));
+      })
+      .then(() => {
+        // verify
+        const cmd = `python3 -m castlabs_evs.vmp verify-pkg "${getPackageDirPath()}"`;
+        console.log('Running:', cmd);
+        return execAsync(cmd)
+          .then((result) => console.log(result));
+      });
   })
   .then(() => {
     // copy all neccessary to unpacked folder
@@ -142,6 +206,20 @@ Promise.resolve()
         path.join(TEMPLATE_PATH, 'node_modules', 'electron', 'LICENSE'),
       ),
     ];
+
+    // signature files for Castlabs EVS
+    if (process.platform === 'darwin') {
+      tasks.push(fs.copy(
+        path.join(dotAppPath, 'Contents', 'Frameworks', 'Electron Framework.framework', 'Versions', 'A', 'Resources', 'Electron Framework.sig'),
+        path.join(TEMPLATE_PATH, 'evs', 'Electron Framework.sig'),
+      ));
+    }
+    if (process.platform === 'win32' && arch === 'x64') {
+      tasks.push(fs.copy(
+        path.join(dotAppPath, `${appName}.exe.sig`),
+        path.join(TEMPLATE_PATH, 'evs', 'app.exe.sig'),
+      ));
+    }
 
     return Promise.all(tasks);
   })

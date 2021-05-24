@@ -15,6 +15,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 import connectComponent from '../../helpers/connect-component';
 import getStaticGlobal from '../../helpers/get-static-global';
+import isMas from '../../helpers/is-mas';
 
 import AppCard from './app-card';
 import SubmitAppCard from './submit-app-card';
@@ -86,8 +87,12 @@ const Home = ({ classes }) => {
 
   const filters = [
     { field: 'type', values: ['Singlesite'], type: 'all' },
-    { field: 'widevine', values: [0], type: 'all' },
   ];
+  // widevine is not supported is mas-build
+  // widevine is not supported on ARM64 Linux & Windows
+  if (isMas() || (window.process.arch === 'arm64' && window.process.platform !== 'darwin')) {
+    filters.push({ field: 'widevine', values: [0], type: 'all' });
+  }
   const appJson = getStaticGlobal('appJson');
   const appJsonId = appJson.id;
   if (appJsonId.startsWith('group-')) {
