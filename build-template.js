@@ -148,17 +148,21 @@ Promise.resolve()
   // sign with Castlabs EVS
   // https://github.com/castlabs/electron-releases/wiki/EVS
   .then(() => {
-    const cmd = `python3 -m castlabs_evs.vmp sign-pkg "${getPackageDirPath()}"`;
-    console.log('Running:', cmd);
-    return execAsync(cmd)
-      .then((result) => console.log(result));
-  })
-  .then(() => {
-    // verify
-    const cmd = `python3 -m castlabs_evs.vmp verify-pkg "${getPackageDirPath()}"`;
-    console.log('Running:', cmd);
-    return execAsync(cmd)
-      .then((result) => console.log(result));
+    if (process.platform === 'linux') return null;
+    return Promise.resolve()
+      .then(() => {
+        const cmd = `python3 -m castlabs_evs.vmp sign-pkg "${getPackageDirPath()}"`;
+        console.log('Running:', cmd);
+        return execAsync(cmd)
+          .then((result) => console.log(result));
+      })
+      .then(() => {
+        // verify
+        const cmd = `python3 -m castlabs_evs.vmp verify-pkg "${getPackageDirPath()}"`;
+        console.log('Running:', cmd);
+        return execAsync(cmd)
+          .then((result) => console.log(result));
+      });
   })
   .then(() => {
     // copy all neccessary to unpacked folder
