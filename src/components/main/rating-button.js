@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import IconButton from '@material-ui/core/IconButton';
@@ -23,6 +23,13 @@ const RatingButton = ({
   ratingLastClicked,
   size,
 }) => {
+  // avoid asking for review immediately when user first starts using the app
+  useEffect(() => {
+    if (ratingLastClicked < 1) {
+      requestSetPreference('ratingLastClicked', Date.now());
+    }
+  }, [ratingLastClicked]);
+
   // for WebCatalog builds
   // hide this button
   if (!isMas()) {

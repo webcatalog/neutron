@@ -21,6 +21,7 @@ const styles = (theme) => ({
     paddingBottom: theme.spacing(2),
     paddingLeft: 0,
     paddingRight: 0,
+    overflow: 'auto',
   },
   text: {
     paddingLeft: theme.spacing(2),
@@ -58,8 +59,10 @@ class DisplayMedia extends React.Component {
           The app wants to use the contents of your screen. Choose what you’d like to share.
         </Typography>
         <List>
+          <ListSubheader disableSticky>Screens</ListSubheader>
           {screenSources.map((source) => (
             <ListItem
+              key={source.id}
               button
               onClick={() => {
                 window.ipcRenderer.send('display-media-selected', source.id);
@@ -72,6 +75,7 @@ class DisplayMedia extends React.Component {
           <ListSubheader disableSticky>Windows</ListSubheader>
           {windowSources.map((source) => (
             <ListItem
+              key={source.id}
               button
               onClick={() => {
                 window.ipcRenderer.send('display-media-selected', source.id);
