@@ -6,11 +6,21 @@ window.addEventListener('load', () => {
   const getBadgeCount = () => {
     let count = 0;
 
-    const sidebarItemNodes = document.getElementsByClassName('J-Ke n0');
-    if (sidebarItemNodes.length > 0) {
-      const primaryBadgeNode = sidebarItemNodes[0].parentNode.nextSibling; // .bsU
-      if (primaryBadgeNode) {
-        count = parseInt(primaryBadgeNode.innerText, 10);
+    // Google Chat is merged with Gmail
+    // handle Google Chat
+    if (window.location.href.startsWith('https://mail.google.com/chat')) {
+      const badgeNode = document.querySelector('span.XU');
+      if (badgeNode) {
+        count = parseInt(badgeNode.innerText, 10);
+      }
+    // Handle Gmail
+    } else {
+      const sidebarItemNodes = document.getElementsByClassName('J-Ke n0');
+      if (sidebarItemNodes.length > 0) {
+        const primaryBadgeNode = sidebarItemNodes[0].parentNode.nextSibling; // .bsU
+        if (primaryBadgeNode) {
+          count = parseInt(primaryBadgeNode.innerText, 10);
+        }
       }
     }
 
