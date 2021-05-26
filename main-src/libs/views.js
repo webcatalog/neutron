@@ -295,13 +295,6 @@ const addView = (browserWindow, workspace) => {
     const currentUaStr = contents.userAgent;
 
     const customUserAgent = getWorkspacePreference(workspace.id, 'customUserAgent') || getPreference('customUserAgent');
-    if (customUserAgent) {
-      if (currentUaStr !== customUserAgent) {
-        contents.userAgent = customUserAgent;
-        return true;
-      }
-      return false;
-    }
 
     const navigatedDomain = extractDomain(url);
     if (navigatedDomain === 'accounts.google.com') {
@@ -321,6 +314,12 @@ const addView = (browserWindow, workspace) => {
         console.log('Changed user agent to', fakedSafariUaStr, 'for web compatibility URL: ', url, 'when', occasion);
         return true;
       }
+    } else if (customUserAgent) {
+      if (currentUaStr !== customUserAgent) {
+        contents.userAgent = customUserAgent;
+        return true;
+      }
+      return false;
     } else if (currentUaStr !== app.userAgentFallback) {
       contents.userAgent = app.userAgentFallback;
       // eslint-disable-next-line no-console

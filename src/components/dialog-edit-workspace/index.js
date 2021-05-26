@@ -28,6 +28,7 @@ import getAvatarText from '../../helpers/get-avatar-text';
 import getMailtoUrl from '../../helpers/get-mailto-url';
 import getWebcalUrl from '../../helpers/get-webcal-url';
 import getStaticGlobal from '../../helpers/get-static-global';
+import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
 
 import {
   getIconFromInternet,
@@ -497,7 +498,7 @@ const EditWorkspace = ({
             </ListItemSecondaryAction>
           </ListItem>
           <ListItem disableGutters>
-            <ListItemText primary="Disable notifications" secondary="Prevent workspace from sending notifications." />
+            <ListItemText primary="Disable notifications" secondary={`Prevent ${getWorkspaceFriendlyName().toLowerCase()} from sending notifications.`} />
             <ListItemSecondaryAction>
               <Switch
                 edge="end"
@@ -508,7 +509,7 @@ const EditWorkspace = ({
             </ListItemSecondaryAction>
           </ListItem>
           <ListItem disableGutters>
-            <ListItemText primary="Disable sound" secondary="Prevent workspace from playing audio." />
+            <ListItemText primary="Disable sound" secondary={`Prevent ${getWorkspaceFriendlyName().toLowerCase()} from playing audio.`} />
             <ListItemSecondaryAction>
               <Switch
                 edge="end"
