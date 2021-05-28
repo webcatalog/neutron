@@ -162,7 +162,6 @@ const Preferences = ({
       text: 'Downloads',
       Icon: CloudDownloadIcon,
       ref: useRef(),
-      hidden: isMas(),
     },
     developers: {
       text: 'Developers',
@@ -355,13 +354,13 @@ const Preferences = ({
           </List>
         </Paper>
 
-        {!isMas() && (
-          <>
-            <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.downloads.ref}>
-              Downloads
-            </Typography>
-            <Paper elevation={0} className={classes.paper}>
-              <List disablePadding dense>
+        <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.downloads.ref}>
+          Downloads
+        </Typography>
+        <Paper elevation={0} className={classes.paper}>
+          <List disablePadding dense>
+            {!isMas() && (
+              <>
                 <ListItem
                   button
                   onClick={() => {
@@ -383,30 +382,33 @@ const Preferences = ({
                   <ChevronRightIcon color="action" />
                 </ListItem>
                 <Divider />
-                <ListItem>
-                  <ListItemText primary="Ask where to save each file before downloading" />
-                  <Select
-                    value={formAskForDownloadPath != null ? formAskForDownloadPath : 'global'}
-                    onChange={(e) => onUpdateForm({
-                      askForDownloadPath: e.target.value !== 'global' ? e.target.value : null,
-                    })}
-                    variant="filled"
-                    disableUnderline
-                    margin="dense"
-                    classes={{
-                      root: classes.select,
-                    }}
-                    className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
-                  >
-                    <MenuItem dense value="global">{`Same as global (${askForDownloadPath ? 'Yes' : 'No'})`}</MenuItem>
-                    <MenuItem dense value>Yes</MenuItem>
-                    <MenuItem dense value={false}>No</MenuItem>
-                  </Select>
-                </ListItem>
-              </List>
-            </Paper>
-          </>
-        )}
+              </>
+            )}
+            <ListItem>
+              <ListItemText
+                primary="Ask where to save each file before downloading"
+                secondary={isMas() ? 'Otherwise, download files are always saved to ~/Downloads folder.' : null}
+              />
+              <Select
+                value={formAskForDownloadPath != null ? formAskForDownloadPath : 'global'}
+                onChange={(e) => onUpdateForm({
+                  askForDownloadPath: e.target.value !== 'global' ? e.target.value : null,
+                })}
+                variant="filled"
+                disableUnderline
+                margin="dense"
+                classes={{
+                  root: classes.select,
+                }}
+                className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
+              >
+                <MenuItem dense value="global">{`Same as global (${askForDownloadPath ? 'Yes' : 'No'})`}</MenuItem>
+                <MenuItem dense value>Yes</MenuItem>
+                <MenuItem dense value={false}>No</MenuItem>
+              </Select>
+            </ListItem>
+          </List>
+        </Paper>
 
         <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.developers.ref}>
           Developers
