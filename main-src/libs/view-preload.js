@@ -371,6 +371,11 @@ webFrame.executeJavaScript(`
         });
     };
   }
+
+  window.navigator.setAppBadge = (contents) => {
+    webcatalog.setBadgeCount(contents);
+    return Promise.resolve();
+  };
 })();
 `);
 

@@ -6,21 +6,11 @@ window.addEventListener('load', () => {
   const getBadgeCount = () => {
     let count = 0;
 
-    // Google Chat is merged with Gmail
-    // handle Google Chat
-    if (window.location.href.startsWith('https://mail.google.com/chat')) {
-      const badgeNode = document.querySelector('span.XU');
-      if (badgeNode) {
-        count = parseInt(badgeNode.innerText, 10);
-      }
-    // Handle Gmail
-    } else {
-      const sidebarItemNodes = document.getElementsByClassName('J-Ke n0');
-      if (sidebarItemNodes.length > 0) {
-        const primaryBadgeNode = sidebarItemNodes[0].parentNode.nextSibling; // .bsU
-        if (primaryBadgeNode) {
-          count = parseInt(primaryBadgeNode.innerText, 10);
-        }
+    const sidebarItemNodes = document.getElementsByClassName('J-Ke n0');
+    if (sidebarItemNodes.length > 0) {
+      const primaryBadgeNode = sidebarItemNodes[0].parentNode.nextSibling; // .bsU
+      if (primaryBadgeNode) {
+        count = parseInt(primaryBadgeNode.innerText, 10);
       }
     }
 
@@ -31,13 +21,19 @@ window.addEventListener('load', () => {
     window.webcatalog.setBadgeCount(count);
   };
 
-  getBadgeCount();
-  setInterval(() => {
+  // Google Chat is merged with Gmail
+  // handle Google Chat
+  // Google Chat is using https://developer.mozilla.org/en-US/docs/Web/API/Navigator/setAppBadge'
+  // so no need to run these scripts
+  if (!window.location.href.startsWith('https://mail.google.com/chat')) {
     getBadgeCount();
-  }, 1000);
+    setInterval(() => {
+      getBadgeCount();
+    }, 1000);
 
-  // overwrite gmail email discard button
-  const node = document.createElement('script');
-  node.innerHTML = 'window.close = () => { window.location.href = \'https://mail.google.com\' }';
-  document.body.appendChild(node);
+    // overwrite gmail email discard button
+    const node = document.createElement('script');
+    node.innerHTML = 'window.close = () => { window.location.href = \'https://mail.google.com\' }';
+    document.body.appendChild(node);
+  }
 });
