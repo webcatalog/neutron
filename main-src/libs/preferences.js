@@ -41,7 +41,11 @@ const shouldShowSidebar = !appJson.url || Boolean(MAILTO_URLS[extractHostname(ap
 const defaultPreferences = {
   allowNodeInJsCodeInjection: false,
   alwaysOnTop: false, // for menubar
-  askForDownloadPath: true,
+  // on macOS, save to ~/Downloads by default
+  // because we can bounce the file in dock
+  // also the save dialog is unreliable on macOS, f
+  // for unknown reason, sometimes, it doesn't show up and gets stuck
+  askForDownloadPath: process.platform !== 'darwin',
   attachToMenubar: false,
   autoCheckForUpdates: true,
   autoRefresh: false,
