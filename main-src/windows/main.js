@@ -394,9 +394,7 @@ const show = () => {
     if (mb == null) {
       createAsync();
     } else {
-      mb.on('ready', () => {
-        mb.showWindow();
-      });
+      mb.showWindow();
     }
   } else if (win == null) {
     createAsync();
