@@ -686,7 +686,7 @@ const addView = (browserWindow, workspace) => {
     const globalPreferences = getPreferences();
     const workspacePreferences = getWorkspacePreferences(workspace.id);
     const downloadPath = workspacePreferences.downloadPath || globalPreferences.downloadPath;
-    const askForDownloadPath = isMas() || (workspacePreferences.askForDownloadPath != null
+    const askForDownloadPath = (workspacePreferences.askForDownloadPath != null
       ? workspacePreferences.askForDownloadPath
       : globalPreferences.askForDownloadPath) || global.forceSaveAs;
     // use for "save image as..." feature
@@ -697,8 +697,6 @@ const addView = (browserWindow, workspace) => {
       saveAs: askForDownloadPath,
       // on macOS, if the file is downloaded to default Download dir
       // we bounce the dock icon
-      // for other directories, as they're not on dock, we open the dir in Finder
-      // for other platforms, always open the dir in file explorer
       openFolderWhenDone: globalPreferences.openFolderWhenDoneDownloading,
     };
     const callback = () => {};

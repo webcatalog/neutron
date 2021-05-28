@@ -1231,22 +1231,25 @@ const Preferences = ({
                   <ChevronRightIcon color="action" />
                 </ListItem>
                 <Divider />
-                <ListItem>
-                  <ListItemText primary="Ask where to save each file before downloading" />
-                  <ListItemSecondaryAction>
-                    <Switch
-                      edge="end"
-                      color="primary"
-                      checked={askForDownloadPath}
-                      onChange={(e) => {
-                        requestSetPreference('askForDownloadPath', e.target.checked);
-                      }}
-                    />
-                  </ListItemSecondaryAction>
-                </ListItem>
-                <Divider />
               </>
             )}
+            <ListItem>
+              <ListItemText
+                primary="Ask where to save each file before downloading"
+                secondary={isMas() ? 'Otherwise, download files are always saved to ~/Downloads folder.' : null}
+              />
+              <ListItemSecondaryAction>
+                <Switch
+                  edge="end"
+                  color="primary"
+                  checked={askForDownloadPath}
+                  onChange={(e) => {
+                    requestSetPreference('askForDownloadPath', e.target.checked);
+                  }}
+                />
+              </ListItemSecondaryAction>
+            </ListItem>
+            <Divider />
             <ListItem>
               <ListItemText primary={`Reveal the file in ${getFileManagerName()} when it is downloaded`} />
               <ListItemSecondaryAction>
