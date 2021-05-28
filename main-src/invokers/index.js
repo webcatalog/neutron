@@ -14,7 +14,6 @@ const {
   setWorkspaceBadgeCount,
 } = require('../libs/workspace-metas');
 const { getPauseNotificationsInfo } = require('../libs/notifications');
-const mainWindow = require('../windows/main');
 
 const {
   getAppLockStatusAsync,
@@ -68,7 +67,7 @@ const loadInvokers = () => {
   });
   ipcMain.handle('set-web-contents-badge', (e, num) => {
     e.sender.usePageTitle = false;
-    setWorkspaceBadgeCount(e.sender.workspaceId, num, mainWindow.get());
+    setWorkspaceBadgeCount(e.sender.workspaceId, num);
   });
   // END for Browser
 
