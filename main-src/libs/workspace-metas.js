@@ -25,7 +25,8 @@ const setWorkspaceMeta = (id, opts) => {
   sendToAllWindows('set-workspace-meta', id, getWorkspaceMeta(id));
 };
 
-const refreshBadgeCount = (browserWindow) => {
+const refreshBadgeCount = () => {
+  const browserWindow = mainWindow.get();
   let count = 0;
 
   if (getPreference('unreadCountBadge')) {
@@ -59,21 +60,28 @@ const refreshBadgeCount = (browserWindow) => {
     }
   }
 
-  mainWindow.get().refreshTitle();
+  browserWindow.refreshTitle();
 };
 
-const setWorkspaceBadgeCount = (workspaceId, badgeCount, browserWindow) => {
+const setWorkspaceBadgeCount = (workspaceId, badgeCount) => {
   setWorkspaceMeta(workspaceId, {
     badgeCount,
   });
 
-  refreshBadgeCount(browserWindow);
+  refreshBadgeCount();
+};
+
+const removeWorkspaceMeta = (workspaceId) => {
+  delete workspaceMetas[workspaceId];
+
+  refreshBadgeCount();
 };
 
 module.exports = {
   getWorkspaceMeta,
   getWorkspaceMetas,
   setWorkspaceMeta,
+  removeWorkspaceMeta,
   setWorkspaceBadgeCount,
   refreshBadgeCount,
 };

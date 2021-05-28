@@ -805,7 +805,7 @@ const addView = (browserWindow, workspace) => {
     view.webContents.on('page-title-updated', (e, title) => {
       if (!view.webContents.usePageTitle) return;
       const num = getBadgeCountFromTitle(title);
-      setWorkspaceBadgeCount(workspace.id, num, browserWindow);
+      setWorkspaceBadgeCount(workspace.id, num);
     });
   }
 

@@ -15,6 +15,7 @@ const tmp = require('tmp');
 
 const sendToAllWindows = require('./send-to-all-windows');
 const downloadAsync = require('./download-async');
+const { removeWorkspaceMeta } = require('./workspace-metas');
 
 const appJson = require('../constants/app-json');
 
@@ -303,6 +304,8 @@ const removeWorkspace = (id) => {
   delete workspaces[id];
   sendToAllWindows('set-workspace', id, null);
   settings.unsetSync(`workspaces.${v}.${id}`);
+
+  removeWorkspaceMeta(id);
 
   // remove workspace data from disk
   fs.remove(path.join(app.getPath('userData'), 'Partitions', id))
