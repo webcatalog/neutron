@@ -14,7 +14,7 @@ import hasErrors from '../../helpers/has-errors';
 
 import { requestCreateWorkspace } from '../../senders';
 
-import swiftype from '../../swiftype';
+import appSearch from '../../app-search';
 
 const getValidationRules = () => ({
   name: {
@@ -45,7 +45,7 @@ export const getWebsiteIconUrlAsync = (url) => new Promise((resolve, reject) => 
 export const getWebsiteIconUrlFromSwifttypeAsync = (url, name) => {
   // if it fails, try to get icon from in-house database
   const query = name && name.length > 0 ? `${url} ${name}` : url;
-  return swiftype
+  return appSearch
     .search(query, {
       search_fields: {
         name: {},
@@ -101,7 +101,7 @@ export const getIconFromInternet = () => (dispatch, getState) => {
     }).catch(console.log); // eslint-disable-line no-console
 };
 
-export const getIconFromSwiftype = () => (dispatch, getState) => {
+export const getIconFromAppSearch = () => (dispatch, getState) => {
   const { form: { name, homeUrl, homeUrlError } } = getState().dialogAddWorkspace;
   if (!homeUrl || homeUrlError) return;
 

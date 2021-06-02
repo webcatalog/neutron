@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 
 import {
   WithSearch,
-  SearchBox as SwiftypeSearchBox,
+  SearchBox as AppSearchSearchBox,
 } from '@elastic/react-search-ui';
 
 import Tooltip from '@material-ui/core/Tooltip';
@@ -89,7 +89,7 @@ const SearchBox = ({
         variant="body1"
         component="div"
       >
-        <SwiftypeSearchBox
+        <AppSearchSearchBox
           searchAsYouType
           debounceLength={300}
           inputView={({ getAutocomplete, getInputProps }) => (

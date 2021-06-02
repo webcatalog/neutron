@@ -23,7 +23,7 @@ import getMailtoUrl from '../../helpers/get-mailto-url';
 
 import {
   getIconFromInternet,
-  getIconFromSwiftype,
+  getIconFromAppSearch,
   save,
   updateForm,
 } from '../../state/dialog-add-workspace/actions';
@@ -152,7 +152,7 @@ const AddWorkspaceCustom = ({
   name,
   nameError,
   onGetIconFromInternet,
-  onGetIconFromSwiftype,
+  onGetIconFromAppSearch,
   onSave,
   onUpdateForm,
   picturePath,
@@ -387,7 +387,7 @@ const AddWorkspaceCustom = ({
                   size="small"
                   className={classes.buttonBot}
                   disabled={Boolean(!homeUrl || homeUrlError || downloadingIcon)}
-                  onClick={() => onGetIconFromSwiftype(true)}
+                  onClick={() => onGetIconFromAppSearch(true)}
                 >
                   {downloadingIcon ? 'Downloading...' : 'Download Icon from Our Database'}
                 </Button>
@@ -451,7 +451,7 @@ AddWorkspaceCustom.propTypes = {
   name: PropTypes.string,
   nameError: PropTypes.string,
   onGetIconFromInternet: PropTypes.func.isRequired,
-  onGetIconFromSwiftype: PropTypes.func.isRequired,
+  onGetIconFromAppSearch: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   onUpdateForm: PropTypes.func.isRequired,
   picturePath: PropTypes.string,
@@ -477,7 +477,7 @@ const mapStateToProps = (state) => ({
 
 const actionCreators = {
   getIconFromInternet,
-  getIconFromSwiftype,
+  getIconFromAppSearch,
   save,
   updateForm,
 };
