@@ -32,7 +32,7 @@ import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name'
 
 import {
   getIconFromInternet,
-  getIconFromSwiftype,
+  getIconFromAppSearch,
   updateForm,
   save,
 } from '../../state/dialog-edit-workspace/actions';
@@ -171,7 +171,7 @@ const EditWorkspace = ({
   isCalendarApp,
   name,
   onGetIconFromInternet,
-  onGetIconFromSwiftype,
+  onGetIconFromAppSearch,
   onSave,
   onUpdateForm,
   order,
@@ -452,7 +452,7 @@ const EditWorkspace = ({
                   size="small"
                   className={classes.buttonBot}
                   disabled={Boolean(homeUrlError || downloadingIcon)}
-                  onClick={() => onGetIconFromSwiftype(true)}
+                  onClick={() => onGetIconFromAppSearch(true)}
                 >
                   {downloadingIcon ? 'Downloading...' : 'Download Icon from Our Database'}
                 </Button>
@@ -558,7 +558,7 @@ EditWorkspace.propTypes = {
   isCalendarApp: PropTypes.bool.isRequired,
   name: PropTypes.string.isRequired,
   onGetIconFromInternet: PropTypes.func.isRequired,
-  onGetIconFromSwiftype: PropTypes.func.isRequired,
+  onGetIconFromAppSearch: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   onUpdateForm: PropTypes.func.isRequired,
   order: PropTypes.number.isRequired,
@@ -591,7 +591,7 @@ const mapStateToProps = (state) => ({
 
 const actionCreators = {
   getIconFromInternet,
-  getIconFromSwiftype,
+  getIconFromAppSearch,
   updateForm,
   save,
 };
