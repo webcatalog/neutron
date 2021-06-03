@@ -849,7 +849,8 @@ const addViewAsync = async (browserWindow, workspace) => {
   view.webContents.on('context-menu', (e, info) => {
     contextMenuBuilder.buildMenuForElement(info)
       .then((menu) => {
-        const extensionMenuItems = extensions.getContextMenuItems(view.webContents, info);
+        const extensionMenuItems = extensions
+          ? extensions.getContextMenuItems(view.webContents, info) : [];
         if (extensionMenuItems.length > 0) {
           menu.append(new MenuItem({ type: 'separator' }));
           extensionMenuItems.forEach((menuItem) => {

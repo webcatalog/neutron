@@ -73,6 +73,7 @@ import { open as openDialogAppLock } from '../../state/dialog-app-lock/actions';
 import { open as openDialogCodeInjection } from '../../state/dialog-code-injection/actions';
 import { open as openDialogCustomUserAgent } from '../../state/dialog-custom-user-agent/actions';
 import { open as openDialogCustomizeFonts } from '../../state/dialog-customize-fonts/actions';
+import { open as openDialogExtensions } from '../../state/dialog-extensions/actions';
 import { open as openDialogInternalUrls } from '../../state/dialog-internal-urls/actions';
 import { open as openDialogProxy } from '../../state/dialog-proxy/actions';
 import { open as openDialogRefreshInterval } from '../../state/dialog-refresh-interval/actions';
@@ -94,6 +95,7 @@ import DialogInternalUrls from '../dialog-internal-urls';
 import DialogProxy from '../dialog-proxy';
 import DialogRefreshInterval from '../dialog-refresh-interval';
 import DialogSpellcheckLanguages from '../dialog-spellcheck-languages';
+import DialogExtensions from '../dialog-extensions';
 
 import SnackbarTrigger from '../shared/snackbar-trigger';
 
@@ -272,6 +274,7 @@ const Preferences = ({
   onOpenDialogCodeInjection,
   onOpenDialogCustomUserAgent,
   onOpenDialogCustomizeFonts,
+  onOpenDialogExtensions,
   onOpenDialogInternalUrls,
   onOpenDialogProxy,
   onOpenDialogRefreshInterval,
@@ -1180,7 +1183,7 @@ const Preferences = ({
         </Typography>
         <Paper elevation={0} className={classes.paper}>
           <List disablePadding dense>
-            <ListItem button onClick={null}>
+            <ListItem button onClick={() => onOpenDialogExtensions()}>
               <ListItemText primary="Manage extensions (experimental)" />
               <ChevronRightIcon color="action" />
             </ListItem>
@@ -2105,6 +2108,7 @@ const Preferences = ({
       <DialogInternalUrls />
       <DialogRefreshInterval />
       <DialogCustomizeFonts />
+      <DialogExtensions />
       <SnackbarTrigger />
     </div>
   );
@@ -2150,6 +2154,7 @@ Preferences.propTypes = {
   onOpenDialogCodeInjection: PropTypes.func.isRequired,
   onOpenDialogCustomUserAgent: PropTypes.func.isRequired,
   onOpenDialogCustomizeFonts: PropTypes.func.isRequired,
+  onOpenDialogExtensions: PropTypes.func.isRequired,
   onOpenDialogInternalUrls: PropTypes.func.isRequired,
   onOpenDialogProxy: PropTypes.func.isRequired,
   onOpenDialogRefreshInterval: PropTypes.func.isRequired,
@@ -2247,6 +2252,7 @@ const actionCreators = {
   openDialogCodeInjection,
   openDialogCustomUserAgent,
   openDialogCustomizeFonts,
+  openDialogExtensions,
   openDialogInternalUrls,
   openDialogProxy,
   openDialogRefreshInterval,

@@ -12,7 +12,6 @@ const {
 const windowStateKeeper = require('electron-window-state');
 const { menubar } = require('menubar');
 const path = require('path');
-const isDev = require('electron-is-dev');
 const contextMenu = require('electron-context-menu');
 
 const { REACT_PATH } = require('../constants/paths');
@@ -173,7 +172,7 @@ const createAsync = () => new Promise((resolve) => {
           enableRemoteModule: true,
           contextIsolation: false,
           nodeIntegration: true,
-          webSecurity: !isDev,
+          webSecurity: process.env.NODE_ENV === 'production',
           preload: path.join(__dirname, 'menubar-preload.js'),
         },
       },
@@ -234,7 +233,7 @@ const createAsync = () => new Promise((resolve) => {
       enableRemoteModule: true,
       contextIsolation: false,
       nodeIntegration: true,
-      webSecurity: !isDev,
+      webSecurity: process.env.NODE_ENV === 'production',
       preload: path.join(__dirname, 'main-preload.js'),
     },
   };

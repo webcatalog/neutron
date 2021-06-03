@@ -6,7 +6,11 @@ const fs = require('fs-extra');
 
 const getChromiumUserDataPath = require('./get-chromium-user-data-path');
 
+const cached = {};
+
 const getExtensionsFromProfile = (browserId, profileDirName) => {
+  if (cached[`${browserId}:${profileDirName}`]) return cached[`${browserId}:${profileDirName}`];
+
   const extensionsPath = path.join(getChromiumUserDataPath(browserId), profileDirName, 'Extensions');
   if (!fs.existsSync(extensionsPath)) return [];
 
@@ -35,21 +39,47 @@ const getExtensionsFromProfile = (browserId, profileDirName) => {
           const manifest = fs.readJsonSync(manifestJsonPath);
 
           // manifest version 3 is not supported
-          if (manifest.manifest_version >= 3) return;
+          if (manifest.manifest_version >= 3 || !manifest.default_locale) return;
+
+          const defaultLocale = manifest.default_locale;
+          const messageJsonPath = path.join(versionPath, '_locales', defaultLocale, 'messages.json');
+          const messages = fs.readJsonSync(messageJsonPath);
+
+          let { name } = manifest;
+          if (name.startsWith('__MSG_')) {
+            try {
+              const nameMessageId = name.match(new RegExp('__MSG_(.*)__'))[1];
+              if (nameMessageId && messages[nameMessageId] && messages[nameMessageId].message) {
+                name = messages[nameMessageId].message;
+              } else { // messages keys are not case-sensitive
+                const matchedMessageId = Object.keys(messages)
+                  .find((messageId) => messageId.toLowerCase() === nameMessageId.toLowerCase());
+                if (messages[matchedMessageId] && messages[matchedMessageId].message) {
+                  name = messages[matchedMessageId].message;
+                }
+              }
+            } catch (err) {
+              // eslint-disable-next-line no-console
+              console.log(err);
+            }
+          }
 
           const iconRelativePath = manifest.icons ? (manifest.icons[128]
             || manifest.icons[64] || manifest.icons[48] || manifest.icons[16]) : null;
 
           extensions.push({
             id: item.name,
+            name,
             path: versionPath,
-            manifest: {
-              version: manifest.version,
-              icon: iconRelativePath ? path.join(versionPath, iconRelativePath) : null,
-            },
+            version: manifest.version,
+            icon: iconRelativePath ? path.join(versionPath, iconRelativePath) : null,
           });
         });
       });
+
+    extensions.sort((a, b) => a.name.localeCompare(b.name));
+
+    cached[`${browserId}:${profileDirName}`] = extensions;
     return extensions;
   } catch (err) {
     // eslint-disable-next-line no-console
