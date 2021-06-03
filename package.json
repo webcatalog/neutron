@@ -9,7 +9,7 @@
   "main": "main-src/electron.js",
   "scripts": {
     "postinstall": "npx patch-package && electron-builder install-app-deps && yarn generate-open-source-notices",
-    "generate-open-source-notices": "yarn licenses generate-disclaimer > public/open-source-notices.txt",
+    "generate-open-source-notices": "yarn licenses generate-disclaimer > public/open-source-notices-automated.txt",
     "build": "react-scripts build && webpack",
     "webpack": "webpack",
     "eject": "react-scripts eject",
