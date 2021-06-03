@@ -199,7 +199,7 @@ const updateAddress = (url) => {
   ipcMain.emit('create-menu');
 };
 
-const addView = (browserWindow, workspace) => {
+const addView = async (browserWindow, workspace) => {
   if (views[workspace.id] != null) return;
 
   // configure session & ad blocker
@@ -261,9 +261,19 @@ const addView = (browserWindow, workspace) => {
   } = getPreferences();
 
   // extensions
-  ses.loadExtension(path.join(app.getPath('desktop'), 'baecahhpgcpccohoeipmdkkbemhjhfmc'));
+  const extensionsPath = path.join(app.getPath('desktop'), 'extensions');
+  const dirPaths = fsExtra.readdirSync(extensionsPath, { withFileTypes: true })
+    .filter((obj) => obj.isDirectory())
+    .map((obj) => path.join(extensionsPath, obj.name));
+
   const extensions = new ElectronChromeExtensions({
     session: ses,
+  });
+  const installedExtensions = await Promise.all(
+    dirPaths.map((extensionPath) => ses.loadExtension(extensionPath).catch(console.log)),
+  );
+  installedExtensions.forEach((extension) => {
+    extensions.addExtension(extension);
   });
 
   const sharedWebPreferences = {
@@ -275,7 +285,7 @@ const addView = (browserWindow, workspace) => {
     enableRemoteModule: false,
     scrollBounce: true,
     session: ses,
-    // preload: path.join(__dirname, 'view-preload.js'),
+    preload: path.join(__dirname, 'view-preload.js'),
     defaultFontSize,
     defaultMonospaceFontSize: defaultFontSizeMonospace,
     minimumFontSize: defaultFontSizeMinimum,
