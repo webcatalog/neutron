@@ -102,6 +102,17 @@ const styles = (theme) => ({
       display: 'none',
     },
   },
+  browserActionList: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    paddingRight: theme.spacing(1),
+    '& * > button': {
+      height: 20,
+      width: 20,
+    },
+  },
 });
 
 const NavigationBar = ({
@@ -232,6 +243,7 @@ const NavigationBar = ({
           }}
         />
       </div>
+      <browser-action-list partition="persist:shared" direction="column" class={classes.browserActionList} />
       <div>
         <RatingButton
           className={classes.iconButton}

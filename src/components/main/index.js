@@ -209,6 +209,11 @@ const styles = (theme) => {
       width: '100%',
       borderRadius: 0,
     },
+    browserActionList: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: theme.spacing(0.5),
+    },
   };
 };
 
@@ -408,6 +413,7 @@ const Main = ({
                   }}
                 />
               </div>
+              {!navigationBar && <browser-action-list partition="persist:shared" direction="column" class={classes.browserActionList} />}
               {!navigationBar && (
               <div
                 className={classnames(classes.end, isSidebarExpanded && classes.endExpanded)}

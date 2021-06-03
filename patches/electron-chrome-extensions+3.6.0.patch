@@ -1,0 +1,56 @@
+diff --git a/node_modules/electron-chrome-extensions/dist/browser-action.js b/node_modules/electron-chrome-extensions/dist/browser-action.js
+index c0876d0..ff0a5f7 100644
+--- a/node_modules/electron-chrome-extensions/dist/browser-action.js
++++ b/node_modules/electron-chrome-extensions/dist/browser-action.js
+@@ -126,7 +126,7 @@ const injectBrowserAction = () => {
+     },
+ 
+     async getState(partition) {
+-      const state = await invoke('browserAction.getState', partition);
++      const state = await invoke('browserAction.getState', partition, partition);
+ 
+       for (const action of state.actions) {
+         actionMap.set(action.id, action);
+@@ -215,8 +215,8 @@ const injectBrowserAction = () => {
+         const style = document.createElement('style');
+         style.textContent = `
+ button {
+-  width: 28px;
+-  height: 28px;
++  width: 24px;
++  height: 24px;
+   background-color: transparent;
+   background-position: center;
+   background-repeat: no-repeat;
+@@ -417,12 +417,7 @@ button:hover {
+           mode: 'open'
+         });
+         const style = document.createElement('style');
+-        style.textContent = `
+-:host {
+-  display: flex;
+-  flex-direction: row;
+-  gap: 5px;
+-}`;
++        style.textContent = ``;
+         shadowRoot.appendChild(style);
+       }
+ 
+diff --git a/node_modules/electron-chrome-extensions/dist/index.js b/node_modules/electron-chrome-extensions/dist/index.js
+index fa9250a..1c2a29e 100644
+--- a/node_modules/electron-chrome-extensions/dist/index.js
++++ b/node_modules/electron-chrome-extensions/dist/index.js
+@@ -1728,9 +1728,10 @@ const getIconPath = extension => {
+     browser_action,
+     icons
+   } = extension.manifest;
+-  const {
+-    default_icon
+-  } = browser_action;
++  
++  // sometimes, browser_action is not defined
++  let default_icon;
++  if (browser_action) default_icon = browser_action.default_icon;
+ 
+   if (typeof default_icon === 'string') {
+     const iconPath = path__WEBPACK_IMPORTED_MODULE_1__["join"](extension.path, default_icon);
