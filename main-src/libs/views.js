@@ -836,8 +836,6 @@ const addView = async (browserWindow, workspace) => {
   );
 
   view.webContents.on('context-menu', (e, info) => {
-    console.log(extensions.getContextMenuItems(view.webContents, info));
-
     contextMenuBuilder.buildMenuForElement(info)
       .then((menu) => {
         const utmSource = getUtmSource();
@@ -994,6 +992,11 @@ const addView = async (browserWindow, workspace) => {
             ],
           }),
         );
+
+        const extensionMenuItems = extensions.getContextMenuItems(view.webContents, info);
+        extensionMenuItems.forEach((menuItem) => {
+          menu.append(menuItem);
+        });
 
         menu.popup(browserWindow);
       });
