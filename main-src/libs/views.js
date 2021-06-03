@@ -17,6 +17,7 @@ const { ElectronBlocker } = require('@cliqz/adblocker-electron');
 const unusedFilename = require('unused-filename');
 const pupa = require('pupa');
 const extName = require('ext-name');
+const { ElectronChromeExtensions } = require('electron-chrome-extensions');
 
 const appJson = require('../constants/app-json');
 
@@ -259,16 +260,22 @@ const addView = (browserWindow, workspace) => {
     defaultFontSizeMonospace,
   } = getPreferences();
 
+  // extensions
+  ses.loadExtension(path.join(app.getPath('desktop'), 'baecahhpgcpccohoeipmdkkbemhjhfmc'));
+  const extensions = new ElectronChromeExtensions({
+    session: ses,
+  });
+
   const sharedWebPreferences = {
     spellcheck: global.spellcheck,
     nativeWindowOpen: true,
-    nodeIntegration: false,
+    nodeIntegration: true,
     contextIsolation: true,
     plugins: true, // PDF reader
     enableRemoteModule: false,
     scrollBounce: true,
     session: ses,
-    preload: path.join(__dirname, 'view-preload.js'),
+    // preload: path.join(__dirname, 'view-preload.js'),
     defaultFontSize,
     defaultMonospaceFontSize: defaultFontSizeMonospace,
     minimumFontSize: defaultFontSizeMinimum,
@@ -276,6 +283,9 @@ const addView = (browserWindow, workspace) => {
   const view = new BrowserView({
     webPreferences: sharedWebPreferences,
   });
+
+  extensions.addTab(view.webContents, browserWindow);
+
   view.webContents.workspaceId = workspace.id;
   // background needs to explictly set
   // if not, by default, the background of BrowserView is transparent
@@ -816,6 +826,8 @@ const addView = (browserWindow, workspace) => {
   );
 
   view.webContents.on('context-menu', (e, info) => {
+    console.log(extensions.getContextMenuItems(view.webContents, info));
+
     contextMenuBuilder.buildMenuForElement(info)
       .then((menu) => {
         const utmSource = getUtmSource();
