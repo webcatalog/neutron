@@ -426,9 +426,12 @@ if (!gotTheLock) {
       autoCheckForUpdates,
       blockAds,
       customUserAgent,
+      extensionEnabledExtesionIds,
+      extensionSourceBrowserId,
+      extensionSourceProfileDirName,
       navigationBar,
-      proxyBypassRules,
       proxyAddress,
+      proxyBypassRules,
       proxyMode,
       proxyPacScript,
       proxyPort,
@@ -485,6 +488,9 @@ if (!gotTheLock) {
     global.proxyPacScript = proxyPacScript;
     global.proxyRules = `${proxyProtocol}://${proxyAddress}:${proxyPort || '80'}`;
     global.proxyMode = proxyMode;
+    global.extensionEnabledExtesionIds = extensionEnabledExtesionIds;
+    global.extensionSourceBrowserId = extensionSourceBrowserId;
+    global.extensionSourceProfileDirName = extensionSourceProfileDirName;
 
     commonInit();
 

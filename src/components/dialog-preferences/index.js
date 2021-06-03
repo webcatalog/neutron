@@ -25,6 +25,7 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import CodeIcon from '@material-ui/icons/Code';
+import ExtensionIcon from '@material-ui/icons/Extension';
 import LanguageIcon from '@material-ui/icons/Language';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import NotificationsIcon from '@material-ui/icons/Notifications';
@@ -345,6 +346,11 @@ const Preferences = ({
     notifications: {
       text: 'Notifications',
       Icon: NotificationsIcon,
+      ref: useRef(),
+    },
+    extensions: {
+      text: 'Extensions',
+      Icon: ExtensionIcon,
       ref: useRef(),
     },
     languages: {
@@ -1165,6 +1171,18 @@ const Preferences = ({
                   </>
                 )}
               />
+            </ListItem>
+          </List>
+        </Paper>
+
+        <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.extensions.ref}>
+          Extensions (experimental)
+        </Typography>
+        <Paper elevation={0} className={classes.paper}>
+          <List disablePadding dense>
+            <ListItem button onClick={null}>
+              <ListItemText primary="Manage extensions (experimental)" />
+              <ChevronRightIcon color="action" />
             </ListItem>
           </List>
         </Paper>

@@ -45,6 +45,7 @@ const isMas = require('./is-mas');
 const getUtmSource = require('./get-utm-source');
 const getWorkspaceFriendlyName = require('./get-workspace-friendly-name');
 const isStandalone = require('./is-standalone');
+const getExtensionFromProfile = require('./extensions/get-extensions-from-profile');
 
 const views = {};
 let shouldMuteAudio;
@@ -263,21 +264,26 @@ const addViewAsync = async (browserWindow, workspace) => {
   } = getPreferences();
 
   // extensions
-  const extensionsPath = path.join(app.getPath('desktop'), 'extensions');
-  const dirPaths = fsExtra.readdirSync(extensionsPath, { withFileTypes: true })
-    .filter((obj) => obj.isDirectory())
-    .map((obj) => path.join(extensionsPath, obj.name));
-
-  if (!extensionManagers[partitionId]) {
-    extensionManagers[partitionId] = new ElectronChromeExtensions({
-      session: ses,
-    });
+  if (global.extensionEnabledExtesionIds
+      && Object.keys(global.extensionEnabledExtesionIds).length > 0) {
+    const enabledExtensions = getExtensionFromProfile(
+      global.extensionSourceBrowserId,
+      global.extensionSourceProfileDirName,
+    )
+      .filter((ext) => global.extensionEnabledExtesionIds[ext.id]);
+    if (enabledExtensions.length > 0) {
+      if (!extensionManagers[partitionId]) {
+        extensionManagers[partitionId] = new ElectronChromeExtensions({
+          session: ses,
+        });
+      }
+      await Promise.all(
+        // eslint-disable-next-line no-console
+        enabledExtensions.map((ext) => ses.loadExtension(ext.path).catch(console.log)),
+      );
+    }
   }
   const extensions = extensionManagers[partitionId];
-  await Promise.all(
-    // eslint-disable-next-line no-console
-    dirPaths.map((extensionPath) => ses.loadExtension(extensionPath).catch(console.log)),
-  );
 
   const sharedWebPreferences = {
     spellcheck: global.spellcheck,
@@ -297,7 +303,9 @@ const addViewAsync = async (browserWindow, workspace) => {
     webPreferences: sharedWebPreferences,
   });
 
-  extensions.addTab(view.webContents, browserWindow);
+  if (extensions) {
+    extensions.addTab(view.webContents, browserWindow);
+  }
 
   view.webContents.workspaceId = workspace.id;
   // background needs to explictly set
