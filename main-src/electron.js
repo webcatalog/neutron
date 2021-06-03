@@ -71,7 +71,7 @@ const openUrlWithWindow = require('./windows/open-url-with');
 
 const { createMenu } = require('./libs/menu');
 const {
-  addView,
+  addViewAsync,
   reloadViewsDarkReader,
 } = require('./libs/views');
 const fetchUpdater = require('./libs/fetch-updater');
@@ -343,7 +343,7 @@ if (!gotTheLock) {
             }
             return;
           }
-          addView(mainWindow.get(), workspace);
+          addViewAsync(mainWindow.get(), workspace);
         });
 
         ipcMain.emit('request-update-pause-notifications-info');
