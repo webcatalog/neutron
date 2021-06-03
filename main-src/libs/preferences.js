@@ -67,6 +67,10 @@ const defaultPreferences = {
   defaultFontSizeMonospace: 13,
   /* Font Settings (same as Chrome/Edge) */
   downloadPath: getDefaultDownloadsPath(),
+  // extensions
+  extensionSourceBrowserId: process.platform === 'win32' ? 'edge' : 'chrome',
+  extensionSourceProfileDirName: 'Default',
+  extensionEnabledExtesionIds: {},
   hibernateUnusedWorkspacesAtLaunch: false,
   iapPurchased: false,
   ignoreCertificateErrors: false,

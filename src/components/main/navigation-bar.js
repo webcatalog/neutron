@@ -22,6 +22,7 @@ import VolumeOffIcon from '@material-ui/icons/VolumeOff';
 import connectComponent from '../../helpers/connect-component';
 import getUrlFromText from '../../helpers/get-url-from-text';
 import getStaticGlobal from '../../helpers/get-static-global';
+import isMas from '../../helpers/is-mas';
 
 import searchEngines from '../../constants/search-engines';
 
@@ -100,6 +101,17 @@ const styles = (theme) => ({
   centerWithExpandedSidebar: {
     '@media (max-width:700px)': {
       display: 'none',
+    },
+  },
+  browserActionList: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    paddingRight: theme.spacing(1),
+    '& * > button': {
+      height: 20,
+      width: 20,
     },
   },
 });
@@ -232,6 +244,7 @@ const NavigationBar = ({
           }}
         />
       </div>
+      {!isMas() && <browser-action-list partition="persist:shared" direction="column" class={classes.browserActionList} />}
       <div>
         <RatingButton
           className={classes.iconButton}

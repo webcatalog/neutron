@@ -23,10 +23,16 @@ const DialogOpenSourceNotices = ({
 }) => {
   const [content, setContent] = useState('Loading...');
   useEffect(() => {
-    window.fetch('./open-source-notices.txt')
-      .then((res) => res.text())
-      .then((text) => {
-        setContent(text);
+    const p = [
+      window.fetch('./open-source-notices-automated.txt')
+        .then((res) => res.text()),
+      window.fetch('./open-source-notices-manual.txt')
+        .then((res) => res.text()),
+    ];
+
+    Promise.all(p)
+      .then((texts) => {
+        setContent(texts.join('\n'));
       })
       // eslint-disable-next-line no-console
       .catch(console.log);

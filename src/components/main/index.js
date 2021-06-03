@@ -26,6 +26,7 @@ import getWorkspacesAsList from '../../helpers/get-workspaces-as-list';
 import getStaticGlobal from '../../helpers/get-static-global';
 import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
 import isMacOs11 from '../../helpers/is-mac-os-11';
+import isMas from '../../helpers/is-mas';
 
 import arrowWhite from '../../images/arrow-white.png';
 import arrowBlack from '../../images/arrow-black.png';
@@ -208,6 +209,11 @@ const styles = (theme) => {
     iconButton: {
       width: '100%',
       borderRadius: 0,
+    },
+    browserActionList: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: theme.spacing(0.5),
     },
   };
 };
@@ -408,6 +414,7 @@ const Main = ({
                   }}
                 />
               </div>
+              {!navigationBar && !isMas() && <browser-action-list partition="persist:shared" direction="column" class={classes.browserActionList} />}
               {!navigationBar && (
               <div
                 className={classnames(classes.end, isSidebarExpanded && classes.endExpanded)}

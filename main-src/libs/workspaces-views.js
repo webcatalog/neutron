@@ -21,7 +21,7 @@ const {
 } = require('./workspaces');
 
 const {
-  addView,
+  addViewAsync,
   hibernateView,
   realignActiveView,
   removeView,
@@ -53,31 +53,33 @@ const createWorkspaceView = (workspaceObj = {}) => {
   const newWorkspace = createWorkspace(workspaceObj);
   setActiveWorkspace(newWorkspace.id);
 
-  addView(mainWindow.get(), getWorkspace(newWorkspace.id));
-  setActiveView(mainWindow.get(), newWorkspace.id);
+  addViewAsync(mainWindow.get(), getWorkspace(newWorkspace.id))
+    .then(() => {
+      setActiveView(mainWindow.get(), newWorkspace.id);
 
-  if (workspaceObj.picture) {
-    setWorkspacePicture(newWorkspace.id, workspaceObj.picture);
-  }
+      if (workspaceObj.picture) {
+        setWorkspacePicture(newWorkspace.id, workspaceObj.picture);
+      }
 
-  // if user add workspace for the first time
-  // show sidebar
-  if (!hasPreference('sidebar')) {
-    setPreference('sidebar', true);
-    // if sidebar is shown, then hide title bar if user hasn't overwritten the pref
-    if (!hasPreference('titlebar')) {
-      setPreference('titlebar', false);
-    }
-    ipcMain.emit('request-realign-active-workspace');
-  }
+      // if user add workspace for the first time
+      // show sidebar
+      if (!hasPreference('sidebar')) {
+        setPreference('sidebar', true);
+        // if sidebar is shown, then hide title bar if user hasn't overwritten the pref
+        if (!hasPreference('titlebar')) {
+          setPreference('titlebar', false);
+        }
+        ipcMain.emit('request-realign-active-workspace');
+      }
 
-  // ask to set as default mail client
-  // ask to set as default calendar client
-  if (extractHostname(workspaceObj.homeUrl || appJson.url) in MAILTO_URLS) {
-    promptSetAsDefaultMailClient();
-  } else if (extractHostname(workspaceObj.homeUrl || appJson.url) in WEBCAL_URLS) {
-    promptSetAsDefaultCalendarApp();
-  }
+      // ask to set as default mail client
+      // ask to set as default calendar client
+      if (extractHostname(workspaceObj.homeUrl || appJson.url) in MAILTO_URLS) {
+        promptSetAsDefaultMailClient();
+      } else if (extractHostname(workspaceObj.homeUrl || appJson.url) in WEBCAL_URLS) {
+        promptSetAsDefaultCalendarApp();
+      }
+    });
 };
 
 const setWorkspaceView = (id, opts) => {
@@ -93,10 +95,12 @@ const setWorkspaceViews = (workspaces) => {
 };
 
 const wakeUpWorkspaceView = (id) => {
-  addView(mainWindow.get(), getWorkspace(id));
-  setWorkspace(id, {
-    hibernated: false,
-  });
+  addViewAsync(mainWindow.get(), getWorkspace(id))
+    .then(() => {
+      setWorkspace(id, {
+        hibernated: false,
+      });
+    });
 };
 
 const hibernateWorkspaceView = (id) => {

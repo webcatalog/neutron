@@ -17,6 +17,7 @@ const { ElectronBlocker } = require('@cliqz/adblocker-electron');
 const unusedFilename = require('unused-filename');
 const pupa = require('pupa');
 const extName = require('ext-name');
+const { ElectronChromeExtensions } = require('electron-chrome-extensions');
 
 const appJson = require('../constants/app-json');
 
@@ -44,6 +45,7 @@ const isMas = require('./is-mas');
 const getUtmSource = require('./get-utm-source');
 const getWorkspaceFriendlyName = require('./get-workspace-friendly-name');
 const isStandalone = require('./is-standalone');
+const getExtensionFromProfile = require('./extensions/get-extensions-from-profile');
 
 const views = {};
 let shouldMuteAudio;
@@ -58,6 +60,7 @@ let completedBytes = 0;
 let totalBytes = 0;
 const activeDownloadItems = () => downloadItems.size;
 const progressDownloadItems = () => receivedBytes / totalBytes;
+const extensionManagers = {};
 
 const getFilenameFromMime = (name, mime) => {
   const extensions = extName.mime(mime);
@@ -198,11 +201,12 @@ const updateAddress = (url) => {
   ipcMain.emit('create-menu');
 };
 
-const addView = (browserWindow, workspace) => {
+const addViewAsync = async (browserWindow, workspace) => {
   if (views[workspace.id] != null) return;
 
   // configure session & ad blocker
-  const ses = session.fromPartition(global.shareWorkspaceBrowsingData ? 'persist:shared' : `persist:${workspace.id}`);
+  const partitionId = global.shareWorkspaceBrowsingData ? 'persist:shared' : `persist:${workspace.id}`;
+  const ses = session.fromPartition(partitionId);
 
   // proxy
   if (global.proxyMode === 'fixed_servers') {
@@ -273,9 +277,51 @@ const addView = (browserWindow, workspace) => {
     defaultMonospaceFontSize: defaultFontSizeMonospace,
     minimumFontSize: defaultFontSizeMinimum,
   };
+
+  // extensions
+  if (global.extensionEnabledExtesionIds
+      && Object.keys(global.extensionEnabledExtesionIds).length > 0) {
+    const enabledExtensions = getExtensionFromProfile(
+      global.extensionSourceBrowserId,
+      global.extensionSourceProfileDirName,
+    )
+      .filter((ext) => global.extensionEnabledExtesionIds[ext.id]);
+    if (enabledExtensions.length > 0) {
+      if (!extensionManagers[partitionId]) {
+        extensionManagers[partitionId] = new ElectronChromeExtensions({
+          session: ses,
+          createTab(details) {
+            const win = new BrowserWindow({
+              show: true,
+              width: 800,
+              height: 600,
+              webPreferences: sharedWebPreferences,
+            });
+
+            if (details && details.url) {
+              win.loadURL(details.url);
+            }
+
+            return [win.webContents, win];
+          },
+        });
+      }
+      await Promise.all(
+        // eslint-disable-next-line no-console
+        enabledExtensions.map((ext) => ses.loadExtension(ext.path).catch(console.log)),
+      );
+    }
+  }
+  const extensions = extensionManagers[partitionId];
+
   const view = new BrowserView({
     webPreferences: sharedWebPreferences,
   });
+
+  if (extensions) {
+    extensions.addTab(view.webContents, browserWindow);
+  }
+
   view.webContents.workspaceId = workspace.id;
   // background needs to explictly set
   // if not, by default, the background of BrowserView is transparent
@@ -818,6 +864,15 @@ const addView = (browserWindow, workspace) => {
   view.webContents.on('context-menu', (e, info) => {
     contextMenuBuilder.buildMenuForElement(info)
       .then((menu) => {
+        const extensionMenuItems = extensions
+          ? extensions.getContextMenuItems(view.webContents, info) : [];
+        if (extensionMenuItems.length > 0) {
+          menu.append(new MenuItem({ type: 'separator' }));
+          extensionMenuItems.forEach((menuItem) => {
+            menu.append(menuItem);
+          });
+        }
+
         const utmSource = getUtmSource();
 
         if (info.linkURL && info.linkURL.length > 0) {
@@ -1031,7 +1086,7 @@ const setActiveView = (browserWindow, id) => {
   }
 
   if (views[id] == null) {
-    addView(browserWindow, getWorkspace(id));
+    addViewAsync(browserWindow, getWorkspace(id));
   } else {
     const view = views[id];
     browserWindow.setBrowserView(view);
@@ -1094,6 +1149,9 @@ const removeView = (id) => {
   }
   session.fromPartition(`persist:${id}`).clearStorageData();
   delete views[id];
+
+  const partitionId = global.shareWorkspaceBrowsingData ? 'persist:shared' : `persist:${id}`;
+  delete extensionManagers[partitionId];
 };
 
 const setViewsAudioPref = (_shouldMuteAudio) => {
@@ -1178,7 +1236,7 @@ const destroyAllViews = () => {
 };
 
 module.exports = {
-  addView,
+  addViewAsync,
   getView,
   destroyAllViews,
   hibernateView,

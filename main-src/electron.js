@@ -71,7 +71,7 @@ const openUrlWithWindow = require('./windows/open-url-with');
 
 const { createMenu } = require('./libs/menu');
 const {
-  addView,
+  addViewAsync,
   reloadViewsDarkReader,
 } = require('./libs/views');
 const fetchUpdater = require('./libs/fetch-updater');
@@ -343,7 +343,7 @@ if (!gotTheLock) {
             }
             return;
           }
-          addView(mainWindow.get(), workspace);
+          addViewAsync(mainWindow.get(), workspace);
         });
 
         ipcMain.emit('request-update-pause-notifications-info');
@@ -426,9 +426,12 @@ if (!gotTheLock) {
       autoCheckForUpdates,
       blockAds,
       customUserAgent,
+      extensionEnabledExtesionIds,
+      extensionSourceBrowserId,
+      extensionSourceProfileDirName,
       navigationBar,
-      proxyBypassRules,
       proxyAddress,
+      proxyBypassRules,
       proxyMode,
       proxyPacScript,
       proxyPort,
@@ -485,6 +488,9 @@ if (!gotTheLock) {
     global.proxyPacScript = proxyPacScript;
     global.proxyRules = `${proxyProtocol}://${proxyAddress}:${proxyPort || '80'}`;
     global.proxyMode = proxyMode;
+    global.extensionEnabledExtesionIds = extensionEnabledExtesionIds;
+    global.extensionSourceBrowserId = extensionSourceBrowserId;
+    global.extensionSourceProfileDirName = extensionSourceProfileDirName;
 
     commonInit();
 
