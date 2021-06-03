@@ -40,6 +40,7 @@ import {
 } from '../../senders';
 
 import RatingButton from './rating-button';
+import isMas from '../../../main-src/libs/is-mas';
 
 const styles = (theme) => ({
   root: {
@@ -243,7 +244,7 @@ const NavigationBar = ({
           }}
         />
       </div>
-      <browser-action-list partition="persist:shared" direction="column" class={classes.browserActionList} />
+      {!isMas() && <browser-action-list partition="persist:shared" direction="column" class={classes.browserActionList} />}
       <div>
         <RatingButton
           className={classes.iconButton}

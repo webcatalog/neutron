@@ -56,6 +56,7 @@ import {
 } from '../../senders';
 
 import './main.css';
+import isMas from '../../../main-src/libs/is-mas';
 
 // https://github.com/sindresorhus/array-move/blob/master/index.js
 const arrayMove = (array, from, to) => {
@@ -413,7 +414,7 @@ const Main = ({
                   }}
                 />
               </div>
-              {!navigationBar && <browser-action-list partition="persist:shared" direction="column" class={classes.browserActionList} />}
+              {!navigationBar && !isMas() && <browser-action-list partition="persist:shared" direction="column" class={classes.browserActionList} />}
               {!navigationBar && (
               <div
                 className={classnames(classes.end, isSidebarExpanded && classes.endExpanded)}

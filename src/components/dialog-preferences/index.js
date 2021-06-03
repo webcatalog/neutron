@@ -355,6 +355,7 @@ const Preferences = ({
       text: 'Extensions',
       Icon: ExtensionIcon,
       ref: useRef(),
+      hidden: isMas(),
     },
     languages: {
       text: 'Languages',
@@ -1178,17 +1179,22 @@ const Preferences = ({
           </List>
         </Paper>
 
-        <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.extensions.ref}>
-          Extensions (experimental)
-        </Typography>
-        <Paper elevation={0} className={classes.paper}>
-          <List disablePadding dense>
-            <ListItem button onClick={() => onOpenDialogExtensions()}>
-              <ListItemText primary="Manage extensions (experimental)" />
-              <ChevronRightIcon color="action" />
-            </ListItem>
-          </List>
-        </Paper>
+        {!isMas() && (
+          <>
+            <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.extensions.ref}>
+              Extensions (experimental)
+            </Typography>
+            <Paper elevation={0} className={classes.paper}>
+              <List disablePadding dense>
+                <ListItem button onClick={() => onOpenDialogExtensions()}>
+                  <ListItemText primary="Manage extensions (experimental)" />
+                  <ChevronRightIcon color="action" />
+                </ListItem>
+              </List>
+            </Paper>
+            <DialogExtensions />
+          </>
+        )}
 
         <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.languages.ref}>
           Languages
@@ -2108,7 +2114,6 @@ const Preferences = ({
       <DialogInternalUrls />
       <DialogRefreshInterval />
       <DialogCustomizeFonts />
-      <DialogExtensions />
       <SnackbarTrigger />
     </div>
   );
