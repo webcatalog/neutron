@@ -263,28 +263,6 @@ const addViewAsync = async (browserWindow, workspace) => {
     defaultFontSizeMonospace,
   } = getPreferences();
 
-  // extensions
-  if (global.extensionEnabledExtesionIds
-      && Object.keys(global.extensionEnabledExtesionIds).length > 0) {
-    const enabledExtensions = getExtensionFromProfile(
-      global.extensionSourceBrowserId,
-      global.extensionSourceProfileDirName,
-    )
-      .filter((ext) => global.extensionEnabledExtesionIds[ext.id]);
-    if (enabledExtensions.length > 0) {
-      if (!extensionManagers[partitionId]) {
-        extensionManagers[partitionId] = new ElectronChromeExtensions({
-          session: ses,
-        });
-      }
-      await Promise.all(
-        // eslint-disable-next-line no-console
-        enabledExtensions.map((ext) => ses.loadExtension(ext.path).catch(console.log)),
-      );
-    }
-  }
-  const extensions = extensionManagers[partitionId];
-
   const sharedWebPreferences = {
     spellcheck: global.spellcheck,
     nativeWindowOpen: true,
@@ -299,6 +277,43 @@ const addViewAsync = async (browserWindow, workspace) => {
     defaultMonospaceFontSize: defaultFontSizeMonospace,
     minimumFontSize: defaultFontSizeMinimum,
   };
+
+  // extensions
+  if (global.extensionEnabledExtesionIds
+      && Object.keys(global.extensionEnabledExtesionIds).length > 0) {
+    const enabledExtensions = getExtensionFromProfile(
+      global.extensionSourceBrowserId,
+      global.extensionSourceProfileDirName,
+    )
+      .filter((ext) => global.extensionEnabledExtesionIds[ext.id]);
+    if (enabledExtensions.length > 0) {
+      if (!extensionManagers[partitionId]) {
+        extensionManagers[partitionId] = new ElectronChromeExtensions({
+          session: ses,
+          createTab(details) {
+            const win = new BrowserWindow({
+              show: true,
+              width: 800,
+              height: 600,
+              webPreferences: sharedWebPreferences,
+            });
+
+            if (details && details.url) {
+              win.loadURL(details.url);
+            }
+
+            return [win.webContents, win];
+          },
+        });
+      }
+      await Promise.all(
+        // eslint-disable-next-line no-console
+        enabledExtensions.map((ext) => ses.loadExtension(ext.path).catch(console.log)),
+      );
+    }
+  }
+  const extensions = extensionManagers[partitionId];
+
   const view = new BrowserView({
     webPreferences: sharedWebPreferences,
   });
