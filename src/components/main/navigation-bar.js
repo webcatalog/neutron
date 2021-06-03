@@ -22,6 +22,7 @@ import VolumeOffIcon from '@material-ui/icons/VolumeOff';
 import connectComponent from '../../helpers/connect-component';
 import getUrlFromText from '../../helpers/get-url-from-text';
 import getStaticGlobal from '../../helpers/get-static-global';
+import isMas from '../../helpers/is-mas';
 
 import searchEngines from '../../constants/search-engines';
 
@@ -40,7 +41,6 @@ import {
 } from '../../senders';
 
 import RatingButton from './rating-button';
-import isMas from '../../../main-src/libs/is-mas';
 
 const styles = (theme) => ({
   root: {
