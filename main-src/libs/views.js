@@ -304,6 +304,20 @@ const addViewAsync = async (browserWindow, workspace) => {
 
             return [win.webContents, win];
           },
+          createWindow(details) {
+            const win = new BrowserWindow({
+              show: true,
+              width: details.width || 800,
+              height: details.height || 600,
+              webPreferences: sharedWebPreferences,
+            });
+
+            if (details && details.url) {
+              win.loadURL(details.url);
+            }
+
+            return win;
+          },
         });
       }
       await Promise.all(

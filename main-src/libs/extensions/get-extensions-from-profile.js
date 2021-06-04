@@ -38,16 +38,17 @@ const getExtensionsFromProfile = (browserId, profileDirName) => {
 
           const manifest = fs.readJsonSync(manifestJsonPath);
 
-          // manifest version 3 is not supported
-          if (manifest.manifest_version >= 3 || !manifest.default_locale) return;
+          // console.log(manifest);
 
-          const defaultLocale = manifest.default_locale;
-          const messageJsonPath = path.join(versionPath, '_locales', defaultLocale, 'messages.json');
-          const messages = fs.readJsonSync(messageJsonPath);
+          // manifest version 3 is not supported
+          if (manifest.manifest_version >= 3) return;
 
           let { name } = manifest;
           if (name.startsWith('__MSG_')) {
             try {
+              const defaultLocale = manifest.default_locale || 'en';
+              const messageJsonPath = path.join(versionPath, '_locales', defaultLocale, 'messages.json');
+              const messages = fs.readJsonSync(messageJsonPath);
               const nameMessageId = name.match(new RegExp('__MSG_(.*)__'))[1];
               if (nameMessageId && messages[nameMessageId] && messages[nameMessageId].message) {
                 name = messages[nameMessageId].message;
