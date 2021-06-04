@@ -34,6 +34,11 @@ const {
 } = require('./views');
 const isStandalone = require('./is-standalone');
 
+// DO NOT require('./workspace-views') here
+// it will cause (node:42042) Warning: Accessing non-existent propertys
+// of module exports inside circular dependency
+// use ipcMain.emit instead
+
 let menu;
 
 const getWorkspaceName = (workspace) => {
