@@ -551,6 +551,185 @@ const addViewAsync = async (browserWindow, workspace) => {
     }
   });
 
+  const buildContextMenu = (contents, openLinkInNewWindow) => {
+    // Menu
+    const contextMenuBuilder = new ContextMenuBuilder(
+      contents,
+      true,
+    );
+
+    contents.on('context-menu', (e, info) => {
+      contextMenuBuilder.buildMenuForElement(info)
+        .then((menu) => {
+          const extensionMenuItems = extensions
+            ? extensions.getContextMenuItems(contents, info) : [];
+          if (extensionMenuItems.length > 0) {
+            menu.append(new MenuItem({ type: 'separator' }));
+            extensionMenuItems.forEach((menuItem) => {
+              menu.append(menuItem);
+            });
+          }
+
+          const utmSource = getUtmSource();
+
+          if (info.linkURL && info.linkURL.length > 0) {
+            menu.append(new MenuItem({ type: 'separator' }));
+
+            menu.append(new MenuItem({
+              label: 'Open Link in New Window',
+              click: () => {
+                // trigger the 'new-window' event manually
+                openLinkInNewWindow(
+                  {
+                    sender: contents,
+                    preventDefault: () => {},
+                  },
+                  info.linkURL,
+                  '', // frameName
+                  'new-window',
+                );
+              },
+            }));
+
+            menu.append(new MenuItem({ type: 'separator' }));
+
+            const workspaces = getWorkspaces();
+
+            const workspaceLst = Object.values(workspaces).sort((a, b) => a.order - b.order);
+
+            menu.append(new MenuItem({
+              label: `Open Link in New ${getWorkspaceFriendlyName()}`,
+              click: () => {
+                ipcMain.emit('request-open-url-in-workspace', null, info.linkURL);
+              },
+            }));
+            menu.append(new MenuItem({ type: 'separator' }));
+
+            workspaceLst.forEach((w) => {
+              const workspaceName = w.name || `${getWorkspaceFriendlyName()} ${w.order + 1}`;
+              menu.append(new MenuItem({
+                label: `Open Link in ${workspaceName}`,
+                click: () => {
+                  ipcMain.emit('request-open-url-in-workspace', null, info.linkURL, w.id);
+                },
+              }));
+            });
+          }
+
+          menu.append(new MenuItem({ type: 'separator' }));
+
+          menu.append(new MenuItem({
+            label: 'Back',
+            enabled: contents.canGoBack(),
+            click: () => {
+              contents.goBack();
+            },
+          }));
+          menu.append(new MenuItem({
+            label: 'Forward',
+            enabled: contents.canGoForward(),
+            click: () => {
+              contents.goForward();
+            },
+          }));
+          menu.append(new MenuItem({
+            label: 'Reload',
+            click: () => {
+              contents.reload();
+            },
+          }));
+
+          menu.append(new MenuItem({ type: 'separator' }));
+
+          const currentUrl = info.linkURL || contents.getURL();
+          if (currentUrl) {
+            menu.append(
+              new MenuItem({
+                label: info.linkURL
+                  ? `Set URL as ${getWorkspaceFriendlyName()}'s Home Page`
+                  : `Set Current URL as ${getWorkspaceFriendlyName()}'s Home Page`,
+                click: () => {
+                  setWorkspace(workspace.id, {
+                    homeUrl: currentUrl,
+                  });
+                },
+              }),
+            );
+            menu.append(new MenuItem({ type: 'separator' }));
+          }
+
+          menu.append(new MenuItem({ type: 'separator' }));
+
+          const sharedUrl = info.linkURL || contents.getURL();
+          if (sharedUrl) {
+            menu.append(
+              new MenuItem({
+                role: 'shareMenu',
+                sharingItem: {
+                  urls: [sharedUrl],
+                },
+              }),
+            );
+            menu.append(new MenuItem({ type: 'separator' }));
+          }
+
+          menu.append(
+            new MenuItem({
+              label: 'More',
+              submenu: [
+                {
+                  label: 'About',
+                  click: () => ipcMain.emit('request-show-about-window'),
+                },
+                { type: 'separator' },
+                {
+                  label: 'Check for Updates',
+                  click: () => ipcMain.emit('request-check-for-updates'),
+                  visible: !isMas(),
+                },
+                {
+                  label: 'Preferences...',
+                  click: () => ipcMain.emit('request-show-preferences-window'),
+                },
+                { type: 'separator' },
+                (!isMas() && !isStandalone()) ? {
+                  label: 'WebCatalog Help',
+                  click: () => shell.openExternal('https://help.webcatalog.app?utm_source=juli_app'),
+                } : {
+                  label: 'Help',
+                  click: () => {
+                    if (appJson.hostname) {
+                      return shell.openExternal(`https://${appJson.hostname}/help?utm_source=${utmSource}`);
+                    }
+                    return shell.openExternal(`https://${appJson.id}.app/help?utm_source=${utmSource}`);
+                  },
+                },
+                (!isMas() && !isStandalone()) ? {
+                  label: 'WebCatalog Website',
+                  click: () => shell.openExternal('https://webcatalog.app?utm_source=juli_app'),
+                } : {
+                  label: 'Website',
+                  click: () => {
+                    if (appJson.hostname) {
+                      return shell.openExternal(`https://${appJson.hostname}?utm_source=${utmSource}`);
+                    }
+                    return shell.openExternal(`https://${appJson.id}.app?utm_source=${utmSource}`);
+                  },
+                },
+                { type: 'separator' },
+                {
+                  label: 'Quit',
+                  click: () => ipcMain.emit('request-quit'),
+                },
+              ],
+            }),
+          );
+
+          menu.popup(browserWindow);
+        });
+    });
+  };
+
   const handleNewWindow = (e, nextUrl, frameName, disposition, options) => {
     const appUrl = getWorkspace(workspace.id).homeUrl || appJson.url;
     const appDomain = extractDomain(appUrl);
@@ -598,14 +777,7 @@ const addViewAsync = async (browserWindow, workspace) => {
         popupWin.loadURL(nextUrl);
       }
 
-      const popUpContextMenuBuilder = new ContextMenuBuilder(
-        popupWin.webContents,
-        true,
-      );
-      popupWin.webContents.on('context-menu', async (_, info) => {
-        const menu = await popUpContextMenuBuilder.buildMenuForElement(info);
-        menu.popup(browserWindow);
-      });
+      buildContextMenu(popupWin.webContents, handleNewWindow);
 
       e.newGuest = popupWin;
     };
@@ -864,182 +1036,7 @@ const addViewAsync = async (browserWindow, workspace) => {
     });
   }
 
-  // Menu
-  const contextMenuBuilder = new ContextMenuBuilder(
-    view.webContents,
-    true,
-  );
-
-  view.webContents.on('context-menu', (e, info) => {
-    contextMenuBuilder.buildMenuForElement(info)
-      .then((menu) => {
-        const extensionMenuItems = extensions
-          ? extensions.getContextMenuItems(view.webContents, info) : [];
-        if (extensionMenuItems.length > 0) {
-          menu.append(new MenuItem({ type: 'separator' }));
-          extensionMenuItems.forEach((menuItem) => {
-            menu.append(menuItem);
-          });
-        }
-
-        const utmSource = getUtmSource();
-
-        if (info.linkURL && info.linkURL.length > 0) {
-          menu.append(new MenuItem({ type: 'separator' }));
-
-          menu.append(new MenuItem({
-            label: 'Open Link in New Window',
-            click: () => {
-              // trigger the 'new-window' event manually
-              handleNewWindow(
-                {
-                  sender: view.webContents,
-                  preventDefault: () => {},
-                },
-                info.linkURL,
-                '', // frameName
-                'new-window',
-              );
-            },
-          }));
-
-          menu.append(new MenuItem({ type: 'separator' }));
-
-          const workspaces = getWorkspaces();
-
-          const workspaceLst = Object.values(workspaces).sort((a, b) => a.order - b.order);
-
-          menu.append(new MenuItem({
-            label: `Open Link in New ${getWorkspaceFriendlyName()}`,
-            click: () => {
-              ipcMain.emit('request-open-url-in-workspace', null, info.linkURL);
-            },
-          }));
-          menu.append(new MenuItem({ type: 'separator' }));
-
-          workspaceLst.forEach((w) => {
-            const workspaceName = w.name || `${getWorkspaceFriendlyName()} ${w.order + 1}`;
-            menu.append(new MenuItem({
-              label: `Open Link in ${workspaceName}`,
-              click: () => {
-                ipcMain.emit('request-open-url-in-workspace', null, info.linkURL, w.id);
-              },
-            }));
-          });
-        }
-
-        menu.append(new MenuItem({ type: 'separator' }));
-
-        menu.append(new MenuItem({
-          label: 'Back',
-          enabled: view.webContents.canGoBack(),
-          click: () => {
-            view.webContents.goBack();
-          },
-        }));
-        menu.append(new MenuItem({
-          label: 'Forward',
-          enabled: view.webContents.canGoForward(),
-          click: () => {
-            view.webContents.goForward();
-          },
-        }));
-        menu.append(new MenuItem({
-          label: 'Reload',
-          click: () => {
-            view.webContents.reload();
-          },
-        }));
-
-        menu.append(new MenuItem({ type: 'separator' }));
-
-        const currentUrl = info.linkURL || view.webContents.getURL();
-        if (currentUrl) {
-          menu.append(
-            new MenuItem({
-              label: info.linkURL
-                ? `Set URL as ${getWorkspaceFriendlyName()}'s Home Page`
-                : `Set Current URL as ${getWorkspaceFriendlyName()}'s Home Page`,
-              click: () => {
-                setWorkspace(workspace.id, {
-                  homeUrl: currentUrl,
-                });
-              },
-            }),
-          );
-          menu.append(new MenuItem({ type: 'separator' }));
-        }
-
-        menu.append(new MenuItem({ type: 'separator' }));
-
-        const sharedUrl = info.linkURL || view.webContents.getURL();
-        if (sharedUrl) {
-          menu.append(
-            new MenuItem({
-              role: 'shareMenu',
-              sharingItem: {
-                urls: [sharedUrl],
-              },
-            }),
-          );
-          menu.append(new MenuItem({ type: 'separator' }));
-        }
-
-        menu.append(
-          new MenuItem({
-            label: 'More',
-            submenu: [
-              {
-                label: 'About',
-                click: () => ipcMain.emit('request-show-about-window'),
-              },
-              { type: 'separator' },
-              {
-                label: 'Check for Updates',
-                click: () => ipcMain.emit('request-check-for-updates'),
-                visible: !isMas(),
-              },
-              {
-                label: 'Preferences...',
-                click: () => ipcMain.emit('request-show-preferences-window'),
-              },
-              { type: 'separator' },
-              (!isMas() && !isStandalone()) ? {
-                label: 'WebCatalog Help',
-                click: () => shell.openExternal('https://help.webcatalog.app?utm_source=juli_app'),
-              } : {
-                label: 'Help',
-                click: () => {
-                  if (appJson.hostname) {
-                    return shell.openExternal(`https://${appJson.hostname}/help?utm_source=${utmSource}`);
-                  }
-                  return shell.openExternal(`https://${appJson.id}.app/help?utm_source=${utmSource}`);
-                },
-              },
-              (!isMas() && !isStandalone()) ? {
-                label: 'WebCatalog Website',
-                click: () => shell.openExternal('https://webcatalog.app?utm_source=juli_app'),
-              } : {
-                label: 'Website',
-                click: () => {
-                  if (appJson.hostname) {
-                    return shell.openExternal(`https://${appJson.hostname}?utm_source=${utmSource}`);
-                  }
-                  return shell.openExternal(`https://${appJson.id}.app?utm_source=${utmSource}`);
-                },
-              },
-              { type: 'separator' },
-              {
-                label: 'Quit',
-                click: () => ipcMain.emit('request-quit'),
-              },
-            ],
-          }),
-        );
-
-        menu.popup(browserWindow);
-      });
-  });
+  buildContextMenu(view.webContents, handleNewWindow);
 
   // Find In Page
   view.webContents.on('found-in-page', (e, result) => {
