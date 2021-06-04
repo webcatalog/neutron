@@ -290,7 +290,7 @@ const handleLoaded = async (event) => {
     if (!e.data) return;
 
     if (e.data.type === 'get-display-media-id') {
-      ipcRenderer.send('request-show-display-media-window', workspaceId);
+      ipcRenderer.send('request-show-display-media-window');
     }
 
     // set workspace to active when its notification is clicked

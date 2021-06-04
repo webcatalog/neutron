@@ -578,8 +578,8 @@ const loadListeners = () => {
     fetchUpdater.checkForUpdates();
   });
 
-  ipcMain.on('request-show-display-media-window', (e, workspaceId) => {
-    displayMediaWindow.show(workspaceId);
+  ipcMain.on('request-show-display-media-window', (e) => {
+    displayMediaWindow.show(e.sender);
   });
 
   ipcMain.on('request-quit', () => {
