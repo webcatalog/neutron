@@ -1,5 +1,5 @@
 diff --git a/node_modules/@cliqz/adblocker-electron/dist/cjs/adblocker.js b/node_modules/@cliqz/adblocker-electron/dist/cjs/adblocker.js
-index f3a2120..a5755a0 100644
+index c9694a6..f0b57fb 100644
 --- a/node_modules/@cliqz/adblocker-electron/dist/cjs/adblocker.js
 +++ b/node_modules/@cliqz/adblocker-electron/dist/cjs/adblocker.js
 @@ -21,7 +21,10 @@ exports.ElectronBlocker = exports.BlockingContext = exports.fromElectronDetails
@@ -15,7 +15,7 @@ index f3a2120..a5755a0 100644
  process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
  /**
 diff --git a/node_modules/@cliqz/adblocker-electron/dist/es6/adblocker.js b/node_modules/@cliqz/adblocker-electron/dist/es6/adblocker.js
-index 03f40a3..dc2a713 100644
+index 66348c0..994641b 100644
 --- a/node_modules/@cliqz/adblocker-electron/dist/es6/adblocker.js
 +++ b/node_modules/@cliqz/adblocker-electron/dist/es6/adblocker.js
 @@ -8,7 +8,10 @@
