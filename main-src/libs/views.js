@@ -744,13 +744,21 @@ const addViewAsync = async (browserWindow, workspace) => {
       // if 'new-window' is triggered with Cmd+Click
       // options is undefined
       // https://github.com/webcatalog/webcatalog-app/issues/842
-      const cmdClick = Boolean(!options);
-      const newOptions = cmdClick ? {
+      const cmdClick = Boolean(
+        !options || !options.webPreferences || !options.webPreferences.session,
+      );
+
+      const newOptions = !options ? {
         show: true,
         width: 800,
         height: 600,
         webPreferences: sharedWebPreferences,
       } : options;
+
+      if (cmdClick) {
+        options.webPreferences = sharedWebPreferences;
+      }
+
       const popupWin = new BrowserWindow(newOptions);
       // WebCatalog internal value to determine whether BrowserWindow is popup
       popupWin.isPopup = true;
