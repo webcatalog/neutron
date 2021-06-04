@@ -730,7 +730,9 @@ const addViewAsync = async (browserWindow, workspace) => {
     });
   };
 
-  const handleNewWindow = (e, nextUrl, frameName, disposition, options) => {
+  const handleNewWindow = (
+    e, nextUrl, frameName, disposition, options, additionalFeatures, referrer, postBody,
+  ) => {
     const appUrl = getWorkspace(workspace.id).homeUrl || appJson.url;
     const appDomain = extractDomain(appUrl);
     const currentUrl = e.sender.getURL();
@@ -741,29 +743,20 @@ const addViewAsync = async (browserWindow, workspace) => {
       // https://gist.github.com/Gvozd/2cec0c8c510a707854e439fb15c561b0
       e.preventDefault();
 
-      // if 'new-window' is triggered with Cmd+Click
-      // options is undefined
-      // https://github.com/webcatalog/webcatalog-app/issues/842
-      const cmdClick = Boolean(
-        !options || !options.webPreferences || !options.webPreferences.session,
-      );
-
-      const newOptions = !options ? {
+      // avoid using options.webContents because it overwrites our custom UA logic
+      const newOptions = {
         show: true,
         width: 800,
         height: 600,
         webPreferences: sharedWebPreferences,
-      } : options;
-
-      if (cmdClick) {
-        options.webPreferences = sharedWebPreferences;
-      }
+      };
 
       const popupWin = new BrowserWindow(newOptions);
       // WebCatalog internal value to determine whether BrowserWindow is popup
       popupWin.isPopup = true;
       popupWin.setMenuBarVisibility(false);
       popupWin.webContents.on('new-window', handleNewWindow);
+      buildContextMenu(popupWin.webContents, handleNewWindow);
 
       // fix Google prevents signing in because of security concerns
       // https://github.com/webcatalog/webcatalog-app/issues/455
@@ -778,14 +771,19 @@ const addViewAsync = async (browserWindow, workspace) => {
         }
       });
 
-      // if 'new-window' is triggered with Cmd+Click
-      // url is not loaded automatically
-      // https://github.com/webcatalog/webcatalog-app/issues/842
-      if (cmdClick) {
-        popupWin.loadURL(nextUrl);
+      // we also don't use options.webContents
+      // so in general loadURL won't be triggered automatically
+      const loadOptions = {};
+      if (referrer) {
+        loadOptions.httpReferrer = referrer;
       }
-
-      buildContextMenu(popupWin.webContents, handleNewWindow);
+      if (postBody != null) {
+        const { data, contentType, boundary } = postBody;
+        loadOptions.postData = data;
+        loadOptions.extraHeaders = `content-type: ${contentType}; boundary=${boundary}`;
+      }
+      adjustUserAgentByUrl(popupWin.webContents, nextUrl);
+      popupWin.loadURL(nextUrl, loadOptions);
 
       e.newGuest = popupWin;
     };

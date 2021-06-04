@@ -39,14 +39,14 @@ const create = (sender) => {
   contextMenu({ window: win });
 
   const onClose = () => {
-    if (sender) {
+    if (sender && !sender.isDestroyed()) {
       sender.send('display-media-id-received', null);
     }
   };
   win.on('close', onClose);
 
   const onSelected = (e, displayMediaId) => {
-    if (sender) {
+    if (sender && !sender.isDestroyed()) {
       sender.send('display-media-id-received', displayMediaId);
     }
     ipcMain.removeListener('display-media-selected', onSelected);
