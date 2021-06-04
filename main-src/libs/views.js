@@ -598,6 +598,15 @@ const addViewAsync = async (browserWindow, workspace) => {
         popupWin.loadURL(nextUrl);
       }
 
+      const popUpContextMenuBuilder = new ContextMenuBuilder(
+        popupWin.webContents,
+        true,
+      );
+      popupWin.webContents.on('context-menu', async (_, info) => {
+        const menu = await popUpContextMenuBuilder.buildMenuForElement(info);
+        menu.popup(browserWindow);
+      });
+
       e.newGuest = popupWin;
     };
 
