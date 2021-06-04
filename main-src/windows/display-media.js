@@ -10,14 +10,13 @@ const contextMenu = require('electron-context-menu');
 
 const { REACT_PATH } = require('../constants/paths');
 
-const { getView } = require('../libs/views');
-
 let win;
+let currentSender;
 
 const get = () => win;
 
-const create = (workspaceId) => {
-  global.displayMediaRequestedWorkspaceId = workspaceId;
+const create = (sender) => {
+  currentSender = sender;
 
   win = new BrowserWindow({
     backgroundColor: '#FFF',
@@ -40,17 +39,15 @@ const create = (workspaceId) => {
   contextMenu({ window: win });
 
   const onClose = () => {
-    const view = getView(global.displayMediaRequestedWorkspaceId);
-    if (view) {
-      view.webContents.send('display-media-id-received', null);
+    if (sender) {
+      sender.send('display-media-id-received', null);
     }
   };
   win.on('close', onClose);
 
   const onSelected = (e, displayMediaId) => {
-    const view = getView(global.displayMediaRequestedWorkspaceId);
-    if (view) {
-      view.webContents.send('display-media-id-received', displayMediaId);
+    if (sender) {
+      sender.send('display-media-id-received', displayMediaId);
     }
     ipcMain.removeListener('display-media-selected', onSelected);
     if (win) {
@@ -71,7 +68,7 @@ const create = (workspaceId) => {
   win.loadURL(REACT_PATH);
 };
 
-const show = (workspaceId) => {
+const show = (sender) => {
   // https://github.com/karaggeorge/mac-screen-capture-permissions/tree/master
   // https://nyrra33.com/2019/07/23/open-preference-pane-programmatically/
 
@@ -90,10 +87,10 @@ const show = (workspaceId) => {
   }
 
   if (win == null) {
-    create(workspaceId);
-  } else if (workspaceId !== global.displayMediaRequestedWorkspaceId) {
+    create(sender);
+  } else if (sender !== currentSender) {
     win.close();
-    create(workspaceId);
+    create(sender);
   } else {
     win.show();
   }
