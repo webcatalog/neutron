@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 
 import Button from '@material-ui/core/Button';
@@ -39,6 +39,10 @@ import {
 
 const styles = (theme) => ({
   button: {
+    float: 'left',
+    marginRight: theme.spacing(1),
+  },
+  buttonRight: {
     float: 'right',
     marginLeft: theme.spacing(1),
   },
@@ -54,6 +58,13 @@ const styles = (theme) => ({
   alert: {
     marginBottom: theme.spacing(1),
   },
+  actions: {
+    display: 'flex',
+    width: '100%',
+  },
+  actionsLeft: {
+    flex: 1,
+  },
 });
 
 const Extensions = ({
@@ -66,21 +77,26 @@ const Extensions = ({
 }) => {
   const [extensions, setExtensions] = useState([]);
   const [sources, setSources] = useState([]);
+
+  const refresh = useMemo(() => () => {
+    getExtensionFromProfileAsync(extensionSourceBrowserId, extensionSourceProfileDirName)
+      .then((_extensions) => {
+        setExtensions(_extensions);
+      // eslint-disable-next-line no-console
+      }).catch(console.log);
+
+    getExtensionSourcesAsync()
+      .then((_sources) => {
+        setSources(_sources);
+      // eslint-disable-next-line no-console
+      }).catch(console.log);
+  }, [extensionSourceBrowserId, extensionSourceProfileDirName, setExtensions, setSources]);
+
   useEffect(() => {
     if (open) {
-      getExtensionFromProfileAsync(extensionSourceBrowserId, extensionSourceProfileDirName)
-        .then((_extensions) => {
-          setExtensions(_extensions);
-        // eslint-disable-next-line no-console
-        }).catch(console.log);
-
-      getExtensionSourcesAsync()
-        .then((_sources) => {
-          setSources(_sources);
-        // eslint-disable-next-line no-console
-        }).catch(console.log);
+      refresh();
     }
-  }, [open, extensionSourceBrowserId, extensionSourceProfileDirName, setExtensions, setSources]);
+  }, [open, refresh]);
 
   const currentSource = sources
     .find((source) => source.browserId === extensionSourceBrowserId);
@@ -111,7 +127,12 @@ const Extensions = ({
                 labelId="browser-label"
                 id="browser"
                 value={extensionSourceBrowserId}
-                onChange={(e) => requestSetPreference('extensionSourceBrowserId', e.target.value)}
+                onChange={(e) => {
+                  const newSource = sources.find((source) => source.browserId === e.target.value);
+                  if (!newSource) return;
+                  requestSetPreference('extensionSourceBrowserId', newSource.browserId);
+                  requestSetPreference('extensionSourceProfileDirName', newSource.profiles[0].profileDirName);
+                }}
                 label="Browser"
               >
                 {sources.map((source) => (
@@ -181,9 +202,28 @@ const Extensions = ({
         </DialogContent>
       )}
       <DialogActions>
-        <Button variant="contained" disableElevation className={classes.button} onClick={onClose}>
-          Close
-        </Button>
+        <div className={classes.actions}>
+          <div className={classes.actionsLeft}>
+            <Button variant="contained" disableElevation className={classes.button} onClick={() => refresh()}>
+              Refresh
+            </Button>
+            <Button
+              variant="contained"
+              disableElevation
+              className={classes.button}
+              onClick={() => {
+                requestSetPreference('extensionEnabledExtesionIds', {});
+              }}
+            >
+              Disable All
+            </Button>
+          </div>
+          <div className={classes.actionsRight}>
+            <Button variant="contained" disableElevation className={classes.buttonRight} onClick={onClose}>
+              Close
+            </Button>
+          </div>
+        </div>
       </DialogActions>
     </Dialog>
   );
