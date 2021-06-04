@@ -30,14 +30,14 @@ const {
 } = require('./workspaces');
 
 const {
-  createWorkspaceView,
-  setActiveWorkspaceView,
-} = require('./workspaces-views');
-
-const {
   getView,
 } = require('./views');
 const isStandalone = require('./is-standalone');
+
+// DO NOT require('./workspace-views') here
+// it will cause (node:42042) Warning: Accessing non-existent propertys
+// of module exports inside circular dependency
+// use ipcMain.emit instead
 
 let menu;
 
@@ -542,8 +542,7 @@ const createMenu = async () => {
           checked: workspace.active,
           click: () => {
             if (workspace.active) return;
-            setActiveWorkspaceView(workspace.id);
-            createMenu();
+            ipcMain.emit('request-set-active-workspace', null, workspace.id);
           },
           accelerator: i < 9 ? `CmdOrCtrl+${i + 1}` : null,
         });
@@ -565,8 +564,7 @@ const createMenu = async () => {
       click: () => {
         const currentActiveWorkspace = getActiveWorkspace();
         const nextWorkspace = getNextWorkspace(currentActiveWorkspace.id);
-        setActiveWorkspaceView(nextWorkspace.id);
-        createMenu();
+        ipcMain.emit('request-set-active-workspace', null, nextWorkspace.id);
       },
       accelerator: 'CmdOrCtrl+Shift+]',
       enabled: !global.locked && hasWorkspaces,
@@ -576,8 +574,7 @@ const createMenu = async () => {
       click: () => {
         const currentActiveWorkspace = getActiveWorkspace();
         const previousWorkspace = getPreviousWorkspace(currentActiveWorkspace.id);
-        setActiveWorkspaceView(previousWorkspace.id);
-        createMenu();
+        ipcMain.emit('request-set-active-workspace', null, previousWorkspace.id);
       },
       accelerator: 'CmdOrCtrl+Shift+[',
       enabled: !global.locked && hasWorkspaces,
@@ -616,8 +613,7 @@ const createMenu = async () => {
     {
       label: `Add ${appJson.name} ${getWorkspaceFriendlyName()}`,
       click: () => {
-        createWorkspaceView();
-        createMenu();
+        ipcMain.emit('request-create-workspace');
       },
       visible: Boolean(appJson.url),
       enabled: !global.locked,
