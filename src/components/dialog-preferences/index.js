@@ -3,7 +3,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
 
 import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
@@ -11,9 +10,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
-import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
-import Select from '@material-ui/core/Select';
 import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
 
@@ -58,9 +55,7 @@ import {
   getIapFormattedPriceAsync,
 } from '../../invokers';
 
-import { open as openDialogInternalUrls } from '../../state/dialog-internal-urls/actions';
 import { open as openDialogProxy } from '../../state/dialog-proxy/actions';
-import { open as openDialogRefreshInterval } from '../../state/dialog-refresh-interval/actions';
 
 import SectionAudioVideo from './section-audio-video';
 import SectionGeneral from './section-general';
@@ -225,26 +220,15 @@ const getUpdaterDesc = (status, info) => {
 };
 
 const Preferences = ({
-  alwaysOnTop,
   autoCheckForUpdates,
-  autoRefresh,
-  autoRefreshInterval,
-  autoRefreshOnlyWhenInactive,
   classes,
-  hibernateUnusedWorkspacesAtLaunch,
   iapPurchased,
-  internalUrlRule,
-  onOpenDialogInternalUrls,
-  onOpenDialogProxy,
-  onOpenDialogRefreshInterval,
   proxyMode,
   standaloneRegistered,
-  swipeToNavigate,
   updaterInfo,
   updaterStatus,
-  useHardwareAcceleration,
-  useSystemTitleBar,
   warnBeforeQuitting,
+  onOpenDialogProxy,
 }) => {
   const appJson = getStaticGlobal('appJson');
   const utmSource = getUtmSource();
@@ -865,37 +849,24 @@ const Preferences = ({
 
 Preferences.defaultProps = {
   iapPurchased: false,
-  internalUrlRule: null,
   standaloneRegistered: false,
   updaterInfo: null,
   updaterStatus: null,
 };
 
 Preferences.propTypes = {
-  alwaysOnTop: PropTypes.bool.isRequired,
   autoCheckForUpdates: PropTypes.bool.isRequired,
-  autoRefresh: PropTypes.bool.isRequired,
-  autoRefreshInterval: PropTypes.number.isRequired,
-  autoRefreshOnlyWhenInactive: PropTypes.bool.isRequired,
   classes: PropTypes.object.isRequired,
-  hibernateUnusedWorkspacesAtLaunch: PropTypes.bool.isRequired,
   iapPurchased: PropTypes.bool,
-  internalUrlRule: PropTypes.string,
-  onOpenDialogInternalUrls: PropTypes.func.isRequired,
-  onOpenDialogProxy: PropTypes.func.isRequired,
-  onOpenDialogRefreshInterval: PropTypes.func.isRequired,
   proxyMode: PropTypes.oneOf(['direct', 'fixed_servers', 'pac_script', 'system']).isRequired,
   standaloneRegistered: PropTypes.bool,
-  swipeToNavigate: PropTypes.bool.isRequired,
   updaterInfo: PropTypes.object,
   updaterStatus: PropTypes.string,
-  useHardwareAcceleration: PropTypes.bool.isRequired,
-  useSystemTitleBar: PropTypes.bool.isRequired,
   warnBeforeQuitting: PropTypes.bool.isRequired,
+  onOpenDialogProxy: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  alwaysOnTop: state.preferences.alwaysOnTop,
   autoCheckForUpdates: state.preferences.autoCheckForUpdates,
   autoRefresh: state.preferences.autoRefresh,
   autoRefreshInterval: state.preferences.autoRefreshInterval,
@@ -915,9 +886,7 @@ const mapStateToProps = (state) => ({
 });
 
 const actionCreators = {
-  openDialogInternalUrls,
   openDialogProxy,
-  openDialogRefreshInterval,
 };
 
 export default connectComponent(
