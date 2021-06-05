@@ -17,6 +17,8 @@ const isMas = require('./is-mas');
 
 const getRecipe = require('./get-recipe');
 
+const preferences = ipcRenderer.sendSync('get-preferences');
+
 contextBridge.exposeInMainWorld(
   'webcatalog',
   {
@@ -37,7 +39,7 @@ const loadDarkReader = (workspaceId) => {
   const workspaceDarkReader = ipcRenderer.sendSync('get-workspace-preference', workspaceId, 'darkReader');
   const darkReader = workspaceDarkReader != null
     ? workspaceDarkReader
-    : ipcRenderer.sendSync('get-preference', 'darkReader');
+    : ipcRenderer.sendSync('get-preference', 'darkReader'); // get fresh value
   if (shouldUseDarkColor && darkReader) {
     let darkReaderBrightness;
     let darkReaderContrast;
@@ -53,11 +55,11 @@ const loadDarkReader = (workspaceId) => {
       darkReaderGrayscale = workspacePreferences.darkReaderGrayscale || 0;
       darkReaderSepia = workspacePreferences.darkReaderSepia || 0;
     } else {
-      const preferences = ipcRenderer.sendSync('get-preferences');
-      darkReaderBrightness = preferences.darkReaderBrightness;
-      darkReaderContrast = preferences.darkReaderContrast;
-      darkReaderGrayscale = preferences.darkReaderGrayscale;
-      darkReaderSepia = preferences.darkReaderSepia;
+      const freshPreferences = ipcRenderer.sendSync('get-preferences'); // get fresh values
+      darkReaderBrightness = freshPreferences.darkReaderBrightness;
+      darkReaderContrast = freshPreferences.darkReaderContrast;
+      darkReaderGrayscale = freshPreferences.darkReaderGrayscale;
+      darkReaderSepia = freshPreferences.darkReaderSepia;
     }
     // use node-fetch
     // to avoid CORS-related issues
@@ -88,7 +90,6 @@ const handleLoaded = async (event) => {
     loadDarkReader(workspaceId);
   });
 
-  const preferences = ipcRenderer.sendSync('get-preferences');
   const workspacePreferences = ipcRenderer.sendSync('get-workspace-preferences', workspaceId);
 
   const jsCodeInjection = workspacePreferences.jsCodeInjection || preferences.jsCodeInjection;
@@ -370,6 +371,24 @@ webFrame.executeJavaScript(`
           });
         });
     };
+
+    const nativeEnumerateDevices = window.navigator.mediaDevices.enumerateDevices.bind(window.navigator.mediaDevices);
+    const preferredDeviceLabels = [
+      '${preferences.defaultAudioInputDeviceLabel || ''}',
+      '${preferences.defaultAudioOutputDeviceLabel || ''}',
+      '${preferences.defaultVideoInputDeviceLabel || ''}',
+    ];
+    window.navigator.mediaDevices.enumerateDevices = async (...args) => {
+      const unsortedDevices = await nativeEnumerateDevices(...args);
+      const sortedDevices = [...unsortedDevices];
+      sortedDevices.sort((a, b) => {
+        const aPreferred = preferredDeviceLabels.includes(a.label) ? 0 : 1;
+        const bPreferred = preferredDeviceLabels.includes(b.label) ? 0 : 1;
+        return aPreferred - bPreferred;
+      });
+      console.log(unsortedDevices, sortedDevices);
+      return sortedDevices;
+    };
   }
 
   window.navigator.setAppBadge = (contents) => {
@@ -378,7 +397,6 @@ webFrame.executeJavaScript(`
   };
 })();
 `);
-
 // enable pinch zooming (default behavior of Chromium)
 // https://github.com/electron/electron/pull/12679
 webFrame.setVisualZoomLevelLimits(1, 10);

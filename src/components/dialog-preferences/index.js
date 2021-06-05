@@ -30,6 +30,7 @@ import LanguageIcon from '@material-ui/icons/Language';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import PaletteIcon from '@material-ui/icons/Palette';
+import PermCameraMicIcon from '@material-ui/icons/PermCameraMic';
 import PowerIcon from '@material-ui/icons/Power';
 import RotateLeftIcon from '@material-ui/icons/RotateLeft';
 import RouterIcon from '@material-ui/icons/Router';
@@ -86,6 +87,7 @@ import autoRefreshIntervals from '../../constants/auto-refresh-intervals';
 import ListItemDefaultMailClient from './list-item-default-mail-client';
 import ListItemDefaultBrowser from './list-item-default-browser';
 import ListItemDefaultCalendarApp from './list-item-default-calendar-app';
+import SectionAudioVideo from './section-audio-video';
 
 import DialogAppLock from '../dialog-app-lock';
 import DialogCodeInjection from '../dialog-code-injection';
@@ -365,6 +367,11 @@ const Preferences = ({
     downloads: {
       text: 'Downloads',
       Icon: CloudDownloadIcon,
+      ref: useRef(),
+    },
+    audioVideo: {
+      text: 'Audio & Video',
+      Icon: PermCameraMicIcon,
       ref: useRef(),
     },
     network: {
@@ -1292,6 +1299,11 @@ const Preferences = ({
             </ListItem>
           </List>
         </Paper>
+
+        <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.audioVideo.ref}>
+          Audio & Video
+        </Typography>
+        <SectionAudioVideo classes={classes} />
 
         <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle} ref={sections.network.ref}>
           Network
