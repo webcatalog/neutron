@@ -23,19 +23,19 @@ import Typography from '@material-ui/core/Typography';
 import MenuItem from '@material-ui/core/MenuItem';
 import Alert from '@material-ui/lab/Alert';
 
-import connectComponent from '../../helpers/connect-component';
+import connectComponent from '../../../helpers/connect-component';
 
-import { close } from '../../state/dialog-extensions/actions';
+import { close } from '../../../state/dialog-extensions/actions';
 
 import {
   getExtensionFromProfileAsync,
   getExtensionSourcesAsync,
-} from '../../invokers';
+} from '../../../invokers';
 
 import {
   requestSetPreference,
   enqueueRequestRestartSnackbar,
-} from '../../senders';
+} from '../../../senders';
 
 const styles = (theme) => ({
   button: {

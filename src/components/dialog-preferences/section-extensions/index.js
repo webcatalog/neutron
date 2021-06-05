@@ -15,7 +15,7 @@ import connectComponent from '../../../helpers/connect-component';
 
 import { open as openDialogExtensions } from '../../../state/dialog-extensions/actions';
 
-import DialogExtensions from '../../dialog-extensions';
+import DialogExtensions from './dialog-extensions';
 
 const styles = (theme) => ({
   paper: {
