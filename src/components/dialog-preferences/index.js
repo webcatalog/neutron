@@ -73,6 +73,7 @@ import SectionPrivacySecurity from './section-privacy-security';
 import SectionExtensions from './section-extensions';
 import SectionLanguages from './section-languages';
 import SectionDevelopers from './section-developers';
+import SectionDownloads from './section-downloads';
 
 import DialogAppLock from '../dialog-app-lock';
 import DialogCodeInjection from '../dialog-code-injection';
@@ -192,12 +193,6 @@ const styles = (theme) => ({
   },
 });
 
-const getFileManagerName = () => {
-  if (window.process.platform === 'darwin') return 'Finder';
-  if (window.process.platform === 'win32') return 'File Explorer';
-  return 'file manager';
-};
-
 const formatBytes = (bytes, decimals = 2) => {
   if (bytes === 0) return '0 Bytes';
 
@@ -233,20 +228,17 @@ const getUpdaterDesc = (status, info) => {
 
 const Preferences = ({
   alwaysOnTop,
-  askForDownloadPath,
   autoCheckForUpdates,
   autoRefresh,
   autoRefreshInterval,
   autoRefreshOnlyWhenInactive,
   classes,
-  downloadPath,
   hibernateUnusedWorkspacesAtLaunch,
   iapPurchased,
   internalUrlRule,
   onOpenDialogInternalUrls,
   onOpenDialogProxy,
   onOpenDialogRefreshInterval,
-  openFolderWhenDoneDownloading,
   proxyMode,
   standaloneRegistered,
   swipeToNavigate,
@@ -449,65 +441,7 @@ const Preferences = ({
         <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.downloads.ref}>
           Downloads
         </Typography>
-        <Paper elevation={0} className={classes.paper}>
-          <List disablePadding dense>
-            {!isMas() && (
-              <>
-                <ListItem
-                  button
-                  onClick={() => {
-                    window.remote.dialog.showOpenDialog(window.remote.getCurrentWindow(), {
-                      properties: ['openDirectory'],
-                    })
-                      .then(({ canceled, filePaths }) => {
-                        if (!canceled && filePaths && filePaths.length > 0) {
-                          requestSetPreference('downloadPath', filePaths[0]);
-                        }
-                      })
-                      .catch(console.log); // eslint-disable-line
-                  }}
-                >
-                  <ListItemText
-                    primary="Download Location"
-                    secondary={downloadPath}
-                  />
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-                <Divider />
-              </>
-            )}
-            <ListItem>
-              <ListItemText
-                primary="Ask where to save each file before downloading"
-                secondary={isMas() ? 'Otherwise, download files are always saved to ~/Downloads folder.' : null}
-              />
-              <ListItemSecondaryAction>
-                <Switch
-                  edge="end"
-                  color="primary"
-                  checked={askForDownloadPath}
-                  onChange={(e) => {
-                    requestSetPreference('askForDownloadPath', e.target.checked);
-                  }}
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListItemText primary={`Reveal the file in ${getFileManagerName()} when it is downloaded`} />
-              <ListItemSecondaryAction>
-                <Switch
-                  edge="end"
-                  color="primary"
-                  checked={openFolderWhenDoneDownloading}
-                  onChange={(e) => {
-                    requestSetPreference('openFolderWhenDoneDownloading', e.target.checked);
-                  }}
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
-          </List>
-        </Paper>
+        <SectionDownloads />
 
         <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.audioVideo.ref}>
           Audio & Video
@@ -1153,20 +1087,17 @@ Preferences.defaultProps = {
 
 Preferences.propTypes = {
   alwaysOnTop: PropTypes.bool.isRequired,
-  askForDownloadPath: PropTypes.bool.isRequired,
   autoCheckForUpdates: PropTypes.bool.isRequired,
   autoRefresh: PropTypes.bool.isRequired,
   autoRefreshInterval: PropTypes.number.isRequired,
   autoRefreshOnlyWhenInactive: PropTypes.bool.isRequired,
   classes: PropTypes.object.isRequired,
-  downloadPath: PropTypes.string.isRequired,
   hibernateUnusedWorkspacesAtLaunch: PropTypes.bool.isRequired,
   iapPurchased: PropTypes.bool,
   internalUrlRule: PropTypes.string,
   onOpenDialogInternalUrls: PropTypes.func.isRequired,
   onOpenDialogProxy: PropTypes.func.isRequired,
   onOpenDialogRefreshInterval: PropTypes.func.isRequired,
-  openFolderWhenDoneDownloading: PropTypes.bool.isRequired,
   proxyMode: PropTypes.oneOf(['direct', 'fixed_servers', 'pac_script', 'system']).isRequired,
   standaloneRegistered: PropTypes.bool,
   swipeToNavigate: PropTypes.bool.isRequired,
@@ -1179,17 +1110,14 @@ Preferences.propTypes = {
 
 const mapStateToProps = (state) => ({
   alwaysOnTop: state.preferences.alwaysOnTop,
-  askForDownloadPath: state.preferences.askForDownloadPath,
   autoCheckForUpdates: state.preferences.autoCheckForUpdates,
   autoRefresh: state.preferences.autoRefresh,
   autoRefreshInterval: state.preferences.autoRefreshInterval,
   autoRefreshOnlyWhenInactive: state.preferences.autoRefreshOnlyWhenInactive,
   defaultFontSize: state.preferences.defaultFontSize,
-  downloadPath: state.preferences.downloadPath,
   hibernateUnusedWorkspacesAtLaunch: state.preferences.hibernateUnusedWorkspacesAtLaunch,
   iapPurchased: state.preferences.iapPurchased,
   internalUrlRule: state.preferences.internalUrlRule,
-  openFolderWhenDoneDownloading: state.preferences.openFolderWhenDoneDownloading,
   proxyMode: state.preferences.proxyMode,
   standaloneRegistered: state.preferences.standaloneRegistered,
   swipeToNavigate: state.preferences.swipeToNavigate,
