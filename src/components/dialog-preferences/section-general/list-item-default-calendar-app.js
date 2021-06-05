@@ -9,20 +9,20 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-import connectComponent from '../../helpers/connect-component';
-import getStaticGlobal from '../../helpers/get-static-global';
-import isWindows10 from '../../helpers/is-windows-10';
+import connectComponent from '../../../helpers/connect-component';
+import getStaticGlobal from '../../../helpers/get-static-global';
+import isWindows10 from '../../../helpers/is-windows-10';
 
-import { requestOpenInBrowser } from '../../senders';
-import { isDefaultMailClientAsync } from '../../invokers';
+import { requestOpenInBrowser } from '../../../senders';
+import { isDefaultCalendarAppAsync } from '../../../invokers';
 
-const ListItemDefaultMailClient = () => {
+const ListItemDefaultCalendarApp = () => {
   const appJson = getStaticGlobal('appJson');
   const [isDefault, setIsDefault] = useState(false);
 
   const recheckIsDefault = useCallback(
     () => {
-      isDefaultMailClientAsync()
+      isDefaultCalendarAppAsync()
         .then((result) => {
           setIsDefault(result);
         });
@@ -44,7 +44,7 @@ const ListItemDefaultMailClient = () => {
   if (isDefault) {
     return (
       <ListItem>
-        <ListItemText secondary={`${appJson.name} is your default email client.`} />
+        <ListItemText secondary={`${appJson.name} is your default calendar app.`} />
       </ListItem>
     );
   }
@@ -55,7 +55,7 @@ const ListItemDefaultMailClient = () => {
     return (
       // https://docs.microsoft.com/en-us/windows/uwp/launch-resume/launch-settings-app
       <ListItem button onClick={() => requestOpenInBrowser('ms-settings:defaultapps')}>
-        <ListItemText primary="Default email client" secondary={`Make ${appJson.name} the default email client.`} />
+        <ListItemText primary="Default calendar app" secondary={`Make ${appJson.name} the default calendar app.`} />
         <ChevronRightIcon color="action" />
       </ListItem>
     );
@@ -63,13 +63,13 @@ const ListItemDefaultMailClient = () => {
 
   return (
     <ListItem>
-      <ListItemText primary="Default email client" secondary={`Make ${appJson.name} the default email client.`} />
+      <ListItemText primary="Default calendar app" secondary={`Make ${appJson.name} the default calendar app.`} />
       <Button
         variant="outlined"
         size="small"
         color="default"
         onClick={() => {
-          window.remote.app.setAsDefaultProtocolClient('mailto');
+          window.remote.app.setAsDefaultProtocolClient('webcal');
           recheckIsDefault();
         }}
       >
@@ -80,7 +80,7 @@ const ListItemDefaultMailClient = () => {
 };
 
 export default connectComponent(
-  ListItemDefaultMailClient,
+  ListItemDefaultCalendarApp,
   null,
   null,
   null,

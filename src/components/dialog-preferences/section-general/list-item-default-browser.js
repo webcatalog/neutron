@@ -9,13 +9,13 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-import connectComponent from '../../helpers/connect-component';
-import getStaticGlobal from '../../helpers/get-static-global';
-import isWindows10 from '../../helpers/is-windows-10';
+import connectComponent from '../../../helpers/connect-component';
+import getStaticGlobal from '../../../helpers/get-static-global';
+import isWindows10 from '../../../helpers/is-windows-10';
 
-import { requestOpenInBrowser } from '../../senders';
+import { requestOpenInBrowser } from '../../../senders';
 
-import { isDefaultBrowserAsync } from '../../invokers';
+import { isDefaultBrowserAsync } from '../../../invokers';
 
 const ListItemDefaultBrowser = () => {
   const appJson = getStaticGlobal('appJson');

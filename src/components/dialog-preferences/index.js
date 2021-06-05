@@ -19,7 +19,6 @@ import Select from '@material-ui/core/Select';
 import Slider from '@material-ui/core/Slider';
 import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
-import Radio from '@material-ui/core/Radio';
 
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -59,7 +58,6 @@ import {
   requestRealignActiveWorkspace,
   requestResetPreferences,
   requestSetPreference,
-  requestSetSystemPreference,
   requestShowAboutWindow,
   requestShowNotification,
   requestShowNotificationsWindow,
@@ -81,13 +79,10 @@ import { open as openDialogRefreshInterval } from '../../state/dialog-refresh-in
 import { open as openDialogSpellcheckLanguages } from '../../state/dialog-spellcheck-languages/actions';
 
 import hunspellLanguagesMap from '../../constants/hunspell-languages';
-import searchEngines from '../../constants/search-engines';
 import autoRefreshIntervals from '../../constants/auto-refresh-intervals';
 
-import ListItemDefaultMailClient from './list-item-default-mail-client';
-import ListItemDefaultBrowser from './list-item-default-browser';
-import ListItemDefaultCalendarApp from './list-item-default-calendar-app';
 import SectionAudioVideo from './section-audio-video';
+import SectionGeneral from './section-general';
 
 import DialogAppLock from '../dialog-app-lock';
 import DialogCodeInjection from '../dialog-code-injection';
@@ -281,7 +276,6 @@ const Preferences = ({
   onOpenDialogProxy,
   onOpenDialogRefreshInterval,
   onOpenDialogSpellcheckLanguages,
-  openAtLogin,
   openFolderWhenDoneDownloading,
   pauseNotificationsBySchedule,
   pauseNotificationsByScheduleFrom,
@@ -289,8 +283,6 @@ const Preferences = ({
   pauseNotificationsMuteAudio,
   proxyMode,
   rememberLastPageVisited,
-  runInBackground,
-  searchEngine,
   sentry,
   shareWorkspaceBrowsingData,
   sidebar,
@@ -303,7 +295,6 @@ const Preferences = ({
   telemetry,
   themeSource,
   titleBar,
-  trayIcon,
   unreadCountBadge,
   updaterInfo,
   updaterStatus,
@@ -478,207 +469,7 @@ const Preferences = ({
         <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.general.ref}>
           General
         </Typography>
-        <Paper elevation={0} className={classes.paper}>
-          <List disablePadding dense>
-            {appJson.url && !isMas() && !isStandalone() && (
-              <>
-                <ListItem
-                  button
-                  onClick={() => {
-                    window.remote.dialog.showMessageBox(window.remote.getCurrentWindow(), {
-                      type: 'question',
-                      buttons: ['Learn More..', 'Later'],
-                      message: 'You can change the app URL through the WebCatalog app.',
-                      cancelId: 1,
-                    }).then(({ response }) => {
-                      if (response === 0) {
-                        requestOpenInBrowser(`https://help.webcatalog.app/article/33-can-i-change-the-url-of-an-installed-app?utm_source=${utmSource}`);
-                      }
-                    }).catch(console.log); // eslint-disable-line
-                  }}
-                >
-                  <ListItemText primary="App URL" secondary={appJson.url} />
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-                <Divider />
-              </>
-            )}
-            {(appJson.id.startsWith('group-') || appJson.id === 'clovery') && (
-              <>
-                <ListItem disableGutters className={classes.listItemModePicker}>
-                  <div className={classes.modePicker}>
-                    <Grid container spacing={2}>
-                      <Grid item>
-                        <Radio
-                          checked={shareWorkspaceBrowsingData}
-                          onChange={(e) => {
-                            requestSetPreference('shareWorkspaceBrowsingData', e.target.checked);
-                            enqueueRequestRestartSnackbar();
-                          }}
-                        />
-                      </Grid>
-                      <Grid item xs>
-                        <Typography variant="body1" gutterBottom={false}>
-                          Single Account Mode
-                        </Typography>
-                        <Typography variant="body2" gutterBottom={false}>
-                          Use same login credentials across added services.
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                    <Grid container spacing={2}>
-                      <Grid item>
-                        <Radio
-                          checked={!shareWorkspaceBrowsingData}
-                          onChange={(e) => {
-                            requestSetPreference('shareWorkspaceBrowsingData', !e.target.checked);
-                            enqueueRequestRestartSnackbar();
-                          }}
-                        />
-                      </Grid>
-                      <Grid item xs>
-                        <Typography variant="body1" gutterBottom={false}>
-                          Multiple Account Mode
-                        </Typography>
-                        <Typography variant="body2" gutterBottom={false}>
-                          Use different login credentials for each added service.
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                  </div>
-                </ListItem>
-                <Divider />
-              </>
-            )}
-            <ListItem>
-              <ListItemText
-                primary={(() => {
-                  if (window.process.platform === 'darwin') { return 'Show menu bar icon'; }
-                  return 'Show tray (notification area) icon';
-                })()}
-              />
-              <ListItemSecondaryAction>
-                <Switch
-                  edge="end"
-                  color="primary"
-                  checked={trayIcon || runInBackground || attachToMenubar}
-                  disabled={runInBackground || attachToMenubar}
-                  onChange={(e) => {
-                    requestSetPreference('trayIcon', e.target.checked);
-                    enqueueRequestRestartSnackbar();
-                  }}
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
-            <ListItem>
-              <ListItemText
-                primary={window.process.platform === 'darwin' ? 'Attach window to menu bar' : 'Pin window to system tray (notification area)'}
-                secondary="Tip: Right-click on app icon to access context menu."
-              />
-              <ListItemSecondaryAction>
-                <Switch
-                  edge="end"
-                  color="primary"
-                  checked={attachToMenubar}
-                  onChange={(e) => {
-                    // this feature is free with WebCatalog
-                    // but not free in MAS apps
-                    if (isMas() && !checkLicense()) {
-                      return;
-                    }
-                    requestSetPreference('attachToMenubar', e.target.checked);
-                    enqueueRequestRestartSnackbar();
-                  }}
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
-            {window.process.platform !== 'darwin' && (
-              <>
-                <Divider />
-                <ListItem>
-                  <ListItemText
-                    primary="Run in background"
-                    secondary="Keep the app running in background even when all windows are closed."
-                  />
-                  <ListItemSecondaryAction>
-                    <Switch
-                      edge="end"
-                      color="primary"
-                      checked={attachToMenubar || runInBackground}
-                      disabled={attachToMenubar}
-                      onChange={(e) => {
-                        requestSetPreference('runInBackground', e.target.checked);
-                        enqueueRequestRestartSnackbar();
-                      }}
-                    />
-                  </ListItemSecondaryAction>
-                </ListItem>
-              </>
-            )}
-            <Divider />
-            <ListItem>
-              <ListItemText
-                primary="Search engine"
-                secondary="Search engine used in the address bar and other contexts."
-              />
-              <Select
-                value={searchEngine}
-                onChange={(e) => requestSetPreference('searchEngine', e.target.value)}
-                variant="filled"
-                disableUnderline
-                margin="dense"
-                classes={{
-                  root: classes.select,
-                }}
-                className={classes.selectRoot}
-              >
-                {Object.keys(searchEngines).map((optKey) => {
-                  const opt = searchEngines[optKey];
-                  return (
-                    <MenuItem
-                      key={optKey}
-                      value={optKey}
-                      dense
-                    >
-                      {opt.name}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListItemText primary="Open at login" />
-              <Select
-                value={openAtLogin}
-                onChange={(e) => requestSetSystemPreference('openAtLogin', e.target.value)}
-                variant="filled"
-                disableUnderline
-                margin="dense"
-                classes={{
-                  root: classes.select,
-                }}
-                className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
-              >
-                <MenuItem dense value="yes">Yes</MenuItem>
-                {window.process.platform === 'darwin' && (
-                  <MenuItem dense value="yes-hidden">Yes, but minimized</MenuItem>
-                )}
-                <MenuItem dense value="no">No</MenuItem>
-              </Select>
-            </ListItem>
-            <Divider />
-            <ListItemDefaultMailClient />
-            {appJson.id !== 'panmail' && (
-              <>
-                <Divider />
-                <ListItemDefaultCalendarApp />
-                <Divider />
-                <ListItemDefaultBrowser />
-              </>
-            )}
-          </List>
-        </Paper>
+        <SectionGeneral />
 
         <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.appearance.ref}>
           Appearance
@@ -2176,7 +1967,6 @@ Preferences.propTypes = {
   onOpenDialogProxy: PropTypes.func.isRequired,
   onOpenDialogRefreshInterval: PropTypes.func.isRequired,
   onOpenDialogSpellcheckLanguages: PropTypes.func.isRequired,
-  openAtLogin: PropTypes.oneOf(['yes', 'yes-hidden', 'no']).isRequired,
   openFolderWhenDoneDownloading: PropTypes.bool.isRequired,
   pauseNotificationsBySchedule: PropTypes.bool.isRequired,
   pauseNotificationsByScheduleFrom: PropTypes.string.isRequired,
@@ -2184,8 +1974,6 @@ Preferences.propTypes = {
   pauseNotificationsMuteAudio: PropTypes.bool.isRequired,
   proxyMode: PropTypes.oneOf(['direct', 'fixed_servers', 'pac_script', 'system']).isRequired,
   rememberLastPageVisited: PropTypes.bool.isRequired,
-  runInBackground: PropTypes.bool.isRequired,
-  searchEngine: PropTypes.string.isRequired,
   sentry: PropTypes.bool.isRequired,
   shareWorkspaceBrowsingData: PropTypes.bool.isRequired,
   sidebar: PropTypes.bool.isRequired,
@@ -2198,7 +1986,6 @@ Preferences.propTypes = {
   telemetry: PropTypes.bool.isRequired,
   themeSource: PropTypes.string.isRequired,
   titleBar: PropTypes.bool.isRequired,
-  trayIcon: PropTypes.bool.isRequired,
   unreadCountBadge: PropTypes.bool.isRequired,
   updaterInfo: PropTypes.object,
   updaterStatus: PropTypes.string,
@@ -2232,7 +2019,6 @@ const mapStateToProps = (state) => ({
   internalUrlRule: state.preferences.internalUrlRule,
   jsCodeInjection: state.preferences.jsCodeInjection,
   navigationBar: state.preferences.navigationBar,
-  openAtLogin: state.systemPreferences.openAtLogin,
   openFolderWhenDoneDownloading: state.preferences.openFolderWhenDoneDownloading,
   pauseNotificationsBySchedule: state.preferences.pauseNotificationsBySchedule,
   pauseNotificationsByScheduleFrom: state.preferences.pauseNotificationsByScheduleFrom,
@@ -2240,8 +2026,6 @@ const mapStateToProps = (state) => ({
   pauseNotificationsMuteAudio: state.preferences.pauseNotificationsMuteAudio,
   proxyMode: state.preferences.proxyMode,
   rememberLastPageVisited: state.preferences.rememberLastPageVisited,
-  runInBackground: state.preferences.runInBackground,
-  searchEngine: state.preferences.searchEngine,
   sentry: state.preferences.sentry,
   shareWorkspaceBrowsingData: state.preferences.shareWorkspaceBrowsingData,
   sidebar: state.preferences.sidebar,
@@ -2254,7 +2038,6 @@ const mapStateToProps = (state) => ({
   telemetry: state.preferences.telemetry,
   themeSource: state.preferences.themeSource,
   titleBar: state.preferences.titleBar,
-  trayIcon: state.preferences.trayIcon,
   unreadCountBadge: state.preferences.unreadCountBadge,
   updaterInfo: state.updater.info,
   updaterStatus: state.updater.status,

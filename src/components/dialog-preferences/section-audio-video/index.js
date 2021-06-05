@@ -12,11 +12,11 @@ import Paper from '@material-ui/core/Paper';
 import Select from '@material-ui/core/Select';
 import Divider from '@material-ui/core/Divider';
 
-import connectComponent from '../../helpers/connect-component';
+import connectComponent from '../../../helpers/connect-component';
 
 import {
   requestSetPreference,
-} from '../../senders';
+} from '../../../senders';
 
 const SectionAudioVideo = ({
   classes,
