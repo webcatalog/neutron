@@ -61,7 +61,6 @@ import {
 
 import { open as openDialogCodeInjection } from '../../state/dialog-code-injection/actions';
 import { open as openDialogCustomUserAgent } from '../../state/dialog-custom-user-agent/actions';
-import { open as openDialogExtensions } from '../../state/dialog-extensions/actions';
 import { open as openDialogInternalUrls } from '../../state/dialog-internal-urls/actions';
 import { open as openDialogProxy } from '../../state/dialog-proxy/actions';
 import { open as openDialogRefreshInterval } from '../../state/dialog-refresh-interval/actions';
@@ -75,6 +74,7 @@ import SectionGeneral from './section-general';
 import SectionAppearance from './section-appearance';
 import SectionNotifications from './section-notifications';
 import SectionPrivacySecurity from './section-privacy-security';
+import SectionExtensions from './section-extensions';
 
 import DialogAppLock from '../dialog-app-lock';
 import DialogCodeInjection from '../dialog-code-injection';
@@ -84,7 +84,6 @@ import DialogInternalUrls from '../dialog-internal-urls';
 import DialogProxy from '../dialog-proxy';
 import DialogRefreshInterval from '../dialog-refresh-interval';
 import DialogSpellcheckLanguages from '../dialog-spellcheck-languages';
-import DialogExtensions from '../dialog-extensions';
 
 import SnackbarTrigger from '../shared/snackbar-trigger';
 
@@ -251,7 +250,6 @@ const Preferences = ({
   jsCodeInjection,
   onOpenDialogCodeInjection,
   onOpenDialogCustomUserAgent,
-  onOpenDialogExtensions,
   onOpenDialogInternalUrls,
   onOpenDialogProxy,
   onOpenDialogRefreshInterval,
@@ -449,15 +447,7 @@ const Preferences = ({
             <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.extensions.ref}>
               Extensions (experimental)
             </Typography>
-            <Paper elevation={0} className={classes.paper}>
-              <List disablePadding dense>
-                <ListItem button onClick={() => onOpenDialogExtensions()}>
-                  <ListItemText primary="Manage extensions (experimental)" />
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-              </List>
-            </Paper>
-            <DialogExtensions />
+            <SectionExtensions />
           </>
         )}
 
@@ -1259,7 +1249,6 @@ Preferences.propTypes = {
   jsCodeInjection: PropTypes.string,
   onOpenDialogCodeInjection: PropTypes.func.isRequired,
   onOpenDialogCustomUserAgent: PropTypes.func.isRequired,
-  onOpenDialogExtensions: PropTypes.func.isRequired,
   onOpenDialogInternalUrls: PropTypes.func.isRequired,
   onOpenDialogProxy: PropTypes.func.isRequired,
   onOpenDialogRefreshInterval: PropTypes.func.isRequired,
@@ -1308,7 +1297,6 @@ const mapStateToProps = (state) => ({
 const actionCreators = {
   openDialogCodeInjection,
   openDialogCustomUserAgent,
-  openDialogExtensions,
   openDialogInternalUrls,
   openDialogProxy,
   openDialogRefreshInterval,
