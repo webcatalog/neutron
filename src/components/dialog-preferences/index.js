@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import Divider from '@material-ui/core/Divider';
@@ -9,11 +9,9 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import CodeIcon from '@material-ui/icons/Code';
 import ExtensionIcon from '@material-ui/icons/Extension';
@@ -31,17 +29,9 @@ import UpdateIcon from '@material-ui/icons/Update';
 import WidgetsIcon from '@material-ui/icons/Widgets';
 
 import connectComponent from '../../helpers/connect-component';
-import checkLicense from '../../helpers/check-license';
 import isMas from '../../helpers/is-mas';
 import isStandalone from '../../helpers/is-standalone';
 import getStaticGlobal from '../../helpers/get-static-global';
-import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
-
-import {
-  getIapFormattedPriceAsync,
-} from '../../invokers';
-
-import { open as openDialogProxy } from '../../state/dialog-proxy/actions';
 
 import SectionAdvanced from './section-advanced';
 import SectionAppearance from './section-appearance';
@@ -58,6 +48,7 @@ import SectionPrivacySecurity from './section-privacy-security';
 import SectionReset from './section-reset';
 import SectionUpdates from './section-updates';
 import SectionMoreApps from './section-more-apps';
+import SectionAccountLicensing from './section-account-licensing';
 
 import DialogAppLock from '../dialog-app-lock';
 import DialogCodeInjection from '../dialog-code-injection';
@@ -174,24 +165,8 @@ const styles = (theme) => ({
 
 const Preferences = ({
   classes,
-  iapPurchased,
-  standaloneRegistered,
 }) => {
   const appJson = getStaticGlobal('appJson');
-  const registered = appJson.registered || iapPurchased || standaloneRegistered;
-
-  const [formattedPrice, setFormattedPrice] = useState(null);
-  useEffect(() => {
-    if (isMas() && !registered) {
-      getIapFormattedPriceAsync(appJson.iapProductIdentifier)
-        .then((value) => {
-          setFormattedPrice(value);
-        });
-    } else if (isStandalone()) {
-      if (appJson.id === 'panmail') setFormattedPrice('15 USD');
-      else setFormattedPrice('20 USD');
-    }
-  }, [appJson, setFormattedPrice, registered]);
 
   const sections = {
     licensing: {
@@ -318,22 +293,7 @@ const Preferences = ({
             <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle} ref={sections.licensing.ref}>
               Licensing
             </Typography>
-            <Paper elevation={0} className={classes.paper}>
-              <List disablePadding dense>
-                <ListItem button onClick={null} disabled>
-                  <ListItemText primary={registered ? `${isMas() || isStandalone() ? `${appJson.name} Plus` : 'WebCatalog Lifetime'} is activated.` : `Upgrade to ${isMas() || isStandalone() ? `${appJson.name} Plus` : 'WebCatalog Lifetime'} (${formattedPrice ? `${formattedPrice}, ` : ''}one-time payment for lifetime use) to unlock all features & add unlimited number of ${getWorkspaceFriendlyName(true).toLowerCase()}.`} />
-                </ListItem>
-                {!registered && (
-                  <>
-                    <Divider />
-                    <ListItem button onClick={checkLicense}>
-                      <ListItemText primary={`Upgrade to ${isMas() || isStandalone() ? `${appJson.name} Plus` : 'WebCatalog Lifetime'}`} />
-                      <ChevronRightIcon color="action" />
-                    </ListItem>
-                  </>
-                )}
-              </List>
-            </Paper>
+            <SectionAccountLicensing />
           </>
         )}
 
@@ -433,15 +393,8 @@ const Preferences = ({
   );
 };
 
-Preferences.defaultProps = {
-  iapPurchased: false,
-  standaloneRegistered: false,
-};
-
 Preferences.propTypes = {
   classes: PropTypes.object.isRequired,
-  iapPurchased: PropTypes.bool,
-  standaloneRegistered: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({
@@ -449,13 +402,9 @@ const mapStateToProps = (state) => ({
   standaloneRegistered: state.preferences.standaloneRegistered,
 });
 
-const actionCreators = {
-  openDialogProxy,
-};
-
 export default connectComponent(
   Preferences,
   mapStateToProps,
-  actionCreators,
+  null,
   styles,
 );
