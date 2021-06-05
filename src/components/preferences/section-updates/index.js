@@ -9,7 +9,6 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
-import Paper from '@material-ui/core/Paper';
 import Switch from '@material-ui/core/Switch';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -22,14 +21,6 @@ import {
   requestCheckForUpdates,
   requestSetPreference,
 } from '../../../senders';
-
-const styles = (theme) => ({
-  paper: {
-    marginTop: theme.spacing(0.5),
-    marginBottom: theme.spacing(3),
-    border: theme.palette.type === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)',
-  },
-});
 
 const formatBytes = (bytes, decimals = 2) => {
   if (bytes === 0) return '0 Bytes';
@@ -66,7 +57,6 @@ const getUpdaterDesc = (status, info) => {
 
 const SectionUpdates = ({
   autoCheckForUpdates,
-  classes,
   updaterInfo,
   updaterStatus,
 }) => {
@@ -74,55 +64,51 @@ const SectionUpdates = ({
 
   if (isStandalone()) {
     return (
-      <Paper elevation={0} className={classes.paper}>
-        <List disablePadding dense>
-          <ListItem
-            button
-            onClick={() => requestCheckForUpdates(false)}
-            disabled={updaterStatus === 'checking-for-update'
-              || updaterStatus === 'download-progress'
-              || updaterStatus === 'download-progress'
-              || updaterStatus === 'update-available'}
-          >
-            <ListItemText
-              primary={updaterStatus === 'update-downloaded' ? 'Restart to Apply Updates' : 'Check for Updates'}
-              secondary={getUpdaterDesc(updaterStatus, updaterInfo)}
-            />
-            <ChevronRightIcon color="action" />
-          </ListItem>
-        </List>
-      </Paper>
+      <List disablePadding dense>
+        <ListItem
+          button
+          onClick={() => requestCheckForUpdates(false)}
+          disabled={updaterStatus === 'checking-for-update'
+            || updaterStatus === 'download-progress'
+            || updaterStatus === 'download-progress'
+            || updaterStatus === 'update-available'}
+        >
+          <ListItemText
+            primary={updaterStatus === 'update-downloaded' ? 'Restart to Apply Updates' : 'Check for Updates'}
+            secondary={getUpdaterDesc(updaterStatus, updaterInfo)}
+          />
+          <ChevronRightIcon color="action" />
+        </ListItem>
+      </List>
     );
   }
 
   return (
-    <Paper elevation={0} className={classes.paper}>
-      <List disablePadding dense>
-        <ListItem
-          button
-          onClick={requestCheckForUpdates}
-        >
-          <ListItemText
-            primary="Check for updates"
+    <List disablePadding dense>
+      <ListItem
+        button
+        onClick={requestCheckForUpdates}
+      >
+        <ListItemText
+          primary="Check for updates"
+        />
+        <ChevronRightIcon color="action" />
+      </ListItem>
+      <Divider />
+      <ListItem>
+        <ListItemText primary="Check for updates automatically" />
+        <ListItemSecondaryAction>
+          <Switch
+            edge="end"
+            color="primary"
+            checked={autoCheckForUpdates}
+            onChange={(e) => {
+              requestSetPreference('autoCheckForUpdates', e.target.checked);
+            }}
           />
-          <ChevronRightIcon color="action" />
-        </ListItem>
-        <Divider />
-        <ListItem>
-          <ListItemText primary="Check for updates automatically" />
-          <ListItemSecondaryAction>
-            <Switch
-              edge="end"
-              color="primary"
-              checked={autoCheckForUpdates}
-              onChange={(e) => {
-                requestSetPreference('autoCheckForUpdates', e.target.checked);
-              }}
-            />
-          </ListItemSecondaryAction>
-        </ListItem>
-      </List>
-    </Paper>
+        </ListItemSecondaryAction>
+      </ListItem>
+    </List>
   );
 };
 
@@ -133,7 +119,6 @@ SectionUpdates.defaultProps = {
 
 SectionUpdates.propTypes = {
   autoCheckForUpdates: PropTypes.bool.isRequired,
-  classes: PropTypes.object.isRequired,
   updaterInfo: PropTypes.object,
   updaterStatus: PropTypes.string,
 };
@@ -147,6 +132,4 @@ const mapStateToProps = (state) => ({
 export default connectComponent(
   SectionUpdates,
   mapStateToProps,
-  null,
-  styles,
 );

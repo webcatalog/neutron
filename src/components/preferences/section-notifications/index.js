@@ -10,7 +10,6 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
-import Paper from '@material-ui/core/Paper';
 import Switch from '@material-ui/core/Switch';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -65,142 +64,140 @@ const SectionNotifications = ({
   const utmSource = getUtmSource();
 
   return (
-    <Paper elevation={0} className={classes.paper}>
-      <List disablePadding dense>
-        <ListItem button onClick={requestShowNotificationsWindow}>
-          <ListItemText primary="Control notifications" />
-          <ChevronRightIcon color="action" />
-        </ListItem>
-        <Divider />
-        <ListItem>
-          <ListItemText>
-            Automatically disable notifications by schedule:
-            <div className={classes.timePickerContainer}>
-              <TimePicker
-                autoOk={false}
-                label="from"
-                value={new Date(pauseNotificationsByScheduleFrom)}
-                onChange={(d) => requestSetPreference('pauseNotificationsByScheduleFrom', d.toString())}
-                onClose={() => { window.preventClosingWindow = false; }}
-                onOpen={() => { window.preventClosingWindow = true; }}
-                disabled={!pauseNotificationsBySchedule}
-              />
-              <TimePicker
-                autoOk={false}
-                label="to"
-                value={new Date(pauseNotificationsByScheduleTo)}
-                onChange={(d) => requestSetPreference('pauseNotificationsByScheduleTo', d.toString())}
-                onClose={() => { window.preventClosingWindow = false; }}
-                onOpen={() => { window.preventClosingWindow = true; }}
-                disabled={!pauseNotificationsBySchedule}
-              />
-            </div>
-            (
-            {window.Intl.DateTimeFormat().resolvedOptions().timeZone}
-            )
-          </ListItemText>
-          <ListItemSecondaryAction>
-            <Switch
-              edge="end"
-              color="primary"
-              checked={pauseNotificationsBySchedule}
-              onChange={(e) => {
-                requestSetPreference('pauseNotificationsBySchedule', e.target.checked);
-              }}
+    <List disablePadding dense>
+      <ListItem button onClick={requestShowNotificationsWindow}>
+        <ListItemText primary="Control notifications" />
+        <ChevronRightIcon color="action" />
+      </ListItem>
+      <Divider />
+      <ListItem>
+        <ListItemText>
+          Automatically disable notifications by schedule:
+          <div className={classes.timePickerContainer}>
+            <TimePicker
+              autoOk={false}
+              label="from"
+              value={new Date(pauseNotificationsByScheduleFrom)}
+              onChange={(d) => requestSetPreference('pauseNotificationsByScheduleFrom', d.toString())}
+              onClose={() => { window.preventClosingWindow = false; }}
+              onOpen={() => { window.preventClosingWindow = true; }}
+              disabled={!pauseNotificationsBySchedule}
             />
-          </ListItemSecondaryAction>
-        </ListItem>
-        <Divider />
-        <ListItem>
-          <ListItemText primary="Mute audio when notifications are paused" />
-          <ListItemSecondaryAction>
-            <Switch
-              edge="end"
-              color="primary"
-              checked={pauseNotificationsMuteAudio}
-              onChange={(e) => {
-                requestSetPreference('pauseNotificationsMuteAudio', e.target.checked);
-              }}
+            <TimePicker
+              autoOk={false}
+              label="to"
+              value={new Date(pauseNotificationsByScheduleTo)}
+              onChange={(d) => requestSetPreference('pauseNotificationsByScheduleTo', d.toString())}
+              onClose={() => { window.preventClosingWindow = false; }}
+              onOpen={() => { window.preventClosingWindow = true; }}
+              disabled={!pauseNotificationsBySchedule}
             />
-          </ListItemSecondaryAction>
-        </ListItem>
-        <Divider />
-        <ListItem>
-          <ListItemText primary="Show unread count badge" />
-          <ListItemSecondaryAction>
-            <Switch
-              edge="end"
-              color="primary"
-              checked={unreadCountBadge}
-              onChange={(e) => {
-                requestSetPreference('unreadCountBadge', e.target.checked);
-              }}
-            />
-          </ListItemSecondaryAction>
-        </ListItem>
-        <Divider />
-        <ListItem
-          button
-          onClick={() => {
-            requestShowNotification({
-              title: 'Test notifications',
-              body: 'It is working!',
-            });
-          }}
-        >
-          <ListItemText
-            primary="Test notifications"
-            secondary={(() => {
-              // only show this message on macOS Catalina 10.15 & above
-              if (
-                window.process.platform === 'darwin'
-                && semver.gte(window.remote.process.getSystemVersion(), '10.15.0')
-              ) {
-                return (
-                  <>
-                    <span>If notifications don&apos;t show up,</span>
-                    <span> make sure you enable notifications in </span>
-                    <b>
-                      <span>macOS Preferences &gt; Notifications &gt; </span>
-                      {appJson.name}
-                    </b>
-                    <span>.</span>
-                  </>
-                );
-              }
-              return null;
-            })()}
+          </div>
+          (
+          {window.Intl.DateTimeFormat().resolvedOptions().timeZone}
+          )
+        </ListItemText>
+        <ListItemSecondaryAction>
+          <Switch
+            edge="end"
+            color="primary"
+            checked={pauseNotificationsBySchedule}
+            onChange={(e) => {
+              requestSetPreference('pauseNotificationsBySchedule', e.target.checked);
+            }}
           />
-          <ChevronRightIcon color="action" />
-        </ListItem>
-        <Divider />
-        <ListItem>
-          <ListItemText
-            secondary={(
-              <>
-                <span>WebCatalog supports notifications out of the box. </span>
-                <span>But for some web apps, to receive notifications, </span>
-                <span>you will need to manually configure additional </span>
-                <span>web app settings. </span>
-                <span
-                  role="link"
-                  tabIndex={0}
-                  className={classes.link}
-                  onClick={() => requestOpenInBrowser(`https://help.webcatalog.app/article/17-how-to-enable-notifications-in-web-apps?utm_source=${utmSource}`)}
-                  onKeyDown={(e) => {
-                    if (e.key !== 'Enter') return;
-                    requestOpenInBrowser(`https://help.webcatalog.app/article/17-how-to-enable-notifications-in-web-apps?utm_source=${utmSource}`);
-                  }}
-                >
-                  Learn more
-                </span>
-                <span>.</span>
-              </>
-            )}
+        </ListItemSecondaryAction>
+      </ListItem>
+      <Divider />
+      <ListItem>
+        <ListItemText primary="Mute audio when notifications are paused" />
+        <ListItemSecondaryAction>
+          <Switch
+            edge="end"
+            color="primary"
+            checked={pauseNotificationsMuteAudio}
+            onChange={(e) => {
+              requestSetPreference('pauseNotificationsMuteAudio', e.target.checked);
+            }}
           />
-        </ListItem>
-      </List>
-    </Paper>
+        </ListItemSecondaryAction>
+      </ListItem>
+      <Divider />
+      <ListItem>
+        <ListItemText primary="Show unread count badge" />
+        <ListItemSecondaryAction>
+          <Switch
+            edge="end"
+            color="primary"
+            checked={unreadCountBadge}
+            onChange={(e) => {
+              requestSetPreference('unreadCountBadge', e.target.checked);
+            }}
+          />
+        </ListItemSecondaryAction>
+      </ListItem>
+      <Divider />
+      <ListItem
+        button
+        onClick={() => {
+          requestShowNotification({
+            title: 'Test notifications',
+            body: 'It is working!',
+          });
+        }}
+      >
+        <ListItemText
+          primary="Test notifications"
+          secondary={(() => {
+            // only show this message on macOS Catalina 10.15 & above
+            if (
+              window.process.platform === 'darwin'
+              && semver.gte(window.remote.process.getSystemVersion(), '10.15.0')
+            ) {
+              return (
+                <>
+                  <span>If notifications don&apos;t show up,</span>
+                  <span> make sure you enable notifications in </span>
+                  <b>
+                    <span>macOS Preferences &gt; Notifications &gt; </span>
+                    {appJson.name}
+                  </b>
+                  <span>.</span>
+                </>
+              );
+            }
+            return null;
+          })()}
+        />
+        <ChevronRightIcon color="action" />
+      </ListItem>
+      <Divider />
+      <ListItem>
+        <ListItemText
+          secondary={(
+            <>
+              <span>WebCatalog supports notifications out of the box. </span>
+              <span>But for some web apps, to receive notifications, </span>
+              <span>you will need to manually configure additional </span>
+              <span>web app settings. </span>
+              <span
+                role="link"
+                tabIndex={0}
+                className={classes.link}
+                onClick={() => requestOpenInBrowser(`https://help.webcatalog.app/article/17-how-to-enable-notifications-in-web-apps?utm_source=${utmSource}`)}
+                onKeyDown={(e) => {
+                  if (e.key !== 'Enter') return;
+                  requestOpenInBrowser(`https://help.webcatalog.app/article/17-how-to-enable-notifications-in-web-apps?utm_source=${utmSource}`);
+                }}
+              >
+                Learn more
+              </span>
+              <span>.</span>
+            </>
+          )}
+        />
+      </ListItem>
+    </List>
   );
 };
 

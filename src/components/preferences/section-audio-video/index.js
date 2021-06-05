@@ -8,7 +8,6 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
-import Paper from '@material-ui/core/Paper';
 import Select from '@material-ui/core/Select';
 import Divider from '@material-ui/core/Divider';
 
@@ -17,6 +16,19 @@ import connectComponent from '../../../helpers/connect-component';
 import {
   requestSetPreference,
 } from '../../../senders';
+
+const styles = (theme) => ({
+  selectRoot: {
+    borderRadius: theme.spacing(0.5),
+    fontSize: '0.84375rem',
+  },
+  select: {
+    paddingTop: theme.spacing(1),
+    paddingRight: 26,
+    paddingBottom: theme.spacing(1),
+    paddingLeft: theme.spacing(1.5),
+  },
+});
 
 const SectionAudioVideo = ({
   classes,
@@ -35,7 +47,7 @@ const SectionAudioVideo = ({
   }, [setDevices]);
 
   return (
-    <Paper elevation={0} className={classes.paper}>
+    <>
       <List disablePadding dense>
         <ListItem>
           <ListItemText
@@ -139,7 +151,7 @@ const SectionAudioVideo = ({
           </Select>
         </ListItem>
       </List>
-    </Paper>
+    </>
   );
 };
 
@@ -165,4 +177,6 @@ const mapStateToProps = (state) => ({
 export default connectComponent(
   SectionAudioVideo,
   mapStateToProps,
+  null,
+  styles,
 );
