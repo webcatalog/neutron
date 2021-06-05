@@ -1,7 +1,7 @@
 {
   "name": "neutron",
   "description": "AppView template for WebCatalog",
-  "version": "18.0.0-alpha.3",
+  "version": "18.0.0-alpha.4",
   "minimumWebCatalogVersion": "33.0.0-rc",
   "engines": {
     "node": ">=14.0.0 <15.0.0"
@@ -61,7 +61,7 @@
     "darkreader": "4.9.32",
     "date-fns": "2.22.1",
     "del": "6.0.0",
-    "electron": "13.1.0",
+    "electron": "13.1.1",
     "electron-builder": "22.11.5",
     "electron-chrome-extensions": "3.6.0",
     "electron-context-menu": "3.1.0",
