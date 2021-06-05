@@ -760,8 +760,10 @@ const addViewAsync = async (browserWindow, workspace) => {
       // avoid using options.webContents because it overwrites our custom UA logic
       const newOptions = {
         show: true,
-        width: 800,
-        height: 600,
+        width: options && options.width ? options.width : 800,
+        height: options && options.width ? options.height : 600,
+        x: options && options.x ? options.x : undefined,
+        y: options && options.y ? options.y : undefined,
         webPreferences: sharedWebPreferences,
       };
 
