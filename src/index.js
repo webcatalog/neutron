@@ -22,34 +22,34 @@ import { getReactInitialStateAsync } from './invokers';
 
 const appJson = getStaticGlobal('appJson');
 
-const DialogAbout = React.lazy(() => import('./components/dialog-about'));
-const DialogAddWorkspace = React.lazy(() => import('./components/dialog-add-workspace'));
-const DialogAuth = React.lazy(() => import('./components/dialog-auth'));
-const DialogDisplayMedia = React.lazy(() => import('./components/dialog-display-media'));
-const DialogEditWorkspace = React.lazy(() => import('./components/dialog-edit-workspace'));
-const DialogGoToUrl = React.lazy(() => import('./components/dialog-go-to-url'));
-const DialogLicenseRegistration = React.lazy(() => import('./components/dialog-license-registration'));
-const DialogNotifications = React.lazy(() => import('./components/dialog-notifications'));
-const DialogOpenSourceNotices = React.lazy(() => import('./components/dialog-open-source-notices'));
-const DialogOpenUrlWith = React.lazy(() => import('./components/dialog-open-url-with'));
-const DialogPreferences = React.lazy(() => import('./components/dialog-preferences'));
-const DialogWorkspacePreferences = React.lazy(() => import('./components/dialog-workspace-preferences'));
+const About = React.lazy(() => import('./components/about'));
+const AddWorkspace = React.lazy(() => import('./components/add-workspace'));
+const Auth = React.lazy(() => import('./components/auth'));
+const DisplayMedia = React.lazy(() => import('./components/display-media'));
+const EditWorkspace = React.lazy(() => import('./components/edit-workspace'));
+const GoToUrl = React.lazy(() => import('./components/go-to-url'));
+const LicenseRegistration = React.lazy(() => import('./components/license-registration'));
+const Notifications = React.lazy(() => import('./components/notifications'));
+const OpenSourceNotices = React.lazy(() => import('./components/open-source-notices'));
+const OpenUrlWith = React.lazy(() => import('./components/open-url-with'));
+const Preferences = React.lazy(() => import('./components/preferences'));
+const WorkspacePreferences = React.lazy(() => import('./components/workspace-preferences'));
 const Main = React.lazy(() => import('./components/main'));
 
 const App = () => {
   switch (window.mode) {
-    case 'about': return <DialogAbout />;
-    case 'add-workspace': return <DialogAddWorkspace />;
-    case 'auth': return <DialogAuth />;
-    case 'display-media': return <DialogDisplayMedia />;
-    case 'edit-workspace': return <DialogEditWorkspace />;
-    case 'go-to-url': return <DialogGoToUrl />;
-    case 'license-registration': return <DialogLicenseRegistration />;
-    case 'notifications': return <DialogNotifications />;
-    case 'open-source-notices': return <DialogOpenSourceNotices />;
-    case 'open-url-with': return <DialogOpenUrlWith />;
-    case 'preferences': return <DialogPreferences />;
-    case 'workspace-preferences': return <DialogWorkspacePreferences />;
+    case 'about': return <About />;
+    case 'add-workspace': return <AddWorkspace />;
+    case 'auth': return <Auth />;
+    case 'display-media': return <DisplayMedia />;
+    case 'edit-workspace': return <EditWorkspace />;
+    case 'go-to-url': return <GoToUrl />;
+    case 'license-registration': return <LicenseRegistration />;
+    case 'notifications': return <Notifications />;
+    case 'open-source-notices': return <OpenSourceNotices />;
+    case 'open-url-with': return <OpenUrlWith />;
+    case 'preferences': return <Preferences />;
+    case 'workspace-preferences': return <WorkspacePreferences />;
     default: return <Main />;
   }
 };
