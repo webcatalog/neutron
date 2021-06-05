@@ -35,12 +35,7 @@ import checkLicense from '../../helpers/check-license';
 import isMas from '../../helpers/is-mas';
 import isStandalone from '../../helpers/is-standalone';
 import getStaticGlobal from '../../helpers/get-static-global';
-import getUtmSource from '../../helpers/get-utm-source';
 import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
-
-import {
-  requestOpenInBrowser,
-} from '../../senders';
 
 import {
   getIapFormattedPriceAsync,
@@ -62,6 +57,7 @@ import SectionNotifications from './section-notifications';
 import SectionPrivacySecurity from './section-privacy-security';
 import SectionReset from './section-reset';
 import SectionUpdates from './section-updates';
+import SectionMoreApps from './section-more-apps';
 
 import DialogAppLock from '../dialog-app-lock';
 import DialogCodeInjection from '../dialog-code-injection';
@@ -73,11 +69,6 @@ import DialogRefreshInterval from '../dialog-refresh-interval';
 import DialogSpellcheckLanguages from '../dialog-spellcheck-languages';
 
 import SnackbarTrigger from '../shared/snackbar-trigger';
-
-import webcatalogIconPng from '../../images/products/webcatalog-mac-icon-128@2x.png';
-import translatiumIconPng from '../../images/products/translatium-mac-icon-128@2x.png';
-import cloveryIconPng from '../../images/products/clovery-mac-icon-128@2x.png';
-import singleboxIconPng from '../../images/products/singlebox-mac-icon-128@2x.png';
 
 const styles = (theme) => ({
   root: {
@@ -187,7 +178,6 @@ const Preferences = ({
   standaloneRegistered,
 }) => {
   const appJson = getStaticGlobal('appJson');
-  const utmSource = getUtmSource();
   const registered = appJson.registered || iapPurchased || standaloneRegistered;
 
   const [formattedPrice, setFormattedPrice] = useState(null);
@@ -420,139 +410,10 @@ const Preferences = ({
         </Typography>
         <SectionReset />
 
-        {/* Apple doesn't allow linking to app distributed outside Mac App Store version,
-          citing Guideline 2.4.5(iv) - Performance
-          They may not download or install standalone apps, kexts,
-          additional code, or resources to add functionality
-          or significantly change the app from what
-          we see during the review process. */}
-        {(isMas() || isStandalone()) && (
-          <>
-            <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle} ref={sections.moreApps.ref}>
-              More Apps
-            </Typography>
-            <Paper elevation={0} className={classes.paper}>
-              <List disablePadding dense>
-                {!isMas() && (
-                  <>
-                    <ListItem
-                      button
-                      onClick={() => {
-                        const url = `https://webcatalog.app?utm_source=${utmSource}`;
-                        requestOpenInBrowser(url);
-                      }}
-                      className={classes.listItemPromotion}
-                    >
-                      <div className={classes.promotionBlock}>
-                        <div className={classes.promotionLeft}>
-                          <img src={webcatalogIconPng} alt="WebCatalog" className={classes.appIcon} />
-                        </div>
-                        <div className={classes.promotionRight}>
-                          <div>
-                            <Typography variant="body1" className={classes.appTitle}>
-                              WebCatalog
-                            </Typography>
-                            <Typography variant="body2" color="textSecondary">
-                              Turn Any Websites Into Real Desktop Apps
-                            </Typography>
-                          </div>
-                        </div>
-                      </div>
-                      <ChevronRightIcon color="action" />
-                    </ListItem>
-                    <Divider />
-                  </>
-                )}
-                <ListItem
-                  button
-                  onClick={() => {
-                    let url = `https://translatium.app?utm_source=${utmSource}`;
-                    if (isMas()) {
-                      url = 'macappstore://apps.apple.com/app/translatium/id1547052291';
-                    }
-                    requestOpenInBrowser(url);
-                  }}
-                  className={classes.listItemPromotion}
-                >
-                  <div className={classes.promotionBlock}>
-                    <div className={classes.promotionLeft}>
-                      <img src={translatiumIconPng} alt="Translatium" className={classes.appIcon} />
-                    </div>
-                    <div className={classes.promotionRight}>
-                      <div>
-                        <Typography variant="body1" className={classes.appTitle}>
-                          Translatium
-                        </Typography>
-                        <Typography variant="body2" color="textSecondary">
-                          Translate 100+ Languages Instantly
-                        </Typography>
-                      </div>
-                    </div>
-                  </div>
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-                <Divider />
-                <ListItem
-                  button
-                  onClick={() => {
-                    let url = `https://singlebox.app?utm_source=${utmSource}`;
-                    if (isMas()) {
-                      url = 'macappstore://apps.apple.com/us/app/singlebox-all-in-one-messenger/id1551183766';
-                    }
-                    requestOpenInBrowser(url);
-                  }}
-                  className={classes.listItemPromotion}
-                >
-                  <div className={classes.promotionBlock}>
-                    <div className={classes.promotionLeft}>
-                      <img src={singleboxIconPng} alt="Singlebox" className={classes.appIcon} />
-                    </div>
-                    <div className={classes.promotionRight}>
-                      <div>
-                        <Typography variant="body1" className={classes.appTitle}>
-                          Singlebox
-                        </Typography>
-                        <Typography variant="body2" color="textSecondary">
-                          All-in-One Messenger
-                        </Typography>
-                      </div>
-                    </div>
-                  </div>
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-                <Divider />
-                <ListItem
-                  button
-                  onClick={() => {
-                    let url = `https://clovery.app?utm_source=${utmSource}`;
-                    if (isMas()) {
-                      url = 'macappstore://apps.apple.com/us/app/clovery-for-google-apps/id1552618413';
-                    }
-                    requestOpenInBrowser(url);
-                  }}
-                  className={classes.listItemPromotion}
-                >
-                  <div className={classes.promotionBlock}>
-                    <div className={classes.promotionLeft}>
-                      <img src={cloveryIconPng} alt="Clovery" className={classes.appIcon} />
-                    </div>
-                    <div className={classes.promotionRight}>
-                      <div>
-                        <Typography variant="body1" className={classes.appTitle}>
-                          Clovery
-                        </Typography>
-                        <Typography variant="body2" color="textSecondary">
-                          All Google Apps in One
-                        </Typography>
-                      </div>
-                    </div>
-                  </div>
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-              </List>
-            </Paper>
-          </>
-        )}
+        <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle} ref={sections.moreApps.ref}>
+          More Apps
+        </Typography>
+        <SectionMoreApps />
 
         <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.miscs.ref}>
           Miscellaneous
