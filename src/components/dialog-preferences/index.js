@@ -50,8 +50,6 @@ import SectionUpdates from './section-updates';
 import SectionMoreApps from './section-more-apps';
 import SectionAccountLicensing from './section-account-licensing';
 
-import DialogSpellcheckLanguages from '../dialog-spellcheck-languages';
-
 import SnackbarTrigger from '../shared/snackbar-trigger';
 
 const styles = (theme) => ({
@@ -373,7 +371,6 @@ const Preferences = ({
         </Typography>
         <SectionMiscs />
       </div>
-      <DialogSpellcheckLanguages />
       <SnackbarTrigger />
     </div>
   );

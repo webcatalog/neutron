@@ -25,6 +25,8 @@ import { open as openDialogSpellcheckLanguages } from '../../../state/dialog-spe
 
 import hunspellLanguagesMap from '../../../constants/hunspell-languages';
 
+import DialogSpellcheckLanguages from './dialog-spellcheck-languages';
+
 const styles = (theme) => ({
   paper: {
     marginTop: theme.spacing(0.5),
@@ -39,36 +41,39 @@ const SectionLanguages = ({
   spellcheckLanguages,
   onOpenDialogSpellcheckLanguages,
 }) => (
-  <Paper elevation={0} className={classes.paper}>
-    <List disablePadding dense>
-      <ListItem>
-        <ListItemText primary="Spell check" />
-        <ListItemSecondaryAction>
-          <Switch
-            edge="end"
-            color="primary"
-            checked={spellcheck}
-            onChange={(e) => {
-              requestSetPreference('spellcheck', e.target.checked);
-              enqueueRequestRestartSnackbar();
-            }}
-          />
-        </ListItemSecondaryAction>
-      </ListItem>
-      {window.process.platform !== 'darwin' && (
-        <>
-          <Divider />
-          <ListItem button onClick={onOpenDialogSpellcheckLanguages}>
-            <ListItemText
-              primary="Spell checking languages"
-              secondary={spellcheckLanguages.map((code) => hunspellLanguagesMap[code]).join(' | ')}
+  <>
+    <Paper elevation={0} className={classes.paper}>
+      <List disablePadding dense>
+        <ListItem>
+          <ListItemText primary="Spell check" />
+          <ListItemSecondaryAction>
+            <Switch
+              edge="end"
+              color="primary"
+              checked={spellcheck}
+              onChange={(e) => {
+                requestSetPreference('spellcheck', e.target.checked);
+                enqueueRequestRestartSnackbar();
+              }}
             />
-            <ChevronRightIcon color="action" />
-          </ListItem>
-        </>
-      )}
-    </List>
-  </Paper>
+          </ListItemSecondaryAction>
+        </ListItem>
+        {window.process.platform !== 'darwin' && (
+          <>
+            <Divider />
+            <ListItem button onClick={onOpenDialogSpellcheckLanguages}>
+              <ListItemText
+                primary="Spell checking languages"
+                secondary={spellcheckLanguages.map((code) => hunspellLanguagesMap[code]).join(' | ')}
+              />
+              <ChevronRightIcon color="action" />
+            </ListItem>
+          </>
+        )}
+      </List>
+    </Paper>
+    <DialogSpellcheckLanguages />
+  </>
 );
 
 SectionLanguages.propTypes = {

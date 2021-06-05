@@ -14,16 +14,16 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 
-import connectComponent from '../../helpers/connect-component';
+import connectComponent from '../../../helpers/connect-component';
 
-import hunspellLanguagesMap from '../../constants/hunspell-languages';
+import hunspellLanguagesMap from '../../../constants/hunspell-languages';
 
 import {
   close,
   addLanguage,
   removeLanguage,
   save,
-} from '../../state/dialog-spellcheck-languages/actions';
+} from '../../../state/dialog-spellcheck-languages/actions';
 
 const styles = () => ({
   top: {
