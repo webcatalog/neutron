@@ -7,7 +7,6 @@ import semver from 'semver';
 import classnames from 'classnames';
 
 import Divider from '@material-ui/core/Divider';
-import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -16,7 +15,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
 import Select from '@material-ui/core/Select';
-import Slider from '@material-ui/core/Slider';
 import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
 
@@ -55,7 +53,6 @@ import {
   requestClearBrowsingData,
   requestOpenInBrowser,
   requestQuit,
-  requestRealignActiveWorkspace,
   requestResetPreferences,
   requestSetPreference,
   requestShowAboutWindow,
@@ -71,7 +68,6 @@ import {
 import { open as openDialogAppLock } from '../../state/dialog-app-lock/actions';
 import { open as openDialogCodeInjection } from '../../state/dialog-code-injection/actions';
 import { open as openDialogCustomUserAgent } from '../../state/dialog-custom-user-agent/actions';
-import { open as openDialogCustomizeFonts } from '../../state/dialog-customize-fonts/actions';
 import { open as openDialogExtensions } from '../../state/dialog-extensions/actions';
 import { open as openDialogInternalUrls } from '../../state/dialog-internal-urls/actions';
 import { open as openDialogProxy } from '../../state/dialog-proxy/actions';
@@ -83,6 +79,7 @@ import autoRefreshIntervals from '../../constants/auto-refresh-intervals';
 
 import SectionAudioVideo from './section-audio-video';
 import SectionGeneral from './section-general';
+import SectionAppearance from './section-appearance';
 
 import DialogAppLock from '../dialog-app-lock';
 import DialogCodeInjection from '../dialog-code-injection';
@@ -245,7 +242,6 @@ const getUpdaterDesc = (status, info) => {
 const Preferences = ({
   alwaysOnTop,
   askForDownloadPath,
-  attachToMenubar,
   autoCheckForUpdates,
   autoRefresh,
   autoRefreshInterval,
@@ -254,23 +250,15 @@ const Preferences = ({
   classes,
   cssCodeInjection,
   customUserAgent,
-  darkReader,
-  darkReaderBrightness,
-  darkReaderContrast,
-  darkReaderGrayscale,
-  darkReaderSepia,
-  defaultFontSize,
   downloadPath,
   hibernateUnusedWorkspacesAtLaunch,
   iapPurchased,
   ignoreCertificateErrors,
   internalUrlRule,
   jsCodeInjection,
-  navigationBar,
   onOpenDialogAppLock,
   onOpenDialogCodeInjection,
   onOpenDialogCustomUserAgent,
-  onOpenDialogCustomizeFonts,
   onOpenDialogExtensions,
   onOpenDialogInternalUrls,
   onOpenDialogProxy,
@@ -285,23 +273,17 @@ const Preferences = ({
   rememberLastPageVisited,
   sentry,
   shareWorkspaceBrowsingData,
-  sidebar,
-  sidebarSize,
-  sidebarTips,
   spellcheck,
   spellcheckLanguages,
   standaloneRegistered,
   swipeToNavigate,
   telemetry,
-  themeSource,
-  titleBar,
   unreadCountBadge,
   updaterInfo,
   updaterStatus,
   useHardwareAcceleration,
   useSystemTitleBar,
   warnBeforeQuitting,
-  windowButtons,
 }) => {
   const appJson = getStaticGlobal('appJson');
   const utmSource = getUtmSource();
@@ -474,368 +456,7 @@ const Preferences = ({
         <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.appearance.ref}>
           Appearance
         </Typography>
-        <Paper elevation={0} className={classes.paper}>
-          <List disablePadding dense>
-            <ListItem>
-              <ListItemText primary="Theme" />
-              <Select
-                value={themeSource}
-                onChange={(e) => requestSetPreference('themeSource', e.target.value)}
-                variant="filled"
-                disableUnderline
-                margin="dense"
-                classes={{
-                  root: classes.select,
-                }}
-                className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
-              >
-                <MenuItem dense value="system">System default</MenuItem>
-                <MenuItem dense value="light">Light</MenuItem>
-                <MenuItem dense value="dark">Dark</MenuItem>
-              </Select>
-            </ListItem>
-            <ListItem>
-              <ListItemText
-                primary="Dark Reader"
-                secondary="Create unofficial dark theme for every service & account."
-              />
-              <ListItemSecondaryAction>
-                <Switch
-                  edge="end"
-                  color="primary"
-                  checked={darkReader}
-                  onChange={(e) => {
-                    requestSetPreference('darkReader', e.target.checked);
-                  }}
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
-            <ListItem>
-              <ListItemText className={classes.sliderContainer}>
-                <Grid container spacing={2}>
-                  <Grid classes={{ item: classes.sliderTitleContainer }} item>
-                    <Typography id="brightness-slider" variant="body2" gutterBottom={false}>
-                      Brightness
-                    </Typography>
-                  </Grid>
-                  <Grid item xs>
-                    <Slider
-                      classes={{ markLabel: classes.sliderMarkLabel }}
-                      value={darkReaderBrightness - 100}
-                      disabled={!darkReader}
-                      aria-labelledby="brightness-slider"
-                      valueLabelDisplay="auto"
-                      step={5}
-                      valueLabelFormat={(val) => {
-                        if (val > 0) return `+${val}`;
-                        return val;
-                      }}
-                      marks={[
-                        {
-                          value: darkReaderBrightness - 100,
-                          label: `${darkReaderBrightness > 100 ? '+' : ''}${darkReaderBrightness - 100}`,
-                        },
-                      ]}
-                      min={-50}
-                      max={50}
-                      onChange={(e, value) => {
-                        requestSetPreference('darkReaderBrightness', value + 100);
-                      }}
-                    />
-                  </Grid>
-                </Grid>
-                <Grid container spacing={2}>
-                  <Grid classes={{ item: classes.sliderTitleContainer }} item>
-                    <Typography id="contrast-slider" variant="body2" gutterBottom={false}>
-                      Contrast
-                    </Typography>
-                  </Grid>
-                  <Grid item xs>
-                    <Slider
-                      classes={{ markLabel: classes.sliderMarkLabel }}
-                      value={darkReaderContrast - 100}
-                      disabled={!darkReader}
-                      aria-labelledby="contrast-slider"
-                      valueLabelDisplay="auto"
-                      step={5}
-                      valueLabelFormat={(val) => {
-                        if (val > 0) return `+${val}`;
-                        return val;
-                      }}
-                      marks={[
-                        {
-                          value: darkReaderContrast - 100,
-                          label: `${darkReaderContrast > 100 ? '+' : ''}${darkReaderContrast - 100}`,
-                        },
-                      ]}
-                      min={-50}
-                      max={50}
-                      onChange={(e, value) => {
-                        requestSetPreference('darkReaderContrast', value + 100);
-                      }}
-                    />
-                  </Grid>
-                </Grid>
-                <Grid container spacing={2}>
-                  <Grid classes={{ item: classes.sliderTitleContainer }} item>
-                    <Typography id="sepia-slider" variant="body2" gutterBottom={false}>
-                      Sepia
-                    </Typography>
-                  </Grid>
-                  <Grid item xs>
-                    <Slider
-                      classes={{ markLabel: classes.sliderMarkLabel }}
-                      value={darkReaderSepia}
-                      disabled={!darkReader}
-                      aria-labelledby="sepia-slider"
-                      valueLabelDisplay="auto"
-                      step={5}
-                      marks={[
-                        {
-                          value: darkReaderSepia,
-                          label: `${darkReaderSepia}`,
-                        },
-                      ]}
-                      min={0}
-                      max={100}
-                      onChange={(e, value) => {
-                        requestSetPreference('darkReaderSepia', value);
-                      }}
-                    />
-                  </Grid>
-                </Grid>
-                <Grid container spacing={2}>
-                  <Grid classes={{ item: classes.sliderTitleContainer }} item>
-                    <Typography id="grayscale-slider" variant="body2" gutterBottom={false}>
-                      Grayscale
-                    </Typography>
-                  </Grid>
-                  <Grid item xs>
-                    <Slider
-                      classes={{ markLabel: classes.sliderMarkLabel }}
-                      value={darkReaderGrayscale}
-                      disabled={!darkReader}
-                      aria-labelledby="grayscale-slider"
-                      valueLabelDisplay="auto"
-                      step={5}
-                      marks={[
-                        {
-                          value: darkReaderGrayscale,
-                          label: `${darkReaderGrayscale}`,
-                        },
-                      ]}
-                      min={0}
-                      max={100}
-                      onChange={(e, value) => {
-                        requestSetPreference('darkReaderGrayscale', value);
-                      }}
-                    />
-                  </Grid>
-                </Grid>
-              </ListItemText>
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListItemText
-                primary="Show sidebar"
-                secondary={`Sidebar lets you switch easily between ${getWorkspaceFriendlyName(true).toLowerCase()}.`}
-              />
-              <ListItemSecondaryAction>
-                <Switch
-                  edge="end"
-                  color="primary"
-                  checked={sidebar}
-                  onChange={(e) => {
-                    requestSetPreference('sidebar', e.target.checked);
-                    requestRealignActiveWorkspace();
-                  }}
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
-            <ListItem>
-              <ListItemText
-                primary="Sidebar size"
-              />
-              <Select
-                value={sidebarSize}
-                onChange={(e) => {
-                  requestSetPreference('sidebarSize', e.target.value);
-                  requestRealignActiveWorkspace();
-                }}
-                variant="filled"
-                disableUnderline
-                margin="dense"
-                classes={{
-                  root: classes.select,
-                }}
-                className={classes.selectRoot}
-              >
-                <MenuItem
-                  value="compact"
-                  dense
-                >
-                  Compact
-                </MenuItem>
-                <MenuItem
-                  value="expanded"
-                  dense
-                >
-                  Expanded
-                </MenuItem>
-              </Select>
-            </ListItem>
-            <ListItem>
-              <ListItemText
-                primary="Show tips on sidebar"
-              />
-              <Select
-                value={sidebarSize === 'expanded' ? 'name+shortcut' : sidebarTips}
-                onChange={(e) => requestSetPreference('sidebarTips', e.target.value)}
-                variant="filled"
-                disableUnderline
-                margin="dense"
-                classes={{
-                  root: classes.select,
-                }}
-                className={classes.selectRoot}
-                disabled={sidebarSize === 'expanded'}
-              >
-                {sidebarSize === 'expanded' && (
-                  <MenuItem
-                    value="name+shortcut"
-                    dense
-                  >
-                    {`${getWorkspaceFriendlyName()} names & keyboard shortcuts`}
-                  </MenuItem>
-                )}
-                <MenuItem
-                  value="shortcut"
-                  dense
-                >
-                  {`${getWorkspaceFriendlyName()} keyboard shortcuts`}
-                </MenuItem>
-                <MenuItem
-                  value="name"
-                  dense
-                >
-                  {`${getWorkspaceFriendlyName()} names`}
-                </MenuItem>
-                <MenuItem
-                  value="none"
-                  dense
-                >
-                  None
-                </MenuItem>
-              </Select>
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListItemText
-                primary="Show navigation bar"
-                secondary="Navigation bar lets you go back, forward, home and reload."
-              />
-              <ListItemSecondaryAction>
-                <Switch
-                  edge="end"
-                  color="primary"
-                  // must show sidebar or navigation bar on Linux
-                  // if not, as user can't right-click on menu bar icon
-                  // they can't access preferences or notifications
-                  checked={(window.process.platform === 'linux' && attachToMenubar && !sidebar) || navigationBar}
-                  disabled={(window.process.platform === 'linux' && attachToMenubar && !sidebar)}
-                  onChange={(e) => {
-                    requestSetPreference('navigationBar', e.target.checked);
-                    requestRealignActiveWorkspace();
-                  }}
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
-            {window.process.platform === 'darwin' && (
-              <>
-                <Divider />
-                <ListItem>
-                  <ListItemText
-                    primary="Show title bar"
-                    secondary="Title bar shows you the title of the current page."
-                  />
-                  <ListItemSecondaryAction>
-                    <Switch
-                      edge="end"
-                      color="primary"
-                      checked={titleBar}
-                      onChange={(e) => {
-                        requestSetPreference('titleBar', e.target.checked);
-                        requestRealignActiveWorkspace();
-                      }}
-                    />
-                  </ListItemSecondaryAction>
-                </ListItem>
-              </>
-            )}
-            {window.process.platform === 'darwin' && (
-              <>
-                <Divider />
-                <ListItem>
-                  <ListItemText
-                    primary="Show window buttons"
-                    secondary={'Show "traffic light" (red/orange/green) buttons.'}
-                  />
-                  <ListItemSecondaryAction>
-                    <Switch
-                      edge="end"
-                      color="primary"
-                      checked={windowButtons}
-                      onChange={(e) => {
-                        requestSetPreference('windowButtons', e.target.checked);
-                        enqueueRequestRestartSnackbar();
-                      }}
-                    />
-                  </ListItemSecondaryAction>
-                </ListItem>
-              </>
-            )}
-            <Divider />
-            <ListItem>
-              <ListItemText primary="Font size" />
-              <Select
-                value={defaultFontSize}
-                onChange={(e) => {
-                  requestSetPreference('defaultFontSize', e.target.value);
-                  enqueueRequestRestartSnackbar();
-                }}
-                variant="filled"
-                disableUnderline
-                margin="dense"
-                classes={{
-                  root: classes.select,
-                }}
-                className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
-              >
-                {[
-                  { value: 9, label: 'Very Small' },
-                  { value: 12, label: 'Small' },
-                  { value: 16, label: 'Medium (Recommended)' },
-                  { value: 20, label: 'Large' },
-                  { value: 24, label: 'Very Large' },
-                ].map((item) => (
-                  <MenuItem key={item.value} dense value={item.value}>{item.label}</MenuItem>
-                ))}
-                {[9, 12, 16, 20, 24].indexOf(defaultFontSize) < 0 && (
-                  <MenuItem
-                    value={defaultFontSize}
-                    dense
-                  >
-                    Custom
-                  </MenuItem>
-                )}
-              </Select>
-            </ListItem>
-            <ListItem button onClick={onOpenDialogCustomizeFonts}>
-              <ListItemText primary="Advanced font size settings" />
-              <ChevronRightIcon color="action" />
-            </ListItem>
-          </List>
-        </Paper>
+        <SectionAppearance />
 
         <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.notifications.ref}>
           Notifications
@@ -1936,7 +1557,6 @@ Preferences.defaultProps = {
 Preferences.propTypes = {
   alwaysOnTop: PropTypes.bool.isRequired,
   askForDownloadPath: PropTypes.bool.isRequired,
-  attachToMenubar: PropTypes.bool.isRequired,
   autoCheckForUpdates: PropTypes.bool.isRequired,
   autoRefresh: PropTypes.bool.isRequired,
   autoRefreshInterval: PropTypes.number.isRequired,
@@ -1945,23 +1565,15 @@ Preferences.propTypes = {
   classes: PropTypes.object.isRequired,
   cssCodeInjection: PropTypes.string,
   customUserAgent: PropTypes.string,
-  darkReader: PropTypes.bool.isRequired,
-  darkReaderBrightness: PropTypes.number.isRequired,
-  darkReaderContrast: PropTypes.number.isRequired,
-  darkReaderGrayscale: PropTypes.number.isRequired,
-  darkReaderSepia: PropTypes.number.isRequired,
-  defaultFontSize: PropTypes.number.isRequired,
   downloadPath: PropTypes.string.isRequired,
   hibernateUnusedWorkspacesAtLaunch: PropTypes.bool.isRequired,
   iapPurchased: PropTypes.bool,
   ignoreCertificateErrors: PropTypes.bool.isRequired,
   internalUrlRule: PropTypes.string,
   jsCodeInjection: PropTypes.string,
-  navigationBar: PropTypes.bool.isRequired,
   onOpenDialogAppLock: PropTypes.func.isRequired,
   onOpenDialogCodeInjection: PropTypes.func.isRequired,
   onOpenDialogCustomUserAgent: PropTypes.func.isRequired,
-  onOpenDialogCustomizeFonts: PropTypes.func.isRequired,
   onOpenDialogExtensions: PropTypes.func.isRequired,
   onOpenDialogInternalUrls: PropTypes.func.isRequired,
   onOpenDialogProxy: PropTypes.func.isRequired,
@@ -1976,29 +1588,22 @@ Preferences.propTypes = {
   rememberLastPageVisited: PropTypes.bool.isRequired,
   sentry: PropTypes.bool.isRequired,
   shareWorkspaceBrowsingData: PropTypes.bool.isRequired,
-  sidebar: PropTypes.bool.isRequired,
-  sidebarSize: PropTypes.oneOf(['compact', 'expanded']).isRequired,
-  sidebarTips: PropTypes.oneOf(['shortcut', 'name', 'none']).isRequired,
   spellcheck: PropTypes.bool.isRequired,
   spellcheckLanguages: PropTypes.arrayOf(PropTypes.string).isRequired,
   standaloneRegistered: PropTypes.bool,
   swipeToNavigate: PropTypes.bool.isRequired,
   telemetry: PropTypes.bool.isRequired,
-  themeSource: PropTypes.string.isRequired,
-  titleBar: PropTypes.bool.isRequired,
   unreadCountBadge: PropTypes.bool.isRequired,
   updaterInfo: PropTypes.object,
   updaterStatus: PropTypes.string,
   useHardwareAcceleration: PropTypes.bool.isRequired,
   useSystemTitleBar: PropTypes.bool.isRequired,
   warnBeforeQuitting: PropTypes.bool.isRequired,
-  windowButtons: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   alwaysOnTop: state.preferences.alwaysOnTop,
   askForDownloadPath: state.preferences.askForDownloadPath,
-  attachToMenubar: state.preferences.attachToMenubar,
   autoCheckForUpdates: state.preferences.autoCheckForUpdates,
   autoRefresh: state.preferences.autoRefresh,
   autoRefreshInterval: state.preferences.autoRefreshInterval,
@@ -2006,11 +1611,6 @@ const mapStateToProps = (state) => ({
   blockAds: state.preferences.blockAds,
   cssCodeInjection: state.preferences.cssCodeInjection,
   customUserAgent: state.preferences.customUserAgent,
-  darkReader: state.preferences.darkReader,
-  darkReaderBrightness: state.preferences.darkReaderBrightness,
-  darkReaderContrast: state.preferences.darkReaderContrast,
-  darkReaderGrayscale: state.preferences.darkReaderGrayscale,
-  darkReaderSepia: state.preferences.darkReaderSepia,
   defaultFontSize: state.preferences.defaultFontSize,
   downloadPath: state.preferences.downloadPath,
   hibernateUnusedWorkspacesAtLaunch: state.preferences.hibernateUnusedWorkspacesAtLaunch,
@@ -2018,7 +1618,6 @@ const mapStateToProps = (state) => ({
   ignoreCertificateErrors: state.preferences.ignoreCertificateErrors,
   internalUrlRule: state.preferences.internalUrlRule,
   jsCodeInjection: state.preferences.jsCodeInjection,
-  navigationBar: state.preferences.navigationBar,
   openFolderWhenDoneDownloading: state.preferences.openFolderWhenDoneDownloading,
   pauseNotificationsBySchedule: state.preferences.pauseNotificationsBySchedule,
   pauseNotificationsByScheduleFrom: state.preferences.pauseNotificationsByScheduleFrom,
@@ -2028,30 +1627,23 @@ const mapStateToProps = (state) => ({
   rememberLastPageVisited: state.preferences.rememberLastPageVisited,
   sentry: state.preferences.sentry,
   shareWorkspaceBrowsingData: state.preferences.shareWorkspaceBrowsingData,
-  sidebar: state.preferences.sidebar,
-  sidebarSize: state.preferences.sidebarSize,
-  sidebarTips: state.preferences.sidebarTips,
   spellcheck: state.preferences.spellcheck,
   spellcheckLanguages: state.preferences.spellcheckLanguages,
   standaloneRegistered: state.preferences.standaloneRegistered,
   swipeToNavigate: state.preferences.swipeToNavigate,
   telemetry: state.preferences.telemetry,
-  themeSource: state.preferences.themeSource,
-  titleBar: state.preferences.titleBar,
   unreadCountBadge: state.preferences.unreadCountBadge,
   updaterInfo: state.updater.info,
   updaterStatus: state.updater.status,
   useHardwareAcceleration: state.preferences.useHardwareAcceleration,
   useSystemTitleBar: state.preferences.useSystemTitleBar,
   warnBeforeQuitting: state.preferences.warnBeforeQuitting,
-  windowButtons: state.preferences.windowButtons,
 });
 
 const actionCreators = {
   openDialogAppLock,
   openDialogCodeInjection,
   openDialogCustomUserAgent,
-  openDialogCustomizeFonts,
   openDialogExtensions,
   openDialogInternalUrls,
   openDialogProxy,
