@@ -87,6 +87,7 @@ import autoRefreshIntervals from '../../constants/auto-refresh-intervals';
 import ListItemDefaultMailClient from './list-item-default-mail-client';
 import ListItemDefaultBrowser from './list-item-default-browser';
 import ListItemDefaultCalendarApp from './list-item-default-calendar-app';
+import SectionAudioVideo from './section-audio-video';
 
 import DialogAppLock from '../dialog-app-lock';
 import DialogCodeInjection from '../dialog-code-injection';
@@ -1298,6 +1299,11 @@ const Preferences = ({
             </ListItem>
           </List>
         </Paper>
+
+        <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.audioVideo.ref}>
+          Audio & Video
+        </Typography>
+        <SectionAudioVideo classes={classes} />
 
         <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle} ref={sections.network.ref}>
           Network
