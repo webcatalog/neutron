@@ -1395,10 +1395,10 @@
   resolved "https://registry.yarnpkg.com/@emotion/utils/-/utils-0.8.2.tgz#576ff7fb1230185b619a75d258cbc98f0867a8dc"
   integrity sha512-rLu3wcBWH4P5q1CGoSSH/i9hrXs7SlbRLkoq9IGuoPYNGQvDJ3pt/wmOM+XgYjIDRMVIdkUWt0RsfzF50JfnCw==
 
-"@fontsource/roboto@4.4.2":
-  version "4.4.2"
-  resolved "https://registry.yarnpkg.com/@fontsource/roboto/-/roboto-4.4.2.tgz#538425f02a13baf545eb26de5f104f6697e19542"
-  integrity sha512-sLuV0jwNirm+3QigxDHZC3GQAJks717AHKl2tEHSYfkQh82gc7t3naaELs+Jgz8CpuEfcC7VKlWaCFWm7Qe82w==
+"@fontsource/roboto@4.4.5":
+  version "4.4.5"
+  resolved "https://registry.yarnpkg.com/@fontsource/roboto/-/roboto-4.4.5.tgz#9ef1b9288ac4a97b97906da920c63c08dba97c89"
+  integrity sha512-e3s7BF8MDBLpkA2r6lnl5PMnllF0McVvpolK9h2zzvVJw2WPexP1GTgMKHISlglYZRij2lKg/ZjQcIUUYDsAXg==
 
 "@hapi/address@2.x.x":
   version "2.1.4"
@@ -5598,10 +5598,10 @@ damerau-levenshtein@^1.0.4, damerau-levenshtein@^1.0.6:
   resolved "https://registry.yarnpkg.com/damerau-levenshtein/-/damerau-levenshtein-1.0.7.tgz#64368003512a1a6992593741a09a9d31a836f55d"
   integrity sha512-VvdQIPGdWP0SqFXghj79Wf/5LArmreyMsGLa6FG6iC4t3j7j5s71TrwWmT/4akbDQIqjfACkLZmjXhA7g2oUZw==
 
-darkreader@4.9.32:
-  version "4.9.32"
-  resolved "https://registry.yarnpkg.com/darkreader/-/darkreader-4.9.32.tgz#a38934bc5d107ed205653ca13fb20860ee2394a6"
-  integrity sha512-llljeLTLLCXCyWAjNAH3i4+avMrOxJTZN3ASzAWhy78c3mt8w7DerwB/5Zq4NW/qmJbmuZ0RdIgj2nrlNZrv8A==
+darkreader@4.9.33:
+  version "4.9.33"
+  resolved "https://registry.yarnpkg.com/darkreader/-/darkreader-4.9.33.tgz#be050b6da401645695c2fb0fe99409e6a20351fa"
+  integrity sha512-L5YrNvp0phK50Efm8l1N/0n4jAaFhnbQXlGuMVqE9tCOFPuvu3ky5zVELanpz6J12BzOhN8rRhf0ntLCxdFrKA==
 
 dashdash@^1.12.0:
   version "1.14.1"
