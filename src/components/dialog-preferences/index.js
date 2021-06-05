@@ -30,6 +30,7 @@ import LanguageIcon from '@material-ui/icons/Language';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import PaletteIcon from '@material-ui/icons/Palette';
+import PermCameraMicIcon from '@material-ui/icons/PermCameraMic';
 import PowerIcon from '@material-ui/icons/Power';
 import RotateLeftIcon from '@material-ui/icons/RotateLeft';
 import RouterIcon from '@material-ui/icons/Router';
@@ -365,6 +366,11 @@ const Preferences = ({
     downloads: {
       text: 'Downloads',
       Icon: CloudDownloadIcon,
+      ref: useRef(),
+    },
+    audioVideo: {
+      text: 'Audio & Video',
+      Icon: PermCameraMicIcon,
       ref: useRef(),
     },
     network: {
