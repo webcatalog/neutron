@@ -42,7 +42,6 @@ import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name'
 
 import {
   enqueueRequestRestartSnackbar,
-  requestCheckForUpdates,
   requestOpenInBrowser,
   requestQuit,
   requestResetPreferences,
@@ -67,6 +66,8 @@ import SectionLanguages from './section-languages';
 import SectionDevelopers from './section-developers';
 import SectionDownloads from './section-downloads';
 import SectionAdvanced from './section-advanced';
+import SectionUpdates from './section-updates';
+import SectionNetwork from './section-network';
 
 import DialogAppLock from '../dialog-app-lock';
 import DialogCodeInjection from '../dialog-code-injection';
@@ -186,49 +187,11 @@ const styles = (theme) => ({
   },
 });
 
-const formatBytes = (bytes, decimals = 2) => {
-  if (bytes === 0) return '0 Bytes';
-
-  const k = 1024;
-  const dm = decimals < 0 ? 0 : decimals;
-  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-
-  return `${parseFloat((bytes / (k ** i)).toFixed(dm))} ${sizes[i]}`;
-};
-
-const getUpdaterDesc = (status, info) => {
-  if (status === 'download-progress') {
-    if (info != null) {
-      const { transferred, total, bytesPerSecond } = info;
-      return `Downloading updates (${formatBytes(transferred)}/${formatBytes(total)} at ${formatBytes(bytesPerSecond)}/s)...`;
-    }
-    return 'Downloading updates...';
-  }
-  if (status === 'checking-for-update') {
-    return 'Checking for updates...';
-  }
-  if (status === 'update-available') {
-    return 'Downloading updates...';
-  }
-  if (status === 'update-downloaded') {
-    if (info && info.version) return `A new version (${info.version}) has been downloaded.`;
-    return 'A new version has been downloaded.';
-  }
-  return null;
-};
-
 const Preferences = ({
-  autoCheckForUpdates,
   classes,
   iapPurchased,
-  proxyMode,
   standaloneRegistered,
-  updaterInfo,
-  updaterStatus,
   warnBeforeQuitting,
-  onOpenDialogProxy,
 }) => {
   const appJson = getStaticGlobal('appJson');
   const utmSource = getUtmSource();
@@ -433,32 +396,7 @@ const Preferences = ({
         <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle} ref={sections.network.ref}>
           Network
         </Typography>
-        <Paper elevation={0} className={classes.paper}>
-          <List disablePadding dense>
-            <ListItem button onClick={onOpenDialogProxy}>
-              <ListItemText
-                primary="Proxy"
-                secondary={(() => {
-                  switch (proxyMode) {
-                    case 'fixed_servers': {
-                      return 'Using proxy server.';
-                    }
-                    case 'pac_script': {
-                      return 'Using PAC script (automatic proxy configuration script).';
-                    }
-                    case 'system': {
-                      return 'Using system proxy configurations.';
-                    }
-                    default: {
-                      return 'Not configured.';
-                    }
-                  }
-                })()}
-              />
-              <ChevronRightIcon color="action" />
-            </ListItem>
-          </List>
-        </Paper>
+        <SectionNetwork />
 
         <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.privacy.ref}>
           Privacy &amp; Security
@@ -480,54 +418,7 @@ const Preferences = ({
             <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.updates.ref}>
               Updates
             </Typography>
-            {isStandalone() ? (
-              <Paper elevation={0} className={classes.paper}>
-                <List disablePadding dense>
-                  <ListItem
-                    button
-                    onClick={() => requestCheckForUpdates(false)}
-                    disabled={updaterStatus === 'checking-for-update'
-                      || updaterStatus === 'download-progress'
-                      || updaterStatus === 'download-progress'
-                      || updaterStatus === 'update-available'}
-                  >
-                    <ListItemText
-                      primary={updaterStatus === 'update-downloaded' ? 'Restart to Apply Updates' : 'Check for Updates'}
-                      secondary={getUpdaterDesc(updaterStatus, updaterInfo)}
-                    />
-                    <ChevronRightIcon color="action" />
-                  </ListItem>
-                </List>
-              </Paper>
-            ) : (
-              <Paper elevation={0} className={classes.paper}>
-                <List disablePadding dense>
-                  <ListItem
-                    button
-                    onClick={requestCheckForUpdates}
-                  >
-                    <ListItemText
-                      primary="Check for updates"
-                    />
-                    <ChevronRightIcon color="action" />
-                  </ListItem>
-                  <Divider />
-                  <ListItem>
-                    <ListItemText primary="Check for updates automatically" />
-                    <ListItemSecondaryAction>
-                      <Switch
-                        edge="end"
-                        color="primary"
-                        checked={autoCheckForUpdates}
-                        onChange={(e) => {
-                          requestSetPreference('autoCheckForUpdates', e.target.checked);
-                        }}
-                      />
-                    </ListItemSecondaryAction>
-                  </ListItem>
-                </List>
-              </Paper>
-            )}
+            <SectionUpdates />
           </>
         )}
 
@@ -850,37 +741,18 @@ const Preferences = ({
 Preferences.defaultProps = {
   iapPurchased: false,
   standaloneRegistered: false,
-  updaterInfo: null,
-  updaterStatus: null,
 };
 
 Preferences.propTypes = {
-  autoCheckForUpdates: PropTypes.bool.isRequired,
   classes: PropTypes.object.isRequired,
   iapPurchased: PropTypes.bool,
-  proxyMode: PropTypes.oneOf(['direct', 'fixed_servers', 'pac_script', 'system']).isRequired,
   standaloneRegistered: PropTypes.bool,
-  updaterInfo: PropTypes.object,
-  updaterStatus: PropTypes.string,
   warnBeforeQuitting: PropTypes.bool.isRequired,
-  onOpenDialogProxy: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  autoCheckForUpdates: state.preferences.autoCheckForUpdates,
-  autoRefresh: state.preferences.autoRefresh,
-  autoRefreshInterval: state.preferences.autoRefreshInterval,
-  autoRefreshOnlyWhenInactive: state.preferences.autoRefreshOnlyWhenInactive,
-  defaultFontSize: state.preferences.defaultFontSize,
-  hibernateUnusedWorkspacesAtLaunch: state.preferences.hibernateUnusedWorkspacesAtLaunch,
   iapPurchased: state.preferences.iapPurchased,
-  internalUrlRule: state.preferences.internalUrlRule,
-  proxyMode: state.preferences.proxyMode,
   standaloneRegistered: state.preferences.standaloneRegistered,
-  swipeToNavigate: state.preferences.swipeToNavigate,
-  updaterInfo: state.updater.info,
-  updaterStatus: state.updater.status,
-  useHardwareAcceleration: state.preferences.useHardwareAcceleration,
   useSystemTitleBar: state.preferences.useSystemTitleBar,
   warnBeforeQuitting: state.preferences.warnBeforeQuitting,
 });
