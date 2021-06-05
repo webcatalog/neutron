@@ -50,7 +50,6 @@ import SectionUpdates from './section-updates';
 import SectionMoreApps from './section-more-apps';
 import SectionAccountLicensing from './section-account-licensing';
 
-import DialogAppLock from '../dialog-app-lock';
 import DialogSpellcheckLanguages from '../dialog-spellcheck-languages';
 
 import SnackbarTrigger from '../shared/snackbar-trigger';
@@ -374,7 +373,6 @@ const Preferences = ({
         </Typography>
         <SectionMiscs />
       </div>
-      <DialogAppLock />
       <DialogSpellcheckLanguages />
       <SnackbarTrigger />
     </div>

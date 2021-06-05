@@ -21,7 +21,7 @@ import Switch from '@material-ui/core/Switch';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 
-import connectComponent from '../../helpers/connect-component';
+import connectComponent from '../../../helpers/connect-component';
 
 import {
   close,
@@ -29,9 +29,9 @@ import {
   save,
   validateCurrentPassword,
   deletePassword,
-} from '../../state/dialog-app-lock/actions';
+} from '../../../state/dialog-app-lock/actions';
 
-import { requestOpenInBrowser } from '../../senders';
+import { requestOpenInBrowser } from '../../../senders';
 
 const styles = (theme) => ({
   actions: {
