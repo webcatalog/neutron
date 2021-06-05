@@ -59,8 +59,6 @@ import {
   getIapFormattedPriceAsync,
 } from '../../invokers';
 
-import { open as openDialogCodeInjection } from '../../state/dialog-code-injection/actions';
-import { open as openDialogCustomUserAgent } from '../../state/dialog-custom-user-agent/actions';
 import { open as openDialogInternalUrls } from '../../state/dialog-internal-urls/actions';
 import { open as openDialogProxy } from '../../state/dialog-proxy/actions';
 import { open as openDialogRefreshInterval } from '../../state/dialog-refresh-interval/actions';
@@ -74,6 +72,7 @@ import SectionNotifications from './section-notifications';
 import SectionPrivacySecurity from './section-privacy-security';
 import SectionExtensions from './section-extensions';
 import SectionLanguages from './section-languages';
+import SectionDevelopers from './section-developers';
 
 import DialogAppLock from '../dialog-app-lock';
 import DialogCodeInjection from '../dialog-code-injection';
@@ -240,15 +239,10 @@ const Preferences = ({
   autoRefreshInterval,
   autoRefreshOnlyWhenInactive,
   classes,
-  cssCodeInjection,
-  customUserAgent,
   downloadPath,
   hibernateUnusedWorkspacesAtLaunch,
   iapPurchased,
   internalUrlRule,
-  jsCodeInjection,
-  onOpenDialogCodeInjection,
-  onOpenDialogCustomUserAgent,
   onOpenDialogInternalUrls,
   onOpenDialogProxy,
   onOpenDialogRefreshInterval,
@@ -558,46 +552,7 @@ const Preferences = ({
         <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.developers.ref}>
           Developers
         </Typography>
-        <Paper elevation={0} className={classes.paper}>
-          <List disablePadding dense>
-            <ListItem button onClick={onOpenDialogCustomUserAgent}>
-              <ListItemText
-                primary="Custom User Agent"
-                secondary={customUserAgent || 'Not set'}
-                secondaryTypographyProps={{ noWrap: true }}
-              />
-              <ChevronRightIcon color="action" />
-            </ListItem>
-            <Divider />
-            <ListItem
-              button
-              onClick={() => {
-                onOpenDialogCodeInjection('js');
-              }}
-            >
-              <ListItemText
-                primary="JS Code Injection"
-                secondary={jsCodeInjection || 'Not set'}
-                secondaryTypographyProps={{ noWrap: true }}
-              />
-              <ChevronRightIcon color="action" />
-            </ListItem>
-            <Divider />
-            <ListItem
-              button
-              onClick={() => {
-                onOpenDialogCodeInjection('css');
-              }}
-            >
-              <ListItemText
-                primary="CSS Code Injection"
-                secondary={cssCodeInjection || 'Not set'}
-                secondaryTypographyProps={{ noWrap: true }}
-              />
-              <ChevronRightIcon color="action" />
-            </ListItem>
-          </List>
-        </Paper>
+        <SectionDevelopers />
 
         <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.advanced.ref}>
           Advanced
@@ -1189,11 +1144,8 @@ const Preferences = ({
 };
 
 Preferences.defaultProps = {
-  cssCodeInjection: null,
-  customUserAgent: null,
   iapPurchased: false,
   internalUrlRule: null,
-  jsCodeInjection: null,
   standaloneRegistered: false,
   updaterInfo: null,
   updaterStatus: null,
@@ -1207,15 +1159,10 @@ Preferences.propTypes = {
   autoRefreshInterval: PropTypes.number.isRequired,
   autoRefreshOnlyWhenInactive: PropTypes.bool.isRequired,
   classes: PropTypes.object.isRequired,
-  cssCodeInjection: PropTypes.string,
-  customUserAgent: PropTypes.string,
   downloadPath: PropTypes.string.isRequired,
   hibernateUnusedWorkspacesAtLaunch: PropTypes.bool.isRequired,
   iapPurchased: PropTypes.bool,
   internalUrlRule: PropTypes.string,
-  jsCodeInjection: PropTypes.string,
-  onOpenDialogCodeInjection: PropTypes.func.isRequired,
-  onOpenDialogCustomUserAgent: PropTypes.func.isRequired,
   onOpenDialogInternalUrls: PropTypes.func.isRequired,
   onOpenDialogProxy: PropTypes.func.isRequired,
   onOpenDialogRefreshInterval: PropTypes.func.isRequired,
@@ -1237,14 +1184,11 @@ const mapStateToProps = (state) => ({
   autoRefresh: state.preferences.autoRefresh,
   autoRefreshInterval: state.preferences.autoRefreshInterval,
   autoRefreshOnlyWhenInactive: state.preferences.autoRefreshOnlyWhenInactive,
-  cssCodeInjection: state.preferences.cssCodeInjection,
-  customUserAgent: state.preferences.customUserAgent,
   defaultFontSize: state.preferences.defaultFontSize,
   downloadPath: state.preferences.downloadPath,
   hibernateUnusedWorkspacesAtLaunch: state.preferences.hibernateUnusedWorkspacesAtLaunch,
   iapPurchased: state.preferences.iapPurchased,
   internalUrlRule: state.preferences.internalUrlRule,
-  jsCodeInjection: state.preferences.jsCodeInjection,
   openFolderWhenDoneDownloading: state.preferences.openFolderWhenDoneDownloading,
   proxyMode: state.preferences.proxyMode,
   standaloneRegistered: state.preferences.standaloneRegistered,
@@ -1257,8 +1201,6 @@ const mapStateToProps = (state) => ({
 });
 
 const actionCreators = {
-  openDialogCodeInjection,
-  openDialogCustomUserAgent,
   openDialogInternalUrls,
   openDialogProxy,
   openDialogRefreshInterval,
