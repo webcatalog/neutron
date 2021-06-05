@@ -36,10 +36,17 @@ const appJson = require('../constants/app-json');
 
 const loadInvokers = () => {
   ipcMain.handle('get-react-initial-state', () => {
+    const workspaces = getWorkspaces();
+    const activeWorkspaceId = Object.values(workspaces)
+      .find((workspace) => workspace.active).id;
+
     const initialState = {
       preferences: getPreferences(),
       systemPreferences: getSystemPreferences(),
-      workspaces: getWorkspaces(),
+      workspaces: {
+        activeWorkspaceId,
+        workspaces,
+      },
       workspaceMetas: getWorkspaceMetas(),
       notifications: {
         pauseNotificationsInfo: getPauseNotificationsInfo(),

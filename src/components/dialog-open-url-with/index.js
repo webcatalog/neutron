@@ -70,7 +70,7 @@ OpenUrlWith.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  workspaces: state.workspaces,
+  workspaces: state.workspaces.workspaces,
 });
 
 export default connectComponent(

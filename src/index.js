@@ -71,6 +71,7 @@ const runApp = () => {
   Promise.resolve()
     .then(async () => {
       const initialState = await getReactInitialStateAsync();
+      const { workspaces } = initialState.workspaces;
 
       if (window.mode === 'about') {
         document.title = 'About';
@@ -80,8 +81,8 @@ const runApp = () => {
         document.title = 'Preferences';
       } else if (window.mode === 'workspace-preferences') {
         const workspaceId = getStaticGlobal('workspacePreferencesWorkspaceId');
-        const workspaceList = getWorkspacesAsList(initialState.workspaces);
-        const workspace = initialState.workspaces[workspaceId];
+        const workspaceList = getWorkspacesAsList(workspaces);
+        const workspace = workspaces[workspaceId];
         workspaceList.some((item, index) => {
           if (item.id === workspaceId) {
             workspace.order = index;
@@ -94,8 +95,8 @@ const runApp = () => {
         document.title = `Edit ${getWorkspaceFriendlyName()} "${getWorkspaceName(workspace)}" (advanced)`;
       } else if (window.mode === 'edit-workspace') {
         const editWorkspaceId = getStaticGlobal('editWorkspaceId');
-        const workspaceList = getWorkspacesAsList(initialState.workspaces);
-        const workspace = initialState.workspaces[editWorkspaceId];
+        const workspaceList = getWorkspacesAsList(workspaces);
+        const workspace = workspaces[editWorkspaceId];
         workspaceList.some((item, index) => {
           if (item.id === editWorkspaceId) {
             workspace.order = index;
