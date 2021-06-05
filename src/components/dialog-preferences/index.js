@@ -47,7 +47,6 @@ import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name'
 import {
   enqueueRequestRestartSnackbar,
   requestCheckForUpdates,
-  requestClearBrowsingData,
   requestOpenInBrowser,
   requestQuit,
   requestResetPreferences,
@@ -60,7 +59,6 @@ import {
   getIapFormattedPriceAsync,
 } from '../../invokers';
 
-import { open as openDialogAppLock } from '../../state/dialog-app-lock/actions';
 import { open as openDialogCodeInjection } from '../../state/dialog-code-injection/actions';
 import { open as openDialogCustomUserAgent } from '../../state/dialog-custom-user-agent/actions';
 import { open as openDialogExtensions } from '../../state/dialog-extensions/actions';
@@ -76,6 +74,7 @@ import SectionAudioVideo from './section-audio-video';
 import SectionGeneral from './section-general';
 import SectionAppearance from './section-appearance';
 import SectionNotifications from './section-notifications';
+import SectionPrivacySecurity from './section-privacy-security';
 
 import DialogAppLock from '../dialog-app-lock';
 import DialogCodeInjection from '../dialog-code-injection';
@@ -242,17 +241,14 @@ const Preferences = ({
   autoRefresh,
   autoRefreshInterval,
   autoRefreshOnlyWhenInactive,
-  blockAds,
   classes,
   cssCodeInjection,
   customUserAgent,
   downloadPath,
   hibernateUnusedWorkspacesAtLaunch,
   iapPurchased,
-  ignoreCertificateErrors,
   internalUrlRule,
   jsCodeInjection,
-  onOpenDialogAppLock,
   onOpenDialogCodeInjection,
   onOpenDialogCustomUserAgent,
   onOpenDialogExtensions,
@@ -262,14 +258,10 @@ const Preferences = ({
   onOpenDialogSpellcheckLanguages,
   openFolderWhenDoneDownloading,
   proxyMode,
-  rememberLastPageVisited,
-  sentry,
-  shareWorkspaceBrowsingData,
   spellcheck,
   spellcheckLanguages,
   standaloneRegistered,
   swipeToNavigate,
-  telemetry,
   updaterInfo,
   updaterStatus,
   useHardwareAcceleration,
@@ -278,8 +270,6 @@ const Preferences = ({
 }) => {
   const appJson = getStaticGlobal('appJson');
   const utmSource = getUtmSource();
-  const canPromptTouchId = window.process.platform === 'darwin'
-    && window.remote.systemPreferences.canPromptTouchID();
   const registered = appJson.registered || iapPurchased || standaloneRegistered;
 
   const [formattedPrice, setFormattedPrice] = useState(null);
@@ -606,165 +596,7 @@ const Preferences = ({
         <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.privacy.ref}>
           Privacy &amp; Security
         </Typography>
-        <Paper elevation={0} className={classes.paper}>
-          <List disablePadding dense>
-            <ListItem button onClick={requestClearBrowsingData}>
-              <ListItemText primary="Clear browsing data" secondary="Clear cookies, cache, and more." />
-              <ChevronRightIcon color="action" />
-            </ListItem>
-            <Divider />
-            <ListItem
-              button
-              onClick={() => {
-                if (!checkLicense()) {
-                  return;
-                }
-
-                onOpenDialogAppLock();
-              }}
-            >
-              <ListItemText
-                primary="App Lock"
-                secondary={`Protect this app from unauthorized access with password${canPromptTouchId ? ' or Touch ID' : ''}.`}
-              />
-              <ChevronRightIcon color="action" />
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListItemText
-                primary="Block ads &amp; trackers"
-              />
-              <ListItemSecondaryAction>
-                <Switch
-                  edge="end"
-                  color="primary"
-                  checked={blockAds}
-                  onChange={(e) => {
-                    if (!checkLicense()) {
-                      return;
-                    }
-
-                    requestSetPreference('blockAds', e.target.checked);
-                    enqueueRequestRestartSnackbar();
-                  }}
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListItemText primary="Remember last page visited" />
-              <ListItemSecondaryAction>
-                <Switch
-                  edge="end"
-                  color="primary"
-                  checked={rememberLastPageVisited}
-                  onChange={(e) => {
-                    requestSetPreference('rememberLastPageVisited', e.target.checked);
-                    enqueueRequestRestartSnackbar();
-                  }}
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
-            {!appJson.id.startsWith('group-') && appJson.id !== 'clovery' && (
-              <>
-                <Divider />
-                <ListItem>
-                  <ListItemText primary="Share browsing data & login credentials between services & accounts" />
-                  <ListItemSecondaryAction>
-                    <Switch
-                      edge="end"
-                      color="primary"
-                      checked={shareWorkspaceBrowsingData}
-                      onChange={(e) => {
-                        requestSetPreference('shareWorkspaceBrowsingData', e.target.checked);
-                        enqueueRequestRestartSnackbar();
-                      }}
-                    />
-                  </ListItemSecondaryAction>
-                </ListItem>
-              </>
-            )}
-            <Divider />
-            <ListItem>
-              <ListItemText
-                primary="Ignore certificate errors"
-                secondary={(
-                  <>
-                    <span>Not recommended. </span>
-                    <span
-                      role="link"
-                      tabIndex={0}
-                      className={classes.link}
-                      onClick={() => requestOpenInBrowser('https://groups.google.com/a/chromium.org/d/msg/security-dev/mB2KJv_mMzM/ddMteO9RjXEJ')}
-                      onKeyDown={(e) => {
-                        if (e.key !== 'Enter') return;
-                        requestOpenInBrowser('https://groups.google.com/a/chromium.org/d/msg/security-dev/mB2KJv_mMzM/ddMteO9RjXEJ');
-                      }}
-                    >
-                      Learn more
-                    </span>
-                    .
-                  </>
-                )}
-              />
-              <ListItemSecondaryAction>
-                <Switch
-                  edge="end"
-                  color="primary"
-                  checked={ignoreCertificateErrors}
-                  onChange={(e) => {
-                    requestSetPreference('ignoreCertificateErrors', e.target.checked);
-                    enqueueRequestRestartSnackbar();
-                  }}
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
-            {(isMas() || isStandalone()) && (
-              <>
-                <Divider />
-                <ListItem>
-                  <ListItemText
-                    primary="Allow the app to send anonymous crash reports"
-                    secondary="Help us quickly diagnose and fix bugs in the app."
-                  />
-                  <ListItemSecondaryAction>
-                    <Switch
-                      edge="end"
-                      color="primary"
-                      checked={sentry}
-                      onChange={(e) => {
-                        requestSetPreference('sentry', e.target.checked);
-                        enqueueRequestRestartSnackbar();
-                      }}
-                    />
-                  </ListItemSecondaryAction>
-                </ListItem>
-                <Divider />
-                <ListItem>
-                  <ListItemText
-                    primary="Allow the app to send anonymous usage data"
-                    secondary="Help us understand how to improve the product."
-                  />
-                  <ListItemSecondaryAction>
-                    <Switch
-                      edge="end"
-                      color="primary"
-                      checked={telemetry}
-                      onChange={(e) => {
-                        requestSetPreference('telemetry', e.target.checked);
-                      }}
-                    />
-                  </ListItemSecondaryAction>
-                </ListItem>
-              </>
-            )}
-            <Divider />
-            <ListItem button onClick={() => requestOpenInBrowser(`https://webcatalog.app/privacy?utm_source=${utmSource}`)}>
-              <ListItemText primary="Privacy Policy" />
-              <ChevronRightIcon color="action" />
-            </ListItem>
-          </List>
-        </Paper>
+        <SectionPrivacySecurity />
 
         <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.developers.ref}>
           Developers
@@ -1417,17 +1249,14 @@ Preferences.propTypes = {
   autoRefresh: PropTypes.bool.isRequired,
   autoRefreshInterval: PropTypes.number.isRequired,
   autoRefreshOnlyWhenInactive: PropTypes.bool.isRequired,
-  blockAds: PropTypes.bool.isRequired,
   classes: PropTypes.object.isRequired,
   cssCodeInjection: PropTypes.string,
   customUserAgent: PropTypes.string,
   downloadPath: PropTypes.string.isRequired,
   hibernateUnusedWorkspacesAtLaunch: PropTypes.bool.isRequired,
   iapPurchased: PropTypes.bool,
-  ignoreCertificateErrors: PropTypes.bool.isRequired,
   internalUrlRule: PropTypes.string,
   jsCodeInjection: PropTypes.string,
-  onOpenDialogAppLock: PropTypes.func.isRequired,
   onOpenDialogCodeInjection: PropTypes.func.isRequired,
   onOpenDialogCustomUserAgent: PropTypes.func.isRequired,
   onOpenDialogExtensions: PropTypes.func.isRequired,
@@ -1437,14 +1266,10 @@ Preferences.propTypes = {
   onOpenDialogSpellcheckLanguages: PropTypes.func.isRequired,
   openFolderWhenDoneDownloading: PropTypes.bool.isRequired,
   proxyMode: PropTypes.oneOf(['direct', 'fixed_servers', 'pac_script', 'system']).isRequired,
-  rememberLastPageVisited: PropTypes.bool.isRequired,
-  sentry: PropTypes.bool.isRequired,
-  shareWorkspaceBrowsingData: PropTypes.bool.isRequired,
   spellcheck: PropTypes.bool.isRequired,
   spellcheckLanguages: PropTypes.arrayOf(PropTypes.string).isRequired,
   standaloneRegistered: PropTypes.bool,
   swipeToNavigate: PropTypes.bool.isRequired,
-  telemetry: PropTypes.bool.isRequired,
   updaterInfo: PropTypes.object,
   updaterStatus: PropTypes.string,
   useHardwareAcceleration: PropTypes.bool.isRequired,
@@ -1459,26 +1284,20 @@ const mapStateToProps = (state) => ({
   autoRefresh: state.preferences.autoRefresh,
   autoRefreshInterval: state.preferences.autoRefreshInterval,
   autoRefreshOnlyWhenInactive: state.preferences.autoRefreshOnlyWhenInactive,
-  blockAds: state.preferences.blockAds,
   cssCodeInjection: state.preferences.cssCodeInjection,
   customUserAgent: state.preferences.customUserAgent,
   defaultFontSize: state.preferences.defaultFontSize,
   downloadPath: state.preferences.downloadPath,
   hibernateUnusedWorkspacesAtLaunch: state.preferences.hibernateUnusedWorkspacesAtLaunch,
   iapPurchased: state.preferences.iapPurchased,
-  ignoreCertificateErrors: state.preferences.ignoreCertificateErrors,
   internalUrlRule: state.preferences.internalUrlRule,
   jsCodeInjection: state.preferences.jsCodeInjection,
   openFolderWhenDoneDownloading: state.preferences.openFolderWhenDoneDownloading,
   proxyMode: state.preferences.proxyMode,
-  rememberLastPageVisited: state.preferences.rememberLastPageVisited,
-  sentry: state.preferences.sentry,
-  shareWorkspaceBrowsingData: state.preferences.shareWorkspaceBrowsingData,
   spellcheck: state.preferences.spellcheck,
   spellcheckLanguages: state.preferences.spellcheckLanguages,
   standaloneRegistered: state.preferences.standaloneRegistered,
   swipeToNavigate: state.preferences.swipeToNavigate,
-  telemetry: state.preferences.telemetry,
   updaterInfo: state.updater.info,
   updaterStatus: state.updater.status,
   useHardwareAcceleration: state.preferences.useHardwareAcceleration,
@@ -1487,7 +1306,6 @@ const mapStateToProps = (state) => ({
 });
 
 const actionCreators = {
-  openDialogAppLock,
   openDialogCodeInjection,
   openDialogCustomUserAgent,
   openDialogExtensions,
