@@ -3,7 +3,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import semver from 'semver';
 import classnames from 'classnames';
 
 import Divider from '@material-ui/core/Divider';
@@ -36,8 +35,6 @@ import StorefrontIcon from '@material-ui/icons/Storefront';
 import UpdateIcon from '@material-ui/icons/Update';
 import WidgetsIcon from '@material-ui/icons/Widgets';
 
-import { TimePicker } from '@material-ui/pickers';
-
 import connectComponent from '../../helpers/connect-component';
 import checkLicense from '../../helpers/check-license';
 import roundTime from '../../helpers/round-time';
@@ -56,8 +53,6 @@ import {
   requestResetPreferences,
   requestSetPreference,
   requestShowAboutWindow,
-  requestShowNotification,
-  requestShowNotificationsWindow,
   requestShowOpenSourceNoticesWindow,
 } from '../../senders';
 
@@ -80,6 +75,7 @@ import autoRefreshIntervals from '../../constants/auto-refresh-intervals';
 import SectionAudioVideo from './section-audio-video';
 import SectionGeneral from './section-general';
 import SectionAppearance from './section-appearance';
+import SectionNotifications from './section-notifications';
 
 import DialogAppLock from '../dialog-app-lock';
 import DialogCodeInjection from '../dialog-code-injection';
@@ -265,10 +261,6 @@ const Preferences = ({
   onOpenDialogRefreshInterval,
   onOpenDialogSpellcheckLanguages,
   openFolderWhenDoneDownloading,
-  pauseNotificationsBySchedule,
-  pauseNotificationsByScheduleFrom,
-  pauseNotificationsByScheduleTo,
-  pauseNotificationsMuteAudio,
   proxyMode,
   rememberLastPageVisited,
   sentry,
@@ -278,7 +270,6 @@ const Preferences = ({
   standaloneRegistered,
   swipeToNavigate,
   telemetry,
-  unreadCountBadge,
   updaterInfo,
   updaterStatus,
   useHardwareAcceleration,
@@ -461,142 +452,7 @@ const Preferences = ({
         <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.notifications.ref}>
           Notifications
         </Typography>
-        <Paper elevation={0} className={classes.paper}>
-          <List disablePadding dense>
-            <ListItem button onClick={requestShowNotificationsWindow}>
-              <ListItemText primary="Control notifications" />
-              <ChevronRightIcon color="action" />
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListItemText>
-                Automatically disable notifications by schedule:
-                <div className={classes.timePickerContainer}>
-                  <TimePicker
-                    autoOk={false}
-                    label="from"
-                    value={new Date(pauseNotificationsByScheduleFrom)}
-                    onChange={(d) => requestSetPreference('pauseNotificationsByScheduleFrom', d.toString())}
-                    onClose={() => { window.preventClosingWindow = false; }}
-                    onOpen={() => { window.preventClosingWindow = true; }}
-                    disabled={!pauseNotificationsBySchedule}
-                  />
-                  <TimePicker
-                    autoOk={false}
-                    label="to"
-                    value={new Date(pauseNotificationsByScheduleTo)}
-                    onChange={(d) => requestSetPreference('pauseNotificationsByScheduleTo', d.toString())}
-                    onClose={() => { window.preventClosingWindow = false; }}
-                    onOpen={() => { window.preventClosingWindow = true; }}
-                    disabled={!pauseNotificationsBySchedule}
-                  />
-                </div>
-                (
-                {window.Intl.DateTimeFormat().resolvedOptions().timeZone}
-                )
-              </ListItemText>
-              <ListItemSecondaryAction>
-                <Switch
-                  edge="end"
-                  color="primary"
-                  checked={pauseNotificationsBySchedule}
-                  onChange={(e) => {
-                    requestSetPreference('pauseNotificationsBySchedule', e.target.checked);
-                  }}
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListItemText primary="Mute audio when notifications are paused" />
-              <ListItemSecondaryAction>
-                <Switch
-                  edge="end"
-                  color="primary"
-                  checked={pauseNotificationsMuteAudio}
-                  onChange={(e) => {
-                    requestSetPreference('pauseNotificationsMuteAudio', e.target.checked);
-                  }}
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListItemText primary="Show unread count badge" />
-              <ListItemSecondaryAction>
-                <Switch
-                  edge="end"
-                  color="primary"
-                  checked={unreadCountBadge}
-                  onChange={(e) => {
-                    requestSetPreference('unreadCountBadge', e.target.checked);
-                  }}
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
-            <Divider />
-            <ListItem
-              button
-              onClick={() => {
-                requestShowNotification({
-                  title: 'Test notifications',
-                  body: 'It is working!',
-                });
-              }}
-            >
-              <ListItemText
-                primary="Test notifications"
-                secondary={(() => {
-                  // only show this message on macOS Catalina 10.15 & above
-                  if (
-                    window.process.platform === 'darwin'
-                    && semver.gte(window.remote.process.getSystemVersion(), '10.15.0')
-                  ) {
-                    return (
-                      <>
-                        <span>If notifications don&apos;t show up,</span>
-                        <span> make sure you enable notifications in </span>
-                        <b>
-                          <span>macOS Preferences &gt; Notifications &gt; </span>
-                          {appJson.name}
-                        </b>
-                        <span>.</span>
-                      </>
-                    );
-                  }
-                  return null;
-                })()}
-              />
-              <ChevronRightIcon color="action" />
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListItemText
-                secondary={(
-                  <>
-                    <span>WebCatalog supports notifications out of the box. </span>
-                    <span>But for some web apps, to receive notifications, </span>
-                    <span>you will need to manually configure additional </span>
-                    <span>web app settings. </span>
-                    <span
-                      role="link"
-                      tabIndex={0}
-                      className={classes.link}
-                      onClick={() => requestOpenInBrowser(`https://help.webcatalog.app/article/17-how-to-enable-notifications-in-web-apps?utm_source=${utmSource}`)}
-                      onKeyDown={(e) => {
-                        if (e.key !== 'Enter') return;
-                        requestOpenInBrowser(`https://help.webcatalog.app/article/17-how-to-enable-notifications-in-web-apps?utm_source=${utmSource}`);
-                      }}
-                    >
-                      Learn more
-                    </span>
-                    <span>.</span>
-                  </>
-                )}
-              />
-            </ListItem>
-          </List>
-        </Paper>
+        <SectionNotifications />
 
         {!isMas() && (
           <>
@@ -1580,10 +1436,6 @@ Preferences.propTypes = {
   onOpenDialogRefreshInterval: PropTypes.func.isRequired,
   onOpenDialogSpellcheckLanguages: PropTypes.func.isRequired,
   openFolderWhenDoneDownloading: PropTypes.bool.isRequired,
-  pauseNotificationsBySchedule: PropTypes.bool.isRequired,
-  pauseNotificationsByScheduleFrom: PropTypes.string.isRequired,
-  pauseNotificationsByScheduleTo: PropTypes.string.isRequired,
-  pauseNotificationsMuteAudio: PropTypes.bool.isRequired,
   proxyMode: PropTypes.oneOf(['direct', 'fixed_servers', 'pac_script', 'system']).isRequired,
   rememberLastPageVisited: PropTypes.bool.isRequired,
   sentry: PropTypes.bool.isRequired,
@@ -1593,7 +1445,6 @@ Preferences.propTypes = {
   standaloneRegistered: PropTypes.bool,
   swipeToNavigate: PropTypes.bool.isRequired,
   telemetry: PropTypes.bool.isRequired,
-  unreadCountBadge: PropTypes.bool.isRequired,
   updaterInfo: PropTypes.object,
   updaterStatus: PropTypes.string,
   useHardwareAcceleration: PropTypes.bool.isRequired,
@@ -1619,10 +1470,6 @@ const mapStateToProps = (state) => ({
   internalUrlRule: state.preferences.internalUrlRule,
   jsCodeInjection: state.preferences.jsCodeInjection,
   openFolderWhenDoneDownloading: state.preferences.openFolderWhenDoneDownloading,
-  pauseNotificationsBySchedule: state.preferences.pauseNotificationsBySchedule,
-  pauseNotificationsByScheduleFrom: state.preferences.pauseNotificationsByScheduleFrom,
-  pauseNotificationsByScheduleTo: state.preferences.pauseNotificationsByScheduleTo,
-  pauseNotificationsMuteAudio: state.preferences.pauseNotificationsMuteAudio,
   proxyMode: state.preferences.proxyMode,
   rememberLastPageVisited: state.preferences.rememberLastPageVisited,
   sentry: state.preferences.sentry,
@@ -1632,7 +1479,6 @@ const mapStateToProps = (state) => ({
   standaloneRegistered: state.preferences.standaloneRegistered,
   swipeToNavigate: state.preferences.swipeToNavigate,
   telemetry: state.preferences.telemetry,
-  unreadCountBadge: state.preferences.unreadCountBadge,
   updaterInfo: state.updater.info,
   updaterStatus: state.updater.status,
   useHardwareAcceleration: state.preferences.useHardwareAcceleration,
