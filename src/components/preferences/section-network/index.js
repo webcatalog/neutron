@@ -7,7 +7,6 @@ import PropTypes from 'prop-types';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import Paper from '@material-ui/core/Paper';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
@@ -26,43 +25,39 @@ const styles = (theme) => ({
 });
 
 const Preferences = ({
-  classes,
   proxyMode,
   onOpenDialogProxy,
 }) => (
   <>
-    <Paper elevation={0} className={classes.paper}>
-      <List disablePadding dense>
-        <ListItem button onClick={onOpenDialogProxy}>
-          <ListItemText
-            primary="Proxy"
-            secondary={(() => {
-              switch (proxyMode) {
-                case 'fixed_servers': {
-                  return 'Using proxy server.';
-                }
-                case 'pac_script': {
-                  return 'Using PAC script (automatic proxy configuration script).';
-                }
-                case 'system': {
-                  return 'Using system proxy configurations.';
-                }
-                default: {
-                  return 'Not configured.';
-                }
+    <List disablePadding dense>
+      <ListItem button onClick={onOpenDialogProxy}>
+        <ListItemText
+          primary="Proxy"
+          secondary={(() => {
+            switch (proxyMode) {
+              case 'fixed_servers': {
+                return 'Using proxy server.';
               }
-            })()}
-          />
-          <ChevronRightIcon color="action" />
-        </ListItem>
-      </List>
-    </Paper>
+              case 'pac_script': {
+                return 'Using PAC script (automatic proxy configuration script).';
+              }
+              case 'system': {
+                return 'Using system proxy configurations.';
+              }
+              default: {
+                return 'Not configured.';
+              }
+            }
+          })()}
+        />
+        <ChevronRightIcon color="action" />
+      </ListItem>
+    </List>
     <DialogProxy />
   </>
 );
 
 Preferences.propTypes = {
-  classes: PropTypes.object.isRequired,
   proxyMode: PropTypes.oneOf(['direct', 'fixed_servers', 'pac_script', 'system']).isRequired,
   onOpenDialogProxy: PropTypes.func.isRequired,
 };

@@ -7,7 +7,6 @@ import PropTypes from 'prop-types';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import Paper from '@material-ui/core/Paper';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
@@ -17,33 +16,21 @@ import { open as openDialogExtensions } from '../../../state/dialog-extensions/a
 
 import DialogExtensions from './dialog-extensions';
 
-const styles = (theme) => ({
-  paper: {
-    marginTop: theme.spacing(0.5),
-    marginBottom: theme.spacing(3),
-    border: theme.palette.type === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)',
-  },
-});
-
 const SectionExtensions = ({
-  classes,
   onOpenDialogExtensions,
 }) => (
   <>
-    <Paper elevation={0} className={classes.paper}>
-      <List disablePadding dense>
-        <ListItem button onClick={() => onOpenDialogExtensions()}>
-          <ListItemText primary="Manage extensions (experimental)" />
-          <ChevronRightIcon color="action" />
-        </ListItem>
-      </List>
-    </Paper>
+    <List disablePadding dense>
+      <ListItem button onClick={() => onOpenDialogExtensions()}>
+        <ListItemText primary="Manage extensions (experimental)" />
+        <ChevronRightIcon color="action" />
+      </ListItem>
+    </List>
     <DialogExtensions />
   </>
 );
 
 SectionExtensions.propTypes = {
-  classes: PropTypes.object.isRequired,
   onOpenDialogExtensions: PropTypes.func.isRequired,
 };
 
@@ -55,5 +42,4 @@ export default connectComponent(
   SectionExtensions,
   null,
   actionCreators,
-  styles,
 );

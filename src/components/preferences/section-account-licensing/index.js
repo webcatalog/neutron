@@ -8,7 +8,6 @@ import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import Paper from '@material-ui/core/Paper';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
@@ -23,16 +22,7 @@ import {
   getIapFormattedPriceAsync,
 } from '../../../invokers';
 
-const styles = (theme) => ({
-  paper: {
-    marginTop: theme.spacing(0.5),
-    marginBottom: theme.spacing(3),
-    border: theme.palette.type === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)',
-  },
-});
-
 const SectionAccountLicensing = ({
-  classes,
   iapPurchased,
   standaloneRegistered,
 }) => {
@@ -52,22 +42,20 @@ const SectionAccountLicensing = ({
   }, [appJson, setFormattedPrice, registered]);
 
   return (
-    <Paper elevation={0} className={classes.paper}>
-      <List disablePadding dense>
-        <ListItem button onClick={null} disabled>
-          <ListItemText primary={registered ? `${isMas() || isStandalone() ? `${appJson.name} Plus` : 'WebCatalog Lifetime'} is activated.` : `Upgrade to ${isMas() || isStandalone() ? `${appJson.name} Plus` : 'WebCatalog Lifetime'} (${formattedPrice ? `${formattedPrice}, ` : ''}one-time payment for lifetime use) to unlock all features & add unlimited number of ${getWorkspaceFriendlyName(true).toLowerCase()}.`} />
-        </ListItem>
-        {!registered && (
-          <>
-            <Divider />
-            <ListItem button onClick={checkLicense}>
-              <ListItemText primary={`Upgrade to ${isMas() || isStandalone() ? `${appJson.name} Plus` : 'WebCatalog Lifetime'}`} />
-              <ChevronRightIcon color="action" />
-            </ListItem>
-          </>
-        )}
-      </List>
-    </Paper>
+    <List disablePadding dense>
+      <ListItem button onClick={null} disabled>
+        <ListItemText primary={registered ? `${isMas() || isStandalone() ? `${appJson.name} Plus` : 'WebCatalog Lifetime'} is activated.` : `Upgrade to ${isMas() || isStandalone() ? `${appJson.name} Plus` : 'WebCatalog Lifetime'} (${formattedPrice ? `${formattedPrice}, ` : ''}one-time payment for lifetime use) to unlock all features & add unlimited number of ${getWorkspaceFriendlyName(true).toLowerCase()}.`} />
+      </ListItem>
+      {!registered && (
+        <>
+          <Divider />
+          <ListItem button onClick={checkLicense}>
+            <ListItemText primary={`Upgrade to ${isMas() || isStandalone() ? `${appJson.name} Plus` : 'WebCatalog Lifetime'}`} />
+            <ChevronRightIcon color="action" />
+          </ListItem>
+        </>
+      )}
+    </List>
   );
 };
 
@@ -77,7 +65,6 @@ SectionAccountLicensing.defaultProps = {
 };
 
 SectionAccountLicensing.propTypes = {
-  classes: PropTypes.object.isRequired,
   iapPurchased: PropTypes.bool,
   standaloneRegistered: PropTypes.bool,
 };
@@ -90,6 +77,4 @@ const mapStateToProps = (state) => ({
 export default connectComponent(
   SectionAccountLicensing,
   mapStateToProps,
-  null,
-  styles,
 );
