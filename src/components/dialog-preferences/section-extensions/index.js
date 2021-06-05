@@ -15,6 +15,8 @@ import connectComponent from '../../../helpers/connect-component';
 
 import { open as openDialogExtensions } from '../../../state/dialog-extensions/actions';
 
+import DialogExtensions from '../../dialog-extensions';
+
 const styles = (theme) => ({
   paper: {
     marginTop: theme.spacing(0.5),
@@ -23,7 +25,7 @@ const styles = (theme) => ({
   },
 });
 
-const DialogExtensions = ({
+const SectionExtensions = ({
   classes,
   onOpenDialogExtensions,
 }) => (
@@ -40,7 +42,7 @@ const DialogExtensions = ({
   </>
 );
 
-DialogExtensions.propTypes = {
+SectionExtensions.propTypes = {
   classes: PropTypes.object.isRequired,
   onOpenDialogExtensions: PropTypes.func.isRequired,
 };
@@ -50,7 +52,7 @@ const actionCreators = {
 };
 
 export default connectComponent(
-  DialogExtensions,
+  SectionExtensions,
   null,
   actionCreators,
   styles,

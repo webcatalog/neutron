@@ -64,9 +64,7 @@ import { open as openDialogCustomUserAgent } from '../../state/dialog-custom-use
 import { open as openDialogInternalUrls } from '../../state/dialog-internal-urls/actions';
 import { open as openDialogProxy } from '../../state/dialog-proxy/actions';
 import { open as openDialogRefreshInterval } from '../../state/dialog-refresh-interval/actions';
-import { open as openDialogSpellcheckLanguages } from '../../state/dialog-spellcheck-languages/actions';
 
-import hunspellLanguagesMap from '../../constants/hunspell-languages';
 import autoRefreshIntervals from '../../constants/auto-refresh-intervals';
 
 import SectionAudioVideo from './section-audio-video';
@@ -75,6 +73,7 @@ import SectionAppearance from './section-appearance';
 import SectionNotifications from './section-notifications';
 import SectionPrivacySecurity from './section-privacy-security';
 import SectionExtensions from './section-extensions';
+import SectionLanguages from './section-languages';
 
 import DialogAppLock from '../dialog-app-lock';
 import DialogCodeInjection from '../dialog-code-injection';
@@ -253,11 +252,8 @@ const Preferences = ({
   onOpenDialogInternalUrls,
   onOpenDialogProxy,
   onOpenDialogRefreshInterval,
-  onOpenDialogSpellcheckLanguages,
   openFolderWhenDoneDownloading,
   proxyMode,
-  spellcheck,
-  spellcheckLanguages,
   standaloneRegistered,
   swipeToNavigate,
   updaterInfo,
@@ -454,36 +450,7 @@ const Preferences = ({
         <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.languages.ref}>
           Languages
         </Typography>
-        <Paper elevation={0} className={classes.paper}>
-          <List disablePadding dense>
-            <ListItem>
-              <ListItemText primary="Spell check" />
-              <ListItemSecondaryAction>
-                <Switch
-                  edge="end"
-                  color="primary"
-                  checked={spellcheck}
-                  onChange={(e) => {
-                    requestSetPreference('spellcheck', e.target.checked);
-                    enqueueRequestRestartSnackbar();
-                  }}
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
-            {window.process.platform !== 'darwin' && (
-              <>
-                <Divider />
-                <ListItem button onClick={onOpenDialogSpellcheckLanguages}>
-                  <ListItemText
-                    primary="Spell checking languages"
-                    secondary={spellcheckLanguages.map((code) => hunspellLanguagesMap[code]).join(' | ')}
-                  />
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-              </>
-            )}
-          </List>
-        </Paper>
+        <SectionLanguages />
 
         <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.downloads.ref}>
           Downloads
@@ -1252,11 +1219,8 @@ Preferences.propTypes = {
   onOpenDialogInternalUrls: PropTypes.func.isRequired,
   onOpenDialogProxy: PropTypes.func.isRequired,
   onOpenDialogRefreshInterval: PropTypes.func.isRequired,
-  onOpenDialogSpellcheckLanguages: PropTypes.func.isRequired,
   openFolderWhenDoneDownloading: PropTypes.bool.isRequired,
   proxyMode: PropTypes.oneOf(['direct', 'fixed_servers', 'pac_script', 'system']).isRequired,
-  spellcheck: PropTypes.bool.isRequired,
-  spellcheckLanguages: PropTypes.arrayOf(PropTypes.string).isRequired,
   standaloneRegistered: PropTypes.bool,
   swipeToNavigate: PropTypes.bool.isRequired,
   updaterInfo: PropTypes.object,
@@ -1283,8 +1247,6 @@ const mapStateToProps = (state) => ({
   jsCodeInjection: state.preferences.jsCodeInjection,
   openFolderWhenDoneDownloading: state.preferences.openFolderWhenDoneDownloading,
   proxyMode: state.preferences.proxyMode,
-  spellcheck: state.preferences.spellcheck,
-  spellcheckLanguages: state.preferences.spellcheckLanguages,
   standaloneRegistered: state.preferences.standaloneRegistered,
   swipeToNavigate: state.preferences.swipeToNavigate,
   updaterInfo: state.updater.info,
@@ -1300,7 +1262,6 @@ const actionCreators = {
   openDialogInternalUrls,
   openDialogProxy,
   openDialogRefreshInterval,
-  openDialogSpellcheckLanguages,
 };
 
 export default connectComponent(
