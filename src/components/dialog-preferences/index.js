@@ -52,7 +52,6 @@ import SectionAccountLicensing from './section-account-licensing';
 
 import DialogAppLock from '../dialog-app-lock';
 import DialogCustomizeFonts from '../dialog-customize-fonts';
-import DialogProxy from '../dialog-proxy';
 import DialogSpellcheckLanguages from '../dialog-spellcheck-languages';
 
 import SnackbarTrigger from '../shared/snackbar-trigger';
@@ -378,7 +377,6 @@ const Preferences = ({
       </div>
       <DialogAppLock />
       <DialogSpellcheckLanguages />
-      <DialogProxy />
       <DialogCustomizeFonts />
       <SnackbarTrigger />
     </div>

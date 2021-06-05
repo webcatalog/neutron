@@ -15,6 +15,8 @@ import connectComponent from '../../../helpers/connect-component';
 
 import { open as openDialogProxy } from '../../../state/dialog-proxy/actions';
 
+import DialogProxy from './dialog-proxy';
+
 const styles = (theme) => ({
   paper: {
     marginTop: theme.spacing(0.5),
@@ -28,32 +30,35 @@ const Preferences = ({
   proxyMode,
   onOpenDialogProxy,
 }) => (
-  <Paper elevation={0} className={classes.paper}>
-    <List disablePadding dense>
-      <ListItem button onClick={onOpenDialogProxy}>
-        <ListItemText
-          primary="Proxy"
-          secondary={(() => {
-            switch (proxyMode) {
-              case 'fixed_servers': {
-                return 'Using proxy server.';
+  <>
+    <Paper elevation={0} className={classes.paper}>
+      <List disablePadding dense>
+        <ListItem button onClick={onOpenDialogProxy}>
+          <ListItemText
+            primary="Proxy"
+            secondary={(() => {
+              switch (proxyMode) {
+                case 'fixed_servers': {
+                  return 'Using proxy server.';
+                }
+                case 'pac_script': {
+                  return 'Using PAC script (automatic proxy configuration script).';
+                }
+                case 'system': {
+                  return 'Using system proxy configurations.';
+                }
+                default: {
+                  return 'Not configured.';
+                }
               }
-              case 'pac_script': {
-                return 'Using PAC script (automatic proxy configuration script).';
-              }
-              case 'system': {
-                return 'Using system proxy configurations.';
-              }
-              default: {
-                return 'Not configured.';
-              }
-            }
-          })()}
-        />
-        <ChevronRightIcon color="action" />
-      </ListItem>
-    </List>
-  </Paper>
+            })()}
+          />
+          <ChevronRightIcon color="action" />
+        </ListItem>
+      </List>
+    </Paper>
+    <DialogProxy />
+  </>
 );
 
 Preferences.propTypes = {
