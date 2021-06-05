@@ -39,9 +39,7 @@ import getUtmSource from '../../helpers/get-utm-source';
 import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
 
 import {
-  enqueueRequestRestartSnackbar,
   requestOpenInBrowser,
-  requestResetPreferences,
 } from '../../senders';
 
 import {
@@ -50,19 +48,20 @@ import {
 
 import { open as openDialogProxy } from '../../state/dialog-proxy/actions';
 
-import SectionAudioVideo from './section-audio-video';
-import SectionGeneral from './section-general';
+import SectionAdvanced from './section-advanced';
 import SectionAppearance from './section-appearance';
-import SectionNotifications from './section-notifications';
-import SectionPrivacySecurity from './section-privacy-security';
-import SectionExtensions from './section-extensions';
-import SectionLanguages from './section-languages';
+import SectionAudioVideo from './section-audio-video';
 import SectionDevelopers from './section-developers';
 import SectionDownloads from './section-downloads';
-import SectionAdvanced from './section-advanced';
-import SectionUpdates from './section-updates';
-import SectionNetwork from './section-network';
+import SectionExtensions from './section-extensions';
+import SectionGeneral from './section-general';
+import SectionLanguages from './section-languages';
 import SectionMiscs from './section-miscs';
+import SectionNetwork from './section-network';
+import SectionNotifications from './section-notifications';
+import SectionPrivacySecurity from './section-privacy-security';
+import SectionReset from './section-reset';
+import SectionUpdates from './section-updates';
 
 import DialogAppLock from '../dialog-app-lock';
 import DialogCodeInjection from '../dialog-code-injection';
@@ -419,31 +418,7 @@ const Preferences = ({
         <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.reset.ref}>
           Reset
         </Typography>
-        <Paper elevation={0} className={classes.paper}>
-          <List disablePadding dense>
-            <ListItem
-              button
-              onClick={() => {
-                window.remote.dialog.showMessageBox(window.remote.getCurrentWindow(), {
-                  type: 'question',
-                  buttons: ['Reset Now', 'Cancel'],
-                  message: `Are you sure? All preferences will be restored to their original defaults. Browsing data & ${getWorkspaceFriendlyName(true).toLowerCase()} won't be affected. This action cannot be undone.`,
-                  cancelId: 1,
-                }).then(({ response }) => {
-                  if (response === 0) {
-                    window.ipcRenderer.once('set-preferences', () => {
-                      enqueueRequestRestartSnackbar();
-                    });
-                    requestResetPreferences();
-                  }
-                }).catch(console.log); // eslint-disable-line
-              }}
-            >
-              <ListItemText primary="Restore preferences to their original defaults" />
-              <ChevronRightIcon color="action" />
-            </ListItem>
-          </List>
-        </Paper>
+        <SectionReset />
 
         {/* Apple doesn't allow linking to app distributed outside Mac App Store version,
           citing Guideline 2.4.5(iv) - Performance
@@ -611,7 +586,6 @@ Preferences.propTypes = {
 const mapStateToProps = (state) => ({
   iapPurchased: state.preferences.iapPurchased,
   standaloneRegistered: state.preferences.standaloneRegistered,
-  useSystemTitleBar: state.preferences.useSystemTitleBar,
 });
 
 const actionCreators = {
