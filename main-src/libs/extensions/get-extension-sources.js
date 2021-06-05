@@ -16,6 +16,7 @@ const getExtensionSources = () => {
 
   Object.keys(browserNames).forEach((browserId) => {
     const userDataPath = getChromiumUserDataPath(browserId);
+    if (!fs.existsSync(userDataPath)) return;
     const files = fs.readdirSync(userDataPath, { withFileTypes: true });
     const profiles = [];
     files
