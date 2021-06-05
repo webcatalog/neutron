@@ -15,15 +15,15 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 
-import connectComponent from '../../helpers/connect-component';
-import getStaticGlobal from '../../helpers/get-static-global';
-import getUtmSource from '../../helpers/get-utm-source';
+import connectComponent from '../../../helpers/connect-component';
+import getStaticGlobal from '../../../helpers/get-static-global';
+import getUtmSource from '../../../helpers/get-utm-source';
 
-import { close, updateForm, save } from '../../state/dialog-internal-urls/actions';
+import { close, updateForm, save } from '../../../state/dialog-internal-urls/actions';
 
 import {
   requestOpenInBrowser,
-} from '../../senders';
+} from '../../../senders';
 
 const DialogInternalUrls = ({
   internalUrlRule,

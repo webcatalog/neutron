@@ -51,12 +51,8 @@ import SectionMoreApps from './section-more-apps';
 import SectionAccountLicensing from './section-account-licensing';
 
 import DialogAppLock from '../dialog-app-lock';
-import DialogCodeInjection from '../dialog-code-injection';
-import DialogCustomUserAgent from '../dialog-custom-user-agent';
 import DialogCustomizeFonts from '../dialog-customize-fonts';
-import DialogInternalUrls from '../dialog-internal-urls';
 import DialogProxy from '../dialog-proxy';
-import DialogRefreshInterval from '../dialog-refresh-interval';
 import DialogSpellcheckLanguages from '../dialog-spellcheck-languages';
 
 import SnackbarTrigger from '../shared/snackbar-trigger';
@@ -381,12 +377,8 @@ const Preferences = ({
         <SectionMiscs />
       </div>
       <DialogAppLock />
-      <DialogCodeInjection />
-      <DialogCustomUserAgent />
       <DialogSpellcheckLanguages />
       <DialogProxy />
-      <DialogInternalUrls />
-      <DialogRefreshInterval />
       <DialogCustomizeFonts />
       <SnackbarTrigger />
     </div>

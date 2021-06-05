@@ -34,6 +34,9 @@ import { open as openDialogRefreshInterval } from '../../../state/dialog-refresh
 
 import autoRefreshIntervals from '../../../constants/auto-refresh-intervals';
 
+import DialogInternalUrls from '../../shared/dialog-internal-urls';
+import DialogRefreshInterval from '../../shared/dialog-refresh-interval';
+
 const styles = (theme) => ({
   paper: {
     marginTop: theme.spacing(0.5),
@@ -85,219 +88,223 @@ const SectionAdvanced = ({
   useHardwareAcceleration,
   useSystemTitleBar,
 }) => (
-  <Paper elevation={0} className={classes.paper}>
-    <List disablePadding dense>
-      <ListItem button onClick={onOpenDialogInternalUrls}>
-        <ListItemText
-          primary="Internal URLs"
-          secondary={internalUrlRule ? `/^${internalUrlRule}$/i` : 'Not set'}
-        />
-        <ChevronRightIcon color="action" />
-      </ListItem>
-      <Divider />
-      <ListItem>
-        <ListItemText
-          primary={`Hibernate unused ${getWorkspaceFriendlyName(true).toLowerCase()} at app launch`}
-          secondary={`Hibernate all ${getWorkspaceFriendlyName(true).toLowerCase()} at launch, except the last active ${getWorkspaceFriendlyName().toLowerCase()}.`}
-        />
-        <ListItemSecondaryAction>
-          <Switch
-            edge="end"
-            color="primary"
-            checked={hibernateUnusedWorkspacesAtLaunch}
-            onChange={(e) => {
-              requestSetPreference('hibernateUnusedWorkspacesAtLaunch', e.target.checked);
-            }}
+  <>
+    <Paper elevation={0} className={classes.paper}>
+      <List disablePadding dense>
+        <ListItem button onClick={onOpenDialogInternalUrls}>
+          <ListItemText
+            primary="Internal URLs"
+            secondary={internalUrlRule ? `/^${internalUrlRule}$/i` : 'Not set'}
           />
-        </ListItemSecondaryAction>
-      </ListItem>
-      {window.process.platform === 'darwin' && (
-        <>
-          <Divider />
-          <ListItem>
-            <ListItemText
-              primary="Swipe with three fingers to navigate"
-              secondary={(
-                <>
-                  <span>Navigate between pages with 3-finger gestures. </span>
-                  <span>Swipe left to go back or swipe right to go forward.</span>
-                  <br />
-                  <span>To enable it, you also need to change </span>
-                  <b>
-                    macOS Preferences &gt; Trackpad &gt; More Gestures &gt; Swipe between page
-                  </b>
-                  <span> to </span>
-                  <b>Swipe with three fingers</b>
-                  <span> or </span>
-                  <b>Swipe with two or three fingers.</b>
-                </>
-              )}
+          <ChevronRightIcon color="action" />
+        </ListItem>
+        <Divider />
+        <ListItem>
+          <ListItemText
+            primary={`Hibernate unused ${getWorkspaceFriendlyName(true).toLowerCase()} at app launch`}
+            secondary={`Hibernate all ${getWorkspaceFriendlyName(true).toLowerCase()} at launch, except the last active ${getWorkspaceFriendlyName().toLowerCase()}.`}
+          />
+          <ListItemSecondaryAction>
+            <Switch
+              edge="end"
+              color="primary"
+              checked={hibernateUnusedWorkspacesAtLaunch}
+              onChange={(e) => {
+                requestSetPreference('hibernateUnusedWorkspacesAtLaunch', e.target.checked);
+              }}
             />
-            <ListItemSecondaryAction>
-              <Switch
-                edge="end"
-                color="primary"
-                checked={swipeToNavigate}
-                onChange={(e) => {
-                  requestSetPreference('swipeToNavigate', e.target.checked);
-                  enqueueRequestRestartSnackbar();
-                }}
+          </ListItemSecondaryAction>
+        </ListItem>
+        {window.process.platform === 'darwin' && (
+          <>
+            <Divider />
+            <ListItem>
+              <ListItemText
+                primary="Swipe with three fingers to navigate"
+                secondary={(
+                  <>
+                    <span>Navigate between pages with 3-finger gestures. </span>
+                    <span>Swipe left to go back or swipe right to go forward.</span>
+                    <br />
+                    <span>To enable it, you also need to change </span>
+                    <b>
+                      macOS Preferences &gt; Trackpad &gt; More Gestures &gt; Swipe between page
+                    </b>
+                    <span> to </span>
+                    <b>Swipe with three fingers</b>
+                    <span> or </span>
+                    <b>Swipe with two or three fingers.</b>
+                  </>
+                )}
               />
-            </ListItemSecondaryAction>
-          </ListItem>
-        </>
-      )}
-      {window.process.platform !== 'darwin' && (
-        <>
-          <Divider />
-          <ListItem>
-            <ListItemText
-              primary="Use system title bar and borders"
+              <ListItemSecondaryAction>
+                <Switch
+                  edge="end"
+                  color="primary"
+                  checked={swipeToNavigate}
+                  onChange={(e) => {
+                    requestSetPreference('swipeToNavigate', e.target.checked);
+                    enqueueRequestRestartSnackbar();
+                  }}
+                />
+              </ListItemSecondaryAction>
+            </ListItem>
+          </>
+        )}
+        {window.process.platform !== 'darwin' && (
+          <>
+            <Divider />
+            <ListItem>
+              <ListItemText
+                primary="Use system title bar and borders"
+              />
+              <ListItemSecondaryAction>
+                <Switch
+                  edge="end"
+                  color="primary"
+                  checked={useSystemTitleBar}
+                  onChange={(e) => {
+                    requestSetPreference('useSystemTitleBar', e.target.checked);
+                    enqueueRequestRestartSnackbar();
+                  }}
+                />
+              </ListItemSecondaryAction>
+            </ListItem>
+          </>
+        )}
+        <Divider />
+        <ListItem>
+          <ListItemText
+            primary="Keep window always on top"
+            secondary="The window won't be hidden even when you click outside."
+          />
+          <ListItemSecondaryAction>
+            <Switch
+              edge="end"
+              color="primary"
+              checked={alwaysOnTop}
+              onChange={(e) => {
+                requestSetPreference('alwaysOnTop', e.target.checked);
+                enqueueRequestRestartSnackbar();
+              }}
             />
-            <ListItemSecondaryAction>
-              <Switch
-                edge="end"
-                color="primary"
-                checked={useSystemTitleBar}
-                onChange={(e) => {
-                  requestSetPreference('useSystemTitleBar', e.target.checked);
-                  enqueueRequestRestartSnackbar();
-                }}
-              />
-            </ListItemSecondaryAction>
-          </ListItem>
-        </>
-      )}
-      <Divider />
-      <ListItem>
-        <ListItemText
-          primary="Keep window always on top"
-          secondary="The window won't be hidden even when you click outside."
-        />
-        <ListItemSecondaryAction>
-          <Switch
-            edge="end"
-            color="primary"
-            checked={alwaysOnTop}
+          </ListItemSecondaryAction>
+        </ListItem>
+        <Divider />
+        <ListItem>
+          <ListItemText
+            primary="Reload web pages automatically"
+          />
+          <ListItemSecondaryAction>
+            <Switch
+              edge="end"
+              color="primary"
+              checked={autoRefresh}
+              onChange={(e) => {
+                requestSetPreference('autoRefresh', e.target.checked);
+                enqueueRequestRestartSnackbar();
+              }}
+            />
+          </ListItemSecondaryAction>
+        </ListItem>
+        <ListItem>
+          <ListItemText primary="Reload every" classes={{ primary: classes.refreshEvery }} />
+          <Select
+            value={autoRefreshInterval}
             onChange={(e) => {
-              requestSetPreference('alwaysOnTop', e.target.checked);
+              if (e.target.value === 'custom') {
+                onOpenDialogRefreshInterval();
+                return;
+              }
+              requestSetPreference('autoRefreshInterval', e.target.value);
               enqueueRequestRestartSnackbar();
             }}
-          />
-        </ListItemSecondaryAction>
-      </ListItem>
-      <Divider />
-      <ListItem>
-        <ListItemText
-          primary="Reload web pages automatically"
-        />
-        <ListItemSecondaryAction>
-          <Switch
-            edge="end"
-            color="primary"
-            checked={autoRefresh}
-            onChange={(e) => {
-              requestSetPreference('autoRefresh', e.target.checked);
-              enqueueRequestRestartSnackbar();
+            variant="filled"
+            disableUnderline
+            margin="dense"
+            classes={{
+              root: classes.select,
             }}
-          />
-        </ListItemSecondaryAction>
-      </ListItem>
-      <ListItem>
-        <ListItemText primary="Reload every" classes={{ primary: classes.refreshEvery }} />
-        <Select
-          value={autoRefreshInterval}
-          onChange={(e) => {
-            if (e.target.value === 'custom') {
-              onOpenDialogRefreshInterval();
-              return;
-            }
-            requestSetPreference('autoRefreshInterval', e.target.value);
-            enqueueRequestRestartSnackbar();
-          }}
-          variant="filled"
-          disableUnderline
-          margin="dense"
-          classes={{
-            root: classes.select,
-          }}
-          className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
-          disabled={!autoRefresh}
-        >
-          {autoRefreshIntervals.map((opt) => (
-            <MenuItem key={opt.value} dense value={opt.value}>{opt.name}</MenuItem>
-          ))}
-          {(() => {
-            const isCustom = autoRefreshIntervals
-              .find((interval) => interval.value === autoRefreshInterval) == null;
-            if (isCustom) {
-              const time = roundTime(autoRefreshInterval);
-              return (
-                <MenuItem dense value={autoRefreshInterval}>
-                  {`${time.value} ${time.unit}`}
-                </MenuItem>
-              );
-            }
-            return null;
-          })()}
-          <MenuItem dense value="custom">Custom</MenuItem>
-        </Select>
-      </ListItem>
-      <ListItem>
-        <ListItemText
-          primary="Only reload on inactivity"
-          secondary={(
-            <>
-              <span>Keep certain apps from logging </span>
-              <span>out automatically when you are away. </span>
-              <span
-                role="link"
-                tabIndex={0}
-                className={classes.link}
-                onClick={() => requestOpenInBrowser(`https://help.webcatalog.app/article/25-how-to-prevent-apps-from-logging-me-out-on-inactivity?utm_source=${getUtmSource()}`)}
-                onKeyDown={(e) => {
-                  if (e.key !== 'Enter') return;
-                  requestOpenInBrowser(`https://help.webcatalog.app/article/25-how-to-prevent-apps-from-logging-me-out-on-inactivity?utm_source=${getUtmSource()}`);
-                }}
-              >
-                Learn more
-              </span>
-              <span>.</span>
-            </>
-          )}
-        />
-        <ListItemSecondaryAction>
-          <Switch
-            edge="end"
-            color="primary"
-            checked={autoRefreshOnlyWhenInactive}
+            className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
             disabled={!autoRefresh}
-            onChange={(e) => {
-              requestSetPreference('autoRefreshOnlyWhenInactive', e.target.checked);
-              enqueueRequestRestartSnackbar();
-            }}
+          >
+            {autoRefreshIntervals.map((opt) => (
+              <MenuItem key={opt.value} dense value={opt.value}>{opt.name}</MenuItem>
+            ))}
+            {(() => {
+              const isCustom = autoRefreshIntervals
+                .find((interval) => interval.value === autoRefreshInterval) == null;
+              if (isCustom) {
+                const time = roundTime(autoRefreshInterval);
+                return (
+                  <MenuItem dense value={autoRefreshInterval}>
+                    {`${time.value} ${time.unit}`}
+                  </MenuItem>
+                );
+              }
+              return null;
+            })()}
+            <MenuItem dense value="custom">Custom</MenuItem>
+          </Select>
+        </ListItem>
+        <ListItem>
+          <ListItemText
+            primary="Only reload on inactivity"
+            secondary={(
+              <>
+                <span>Keep certain apps from logging </span>
+                <span>out automatically when you are away. </span>
+                <span
+                  role="link"
+                  tabIndex={0}
+                  className={classes.link}
+                  onClick={() => requestOpenInBrowser(`https://help.webcatalog.app/article/25-how-to-prevent-apps-from-logging-me-out-on-inactivity?utm_source=${getUtmSource()}`)}
+                  onKeyDown={(e) => {
+                    if (e.key !== 'Enter') return;
+                    requestOpenInBrowser(`https://help.webcatalog.app/article/25-how-to-prevent-apps-from-logging-me-out-on-inactivity?utm_source=${getUtmSource()}`);
+                  }}
+                >
+                  Learn more
+                </span>
+                <span>.</span>
+              </>
+            )}
           />
-        </ListItemSecondaryAction>
-      </ListItem>
-      <Divider />
-      <ListItem>
-        <ListItemText
-          primary="Use hardware acceleration when available"
-        />
-        <ListItemSecondaryAction>
-          <Switch
-            edge="end"
-            color="primary"
-            checked={useHardwareAcceleration}
-            onChange={(e) => {
-              requestSetPreference('useHardwareAcceleration', e.target.checked);
-              enqueueRequestRestartSnackbar();
-            }}
+          <ListItemSecondaryAction>
+            <Switch
+              edge="end"
+              color="primary"
+              checked={autoRefreshOnlyWhenInactive}
+              disabled={!autoRefresh}
+              onChange={(e) => {
+                requestSetPreference('autoRefreshOnlyWhenInactive', e.target.checked);
+                enqueueRequestRestartSnackbar();
+              }}
+            />
+          </ListItemSecondaryAction>
+        </ListItem>
+        <Divider />
+        <ListItem>
+          <ListItemText
+            primary="Use hardware acceleration when available"
           />
-        </ListItemSecondaryAction>
-      </ListItem>
-    </List>
-  </Paper>
+          <ListItemSecondaryAction>
+            <Switch
+              edge="end"
+              color="primary"
+              checked={useHardwareAcceleration}
+              onChange={(e) => {
+                requestSetPreference('useHardwareAcceleration', e.target.checked);
+                enqueueRequestRestartSnackbar();
+              }}
+            />
+          </ListItemSecondaryAction>
+        </ListItem>
+      </List>
+    </Paper>
+    <DialogInternalUrls />
+    <DialogRefreshInterval />
+  </>
 );
 
 SectionAdvanced.defaultProps = {

@@ -11,10 +11,10 @@ import IconButton from '@material-ui/core/IconButton';
 
 import MenuIcon from '@material-ui/icons/Menu';
 
-import { requestShowAppMenu } from '../../senders';
+import { requestShowAppMenu } from '../../../senders';
 
-import connectComponent from '../../helpers/connect-component';
-import getStaticGlobal from '../../helpers/get-static-global';
+import connectComponent from '../../../helpers/connect-component';
+import getStaticGlobal from '../../../helpers/get-static-global';
 
 const TOOLBAR_HEIGHT = 28;
 const BUTTON_WIDTH = 46;

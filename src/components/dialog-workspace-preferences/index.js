@@ -42,10 +42,10 @@ import { updateForm } from '../../state/dialog-workspace-preferences/actions';
 
 import autoRefreshIntervals from '../../constants/auto-refresh-intervals';
 
-import DialogCodeInjection from '../dialog-code-injection';
-import DialogCustomUserAgent from '../dialog-custom-user-agent';
-import DialogInternalUrls from '../dialog-internal-urls';
-import DialogRefreshInterval from '../dialog-refresh-interval';
+import DialogCodeInjection from '../shared/dialog-code-injection';
+import DialogCustomUserAgent from '../shared/dialog-custom-user-agent';
+import DialogInternalUrls from '../shared/dialog-internal-urls';
+import DialogRefreshInterval from '../shared/dialog-refresh-interval';
 
 import SnackbarTrigger from '../shared/snackbar-trigger';
 

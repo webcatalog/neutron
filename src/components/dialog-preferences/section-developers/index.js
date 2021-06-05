@@ -17,6 +17,9 @@ import connectComponent from '../../../helpers/connect-component';
 import { open as openDialogCodeInjection } from '../../../state/dialog-code-injection/actions';
 import { open as openDialogCustomUserAgent } from '../../../state/dialog-custom-user-agent/actions';
 
+import DialogCodeInjection from '../../shared/dialog-code-injection';
+import DialogCustomUserAgent from '../../shared/dialog-custom-user-agent';
+
 const styles = (theme) => ({
   paper: {
     marginTop: theme.spacing(0.5),
@@ -33,46 +36,50 @@ const DialogDevelopers = ({
   onOpenDialogCodeInjection,
   onOpenDialogCustomUserAgent,
 }) => (
-  <Paper elevation={0} className={classes.paper}>
-    <List disablePadding dense>
-      <ListItem button onClick={onOpenDialogCustomUserAgent}>
-        <ListItemText
-          primary="Custom User Agent"
-          secondary={customUserAgent || 'Not set'}
-          secondaryTypographyProps={{ noWrap: true }}
-        />
-        <ChevronRightIcon color="action" />
-      </ListItem>
-      <Divider />
-      <ListItem
-        button
-        onClick={() => {
-          onOpenDialogCodeInjection('js');
-        }}
-      >
-        <ListItemText
-          primary="JS Code Injection"
-          secondary={jsCodeInjection || 'Not set'}
-          secondaryTypographyProps={{ noWrap: true }}
-        />
-        <ChevronRightIcon color="action" />
-      </ListItem>
-      <Divider />
-      <ListItem
-        button
-        onClick={() => {
-          onOpenDialogCodeInjection('css');
-        }}
-      >
-        <ListItemText
-          primary="CSS Code Injection"
-          secondary={cssCodeInjection || 'Not set'}
-          secondaryTypographyProps={{ noWrap: true }}
-        />
-        <ChevronRightIcon color="action" />
-      </ListItem>
-    </List>
-  </Paper>
+  <>
+    <Paper elevation={0} className={classes.paper}>
+      <List disablePadding dense>
+        <ListItem button onClick={onOpenDialogCustomUserAgent}>
+          <ListItemText
+            primary="Custom User Agent"
+            secondary={customUserAgent || 'Not set'}
+            secondaryTypographyProps={{ noWrap: true }}
+          />
+          <ChevronRightIcon color="action" />
+        </ListItem>
+        <Divider />
+        <ListItem
+          button
+          onClick={() => {
+            onOpenDialogCodeInjection('js');
+          }}
+        >
+          <ListItemText
+            primary="JS Code Injection"
+            secondary={jsCodeInjection || 'Not set'}
+            secondaryTypographyProps={{ noWrap: true }}
+          />
+          <ChevronRightIcon color="action" />
+        </ListItem>
+        <Divider />
+        <ListItem
+          button
+          onClick={() => {
+            onOpenDialogCodeInjection('css');
+          }}
+        >
+          <ListItemText
+            primary="CSS Code Injection"
+            secondary={cssCodeInjection || 'Not set'}
+            secondaryTypographyProps={{ noWrap: true }}
+          />
+          <ChevronRightIcon color="action" />
+        </ListItem>
+      </List>
+    </Paper>
+    <DialogCodeInjection />
+    <DialogCustomUserAgent />
+  </>
 );
 
 DialogDevelopers.defaultProps = {
