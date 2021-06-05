@@ -8,10 +8,8 @@ import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Paper from '@material-ui/core/Paper';
-import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
 
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
@@ -43,11 +41,7 @@ import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name'
 import {
   enqueueRequestRestartSnackbar,
   requestOpenInBrowser,
-  requestQuit,
   requestResetPreferences,
-  requestSetPreference,
-  requestShowAboutWindow,
-  requestShowOpenSourceNoticesWindow,
 } from '../../senders';
 
 import {
@@ -68,6 +62,7 @@ import SectionDownloads from './section-downloads';
 import SectionAdvanced from './section-advanced';
 import SectionUpdates from './section-updates';
 import SectionNetwork from './section-network';
+import SectionMiscs from './section-miscs';
 
 import DialogAppLock from '../dialog-app-lock';
 import DialogCodeInjection from '../dialog-code-injection';
@@ -191,7 +186,6 @@ const Preferences = ({
   classes,
   iapPurchased,
   standaloneRegistered,
-  warnBeforeQuitting,
 }) => {
   const appJson = getStaticGlobal('appJson');
   const utmSource = getUtmSource();
@@ -588,142 +582,7 @@ const Preferences = ({
         <Typography variant="subtitle2" className={classes.sectionTitle} ref={sections.miscs.ref}>
           Miscellaneous
         </Typography>
-        <Paper elevation={0} className={classes.paper}>
-          <List disablePadding dense>
-            <ListItem button onClick={requestShowAboutWindow}>
-              <ListItemText primary="About" />
-              <ChevronRightIcon color="action" />
-            </ListItem>
-            <Divider />
-            {(() => {
-              if (isMas()) {
-                return (
-                  <>
-                    <ListItem
-                      button
-                      onClick={() => {
-                        if (appJson.hostname) {
-                          return requestOpenInBrowser(`https://${appJson.hostname}?utm_source=${utmSource}`);
-                        }
-                        return requestOpenInBrowser(`https://${appJson.id}.app?utm_source=${utmSource}`);
-                      }}
-                    >
-                      <ListItemText primary="Website" />
-                      <ChevronRightIcon color="action" />
-                    </ListItem>
-                    <Divider />
-                    <ListItem
-                      button
-                      onClick={() => {
-                        if (appJson.hostname) {
-                          return requestOpenInBrowser(`https://${appJson.hostname}/help?utm_source=${utmSource}`);
-                        }
-                        return requestOpenInBrowser(`https://${appJson.id}.app/help?utm_source=${utmSource}`);
-                      }}
-                    >
-                      <ListItemText primary="Help" />
-                      <ChevronRightIcon color="action" />
-                    </ListItem>
-                    <Divider />
-                    <ListItem
-                      button
-                      onClick={() => requestOpenInBrowser(`macappstore://apps.apple.com/app/id${appJson.macAppStoreId}`)}
-                    >
-                      <ListItemText primary="Mac App Store" />
-                      <ChevronRightIcon color="action" />
-                    </ListItem>
-                    <Divider />
-                    <ListItem
-                      button
-                      onClick={() => requestOpenInBrowser(`macappstore://apps.apple.com/app/id${appJson.macAppStoreId}?action=write-review`)}
-                    >
-                      <ListItemText primary={`Rate ${appJson.name} on Mac App Store`} />
-                      <ChevronRightIcon color="action" />
-                    </ListItem>
-                  </>
-                );
-              }
-
-              if (isStandalone()) {
-                return (
-                  <>
-                    <ListItem
-                      button
-                      onClick={() => {
-                        if (appJson.hostname) {
-                          return requestOpenInBrowser(`https://${appJson.hostname}?utm_source=${utmSource}`);
-                        }
-                        return requestOpenInBrowser(`https://${appJson.id}.app?utm_source=${utmSource}`);
-                      }}
-                    >
-                      <ListItemText primary="Website" />
-                      <ChevronRightIcon color="action" />
-                    </ListItem>
-                    <Divider />
-                    <ListItem
-                      button
-                      onClick={() => {
-                        if (appJson.hostname) {
-                          return requestOpenInBrowser(`https://${appJson.hostname}/help?utm_source=${utmSource}`);
-                        }
-                        return requestOpenInBrowser(`https://${appJson.id}.app/help?utm_source=${utmSource}`);
-                      }}
-                    >
-                      <ListItemText primary="Help" />
-                      <ChevronRightIcon color="action" />
-                    </ListItem>
-                  </>
-                );
-              }
-
-              return (
-                <>
-                  <ListItem button onClick={() => requestOpenInBrowser(`https://webcatalog.app?utm_source=${utmSource}`)}>
-                    <ListItemText primary="WebCatalog Website" />
-                    <ChevronRightIcon color="action" />
-                  </ListItem>
-                  <Divider />
-                  <ListItem button onClick={() => requestOpenInBrowser(`https://help.webcatalog.app?utm_source=${utmSource}`)}>
-                    <ListItemText primary="WebCatalog Help" />
-                    <ChevronRightIcon color="action" />
-                  </ListItem>
-                </>
-              );
-            })()}
-            <Divider />
-            <ListItem button onClick={requestShowOpenSourceNoticesWindow}>
-              <ListItemText primary="Open Source Notices" />
-              <ChevronRightIcon color="action" />
-            </ListItem>
-            {!isMas() && !isStandalone() && (
-              <>
-                <Divider />
-                <ListItem button onClick={() => requestOpenInBrowser('https://twitter.com/webcatalog_app')}>
-                  <ListItemText primary="Find Us on Twitter" />
-                  <ChevronRightIcon color="action" />
-                </ListItem>
-              </>
-            )}
-            <Divider />
-            <ListItem>
-              <ListItemText primary="Warn before quitting" />
-              <ListItemSecondaryAction>
-                <Switch
-                  edge="end"
-                  color="primary"
-                  checked={warnBeforeQuitting}
-                  onChange={(e) => {
-                    requestSetPreference('warnBeforeQuitting', e.target.checked);
-                  }}
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
-            <ListItem button onClick={requestQuit}>
-              <ListItemText primary="Quit" />
-              <ChevronRightIcon color="action" />
-            </ListItem>
-          </List>
-        </Paper>
+        <SectionMiscs />
       </div>
       <DialogAppLock />
       <DialogCodeInjection />
@@ -747,14 +606,12 @@ Preferences.propTypes = {
   classes: PropTypes.object.isRequired,
   iapPurchased: PropTypes.bool,
   standaloneRegistered: PropTypes.bool,
-  warnBeforeQuitting: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   iapPurchased: state.preferences.iapPurchased,
   standaloneRegistered: state.preferences.standaloneRegistered,
   useSystemTitleBar: state.preferences.useSystemTitleBar,
-  warnBeforeQuitting: state.preferences.warnBeforeQuitting,
 });
 
 const actionCreators = {
