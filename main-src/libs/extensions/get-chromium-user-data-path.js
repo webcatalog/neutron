@@ -9,12 +9,12 @@ const getChromiumUserDataPath = (browserId) => {
   const chromiumUserDataPath = {
     chrome: {
       darwin: path.join(app.getPath('home'), 'Library', 'Application Support', 'Google', 'Chrome'),
-      win32: path.join(app.getPath('appData'), 'Google', 'Chrome', 'User Data'),
+      win32: path.join(app.getPath('home'), 'AppData', 'Local', 'Google', 'Chrome', 'User Data'),
       linux: path.join(app.getPath('appData'), 'google-chrome'),
     },
     edge: {
       darwin: path.join(app.getPath('home'), 'Library', 'Application Support', 'Microsoft Edge'),
-      win32: path.join(app.getPath('appData'), 'Microsoft', 'Edge', 'User Data'),
+      win32: path.join(app.getPath('home'), 'AppData', 'Local', 'Microsoft', 'Edge', 'User Data'),
       linux: path.join(app.getPath('appData'), 'microsoft-edge'),
     },
   };
