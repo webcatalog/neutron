@@ -79,7 +79,7 @@ const defaultPreferences = {
   lastShowNewUpdateDialog: 0,
   navigationBar: false,
   muteApp: false,
-  openFolderWhenDoneDownloading: process.platform !== 'darwin',
+  openFolderWhenDoneDownloading: true,
   pauseNotifications: null,
   pauseNotificationsBySchedule: false,
   pauseNotificationsByScheduleFrom: getDefaultPauseNotificationsByScheduleFrom(),
