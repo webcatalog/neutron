@@ -38,6 +38,7 @@ import MacTitleBar from './mac-title-bar';
 import DraggableRegion from './draggable-region';
 import TelemetryManager from './telemetry-manager';
 import RatingButton from './rating-button';
+import BrowserActionList from './browser-action-list';
 
 import {
   requestCreateWorkspace,
@@ -414,7 +415,9 @@ const Main = ({
                   }}
                 />
               </div>
-              {!navigationBar && !isMas() && <browser-action-list partition="persist:shared" direction="column" class={classes.browserActionList} />}
+              {!navigationBar && !isMas() && (
+                <BrowserActionList className={classes.browserActionList} />
+              )}
               {!navigationBar && (
               <div
                 className={classnames(classes.end, isSidebarExpanded && classes.endExpanded)}
@@ -567,8 +570,7 @@ Main.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-  const activeWorkspace = Object.values(state.workspaces)
-    .find((workspace) => workspace.active);
+  const activeWorkspace = state.workspaces.workspaces[state.workspaces.activeWorkspaceId];
 
   return {
     didFailLoad: activeWorkspace && state.workspaceMetas[activeWorkspace.id]
@@ -587,7 +589,7 @@ const mapStateToProps = (state) => {
     sidebarSize: state.preferences.sidebarSize,
     titleBar: state.preferences.titleBar,
     muteApp: state.preferences.muteApp,
-    workspaces: state.workspaces,
+    workspaces: state.workspaces.workspaces,
   };
 };
 

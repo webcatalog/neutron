@@ -41,6 +41,7 @@ import {
 } from '../../senders';
 
 import RatingButton from './rating-button';
+import BrowserActionList from './browser-action-list';
 
 const styles = (theme) => ({
   root: {
@@ -244,7 +245,7 @@ const NavigationBar = ({
           }}
         />
       </div>
-      {!isMas() && <browser-action-list partition="persist:shared" direction="column" class={classes.browserActionList} />}
+      {!isMas() && <BrowserActionList className={classes.browserActionList} />}
       <div>
         <RatingButton
           className={classes.iconButton}
@@ -329,7 +330,7 @@ const mapStateToProps = (state) => ({
     && !state.preferences.titleBar
     && !state.preferences.sidebar
     && !state.general.isFullScreen,
-  hasWorkspaces: Object.keys(state.workspaces).length > 0,
+  hasWorkspaces: Object.keys(state.workspaces.workspaces).length > 0,
   muteApp: state.preferences.muteApp,
   searchEngine: state.preferences.searchEngine,
   shouldPauseNotifications: state.notifications.pauseNotificationsInfo !== null,
