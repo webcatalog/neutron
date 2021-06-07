@@ -637,4 +637,13 @@ if (!gotTheLock) {
       }
     }, 5 * 60 * 1000);
   });
+
+  // by default, castlabs/electron-releases terminates the app (process.exit(1))
+  // if error occurs when installing Widevine
+  // we overwrite that behavior here because widevine is not super important for us
+  // and should not crash the app
+  app.on('widevine-error', (error) => {
+    // eslint-disable-next-line no-console
+    console.log(`Widevine installation encountered an error: ${error}`);
+  });
 }
