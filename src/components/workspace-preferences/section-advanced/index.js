@@ -100,7 +100,9 @@ const SectionAdvanced = ({
           value={formAutoRefresh != null ? formAutoRefresh : 'global'}
           onChange={(e) => {
             onUpdateForm({
-              autoRefresh: e.target.value !== 'global' ? e.target.value : null,
+              preferences: {
+                autoRefresh: e.target.value !== 'global' ? e.target.value : null,
+              },
             });
             const workspaceId = getStaticGlobal('workspacePreferencesWorkspaceId');
             requestRequestReloadWorkspaceDialog(workspaceId);
@@ -130,7 +132,9 @@ const SectionAdvanced = ({
                   return;
                 }
                 onUpdateForm({
-                  autoRefreshInterval: e.target.value,
+                  preferences: {
+                    autoRefreshInterval: e.target.value,
+                  },
                 });
                 const workspaceId = getStaticGlobal('workspacePreferencesWorkspaceId');
                 requestRequestReloadWorkspaceDialog(workspaceId);
@@ -190,7 +194,9 @@ const SectionAdvanced = ({
               value={formAutoRefreshOnlyWhenInactive != null ? formAutoRefreshOnlyWhenInactive : 'global'}
               onChange={(e) => {
                 onUpdateForm({
-                  autoRefreshOnlyWhenInactive: e.target.value !== 'global' ? e.target.value : null,
+                  preferences: {
+                    autoRefreshOnlyWhenInactive: e.target.value !== 'global' ? e.target.value : null,
+                  },
                 });
                 const workspaceId = getStaticGlobal('workspacePreferencesWorkspaceId');
                 requestRequestReloadWorkspaceDialog(workspaceId);
@@ -245,10 +251,10 @@ const mapStateToProps = (state) => ({
   autoRefreshInterval: state.preferences.autoRefreshInterval,
   autoRefreshOnlyWhenInactive: state.preferences.autoRefreshOnlyWhenInactive,
   internalUrlRule: state.preferences.internalUrlRule,
-  formAskForDownloadPath: state.dialogWorkspacePreferences.form.askForDownloadPath,
-  formAutoRefresh: state.dialogWorkspacePreferences.form.autoRefresh,
-  formAutoRefreshInterval: state.dialogWorkspacePreferences.form.autoRefreshInterval,
-  formInternalUrlRule: state.dialogWorkspacePreferences.form.internalUrlRule,
+  formAskForDownloadPath: state.dialogWorkspacePreferences.form.preferences.askForDownloadPath,
+  formAutoRefresh: state.dialogWorkspacePreferences.form.preferences.autoRefresh,
+  formAutoRefreshInterval: state.dialogWorkspacePreferences.form.preferences.autoRefreshInterval,
+  formInternalUrlRule: state.dialogWorkspacePreferences.form.preferences.internalUrlRule,
 });
 
 const actionCreators = {

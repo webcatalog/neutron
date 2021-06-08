@@ -59,7 +59,7 @@ const SectionDownloads = ({
             })
               .then(({ canceled, filePaths }) => {
                 if (!canceled && filePaths && filePaths.length > 0) {
-                  onUpdateForm({ downloadPath: filePaths[0] });
+                  onUpdateForm({ preferences: { downloadPath: filePaths[0] } });
                 }
               })
               .catch(console.log); // eslint-disable-line
@@ -82,7 +82,9 @@ const SectionDownloads = ({
       <Select
         value={formAskForDownloadPath != null ? formAskForDownloadPath : 'global'}
         onChange={(e) => onUpdateForm({
-          askForDownloadPath: e.target.value !== 'global' ? e.target.value : null,
+          preferences: {
+            askForDownloadPath: e.target.value !== 'global' ? e.target.value : null,
+          },
         })}
         variant="filled"
         disableUnderline
@@ -117,7 +119,7 @@ SectionDownloads.propTypes = {
 const mapStateToProps = (state) => ({
   askForDownloadPath: state.preferences.askForDownloadPath,
   downloadPath: state.preferences.downloadPath,
-  formDownloadPath: state.dialogWorkspacePreferences.form.downloadPath,
+  formDownloadPath: state.dialogWorkspacePreferences.form.preferences.downloadPath,
 });
 
 const actionCreators = {

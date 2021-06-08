@@ -19,7 +19,8 @@ export const updateForm = (changes) => (dispatch, getState) => {
   });
 
   const workspaceId = getStaticGlobal('workspacePreferencesWorkspaceId');
-  const preferences = getState().dialogWorkspacePreferences.form;
+  const { preferences } = getState().dialogWorkspacePreferences.form;
+
   requestSetWorkspace(workspaceId, { preferences });
 
   const shouldReloadDarkReader = Object.keys(changes).find((key) => key.startsWith('darkReader'));

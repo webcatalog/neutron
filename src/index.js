@@ -90,7 +90,9 @@ const runApp = () => {
           }
           return false;
         });
-        initialState.dialogWorkspacePreferences = { form: workspace.preferences || {} };
+        initialState.dialogWorkspacePreferences = {
+          form: { ...workspace, preferences: workspace.preferences || {} },
+        };
 
         document.title = `Edit ${getWorkspaceFriendlyName()} "${getWorkspaceName(workspace)}" (advanced)`;
       } else if (window.mode === 'edit-workspace') {
@@ -104,6 +106,7 @@ const runApp = () => {
           }
           return false;
         });
+
         initialState.dialogEditWorkspace = { form: workspace };
 
         document.title = `Edit ${getWorkspaceFriendlyName()} "${getWorkspaceName(workspace)}"`;

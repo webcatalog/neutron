@@ -15,7 +15,6 @@ import connectComponent from '../../../helpers/connect-component';
 
 import { open as openDialogCodeInjection } from '../../../state/dialog-code-injection/actions';
 import { open as openDialogCustomUserAgent } from '../../../state/dialog-custom-user-agent/actions';
-import { updateForm } from '../../../state/dialog-workspace-preferences/actions';
 
 import DialogCodeInjection from '../../shared/dialog-code-injection';
 import DialogCustomUserAgent from '../../shared/dialog-custom-user-agent';
@@ -113,15 +112,14 @@ const mapStateToProps = (state) => ({
   cssCodeInjection: state.preferences.cssCodeInjection,
   customUserAgent: state.preferences.customUserAgent,
   jsCodeInjection: state.preferences.jsCodeInjection,
-  formCssCodeInjection: state.dialogWorkspacePreferences.form.cssCodeInjection,
-  formCustomUserAgent: state.dialogWorkspacePreferences.form.customUserAgent,
-  formJsCodeInjection: state.dialogWorkspacePreferences.form.jsCodeInjection,
+  formCssCodeInjection: state.dialogWorkspacePreferences.form.preferences.cssCodeInjection,
+  formCustomUserAgent: state.dialogWorkspacePreferences.form.preferences.customUserAgent,
+  formJsCodeInjection: state.dialogWorkspacePreferences.form.preferences.jsCodeInjection,
 });
 
 const actionCreators = {
   openDialogCodeInjection,
   openDialogCustomUserAgent,
-  updateForm,
 };
 
 export default connectComponent(

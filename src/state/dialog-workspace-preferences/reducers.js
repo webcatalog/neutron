@@ -11,7 +11,13 @@ import {
 
 const form = (state = {}, action) => {
   switch (action.type) {
-    case UPDATE_WORKSPACE_PREFERENCES_DIALOG: return cleanDeep({ ...state, ...action.changes });
+    case UPDATE_WORKSPACE_PREFERENCES_DIALOG: {
+      const changes = { ...action.changes };
+      if (changes.preferences) {
+        changes.preferences = cleanDeep({ ...state.preferences, ...action.changes.preferences });
+      }
+      return cleanDeep({ ...state, ...changes });
+    }
     default: return state;
   }
 };
