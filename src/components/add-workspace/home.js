@@ -91,10 +91,6 @@ if (appJsonId.startsWith('group-')) {
   filters.push({ field: 'group_id', values: [groupId], type: 'all' });
 } else if (appJsonId === 'clovery') {
   filters.push({ field: 'group_id', values: ['google'], type: 'all' });
-} else if (appJsonId === 'tulipa') {
-  filters.push({ field: 'group_id', values: ['microsoft'], type: 'all' });
-} else if (appJsonId === 'panmail') {
-  filters.push({ field: 'sub_category', values: ['Email'], type: 'all' });
 }
 
 const Home = ({ classes }) => {
@@ -144,13 +140,11 @@ const Home = ({ classes }) => {
       }}
     >
       <div className={classes.homeContainer}>
-        {appJsonId !== 'panmail' && (
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <SearchBox />
-            </Grid>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <SearchBox />
           </Grid>
-        )}
+        </Grid>
         <div
           className={classes.scrollContainer}
           ref={scrollContainerRef}
