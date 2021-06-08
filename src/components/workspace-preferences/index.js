@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { useRef } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Divider from '@material-ui/core/Divider';
@@ -54,32 +54,32 @@ const styles = (theme) => ({
 });
 
 const Preferences = ({ classes }) => {
+  const [activeSectionKey, setActiveSectionKey] = useState('appearance');
+
   const sections = {
     appearance: {
       text: 'Appearance',
       Icon: PaletteIcon,
       Component: SectionAppearance,
-      ref: useRef(),
     },
     downloads: {
       text: 'Downloads',
       Icon: CloudDownloadIcon,
       Component: SectionDownloads,
-      ref: useRef(),
     },
     developers: {
       text: 'Developers',
       Icon: CodeIcon,
       Component: SectionDevelopers,
-      ref: useRef(),
     },
     advanced: {
       text: 'Advanced',
       Icon: PowerIcon,
       Component: SectionAdvanced,
-      ref: useRef(),
     },
   };
+
+  const activeSection = sections[activeSectionKey];
 
   return (
     <div className={classes.root}>
@@ -87,13 +87,17 @@ const Preferences = ({ classes }) => {
         <List dense>
           {Object.keys(sections).map((sectionKey, i) => {
             const {
-              Icon, text, ref, hidden,
+              Icon, text, hidden,
             } = sections[sectionKey];
             if (hidden) return null;
             return (
               <React.Fragment key={sectionKey}>
                 {i > 0 && <Divider />}
-                <ListItem button onClick={() => ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+                <ListItem
+                  button
+                  onClick={() => setActiveSectionKey(sectionKey)}
+                  selected={sectionKey === activeSectionKey}
+                >
                   <ListItemIcon>
                     <Icon />
                   </ListItemIcon>
@@ -107,20 +111,12 @@ const Preferences = ({ classes }) => {
         </List>
       </div>
       <div className={classes.inner}>
-        {Object.keys(sections).map((sectionKey) => {
-          const section = sections[sectionKey];
-          if (section.hidden) return null;
-          return (
-            <React.Fragment key={sectionKey}>
-              <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle} ref={section.ref}>
-                {section.text}
-              </Typography>
-              <Paper elevation={0} className={classes.paper}>
-                <section.Component />
-              </Paper>
-            </React.Fragment>
-          );
-        })}
+        <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle}>
+          {activeSection.text}
+        </Typography>
+        <Paper elevation={0} className={classes.paper}>
+          <activeSection.Component />
+        </Paper>
       </div>
       <SnackbarTrigger />
     </div>

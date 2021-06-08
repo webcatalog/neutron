@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Divider from '@material-ui/core/Divider';
@@ -85,114 +85,96 @@ const Preferences = ({
 }) => {
   const appJson = getStaticGlobal('appJson');
 
+  const [activeSectionKey, setActiveSectionKey] = useState(getStaticGlobal('preferencesScrollTo') || 'general');
+
   const sections = {
     accountLicensing: {
       text: 'Licensing',
       Icon: CheckCircleIcon,
       Component: SectionAccountLicensing,
-      ref: useRef(),
       hidden: isMas() && appJson.registered,
     },
     general: {
       text: 'General',
       Icon: WidgetsIcon,
       Component: SectionGeneral,
-      ref: useRef(),
     },
     appearance: {
       text: 'Appearance',
       Icon: PaletteIcon,
       Component: SectionAppearance,
-      ref: useRef(),
     },
     notifications: {
       text: 'Notifications',
       Icon: NotificationsIcon,
       Component: SectionNotifications,
-      ref: useRef(),
     },
     extensions: {
       text: 'Extensions',
       Icon: ExtensionIcon,
       Component: SectionExtensions,
-      ref: useRef(),
       hidden: isMas(),
     },
     languages: {
       text: 'Languages',
       Icon: LanguageIcon,
       Component: SectionLanguages,
-      ref: useRef(),
     },
     downloads: {
       text: 'Downloads',
       Icon: CloudDownloadIcon,
       Component: SectionDownloads,
-      ref: useRef(),
     },
     audioVideo: {
       text: 'Audio & Video',
       Icon: PermCameraMicIcon,
       Component: SectionAudioVideo,
-      ref: useRef(),
     },
     network: {
       text: 'Network',
       Icon: RouterIcon,
       Component: SectionNetwork,
-      ref: useRef(),
     },
     privacy: {
       text: 'Privacy & Security',
       Icon: SecurityIcon,
       Component: SectionPrivacySecurity,
-      ref: useRef(),
     },
     developers: {
       text: 'Developers',
       Icon: CodeIcon,
       Component: SectionDevelopers,
-      ref: useRef(),
     },
     advanced: {
       text: 'Advanced',
       Icon: PowerIcon,
       Component: SectionAdvanced,
-      ref: useRef(),
     },
     updates: {
       text: 'Updates',
       Icon: UpdateIcon,
       ref: useRef(),
       Component: SectionUpdates,
-      hidden: isMas(),
     },
     reset: {
       text: 'Reset',
       Icon: RotateLeftIcon,
       Component: SectionReset,
-      ref: useRef(),
     },
     moreApps: {
       text: 'More Apps',
       Icon: StorefrontIcon,
       Component: SectionMoreApps,
-      ref: useRef(),
       hidden: !isMas() && !isStandalone(),
     },
     miscs: {
       text: 'Miscellaneous',
       Icon: MoreHorizIcon,
       Component: SectionMiscs,
-      ref: useRef(),
     },
   };
 
-  useEffect(() => {
-    const scrollTo = getStaticGlobal('preferencesScrollTo');
-    if (!scrollTo) return;
-    sections[scrollTo].ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
+  const activeSection = sections[activeSectionKey];
 
   return (
     <div className={classes.root}>
@@ -202,12 +184,16 @@ const Preferences = ({
             .filter((sectionKey) => !sections[sectionKey].hidden)
             .map((sectionKey, i) => {
               const {
-                Icon, text, ref,
+                Icon, text,
               } = sections[sectionKey];
               return (
                 <React.Fragment key={sectionKey}>
                   {i > 0 && <Divider />}
-                  <ListItem button onClick={() => ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+                  <ListItem
+                    button
+                    onClick={() => setActiveSectionKey(sectionKey)}
+                    selected={sectionKey === activeSectionKey}
+                  >
                     <ListItemIcon>
                       <Icon />
                     </ListItemIcon>
@@ -221,20 +207,12 @@ const Preferences = ({
         </List>
       </div>
       <div className={classes.inner}>
-        {Object.keys(sections).map((sectionKey) => {
-          const section = sections[sectionKey];
-          if (section.hidden) return null;
-          return (
-            <React.Fragment key={sectionKey}>
-              <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle} ref={section.ref}>
-                {section.text}
-              </Typography>
-              <Paper elevation={0} className={classes.paper}>
-                <section.Component />
-              </Paper>
-            </React.Fragment>
-          );
-        })}
+        <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle}>
+          {activeSection.text}
+        </Typography>
+        <Paper elevation={0} className={classes.paper}>
+          <activeSection.Component />
+        </Paper>
       </div>
       <SnackbarTrigger />
     </div>
