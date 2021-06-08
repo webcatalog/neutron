@@ -194,7 +194,8 @@ const handleLoaded = async (event) => {
   // tie Google account info with workspace
   ipcRenderer.invoke('get-app-json')
     .then((appJson) => {
-      if (appJson.id === 'clovery') {
+      // only continue for app, not space
+      if (appJson.url || preferences.shareWorkspaceBrowsingData) {
         // the whole app uses same Google account
         // eslint-disable-next-line no-console
         console.log('Skip retrieving Google account for workspace');
@@ -208,14 +209,14 @@ const handleLoaded = async (event) => {
             if (success) return;
             // eslint-disable-next-line no-console
             console.log('Getting Google account info...');
-            const pictureUrl = document.querySelector('img.gb_fb')
+            const pictureUrl = document.querySelector('img[title="Profile"')
               .getAttribute('data-srcset')
               .split(',')
               .pop()
               .trim()
               .split(' ')[0];
-            const name = document.querySelector('.gb_nb').innerText;
-            const email = document.querySelector('.gb_ob').innerText;
+            const name = document.querySelector('.gb_lb.gb_mb').innerText;
+            const email = document.querySelector('.gb_nb').innerText;
             ipcRenderer.send('request-set-workspace-account-info', workspaceId, {
               pictureUrl,
               name,
@@ -386,7 +387,6 @@ webFrame.executeJavaScript(`
         const bPreferred = preferredDeviceLabels.includes(b.label) ? 0 : 1;
         return aPreferred - bPreferred;
       });
-      console.log(unsortedDevices, sortedDevices);
       return sortedDevices;
     };
   }
