@@ -55,7 +55,7 @@ const defaultPreferences = {
   cssCodeInjection: null,
   customUserAgent: null,
   // default Dark Reader settings from its Chrome extension */
-  darkReader: appJson.id === 'tulipa' || appJson.id === 'clovery' || appJson.id === 'panmail',
+  darkReader: appJson.id === 'clovery',
   darkReaderBrightness: 100,
   darkReaderContrast: 100,
   darkReaderGrayscale: 0,
@@ -106,7 +106,7 @@ const defaultPreferences = {
   sentry: false,
   // branded apps (like Google/Microsoft) share browsing data by default
   // https://github.com/webcatalog/webcatalog-app/issues/986
-  shareWorkspaceBrowsingData: appJson.id.startsWith('group-') || appJson.id === 'clovery' || appJson.id === 'tulipa',
+  shareWorkspaceBrowsingData: appJson.id.startsWith('group-') || appJson.id === 'clovery',
   sidebar: shouldShowSidebar,
   sidebarSize: 'compact',
   sidebarTips: 'shortcut',

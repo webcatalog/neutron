@@ -16,7 +16,6 @@ import { trackAddWorkspaceAsync } from '../../firebase/functions';
 import connectComponent from '../../helpers/connect-component';
 import isUrl from '../../helpers/is-url';
 import extractHostname from '../../helpers/extract-hostname';
-import getStaticGlobal from '../../helpers/get-static-global';
 import { requestCreateWorkspace } from '../../senders';
 
 import { updateForm, updateMode } from '../../state/dialog-add-workspace/actions';
@@ -84,8 +83,6 @@ const AppCard = (props) => {
     url,
   } = props;
 
-  const appJson = getStaticGlobal('appJson');
-
   return (
     <Paper elevation={0} className={classes.card} square>
       <img
@@ -102,30 +99,28 @@ const AppCard = (props) => {
         </Typography>
       </div>
       <div className={classes.actionContainer}>
-        {appJson.id !== 'panmail' && (
-          <IconButton
-            size="small"
-            aria-label="More"
-            className={classes.topRight}
-            onClick={() => {
-              const template = [
-                {
-                  label: 'Clone',
-                  click: () => {
-                    onUpdateForm({
-                      name, homeUrl: url, internetIcon: icon,
-                    });
-                    onUpdateMode('custom');
-                  },
+        <IconButton
+          size="small"
+          aria-label="More"
+          className={classes.topRight}
+          onClick={() => {
+            const template = [
+              {
+                label: 'Clone',
+                click: () => {
+                  onUpdateForm({
+                    name, homeUrl: url, internetIcon: icon,
+                  });
+                  onUpdateMode('custom');
                 },
-              ];
-              const menu = window.remote.Menu.buildFromTemplate(template);
-              menu.popup(window.remote.getCurrentWindow());
-            }}
-          >
-            <MoreVertIcon fontSize="small" />
-          </IconButton>
-        )}
+              },
+            ];
+            const menu = window.remote.Menu.buildFromTemplate(template);
+            menu.popup(window.remote.getCurrentWindow());
+          }}
+        >
+          <MoreVertIcon fontSize="small" />
+        </IconButton>
         <Button
           className={classes.actionButton}
           color="primary"

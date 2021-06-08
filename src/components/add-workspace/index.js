@@ -12,7 +12,6 @@ import ViewListIcon from '@material-ui/icons/ViewList';
 import CreateIcon from '@material-ui/icons/Create';
 
 import connectComponent from '../../helpers/connect-component';
-import getStaticGlobal from '../../helpers/get-static-global';
 import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
 
 import { updateMode } from '../../state/dialog-add-workspace/actions';
@@ -46,50 +45,43 @@ const AddWorkspace = ({
   classes,
   mode,
   onUpdateMode,
-}) => {
-  const appJson = getStaticGlobal('appJson');
-  const appJsonId = appJson.id;
+}) => (
+  <div className={classes.root}>
+    {mode === 'catalog' && <Home />}
+    {mode === 'custom' && <Form />}
 
-  return (
-    <div className={classes.root}>
-      {mode === 'catalog' && <Home />}
-      {mode === 'custom' && <Form />}
-
-      {appJsonId !== 'panmail' && (
-        <Paper elevation={1} square className={classes.paper}>
-          <BottomNavigation
-            showLabels
-            value={mode}
-            onChange={(e, value) => {
-              // custom workspace is disabled in free version of Singlebox
-              onUpdateMode(value);
-            }}
-            classes={{ root: classes.bottomNavigation }}
-          >
-            <BottomNavigationAction
-              label="Catalog"
-              value="catalog"
-              icon={<ViewListIcon />}
-              classes={{
-                wrapper: classes.bottomNavigationActionWrapper,
-                label: classes.bottomNavigationActionLabel,
-              }}
-            />
-            <BottomNavigationAction
-              label={`Custom ${getWorkspaceFriendlyName()}`}
-              value="custom"
-              icon={<CreateIcon />}
-              classes={{
-                wrapper: classes.bottomNavigationActionWrapper,
-                label: classes.bottomNavigationActionLabel,
-              }}
-            />
-          </BottomNavigation>
-        </Paper>
-      )}
-    </div>
-  );
-};
+    <Paper elevation={1} square className={classes.paper}>
+      <BottomNavigation
+        showLabels
+        value={mode}
+        onChange={(e, value) => {
+          // custom workspace is disabled in free version of Singlebox
+          onUpdateMode(value);
+        }}
+        classes={{ root: classes.bottomNavigation }}
+      >
+        <BottomNavigationAction
+          label="Catalog"
+          value="catalog"
+          icon={<ViewListIcon />}
+          classes={{
+            wrapper: classes.bottomNavigationActionWrapper,
+            label: classes.bottomNavigationActionLabel,
+          }}
+        />
+        <BottomNavigationAction
+          label={`Custom ${getWorkspaceFriendlyName()}`}
+          value="custom"
+          icon={<CreateIcon />}
+          classes={{
+            wrapper: classes.bottomNavigationActionWrapper,
+            label: classes.bottomNavigationActionLabel,
+          }}
+        />
+      </BottomNavigation>
+    </Paper>
+  </div>
+);
 
 AddWorkspace.propTypes = {
   classes: PropTypes.object.isRequired,

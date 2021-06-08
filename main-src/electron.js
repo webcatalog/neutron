@@ -514,7 +514,7 @@ if (!gotTheLock) {
           }
         }
 
-        // pre-cache pricing for (Singlebox|PanMail|...) Plus
+        // pre-cache pricing for (Singlebox|...) Plus
         if (isMas() && !appJson.registered && !getPreference('iapPurchased')) {
           getIapFormattedPriceAsync(appJson.iapProductIdentifier);
         }

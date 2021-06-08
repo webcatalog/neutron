@@ -15,7 +15,6 @@ import Select from '@material-ui/core/Select';
 import Switch from '@material-ui/core/Switch';
 
 import connectComponent from '../../../helpers/connect-component';
-import getStaticGlobal from '../../../helpers/get-static-global';
 
 import {
   enqueueRequestRestartSnackbar,
@@ -49,67 +48,59 @@ const SectionSystem = ({
   classes,
   openAtLogin,
   runInBackground,
-}) => {
-  const appJson = getStaticGlobal('appJson');
-
-  return (
-    <List disablePadding dense>
-      {window.process.platform !== 'darwin' && (
-        <>
-          <ListItem>
-            <ListItemText
-              primary="Run in background"
-              secondary="Keep the app running in background even when all windows are closed."
+}) => (
+  <List disablePadding dense>
+    {window.process.platform !== 'darwin' && (
+      <>
+        <ListItem>
+          <ListItemText
+            primary="Run in background"
+            secondary="Keep the app running in background even when all windows are closed."
+          />
+          <ListItemSecondaryAction>
+            <Switch
+              edge="end"
+              color="primary"
+              checked={attachToMenubar || runInBackground}
+              disabled={attachToMenubar}
+              onChange={(e) => {
+                requestSetPreference('runInBackground', e.target.checked);
+                enqueueRequestRestartSnackbar();
+              }}
             />
-            <ListItemSecondaryAction>
-              <Switch
-                edge="end"
-                color="primary"
-                checked={attachToMenubar || runInBackground}
-                disabled={attachToMenubar}
-                onChange={(e) => {
-                  requestSetPreference('runInBackground', e.target.checked);
-                  enqueueRequestRestartSnackbar();
-                }}
-              />
-            </ListItemSecondaryAction>
-          </ListItem>
-          <Divider />
-        </>
-      )}
-      <ListItem>
-        <ListItemText primary="Open at login" />
-        <Select
-          value={openAtLogin}
-          onChange={(e) => requestSetSystemPreference('openAtLogin', e.target.value)}
-          variant="filled"
-          disableUnderline
-          margin="dense"
-          classes={{
-            root: classes.select,
-          }}
-          className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
-        >
-          <MenuItem dense value="yes">Yes</MenuItem>
-          {window.process.platform === 'darwin' && (
-            <MenuItem dense value="yes-hidden">Yes, but minimized</MenuItem>
-          )}
-          <MenuItem dense value="no">No</MenuItem>
-        </Select>
-      </ListItem>
-      <Divider />
-      <ListItemDefaultMailClient />
-      {appJson.id !== 'panmail' && (
-        <>
-          <Divider />
-          <ListItemDefaultCalendarApp />
-          <Divider />
-          <ListItemDefaultBrowser />
-        </>
-      )}
-    </List>
-  );
-};
+          </ListItemSecondaryAction>
+        </ListItem>
+        <Divider />
+      </>
+    )}
+    <ListItem>
+      <ListItemText primary="Open at login" />
+      <Select
+        value={openAtLogin}
+        onChange={(e) => requestSetSystemPreference('openAtLogin', e.target.value)}
+        variant="filled"
+        disableUnderline
+        margin="dense"
+        classes={{
+          root: classes.select,
+        }}
+        className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
+      >
+        <MenuItem dense value="yes">Yes</MenuItem>
+        {window.process.platform === 'darwin' && (
+          <MenuItem dense value="yes-hidden">Yes, but minimized</MenuItem>
+        )}
+        <MenuItem dense value="no">No</MenuItem>
+      </Select>
+    </ListItem>
+    <Divider />
+    <ListItemDefaultMailClient />
+    <Divider />
+    <ListItemDefaultCalendarApp />
+    <Divider />
+    <ListItemDefaultBrowser />
+  </List>
+);
 
 SectionSystem.propTypes = {
   attachToMenubar: PropTypes.bool.isRequired,
