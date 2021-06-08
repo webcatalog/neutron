@@ -2,18 +2,14 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
-import Switch from '@material-ui/core/Switch';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-import connectComponent from '../../../helpers/connect-component';
 import isMas from '../../../helpers/is-mas';
 import isStandalone from '../../../helpers/is-standalone';
 import getStaticGlobal from '../../../helpers/get-static-global';
@@ -21,15 +17,11 @@ import getUtmSource from '../../../helpers/get-utm-source';
 
 import {
   requestOpenInBrowser,
-  requestQuit,
-  requestSetPreference,
   requestShowAboutWindow,
   requestShowOpenSourceNoticesWindow,
 } from '../../../senders';
 
-const SectionAbout = ({
-  warnBeforeQuitting,
-}) => {
+const SectionAbout = () => {
   const appJson = getStaticGlobal('appJson');
   const utmSource = getUtmSource();
 
@@ -149,37 +141,8 @@ const SectionAbout = ({
           </ListItem>
         </>
       )}
-      <Divider />
-      <ListItem>
-        <ListItemText primary="Warn before quitting" />
-        <ListItemSecondaryAction>
-          <Switch
-            edge="end"
-            color="primary"
-            checked={warnBeforeQuitting}
-            onChange={(e) => {
-              requestSetPreference('warnBeforeQuitting', e.target.checked);
-            }}
-          />
-        </ListItemSecondaryAction>
-      </ListItem>
-      <ListItem button onClick={requestQuit}>
-        <ListItemText primary="Quit" />
-        <ChevronRightIcon color="action" />
-      </ListItem>
     </List>
   );
 };
 
-SectionAbout.propTypes = {
-  warnBeforeQuitting: PropTypes.bool.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  warnBeforeQuitting: state.preferences.warnBeforeQuitting,
-});
-
-export default connectComponent(
-  SectionAbout,
-  mapStateToProps,
-);
+export default SectionAbout;

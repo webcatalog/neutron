@@ -24,6 +24,7 @@ import WidgetsIcon from '@material-ui/icons/Widgets';
 
 import connectComponent from '../../helpers/connect-component';
 import isMas from '../../helpers/is-mas';
+import isStandalone from '../../helpers/is-standalone';
 import getStaticGlobal from '../../helpers/get-static-global';
 
 import SectionAdvanced from './section-advanced';
@@ -32,7 +33,7 @@ import SectionAudioVideo from './section-audio-video';
 import SectionDevelopers from './section-developers';
 import SectionDownloads from './section-downloads';
 import SectionExtensions from './section-extensions';
-import SectionGeneral from './section-general';
+import SectionSystem from './section-system';
 import SectionLanguage from './section-language';
 import SectionAbout from './section-about';
 import SectionNetwork from './section-network';
@@ -42,6 +43,10 @@ import SectionReset from './section-reset';
 import SectionUpdates from './section-updates';
 import SectionMoreApps from './section-more-apps';
 import SectionAccountLicensing from './section-account-licensing';
+import SectionMode from './section-mode';
+import SectionTray from './section-tray';
+import SectionHome from './section-home';
+import SectionExit from './section-exit';
 
 import SnackbarTrigger from '../shared/snackbar-trigger';
 
@@ -85,9 +90,13 @@ const Preferences = ({
       Icon: WidgetsIcon,
       subSections: {
         licensing: { text: 'Licensing', Component: SectionAccountLicensing, hidden: isMas() && appJson.registered },
-        general: { text: 'General', Component: SectionGeneral },
+        home: { text: 'Home', Component: SectionHome, hidden: !(appJson.url && !isMas() && !isStandalone()) },
+        mode: { text: 'Mode', Component: SectionMode, hidden: !appJson.id.startsWith('group-') && appJson.id !== 'clovery' },
+        tray: { text: window.process.platform === 'darwin' ? 'Menu bar' : 'Tray', Component: SectionTray },
+        general: { text: 'System', Component: SectionSystem },
         downloads: { text: 'Downloads', Component: SectionDownloads },
         language: { text: 'Language', Component: SectionLanguage },
+        exit: { text: 'Exit', Component: SectionExit },
       },
     },
     appearance: {
