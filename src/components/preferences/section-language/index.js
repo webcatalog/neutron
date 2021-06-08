@@ -26,7 +26,7 @@ import hunspellLanguagesMap from '../../../constants/hunspell-languages';
 
 import DialogSpellcheckLanguages from './dialog-spellcheck-languages';
 
-const SectionLanguages = ({
+const SectionLanguage = ({
   spellcheck,
   spellcheckLanguages,
   onOpenDialogSpellcheckLanguages,
@@ -64,7 +64,7 @@ const SectionLanguages = ({
   </>
 );
 
-SectionLanguages.propTypes = {
+SectionLanguage.propTypes = {
   onOpenDialogSpellcheckLanguages: PropTypes.func.isRequired,
   spellcheck: PropTypes.bool.isRequired,
   spellcheckLanguages: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -80,7 +80,7 @@ const actionCreators = {
 };
 
 export default connectComponent(
-  SectionLanguages,
+  SectionLanguage,
   mapStateToProps,
   actionCreators,
 );

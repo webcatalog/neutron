@@ -12,8 +12,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 
-import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
-import CodeIcon from '@material-ui/icons/Code';
+import WidgetsIcon from '@material-ui/icons/Widgets';
 import PaletteIcon from '@material-ui/icons/Palette';
 import PowerIcon from '@material-ui/icons/Power';
 
@@ -54,28 +53,30 @@ const styles = (theme) => ({
 });
 
 const Preferences = ({ classes }) => {
-  const [activeSectionKey, setActiveSectionKey] = useState('appearance');
+  const [activeSectionKey, setActiveSectionKey] = useState('general');
 
   const sections = {
+    general: {
+      text: 'General',
+      Icon: WidgetsIcon,
+      subSections: {
+        downloads: { text: 'Downloads', Component: SectionDownloads },
+      },
+    },
     appearance: {
       text: 'Appearance',
       Icon: PaletteIcon,
-      Component: SectionAppearance,
-    },
-    downloads: {
-      text: 'Downloads',
-      Icon: CloudDownloadIcon,
-      Component: SectionDownloads,
-    },
-    developers: {
-      text: 'Developers',
-      Icon: CodeIcon,
-      Component: SectionDevelopers,
+      subSections: {
+        appearance: { text: 'Appearance', Component: SectionAppearance },
+      },
     },
     advanced: {
       text: 'Advanced',
       Icon: PowerIcon,
-      Component: SectionAdvanced,
+      subSections: {
+        advanced: { text: 'Advanced', Component: SectionAdvanced },
+        developers: { text: 'Developers', Component: SectionDevelopers },
+      },
     },
   };
 
@@ -111,12 +112,20 @@ const Preferences = ({ classes }) => {
         </List>
       </div>
       <div className={classes.inner}>
-        <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle}>
-          {activeSection.text}
-        </Typography>
-        <Paper elevation={0} className={classes.paper}>
-          <activeSection.Component />
-        </Paper>
+        {Object.keys(activeSection.subSections).map((subSectionKey) => {
+          const subSection = activeSection.subSections[subSectionKey];
+          if (subSection.hidden) return null;
+          return (
+            <React.Fragment key={subSectionKey}>
+              <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle}>
+                {subSection.text}
+              </Typography>
+              <Paper elevation={0} className={classes.paper}>
+                <subSection.Component />
+              </Paper>
+            </React.Fragment>
+          );
+        })}
       </div>
       <SnackbarTrigger />
     </div>

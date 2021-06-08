@@ -27,7 +27,7 @@ import {
   requestShowOpenSourceNoticesWindow,
 } from '../../../senders';
 
-const SectionMiscs = ({
+const SectionAbout = ({
   warnBeforeQuitting,
 }) => {
   const appJson = getStaticGlobal('appJson');
@@ -171,7 +171,7 @@ const SectionMiscs = ({
   );
 };
 
-SectionMiscs.propTypes = {
+SectionAbout.propTypes = {
   warnBeforeQuitting: PropTypes.bool.isRequired,
 };
 
@@ -180,6 +180,6 @@ const mapStateToProps = (state) => ({
 });
 
 export default connectComponent(
-  SectionMiscs,
+  SectionAbout,
   mapStateToProps,
 );

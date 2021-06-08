@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Divider from '@material-ui/core/Divider';
@@ -12,26 +12,18 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
-import CodeIcon from '@material-ui/icons/Code';
 import ExtensionIcon from '@material-ui/icons/Extension';
-import LanguageIcon from '@material-ui/icons/Language';
-import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import InfoIcon from '@material-ui/icons/Info';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import PaletteIcon from '@material-ui/icons/Palette';
-import PermCameraMicIcon from '@material-ui/icons/PermCameraMic';
 import PowerIcon from '@material-ui/icons/Power';
 import RotateLeftIcon from '@material-ui/icons/RotateLeft';
-import RouterIcon from '@material-ui/icons/Router';
 import SecurityIcon from '@material-ui/icons/Security';
-import StorefrontIcon from '@material-ui/icons/Storefront';
 import UpdateIcon from '@material-ui/icons/Update';
 import WidgetsIcon from '@material-ui/icons/Widgets';
 
 import connectComponent from '../../helpers/connect-component';
 import isMas from '../../helpers/is-mas';
-import isStandalone from '../../helpers/is-standalone';
 import getStaticGlobal from '../../helpers/get-static-global';
 
 import SectionAdvanced from './section-advanced';
@@ -41,8 +33,8 @@ import SectionDevelopers from './section-developers';
 import SectionDownloads from './section-downloads';
 import SectionExtensions from './section-extensions';
 import SectionGeneral from './section-general';
-import SectionLanguages from './section-languages';
-import SectionMiscs from './section-miscs';
+import SectionLanguage from './section-language';
+import SectionAbout from './section-about';
 import SectionNetwork from './section-network';
 import SectionNotifications from './section-notifications';
 import SectionPrivacySecurity from './section-privacy-security';
@@ -88,89 +80,76 @@ const Preferences = ({
   const [activeSectionKey, setActiveSectionKey] = useState(getStaticGlobal('preferencesScrollTo') || 'general');
 
   const sections = {
-    accountLicensing: {
-      text: 'Licensing',
-      Icon: CheckCircleIcon,
-      Component: SectionAccountLicensing,
-      hidden: isMas() && appJson.registered,
-    },
     general: {
       text: 'General',
       Icon: WidgetsIcon,
-      Component: SectionGeneral,
+      subSections: {
+        licensing: { text: 'Licensing', Component: SectionAccountLicensing, hidden: isMas() && appJson.registered },
+        general: { text: 'General', Component: SectionGeneral },
+        downloads: { text: 'Downloads', Component: SectionDownloads },
+        language: { text: 'Language', Component: SectionLanguage },
+      },
     },
     appearance: {
       text: 'Appearance',
       Icon: PaletteIcon,
-      Component: SectionAppearance,
+      subSections: {
+        appearance: { text: 'Appearance', Component: SectionAppearance },
+      },
     },
     notifications: {
       text: 'Notifications',
       Icon: NotificationsIcon,
-      Component: SectionNotifications,
+      subSections: {
+        notifications: { text: 'Notifications', Component: SectionNotifications },
+      },
     },
     extensions: {
       text: 'Extensions',
       Icon: ExtensionIcon,
-      Component: SectionExtensions,
       hidden: isMas(),
+      subSections: {
+        extensions: { text: 'Extensions', Component: SectionExtensions },
+      },
     },
-    languages: {
-      text: 'Languages',
-      Icon: LanguageIcon,
-      Component: SectionLanguages,
-    },
-    downloads: {
-      text: 'Downloads',
-      Icon: CloudDownloadIcon,
-      Component: SectionDownloads,
-    },
-    audioVideo: {
-      text: 'Audio & Video',
-      Icon: PermCameraMicIcon,
-      Component: SectionAudioVideo,
-    },
-    network: {
-      text: 'Network',
-      Icon: RouterIcon,
-      Component: SectionNetwork,
-    },
-    privacy: {
+    privacySecuriy: {
       text: 'Privacy & Security',
       Icon: SecurityIcon,
-      Component: SectionPrivacySecurity,
-    },
-    developers: {
-      text: 'Developers',
-      Icon: CodeIcon,
-      Component: SectionDevelopers,
+      subSections: {
+        privacySecuriy: { text: 'Privacy & Security', Component: SectionPrivacySecurity },
+      },
     },
     advanced: {
       text: 'Advanced',
       Icon: PowerIcon,
-      Component: SectionAdvanced,
+      subSections: {
+        advanced: { text: 'Advanced', Component: SectionAdvanced },
+        audioVideo: { text: 'Audio & Video', Component: SectionAudioVideo },
+        network: { text: 'Network', Component: SectionNetwork },
+        developers: { text: 'Developers', Component: SectionDevelopers },
+      },
     },
     updates: {
       text: 'Updates',
       Icon: UpdateIcon,
-      ref: useRef(),
-      Component: SectionUpdates,
+      subSections: {
+        updates: { text: 'Updates', Component: SectionUpdates },
+      },
     },
     reset: {
       text: 'Reset',
       Icon: RotateLeftIcon,
-      Component: SectionReset,
-    },
-    moreApps: {
-      text: 'More Apps',
-      Icon: StorefrontIcon,
-      Component: SectionMoreApps,
-      hidden: !isMas() && !isStandalone(),
+      subSections: {
+        reset: { text: 'Reset', Component: SectionReset },
+      },
     },
     miscs: {
-      text: 'Miscellaneous',
-      Icon: MoreHorizIcon,
-      Component: SectionMiscs,
+      text: 'About',
+      Icon: InfoIcon,
+      subSections: {
+        about: { text: 'About', Component: SectionAbout },
+        moreApps: { text: 'More Apps', Component: SectionMoreApps },
+      },
     },
   };
 
@@ -179,7 +158,7 @@ const Preferences = ({
   return (
     <div className={classes.root}>
       <div className={classes.sidebar}>
-        <List dense>
+        <List dense disablePadding>
           {Object.keys(sections)
             .filter((sectionKey) => !sections[sectionKey].hidden)
             .map((sectionKey, i) => {
@@ -207,12 +186,20 @@ const Preferences = ({
         </List>
       </div>
       <div className={classes.inner}>
-        <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle}>
-          {activeSection.text}
-        </Typography>
-        <Paper elevation={0} className={classes.paper}>
-          <activeSection.Component />
-        </Paper>
+        {Object.keys(activeSection.subSections).map((subSectionKey) => {
+          const subSection = activeSection.subSections[subSectionKey];
+          if (subSection.hidden) return null;
+          return (
+            <React.Fragment key={subSectionKey}>
+              <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle}>
+                {subSection.text}
+              </Typography>
+              <Paper elevation={0} className={classes.paper}>
+                <subSection.Component />
+              </Paper>
+            </React.Fragment>
+          );
+        })}
       </div>
       <SnackbarTrigger />
     </div>
