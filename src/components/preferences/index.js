@@ -47,6 +47,7 @@ import SectionMode from './section-mode';
 import SectionTray from './section-tray';
 import SectionHome from './section-home';
 import SectionExit from './section-exit';
+import SectionPerformance from './section-performance';
 
 import SnackbarTrigger from '../shared/snackbar-trigger';
 
@@ -132,6 +133,7 @@ const Preferences = ({
       text: 'Advanced',
       Icon: PowerIcon,
       subSections: {
+        performance: { text: 'Performance', Component: SectionPerformance },
         advanced: { text: 'Advanced', Component: SectionAdvanced },
         audioVideo: { text: 'Audio & Video', Component: SectionAudioVideo },
         network: { text: 'Network', Component: SectionNetwork },

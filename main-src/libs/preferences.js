@@ -77,6 +77,7 @@ const defaultPreferences = {
   extensionSourceBrowserId: process.platform === 'win32' ? 'edge' : 'chrome',
   extensionSourceProfileDirName: 'Default',
   extensionEnabledExtesionIds: {},
+  hibernateWhenUnused: false,
   hibernateUnusedWorkspacesAtLaunch: false,
   iapPurchased: false,
   ignoreCertificateErrors: false,
