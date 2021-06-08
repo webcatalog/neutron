@@ -688,8 +688,12 @@ const addView = (browserWindow, workspace) => {
       // https://gist.github.com/Gvozd/2cec0c8c510a707854e439fb15c561b0
       e.preventDefault();
 
-      // avoid using options.webContents because it overwrites our custom UA logic
-      const newOptions = {
+      // have to use options.webContents
+      // because if not, it would break certain sites, such as Gmail
+      // but avoid using it when opening Google Meet/Google login link
+      // because somehow options.webContents doesn't let us configure UA
+      const useProvidedOptions = options && options.webContents && nextDomain !== 'meet.google.com';
+      const newOptions = useProvidedOptions ? options : {
         show: true,
         width: options && options.width ? options.width : 800,
         height: options && options.width ? options.height : 600,
@@ -718,19 +722,21 @@ const addView = (browserWindow, workspace) => {
         }
       });
 
-      // we also don't use options.webContents
-      // so in general loadURL won't be triggered automatically
-      const loadOptions = {};
-      if (referrer) {
-        loadOptions.httpReferrer = referrer;
+      // if options.webContents is not used
+      // loadURL won't be triggered automatically
+      if (!useProvidedOptions) {
+        const loadOptions = {};
+        if (referrer) {
+          loadOptions.httpReferrer = referrer;
+        }
+        if (postBody != null) {
+          const { data, contentType, boundary } = postBody;
+          loadOptions.postData = data;
+          loadOptions.extraHeaders = `content-type: ${contentType}; boundary=${boundary}`;
+        }
+        adjustUserAgentByUrl(popupWin.webContents, nextUrl);
+        popupWin.loadURL(nextUrl, loadOptions);
       }
-      if (postBody != null) {
-        const { data, contentType, boundary } = postBody;
-        loadOptions.postData = data;
-        loadOptions.extraHeaders = `content-type: ${contentType}; boundary=${boundary}`;
-      }
-      adjustUserAgentByUrl(popupWin.webContents, nextUrl);
-      popupWin.loadURL(nextUrl, loadOptions);
 
       e.newGuest = popupWin;
     };
