@@ -42,6 +42,7 @@ const SectionMode = ({
                 requestSetPreference('shareWorkspaceBrowsingData', e.target.checked);
                 enqueueRequestRestartSnackbar();
               }}
+              color="primary"
             />
           </Grid>
           <Grid item xs>
@@ -61,6 +62,7 @@ const SectionMode = ({
                 requestSetPreference('shareWorkspaceBrowsingData', !e.target.checked);
                 enqueueRequestRestartSnackbar();
               }}
+              color="primary"
             />
           </Grid>
           <Grid item xs>

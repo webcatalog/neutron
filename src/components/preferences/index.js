@@ -27,27 +27,34 @@ import isMas from '../../helpers/is-mas';
 import isStandalone from '../../helpers/is-standalone';
 import getStaticGlobal from '../../helpers/get-static-global';
 
-import SectionAdvanced from './section-advanced';
-import SectionAppearance from './section-appearance';
+import SectionAbout from './section-about';
+import SectionAccountLicensing from './section-account-licensing';
+import SectionAppLock from './section-app-lock';
 import SectionAudioVideo from './section-audio-video';
+import SectionAutoReload from './section-auto-reload';
+import SectionBrowsing from './section-browsing';
 import SectionDevelopers from './section-developers';
 import SectionDownloads from './section-downloads';
+import SectionExit from './section-exit';
 import SectionExtensions from './section-extensions';
-import SectionSystem from './section-system';
+import SectionFonts from './section-fonts';
+import SectionHardware from './section-hardware';
+import SectionHome from './section-home';
 import SectionLanguage from './section-language';
-import SectionAbout from './section-about';
+import SectionLinkHandling from './section-link-handling';
+import SectionMode from './section-mode';
+import SectionMoreApps from './section-more-apps';
 import SectionNetwork from './section-network';
 import SectionNotifications from './section-notifications';
-import SectionPrivacySecurity from './section-privacy-security';
-import SectionReset from './section-reset';
-import SectionUpdates from './section-updates';
-import SectionMoreApps from './section-more-apps';
-import SectionAccountLicensing from './section-account-licensing';
-import SectionMode from './section-mode';
-import SectionTray from './section-tray';
-import SectionHome from './section-home';
-import SectionExit from './section-exit';
 import SectionPerformance from './section-performance';
+import SectionReset from './section-reset';
+import SectionSystem from './section-system';
+import SectionTelemetry from './section-telemetry';
+import SectionTheme from './section-theme';
+import SectionTray from './section-tray';
+import SectionUpdates from './section-updates';
+import SectionView from './section-view';
+import SectionWindow from './section-window';
 
 import SnackbarTrigger from '../shared/snackbar-trigger';
 
@@ -93,7 +100,7 @@ const Preferences = ({
         licensing: { text: 'Licensing', Component: SectionAccountLicensing, hidden: isMas() && appJson.registered },
         home: { text: 'Home', Component: SectionHome, hidden: !(appJson.url && !isMas() && !isStandalone()) },
         mode: { text: 'Mode', Component: SectionMode, hidden: !appJson.id.startsWith('group-') && appJson.id !== 'clovery' },
-        tray: { text: window.process.platform === 'darwin' ? 'Menu bar' : 'Tray', Component: SectionTray },
+        tray: { text: window.process.platform === 'darwin' ? 'Menu Bar' : 'Tray', Component: SectionTray },
         general: { text: 'System', Component: SectionSystem },
         downloads: { text: 'Downloads', Component: SectionDownloads },
         language: { text: 'Language', Component: SectionLanguage },
@@ -104,7 +111,10 @@ const Preferences = ({
       text: 'Appearance',
       Icon: PaletteIcon,
       subSections: {
-        appearance: { text: 'Appearance', Component: SectionAppearance },
+        theme: { text: 'Theme', Component: SectionTheme },
+        view: { text: 'View', Component: SectionView },
+        window: { text: 'Window', Component: SectionWindow },
+        fonts: { text: 'Fonts', Component: SectionFonts },
       },
     },
     notifications: {
@@ -126,23 +136,28 @@ const Preferences = ({
       text: 'Privacy & Security',
       Icon: SecurityIcon,
       subSections: {
-        privacySecuriy: { text: 'Privacy & Security', Component: SectionPrivacySecurity },
+        browsingData: { text: 'Browsing', Component: SectionBrowsing },
+        appLock: { text: 'App Lock', Component: SectionAppLock },
+        telemetry: { text: 'Telemetry', Component: SectionTelemetry, hidden: !isMas() && !isStandalone() },
       },
     },
     advanced: {
       text: 'Advanced',
       Icon: PowerIcon,
       subSections: {
+        linkHandling: { text: 'Link Handling', Component: SectionLinkHandling },
         performance: { text: 'Performance', Component: SectionPerformance },
-        advanced: { text: 'Advanced', Component: SectionAdvanced },
         audioVideo: { text: 'Audio & Video', Component: SectionAudioVideo },
         network: { text: 'Network', Component: SectionNetwork },
+        hardward: { text: 'Hardware', Component: SectionHardware },
+        autoReload: { text: 'Auto Reload', Component: SectionAutoReload },
         developers: { text: 'Developers', Component: SectionDevelopers },
       },
     },
     updates: {
       text: 'Updates',
       Icon: UpdateIcon,
+      hidden: isMas(),
       subSections: {
         updates: { text: 'Updates', Component: SectionUpdates },
       },
