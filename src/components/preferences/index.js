@@ -39,7 +39,6 @@ import SectionLanguage from './section-language';
 import SectionAbout from './section-about';
 import SectionNetwork from './section-network';
 import SectionNotifications from './section-notifications';
-import SectionPrivacySecurity from './section-privacy-security';
 import SectionReset from './section-reset';
 import SectionUpdates from './section-updates';
 import SectionMoreApps from './section-more-apps';
@@ -52,6 +51,9 @@ import SectionFonts from './section-fonts';
 import SectionWindow from './section-window';
 import SectionPerformance from './section-performance';
 import SectionHardware from './section-hardware';
+import SectionAppLock from './section-app-lock';
+import SectionTelemetry from './section-telemetry';
+import SectionBrowsing from './section-browsing';
 
 import SnackbarTrigger from '../shared/snackbar-trigger';
 
@@ -97,7 +99,7 @@ const Preferences = ({
         licensing: { text: 'Licensing', Component: SectionAccountLicensing, hidden: isMas() && appJson.registered },
         home: { text: 'Home', Component: SectionHome, hidden: !(appJson.url && !isMas() && !isStandalone()) },
         mode: { text: 'Mode', Component: SectionMode, hidden: !appJson.id.startsWith('group-') && appJson.id !== 'clovery' },
-        tray: { text: window.process.platform === 'darwin' ? 'Menu bar' : 'Tray', Component: SectionTray },
+        tray: { text: window.process.platform === 'darwin' ? 'Menu Bar' : 'Tray', Component: SectionTray },
         general: { text: 'System', Component: SectionSystem },
         downloads: { text: 'Downloads', Component: SectionDownloads },
         language: { text: 'Language', Component: SectionLanguage },
@@ -132,7 +134,9 @@ const Preferences = ({
       text: 'Privacy & Security',
       Icon: SecurityIcon,
       subSections: {
-        privacySecuriy: { text: 'Privacy & Security', Component: SectionPrivacySecurity },
+        browsingData: { text: 'Browsing', Component: SectionBrowsing },
+        appLock: { text: 'App Lock', Component: SectionAppLock },
+        telemetry: { text: 'Telemetry', Component: SectionTelemetry, hidden: !isMas() && !isStandalone() },
       },
     },
     advanced: {
@@ -144,13 +148,14 @@ const Preferences = ({
         audioVideo: { text: 'Audio & Video', Component: SectionAudioVideo },
         network: { text: 'Network', Component: SectionNetwork },
         hardward: { text: 'Hardware', Component: SectionHardware },
-        developers: { text: 'Developers', Component: SectionDevelopers },
         autoReload: { text: 'Auto Reload', Component: SectionAutoReload },
+        developers: { text: 'Developers', Component: SectionDevelopers },
       },
     },
     updates: {
       text: 'Updates',
       Icon: UpdateIcon,
+      hidden: isMas(),
       subSections: {
         updates: { text: 'Updates', Component: SectionUpdates },
       },
