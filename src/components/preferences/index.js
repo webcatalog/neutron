@@ -21,6 +21,7 @@ import RotateLeftIcon from '@material-ui/icons/RotateLeft';
 import SecurityIcon from '@material-ui/icons/Security';
 import UpdateIcon from '@material-ui/icons/Update';
 import WidgetsIcon from '@material-ui/icons/Widgets';
+import ViewListIcon from '@material-ui/icons/ViewList';
 
 import connectComponent from '../../helpers/connect-component';
 import isMas from '../../helpers/is-mas';
@@ -158,7 +159,7 @@ const Preferences = ({
     },
     workspaces: {
       text: getWorkspaceFriendlyName(true),
-      Icon: PowerIcon,
+      Icon: ViewListIcon,
       subSections: {
         workspaces: { text: getWorkspaceFriendlyName(true), Component: SectionWorkspaces },
       },

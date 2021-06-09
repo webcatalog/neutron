@@ -8,9 +8,11 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import Divider from '@material-ui/core/Divider';
 
 import connectComponent from '../../../helpers/connect-component';
 import getWorkspacesAsList from '../../../helpers/get-workspaces-as-list';
+import getWorkspaceName from '../../../helpers/get-workspace-name';
 import {
   requestShowWorkspacePreferencesWindow,
 } from '../../../senders';
@@ -22,15 +24,17 @@ const SectionWorkspaces = ({
 
   return (
     <List disablePadding dense>
-      {workspacesList.map((workspace) => (
-        <ListItem
-          key={workspace.id}
-          button
-          onClick={() => requestShowWorkspacePreferencesWindow(workspace.id)}
-        >
-          <ListItemText primary={workspacesList[0].name} />
-          <ChevronRightIcon color="action" />
-        </ListItem>
+      {workspacesList.map((workspace, i) => (
+        <React.Fragment key={workspace.id}>
+          {i > 0 && <Divider />}
+          <ListItem
+            button
+            onClick={() => requestShowWorkspacePreferencesWindow(workspace.id)}
+          >
+            <ListItemText primary={getWorkspaceName(workspace)} />
+            <ChevronRightIcon color="action" />
+          </ListItem>
+        </React.Fragment>
       ))}
     </List>
   );
