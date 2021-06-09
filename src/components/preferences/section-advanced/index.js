@@ -80,7 +80,6 @@ const SectionAdvanced = ({
   onOpenDialogRefreshInterval,
   swipeToNavigate,
   useHardwareAcceleration,
-  useSystemTitleBar,
 }) => (
   <>
     <List disablePadding dense>
@@ -137,27 +136,6 @@ const SectionAdvanced = ({
                 checked={swipeToNavigate}
                 onChange={(e) => {
                   requestSetPreference('swipeToNavigate', e.target.checked);
-                  enqueueRequestRestartSnackbar();
-                }}
-              />
-            </ListItemSecondaryAction>
-          </ListItem>
-        </>
-      )}
-      {window.process.platform !== 'darwin' && (
-        <>
-          <Divider />
-          <ListItem>
-            <ListItemText
-              primary="Use system title bar and borders"
-            />
-            <ListItemSecondaryAction>
-              <Switch
-                edge="end"
-                color="primary"
-                checked={useSystemTitleBar}
-                onChange={(e) => {
-                  requestSetPreference('useSystemTitleBar', e.target.checked);
                   enqueueRequestRestartSnackbar();
                 }}
               />
@@ -315,7 +293,6 @@ SectionAdvanced.propTypes = {
   onOpenDialogRefreshInterval: PropTypes.func.isRequired,
   swipeToNavigate: PropTypes.bool.isRequired,
   useHardwareAcceleration: PropTypes.bool.isRequired,
-  useSystemTitleBar: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -328,7 +305,6 @@ const mapStateToProps = (state) => ({
   internalUrlRule: state.preferences.internalUrlRule,
   swipeToNavigate: state.preferences.swipeToNavigate,
   useHardwareAcceleration: state.preferences.useHardwareAcceleration,
-  useSystemTitleBar: state.preferences.useSystemTitleBar,
 });
 
 const actionCreators = {

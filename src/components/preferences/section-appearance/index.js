@@ -21,17 +21,11 @@ import connectComponent from '../../../helpers/connect-component';
 import getWorkspaceFriendlyName from '../../../helpers/get-workspace-friendly-name';
 
 import {
-  enqueueRequestRestartSnackbar,
   requestRealignActiveWorkspace,
   requestSetPreference,
 } from '../../../senders';
 
 const styles = (theme) => ({
-  paper: {
-    marginTop: theme.spacing(0.5),
-    marginBottom: theme.spacing(3),
-    border: theme.palette.type === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)',
-  },
   sliderContainer: {
     paddingLeft: theme.spacing(5),
     paddingRight: theme.spacing(5),
@@ -73,7 +67,6 @@ const SectionAppearance = ({
   sidebarTips,
   themeSource,
   titleBar,
-  windowButtons,
 }) => (
   <>
     <List disablePadding dense>
@@ -373,28 +366,6 @@ const SectionAppearance = ({
           </ListItem>
         </>
       )}
-      {window.process.platform === 'darwin' && (
-        <>
-          <Divider />
-          <ListItem>
-            <ListItemText
-              primary="Show window buttons"
-              secondary={'Show "traffic light" (red/orange/green) buttons.'}
-            />
-            <ListItemSecondaryAction>
-              <Switch
-                edge="end"
-                color="primary"
-                checked={windowButtons}
-                onChange={(e) => {
-                  requestSetPreference('windowButtons', e.target.checked);
-                  enqueueRequestRestartSnackbar();
-                }}
-              />
-            </ListItemSecondaryAction>
-          </ListItem>
-        </>
-      )}
     </List>
   </>
 );
@@ -413,7 +384,6 @@ SectionAppearance.propTypes = {
   sidebarTips: PropTypes.oneOf(['shortcut', 'name', 'none']).isRequired,
   themeSource: PropTypes.string.isRequired,
   titleBar: PropTypes.bool.isRequired,
-  windowButtons: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -429,7 +399,6 @@ const mapStateToProps = (state) => ({
   sidebarTips: state.preferences.sidebarTips,
   themeSource: state.preferences.themeSource,
   titleBar: state.preferences.titleBar,
-  windowButtons: state.preferences.windowButtons,
 });
 
 export default connectComponent(
