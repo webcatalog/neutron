@@ -20,10 +20,11 @@ import connectComponent from '../../helpers/connect-component';
 
 import SnackbarTrigger from '../shared/snackbar-trigger';
 
-import SectionAdvanced from './section-advanced';
-import SectionAppearance from './section-appearance';
+import SectionAutoReload from './section-auto-reload';
+import SectionTheme from './section-theme';
 import SectionDevelopers from './section-developers';
 import SectionDownloads from './section-downloads';
+import SectionLinkHandling from './section-link-handling';
 
 const styles = (theme) => ({
   root: {
@@ -67,14 +68,15 @@ const Preferences = ({ classes }) => {
       text: 'Appearance',
       Icon: PaletteIcon,
       subSections: {
-        appearance: { text: 'Appearance', Component: SectionAppearance },
+        appearance: { text: 'Theme', Component: SectionTheme },
       },
     },
     advanced: {
       text: 'Advanced',
       Icon: PowerIcon,
       subSections: {
-        advanced: { text: 'Advanced', Component: SectionAdvanced },
+        linkHandling: { text: 'Link Handling', Component: SectionLinkHandling },
+        autoReload: { text: 'Advanced', Component: SectionAutoReload },
         developers: { text: 'Developers', Component: SectionDevelopers },
       },
     },
@@ -85,7 +87,7 @@ const Preferences = ({ classes }) => {
   return (
     <div className={classes.root}>
       <div className={classes.sidebar}>
-        <List dense>
+        <List dense disablePadding>
           {Object.keys(sections).map((sectionKey, i) => {
             const {
               Icon, text, hidden,

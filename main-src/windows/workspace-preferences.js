@@ -18,7 +18,7 @@ const create = (workspaceId) => {
     backgroundColor: '#FFF',
     minWidth: 760,
     minHeight: 640,
-    width: 760,
+    width: 860,
     height: 640,
     resizable: true,
     maximizable: true,

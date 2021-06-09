@@ -41,7 +41,7 @@ const styles = (theme) => ({
   },
 });
 
-const SectionAppearance = ({
+const SectionTheme = ({
   classes,
   darkReader,
   onUpdateForm,
@@ -203,7 +203,7 @@ const SectionAppearance = ({
   </List>
 );
 
-SectionAppearance.defaultProps = {
+SectionTheme.defaultProps = {
   formDarkReader: null,
   formDarkReaderBrightness: 100,
   formDarkReaderContrast: 100,
@@ -211,7 +211,7 @@ SectionAppearance.defaultProps = {
   formDarkReaderSepia: 0,
 };
 
-SectionAppearance.propTypes = {
+SectionTheme.propTypes = {
   classes: PropTypes.object.isRequired,
   darkReader: PropTypes.bool.isRequired,
   onUpdateForm: PropTypes.func.isRequired,
@@ -237,7 +237,7 @@ const actionCreators = {
 };
 
 export default connectComponent(
-  SectionAppearance,
+  SectionTheme,
   mapStateToProps,
   actionCreators,
   styles,

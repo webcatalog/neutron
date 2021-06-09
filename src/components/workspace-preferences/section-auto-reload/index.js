@@ -5,14 +5,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
-
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 import connectComponent from '../../../helpers/connect-component';
 import roundTime from '../../../helpers/round-time';
@@ -63,35 +60,19 @@ const styles = (theme) => ({
   },
 });
 
-const SectionAdvanced = ({
+const SectionAutoReload = ({
   autoRefresh,
   autoRefreshInterval,
   autoRefreshOnlyWhenInactive,
   classes,
-  internalUrlRule,
-  onOpenDialogInternalUrls,
   onOpenDialogRefreshInterval,
   onUpdateForm,
   formAutoRefresh,
   formAutoRefreshInterval,
   formAutoRefreshOnlyWhenInactive,
-  formInternalUrlRule,
 }) => (
   <>
     <List disablePadding dense>
-      <ListItem button onClick={onOpenDialogInternalUrls}>
-        <ListItemText
-          primary="Internal URLs"
-          secondary={(() => {
-            if (formInternalUrlRule != null) {
-              return `/^${formInternalUrlRule}$/i`;
-            }
-            return `Same as global (${internalUrlRule ? `/^${internalUrlRule}$/i` : 'Not set'})`;
-          })()}
-        />
-        <ChevronRightIcon color="action" />
-      </ListItem>
-      <Divider />
       <ListItem>
         <ListItemText
           primary="Reload web pages automatically"
@@ -222,39 +203,33 @@ const SectionAdvanced = ({
   </>
 );
 
-SectionAdvanced.defaultProps = {
-  internalUrlRule: null,
+SectionAutoReload.defaultProps = {
   formAutoRefresh: null,
   formAutoRefreshInterval: null,
   formAutoRefreshOnlyWhenInactive: null,
-  formInternalUrlRule: null,
 };
 
-SectionAdvanced.propTypes = {
+SectionAutoReload.propTypes = {
   autoRefresh: PropTypes.bool.isRequired,
   autoRefreshInterval: PropTypes.number.isRequired,
   autoRefreshOnlyWhenInactive: PropTypes.bool.isRequired,
   classes: PropTypes.object.isRequired,
-  internalUrlRule: PropTypes.string,
-  onOpenDialogInternalUrls: PropTypes.func.isRequired,
   onOpenDialogRefreshInterval: PropTypes.func.isRequired,
   onUpdateForm: PropTypes.func.isRequired,
 
   formAutoRefresh: PropTypes.bool,
   formAutoRefreshInterval: PropTypes.number,
   formAutoRefreshOnlyWhenInactive: PropTypes.bool,
-  formInternalUrlRule: PropTypes.string,
 };
 
 const mapStateToProps = (state) => ({
   autoRefresh: state.preferences.autoRefresh,
   autoRefreshInterval: state.preferences.autoRefreshInterval,
   autoRefreshOnlyWhenInactive: state.preferences.autoRefreshOnlyWhenInactive,
-  internalUrlRule: state.preferences.internalUrlRule,
-  formAskForDownloadPath: state.dialogWorkspacePreferences.form.preferences.askForDownloadPath,
   formAutoRefresh: state.dialogWorkspacePreferences.form.preferences.autoRefresh,
   formAutoRefreshInterval: state.dialogWorkspacePreferences.form.preferences.autoRefreshInterval,
-  formInternalUrlRule: state.dialogWorkspacePreferences.form.preferences.internalUrlRule,
+  formAutoRefreshOnlyWhenInactive: state.dialogWorkspacePreferences.form
+    .preferences.autoRefreshOnlyWhenInactive,
 });
 
 const actionCreators = {
@@ -262,7 +237,7 @@ const actionCreators = {
 };
 
 export default connectComponent(
-  SectionAdvanced,
+  SectionAutoReload,
   mapStateToProps,
   actionCreators,
   styles,
