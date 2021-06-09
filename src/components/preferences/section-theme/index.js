@@ -18,10 +18,8 @@ import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
 
 import connectComponent from '../../../helpers/connect-component';
-import getWorkspaceFriendlyName from '../../../helpers/get-workspace-friendly-name';
 
 import {
-  requestRealignActiveWorkspace,
   requestSetPreference,
 } from '../../../senders';
 
@@ -53,20 +51,14 @@ const styles = (theme) => ({
   },
 });
 
-const SectionAppearance = ({
-  attachToMenubar,
+const SectionTheme = ({
   classes,
   darkReader,
   darkReaderBrightness,
   darkReaderContrast,
   darkReaderGrayscale,
   darkReaderSepia,
-  navigationBar,
-  sidebar,
-  sidebarSize,
-  sidebarTips,
   themeSource,
-  titleBar,
 }) => (
   <>
     <List disablePadding dense>
@@ -88,6 +80,7 @@ const SectionAppearance = ({
           <MenuItem dense value="dark">Dark</MenuItem>
         </Select>
       </ListItem>
+      <Divider />
       <ListItem>
         <ListItemText
           primary="Dark Reader"
@@ -228,181 +221,31 @@ const SectionAppearance = ({
           </Grid>
         </ListItemText>
       </ListItem>
-      <Divider />
-      <ListItem>
-        <ListItemText
-          primary="Show sidebar"
-          secondary={`Sidebar lets you switch easily between ${getWorkspaceFriendlyName(true).toLowerCase()}.`}
-        />
-        <ListItemSecondaryAction>
-          <Switch
-            edge="end"
-            color="primary"
-            checked={sidebar}
-            onChange={(e) => {
-              requestSetPreference('sidebar', e.target.checked);
-              requestRealignActiveWorkspace();
-            }}
-          />
-        </ListItemSecondaryAction>
-      </ListItem>
-      <ListItem>
-        <ListItemText
-          primary="Sidebar size"
-        />
-        <Select
-          value={sidebarSize}
-          onChange={(e) => {
-            requestSetPreference('sidebarSize', e.target.value);
-            requestRealignActiveWorkspace();
-          }}
-          variant="filled"
-          disableUnderline
-          margin="dense"
-          classes={{
-            root: classes.select,
-          }}
-          className={classes.selectRoot}
-        >
-          <MenuItem
-            value="compact"
-            dense
-          >
-            Compact
-          </MenuItem>
-          <MenuItem
-            value="expanded"
-            dense
-          >
-            Expanded
-          </MenuItem>
-        </Select>
-      </ListItem>
-      <ListItem>
-        <ListItemText
-          primary="Show tips on sidebar"
-        />
-        <Select
-          value={sidebarSize === 'expanded' ? 'name+shortcut' : sidebarTips}
-          onChange={(e) => requestSetPreference('sidebarTips', e.target.value)}
-          variant="filled"
-          disableUnderline
-          margin="dense"
-          classes={{
-            root: classes.select,
-          }}
-          className={classes.selectRoot}
-          disabled={sidebarSize === 'expanded'}
-        >
-          {sidebarSize === 'expanded' && (
-            <MenuItem
-              value="name+shortcut"
-              dense
-            >
-              {`${getWorkspaceFriendlyName()} names & keyboard shortcuts`}
-            </MenuItem>
-          )}
-          <MenuItem
-            value="shortcut"
-            dense
-          >
-            {`${getWorkspaceFriendlyName()} keyboard shortcuts`}
-          </MenuItem>
-          <MenuItem
-            value="name"
-            dense
-          >
-            {`${getWorkspaceFriendlyName()} names`}
-          </MenuItem>
-          <MenuItem
-            value="none"
-            dense
-          >
-            None
-          </MenuItem>
-        </Select>
-      </ListItem>
-      <Divider />
-      <ListItem>
-        <ListItemText
-          primary="Show navigation bar"
-          secondary="Navigation bar lets you go back, forward, home and reload."
-        />
-        <ListItemSecondaryAction>
-          <Switch
-            edge="end"
-            color="primary"
-            // must show sidebar or navigation bar on Linux
-            // if not, as user can't right-click on menu bar icon
-            // they can't access preferences or notifications
-            checked={(window.process.platform === 'linux' && attachToMenubar && !sidebar) || navigationBar}
-            disabled={(window.process.platform === 'linux' && attachToMenubar && !sidebar)}
-            onChange={(e) => {
-              requestSetPreference('navigationBar', e.target.checked);
-              requestRealignActiveWorkspace();
-            }}
-          />
-        </ListItemSecondaryAction>
-      </ListItem>
-      {window.process.platform === 'darwin' && (
-        <>
-          <Divider />
-          <ListItem>
-            <ListItemText
-              primary="Show title bar"
-              secondary="Title bar shows you the title of the current page."
-            />
-            <ListItemSecondaryAction>
-              <Switch
-                edge="end"
-                color="primary"
-                checked={titleBar}
-                onChange={(e) => {
-                  requestSetPreference('titleBar', e.target.checked);
-                  requestRealignActiveWorkspace();
-                }}
-              />
-            </ListItemSecondaryAction>
-          </ListItem>
-        </>
-      )}
     </List>
   </>
 );
 
-SectionAppearance.propTypes = {
-  attachToMenubar: PropTypes.bool.isRequired,
+SectionTheme.propTypes = {
   classes: PropTypes.object.isRequired,
   darkReader: PropTypes.bool.isRequired,
   darkReaderBrightness: PropTypes.number.isRequired,
   darkReaderContrast: PropTypes.number.isRequired,
   darkReaderGrayscale: PropTypes.number.isRequired,
   darkReaderSepia: PropTypes.number.isRequired,
-  navigationBar: PropTypes.bool.isRequired,
-  sidebar: PropTypes.bool.isRequired,
-  sidebarSize: PropTypes.oneOf(['compact', 'expanded']).isRequired,
-  sidebarTips: PropTypes.oneOf(['shortcut', 'name', 'none']).isRequired,
   themeSource: PropTypes.string.isRequired,
-  titleBar: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  attachToMenubar: state.preferences.attachToMenubar,
   darkReader: state.preferences.darkReader,
   darkReaderBrightness: state.preferences.darkReaderBrightness,
   darkReaderContrast: state.preferences.darkReaderContrast,
   darkReaderGrayscale: state.preferences.darkReaderGrayscale,
   darkReaderSepia: state.preferences.darkReaderSepia,
-  navigationBar: state.preferences.navigationBar,
-  sidebar: state.preferences.sidebar,
-  sidebarSize: state.preferences.sidebarSize,
-  sidebarTips: state.preferences.sidebarTips,
   themeSource: state.preferences.themeSource,
-  titleBar: state.preferences.titleBar,
 });
 
 export default connectComponent(
-  SectionAppearance,
+  SectionTheme,
   mapStateToProps,
   null,
   styles,

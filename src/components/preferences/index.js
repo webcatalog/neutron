@@ -27,33 +27,34 @@ import isMas from '../../helpers/is-mas';
 import isStandalone from '../../helpers/is-standalone';
 import getStaticGlobal from '../../helpers/get-static-global';
 
-import SectionLinkHandling from './section-link-handling';
-import SectionAutoReload from './section-auto-reload';
-import SectionAppearance from './section-appearance';
+import SectionAbout from './section-about';
+import SectionAccountLicensing from './section-account-licensing';
+import SectionAppLock from './section-app-lock';
 import SectionAudioVideo from './section-audio-video';
+import SectionAutoReload from './section-auto-reload';
+import SectionBrowsing from './section-browsing';
 import SectionDevelopers from './section-developers';
 import SectionDownloads from './section-downloads';
+import SectionExit from './section-exit';
 import SectionExtensions from './section-extensions';
-import SectionSystem from './section-system';
+import SectionFonts from './section-fonts';
+import SectionHardware from './section-hardware';
+import SectionHome from './section-home';
 import SectionLanguage from './section-language';
-import SectionAbout from './section-about';
+import SectionLinkHandling from './section-link-handling';
+import SectionMode from './section-mode';
+import SectionMoreApps from './section-more-apps';
 import SectionNetwork from './section-network';
 import SectionNotifications from './section-notifications';
-import SectionReset from './section-reset';
-import SectionUpdates from './section-updates';
-import SectionMoreApps from './section-more-apps';
-import SectionAccountLicensing from './section-account-licensing';
-import SectionMode from './section-mode';
-import SectionTray from './section-tray';
-import SectionHome from './section-home';
-import SectionExit from './section-exit';
-import SectionFonts from './section-fonts';
-import SectionWindow from './section-window';
 import SectionPerformance from './section-performance';
-import SectionHardware from './section-hardware';
-import SectionAppLock from './section-app-lock';
+import SectionReset from './section-reset';
+import SectionSystem from './section-system';
 import SectionTelemetry from './section-telemetry';
-import SectionBrowsing from './section-browsing';
+import SectionTheme from './section-theme';
+import SectionTray from './section-tray';
+import SectionUpdates from './section-updates';
+import SectionView from './section-view';
+import SectionWindow from './section-window';
 
 import SnackbarTrigger from '../shared/snackbar-trigger';
 
@@ -110,7 +111,8 @@ const Preferences = ({
       text: 'Appearance',
       Icon: PaletteIcon,
       subSections: {
-        appearance: { text: 'Appearance', Component: SectionAppearance },
+        theme: { text: 'Theme', Component: SectionTheme },
+        view: { text: 'View', Component: SectionView },
         window: { text: 'Window', Component: SectionWindow },
         fonts: { text: 'Fonts', Component: SectionFonts },
       },
