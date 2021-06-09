@@ -155,7 +155,7 @@ const WorkspaceSelector = ({
 
   const fullName = (() => {
     if (userDefinedName) return userDefinedName;
-    return `Workspace ${order + 1}`;
+    return `${getWorkspaceFriendlyName()} ${order + 1}`;
   })();
 
   const tipText = (() => {
@@ -188,7 +188,7 @@ const WorkspaceSelector = ({
     }
 
     if (typeof order === 'number') {
-      return `Workspace ${order + 1}${shortcutTip ? ` (${shortcutTip})` : ''}`;
+      return `${getWorkspaceFriendlyName()} ${order + 1}${shortcutTip ? ` (${shortcutTip})` : ''}`;
     }
 
     return null;

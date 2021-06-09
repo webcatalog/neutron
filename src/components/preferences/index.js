@@ -26,6 +26,7 @@ import connectComponent from '../../helpers/connect-component';
 import isMas from '../../helpers/is-mas';
 import isStandalone from '../../helpers/is-standalone';
 import getStaticGlobal from '../../helpers/get-static-global';
+import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
 
 import SectionAbout from './section-about';
 import SectionAccountLicensing from './section-account-licensing';
@@ -55,6 +56,7 @@ import SectionTray from './section-tray';
 import SectionUpdates from './section-updates';
 import SectionView from './section-view';
 import SectionWindow from './section-window';
+import SectionWorkspaces from './section-workspaces';
 
 import SnackbarTrigger from '../shared/snackbar-trigger';
 
@@ -152,6 +154,13 @@ const Preferences = ({
         hardward: { text: 'Hardware', Component: SectionHardware },
         autoReload: { text: 'Auto Reload', Component: SectionAutoReload },
         developers: { text: 'Developers', Component: SectionDevelopers },
+      },
+    },
+    workspaces: {
+      text: getWorkspaceFriendlyName(true),
+      Icon: PowerIcon,
+      subSections: {
+        workspaces: { text: getWorkspaceFriendlyName(true), Component: SectionWorkspaces },
       },
     },
     updates: {
