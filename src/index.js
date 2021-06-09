@@ -76,7 +76,7 @@ const runApp = () => {
       } else if (window.mode === 'auth') {
         document.title = 'Sign In';
       } else if (window.mode === 'preferences') {
-        document.title = 'Preferences';
+        document.title = 'Global Preferences';
       } else if (window.mode === 'workspace-preferences') {
         const workspaceId = getStaticGlobal('workspacePreferencesWorkspaceId');
         const workspaceList = getWorkspacesAsList(workspaces);

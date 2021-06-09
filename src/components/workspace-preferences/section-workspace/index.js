@@ -12,6 +12,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 import connectComponent from '../../../helpers/connect-component';
+import getWorkspaceName from '../../../helpers/get-workspace-name';
 
 import { open as openDialogEditWorkspace } from '../../../state/dialog-edit-workspace/actions';
 
@@ -66,7 +67,7 @@ SectionWorkspace.propTypes = {
 
 const mapStateToProps = (state) => ({
   homeUrl: state.dialogWorkspacePreferences.form.homeUrl,
-  name: state.dialogWorkspacePreferences.form.name,
+  name: getWorkspaceName(state.dialogWorkspacePreferences.form),
 });
 
 const actionCreators = {
