@@ -597,7 +597,7 @@ const createMenu = async () => {
       label: `Edit Current ${getWorkspaceFriendlyName()}`,
       click: () => {
         const activeWorkspace = getActiveWorkspace();
-        ipcMain.emit('request-show-edit-workspace-window', null, activeWorkspace.id);
+        ipcMain.emit('request-show-workspace-preferences-window', null, activeWorkspace.id);
       },
       enabled: !global.locked && hasWorkspaces,
     },

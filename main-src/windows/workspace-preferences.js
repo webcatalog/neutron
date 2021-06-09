@@ -18,7 +18,7 @@ const create = (workspaceId) => {
     backgroundColor: '#FFF',
     minWidth: 760,
     minHeight: 640,
-    width: 760,
+    width: 860,
     height: 640,
     resizable: true,
     maximizable: true,
@@ -30,6 +30,7 @@ const create = (workspaceId) => {
       enableRemoteModule: true,
       contextIsolation: false,
       nodeIntegration: true,
+      webSecurity: process.env.NODE_ENV === 'production',
       preload: path.join(__dirname, 'workspace-preferences-preload.js'),
     },
   });

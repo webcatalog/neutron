@@ -41,7 +41,7 @@ const styles = (theme) => ({
   },
 });
 
-const SectionAppearance = ({
+const SectionTheme = ({
   classes,
   darkReader,
   onUpdateForm,
@@ -61,7 +61,9 @@ const SectionAppearance = ({
       <Select
         value={formDarkReader != null ? formDarkReader : 'global'}
         onChange={(e) => onUpdateForm({
-          darkReader: e.target.value !== 'global' ? e.target.value : null,
+          preferences: {
+            darkReader: e.target.value !== 'global' ? e.target.value : null,
+          },
         })}
         variant="filled"
         disableUnderline
@@ -105,7 +107,7 @@ const SectionAppearance = ({
                 min={-50}
                 max={50}
                 onChange={(e, value) => {
-                  onUpdateForm({ darkReaderBrightness: value + 100 });
+                  onUpdateForm({ preferences: { darkReaderBrightness: value + 100 } });
                 }}
               />
             </Grid>
@@ -136,7 +138,7 @@ const SectionAppearance = ({
                 min={-50}
                 max={50}
                 onChange={(e, value) => {
-                  onUpdateForm({ darkReaderContrast: value + 100 });
+                  onUpdateForm({ preferences: { darkReaderContrast: value + 100 } });
                 }}
               />
             </Grid>
@@ -163,7 +165,7 @@ const SectionAppearance = ({
                 min={0}
                 max={100}
                 onChange={(e, value) => {
-                  onUpdateForm({ darkReaderSepia: value });
+                  onUpdateForm({ preference: { darkReaderSepia: value } });
                 }}
               />
             </Grid>
@@ -190,7 +192,7 @@ const SectionAppearance = ({
                 min={0}
                 max={100}
                 onChange={(e, value) => {
-                  onUpdateForm({ darkReaderGrayscale: value });
+                  onUpdateForm({ preferences: { darkReaderGrayscale: value } });
                 }}
               />
             </Grid>
@@ -201,7 +203,7 @@ const SectionAppearance = ({
   </List>
 );
 
-SectionAppearance.defaultProps = {
+SectionTheme.defaultProps = {
   formDarkReader: null,
   formDarkReaderBrightness: 100,
   formDarkReaderContrast: 100,
@@ -209,7 +211,7 @@ SectionAppearance.defaultProps = {
   formDarkReaderSepia: 0,
 };
 
-SectionAppearance.propTypes = {
+SectionTheme.propTypes = {
   classes: PropTypes.object.isRequired,
   darkReader: PropTypes.bool.isRequired,
   onUpdateForm: PropTypes.func.isRequired,
@@ -224,10 +226,10 @@ SectionAppearance.propTypes = {
 const mapStateToProps = (state) => ({
   darkReader: state.preferences.darkReader,
   formDarkReader: state.dialogWorkspacePreferences.form.darkReader,
-  formDarkReaderBrightness: state.dialogWorkspacePreferences.form.darkReaderBrightness,
-  formDarkReaderContrast: state.dialogWorkspacePreferences.form.darkReaderContrast,
-  formDarkReaderGrayscale: state.dialogWorkspacePreferences.form.darkReaderGrayscale,
-  formDarkReaderSepia: state.dialogWorkspacePreferences.form.darkReaderSepia,
+  formDarkReaderBrightness: state.dialogWorkspacePreferences.form.preferences.darkReaderBrightness,
+  formDarkReaderContrast: state.dialogWorkspacePreferences.form.preferences.darkReaderContrast,
+  formDarkReaderGrayscale: state.dialogWorkspacePreferences.form.preferences.darkReaderGrayscale,
+  formDarkReaderSepia: state.dialogWorkspacePreferences.form.preferences.darkReaderSepia,
 });
 
 const actionCreators = {
@@ -235,7 +237,7 @@ const actionCreators = {
 };
 
 export default connectComponent(
-  SectionAppearance,
+  SectionTheme,
   mapStateToProps,
   actionCreators,
   styles,

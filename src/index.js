@@ -26,7 +26,6 @@ const About = React.lazy(() => import('./components/about'));
 const AddWorkspace = React.lazy(() => import('./components/add-workspace'));
 const Auth = React.lazy(() => import('./components/auth'));
 const DisplayMedia = React.lazy(() => import('./components/display-media'));
-const EditWorkspace = React.lazy(() => import('./components/edit-workspace'));
 const GoToUrl = React.lazy(() => import('./components/go-to-url'));
 const LicenseRegistration = React.lazy(() => import('./components/license-registration'));
 const Notifications = React.lazy(() => import('./components/notifications'));
@@ -42,7 +41,6 @@ const App = () => {
     case 'add-workspace': return <AddWorkspace />;
     case 'auth': return <Auth />;
     case 'display-media': return <DisplayMedia />;
-    case 'edit-workspace': return <EditWorkspace />;
     case 'go-to-url': return <GoToUrl />;
     case 'license-registration': return <LicenseRegistration />;
     case 'notifications': return <Notifications />;
@@ -90,21 +88,9 @@ const runApp = () => {
           }
           return false;
         });
-        initialState.dialogWorkspacePreferences = { form: workspace.preferences || {} };
-
-        document.title = `Edit ${getWorkspaceFriendlyName()} "${getWorkspaceName(workspace)}" (advanced)`;
-      } else if (window.mode === 'edit-workspace') {
-        const editWorkspaceId = getStaticGlobal('editWorkspaceId');
-        const workspaceList = getWorkspacesAsList(workspaces);
-        const workspace = workspaces[editWorkspaceId];
-        workspaceList.some((item, index) => {
-          if (item.id === editWorkspaceId) {
-            workspace.order = index;
-            return true;
-          }
-          return false;
-        });
-        initialState.dialogEditWorkspace = { form: workspace };
+        initialState.dialogWorkspacePreferences = {
+          form: { ...workspace, preferences: workspace.preferences || {} },
+        };
 
         document.title = `Edit ${getWorkspaceFriendlyName()} "${getWorkspaceName(workspace)}"`;
       } else if (window.mode === 'open-url-with') {

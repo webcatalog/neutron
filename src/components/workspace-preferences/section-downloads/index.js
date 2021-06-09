@@ -17,10 +17,6 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import connectComponent from '../../../helpers/connect-component';
 import isMas from '../../../helpers/is-mas';
 
-import { open as openDialogCodeInjection } from '../../../state/dialog-code-injection/actions';
-import { open as openDialogCustomUserAgent } from '../../../state/dialog-custom-user-agent/actions';
-import { open as openDialogInternalUrls } from '../../../state/dialog-internal-urls/actions';
-import { open as openDialogRefreshInterval } from '../../../state/dialog-refresh-interval/actions';
 import { updateForm } from '../../../state/dialog-workspace-preferences/actions';
 
 const styles = (theme) => ({
@@ -59,7 +55,7 @@ const SectionDownloads = ({
             })
               .then(({ canceled, filePaths }) => {
                 if (!canceled && filePaths && filePaths.length > 0) {
-                  onUpdateForm({ downloadPath: filePaths[0] });
+                  onUpdateForm({ preferences: { downloadPath: filePaths[0] } });
                 }
               })
               .catch(console.log); // eslint-disable-line
@@ -82,7 +78,9 @@ const SectionDownloads = ({
       <Select
         value={formAskForDownloadPath != null ? formAskForDownloadPath : 'global'}
         onChange={(e) => onUpdateForm({
-          askForDownloadPath: e.target.value !== 'global' ? e.target.value : null,
+          preferences: {
+            askForDownloadPath: e.target.value !== 'global' ? e.target.value : null,
+          },
         })}
         variant="filled"
         disableUnderline
@@ -117,14 +115,11 @@ SectionDownloads.propTypes = {
 const mapStateToProps = (state) => ({
   askForDownloadPath: state.preferences.askForDownloadPath,
   downloadPath: state.preferences.downloadPath,
-  formDownloadPath: state.dialogWorkspacePreferences.form.downloadPath,
+  formAskForDownloadPath: state.dialogWorkspacePreferences.form.preferences.askForDownloadPath,
+  formDownloadPath: state.dialogWorkspacePreferences.form.preferences.downloadPath,
 });
 
 const actionCreators = {
-  openDialogCodeInjection,
-  openDialogCustomUserAgent,
-  openDialogInternalUrls,
-  openDialogRefreshInterval,
   updateForm,
 };
 

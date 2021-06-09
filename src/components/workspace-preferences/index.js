@@ -15,15 +15,21 @@ import Paper from '@material-ui/core/Paper';
 import WidgetsIcon from '@material-ui/icons/Widgets';
 import PaletteIcon from '@material-ui/icons/Palette';
 import PowerIcon from '@material-ui/icons/Power';
+import NotificationsIcon from '@material-ui/icons/Notifications';
 
 import connectComponent from '../../helpers/connect-component';
+import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
 
 import SnackbarTrigger from '../shared/snackbar-trigger';
 
-import SectionAdvanced from './section-advanced';
-import SectionAppearance from './section-appearance';
+import SectionAutoReload from './section-auto-reload';
+import SectionTheme from './section-theme';
 import SectionDevelopers from './section-developers';
 import SectionDownloads from './section-downloads';
+import SectionLinkHandling from './section-link-handling';
+import SectionAudioVideo from './section-audio-video';
+import SectionNotifications from './section-notifications';
+import SectionWorkspace from './section-workspace';
 
 const styles = (theme) => ({
   root: {
@@ -60,6 +66,7 @@ const Preferences = ({ classes }) => {
       text: 'General',
       Icon: WidgetsIcon,
       subSections: {
+        workspace: { text: getWorkspaceFriendlyName(), Component: SectionWorkspace },
         downloads: { text: 'Downloads', Component: SectionDownloads },
       },
     },
@@ -67,14 +74,23 @@ const Preferences = ({ classes }) => {
       text: 'Appearance',
       Icon: PaletteIcon,
       subSections: {
-        appearance: { text: 'Appearance', Component: SectionAppearance },
+        appearance: { text: 'Theme', Component: SectionTheme },
+      },
+    },
+    notifications: {
+      text: 'Notifications',
+      Icon: NotificationsIcon,
+      subSections: {
+        notifications: { text: 'Notifications', Component: SectionNotifications },
       },
     },
     advanced: {
       text: 'Advanced',
       Icon: PowerIcon,
       subSections: {
-        advanced: { text: 'Advanced', Component: SectionAdvanced },
+        linkHandling: { text: 'Link Handling', Component: SectionLinkHandling },
+        audioVideo: { text: 'Audio & Video', Component: SectionAudioVideo },
+        autoReload: { text: 'Auto Reload', Component: SectionAutoReload },
         developers: { text: 'Developers', Component: SectionDevelopers },
       },
     },
@@ -85,7 +101,7 @@ const Preferences = ({ classes }) => {
   return (
     <div className={classes.root}>
       <div className={classes.sidebar}>
-        <List dense>
+        <List dense disablePadding>
           {Object.keys(sections).map((sectionKey, i) => {
             const {
               Icon, text, hidden,

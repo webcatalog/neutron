@@ -50,7 +50,7 @@ import {
   requestSetWorkspace,
   requestSetWorkspaces,
   requestShowAddWorkspaceWindow,
-  requestShowEditWorkspaceWindow,
+  requestShowWorkspacePreferencesWindow,
   requestShowNotificationsWindow,
   requestShowPreferencesWindow,
   requestShowShareMenu,
@@ -255,7 +255,7 @@ const SortableItem = sortableElement(({ value }) => {
         const template = [
           {
             label: `Edit ${getWorkspaceFriendlyName()}`,
-            click: () => requestShowEditWorkspaceWindow(id),
+            click: () => requestShowWorkspacePreferencesWindow(id),
           },
           {
             label: `Remove ${getWorkspaceFriendlyName()}`,

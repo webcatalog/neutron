@@ -6,14 +6,28 @@ import cleanDeep from 'clean-deep';
 import { combineReducers } from 'redux';
 
 import {
-  UPDATE_WORKSPACE_PREFERENCES_DIALOG,
+  UPDATE_WORKSPACE_PREFERENCES_FORM,
+  UPDATE_WORKSPACE_PREFERENCES_DOWNLOADING_ICON,
 } from '../../constants/actions';
 
 const form = (state = {}, action) => {
   switch (action.type) {
-    case UPDATE_WORKSPACE_PREFERENCES_DIALOG: return cleanDeep({ ...state, ...action.changes });
+    case UPDATE_WORKSPACE_PREFERENCES_FORM: {
+      const changes = { ...action.changes };
+      if (changes.preferences) {
+        changes.preferences = cleanDeep({ ...state.preferences, ...action.changes.preferences });
+      }
+      return { ...state, ...changes };
+    }
     default: return state;
   }
 };
 
-export default combineReducers({ form });
+const downloadingIcon = (state = false, action) => {
+  switch (action.type) {
+    case UPDATE_WORKSPACE_PREFERENCES_DOWNLOADING_ICON: return action.downloadingIcon;
+    default: return state;
+  }
+};
+
+export default combineReducers({ form, downloadingIcon });

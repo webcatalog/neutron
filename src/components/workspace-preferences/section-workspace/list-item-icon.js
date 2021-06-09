@@ -8,83 +8,55 @@ import Color from 'color';
 
 import * as materialColors from '@material-ui/core/colors';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Badge from '@material-ui/core/Badge';
+import ListItem from '@material-ui/core/ListItem';
 
 import CheckIcon from '@material-ui/icons/Check';
 
-import connectComponent from '../../helpers/connect-component';
-import getAvatarText from '../../helpers/get-avatar-text';
-import getMailtoUrl from '../../helpers/get-mailto-url';
-import getWebcalUrl from '../../helpers/get-webcal-url';
-import getStaticGlobal from '../../helpers/get-static-global';
-import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
+import connectComponent from '../../../helpers/connect-component';
+import getAvatarText from '../../../helpers/get-avatar-text';
 
 import {
+  updateForm,
   getIconFromInternet,
   getIconFromAppSearch,
-  updateForm,
-  save,
-} from '../../state/dialog-edit-workspace/actions';
+} from '../../../state/dialog-workspace-preferences/actions';
 
-import {
-  requestShowWorkspacePreferencesWindow,
-} from '../../senders';
-
-import defaultWorkspaceImageLight from '../../images/default-workspace-image-light.png';
-import defaultWorkspaceImageDark from '../../images/default-workspace-image-dark.png';
+import defaultWorkspaceImageLight from '../../../images/default-workspace-image-light.png';
+import defaultWorkspaceImageDark from '../../../images/default-workspace-image-dark.png';
+import isUrl from '../../../helpers/is-url';
 
 const styles = (theme) => ({
-  root: {
-    background: theme.palette.background.paper,
-    height: '100%',
-    width: '100%',
-    paddingTop: theme.spacing(3),
-    paddingBottom: theme.spacing(3),
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
-    display: 'flex',
-    flexDirection: 'column',
-  },
   flexGrow: {
     flex: 1,
   },
   button: {
     float: 'right',
   },
-  textField: {
-    marginBottom: theme.spacing(3),
-  },
   avatarFlex: {
     display: 'flex',
+    flexDirection: 'column',
   },
   avatarLeft: {
     paddingTop: theme.spacing(1),
     paddingBottom: theme.spacing(1),
     paddingLeft: 0,
     paddingRight: theme.spacing(4),
+    display: 'flex',
+    flexDirection: 'row',
   },
   avatarRight: {
     flex: 1,
-    paddingTop: theme.spacing(1),
-    paddingBottom: theme.spacing(1),
-    paddingLeft: theme.spacing(1),
+    paddingTop: theme.spacing(2),
     paddingRight: 0,
   },
   avatarContainer: {
     position: 'relative',
-    '&:not(:first-child)': {
-      marginTop: theme.spacing(2),
-    },
+    marginRight: theme.spacing(2),
   },
   avatar: {
     fontFamily: theme.typography.fontFamily,
@@ -154,23 +126,15 @@ const styles = (theme) => ({
   },
 });
 
-const EditWorkspace = ({
+const ListItemIcon = ({
   accountInfo,
   backgroundColor,
   classes,
-  disableAudio,
-  disableNotifications,
   downloadingIcon,
-  homeUrl,
-  homeUrlError,
   id,
-  internetIcon,
-  isMailApp,
-  isCalendarApp,
   name,
   onGetIconFromInternet,
   onGetIconFromAppSearch,
-  onSave,
   onUpdateForm,
   order,
   picturePath,
@@ -178,19 +142,8 @@ const EditWorkspace = ({
   shouldUseDarkColors,
   transparentBackground,
 }) => {
-  const appJson = getStaticGlobal('appJson');
-
-  let namePlaceholder = 'Optional';
-  if (accountInfo) {
-    if (accountInfo.name && accountInfo.email) {
-      namePlaceholder = `${accountInfo.name} (${accountInfo.email})`;
-    } else if (accountInfo.name) {
-      namePlaceholder = accountInfo.name;
-    }
-  }
-
   let selectedIconType = 'text';
-  if (((picturePath || internetIcon) && preferredIconType === 'auto') || (preferredIconType === 'image')) {
+  if ((picturePath && preferredIconType === 'auto') || (preferredIconType === 'image')) {
     selectedIconType = 'image';
   } else if (accountInfo && accountInfo.picturePath && (preferredIconType === 'auto' || preferredIconType === 'accountInfo')) {
     selectedIconType = 'accountInfo';
@@ -261,47 +214,8 @@ const EditWorkspace = ({
   );
 
   return (
-    <div className={classes.root}>
+    <ListItem>
       <div className={classes.flexGrow}>
-        <TextField
-          label="Name"
-          placeholder={namePlaceholder}
-          fullWidth
-          margin="dense"
-          variant="outlined"
-          className={classes.textField}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          value={name}
-          onChange={(e) => onUpdateForm({ name: e.target.value })}
-        />
-        <TextField
-          label="Home URL"
-          error={Boolean(homeUrlError)}
-          placeholder="Optional"
-          fullWidth
-          margin="dense"
-          variant="outlined"
-          className={classes.textField}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          value={homeUrl}
-          onChange={(e) => onUpdateForm({ homeUrl: e.target.value })}
-          helperText={(() => {
-            if (!homeUrlError && isMailApp) {
-              return 'Email app detected.';
-            }
-            if (!homeUrlError && isCalendarApp) {
-              return 'Calendar app detected.';
-            }
-            if (!homeUrl && appJson.url) {
-              return `Defaults to ${appJson.url}.`;
-            }
-            return homeUrlError;
-          })()}
-        />
         <div className={classes.avatarFlex}>
           <div className={classes.avatarLeft}>
             {renderAvatar(
@@ -315,8 +229,8 @@ const EditWorkspace = ({
                 alt="Icon"
                 className={classes.avatarPicture}
                 src={(() => {
+                  if (isUrl(picturePath)) return picturePath;
                   if (picturePath) return `file://${picturePath}`;
-                  if (internetIcon) return internetIcon;
                   return shouldUseDarkColors
                     ? defaultWorkspaceImageLight : defaultWorkspaceImageDark;
                 })()}
@@ -433,7 +347,7 @@ const EditWorkspace = ({
                   variant="outlined"
                   size="small"
                   className={classes.buttonBot}
-                  disabled={Boolean(homeUrlError || downloadingIcon)}
+                  disabled={Boolean(downloadingIcon)}
                   onClick={() => onGetIconFromInternet(true)}
                 >
                   {downloadingIcon ? 'Downloading...' : 'Download Icon from URL'}
@@ -443,7 +357,7 @@ const EditWorkspace = ({
                   variant="outlined"
                   size="small"
                   className={classes.buttonBot}
-                  disabled={Boolean(homeUrlError || downloadingIcon)}
+                  disabled={Boolean(downloadingIcon)}
                   onClick={() => onGetIconFromAppSearch(true)}
                 >
                   {downloadingIcon ? 'Downloading...' : 'Download Icon from Our Database'}
@@ -456,7 +370,6 @@ const EditWorkspace = ({
                   disabled={Boolean(downloadingIcon)}
                   onClick={() => onUpdateForm({
                     picturePath: null,
-                    internetIcon: null,
                   })}
                 >
                   Reset to Default
@@ -476,69 +389,27 @@ const EditWorkspace = ({
             label="Use transparent background"
           />
         </FormGroup>
-        <List>
-          <ListItem disableGutters>
-            <ListItemText primary="Disable notifications" secondary={`Prevent ${getWorkspaceFriendlyName().toLowerCase()} from sending notifications.`} />
-            <ListItemSecondaryAction>
-              <Switch
-                edge="end"
-                color="primary"
-                checked={disableNotifications}
-                onChange={(e) => onUpdateForm({ disableNotifications: e.target.checked })}
-              />
-            </ListItemSecondaryAction>
-          </ListItem>
-          <ListItem disableGutters>
-            <ListItemText primary="Disable sound" secondary={`Prevent ${getWorkspaceFriendlyName().toLowerCase()} from playing audio.`} />
-            <ListItemSecondaryAction>
-              <Switch
-                edge="end"
-                color="primary"
-                checked={disableAudio}
-                onChange={(e) => onUpdateForm({ disableAudio: e.target.checked })}
-              />
-            </ListItemSecondaryAction>
-          </ListItem>
-        </List>
       </div>
-      <div>
-        <Button variant="contained" disableElevation onClick={() => requestShowWorkspacePreferencesWindow(id)}>
-          Show Advanced Settings
-        </Button>
-        <Button color="primary" variant="contained" className={classes.button} onClick={onSave}>
-          Save
-        </Button>
-      </div>
-    </div>
+    </ListItem>
   );
 };
 
-EditWorkspace.defaultProps = {
+ListItemIcon.defaultProps = {
   accountInfo: null,
   backgroundColor: null,
-  homeUrlError: null,
-  internetIcon: null,
   picturePath: null,
   preferredIconType: 'auto',
 };
 
-EditWorkspace.propTypes = {
+ListItemIcon.propTypes = {
   accountInfo: PropTypes.object,
   backgroundColor: PropTypes.string,
   classes: PropTypes.object.isRequired,
-  disableAudio: PropTypes.bool.isRequired,
-  disableNotifications: PropTypes.bool.isRequired,
   downloadingIcon: PropTypes.bool.isRequired,
-  homeUrl: PropTypes.string.isRequired,
-  homeUrlError: PropTypes.string,
   id: PropTypes.string.isRequired,
-  internetIcon: PropTypes.string,
-  isMailApp: PropTypes.bool.isRequired,
-  isCalendarApp: PropTypes.bool.isRequired,
   name: PropTypes.string.isRequired,
   onGetIconFromInternet: PropTypes.func.isRequired,
   onGetIconFromAppSearch: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
   onUpdateForm: PropTypes.func.isRequired,
   order: PropTypes.number.isRequired,
   picturePath: PropTypes.string,
@@ -548,34 +419,26 @@ EditWorkspace.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  accountInfo: state.dialogEditWorkspace.form.accountInfo,
-  backgroundColor: state.dialogEditWorkspace.form.backgroundColor,
-  disableAudio: Boolean(state.dialogEditWorkspace.form.disableAudio),
-  disableNotifications: Boolean(state.dialogEditWorkspace.form.disableNotifications),
-  downloadingIcon: state.dialogEditWorkspace.downloadingIcon,
-  homeUrl: state.dialogEditWorkspace.form.homeUrl || '',
-  homeUrlError: state.dialogEditWorkspace.form.homeUrlError,
-  id: state.dialogEditWorkspace.form.id || '',
-  internetIcon: state.dialogEditWorkspace.form.internetIcon,
-  isMailApp: Boolean(getMailtoUrl(state.dialogEditWorkspace.form.homeUrl)),
-  isCalendarApp: Boolean(getWebcalUrl(state.dialogEditWorkspace.form.homeUrl)),
-  name: state.dialogEditWorkspace.form.name || '',
-  order: state.dialogEditWorkspace.form.order || 0,
-  picturePath: state.dialogEditWorkspace.form.picturePath,
-  preferredIconType: state.dialogEditWorkspace.form.preferredIconType,
+  accountInfo: state.dialogWorkspacePreferences.form.accountInfo,
+  backgroundColor: state.dialogWorkspacePreferences.form.backgroundColor,
+  downloadingIcon: state.dialogWorkspacePreferences.downloadingIcon,
+  id: state.dialogWorkspacePreferences.form.id || '',
+  name: state.dialogWorkspacePreferences.form.name || '',
+  order: state.dialogWorkspacePreferences.form.order || 0,
+  picturePath: state.dialogWorkspacePreferences.form.picturePath,
+  preferredIconType: state.dialogWorkspacePreferences.form.preferredIconType,
   shouldUseDarkColors: state.general.shouldUseDarkColors,
-  transparentBackground: Boolean(state.dialogEditWorkspace.form.transparentBackground),
+  transparentBackground: Boolean(state.dialogWorkspacePreferences.form.transparentBackground),
 });
 
 const actionCreators = {
   getIconFromInternet,
   getIconFromAppSearch,
   updateForm,
-  save,
 };
 
 export default connectComponent(
-  EditWorkspace,
+  ListItemIcon,
   mapStateToProps,
   actionCreators,
   styles,
