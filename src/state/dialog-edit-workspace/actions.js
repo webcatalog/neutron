@@ -173,7 +173,6 @@ export const save = () => (dispatch, getState) => {
       // prefs
       disableAudio: Boolean(form.disableAudio),
       disableNotifications: Boolean(form.disableNotifications),
-      hibernateWhenUnused: Boolean(form.hibernateWhenUnused),
       transparentBackground: Boolean(form.transparentBackground),
       preferredIconType: form.preferredIconType,
       backgroundColor: form.backgroundColor,

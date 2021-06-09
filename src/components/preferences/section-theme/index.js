@@ -17,27 +17,13 @@ import Slider from '@material-ui/core/Slider';
 import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
 
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-
 import connectComponent from '../../../helpers/connect-component';
-import getWorkspaceFriendlyName from '../../../helpers/get-workspace-friendly-name';
 
 import {
-  enqueueRequestRestartSnackbar,
-  requestRealignActiveWorkspace,
   requestSetPreference,
 } from '../../../senders';
 
-import { open as openDialogCustomizeFonts } from '../../../state/dialog-customize-fonts/actions';
-
-import DialogCustomizeFonts from './dialog-customize-fonts';
-
 const styles = (theme) => ({
-  paper: {
-    marginTop: theme.spacing(0.5),
-    marginBottom: theme.spacing(3),
-    border: theme.palette.type === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)',
-  },
   sliderContainer: {
     paddingLeft: theme.spacing(5),
     paddingRight: theme.spacing(5),
@@ -65,23 +51,14 @@ const styles = (theme) => ({
   },
 });
 
-const SectionAppearance = ({
-  attachToMenubar,
+const SectionTheme = ({
   classes,
   darkReader,
   darkReaderBrightness,
   darkReaderContrast,
   darkReaderGrayscale,
   darkReaderSepia,
-  defaultFontSize,
-  navigationBar,
-  onOpenDialogCustomizeFonts,
-  sidebar,
-  sidebarSize,
-  sidebarTips,
   themeSource,
-  titleBar,
-  windowButtons,
 }) => (
   <>
     <List disablePadding dense>
@@ -103,6 +80,7 @@ const SectionAppearance = ({
           <MenuItem dense value="dark">Dark</MenuItem>
         </Select>
       </ListItem>
+      <Divider />
       <ListItem>
         <ListItemText
           primary="Dark Reader"
@@ -243,254 +221,32 @@ const SectionAppearance = ({
           </Grid>
         </ListItemText>
       </ListItem>
-      <Divider />
-      <ListItem>
-        <ListItemText
-          primary="Show sidebar"
-          secondary={`Sidebar lets you switch easily between ${getWorkspaceFriendlyName(true).toLowerCase()}.`}
-        />
-        <ListItemSecondaryAction>
-          <Switch
-            edge="end"
-            color="primary"
-            checked={sidebar}
-            onChange={(e) => {
-              requestSetPreference('sidebar', e.target.checked);
-              requestRealignActiveWorkspace();
-            }}
-          />
-        </ListItemSecondaryAction>
-      </ListItem>
-      <ListItem>
-        <ListItemText
-          primary="Sidebar size"
-        />
-        <Select
-          value={sidebarSize}
-          onChange={(e) => {
-            requestSetPreference('sidebarSize', e.target.value);
-            requestRealignActiveWorkspace();
-          }}
-          variant="filled"
-          disableUnderline
-          margin="dense"
-          classes={{
-            root: classes.select,
-          }}
-          className={classes.selectRoot}
-        >
-          <MenuItem
-            value="compact"
-            dense
-          >
-            Compact
-          </MenuItem>
-          <MenuItem
-            value="expanded"
-            dense
-          >
-            Expanded
-          </MenuItem>
-        </Select>
-      </ListItem>
-      <ListItem>
-        <ListItemText
-          primary="Show tips on sidebar"
-        />
-        <Select
-          value={sidebarSize === 'expanded' ? 'name+shortcut' : sidebarTips}
-          onChange={(e) => requestSetPreference('sidebarTips', e.target.value)}
-          variant="filled"
-          disableUnderline
-          margin="dense"
-          classes={{
-            root: classes.select,
-          }}
-          className={classes.selectRoot}
-          disabled={sidebarSize === 'expanded'}
-        >
-          {sidebarSize === 'expanded' && (
-            <MenuItem
-              value="name+shortcut"
-              dense
-            >
-              {`${getWorkspaceFriendlyName()} names & keyboard shortcuts`}
-            </MenuItem>
-          )}
-          <MenuItem
-            value="shortcut"
-            dense
-          >
-            {`${getWorkspaceFriendlyName()} keyboard shortcuts`}
-          </MenuItem>
-          <MenuItem
-            value="name"
-            dense
-          >
-            {`${getWorkspaceFriendlyName()} names`}
-          </MenuItem>
-          <MenuItem
-            value="none"
-            dense
-          >
-            None
-          </MenuItem>
-        </Select>
-      </ListItem>
-      <Divider />
-      <ListItem>
-        <ListItemText
-          primary="Show navigation bar"
-          secondary="Navigation bar lets you go back, forward, home and reload."
-        />
-        <ListItemSecondaryAction>
-          <Switch
-            edge="end"
-            color="primary"
-            // must show sidebar or navigation bar on Linux
-            // if not, as user can't right-click on menu bar icon
-            // they can't access preferences or notifications
-            checked={(window.process.platform === 'linux' && attachToMenubar && !sidebar) || navigationBar}
-            disabled={(window.process.platform === 'linux' && attachToMenubar && !sidebar)}
-            onChange={(e) => {
-              requestSetPreference('navigationBar', e.target.checked);
-              requestRealignActiveWorkspace();
-            }}
-          />
-        </ListItemSecondaryAction>
-      </ListItem>
-      {window.process.platform === 'darwin' && (
-        <>
-          <Divider />
-          <ListItem>
-            <ListItemText
-              primary="Show title bar"
-              secondary="Title bar shows you the title of the current page."
-            />
-            <ListItemSecondaryAction>
-              <Switch
-                edge="end"
-                color="primary"
-                checked={titleBar}
-                onChange={(e) => {
-                  requestSetPreference('titleBar', e.target.checked);
-                  requestRealignActiveWorkspace();
-                }}
-              />
-            </ListItemSecondaryAction>
-          </ListItem>
-        </>
-      )}
-      {window.process.platform === 'darwin' && (
-        <>
-          <Divider />
-          <ListItem>
-            <ListItemText
-              primary="Show window buttons"
-              secondary={'Show "traffic light" (red/orange/green) buttons.'}
-            />
-            <ListItemSecondaryAction>
-              <Switch
-                edge="end"
-                color="primary"
-                checked={windowButtons}
-                onChange={(e) => {
-                  requestSetPreference('windowButtons', e.target.checked);
-                  enqueueRequestRestartSnackbar();
-                }}
-              />
-            </ListItemSecondaryAction>
-          </ListItem>
-        </>
-      )}
-      <Divider />
-      <ListItem>
-        <ListItemText primary="Font size" />
-        <Select
-          value={defaultFontSize}
-          onChange={(e) => {
-            requestSetPreference('defaultFontSize', e.target.value);
-            enqueueRequestRestartSnackbar();
-          }}
-          variant="filled"
-          disableUnderline
-          margin="dense"
-          classes={{
-            root: classes.select,
-          }}
-          className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
-        >
-          {[
-            { value: 9, label: 'Very Small' },
-            { value: 12, label: 'Small' },
-            { value: 16, label: 'Medium (Recommended)' },
-            { value: 20, label: 'Large' },
-            { value: 24, label: 'Very Large' },
-          ].map((item) => (
-            <MenuItem key={item.value} dense value={item.value}>{item.label}</MenuItem>
-          ))}
-          {[9, 12, 16, 20, 24].indexOf(defaultFontSize) < 0 && (
-            <MenuItem
-              value={defaultFontSize}
-              dense
-            >
-              Custom
-            </MenuItem>
-          )}
-        </Select>
-      </ListItem>
-      <ListItem button onClick={onOpenDialogCustomizeFonts}>
-        <ListItemText primary="Advanced font size settings" />
-        <ChevronRightIcon color="action" />
-      </ListItem>
     </List>
-    <DialogCustomizeFonts />
   </>
 );
 
-SectionAppearance.propTypes = {
-  attachToMenubar: PropTypes.bool.isRequired,
+SectionTheme.propTypes = {
   classes: PropTypes.object.isRequired,
   darkReader: PropTypes.bool.isRequired,
   darkReaderBrightness: PropTypes.number.isRequired,
   darkReaderContrast: PropTypes.number.isRequired,
   darkReaderGrayscale: PropTypes.number.isRequired,
   darkReaderSepia: PropTypes.number.isRequired,
-  defaultFontSize: PropTypes.number.isRequired,
-  navigationBar: PropTypes.bool.isRequired,
-  onOpenDialogCustomizeFonts: PropTypes.func.isRequired,
-  sidebar: PropTypes.bool.isRequired,
-  sidebarSize: PropTypes.oneOf(['compact', 'expanded']).isRequired,
-  sidebarTips: PropTypes.oneOf(['shortcut', 'name', 'none']).isRequired,
   themeSource: PropTypes.string.isRequired,
-  titleBar: PropTypes.bool.isRequired,
-  windowButtons: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  attachToMenubar: state.preferences.attachToMenubar,
   darkReader: state.preferences.darkReader,
   darkReaderBrightness: state.preferences.darkReaderBrightness,
   darkReaderContrast: state.preferences.darkReaderContrast,
   darkReaderGrayscale: state.preferences.darkReaderGrayscale,
   darkReaderSepia: state.preferences.darkReaderSepia,
-  defaultFontSize: state.preferences.defaultFontSize,
-  navigationBar: state.preferences.navigationBar,
-  sidebar: state.preferences.sidebar,
-  sidebarSize: state.preferences.sidebarSize,
-  sidebarTips: state.preferences.sidebarTips,
   themeSource: state.preferences.themeSource,
-  titleBar: state.preferences.titleBar,
-  windowButtons: state.preferences.windowButtons,
 });
 
-const actionCreators = {
-  openDialogCustomizeFonts,
-};
-
 export default connectComponent(
-  SectionAppearance,
+  SectionTheme,
   mapStateToProps,
-  actionCreators,
+  null,
   styles,
 );

@@ -15,10 +15,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 import connectComponent from '../../../helpers/connect-component';
 import checkLicense from '../../../helpers/check-license';
-import isMas from '../../../helpers/is-mas';
-import isStandalone from '../../../helpers/is-standalone';
 import getStaticGlobal from '../../../helpers/get-static-global';
-import getUtmSource from '../../../helpers/get-utm-source';
 
 import {
   enqueueRequestRestartSnackbar,
@@ -26,10 +23,6 @@ import {
   requestOpenInBrowser,
   requestSetPreference,
 } from '../../../senders';
-
-import { open as openDialogAppLock } from '../../../state/dialog-app-lock/actions';
-
-import DialogAppLock from './dialog-app-lock';
 
 const styles = () => ({
   link: {
@@ -45,43 +38,20 @@ const styles = () => ({
   },
 });
 
-const SectionPrivacySecurity = ({
+const SectionBrowsing = ({
   blockAds,
   classes,
   ignoreCertificateErrors,
-  onOpenDialogAppLock,
   rememberLastPageVisited,
-  sentry,
   shareWorkspaceBrowsingData,
-  telemetry,
 }) => {
   const appJson = getStaticGlobal('appJson');
-  const utmSource = getUtmSource();
-  const canPromptTouchId = window.process.platform === 'darwin'
-    && window.remote.systemPreferences.canPromptTouchID();
 
   return (
     <>
       <List disablePadding dense>
         <ListItem button onClick={requestClearBrowsingData}>
           <ListItemText primary="Clear browsing data" secondary="Clear cookies, cache, and more." />
-          <ChevronRightIcon color="action" />
-        </ListItem>
-        <Divider />
-        <ListItem
-          button
-          onClick={() => {
-            if (!checkLicense()) {
-              return;
-            }
-
-            onOpenDialogAppLock();
-          }}
-        >
-          <ListItemText
-            primary="App Lock"
-            secondary={`Protect this app from unauthorized access with password${canPromptTouchId ? ' or Touch ID' : ''}.`}
-          />
           <ChevronRightIcon color="action" />
         </ListItem>
         <Divider />
@@ -100,21 +70,6 @@ const SectionPrivacySecurity = ({
                 }
 
                 requestSetPreference('blockAds', e.target.checked);
-                enqueueRequestRestartSnackbar();
-              }}
-            />
-          </ListItemSecondaryAction>
-        </ListItem>
-        <Divider />
-        <ListItem>
-          <ListItemText primary="Remember last page visited" />
-          <ListItemSecondaryAction>
-            <Switch
-              edge="end"
-              color="primary"
-              checked={rememberLastPageVisited}
-              onChange={(e) => {
-                requestSetPreference('rememberLastPageVisited', e.target.checked);
                 enqueueRequestRestartSnackbar();
               }}
             />
@@ -139,6 +94,21 @@ const SectionPrivacySecurity = ({
             </ListItem>
           </>
         )}
+        <Divider />
+        <ListItem>
+          <ListItemText primary="Remember last page visited" />
+          <ListItemSecondaryAction>
+            <Switch
+              edge="end"
+              color="primary"
+              checked={rememberLastPageVisited}
+              onChange={(e) => {
+                requestSetPreference('rememberLastPageVisited', e.target.checked);
+                enqueueRequestRestartSnackbar();
+              }}
+            />
+          </ListItemSecondaryAction>
+        </ListItem>
         <Divider />
         <ListItem>
           <ListItemText
@@ -174,83 +144,29 @@ const SectionPrivacySecurity = ({
             />
           </ListItemSecondaryAction>
         </ListItem>
-        {(isMas() || isStandalone()) && (
-          <>
-            <Divider />
-            <ListItem>
-              <ListItemText
-                primary="Allow the app to send anonymous crash reports"
-                secondary="Help us quickly diagnose and fix bugs in the app."
-              />
-              <ListItemSecondaryAction>
-                <Switch
-                  edge="end"
-                  color="primary"
-                  checked={sentry}
-                  onChange={(e) => {
-                    requestSetPreference('sentry', e.target.checked);
-                    enqueueRequestRestartSnackbar();
-                  }}
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListItemText
-                primary="Allow the app to send anonymous usage data"
-                secondary="Help us understand how to improve the product."
-              />
-              <ListItemSecondaryAction>
-                <Switch
-                  edge="end"
-                  color="primary"
-                  checked={telemetry}
-                  onChange={(e) => {
-                    requestSetPreference('telemetry', e.target.checked);
-                  }}
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
-          </>
-        )}
-        <Divider />
-        <ListItem button onClick={() => requestOpenInBrowser(`https://webcatalog.app/privacy?utm_source=${utmSource}`)}>
-          <ListItemText primary="Privacy Policy" />
-          <ChevronRightIcon color="action" />
-        </ListItem>
       </List>
-      <DialogAppLock />
     </>
   );
 };
 
-SectionPrivacySecurity.propTypes = {
+SectionBrowsing.propTypes = {
   blockAds: PropTypes.bool.isRequired,
   classes: PropTypes.object.isRequired,
   ignoreCertificateErrors: PropTypes.bool.isRequired,
-  onOpenDialogAppLock: PropTypes.func.isRequired,
   rememberLastPageVisited: PropTypes.bool.isRequired,
-  sentry: PropTypes.bool.isRequired,
   shareWorkspaceBrowsingData: PropTypes.bool.isRequired,
-  telemetry: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   blockAds: state.preferences.blockAds,
   ignoreCertificateErrors: state.preferences.ignoreCertificateErrors,
   rememberLastPageVisited: state.preferences.rememberLastPageVisited,
-  sentry: state.preferences.sentry,
   shareWorkspaceBrowsingData: state.preferences.shareWorkspaceBrowsingData,
-  telemetry: state.preferences.telemetry,
 });
 
-const actionCreators = {
-  openDialogAppLock,
-};
-
 export default connectComponent(
-  SectionPrivacySecurity,
+  SectionBrowsing,
   mapStateToProps,
-  actionCreators,
+  null,
   styles,
 );

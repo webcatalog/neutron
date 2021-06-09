@@ -119,7 +119,7 @@ const setActiveWorkspaceView = (id) => {
   setActiveView(mainWindow.get(), id);
 
   // hibernate old view
-  if (oldActiveWorkspace.hibernateWhenUnused && oldActiveWorkspace.id !== id) {
+  if (global.hibernateWhenUnused && oldActiveWorkspace.id !== id) {
     hibernateWorkspaceView(oldActiveWorkspace.id);
   }
 };

@@ -23,6 +23,8 @@ import webcatalogIconPng from '../../../images/products/webcatalog-mac-icon-128@
 import translatiumIconPng from '../../../images/products/translatium-mac-icon-128@2x.png';
 import cloveryIconPng from '../../../images/products/clovery-mac-icon-128@2x.png';
 import singleboxIconPng from '../../../images/products/singlebox-mac-icon-128@2x.png';
+import chromelessIconPng from '../../../images/products/chromeless-mac-icon-128@2x.png';
+import switchbarIconPng from '../../../images/products/switchbar-mac-icon-128@2x.png';
 
 const styles = (theme) => ({
   listItemPromotion: {
@@ -118,10 +120,7 @@ const SectionMoreApps = ({
       <ListItem
         button
         onClick={() => {
-          let url = `https://singlebox.app?utm_source=${utmSource}`;
-          if (isMas()) {
-            url = 'macappstore://apps.apple.com/us/app/singlebox-all-in-one-messenger/id1551183766';
-          }
+          const url = `https://translatium.app?utm_source=${utmSource}`;
           requestOpenInBrowser(url);
         }}
         className={classes.listItemPromotion}
@@ -143,6 +142,36 @@ const SectionMoreApps = ({
         </div>
         <ChevronRightIcon color="action" />
       </ListItem>
+      {!isMas() && (
+        <>
+          <Divider />
+          <ListItem
+            button
+            onClick={() => {
+              const url = `https://switchbar.app?utm_source=${utmSource}`;
+              requestOpenInBrowser(url);
+            }}
+            className={classes.listItemPromotion}
+          >
+            <div className={classes.promotionBlock}>
+              <div className={classes.promotionLeft}>
+                <img src={switchbarIconPng} alt="Switchbar" className={classes.appIcon} />
+              </div>
+              <div className={classes.promotionRight}>
+                <div>
+                  <Typography variant="body1" className={classes.appTitle}>
+                    Switchbar
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    Choose Where to Open Links
+                  </Typography>
+                </div>
+              </div>
+            </div>
+            <ChevronRightIcon color="action" />
+          </ListItem>
+        </>
+      )}
       <Divider />
       <ListItem
         button
@@ -172,6 +201,36 @@ const SectionMoreApps = ({
         </div>
         <ChevronRightIcon color="action" />
       </ListItem>
+      {!isMas() && (
+        <>
+          <Divider />
+          <ListItem
+            button
+            onClick={() => {
+              const url = `https://chromeless.app?utm_source=${utmSource}`;
+              requestOpenInBrowser(url);
+            }}
+            className={classes.listItemPromotion}
+          >
+            <div className={classes.promotionBlock}>
+              <div className={classes.promotionLeft}>
+                <img src={chromelessIconPng} alt="Chromeless" className={classes.appIcon} />
+              </div>
+              <div className={classes.promotionRight}>
+                <div>
+                  <Typography variant="body1" className={classes.appTitle}>
+                    Chromeless
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    Create Chromium-based Apps
+                  </Typography>
+                </div>
+              </div>
+            </div>
+            <ChevronRightIcon color="action" />
+          </ListItem>
+        </>
+      )}
     </List>
   );
 };
