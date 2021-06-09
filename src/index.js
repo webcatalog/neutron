@@ -92,7 +92,7 @@ const runApp = () => {
           form: { ...workspace, preferences: workspace.preferences || {} },
         };
 
-        document.title = `Edit ${getWorkspaceFriendlyName()} "${getWorkspaceName(workspace)}" (advanced)`;
+        document.title = `Edit ${getWorkspaceFriendlyName()} "${getWorkspaceName(workspace)}"`;
       } else if (window.mode === 'open-url-with') {
         document.title = 'Open Link With';
       } else if (window.mode === 'notifications') {
