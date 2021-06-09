@@ -106,12 +106,9 @@ export const getIconFromInternet = () => (dispatch, getState) => {
       if (form.homeUrl === homeUrl) {
         const changes = {
           preferredIconType: 'image',
-          internetIcon: iconUrl || form.internetIcon,
+          picturePath: iconUrl || form.picturePath,
         };
-        dispatch(({
-          type: UPDATE_WORKSPACE_PREFERENCES_FORM,
-          changes,
-        }));
+        dispatch(updateForm(changes));
         dispatch({
           type: UPDATE_WORKSPACE_PREFERENCES_DOWNLOADING_ICON,
           downloadingIcon: false,
@@ -146,12 +143,9 @@ export const getIconFromAppSearch = () => (dispatch, getState) => {
       if (form.homeUrl === homeUrl) {
         const changes = {
           preferredIconType: 'image',
-          internetIcon: iconUrl || form.internetIcon,
+          picturePath: iconUrl || form.picturePath,
         };
-        dispatch(({
-          type: UPDATE_WORKSPACE_PREFERENCES_FORM,
-          changes,
-        }));
+        dispatch(updateForm(changes));
         dispatch({
           type: UPDATE_WORKSPACE_PREFERENCES_DOWNLOADING_ICON,
           downloadingIcon: false,
