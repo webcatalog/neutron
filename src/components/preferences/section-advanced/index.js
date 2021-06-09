@@ -18,7 +18,6 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 import connectComponent from '../../../helpers/connect-component';
 import roundTime from '../../../helpers/round-time';
-import getWorkspaceFriendlyName from '../../../helpers/get-workspace-friendly-name';
 import getUtmSource from '../../../helpers/get-utm-source';
 
 import {
@@ -74,7 +73,6 @@ const SectionAdvanced = ({
   autoRefreshInterval,
   autoRefreshOnlyWhenInactive,
   classes,
-  hibernateUnusedWorkspacesAtLaunch,
   internalUrlRule,
   onOpenDialogInternalUrls,
   onOpenDialogRefreshInterval,
@@ -89,23 +87,6 @@ const SectionAdvanced = ({
           secondary={internalUrlRule ? `/^${internalUrlRule}$/i` : 'Not set'}
         />
         <ChevronRightIcon color="action" />
-      </ListItem>
-      <Divider />
-      <ListItem>
-        <ListItemText
-          primary={`Hibernate unused ${getWorkspaceFriendlyName(true).toLowerCase()} at app launch`}
-          secondary={`Hibernate all ${getWorkspaceFriendlyName(true).toLowerCase()} at launch, except the last active ${getWorkspaceFriendlyName().toLowerCase()}.`}
-        />
-        <ListItemSecondaryAction>
-          <Switch
-            edge="end"
-            color="primary"
-            checked={hibernateUnusedWorkspacesAtLaunch}
-            onChange={(e) => {
-              requestSetPreference('hibernateUnusedWorkspacesAtLaunch', e.target.checked);
-            }}
-          />
-        </ListItemSecondaryAction>
       </ListItem>
       {window.process.platform === 'darwin' && (
         <>
@@ -287,7 +268,6 @@ SectionAdvanced.propTypes = {
   autoRefreshInterval: PropTypes.number.isRequired,
   autoRefreshOnlyWhenInactive: PropTypes.bool.isRequired,
   classes: PropTypes.object.isRequired,
-  hibernateUnusedWorkspacesAtLaunch: PropTypes.bool.isRequired,
   internalUrlRule: PropTypes.string,
   onOpenDialogInternalUrls: PropTypes.func.isRequired,
   onOpenDialogRefreshInterval: PropTypes.func.isRequired,
@@ -301,7 +281,6 @@ const mapStateToProps = (state) => ({
   autoRefreshInterval: state.preferences.autoRefreshInterval,
   autoRefreshOnlyWhenInactive: state.preferences.autoRefreshOnlyWhenInactive,
   defaultFontSize: state.preferences.defaultFontSize,
-  hibernateUnusedWorkspacesAtLaunch: state.preferences.hibernateUnusedWorkspacesAtLaunch,
   internalUrlRule: state.preferences.internalUrlRule,
   swipeToNavigate: state.preferences.swipeToNavigate,
   useHardwareAcceleration: state.preferences.useHardwareAcceleration,

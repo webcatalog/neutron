@@ -9,7 +9,6 @@ import Color from 'color';
 import * as materialColors from '@material-ui/core/colors';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -162,7 +161,6 @@ const EditWorkspace = ({
   disableAudio,
   disableNotifications,
   downloadingIcon,
-  hibernateWhenUnused,
   homeUrl,
   homeUrlError,
   id,
@@ -479,18 +477,6 @@ const EditWorkspace = ({
           />
         </FormGroup>
         <List>
-          <Divider />
-          <ListItem disableGutters>
-            <ListItemText primary="Hibernate when not used" secondary="Save CPU usage, memory and battery." />
-            <ListItemSecondaryAction>
-              <Switch
-                edge="end"
-                color="primary"
-                checked={hibernateWhenUnused}
-                onChange={(e) => onUpdateForm({ hibernateWhenUnused: e.target.checked })}
-              />
-            </ListItemSecondaryAction>
-          </ListItem>
           <ListItem disableGutters>
             <ListItemText primary="Disable notifications" secondary={`Prevent ${getWorkspaceFriendlyName().toLowerCase()} from sending notifications.`} />
             <ListItemSecondaryAction>
@@ -543,7 +529,6 @@ EditWorkspace.propTypes = {
   disableAudio: PropTypes.bool.isRequired,
   disableNotifications: PropTypes.bool.isRequired,
   downloadingIcon: PropTypes.bool.isRequired,
-  hibernateWhenUnused: PropTypes.bool.isRequired,
   homeUrl: PropTypes.string.isRequired,
   homeUrlError: PropTypes.string,
   id: PropTypes.string.isRequired,
@@ -568,7 +553,6 @@ const mapStateToProps = (state) => ({
   disableAudio: Boolean(state.dialogEditWorkspace.form.disableAudio),
   disableNotifications: Boolean(state.dialogEditWorkspace.form.disableNotifications),
   downloadingIcon: state.dialogEditWorkspace.downloadingIcon,
-  hibernateWhenUnused: Boolean(state.dialogEditWorkspace.form.hibernateWhenUnused),
   homeUrl: state.dialogEditWorkspace.form.homeUrl || '',
   homeUrlError: state.dialogEditWorkspace.form.homeUrlError,
   id: state.dialogEditWorkspace.form.id || '',
