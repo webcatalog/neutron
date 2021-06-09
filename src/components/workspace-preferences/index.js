@@ -18,6 +18,7 @@ import PowerIcon from '@material-ui/icons/Power';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 
 import connectComponent from '../../helpers/connect-component';
+import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
 
 import SnackbarTrigger from '../shared/snackbar-trigger';
 
@@ -28,6 +29,7 @@ import SectionDownloads from './section-downloads';
 import SectionLinkHandling from './section-link-handling';
 import SectionAudioVideo from './section-audio-video';
 import SectionNotifications from './section-notifications';
+import SectionWorkspace from './section-workspace';
 
 const styles = (theme) => ({
   root: {
@@ -64,6 +66,7 @@ const Preferences = ({ classes }) => {
       text: 'General',
       Icon: WidgetsIcon,
       subSections: {
+        workspace: { text: getWorkspaceFriendlyName(), Component: SectionWorkspace },
         downloads: { text: 'Downloads', Component: SectionDownloads },
       },
     },
