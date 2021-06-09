@@ -26,7 +26,7 @@ const workspaces = (state = {}, action) => {
 const activeWorkspaceId = (state = null, action) => {
   switch (action.type) {
     case SET_WORKSPACES: {
-      return Object.values(state.workspaces)
+      return Object.values(action.workspaces)
         .find((workspace) => workspace.active).id;
     }
     case SET_WORKSPACE: {
