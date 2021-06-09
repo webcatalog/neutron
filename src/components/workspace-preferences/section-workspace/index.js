@@ -15,11 +15,15 @@ import connectComponent from '../../../helpers/connect-component';
 
 import { updateForm } from '../../../state/dialog-workspace-preferences/actions';
 
+import ListItemIcon from './list-item-icon';
+
 const SectionWorkspace = ({
   name,
   homeUrl,
 }) => (
   <List disablePadding dense>
+    <ListItemIcon />
+    <Divider />
     <ListItem
       button
       onClick={() => {}}

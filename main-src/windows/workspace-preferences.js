@@ -30,6 +30,7 @@ const create = (workspaceId) => {
       enableRemoteModule: true,
       contextIsolation: false,
       nodeIntegration: true,
+      webSecurity: process.env.NODE_ENV === 'production',
       preload: path.join(__dirname, 'workspace-preferences-preload.js'),
     },
   });
