@@ -19,9 +19,12 @@ export const updateForm = (changes) => (dispatch, getState) => {
   });
 
   const workspaceId = getStaticGlobal('workspacePreferencesWorkspaceId');
-  const { preferences } = getState().dialogWorkspacePreferences.form;
+  const { preferences, disableAudio } = getState().dialogWorkspacePreferences.form;
 
-  requestSetWorkspace(workspaceId, { preferences });
+  requestSetWorkspace(workspaceId, {
+    disableAudio: disableAudio === true ? true : undefined,
+    preferences,
+  });
 
   const shouldReloadDarkReader = Object.keys(changes).find((key) => key.startsWith('darkReader'));
   if (shouldReloadDarkReader) {

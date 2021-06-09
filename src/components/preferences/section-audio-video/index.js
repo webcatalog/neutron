@@ -10,6 +10,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import Divider from '@material-ui/core/Divider';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import Switch from '@material-ui/core/Switch';
 
 import connectComponent from '../../../helpers/connect-component';
 
@@ -35,6 +37,7 @@ const SectionAudioVideo = ({
   defaultAudioInputDeviceLabel,
   defaultAudioOutputDeviceLabel,
   defaultVideoInputDeviceLabel,
+  muteApp,
 }) => {
   const [devices, setDevices] = useState([]);
   useEffect(() => {
@@ -49,6 +52,20 @@ const SectionAudioVideo = ({
   return (
     <>
       <List disablePadding dense>
+        <ListItem>
+          <ListItemText primary="Prevent the app from playing sounds" />
+          <ListItemSecondaryAction>
+            <Switch
+              edge="end"
+              color="primary"
+              checked={muteApp}
+              onChange={(e) => {
+                requestSetPreference('muteApp', e.target.checked);
+              }}
+            />
+          </ListItemSecondaryAction>
+        </ListItem>
+        <Divider />
         <ListItem>
           <ListItemText
             primary="Preferred audio input device"
@@ -166,12 +183,14 @@ SectionAudioVideo.propTypes = {
   defaultAudioInputDeviceLabel: PropTypes.string,
   defaultAudioOutputDeviceLabel: PropTypes.string,
   defaultVideoInputDeviceLabel: PropTypes.string,
+  muteApp: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   defaultAudioInputDeviceLabel: state.preferences.defaultAudioInputDeviceLabel,
   defaultAudioOutputDeviceLabel: state.preferences.defaultAudioOutputDeviceLabel,
   defaultVideoInputDeviceLabel: state.preferences.defaultVideoInputDeviceLabel,
+  muteApp: state.preferences.muteApp,
 });
 
 export default connectComponent(

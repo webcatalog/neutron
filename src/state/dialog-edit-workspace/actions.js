@@ -171,7 +171,6 @@ export const save = () => (dispatch, getState) => {
       name: form.name,
       homeUrl,
       // prefs
-      disableAudio: Boolean(form.disableAudio),
       disableNotifications: Boolean(form.disableNotifications),
       transparentBackground: Boolean(form.transparentBackground),
       preferredIconType: form.preferredIconType,

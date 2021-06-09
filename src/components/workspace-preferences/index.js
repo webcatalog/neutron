@@ -25,6 +25,7 @@ import SectionTheme from './section-theme';
 import SectionDevelopers from './section-developers';
 import SectionDownloads from './section-downloads';
 import SectionLinkHandling from './section-link-handling';
+import SectionAudioVideo from './section-audio-video';
 
 const styles = (theme) => ({
   root: {
@@ -76,7 +77,8 @@ const Preferences = ({ classes }) => {
       Icon: PowerIcon,
       subSections: {
         linkHandling: { text: 'Link Handling', Component: SectionLinkHandling },
-        autoReload: { text: 'Advanced', Component: SectionAutoReload },
+        audioVideo: { text: 'Audio & Video', Component: SectionAudioVideo },
+        autoReload: { text: 'Auto Reload', Component: SectionAutoReload },
         developers: { text: 'Developers', Component: SectionDevelopers },
       },
     },

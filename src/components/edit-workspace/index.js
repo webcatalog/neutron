@@ -158,7 +158,6 @@ const EditWorkspace = ({
   accountInfo,
   backgroundColor,
   classes,
-  disableAudio,
   disableNotifications,
   downloadingIcon,
   homeUrl,
@@ -488,17 +487,6 @@ const EditWorkspace = ({
               />
             </ListItemSecondaryAction>
           </ListItem>
-          <ListItem disableGutters>
-            <ListItemText primary="Disable sound" secondary={`Prevent ${getWorkspaceFriendlyName().toLowerCase()} from playing audio.`} />
-            <ListItemSecondaryAction>
-              <Switch
-                edge="end"
-                color="primary"
-                checked={disableAudio}
-                onChange={(e) => onUpdateForm({ disableAudio: e.target.checked })}
-              />
-            </ListItemSecondaryAction>
-          </ListItem>
         </List>
       </div>
       <div>
@@ -526,7 +514,6 @@ EditWorkspace.propTypes = {
   accountInfo: PropTypes.object,
   backgroundColor: PropTypes.string,
   classes: PropTypes.object.isRequired,
-  disableAudio: PropTypes.bool.isRequired,
   disableNotifications: PropTypes.bool.isRequired,
   downloadingIcon: PropTypes.bool.isRequired,
   homeUrl: PropTypes.string.isRequired,
@@ -550,7 +537,6 @@ EditWorkspace.propTypes = {
 const mapStateToProps = (state) => ({
   accountInfo: state.dialogEditWorkspace.form.accountInfo,
   backgroundColor: state.dialogEditWorkspace.form.backgroundColor,
-  disableAudio: Boolean(state.dialogEditWorkspace.form.disableAudio),
   disableNotifications: Boolean(state.dialogEditWorkspace.form.disableNotifications),
   downloadingIcon: state.dialogEditWorkspace.downloadingIcon,
   homeUrl: state.dialogEditWorkspace.form.homeUrl || '',

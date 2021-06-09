@@ -5,17 +5,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-
 import connectComponent from '../../../helpers/connect-component';
-import isMas from '../../../helpers/is-mas';
+import getWorkspaceFriendlyName from '../../../helpers/get-workspace-friendly-name';
 
 import { open as openDialogCodeInjection } from '../../../state/dialog-code-injection/actions';
 import { open as openDialogCustomUserAgent } from '../../../state/dialog-custom-user-agent/actions';
@@ -40,51 +37,21 @@ const styles = (theme) => ({
   },
 });
 
-const SectionDownloads = ({
-  askForDownloadPath,
+const SectionAudioVideo = ({
+  muteApp,
+  formDisableAudio,
   classes,
-  downloadPath,
   onUpdateForm,
-  formAskForDownloadPath,
-  formDownloadPath,
 }) => (
   <List disablePadding dense>
-    {!isMas() && (
-      <>
-        <ListItem
-          button
-          onClick={() => {
-            window.remote.dialog.showOpenDialog(window.remote.getCurrentWindow(), {
-              properties: ['openDirectory'],
-            })
-              .then(({ canceled, filePaths }) => {
-                if (!canceled && filePaths && filePaths.length > 0) {
-                  onUpdateForm({ preferences: { downloadPath: filePaths[0] } });
-                }
-              })
-              .catch(console.log); // eslint-disable-line
-          }}
-        >
-          <ListItemText
-            primary="Download Location"
-            secondary={formDownloadPath != null ? formDownloadPath : `Same as global (${downloadPath})`}
-          />
-          <ChevronRightIcon color="action" />
-        </ListItem>
-        <Divider />
-      </>
-    )}
     <ListItem>
       <ListItemText
-        primary="Ask where to save each file before downloading"
-        secondary={isMas() ? 'Otherwise, download files are always saved to ~/Downloads folder.' : null}
+        primary={`Prevent the ${getWorkspaceFriendlyName().toLowerCase()} from playing sounds`}
       />
       <Select
-        value={formAskForDownloadPath != null ? formAskForDownloadPath : 'global'}
+        value={formDisableAudio === true ? formDisableAudio : 'global'}
         onChange={(e) => onUpdateForm({
-          preferences: {
-            askForDownloadPath: e.target.value !== 'global' ? e.target.value : null,
-          },
+          disableAudio: e.target.value !== 'global' ? e.target.value : null,
         })}
         variant="filled"
         disableUnderline
@@ -94,33 +61,27 @@ const SectionDownloads = ({
         }}
         className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
       >
-        <MenuItem dense value="global">{`Same as global (${askForDownloadPath ? 'Yes' : 'No'})`}</MenuItem>
+        <MenuItem dense value="global">{`Same as global (${muteApp ? 'Yes' : 'No'})`}</MenuItem>
         <MenuItem dense value>Yes</MenuItem>
-        <MenuItem dense value={false}>No</MenuItem>
       </Select>
     </ListItem>
   </List>
 );
 
-SectionDownloads.defaultProps = {
-  formAskForDownloadPath: null,
-  formDownloadPath: null,
+SectionAudioVideo.defaultProps = {
+  formDisableAudio: null,
 };
 
-SectionDownloads.propTypes = {
-  askForDownloadPath: PropTypes.bool.isRequired,
+SectionAudioVideo.propTypes = {
+  muteApp: PropTypes.bool.isRequired,
   classes: PropTypes.object.isRequired,
-  downloadPath: PropTypes.string.isRequired,
   onUpdateForm: PropTypes.func.isRequired,
-  formAskForDownloadPath: PropTypes.bool,
-  formDownloadPath: PropTypes.string,
+  formDisableAudio: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({
-  askForDownloadPath: state.preferences.askForDownloadPath,
-  downloadPath: state.preferences.downloadPath,
-  formAskForDownloadPath: state.dialogWorkspacePreferences.form.preferences.askForDownloadPath,
-  formDownloadPath: state.dialogWorkspacePreferences.form.preferences.downloadPath,
+  muteApp: state.preferences.muteApp,
+  formDisableAudio: state.dialogWorkspacePreferences.form.disableAudio,
 });
 
 const actionCreators = {
@@ -132,7 +93,7 @@ const actionCreators = {
 };
 
 export default connectComponent(
-  SectionDownloads,
+  SectionAudioVideo,
   mapStateToProps,
   actionCreators,
   styles,
