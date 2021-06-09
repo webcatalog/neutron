@@ -38,7 +38,7 @@ const SectionDevelopers = ({
             if (formCustomUserAgent != null) {
               return formCustomUserAgent;
             }
-            return `Same as global (${customUserAgent || 'Not set'})`;
+            return `Global preference (${customUserAgent || 'Not set'})`;
           })()}
           secondaryTypographyProps={{ noWrap: true }}
         />
@@ -57,7 +57,7 @@ const SectionDevelopers = ({
             if (formJsCodeInjection != null) {
               return formJsCodeInjection;
             }
-            return `Same as global (${jsCodeInjection || 'Not set'})`;
+            return `Global preference (${jsCodeInjection || 'Not set'})`;
           })()}
           secondaryTypographyProps={{ noWrap: true }}
         />
@@ -76,7 +76,7 @@ const SectionDevelopers = ({
             if (formCssCodeInjection != null) {
               return formCssCodeInjection;
             }
-            return `Same as global (${cssCodeInjection || 'Not set'})`;
+            return `Global preference (${cssCodeInjection || 'Not set'})`;
           })()}
           secondaryTypographyProps={{ noWrap: true }}
         />
