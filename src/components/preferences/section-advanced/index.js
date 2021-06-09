@@ -18,7 +18,6 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 import connectComponent from '../../../helpers/connect-component';
 import roundTime from '../../../helpers/round-time';
-import getWorkspaceFriendlyName from '../../../helpers/get-workspace-friendly-name';
 import getUtmSource from '../../../helpers/get-utm-source';
 
 import {
