@@ -18,7 +18,6 @@ import checkLicense from '../../../helpers/check-license';
 import isMas from '../../../helpers/is-mas';
 import isStandalone from '../../../helpers/is-standalone';
 import getStaticGlobal from '../../../helpers/get-static-global';
-import getUtmSource from '../../../helpers/get-utm-source';
 
 import {
   enqueueRequestRestartSnackbar,
@@ -56,7 +55,6 @@ const SectionPrivacySecurity = ({
   telemetry,
 }) => {
   const appJson = getStaticGlobal('appJson');
-  const utmSource = getUtmSource();
   const canPromptTouchId = window.process.platform === 'darwin'
     && window.remote.systemPreferences.canPromptTouchID();
 
@@ -213,11 +211,6 @@ const SectionPrivacySecurity = ({
             </ListItem>
           </>
         )}
-        <Divider />
-        <ListItem button onClick={() => requestOpenInBrowser(`https://webcatalog.app/privacy?utm_source=${utmSource}`)}>
-          <ListItemText primary="Privacy Policy" />
-          <ChevronRightIcon color="action" />
-        </ListItem>
       </List>
       <DialogAppLock />
     </>

@@ -14,8 +14,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import Switch from '@material-ui/core/Switch';
 
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-
 import connectComponent from '../../../helpers/connect-component';
 import roundTime from '../../../helpers/round-time';
 import getUtmSource from '../../../helpers/get-utm-source';
@@ -26,13 +24,10 @@ import {
   requestSetPreference,
 } from '../../../senders';
 
-import { open as openDialogInternalUrls } from '../../../state/dialog-internal-urls/actions';
-import { open as openDialogProxy } from '../../../state/dialog-proxy/actions';
 import { open as openDialogRefreshInterval } from '../../../state/dialog-refresh-interval/actions';
 
 import autoRefreshIntervals from '../../../constants/auto-refresh-intervals';
 
-import DialogInternalUrls from '../../shared/dialog-internal-urls';
 import DialogRefreshInterval from '../../shared/dialog-refresh-interval';
 
 const styles = (theme) => ({
@@ -67,25 +62,15 @@ const styles = (theme) => ({
   },
 });
 
-const SectionAdvanced = ({
+const SectionAutoReload = ({
   autoRefresh,
   autoRefreshInterval,
   autoRefreshOnlyWhenInactive,
   classes,
-  internalUrlRule,
-  onOpenDialogInternalUrls,
   onOpenDialogRefreshInterval,
 }) => (
   <>
     <List disablePadding dense>
-      <ListItem button onClick={onOpenDialogInternalUrls}>
-        <ListItemText
-          primary="Internal URLs"
-          secondary={internalUrlRule ? `/^${internalUrlRule}$/i` : 'Not set'}
-        />
-        <ChevronRightIcon color="action" />
-      </ListItem>
-      <Divider />
       <ListItem>
         <ListItemText
           primary="Reload web pages automatically"
@@ -142,6 +127,7 @@ const SectionAdvanced = ({
           <MenuItem dense value="custom">Custom</MenuItem>
         </Select>
       </ListItem>
+      <Divider />
       <ListItem>
         <ListItemText
           primary="Only reload on inactivity"
@@ -179,22 +165,15 @@ const SectionAdvanced = ({
         </ListItemSecondaryAction>
       </ListItem>
     </List>
-    <DialogInternalUrls />
     <DialogRefreshInterval />
   </>
 );
 
-SectionAdvanced.defaultProps = {
-  internalUrlRule: null,
-};
-
-SectionAdvanced.propTypes = {
+SectionAutoReload.propTypes = {
   autoRefresh: PropTypes.bool.isRequired,
   autoRefreshInterval: PropTypes.number.isRequired,
   autoRefreshOnlyWhenInactive: PropTypes.bool.isRequired,
   classes: PropTypes.object.isRequired,
-  internalUrlRule: PropTypes.string,
-  onOpenDialogInternalUrls: PropTypes.func.isRequired,
   onOpenDialogRefreshInterval: PropTypes.func.isRequired,
 };
 
@@ -202,18 +181,14 @@ const mapStateToProps = (state) => ({
   autoRefresh: state.preferences.autoRefresh,
   autoRefreshInterval: state.preferences.autoRefreshInterval,
   autoRefreshOnlyWhenInactive: state.preferences.autoRefreshOnlyWhenInactive,
-  defaultFontSize: state.preferences.defaultFontSize,
-  internalUrlRule: state.preferences.internalUrlRule,
 });
 
 const actionCreators = {
-  openDialogInternalUrls,
-  openDialogProxy,
   openDialogRefreshInterval,
 };
 
 export default connectComponent(
-  SectionAdvanced,
+  SectionAutoReload,
   mapStateToProps,
   actionCreators,
   styles,

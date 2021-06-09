@@ -27,7 +27,8 @@ import isMas from '../../helpers/is-mas';
 import isStandalone from '../../helpers/is-standalone';
 import getStaticGlobal from '../../helpers/get-static-global';
 
-import SectionAdvanced from './section-advanced';
+import SectionLinkHandling from './section-link-handling';
+import SectionAutoReload from './section-auto-reload';
 import SectionAppearance from './section-appearance';
 import SectionAudioVideo from './section-audio-video';
 import SectionDevelopers from './section-developers';
@@ -138,12 +139,13 @@ const Preferences = ({
       text: 'Advanced',
       Icon: PowerIcon,
       subSections: {
+        linkHandling: { text: 'Link Handling', Component: SectionLinkHandling },
         performance: { text: 'Performance', Component: SectionPerformance },
-        advanced: { text: 'Advanced', Component: SectionAdvanced },
         audioVideo: { text: 'Audio & Video', Component: SectionAudioVideo },
         network: { text: 'Network', Component: SectionNetwork },
         hardward: { text: 'Hardware', Component: SectionHardware },
         developers: { text: 'Developers', Component: SectionDevelopers },
+        autoReload: { text: 'Auto Reload', Component: SectionAutoReload },
       },
     },
     updates: {
