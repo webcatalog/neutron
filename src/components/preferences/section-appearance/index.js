@@ -17,8 +17,6 @@ import Slider from '@material-ui/core/Slider';
 import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
 
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-
 import connectComponent from '../../../helpers/connect-component';
 import getWorkspaceFriendlyName from '../../../helpers/get-workspace-friendly-name';
 
@@ -27,10 +25,6 @@ import {
   requestRealignActiveWorkspace,
   requestSetPreference,
 } from '../../../senders';
-
-import { open as openDialogCustomizeFonts } from '../../../state/dialog-customize-fonts/actions';
-
-import DialogCustomizeFonts from './dialog-customize-fonts';
 
 const styles = (theme) => ({
   paper: {
@@ -73,9 +67,7 @@ const SectionAppearance = ({
   darkReaderContrast,
   darkReaderGrayscale,
   darkReaderSepia,
-  defaultFontSize,
   navigationBar,
-  onOpenDialogCustomizeFonts,
   sidebar,
   sidebarSize,
   sidebarTips,
@@ -403,48 +395,7 @@ const SectionAppearance = ({
           </ListItem>
         </>
       )}
-      <Divider />
-      <ListItem>
-        <ListItemText primary="Font size" />
-        <Select
-          value={defaultFontSize}
-          onChange={(e) => {
-            requestSetPreference('defaultFontSize', e.target.value);
-            enqueueRequestRestartSnackbar();
-          }}
-          variant="filled"
-          disableUnderline
-          margin="dense"
-          classes={{
-            root: classes.select,
-          }}
-          className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
-        >
-          {[
-            { value: 9, label: 'Very Small' },
-            { value: 12, label: 'Small' },
-            { value: 16, label: 'Medium (Recommended)' },
-            { value: 20, label: 'Large' },
-            { value: 24, label: 'Very Large' },
-          ].map((item) => (
-            <MenuItem key={item.value} dense value={item.value}>{item.label}</MenuItem>
-          ))}
-          {[9, 12, 16, 20, 24].indexOf(defaultFontSize) < 0 && (
-            <MenuItem
-              value={defaultFontSize}
-              dense
-            >
-              Custom
-            </MenuItem>
-          )}
-        </Select>
-      </ListItem>
-      <ListItem button onClick={onOpenDialogCustomizeFonts}>
-        <ListItemText primary="Advanced font size settings" />
-        <ChevronRightIcon color="action" />
-      </ListItem>
     </List>
-    <DialogCustomizeFonts />
   </>
 );
 
@@ -456,9 +407,7 @@ SectionAppearance.propTypes = {
   darkReaderContrast: PropTypes.number.isRequired,
   darkReaderGrayscale: PropTypes.number.isRequired,
   darkReaderSepia: PropTypes.number.isRequired,
-  defaultFontSize: PropTypes.number.isRequired,
   navigationBar: PropTypes.bool.isRequired,
-  onOpenDialogCustomizeFonts: PropTypes.func.isRequired,
   sidebar: PropTypes.bool.isRequired,
   sidebarSize: PropTypes.oneOf(['compact', 'expanded']).isRequired,
   sidebarTips: PropTypes.oneOf(['shortcut', 'name', 'none']).isRequired,
@@ -474,7 +423,6 @@ const mapStateToProps = (state) => ({
   darkReaderContrast: state.preferences.darkReaderContrast,
   darkReaderGrayscale: state.preferences.darkReaderGrayscale,
   darkReaderSepia: state.preferences.darkReaderSepia,
-  defaultFontSize: state.preferences.defaultFontSize,
   navigationBar: state.preferences.navigationBar,
   sidebar: state.preferences.sidebar,
   sidebarSize: state.preferences.sidebarSize,
@@ -484,13 +432,9 @@ const mapStateToProps = (state) => ({
   windowButtons: state.preferences.windowButtons,
 });
 
-const actionCreators = {
-  openDialogCustomizeFonts,
-};
-
 export default connectComponent(
   SectionAppearance,
   mapStateToProps,
-  actionCreators,
+  null,
   styles,
 );

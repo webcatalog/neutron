@@ -47,6 +47,7 @@ import SectionMode from './section-mode';
 import SectionTray from './section-tray';
 import SectionHome from './section-home';
 import SectionExit from './section-exit';
+import SectionFonts from './section-fonts';
 
 import SnackbarTrigger from '../shared/snackbar-trigger';
 
@@ -104,6 +105,7 @@ const Preferences = ({
       Icon: PaletteIcon,
       subSections: {
         appearance: { text: 'Appearance', Component: SectionAppearance },
+        fonts: { text: 'Fonts', Component: SectionFonts },
       },
     },
     notifications: {
