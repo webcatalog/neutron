@@ -75,8 +75,6 @@ const SectionAdvanced = ({
   internalUrlRule,
   onOpenDialogInternalUrls,
   onOpenDialogRefreshInterval,
-  swipeToNavigate,
-  useHardwareAcceleration,
 }) => (
   <>
     <List disablePadding dense>
@@ -87,42 +85,6 @@ const SectionAdvanced = ({
         />
         <ChevronRightIcon color="action" />
       </ListItem>
-      {window.process.platform === 'darwin' && (
-        <>
-          <Divider />
-          <ListItem>
-            <ListItemText
-              primary="Swipe with three fingers to navigate"
-              secondary={(
-                <>
-                  <span>Navigate between pages with 3-finger gestures. </span>
-                  <span>Swipe left to go back or swipe right to go forward.</span>
-                  <br />
-                  <span>To enable it, you also need to change </span>
-                  <b>
-                    macOS Preferences &gt; Trackpad &gt; More Gestures &gt; Swipe between page
-                  </b>
-                  <span> to </span>
-                  <b>Swipe with three fingers</b>
-                  <span> or </span>
-                  <b>Swipe with two or three fingers.</b>
-                </>
-              )}
-            />
-            <ListItemSecondaryAction>
-              <Switch
-                edge="end"
-                color="primary"
-                checked={swipeToNavigate}
-                onChange={(e) => {
-                  requestSetPreference('swipeToNavigate', e.target.checked);
-                  enqueueRequestRestartSnackbar();
-                }}
-              />
-            </ListItemSecondaryAction>
-          </ListItem>
-        </>
-      )}
       <Divider />
       <ListItem>
         <ListItemText
@@ -216,23 +178,6 @@ const SectionAdvanced = ({
           />
         </ListItemSecondaryAction>
       </ListItem>
-      <Divider />
-      <ListItem>
-        <ListItemText
-          primary="Use hardware acceleration when available"
-        />
-        <ListItemSecondaryAction>
-          <Switch
-            edge="end"
-            color="primary"
-            checked={useHardwareAcceleration}
-            onChange={(e) => {
-              requestSetPreference('useHardwareAcceleration', e.target.checked);
-              enqueueRequestRestartSnackbar();
-            }}
-          />
-        </ListItemSecondaryAction>
-      </ListItem>
     </List>
     <DialogInternalUrls />
     <DialogRefreshInterval />
@@ -251,8 +196,6 @@ SectionAdvanced.propTypes = {
   internalUrlRule: PropTypes.string,
   onOpenDialogInternalUrls: PropTypes.func.isRequired,
   onOpenDialogRefreshInterval: PropTypes.func.isRequired,
-  swipeToNavigate: PropTypes.bool.isRequired,
-  useHardwareAcceleration: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -261,8 +204,6 @@ const mapStateToProps = (state) => ({
   autoRefreshOnlyWhenInactive: state.preferences.autoRefreshOnlyWhenInactive,
   defaultFontSize: state.preferences.defaultFontSize,
   internalUrlRule: state.preferences.internalUrlRule,
-  swipeToNavigate: state.preferences.swipeToNavigate,
-  useHardwareAcceleration: state.preferences.useHardwareAcceleration,
 });
 
 const actionCreators = {

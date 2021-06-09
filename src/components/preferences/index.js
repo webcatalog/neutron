@@ -50,6 +50,7 @@ import SectionExit from './section-exit';
 import SectionFonts from './section-fonts';
 import SectionWindow from './section-window';
 import SectionPerformance from './section-performance';
+import SectionHardware from './section-hardware';
 
 import SnackbarTrigger from '../shared/snackbar-trigger';
 
@@ -141,6 +142,7 @@ const Preferences = ({
         advanced: { text: 'Advanced', Component: SectionAdvanced },
         audioVideo: { text: 'Audio & Video', Component: SectionAudioVideo },
         network: { text: 'Network', Component: SectionNetwork },
+        hardward: { text: 'Hardware', Component: SectionHardware },
         developers: { text: 'Developers', Component: SectionDevelopers },
       },
     },
