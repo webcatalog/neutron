@@ -25,16 +25,20 @@ export const updateForm = (changes) => (dispatch, getState) => {
 
   const workspaceId = getStaticGlobal('workspacePreferencesWorkspaceId');
   const {
-    preferences,
+    name,
+    homeUrl,
     disableAudio,
     disableNotifications,
     transparentBackground,
     preferredIconType,
     backgroundColor,
     picturePath,
+    preferences,
   } = getState().dialogWorkspacePreferences.form;
 
   requestSetWorkspace(workspaceId, {
+    name,
+    homeUrl,
     disableAudio: Boolean(disableAudio),
     disableNotifications: Boolean(disableNotifications),
     transparentBackground: Boolean(transparentBackground),
