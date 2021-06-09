@@ -15,6 +15,7 @@ import Paper from '@material-ui/core/Paper';
 import WidgetsIcon from '@material-ui/icons/Widgets';
 import PaletteIcon from '@material-ui/icons/Palette';
 import PowerIcon from '@material-ui/icons/Power';
+import NotificationsIcon from '@material-ui/icons/Notifications';
 
 import connectComponent from '../../helpers/connect-component';
 
@@ -26,6 +27,7 @@ import SectionDevelopers from './section-developers';
 import SectionDownloads from './section-downloads';
 import SectionLinkHandling from './section-link-handling';
 import SectionAudioVideo from './section-audio-video';
+import SectionNotifications from './section-notifications';
 
 const styles = (theme) => ({
   root: {
@@ -70,6 +72,13 @@ const Preferences = ({ classes }) => {
       Icon: PaletteIcon,
       subSections: {
         appearance: { text: 'Theme', Component: SectionTheme },
+      },
+    },
+    notifications: {
+      text: 'Notifications',
+      Icon: NotificationsIcon,
+      subSections: {
+        notifications: { text: 'Notifications', Component: SectionNotifications },
       },
     },
     advanced: {

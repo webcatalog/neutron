@@ -15,23 +15,23 @@ import getWorkspaceFriendlyName from '../../../helpers/get-workspace-friendly-na
 
 import { updateForm } from '../../../state/dialog-workspace-preferences/actions';
 
-const SectionAudioVideo = ({
-  formDisableAudio,
+const SectionNotifications = ({
+  formDisableNotifications,
   onUpdateForm,
 }) => (
   <List disablePadding dense>
     <ListItem>
       <ListItemText
-        primary={`Prevent the ${getWorkspaceFriendlyName().toLowerCase()} from playing sounds`}
+        primary={`Prevent the ${getWorkspaceFriendlyName().toLowerCase()} from sending notifications`}
       />
       <ListItemSecondaryAction>
         <Switch
           edge="end"
           color="primary"
-          checked={formDisableAudio}
+          checked={formDisableNotifications}
           onChange={(e) => {
             onUpdateForm({
-              disableAudio: e.target.value !== 'global' ? e.target.value : null,
+              disableNotifications: e.target.value !== 'global' ? e.target.value : null,
             });
           }}
         />
@@ -40,13 +40,13 @@ const SectionAudioVideo = ({
   </List>
 );
 
-SectionAudioVideo.propTypes = {
+SectionNotifications.propTypes = {
   onUpdateForm: PropTypes.func.isRequired,
-  formDisableAudio: PropTypes.bool.isRequired,
+  formDisableNotifications: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  formDisableAudio: Boolean(state.dialogWorkspacePreferences.form.disableAudio),
+  formDisableNotifications: Boolean(state.dialogWorkspacePreferences.form.disableNotifications),
 });
 
 const actionCreators = {
@@ -54,7 +54,7 @@ const actionCreators = {
 };
 
 export default connectComponent(
-  SectionAudioVideo,
+  SectionNotifications,
   mapStateToProps,
   actionCreators,
 );

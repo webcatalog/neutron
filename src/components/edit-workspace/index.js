@@ -9,11 +9,6 @@ import Color from 'color';
 import * as materialColors from '@material-ui/core/colors';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -27,7 +22,6 @@ import getAvatarText from '../../helpers/get-avatar-text';
 import getMailtoUrl from '../../helpers/get-mailto-url';
 import getWebcalUrl from '../../helpers/get-webcal-url';
 import getStaticGlobal from '../../helpers/get-static-global';
-import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
 
 import {
   getIconFromInternet,
@@ -158,7 +152,6 @@ const EditWorkspace = ({
   accountInfo,
   backgroundColor,
   classes,
-  disableNotifications,
   downloadingIcon,
   homeUrl,
   homeUrlError,
@@ -475,19 +468,6 @@ const EditWorkspace = ({
             label="Use transparent background"
           />
         </FormGroup>
-        <List>
-          <ListItem disableGutters>
-            <ListItemText primary="Disable notifications" secondary={`Prevent ${getWorkspaceFriendlyName().toLowerCase()} from sending notifications.`} />
-            <ListItemSecondaryAction>
-              <Switch
-                edge="end"
-                color="primary"
-                checked={disableNotifications}
-                onChange={(e) => onUpdateForm({ disableNotifications: e.target.checked })}
-              />
-            </ListItemSecondaryAction>
-          </ListItem>
-        </List>
       </div>
       <div>
         <Button variant="contained" disableElevation onClick={() => requestShowWorkspacePreferencesWindow(id)}>
@@ -514,7 +494,6 @@ EditWorkspace.propTypes = {
   accountInfo: PropTypes.object,
   backgroundColor: PropTypes.string,
   classes: PropTypes.object.isRequired,
-  disableNotifications: PropTypes.bool.isRequired,
   downloadingIcon: PropTypes.bool.isRequired,
   homeUrl: PropTypes.string.isRequired,
   homeUrlError: PropTypes.string,
@@ -537,7 +516,6 @@ EditWorkspace.propTypes = {
 const mapStateToProps = (state) => ({
   accountInfo: state.dialogEditWorkspace.form.accountInfo,
   backgroundColor: state.dialogEditWorkspace.form.backgroundColor,
-  disableNotifications: Boolean(state.dialogEditWorkspace.form.disableNotifications),
   downloadingIcon: state.dialogEditWorkspace.downloadingIcon,
   homeUrl: state.dialogEditWorkspace.form.homeUrl || '',
   homeUrlError: state.dialogEditWorkspace.form.homeUrlError,

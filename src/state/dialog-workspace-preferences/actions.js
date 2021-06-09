@@ -19,10 +19,13 @@ export const updateForm = (changes) => (dispatch, getState) => {
   });
 
   const workspaceId = getStaticGlobal('workspacePreferencesWorkspaceId');
-  const { preferences, disableAudio } = getState().dialogWorkspacePreferences.form;
+  const {
+    preferences, disableAudio, disableNotifications,
+  } = getState().dialogWorkspacePreferences.form;
 
   requestSetWorkspace(workspaceId, {
     disableAudio: disableAudio === true ? true : undefined,
+    disableNotifications: disableNotifications === true ? true : undefined,
     preferences,
   });
 

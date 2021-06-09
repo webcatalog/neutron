@@ -17,10 +17,6 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import connectComponent from '../../../helpers/connect-component';
 import isMas from '../../../helpers/is-mas';
 
-import { open as openDialogCodeInjection } from '../../../state/dialog-code-injection/actions';
-import { open as openDialogCustomUserAgent } from '../../../state/dialog-custom-user-agent/actions';
-import { open as openDialogInternalUrls } from '../../../state/dialog-internal-urls/actions';
-import { open as openDialogRefreshInterval } from '../../../state/dialog-refresh-interval/actions';
 import { updateForm } from '../../../state/dialog-workspace-preferences/actions';
 
 const styles = (theme) => ({
@@ -124,10 +120,6 @@ const mapStateToProps = (state) => ({
 });
 
 const actionCreators = {
-  openDialogCodeInjection,
-  openDialogCustomUserAgent,
-  openDialogInternalUrls,
-  openDialogRefreshInterval,
   updateForm,
 };
 
