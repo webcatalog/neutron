@@ -9,6 +9,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Switch from '@material-ui/core/Switch';
+import Divider from '@material-ui/core/Divider';
 
 import connectComponent from '../../../helpers/connect-component';
 
@@ -51,6 +52,7 @@ const styles = (theme) => ({
 });
 
 const SectionAppearance = ({
+  alwaysOnTop,
   windowButtons,
   useSystemTitleBar,
 }) => (
@@ -94,16 +96,36 @@ const SectionAppearance = ({
           </ListItem>
         </>
       )}
+      <Divider />
+      <ListItem>
+        <ListItemText
+          primary="Keep window always on top"
+          secondary="The window won't be hidden even when you click outside."
+        />
+        <ListItemSecondaryAction>
+          <Switch
+            edge="end"
+            color="primary"
+            checked={alwaysOnTop}
+            onChange={(e) => {
+              requestSetPreference('alwaysOnTop', e.target.checked);
+              enqueueRequestRestartSnackbar();
+            }}
+          />
+        </ListItemSecondaryAction>
+      </ListItem>
     </List>
   </>
 );
 
 SectionAppearance.propTypes = {
+  alwaysOnTop: PropTypes.bool.isRequired,
   windowButtons: PropTypes.bool.isRequired,
   useSystemTitleBar: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
+  alwaysOnTop: state.preferences.alwaysOnTop,
   windowButtons: state.preferences.windowButtons,
   useSystemTitleBar: state.preferences.useSystemTitleBar,
 });

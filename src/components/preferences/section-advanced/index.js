@@ -68,7 +68,6 @@ const styles = (theme) => ({
 });
 
 const SectionAdvanced = ({
-  alwaysOnTop,
   autoRefresh,
   autoRefreshInterval,
   autoRefreshOnlyWhenInactive,
@@ -124,24 +123,6 @@ const SectionAdvanced = ({
           </ListItem>
         </>
       )}
-      <Divider />
-      <ListItem>
-        <ListItemText
-          primary="Keep window always on top"
-          secondary="The window won't be hidden even when you click outside."
-        />
-        <ListItemSecondaryAction>
-          <Switch
-            edge="end"
-            color="primary"
-            checked={alwaysOnTop}
-            onChange={(e) => {
-              requestSetPreference('alwaysOnTop', e.target.checked);
-              enqueueRequestRestartSnackbar();
-            }}
-          />
-        </ListItemSecondaryAction>
-      </ListItem>
       <Divider />
       <ListItem>
         <ListItemText
@@ -263,7 +244,6 @@ SectionAdvanced.defaultProps = {
 };
 
 SectionAdvanced.propTypes = {
-  alwaysOnTop: PropTypes.bool.isRequired,
   autoRefresh: PropTypes.bool.isRequired,
   autoRefreshInterval: PropTypes.number.isRequired,
   autoRefreshOnlyWhenInactive: PropTypes.bool.isRequired,
@@ -276,7 +256,6 @@ SectionAdvanced.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  alwaysOnTop: state.preferences.alwaysOnTop,
   autoRefresh: state.preferences.autoRefresh,
   autoRefreshInterval: state.preferences.autoRefreshInterval,
   autoRefreshOnlyWhenInactive: state.preferences.autoRefreshOnlyWhenInactive,
