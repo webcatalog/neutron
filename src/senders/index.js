@@ -27,7 +27,6 @@ export const requestCheckForUpdates = () => window.ipcRenderer.send('request-che
 
 export const requestShowAboutWindow = () => window.ipcRenderer.send('request-show-about-window');
 export const requestShowAddWorkspaceWindow = () => window.ipcRenderer.send('request-show-add-workspace-window');
-export const requestShowEditWorkspaceWindow = (id) => window.ipcRenderer.send('request-show-edit-workspace-window', id);
 export const requestShowNotificationsWindow = () => window.ipcRenderer.send('request-show-notifications-window');
 export const requestShowOpenSourceNoticesWindow = () => window.ipcRenderer.send('request-show-open-source-notices-window');
 export const requestShowPreferencesWindow = (scrollTo) => window.ipcRenderer.send('request-show-preferences-window', scrollTo);

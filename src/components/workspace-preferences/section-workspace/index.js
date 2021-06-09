@@ -13,39 +13,44 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 import connectComponent from '../../../helpers/connect-component';
 
-import { updateForm } from '../../../state/dialog-workspace-preferences/actions';
+import { open as openDialogEditWorkspace } from '../../../state/dialog-edit-workspace/actions';
 
 import ListItemIcon from './list-item-icon';
+import DialogEditWorkspace from './dialog-edit-workspace';
 
 const SectionWorkspace = ({
   name,
   homeUrl,
+  onOpenDialogEditWorkspace,
 }) => (
-  <List disablePadding dense>
-    <ListItemIcon />
-    <Divider />
-    <ListItem
-      button
-      onClick={() => {}}
-    >
-      <ListItemText
-        primary="Name"
-        secondary={name}
-      />
-      <ChevronRightIcon color="action" />
-    </ListItem>
-    <Divider />
-    <ListItem
-      button
-      onClick={() => {}}
-    >
-      <ListItemText
-        primary="Home URL"
-        secondary={homeUrl}
-      />
-      <ChevronRightIcon color="action" />
-    </ListItem>
-  </List>
+  <>
+    <List disablePadding dense>
+      <ListItemIcon />
+      <Divider />
+      <ListItem
+        button
+        onClick={() => onOpenDialogEditWorkspace()}
+      >
+        <ListItemText
+          primary="Name"
+          secondary={name}
+        />
+        <ChevronRightIcon color="action" />
+      </ListItem>
+      <Divider />
+      <ListItem
+        button
+        onClick={() => onOpenDialogEditWorkspace()}
+      >
+        <ListItemText
+          primary="Home URL"
+          secondary={homeUrl}
+        />
+        <ChevronRightIcon color="action" />
+      </ListItem>
+    </List>
+    <DialogEditWorkspace />
+  </>
 );
 
 SectionWorkspace.defaultProps = {
@@ -56,6 +61,7 @@ SectionWorkspace.defaultProps = {
 SectionWorkspace.propTypes = {
   name: PropTypes.string,
   homeUrl: PropTypes.string,
+  onOpenDialogEditWorkspace: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -64,7 +70,7 @@ const mapStateToProps = (state) => ({
 });
 
 const actionCreators = {
-  updateForm,
+  openDialogEditWorkspace,
 };
 
 export default connectComponent(

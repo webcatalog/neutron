@@ -90,7 +90,6 @@ const getWorkspaceFriendlyName = require('../libs/get-workspace-friendly-name');
 const aboutWindow = require('../windows/about');
 const addWorkspaceWindow = require('../windows/add-workspace');
 const displayMediaWindow = require('../windows/display-media');
-const editWorkspaceWindow = require('../windows/edit-workspace');
 const licenseRegistrationWindow = require('../windows/license-registration');
 const mainWindow = require('../windows/main');
 const notificationsWindow = require('../windows/notifications');
@@ -198,10 +197,6 @@ const loadListeners = () => {
     }
 
     workspacePreferencesWindow.show(id);
-  });
-
-  ipcMain.on('request-show-edit-workspace-window', (e, id) => {
-    editWorkspaceWindow.show(id);
   });
 
   ipcMain.on('request-show-add-workspace-window', () => {

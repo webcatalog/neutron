@@ -22,15 +22,13 @@ import getAvatarText from '../../../helpers/get-avatar-text';
 
 import {
   updateForm,
-} from '../../../state/dialog-workspace-preferences/actions';
-
-import {
   getIconFromInternet,
   getIconFromAppSearch,
-} from '../../../state/dialog-edit-workspace/actions';
+} from '../../../state/dialog-workspace-preferences/actions';
 
 import defaultWorkspaceImageLight from '../../../images/default-workspace-image-light.png';
 import defaultWorkspaceImageDark from '../../../images/default-workspace-image-dark.png';
+import isUrl from '../../../helpers/is-url';
 
 const styles = (theme) => ({
   flexGrow: {
@@ -134,7 +132,6 @@ const ListItemIcon = ({
   classes,
   downloadingIcon,
   id,
-  internetIcon,
   name,
   onGetIconFromInternet,
   onGetIconFromAppSearch,
@@ -146,7 +143,7 @@ const ListItemIcon = ({
   transparentBackground,
 }) => {
   let selectedIconType = 'text';
-  if (((picturePath || internetIcon) && preferredIconType === 'auto') || (preferredIconType === 'image')) {
+  if ((picturePath && preferredIconType === 'auto') || (preferredIconType === 'image')) {
     selectedIconType = 'image';
   } else if (accountInfo && accountInfo.picturePath && (preferredIconType === 'auto' || preferredIconType === 'accountInfo')) {
     selectedIconType = 'accountInfo';
@@ -232,8 +229,8 @@ const ListItemIcon = ({
                 alt="Icon"
                 className={classes.avatarPicture}
                 src={(() => {
+                  if (isUrl(picturePath)) return picturePath;
                   if (picturePath) return `file://${picturePath}`;
-                  if (internetIcon) return internetIcon;
                   return shouldUseDarkColors
                     ? defaultWorkspaceImageLight : defaultWorkspaceImageDark;
                 })()}
@@ -373,7 +370,6 @@ const ListItemIcon = ({
                   disabled={Boolean(downloadingIcon)}
                   onClick={() => onUpdateForm({
                     picturePath: null,
-                    internetIcon: null,
                   })}
                 >
                   Reset to Default
@@ -401,7 +397,6 @@ const ListItemIcon = ({
 ListItemIcon.defaultProps = {
   accountInfo: null,
   backgroundColor: null,
-  internetIcon: null,
   picturePath: null,
   preferredIconType: 'auto',
 };
@@ -412,7 +407,6 @@ ListItemIcon.propTypes = {
   classes: PropTypes.object.isRequired,
   downloadingIcon: PropTypes.bool.isRequired,
   id: PropTypes.string.isRequired,
-  internetIcon: PropTypes.string,
   name: PropTypes.string.isRequired,
   onGetIconFromInternet: PropTypes.func.isRequired,
   onGetIconFromAppSearch: PropTypes.func.isRequired,
@@ -429,7 +423,6 @@ const mapStateToProps = (state) => ({
   backgroundColor: state.dialogWorkspacePreferences.form.backgroundColor,
   downloadingIcon: state.dialogWorkspacePreferences.downloadingIcon,
   id: state.dialogWorkspacePreferences.form.id || '',
-  internetIcon: state.dialogWorkspacePreferences.form.internetIcon,
   name: state.dialogWorkspacePreferences.form.name || '',
   order: state.dialogWorkspacePreferences.form.order || 0,
   picturePath: state.dialogWorkspacePreferences.form.picturePath,

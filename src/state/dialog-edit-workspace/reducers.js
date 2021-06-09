@@ -4,12 +4,23 @@
 import { combineReducers } from 'redux';
 
 import {
+  OPEN_EDIT_WORKSPACE,
+  CLOSE_EDIT_WORKSPACE,
   UPDATE_EDIT_WORKSPACE_DOWNLOADING_ICON,
   UPDATE_EDIT_WORKSPACE_FORM,
 } from '../../constants/actions';
 
+const open = (state = false, action) => {
+  switch (action.type) {
+    case OPEN_EDIT_WORKSPACE: return true;
+    case CLOSE_EDIT_WORKSPACE: return false;
+    default: return state;
+  }
+};
+
 const form = (state = {}, action) => {
   switch (action.type) {
+    case OPEN_EDIT_WORKSPACE: return action.form;
     case UPDATE_EDIT_WORKSPACE_FORM: return { ...state, ...action.changes };
     default: return state;
   }
@@ -22,4 +33,4 @@ const downloadingIcon = (state = false, action) => {
   }
 };
 
-export default combineReducers({ downloadingIcon, form });
+export default combineReducers({ open, downloadingIcon, form });
