@@ -316,7 +316,7 @@ if (!gotTheLock) {
       .then(() => mainWindow.createAsync())
       .then(() => {
         const {
-          hibernateUnusedWorkspacesAtLaunch,
+          hibernateWhenUnused,
           themeSource,
           privacyConsentAsked,
         } = getPreferences();
@@ -335,7 +335,7 @@ if (!gotTheLock) {
         Object.keys(workspaceObjects).forEach((id) => {
           const workspace = workspaceObjects[id];
           if (
-            (hibernateUnusedWorkspacesAtLaunch || workspace.hibernateWhenUnused)
+            (hibernateWhenUnused)
             && !workspace.active
           ) {
             if (!workspace.hibernated) {
@@ -447,6 +447,7 @@ if (!gotTheLock) {
       trayIcon,
       useSystemTitleBar,
       windowButtons,
+      hibernateWhenUnused,
     } = getPreferences();
 
     if (customUserAgent) {
@@ -491,6 +492,7 @@ if (!gotTheLock) {
     global.extensionEnabledExtesionIds = extensionEnabledExtesionIds;
     global.extensionSourceBrowserId = extensionSourceBrowserId;
     global.extensionSourceProfileDirName = extensionSourceProfileDirName;
+    global.hibernateWhenUnused = hibernateWhenUnused;
 
     commonInit();
 
