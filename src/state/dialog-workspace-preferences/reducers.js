@@ -17,7 +17,7 @@ const form = (state = {}, action) => {
       if (changes.preferences) {
         changes.preferences = cleanDeep({ ...state.preferences, ...action.changes.preferences });
       }
-      return cleanDeep({ ...state, ...changes });
+      return { ...state, ...changes };
     }
     default: return state;
   }
