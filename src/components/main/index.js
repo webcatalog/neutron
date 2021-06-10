@@ -309,25 +309,31 @@ const SortableItem = sortableElement(({ value }) => {
 
 const SortableContainer = sortableContainer(({ children }) => <div>{children}</div>);
 
-const ScrollbarContainer = ({ children, className }) => {
+const ScrollbarContainer = ({ children, className, style }) => {
   // SimpleBar brings problems on macOS
   // https://github.com/webcatalog/webcatalog-app/issues/1247
   if (window.process.platform === 'darwin') {
     return (
-      <div className={className}>
+      <div className={className} style={style}>
         {children}
       </div>
     );
   }
 
   return (
-    <SimpleBar className={className}>
+    <SimpleBar className={className} style={style}>
       {children}
     </SimpleBar>
   );
 };
+
+ScrollbarContainer.defaultProps = {
+  style: null,
+};
+
 ScrollbarContainer.propTypes = {
   children: PropTypes.node.isRequired,
+  style: PropTypes.object,
   className: PropTypes.string.isRequired,
 };
 
@@ -360,6 +366,7 @@ const Main = ({
               classes.sidebarUpperRoot,
               isSidebarExpanded && classes.sidebarUpperRootWide,
             )}
+            style={{ backgroundColor: '#B71C1C' }}
           >
             <div className={classes.sidebarRoot}>
               {window.process.platform === 'darwin' && !isFullScreen && !showMacTitleBar && (

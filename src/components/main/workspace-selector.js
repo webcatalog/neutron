@@ -35,7 +35,6 @@ const styles = (theme) => ({
       cursor: 'pointer',
     },
     WebkitAppRegion: 'no-drag',
-    opacity: 0.8,
     position: 'relative',
     // to show active status
     borderLeft: '3px solid',
