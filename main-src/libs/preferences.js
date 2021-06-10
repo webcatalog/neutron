@@ -120,7 +120,7 @@ const defaultPreferences = {
   standaloneRegistered: false,
   swipeToNavigate: true,
   telemetry: false,
-  themeColor: 'red',
+  themeColor: 'auto',
   themeSource: 'system',
   titleBar: !shouldShowSidebar, // if sidebar is shown, then hide titleBar
   trayIcon: false,
