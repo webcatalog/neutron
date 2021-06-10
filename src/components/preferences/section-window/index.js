@@ -52,6 +52,7 @@ const styles = (theme) => ({
 });
 
 const SectionAppearance = ({
+  autoHideMenuBar,
   alwaysOnTop,
   windowButtons,
   useSystemTitleBar,
@@ -94,6 +95,25 @@ const SectionAppearance = ({
               />
             </ListItemSecondaryAction>
           </ListItem>
+          <Divider />
+          <ListItem>
+            <ListItemText
+              primary="Hide menu bar automatically"
+              secondary="Auto hide the menu bar unless the Alt key is pressed."
+            />
+            <ListItemSecondaryAction>
+              <Switch
+                edge="end"
+                color="primary"
+                disabled={!useSystemTitleBar}
+                checked={useSystemTitleBar && autoHideMenuBar}
+                onChange={(e) => {
+                  requestSetPreference('autoHideMenuBar', e.target.checked);
+                  enqueueRequestRestartSnackbar();
+                }}
+              />
+            </ListItemSecondaryAction>
+          </ListItem>
         </>
       )}
       <Divider />
@@ -120,14 +140,16 @@ const SectionAppearance = ({
 
 SectionAppearance.propTypes = {
   alwaysOnTop: PropTypes.bool.isRequired,
-  windowButtons: PropTypes.bool.isRequired,
+  autoHideMenuBar: PropTypes.bool.isRequired,
   useSystemTitleBar: PropTypes.bool.isRequired,
+  windowButtons: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   alwaysOnTop: state.preferences.alwaysOnTop,
-  windowButtons: state.preferences.windowButtons,
+  autoHideMenuBar: state.preferences.autoHideMenuBar,
   useSystemTitleBar: state.preferences.useSystemTitleBar,
+  windowButtons: state.preferences.windowButtons,
 });
 
 export default connectComponent(

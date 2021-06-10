@@ -229,6 +229,7 @@ const createAsync = () => new Promise((resolve) => {
     frame: (process.platform === 'darwin' && global.windowButtons) || global.useSystemTitleBar,
     show: false,
     alwaysOnTop: getPreference('alwaysOnTop'),
+    autoHideMenuBar: global.useSystemTitleBar && getPreference('autoHideMenuBar'),
     webPreferences: {
       enableRemoteModule: true,
       contextIsolation: false,
