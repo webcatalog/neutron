@@ -58,7 +58,6 @@ const SectionNotifications = ({
   pauseNotificationsByScheduleFrom,
   pauseNotificationsByScheduleTo,
   pauseNotificationsMuteAudio,
-  unreadCountBadge,
 }) => {
   const appJson = getStaticGlobal('appJson');
   const utmSource = getUtmSource();
@@ -118,20 +117,6 @@ const SectionNotifications = ({
             checked={pauseNotificationsMuteAudio}
             onChange={(e) => {
               requestSetPreference('pauseNotificationsMuteAudio', e.target.checked);
-            }}
-          />
-        </ListItemSecondaryAction>
-      </ListItem>
-      <Divider />
-      <ListItem>
-        <ListItemText primary="Show unread count badge" />
-        <ListItemSecondaryAction>
-          <Switch
-            edge="end"
-            color="primary"
-            checked={unreadCountBadge}
-            onChange={(e) => {
-              requestSetPreference('unreadCountBadge', e.target.checked);
             }}
           />
         </ListItemSecondaryAction>
@@ -207,7 +192,6 @@ SectionNotifications.propTypes = {
   pauseNotificationsByScheduleFrom: PropTypes.string.isRequired,
   pauseNotificationsByScheduleTo: PropTypes.string.isRequired,
   pauseNotificationsMuteAudio: PropTypes.bool.isRequired,
-  unreadCountBadge: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -215,7 +199,6 @@ const mapStateToProps = (state) => ({
   pauseNotificationsByScheduleFrom: state.preferences.pauseNotificationsByScheduleFrom,
   pauseNotificationsByScheduleTo: state.preferences.pauseNotificationsByScheduleTo,
   pauseNotificationsMuteAudio: state.preferences.pauseNotificationsMuteAudio,
-  unreadCountBadge: state.preferences.unreadCountBadge,
 });
 
 export default connectComponent(

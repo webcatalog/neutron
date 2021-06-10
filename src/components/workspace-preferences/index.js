@@ -22,13 +22,14 @@ import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name'
 
 import SnackbarTrigger from '../shared/snackbar-trigger';
 
+import SectionAudioVideo from './section-audio-video';
 import SectionAutoReload from './section-auto-reload';
-import SectionTheme from './section-theme';
+import SectionBadge from './section-badge';
 import SectionDevelopers from './section-developers';
 import SectionDownloads from './section-downloads';
 import SectionLinkHandling from './section-link-handling';
-import SectionAudioVideo from './section-audio-video';
 import SectionNotifications from './section-notifications';
+import SectionTheme from './section-theme';
 import SectionWorkspace from './section-workspace';
 
 const styles = (theme) => ({
@@ -82,6 +83,7 @@ const Preferences = ({ classes }) => {
       Icon: NotificationsIcon,
       subSections: {
         notifications: { text: 'Notifications', Component: SectionNotifications },
+        badge: { text: 'Badge', Component: SectionBadge },
       },
     },
     advanced: {
