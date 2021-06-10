@@ -60,7 +60,7 @@ export const requestCreateWorkspace = (workspaceObj) => {
   amplitude.getInstance().logEvent('webcatalog-engine: add workspace');
   window.ipcRenderer.send('request-create-workspace', workspaceObj);
 };
-export const requestHibernateWorkspace = (id) => window.ipcRenderer.send('request-hibernate-workspace', id);
+export const requestHibernateWorkspace = (id, timeout) => window.ipcRenderer.send('request-hibernate-workspace', id, timeout);
 export const requestOpenUrlInWorkspace = (url, id) => window.ipcRenderer.send('request-open-url-in-workspace', url, id);
 export const requestRealignActiveWorkspace = () => window.ipcRenderer.send('request-realign-active-workspace');
 export const requestRemoveWorkspace = (id) => {

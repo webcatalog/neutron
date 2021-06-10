@@ -79,7 +79,7 @@ const defaultPreferences = {
   extensionSourceProfileDirName: 'Default',
   extensionEnabledExtesionIds: {},
   hibernateWhenUnused: false,
-  hibernateUnusedWorkspacesAtLaunch: false,
+  hibernateWhenUnusedTimeout: 0,
   iapPurchased: false,
   ignoreCertificateErrors: false,
   internalUrlRule: '',

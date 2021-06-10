@@ -47,6 +47,8 @@ const WEBCAL_URLS = require('../constants/webcal-urls');
 
 const appJson = require('../constants/app-json');
 
+const hibernationTimeouts = {};
+
 // isRecreate: whether workspace is created to replace another workspace
 const createWorkspaceView = (workspaceObj = {}) => {
   const newWorkspace = createWorkspace(workspaceObj);
@@ -102,24 +104,31 @@ const wakeUpWorkspaceView = (id) => {
     });
 };
 
-const hibernateWorkspaceView = (id) => {
-  if (!getWorkspace(id).active) {
-    hibernateView(id);
-    setWorkspace(id, {
-      hibernated: true,
-    });
-  }
+const hibernateWorkspaceView = (id, timeout = 0) => {
+  clearTimeout(hibernationTimeouts[id]);
+  // eslint-disable-next-line no-console
+  console.log('Hibernating', id, 'in', timeout, 'ms');
+  hibernationTimeouts[id] = setTimeout(() => {
+    if (!getWorkspace(id).active) {
+      hibernateView(id);
+      setWorkspace(id, {
+        hibernated: true,
+      });
+      ipcMain.emit('request-refresh-badge-count');
+    }
+  }, timeout);
 };
 
 const setActiveWorkspaceView = (id) => {
   const oldActiveWorkspace = getActiveWorkspace();
 
+  clearTimeout(hibernationTimeouts[id]);
   setActiveWorkspace(id);
   setActiveView(mainWindow.get(), id);
 
   // hibernate old view
   if (global.hibernateWhenUnused && oldActiveWorkspace.id !== id) {
-    hibernateWorkspaceView(oldActiveWorkspace.id);
+    hibernateWorkspaceView(oldActiveWorkspace.id, global.hibernateWhenUnusedTimeout);
   }
 };
 

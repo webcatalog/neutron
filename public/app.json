@@ -3,6 +3,6 @@
     "name": "Clovery",
     "hostname": "clovery.app",
     "macAppStoreId": "1561301796",
-    "registered": false,
+    "registered": true,
     "iapProductIdentifier": "clovery_plus"
 }

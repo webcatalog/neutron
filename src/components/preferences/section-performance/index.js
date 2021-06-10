@@ -9,25 +9,48 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Switch from '@material-ui/core/Switch';
-import Divider from '@material-ui/core/Divider';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
 
 import connectComponent from '../../../helpers/connect-component';
 import getWorkspaceFriendlyName from '../../../helpers/get-workspace-friendly-name';
+
+import autoHibernateTimeouts from '../../../constants/auto-hibernate-timeouts';
 
 import {
   enqueueRequestRestartSnackbar,
   requestSetPreference,
 } from '../../../senders';
 
+const styles = (theme) => ({
+  selectRoot: {
+    borderRadius: theme.spacing(0.5),
+    fontSize: '0.84375rem',
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+  },
+  select: {
+    paddingTop: theme.spacing(1),
+    paddingRight: 26,
+    paddingBottom: theme.spacing(1),
+    paddingLeft: theme.spacing(1.5),
+  },
+  refreshEvery: {
+    float: 'right',
+    paddingRight: theme.spacing(1),
+  },
+});
+
 const SectionPerformance = ({
+  classes,
   hibernateWhenUnused,
-  hibernateUnusedWorkspacesAtLaunch,
+  hibernateWhenUnusedTimeout,
 }) => (
   <List disablePadding dense>
     <ListItem>
       <ListItemText
         primary={`Hibernate inactive ${getWorkspaceFriendlyName(true).toLowerCase()} automatically`}
-        secondary={`When this is on, inactive ${getWorkspaceFriendlyName(true).toLowerCase()} will go to sleep to save system resources.`}
+        secondary={`When this is on, inactive ${getWorkspaceFriendlyName(true).toLowerCase()} will go to sleep after the specified time to save system resources.`}
       />
       <ListItemSecondaryAction>
         <Switch
@@ -41,37 +64,50 @@ const SectionPerformance = ({
         />
       </ListItemSecondaryAction>
     </ListItem>
-    <Divider />
     <ListItem>
       <ListItemText
-        primary={`Hibernate inactive ${getWorkspaceFriendlyName(true).toLowerCase()} at app launch`}
-        secondary={`Hibernate all ${getWorkspaceFriendlyName(true).toLowerCase()} at launch, excluding the active ${getWorkspaceFriendlyName().toLowerCase()}.`}
+        primary={`Put inactive ${getWorkspaceFriendlyName(true).toLowerCase()} to sleep after`}
+        classes={{ primary: classes.refreshEvery }}
       />
-      <ListItemSecondaryAction>
-        <Switch
-          edge="end"
-          color="primary"
-          checked={hibernateUnusedWorkspacesAtLaunch}
-          onChange={(e) => {
-            requestSetPreference('hibernateUnusedWorkspacesAtLaunch', e.target.checked);
-          }}
-        />
-      </ListItemSecondaryAction>
+      <Select
+        value={hibernateWhenUnusedTimeout}
+        onChange={(e) => {
+          requestSetPreference('hibernateWhenUnusedTimeout', e.target.value);
+          enqueueRequestRestartSnackbar();
+        }}
+        variant="filled"
+        disableUnderline
+        margin="dense"
+        classes={{
+          root: classes.select,
+        }}
+        className={classes.selectRoot}
+        disabled={!hibernateWhenUnused}
+      >
+        {autoHibernateTimeouts.map((opt) => (
+          <MenuItem key={opt.value} dense value={opt.value}>
+            {opt.value > 0 ? `${opt.name} of inactivity` : opt.name}
+          </MenuItem>
+        ))}
+      </Select>
     </ListItem>
   </List>
 );
 
 SectionPerformance.propTypes = {
   hibernateWhenUnused: PropTypes.bool.isRequired,
-  hibernateUnusedWorkspacesAtLaunch: PropTypes.bool.isRequired,
+  hibernateWhenUnusedTimeout: PropTypes.number.isRequired,
+  classes: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   hibernateWhenUnused: state.preferences.hibernateWhenUnused,
-  hibernateUnusedWorkspacesAtLaunch: state.preferences.hibernateUnusedWorkspacesAtLaunch,
+  hibernateWhenUnusedTimeout: state.preferences.hibernateWhenUnusedTimeout,
 });
 
 export default connectComponent(
   SectionPerformance,
   mapStateToProps,
+  null,
+  styles,
 );

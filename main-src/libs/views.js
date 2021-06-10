@@ -1101,6 +1101,8 @@ const addViewAsync = async (browserWindow, workspace) => {
       width: true,
       height: true,
     });
+  } else if (global.hibernateWhenUnused && global.hibernateWhenUnusedTimeout > 0) {
+    ipcMain.emit('request-hibernate-workspace', null, workspace.id, global.hibernateWhenUnusedTimeout);
   }
 
   const initialUrl = (global.rememberLastPageVisited && workspace.lastUrl)

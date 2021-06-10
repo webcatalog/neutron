@@ -316,7 +316,6 @@ if (!gotTheLock) {
       .then(() => mainWindow.createAsync())
       .then(() => {
         const {
-          hibernateWhenUnused,
           themeSource,
           privacyConsentAsked,
         } = getPreferences();
@@ -335,7 +334,7 @@ if (!gotTheLock) {
         Object.keys(workspaceObjects).forEach((id) => {
           const workspace = workspaceObjects[id];
           if (
-            (hibernateWhenUnused)
+            (global.hibernateWhenUnused && global.hibernateWhenUnusedTimeout === 0)
             && !workspace.active
           ) {
             if (!workspace.hibernated) {
@@ -343,6 +342,7 @@ if (!gotTheLock) {
             }
             return;
           }
+          setWorkspace(workspace.id, { hibernated: false });
           addViewAsync(mainWindow.get(), workspace);
         });
 
@@ -448,6 +448,7 @@ if (!gotTheLock) {
       useSystemTitleBar,
       windowButtons,
       hibernateWhenUnused,
+      hibernateWhenUnusedTimeout,
     } = getPreferences();
 
     if (customUserAgent) {
@@ -493,6 +494,7 @@ if (!gotTheLock) {
     global.extensionSourceBrowserId = extensionSourceBrowserId;
     global.extensionSourceProfileDirName = extensionSourceProfileDirName;
     global.hibernateWhenUnused = hibernateWhenUnused;
+    global.hibernateWhenUnusedTimeout = hibernateWhenUnusedTimeout;
 
     commonInit();
 
