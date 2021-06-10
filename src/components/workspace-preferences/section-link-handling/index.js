@@ -13,6 +13,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import connectComponent from '../../../helpers/connect-component';
 
 import { updateForm } from '../../../state/dialog-workspace-preferences/actions';
+import { open as openDialogInternalUrls } from '../../../state/dialog-internal-urls/actions';
 
 import DialogInternalUrls from '../../shared/dialog-internal-urls';
 
@@ -61,6 +62,7 @@ const mapStateToProps = (state) => ({
 
 const actionCreators = {
   updateForm,
+  openDialogInternalUrls,
 };
 
 export default connectComponent(

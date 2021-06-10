@@ -22,6 +22,7 @@ import {
 } from '../../../senders';
 
 import { updateForm } from '../../../state/dialog-workspace-preferences/actions';
+import { open as openDialogRefreshInterval } from '../../../state/dialog-refresh-interval/actions';
 
 import autoRefreshIntervals from '../../../constants/auto-refresh-intervals';
 
@@ -234,6 +235,7 @@ const mapStateToProps = (state) => ({
 
 const actionCreators = {
   updateForm,
+  openDialogRefreshInterval,
 };
 
 export default connectComponent(
