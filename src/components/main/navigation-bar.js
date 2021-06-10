@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     height: 36,
     backgroundColor: (props) => {
-      if ((props.themeColor !== null && props.themeColor !== 'auto')) {
+      if (props.themeColor != null) {
         return themeColors[props.themeColor][800];
       }
       return theme.palette.background.paper;
@@ -82,7 +82,7 @@ const useStyles = makeStyles((theme) => ({
     padding: 6,
     WebkitAppRegion: 'no-drag',
     color: (props) => {
-      if ((props.themeColor !== null && props.themeColor !== 'auto')) {
+      if (props.themeColor != null) {
         return theme.palette.getContrastText(themeColors[props.themeColor][800]);
       }
       return theme.palette.text.primary;
@@ -90,7 +90,7 @@ const useStyles = makeStyles((theme) => ({
   },
   iconButtonDisabled: {
     color: (props) => {
-      if ((props.themeColor !== null && props.themeColor !== 'auto')) {
+      if (props.themeColor != null) {
         return `${fade(theme.palette.getContrastText(themeColors[props.themeColor][800]), 0.3)} !important`;
       }
       return undefined;
@@ -102,13 +102,13 @@ const useStyles = makeStyles((theme) => ({
   addressBarRoot: {
     width: '100%',
     backgroundColor: (props) => {
-      if ((props.themeColor !== null && props.themeColor !== 'auto')) {
+      if (props.themeColor != null) {
         return themeColors[props.themeColor][900];
       }
       return theme.palette.type === 'dark' ? theme.palette.background.default : theme.palette.grey[200];
     },
     color: (props) => {
-      if ((props.themeColor !== null && props.themeColor !== 'auto')) {
+      if (props.themeColor != null) {
         return theme.palette.getContrastText(themeColors[props.themeColor][800]);
       }
       return theme.palette.text.primary;
@@ -398,7 +398,6 @@ const mapStateToProps = (state) => ({
   shouldPauseNotifications: state.notifications.pauseNotificationsInfo !== null,
   sidebar: state.preferences.sidebar,
   sidebarSize: state.preferences.sidebarSize,
-  themeColor: state.preferences.themeColor,
 });
 
 const actionCreators = {

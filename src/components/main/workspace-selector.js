@@ -58,20 +58,23 @@ const useStyles = makeStyles((theme) => ({
   },
   rootActive: {
     background: (props) => {
-      if ((props.themeColor !== null && props.themeColor !== 'auto')) {
+      if (props.themeColor != null) {
         return themeColors[props.themeColor][600];
       }
       return theme.palette.action.selected;
     },
     borderLeftColor: (props) => {
-      if ((props.themeColor !== null && props.themeColor !== 'auto') || theme.palette.type === 'dark') {
+      if (props.themeColor != null) {
         return theme.palette.getContrastText(themeColors[props.themeColor][800]);
+      }
+      if (theme.palette.type === 'dark') {
+        return theme.palette.common.white;
       }
       return theme.palette.common.black;
     },
     '&:hover': {
       background: (props) => {
-        if ((props.themeColor !== null && props.themeColor !== 'auto')) {
+        if (props.themeColor != null) {
           return themeColors[props.themeColor][600];
         }
         return theme.palette.action.selected;
@@ -89,7 +92,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 400,
     textTransform: 'uppercase',
     border: (props) => {
-      if ((props.themeColor !== null && props.themeColor !== 'auto') || theme.palette.type === 'dark') {
+      if (props.themeColor != null || theme.palette.type === 'dark') {
         return 'none';
       }
       return '1px solid rgba(0, 0, 0, 0.12)';
@@ -103,13 +106,13 @@ const useStyles = makeStyles((theme) => ({
   },
   textAvatar: {
     background: (props) => {
-      if ((props.themeColor !== null && props.themeColor !== 'auto') || theme.palette.type === 'light') {
+      if (props.themeColor != null || theme.palette.type === 'light') {
         return theme.palette.common.white;
       }
       return theme.palette.common.black;
     },
     color: (props) => {
-      if ((props.themeColor !== null && props.themeColor !== 'auto') || theme.palette.type === 'light') {
+      if (props.themeColor != null || theme.palette.type === 'light') {
         return theme.palette.common.black;
       }
       return theme.palette.common.white;
@@ -128,7 +131,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '10.5px',
     fontWeight: 500,
     color: (props) => {
-      if (props.themeColor !== null && props.themeColor !== 'auto') {
+      if (props.themeColor != null) {
         return theme.palette.getContrastText(themeColors[props.themeColor][800]);
       }
       return theme.palette.text.primary;
@@ -306,10 +309,10 @@ const WorkspaceSelector = ({
           className={classnames(
             classes.avatar,
             selectedIconType === 'text' && classes.textAvatar,
-            transparentBackground && classes.transparentAvatar,
+            selectedIconType === 'image' && transparentBackground && classes.transparentAvatar,
           )}
           style={(() => {
-            if (selectedIconType === 'text' && backgroundColor && !transparentBackground) {
+            if (selectedIconType === 'text' && backgroundColor) {
               return {
                 backgroundColor,
                 color: Color(backgroundColor).isDark() ? '#fff' : '#000',
@@ -402,7 +405,10 @@ const mapStateToProps = (state, ownProps) => ({
   shouldUseDarkColors: state.general.shouldUseDarkColors,
   sidebarSize: state.preferences.sidebarSize,
   sidebarTips: state.preferences.sidebarTips,
-  themeColor: state.preferences.themeColor,
+  backgroundColor: ownProps.preferences
+    && ownProps.preferences.color
+    && ownProps.preferences.color !== ownProps.themeColor
+    ? themeColors[ownProps.preferences.color][600] : null,
 });
 
 export default connectComponent(

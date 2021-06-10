@@ -17,6 +17,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 
 import connectComponent from '../../../helpers/connect-component';
 import getWorkspaceFriendlyName from '../../../helpers/get-workspace-friendly-name';
+import camelCaseToSentenceCase from '../../../helpers/camel-case-to-sentence-case';
 
 import themeColors from '../../../constants/theme-colors';
 
@@ -45,13 +46,6 @@ const styles = (theme) => ({
   },
 });
 
-const camelCaseToSentenceCase = (val) => {
-  // convert camel case to sentence case
-  const valTitleRaw = val.replace(/([A-Z])/g, ' $1');
-  const valTitle = valTitleRaw.charAt(0).toUpperCase() + valTitleRaw.slice(1);
-  return valTitle;
-};
-
 const SectionTheme = ({
   classes,
   themeSource,
@@ -79,7 +73,7 @@ const SectionTheme = ({
       </ListItem>
       <Divider />
       <ListItem>
-        <ListItemText primary="Background Color" />
+        <ListItemText primary="Color" />
         <Select
           value={themeColor == null ? 'none' : themeColor}
           onChange={(e) => requestSetPreference('themeColor', e.target.value === 'none' ? null : e.target.value)}
@@ -90,14 +84,11 @@ const SectionTheme = ({
             root: classes.select,
           }}
           className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
-          renderValue={(value) => camelCaseToSentenceCase(value)}
+          // renderValue={(value) => camelCaseToSentenceCase(value)}
         >
           <MenuItem dense value="none">None</MenuItem>
           <MenuItem dense value="auto">
-            <ListItemIcon>
-              <Avatar className={classes.avatar}>A</Avatar>
-            </ListItemIcon>
-            <ListItemText primary={`Matches with active ${getWorkspaceFriendlyName().toLowerCase()}'s color`} />
+            {`Matches with active ${getWorkspaceFriendlyName().toLowerCase()}'s color`}
           </MenuItem>
           {Object.keys(themeColors).map((val) => (
             <MenuItem dense value={val} key={val}>

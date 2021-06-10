@@ -96,7 +96,7 @@ const useStyles = makeStyles((theme) => {
       height: '100%',
       width: 68,
       backgroundColor: (props) => {
-        if ((props.themeColor !== null && props.themeColor !== 'auto')) {
+        if (props.themeColor != null) {
           return themeColors[props.themeColor][800];
         }
         return theme.palette.background.paper;
@@ -229,11 +229,10 @@ const useStyles = makeStyles((theme) => {
 });
 
 const SortableItem = sortableElement(({ value }) => {
-  const { workspace, index } = value;
+  const { workspace, themeColor, index } = value;
   const {
     accountInfo,
     active,
-    backgroundColor,
     disableAudio,
     disableNotifications,
     hibernated,
@@ -253,13 +252,13 @@ const SortableItem = sortableElement(({ value }) => {
       name={name}
       accountInfo={accountInfo}
       picturePath={picturePath}
-      backgroundColor={backgroundColor}
       transparentBackground={transparentBackground}
       preferredIconType={preferredIconType}
       order={index}
       hibernated={hibernated}
       preferences={preferences}
       onClick={() => requestSetActiveWorkspace(id)}
+      themeColor={themeColor}
       onContextMenu={(e) => {
         e.preventDefault();
 
@@ -362,7 +361,7 @@ const Main = ({
 
   return (
     <div className={classes.outerRoot}>
-      {showMacTitleBar && <MacTitleBar />}
+      {showMacTitleBar && <MacTitleBar themeColor={themeColor} />}
       <DraggableRegion />
       <div className={classes.root}>
         {sidebar && (
@@ -398,11 +397,12 @@ const Main = ({
                   }}
                 >
                   {workspacesList.map((workspace, i) => (
-                    <SortableItem key={`item-${workspace.id}`} index={i} value={{ index: i, workspace }} />
+                    <SortableItem key={`item-${workspace.id}`} index={i} value={{ index: i, workspace, themeColor }} />
                   ))}
                 </SortableContainer>
                 <WorkspaceSelector
                   id="add"
+                  themeColor={themeColor}
                   onClick={() => {
                     if (!appJson.url) {
                       requestShowAddWorkspaceWindow();
@@ -485,7 +485,7 @@ const Main = ({
           </ScrollbarContainer>
         )}
         <div className={classes.contentRoot}>
-          {navigationBar && <NavigationBar />}
+          {navigationBar && <NavigationBar themeColor={themeColor} />}
           <FindInPage />
           <div className={classes.innerContentRoot}>
             {didFailLoad && !isLoading && (
@@ -604,7 +604,15 @@ const mapStateToProps = (state) => {
     titleBar: state.preferences.titleBar,
     muteApp: state.preferences.muteApp,
     workspaces: state.workspaces.workspaces,
-    themeColor: state.preferences.themeColor,
+    themeColor: (() => {
+      if (state.preferences.themeColor === 'auto') {
+        if (activeWorkspace && activeWorkspace.preferences && activeWorkspace.preferences.color) {
+          return activeWorkspace.preferences.color;
+        }
+        return null;
+      }
+      return state.preferences.themeColor;
+    })(),
   };
 };
 

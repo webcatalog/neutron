@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => {
   return {
     root: {
       background: (props) => {
-        if ((props.themeColor !== null && props.themeColor !== 'auto')) {
+        if (props.themeColor != null) {
           return themeColors[props.themeColor][900];
         }
         return theme.palette.type === 'dark' ? '#2a2b2c' : 'linear-gradient(top, #e4e4e4, #cecece)';
@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => {
       lineHeight: `${titleBarHeight}px`,
       fontSize: '13px',
       color: (props) => {
-        if ((props.themeColor !== null && props.themeColor !== 'auto')) {
+        if (props.themeColor != null) {
           return fade(theme.palette.getContrastText(themeColors[props.themeColor][900]), 0.7);
         }
         return theme.palette.type === 'dark' ? 'rgba(255, 255, 255, 0.7)' : 'rgb(77, 77, 77)';
@@ -112,7 +112,6 @@ FakeTitleBar.propTypes = {
 const mapStateToProps = (state) => ({
   title: state.general.title,
   searchEngine: state.preferences.searchEngine,
-  themeColor: state.preferences.themeColor,
 });
 
 export default connectComponent(
