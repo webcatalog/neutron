@@ -430,8 +430,8 @@ const loadListeners = () => {
     wakeUpWorkspaceView(id);
   });
 
-  ipcMain.on('request-hibernate-workspace', (e, id) => {
-    hibernateWorkspaceView(id);
+  ipcMain.on('request-hibernate-workspace', (e, id, timeout) => {
+    hibernateWorkspaceView(id, timeout);
   });
 
   ipcMain.on('request-remove-workspace', (e, id) => {

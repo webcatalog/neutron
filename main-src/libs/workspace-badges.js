@@ -18,6 +18,7 @@ const refreshBadgeCount = () => {
     Object.keys(workspaces).forEach((id) => {
       const workspace = workspaces[id];
 
+      if (workspace.hibernated) return;
       if (workspace.preferences && workspace.preferences.unreadCountBadge === false) return;
 
       const m = getWorkspaceMeta(id);
