@@ -135,6 +135,26 @@ const createAsync = () => new Promise((resolve) => {
     (global.attachToMenubar ? mb.tray : tray).popUpContextMenu(trayContextMenu);
   };
 
+  const handleAppCommand = (e, cmd) => {
+    // https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-appcommand?redirectedfrom=MSDN
+    // Handle mouse events on Linux & Windows
+    switch (cmd) {
+      case 'browser-backward':
+        ipcMain.emit('request-go-back');
+        break;
+      case 'browser-forward':
+        ipcMain.emit('request-go-forward');
+        break;
+      case 'browser-refresh':
+        ipcMain.emit('request-reload');
+        break;
+      case 'browser-home':
+        ipcMain.emit('request-go-home');
+        break;
+      default: break;
+    }
+  };
+
   if (global.attachToMenubar) {
     const menubarWindowState = windowStateKeeper({
       file: 'window-state-menubar.json',
@@ -196,6 +216,8 @@ const createAsync = () => new Promise((resolve) => {
           view.webContents.focus();
         }
       });
+
+      mb.window.on('app-command', handleAppCommand);
     });
 
     mb.on('ready', () => {
@@ -358,6 +380,8 @@ const createAsync = () => new Promise((resolve) => {
       ipcMain.emit('request-realign-active-workspace');
     }, 500);
   });
+
+  win.on('app-command', handleAppCommand);
 
   // ensure redux is loaded first
   // if not, redux might not be able catch changes sent from ipcMain
