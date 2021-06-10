@@ -1186,8 +1186,9 @@ const removeView = (id) => {
   session.fromPartition(`persist:${id}`).clearStorageData();
   delete views[id];
 
-  const partitionId = global.shareWorkspaceBrowsingData ? 'persist:shared' : `persist:${id}`;
-  delete extensionManagers[partitionId];
+  if (!global.shareWorkspaceBrowsingData) {
+    delete extensionManagers[`persist:${id}`];
+  }
 };
 
 const setViewsAudioPref = (_shouldMuteAudio) => {
