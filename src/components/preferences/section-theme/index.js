@@ -19,6 +19,8 @@ import Typography from '@material-ui/core/Typography';
 
 import connectComponent from '../../../helpers/connect-component';
 
+import themeColors from '../../../constants/theme-colors';
+
 import {
   requestSetPreference,
 } from '../../../senders';
@@ -59,6 +61,7 @@ const SectionTheme = ({
   darkReaderGrayscale,
   darkReaderSepia,
   themeSource,
+  themeColor,
 }) => (
   <>
     <List disablePadding dense>
@@ -78,6 +81,30 @@ const SectionTheme = ({
           <MenuItem dense value="system">System default</MenuItem>
           <MenuItem dense value="light">Light</MenuItem>
           <MenuItem dense value="dark">Dark</MenuItem>
+        </Select>
+      </ListItem>
+      <Divider />
+      <ListItem>
+        <ListItemText primary="Background Color" />
+        <Select
+          value={themeColor}
+          onChange={(e) => requestSetPreference('themeColor', e.target.value)}
+          variant="filled"
+          disableUnderline
+          margin="dense"
+          classes={{
+            root: classes.select,
+          }}
+          className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
+        >
+          <MenuItem dense value={null}>None</MenuItem>
+          {Object.keys(themeColors).map((val) => {
+            // https://stackoverflow.com/a/7225450
+            // convert camel case to sentence case
+            const valTitleRaw = val.replace(/([A-Z])/g, ' $1');
+            const valTitle = valTitleRaw.charAt(0).toUpperCase() + valTitleRaw.slice(1);
+            return <MenuItem dense value={val}>{valTitle}</MenuItem>;
+          })}
         </Select>
       </ListItem>
       <Divider />
@@ -225,6 +252,10 @@ const SectionTheme = ({
   </>
 );
 
+SectionTheme.defaultProps = {
+  themeColor: null,
+};
+
 SectionTheme.propTypes = {
   classes: PropTypes.object.isRequired,
   darkReader: PropTypes.bool.isRequired,
@@ -233,6 +264,7 @@ SectionTheme.propTypes = {
   darkReaderGrayscale: PropTypes.number.isRequired,
   darkReaderSepia: PropTypes.number.isRequired,
   themeSource: PropTypes.string.isRequired,
+  themeColor: PropTypes.string,
 };
 
 const mapStateToProps = (state) => ({
@@ -242,6 +274,7 @@ const mapStateToProps = (state) => ({
   darkReaderGrayscale: state.preferences.darkReaderGrayscale,
   darkReaderSepia: state.preferences.darkReaderSepia,
   themeSource: state.preferences.themeSource,
+  themeColor: state.preferences.themeColor,
 });
 
 export default connectComponent(

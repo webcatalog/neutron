@@ -5,28 +5,41 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
+import { makeStyles } from '@material-ui/core/styles';
+
 import connectComponent from '../../helpers/connect-component';
 import getUrlFromText from '../../helpers/get-url-from-text';
 import isMacOs11 from '../../helpers/is-mac-os-11';
 import getStaticGlobal from '../../helpers/get-static-global';
+import themeColors from '../../constants/theme-colors';
 
 import {
   requestLoadUrl,
 } from '../../senders';
 
-const styles = (theme) => {
+const useStyles = makeStyles((theme) => {
   // big sur increases title bar height
   const titleBarHeight = isMacOs11() ? 28 : 22;
   return {
     root: {
-      background: theme.palette.type === 'dark' ? '#2a2b2c' : 'linear-gradient(top, #e4e4e4, #cecece)',
+      background: (props) => {
+        if ((props.themeColor !== null && props.themeColor !== 'auto')) {
+          return themeColors[props.themeColor][900];
+        }
+        return theme.palette.type === 'dark' ? '#2a2b2c' : 'linear-gradient(top, #e4e4e4, #cecece)';
+      },
       height: titleBarHeight,
       WebkitAppRegion: 'drag',
       WebkitUserSelect: 'none',
       textAlign: 'center',
       lineHeight: `${titleBarHeight}px`,
       fontSize: '13px',
-      color: theme.palette.type === 'dark' ? 'rgba(255, 255, 255, 0.7)' : 'rgb(77, 77, 77)',
+      color: (props) => {
+        if ((props.themeColor !== null && props.themeColor !== 'auto')) {
+          return 'rgba(255, 255, 255, 0.7)';
+        }
+        return theme.palette.type === 'dark' ? 'rgba(255, 255, 255, 0.7)' : 'rgb(77, 77, 77)';
+      },
       fontFamily: '-apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif',
       fontWeight: 500,
       paddingLeft: 72,
@@ -40,14 +53,16 @@ const styles = (theme) => {
       paddingRight: theme.spacing(1),
     },
   };
-};
+});
 
 const FakeTitleBar = (props) => {
   const {
-    classes,
     title,
     searchEngine,
+    themeColor,
   } = props;
+
+  const classes = useStyles({ themeColor });
 
   if (window.process.platform !== 'darwin') return null;
 
@@ -84,22 +99,22 @@ const FakeTitleBar = (props) => {
 
 FakeTitleBar.defaultProps = {
   title: '',
+  themeColor: null,
 };
 
 FakeTitleBar.propTypes = {
-  classes: PropTypes.object.isRequired,
   title: PropTypes.string,
   searchEngine: PropTypes.string.isRequired,
+  themeColor: PropTypes.string,
 };
 
 const mapStateToProps = (state) => ({
   title: state.general.title,
   searchEngine: state.preferences.searchEngine,
+  themeColor: state.preferences.themeColor,
 });
 
 export default connectComponent(
   FakeTitleBar,
   mapStateToProps,
-  null,
-  styles,
 );

@@ -6,6 +6,8 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Color from 'color';
 
+import { makeStyles } from '@material-ui/core/styles';
+
 import Badge from '@material-ui/core/Badge';
 import Avatar from '@material-ui/core/Avatar';
 import SvgIcon from '@material-ui/core/SvgIcon';
@@ -14,6 +16,7 @@ import connectComponent from '../../helpers/connect-component';
 import getAvatarText from '../../helpers/get-avatar-text';
 import getUrlFromText from '../../helpers/get-url-from-text';
 import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
+import themeColors from '../../constants/theme-colors';
 
 import {
   requestOpenUrlInWorkspace,
@@ -22,7 +25,7 @@ import {
 import defaultWorkspaceImageLight from '../../images/default-workspace-image-light.png';
 import defaultWorkspaceImageDark from '../../images/default-workspace-image-dark.png';
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     height: 56,
     width: '100%',
@@ -54,10 +57,25 @@ const styles = (theme) => ({
     height: 68,
   },
   rootActive: {
-    background: theme.palette.action.selected,
-    borderLeftColor: theme.palette.type === 'dark' ? theme.palette.common.white : theme.palette.common.black,
+    background: (props) => {
+      if ((props.themeColor !== null && props.themeColor !== 'auto')) {
+        return themeColors[props.themeColor][600];
+      }
+      return theme.palette.action.selected;
+    },
+    borderLeftColor: (props) => {
+      if ((props.themeColor !== null && props.themeColor !== 'auto') || theme.palette.type === 'dark') {
+        return theme.palette.common.white;
+      }
+      return theme.palette.common.black;
+    },
     '&:hover': {
-      background: theme.palette.action.selected,
+      background: (props) => {
+        if ((props.themeColor !== null && props.themeColor !== 'auto')) {
+          return themeColors[props.themeColor][600];
+        }
+        return theme.palette.action.selected;
+      },
     },
   },
   avatar: {
@@ -70,7 +88,12 @@ const styles = (theme) => ({
     textAlign: 'center',
     fontWeight: 400,
     textTransform: 'uppercase',
-    border: theme.palette.type === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)',
+    border: (props) => {
+      if ((props.themeColor !== null && props.themeColor !== 'auto') || theme.palette.type === 'dark') {
+        return 'none';
+      }
+      return '1px solid rgba(0, 0, 0, 0.12)';
+    },
     overflow: 'hidden',
     fontSize: '24px',
   },
@@ -79,8 +102,18 @@ const styles = (theme) => ({
     width: '100%',
   },
   textAvatar: {
-    background: theme.palette.type === 'dark' ? theme.palette.common.white : theme.palette.common.black,
-    color: theme.palette.getContrastText(theme.palette.type === 'dark' ? theme.palette.common.white : theme.palette.common.black),
+    background: (props) => {
+      if ((props.themeColor !== null && props.themeColor !== 'auto') || theme.palette.type === 'light') {
+        return theme.palette.common.white;
+      }
+      return theme.palette.common.black;
+    },
+    color: (props) => {
+      if ((props.themeColor !== null && props.themeColor !== 'auto') || theme.palette.type === 'light') {
+        return theme.palette.common.black;
+      }
+      return theme.palette.common.white;
+    },
   },
   transparentAvatar: {
     background: 'transparent',
@@ -94,7 +127,12 @@ const styles = (theme) => ({
     padding: 0,
     fontSize: '10.5px',
     fontWeight: 500,
-    color: theme.palette.text.primary,
+    color: (props) => {
+      if (props.themeColor !== null && props.themeColor !== 'auto') {
+        return theme.palette.common.white;
+      }
+      return theme.palette.text.primary;
+    },
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
@@ -120,14 +158,13 @@ const styles = (theme) => ({
     height: 14,
     width: 14,
   },
-});
+}));
 
 const WorkspaceSelector = ({
   accountInfo,
   active,
   backgroundColor,
   badgeCount,
-  classes,
   hibernated,
   id,
   name,
@@ -141,7 +178,9 @@ const WorkspaceSelector = ({
   sidebarSize,
   sidebarTips,
   transparentBackground,
+  themeColor,
 }) => {
+  const classes = useStyles({ themeColor });
   const isExpanded = sidebarSize === 'expanded';
   const shortcutTip = order < 9 && id !== 'add'
     ? `${window.process.platform === 'darwin' ? '⌘' : 'Ctrl+'}${order + 1}` : null;
@@ -330,6 +369,7 @@ WorkspaceSelector.defaultProps = {
   picturePath: null,
   preferredIconType: 'auto',
   transparentBackground: false,
+  themeColor: null,
 };
 
 WorkspaceSelector.propTypes = {
@@ -337,7 +377,6 @@ WorkspaceSelector.propTypes = {
   active: PropTypes.bool,
   backgroundColor: PropTypes.string,
   badgeCount: PropTypes.number,
-  classes: PropTypes.object.isRequired,
   hibernated: PropTypes.bool,
   id: PropTypes.string.isRequired,
   name: PropTypes.string,
@@ -351,6 +390,7 @@ WorkspaceSelector.propTypes = {
   sidebarSize: PropTypes.oneOf(['compact', 'expanded']).isRequired,
   sidebarTips: PropTypes.oneOf(['shortcut', 'name', 'none']).isRequired,
   transparentBackground: PropTypes.bool,
+  themeColor: PropTypes.string,
 };
 
 const mapStateToProps = (state, ownProps) => ({
@@ -362,11 +402,11 @@ const mapStateToProps = (state, ownProps) => ({
   shouldUseDarkColors: state.general.shouldUseDarkColors,
   sidebarSize: state.preferences.sidebarSize,
   sidebarTips: state.preferences.sidebarTips,
+  themeColor: state.preferences.themeColor,
 });
 
 export default connectComponent(
   WorkspaceSelector,
   mapStateToProps,
   null,
-  styles,
 );
