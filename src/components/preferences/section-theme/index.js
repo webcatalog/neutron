@@ -16,8 +16,12 @@ import Select from '@material-ui/core/Select';
 import Slider from '@material-ui/core/Slider';
 import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
+import Avatar from '@material-ui/core/Avatar';
+
+import ListItemIcon from '@material-ui/core/ListItemIcon';
 
 import connectComponent from '../../../helpers/connect-component';
+import getWorkspaceFriendlyName from '../../../helpers/get-workspace-friendly-name';
 
 import themeColors from '../../../constants/theme-colors';
 
@@ -51,7 +55,18 @@ const styles = (theme) => ({
     paddingBottom: theme.spacing(1),
     paddingLeft: theme.spacing(1.5),
   },
+  avatar: {
+    width: theme.spacing(3),
+    height: theme.spacing(3),
+  },
 });
+
+const camelCaseToSentenceCase = (val) => {
+  // convert camel case to sentence case
+  const valTitleRaw = val.replace(/([A-Z])/g, ' $1');
+  const valTitle = valTitleRaw.charAt(0).toUpperCase() + valTitleRaw.slice(1);
+  return valTitle;
+};
 
 const SectionTheme = ({
   classes,
@@ -87,8 +102,8 @@ const SectionTheme = ({
       <ListItem>
         <ListItemText primary="Background Color" />
         <Select
-          value={themeColor}
-          onChange={(e) => requestSetPreference('themeColor', e.target.value)}
+          value={themeColor == null ? 'none' : themeColor}
+          onChange={(e) => requestSetPreference('themeColor', e.target.value === 'none' ? null : e.target.value)}
           variant="filled"
           disableUnderline
           margin="dense"
@@ -96,15 +111,23 @@ const SectionTheme = ({
             root: classes.select,
           }}
           className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
+          renderValue={(value) => camelCaseToSentenceCase(value)}
         >
-          <MenuItem dense value={null}>None</MenuItem>
-          {Object.keys(themeColors).map((val) => {
-            // https://stackoverflow.com/a/7225450
-            // convert camel case to sentence case
-            const valTitleRaw = val.replace(/([A-Z])/g, ' $1');
-            const valTitle = valTitleRaw.charAt(0).toUpperCase() + valTitleRaw.slice(1);
-            return <MenuItem dense value={val}>{valTitle}</MenuItem>;
-          })}
+          <MenuItem dense value="none">None</MenuItem>
+          <MenuItem dense value="auto">
+            <ListItemIcon>
+              <Avatar className={classes.avatar}>A</Avatar>
+            </ListItemIcon>
+            <ListItemText primary={`Matches with active ${getWorkspaceFriendlyName().toLowerCase()}'s color`} />
+          </MenuItem>
+          {Object.keys(themeColors).map((val) => (
+            <MenuItem dense value={val} key={val}>
+              <ListItemIcon>
+                <Avatar className={classes.avatar} style={{ backgroundColor: themeColors[val][600] }}>{' '}</Avatar>
+              </ListItemIcon>
+              <ListItemText primary={camelCaseToSentenceCase(val)} />
+            </MenuItem>
+          ))}
         </Select>
       </ListItem>
       <Divider />

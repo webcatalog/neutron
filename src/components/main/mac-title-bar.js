@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import { makeStyles } from '@material-ui/core/styles';
+import { fade } from '@material-ui/core/styles/colorManipulator';
 
 import connectComponent from '../../helpers/connect-component';
 import getUrlFromText from '../../helpers/get-url-from-text';
@@ -36,7 +37,7 @@ const useStyles = makeStyles((theme) => {
       fontSize: '13px',
       color: (props) => {
         if ((props.themeColor !== null && props.themeColor !== 'auto')) {
-          return 'rgba(255, 255, 255, 0.7)';
+          return fade(theme.palette.getContrastText(themeColors[props.themeColor][900]), 0.7);
         }
         return theme.palette.type === 'dark' ? 'rgba(255, 255, 255, 0.7)' : 'rgb(77, 77, 77)';
       },

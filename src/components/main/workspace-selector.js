@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
     },
     borderLeftColor: (props) => {
       if ((props.themeColor !== null && props.themeColor !== 'auto') || theme.palette.type === 'dark') {
-        return theme.palette.common.white;
+        return theme.palette.getContrastText(themeColors[props.themeColor][800]);
       }
       return theme.palette.common.black;
     },
@@ -129,7 +129,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 500,
     color: (props) => {
       if (props.themeColor !== null && props.themeColor !== 'auto') {
-        return theme.palette.common.white;
+        return theme.palette.getContrastText(themeColors[props.themeColor][800]);
       }
       return theme.palette.text.primary;
     },

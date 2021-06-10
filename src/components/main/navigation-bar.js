@@ -6,9 +6,9 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import { makeStyles } from '@material-ui/core/styles';
+import { fade } from '@material-ui/core/styles/colorManipulator';
 
 import SvgIcon from '@material-ui/core/SvgIcon';
-
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import HomeIcon from '@material-ui/icons/Home';
@@ -83,7 +83,7 @@ const useStyles = makeStyles((theme) => ({
     WebkitAppRegion: 'no-drag',
     color: (props) => {
       if ((props.themeColor !== null && props.themeColor !== 'auto')) {
-        return theme.palette.common.white;
+        return theme.palette.getContrastText(themeColors[props.themeColor][800]);
       }
       return theme.palette.text.primary;
     },
@@ -91,7 +91,7 @@ const useStyles = makeStyles((theme) => ({
   iconButtonDisabled: {
     color: (props) => {
       if ((props.themeColor !== null && props.themeColor !== 'auto')) {
-        return 'rgba(255, 255, 255, 0.3) !important';
+        return `${fade(theme.palette.getContrastText(themeColors[props.themeColor][800]), 0.3)} !important`;
       }
       return undefined;
     },
@@ -109,7 +109,7 @@ const useStyles = makeStyles((theme) => ({
     },
     color: (props) => {
       if ((props.themeColor !== null && props.themeColor !== 'auto')) {
-        return theme.palette.common.white;
+        return theme.palette.getContrastText(themeColors[props.themeColor][800]);
       }
       return theme.palette.text.primary;
     },
