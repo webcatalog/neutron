@@ -31,7 +31,7 @@ const SectionLinkHandling = ({
             if (formInternalUrlRule != null) {
               return `/^${formInternalUrlRule}$/i`;
             }
-            return `Global preference (${internalUrlRule ? `/^${internalUrlRule}$/i` : 'Not set'})`;
+            return `Use global preference (${internalUrlRule ? `/^${internalUrlRule}$/i` : 'Not set'})`;
           })()}
         />
         <ChevronRightIcon color="action" />

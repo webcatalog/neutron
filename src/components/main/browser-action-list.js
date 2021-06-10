@@ -28,9 +28,9 @@ const mapStateToProps = (state) => {
   const shareWorkspaceBrowsingData = getStaticGlobal('shareWorkspaceBrowsingData');
 
   let partitionId = null;
-  if (shareWorkspaceBrowsingData) partitionId = 'persist:shared';
   if (activeWorkspace) {
-    partitionId = `persist:${activeWorkspace.id}`;
+    if (shareWorkspaceBrowsingData) partitionId = 'persist:shared';
+    else partitionId = `persist:${activeWorkspace.id}`;
   }
 
   return {
