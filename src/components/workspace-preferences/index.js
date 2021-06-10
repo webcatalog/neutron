@@ -29,7 +29,7 @@ import SectionDevelopers from './section-developers';
 import SectionDownloads from './section-downloads';
 import SectionLinkHandling from './section-link-handling';
 import SectionNotifications from './section-notifications';
-import SectionTheme from './section-theme';
+import SectionDarkReader from './section-dark-reader';
 import SectionWorkspace from './section-workspace';
 
 const styles = (theme) => ({
@@ -75,7 +75,7 @@ const Preferences = ({ classes }) => {
       text: 'Appearance',
       Icon: PaletteIcon,
       subSections: {
-        appearance: { text: 'Theme', Component: SectionTheme },
+        appearance: { text: 'Dark Reader', Component: SectionDarkReader },
       },
     },
     notifications: {
