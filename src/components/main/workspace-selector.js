@@ -7,6 +7,8 @@ import classnames from 'classnames';
 import Color from 'color';
 
 import Badge from '@material-ui/core/Badge';
+import Avatar from '@material-ui/core/Avatar';
+import SvgIcon from '@material-ui/core/SvgIcon';
 
 import connectComponent from '../../helpers/connect-component';
 import getAvatarText from '../../helpers/get-avatar-text';
@@ -22,7 +24,7 @@ import defaultWorkspaceImageDark from '../../images/default-workspace-image-dark
 
 const styles = (theme) => ({
   root: {
-    height: 48,
+    height: 56,
     width: '100%',
     display: 'flex',
     alignItems: 'center',
@@ -49,15 +51,11 @@ const styles = (theme) => ({
     paddingRight: theme.spacing(1),
   },
   rootWithText: {
-    height: 60,
-  },
-  rootHibernate: {
-    opacity: 0.4,
+    height: 68,
   },
   rootActive: {
     background: theme.palette.action.selected,
     borderLeftColor: theme.palette.type === 'dark' ? theme.palette.common.white : theme.palette.common.black,
-    opacity: 1,
     '&:hover': {
       background: theme.palette.action.selected,
     },
@@ -112,6 +110,15 @@ const styles = (theme) => ({
     textOverflow: 'ellipsis',
     overflow: 'hidden',
     whiteSpace: 'nowrap',
+  },
+  sleepAvatar: {
+    height: 20,
+    width: 20,
+    color: theme.palette.text.primary,
+  },
+  sleepAvatarIcon: {
+    height: 14,
+    width: 14,
   },
 });
 
@@ -207,7 +214,6 @@ const WorkspaceSelector = ({
         classes.root,
         isExpanded && classes.rootExpanded,
         tipText && classes.rootWithText,
-        hibernated && classes.rootHibernate,
         active && classes.rootActive,
       )}
       onClick={onClick}
@@ -235,8 +241,25 @@ const WorkspaceSelector = ({
       title={hoverText}
     >
       <Badge
-        color="secondary"
-        badgeContent={typeof badgeCount === 'number' && !Number.isNaN(badgeCount) ? badgeCount : 0}
+        color={hibernated ? 'default' : 'error'}
+        overlap="circle"
+        badgeContent={(() => {
+          if (hibernated) {
+            return (
+              <Avatar variant="circle" className={classes.sleepAvatar}>
+                <SvgIcon className={classes.sleepAvatarIcon}>
+                  <path fill="currentColor" d="M18.73,18C15.4,21.69 9.71,22 6,18.64C2.33,15.31 2.04,9.62 5.37,5.93C6.9,4.25 9,3.2 11.27,3C7.96,6.7 8.27,12.39 12,15.71C13.63,17.19 15.78,18 18,18C18.25,18 18.5,18 18.73,18Z" />
+                </SvgIcon>
+              </Avatar>
+            );
+          }
+
+          return typeof badgeCount === 'number' && !Number.isNaN(badgeCount) ? badgeCount : 0;
+        })()}
+        anchorOrigin={{
+          vertical: hibernated ? 'bottom' : 'top',
+          horizontal: 'right',
+        }}
         max={99}
         classes={{ badge: classes.badge }}
       >
