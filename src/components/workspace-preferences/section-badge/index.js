@@ -57,7 +57,7 @@ const SectionBadge = ({
         }}
         className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
       >
-        <MenuItem dense value="global">{`Global preference (${unreadCountBadge ? 'Yes' : 'No'})`}</MenuItem>
+        <MenuItem dense value="global">{`Use global preference (${unreadCountBadge ? 'Yes' : 'No'})`}</MenuItem>
         <MenuItem dense value={false}>No</MenuItem>
       </Select>
     </ListItem>

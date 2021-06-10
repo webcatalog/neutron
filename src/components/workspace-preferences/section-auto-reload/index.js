@@ -97,7 +97,7 @@ const SectionAutoReload = ({
           }}
           className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
         >
-          <MenuItem dense value="global">{`Global preference (${autoRefresh ? 'Yes' : 'No'})`}</MenuItem>
+          <MenuItem dense value="global">{`Use global preference (${autoRefresh ? 'Yes' : 'No'})`}</MenuItem>
           <MenuItem dense value>Yes</MenuItem>
           <MenuItem dense value={false}>No</MenuItem>
         </Select>
@@ -191,7 +191,7 @@ const SectionAutoReload = ({
               }}
               className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
             >
-              <MenuItem dense value="global">{`Global preference (${autoRefreshOnlyWhenInactive ? 'Yes' : 'No'})`}</MenuItem>
+              <MenuItem dense value="global">{`Use global preference (${autoRefreshOnlyWhenInactive ? 'Yes' : 'No'})`}</MenuItem>
               <MenuItem dense value>Yes</MenuItem>
               <MenuItem dense value={false}>No</MenuItem>
             </Select>

@@ -73,7 +73,7 @@ const SectionTheme = ({
         }}
         className={classes.selectRoot}
       >
-        <MenuItem dense value="global">{`Global preference (${darkReader ? 'Yes' : 'No'})`}</MenuItem>
+        <MenuItem dense value="global">{`Use global preference (${darkReader ? 'Yes' : 'No'})`}</MenuItem>
         <MenuItem dense value>Yes</MenuItem>
         <MenuItem dense value={false}>No</MenuItem>
       </Select>

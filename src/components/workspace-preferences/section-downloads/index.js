@@ -63,7 +63,7 @@ const SectionDownloads = ({
         >
           <ListItemText
             primary="Download Location"
-            secondary={formDownloadPath != null ? formDownloadPath : `Global preference (${downloadPath})`}
+            secondary={formDownloadPath != null ? formDownloadPath : `Use global preference (${downloadPath})`}
           />
           <ChevronRightIcon color="action" />
         </ListItem>
@@ -90,7 +90,7 @@ const SectionDownloads = ({
         }}
         className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
       >
-        <MenuItem dense value="global">{`Global preference (${askForDownloadPath ? 'Yes' : 'No'})`}</MenuItem>
+        <MenuItem dense value="global">{`Use global preference (${askForDownloadPath ? 'Yes' : 'No'})`}</MenuItem>
         <MenuItem dense value>Yes</MenuItem>
         <MenuItem dense value={false}>No</MenuItem>
       </Select>
