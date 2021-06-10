@@ -36,6 +36,7 @@ import SectionAudioVideo from './section-audio-video';
 import SectionAutoReload from './section-auto-reload';
 import SectionBadge from './section-badge';
 import SectionBrowsing from './section-browsing';
+import SectionDarkReader from './section-dark-reader';
 import SectionDevelopers from './section-developers';
 import SectionDownloads from './section-downloads';
 import SectionExit from './section-exit';
@@ -116,6 +117,7 @@ const Preferences = ({
       Icon: PaletteIcon,
       subSections: {
         theme: { text: 'Theme', Component: SectionTheme },
+        darkReader: { text: 'Dark Reader', Component: SectionDarkReader },
         view: { text: 'View', Component: SectionView },
         window: { text: 'Window', Component: SectionWindow },
         fonts: { text: 'Fonts', Component: SectionFonts },

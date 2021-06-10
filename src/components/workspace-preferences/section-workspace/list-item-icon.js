@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Color from 'color';
 
-import * as materialColors from '@material-ui/core/colors';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -19,6 +18,9 @@ import CheckIcon from '@material-ui/icons/Check';
 
 import connectComponent from '../../../helpers/connect-component';
 import getAvatarText from '../../../helpers/get-avatar-text';
+import isUrl from '../../../helpers/is-url';
+
+import themeColors from '../../../constants/theme-colors';
 
 import {
   updateForm,
@@ -28,7 +30,6 @@ import {
 
 import defaultWorkspaceImageLight from '../../../images/default-workspace-image-light.png';
 import defaultWorkspaceImageDark from '../../../images/default-workspace-image-dark.png';
-import isUrl from '../../../helpers/is-url';
 
 const styles = (theme) => ({
   flexGrow: {
@@ -109,26 +110,11 @@ const styles = (theme) => ({
   caption: {
     display: 'block',
   },
-  colorPickerRow: {
-    paddingBottom: theme.spacing(1),
-  },
-  colorPicker: {
-    height: 24,
-    width: 24,
-    borderRadius: 12,
-    marginRight: theme.spacing(1),
-    cursor: 'pointer',
-    outline: 'none',
-    display: 'inline-block',
-  },
-  colorPickerSelected: {
-    boxShadow: `0 0 2px 2px ${theme.palette.primary.main}`,
-  },
 });
 
 const ListItemIcon = ({
   accountInfo,
-  backgroundColor,
+  color,
   classes,
   downloadingIcon,
   id,
@@ -161,6 +147,8 @@ const ListItemIcon = ({
     return name;
   })();
 
+  const backgroundColor = color ? themeColors[color][600] : null;
+
   const renderAvatar = (avatarContent, type, title = null, avatarAdditionalClassnames = []) => (
     <div className={classes.avatarContainer} title={title}>
       {selectedIconType === type ? (
@@ -178,12 +166,12 @@ const ListItemIcon = ({
           <div
             className={classnames(
               classes.avatar,
-              transparentBackground && classes.transparentAvatar,
+              type === 'image' && transparentBackground && classes.transparentAvatar,
               classes.avatarSelected,
               ...avatarAdditionalClassnames,
             )}
             style={(() => {
-              if (type === 'text' && backgroundColor && !transparentBackground) {
+              if (type === 'text' && backgroundColor) {
                 return {
                   backgroundColor,
                   color: Color(backgroundColor).isDark() ? '#fff' : '#000',
@@ -201,9 +189,18 @@ const ListItemIcon = ({
           tabIndex={0}
           className={classnames(
             classes.avatar,
-            transparentBackground && classes.transparentAvatar,
+            type === 'image' && transparentBackground && classes.transparentAvatar,
             ...avatarAdditionalClassnames,
           )}
+          style={(() => {
+            if (type === 'text' && backgroundColor) {
+              return {
+                backgroundColor,
+                color: Color(backgroundColor).isDark() ? '#fff' : '#000',
+              };
+            }
+            return null;
+          })()}
           onClick={() => onUpdateForm({ preferredIconType: type })}
           onKeyDown={() => onUpdateForm({ preferredIconType: type })}
         >
@@ -245,74 +242,6 @@ const ListItemIcon = ({
             )}
           </div>
           <div className={classes.avatarRight}>
-            {selectedIconType === 'text' && (
-              <>
-                <div className={classes.colorPickerRow}>
-                  <div
-                    className={classnames(
-                      classes.colorPicker,
-                      backgroundColor == null && classes.colorPickerSelected,
-                    )}
-                    title="default"
-                    style={{ backgroundColor: shouldUseDarkColors ? '#fff' : '#000' }}
-                    aria-label="default"
-                    role="button"
-                    tabIndex={0}
-                    onClick={() => onUpdateForm({
-                      backgroundColor: null,
-                    })}
-                    onKeyDown={() => onUpdateForm({
-                      backgroundColor: null,
-                    })}
-                  />
-                  {backgroundColor != null && (
-                    <div
-                      className={classnames(
-                        classes.colorPicker,
-                        classes.colorPickerSelected,
-                      )}
-                      title="default"
-                      style={{ backgroundColor }}
-                      aria-label="default"
-                      role="button"
-                      tabIndex={0}
-                      onClick={() => onUpdateForm({
-                        backgroundColor,
-                      })}
-                      onKeyDown={() => onUpdateForm({
-                        backgroundColor,
-                      })}
-                    />
-                  )}
-                </div>
-                <div className={classes.colorPickerRow}>
-                  {Object.keys(materialColors).map((colorId) => {
-                    const colorScales = materialColors[colorId];
-                    if (!colorScales[500]) return null;
-                    return (
-                      <div
-                        key={colorId}
-                        title={colorId}
-                        className={classnames(
-                          classes.colorPicker,
-                          backgroundColor === colorScales[500] && classes.colorPickerSelected,
-                        )}
-                        style={{ backgroundColor: materialColors[colorId][500] }}
-                        aria-label={colorId}
-                        role="button"
-                        tabIndex={0}
-                        onClick={() => onUpdateForm({
-                          backgroundColor: materialColors[colorId][500],
-                        })}
-                        onKeyDown={() => onUpdateForm({
-                          backgroundColor: materialColors[colorId][500],
-                        })}
-                      />
-                    );
-                  })}
-                </div>
-              </>
-            )}
             {selectedIconType === 'image' && (
               <>
                 <Button
@@ -378,17 +307,19 @@ const ListItemIcon = ({
             )}
           </div>
         </div>
-        <FormGroup>
-          <FormControlLabel
-            control={(
-              <Checkbox
-                checked={transparentBackground}
-                onChange={(e) => onUpdateForm({ transparentBackground: e.target.checked })}
-              />
-            )}
-            label="Use transparent background"
-          />
-        </FormGroup>
+        {selectedIconType === 'image' && (
+          <FormGroup>
+            <FormControlLabel
+              control={(
+                <Checkbox
+                  checked={transparentBackground}
+                  onChange={(e) => onUpdateForm({ transparentBackground: e.target.checked })}
+                />
+              )}
+              label="Use transparent background"
+            />
+          </FormGroup>
+        )}
       </div>
     </ListItem>
   );
@@ -396,20 +327,20 @@ const ListItemIcon = ({
 
 ListItemIcon.defaultProps = {
   accountInfo: null,
-  backgroundColor: null,
+  color: null,
   picturePath: null,
   preferredIconType: 'auto',
 };
 
 ListItemIcon.propTypes = {
   accountInfo: PropTypes.object,
-  backgroundColor: PropTypes.string,
   classes: PropTypes.object.isRequired,
+  color: PropTypes.string,
   downloadingIcon: PropTypes.bool.isRequired,
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  onGetIconFromInternet: PropTypes.func.isRequired,
   onGetIconFromAppSearch: PropTypes.func.isRequired,
+  onGetIconFromInternet: PropTypes.func.isRequired,
   onUpdateForm: PropTypes.func.isRequired,
   order: PropTypes.number.isRequired,
   picturePath: PropTypes.string,
@@ -420,7 +351,7 @@ ListItemIcon.propTypes = {
 
 const mapStateToProps = (state) => ({
   accountInfo: state.dialogWorkspacePreferences.form.accountInfo,
-  backgroundColor: state.dialogWorkspacePreferences.form.backgroundColor,
+  color: state.dialogWorkspacePreferences.form.preferences.color,
   downloadingIcon: state.dialogWorkspacePreferences.downloadingIcon,
   id: state.dialogWorkspacePreferences.form.id || '',
   name: state.dialogWorkspacePreferences.form.name || '',

@@ -5,6 +5,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
+import { makeStyles } from '@material-ui/core/styles';
+
 import SimpleBar from 'simplebar-react';
 import 'simplebar/dist/simplebar.min.css';
 
@@ -27,6 +29,8 @@ import getStaticGlobal from '../../helpers/get-static-global';
 import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
 import isMacOs11 from '../../helpers/is-mac-os-11';
 import isMas from '../../helpers/is-mas';
+
+import themeColors from '../../constants/theme-colors';
 
 import arrowWhite from '../../images/arrow-white.png';
 import arrowBlack from '../../images/arrow-black.png';
@@ -68,7 +72,7 @@ const arrayMove = (array, from, to) => {
   return newArray;
 };
 
-const styles = (theme) => {
+const useStyles = makeStyles((theme) => {
   // big sur increases title bar height
   const titleBarHeight = isMacOs11() ? 28 : 22;
 
@@ -91,7 +95,12 @@ const styles = (theme) => {
       display: 'flex',
       height: '100%',
       width: 68,
-      backgroundColor: theme.palette.background.paper,
+      backgroundColor: (props) => {
+        if (props.themeColor != null) {
+          return themeColors[props.themeColor][800];
+        }
+        return theme.palette.background.paper;
+      },
       borderRight: '1px solid',
       borderRightColor: theme.palette.divider,
       overflowX: 'hidden',
@@ -217,14 +226,13 @@ const styles = (theme) => {
       gap: theme.spacing(0.5),
     },
   };
-};
+});
 
 const SortableItem = sortableElement(({ value }) => {
-  const { workspace, index } = value;
+  const { workspace, themeColor, index } = value;
   const {
     accountInfo,
     active,
-    backgroundColor,
     disableAudio,
     disableNotifications,
     hibernated,
@@ -244,13 +252,13 @@ const SortableItem = sortableElement(({ value }) => {
       name={name}
       accountInfo={accountInfo}
       picturePath={picturePath}
-      backgroundColor={backgroundColor}
       transparentBackground={transparentBackground}
       preferredIconType={preferredIconType}
       order={index}
       hibernated={hibernated}
       preferences={preferences}
       onClick={() => requestSetActiveWorkspace(id)}
+      themeColor={themeColor}
       onContextMenu={(e) => {
         e.preventDefault();
 
@@ -326,13 +334,13 @@ const ScrollbarContainer = ({ children, className }) => {
     </SimpleBar>
   );
 };
+
 ScrollbarContainer.propTypes = {
   children: PropTypes.node.isRequired,
   className: PropTypes.string.isRequired,
 };
 
 const Main = ({
-  classes,
   didFailLoad,
   isFullScreen,
   isLoading,
@@ -341,9 +349,11 @@ const Main = ({
   shouldPauseNotifications,
   sidebar,
   sidebarSize,
+  themeColor,
   titleBar,
   workspaces,
 }) => {
+  const classes = useStyles({ themeColor });
   const appJson = getStaticGlobal('appJson');
   const workspacesList = getWorkspacesAsList(workspaces);
   const showMacTitleBar = window.process.platform === 'darwin' && titleBar && !isFullScreen;
@@ -351,7 +361,7 @@ const Main = ({
 
   return (
     <div className={classes.outerRoot}>
-      {showMacTitleBar && <MacTitleBar />}
+      {showMacTitleBar && <MacTitleBar themeColor={themeColor} />}
       <DraggableRegion />
       <div className={classes.root}>
         {sidebar && (
@@ -387,11 +397,12 @@ const Main = ({
                   }}
                 >
                   {workspacesList.map((workspace, i) => (
-                    <SortableItem key={`item-${workspace.id}`} index={i} value={{ index: i, workspace }} />
+                    <SortableItem key={`item-${workspace.id}`} index={i} value={{ index: i, workspace, themeColor }} />
                   ))}
                 </SortableContainer>
                 <WorkspaceSelector
                   id="add"
+                  themeColor={themeColor}
                   onClick={() => {
                     if (!appJson.url) {
                       requestShowAddWorkspaceWindow();
@@ -474,7 +485,7 @@ const Main = ({
           </ScrollbarContainer>
         )}
         <div className={classes.contentRoot}>
-          {navigationBar && <NavigationBar />}
+          {navigationBar && <NavigationBar themeColor={themeColor} />}
           <FindInPage />
           <div className={classes.innerContentRoot}>
             {didFailLoad && !isLoading && (
@@ -555,10 +566,10 @@ const Main = ({
 Main.defaultProps = {
   didFailLoad: null,
   isLoading: false,
+  themeColor: null,
 };
 
 Main.propTypes = {
-  classes: PropTypes.object.isRequired,
   didFailLoad: PropTypes.string,
   isFullScreen: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool,
@@ -567,6 +578,7 @@ Main.propTypes = {
   shouldPauseNotifications: PropTypes.bool.isRequired,
   sidebar: PropTypes.bool.isRequired,
   sidebarSize: PropTypes.oneOf(['compact', 'expanded']).isRequired,
+  themeColor: PropTypes.string,
   titleBar: PropTypes.bool.isRequired,
   workspaces: PropTypes.object.isRequired,
 };
@@ -592,12 +604,19 @@ const mapStateToProps = (state) => {
     titleBar: state.preferences.titleBar,
     muteApp: state.preferences.muteApp,
     workspaces: state.workspaces.workspaces,
+    themeColor: (() => {
+      if (state.preferences.themeColor === 'auto') {
+        if (activeWorkspace && activeWorkspace.preferences && activeWorkspace.preferences.color) {
+          return activeWorkspace.preferences.color;
+        }
+        return null;
+      }
+      return state.preferences.themeColor;
+    })(),
   };
 };
 
 export default connectComponent(
   Main,
   mapStateToProps,
-  null,
-  styles,
 );

@@ -5,8 +5,10 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-import SvgIcon from '@material-ui/core/SvgIcon';
+import { makeStyles } from '@material-ui/core/styles';
+import { fade } from '@material-ui/core/styles/colorManipulator';
 
+import SvgIcon from '@material-ui/core/SvgIcon';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import HomeIcon from '@material-ui/icons/Home';
@@ -25,6 +27,7 @@ import getStaticGlobal from '../../helpers/get-static-global';
 import isMas from '../../helpers/is-mas';
 
 import searchEngines from '../../constants/search-engines';
+import themeColors from '../../constants/theme-colors';
 
 import { updateAddressBarInfo } from '../../state/general/actions';
 
@@ -43,11 +46,16 @@ import {
 import RatingButton from './rating-button';
 import BrowserActionList from './browser-action-list';
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
     height: 36,
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: (props) => {
+      if (props.themeColor != null) {
+        return themeColors[props.themeColor][800];
+      }
+      return theme.palette.background.paper;
+    },
     borderBottom: `1px solid ${theme.palette.divider}`,
     display: 'flex',
     alignItems: 'center',
@@ -73,13 +81,38 @@ const styles = (theme) => ({
   iconButton: {
     padding: 6,
     WebkitAppRegion: 'no-drag',
+    color: (props) => {
+      if (props.themeColor != null) {
+        return theme.palette.getContrastText(themeColors[props.themeColor][800]);
+      }
+      return theme.palette.text.primary;
+    },
+  },
+  iconButtonDisabled: {
+    color: (props) => {
+      if (props.themeColor != null) {
+        return `${fade(theme.palette.getContrastText(themeColors[props.themeColor][800]), 0.3)} !important`;
+      }
+      return undefined;
+    },
   },
   icon: {
     fontSize: '18px',
   },
   addressBarRoot: {
     width: '100%',
-    background: theme.palette.type === 'dark' ? theme.palette.background.default : theme.palette.grey[200],
+    backgroundColor: (props) => {
+      if (props.themeColor != null) {
+        return themeColors[props.themeColor][900];
+      }
+      return theme.palette.type === 'dark' ? theme.palette.background.default : theme.palette.grey[200];
+    },
+    color: (props) => {
+      if (props.themeColor != null) {
+        return theme.palette.getContrastText(themeColors[props.themeColor][800]);
+      }
+      return theme.palette.text.primary;
+    },
     borderRadius: 4,
     WebkitAppRegion: 'none',
     WebkitUserSelect: 'text',
@@ -115,14 +148,13 @@ const styles = (theme) => ({
       width: 20,
     },
   },
-});
+}));
 
 const NavigationBar = ({
   address,
   addressEdited,
   canGoBack,
   canGoForward,
-  classes,
   draggable,
   hasTrafficLights,
   hasWorkspaces,
@@ -132,7 +164,9 @@ const NavigationBar = ({
   shouldPauseNotifications,
   sidebar,
   sidebarSize,
+  themeColor,
 }) => {
+  const classes = useStyles({ themeColor });
   const [addressInputClicked, setAddressInputClicked] = useState(false);
   const hasExpandedSidebar = sidebar && sidebarSize === 'expanded';
 
@@ -150,7 +184,10 @@ const NavigationBar = ({
         <IconButton
           title="Back"
           aria-label="Back"
-          className={classes.iconButton}
+          classes={{
+            root: classes.iconButton,
+            disabled: classes.iconButtonDisabled,
+          }}
           disabled={!hasWorkspaces || !canGoBack}
           onClick={requestGoBack}
         >
@@ -159,7 +196,10 @@ const NavigationBar = ({
         <IconButton
           title="Forward"
           aria-label="Forward"
-          className={classes.iconButton}
+          classes={{
+            root: classes.iconButton,
+            disabled: classes.iconButtonDisabled,
+          }}
           disabled={!hasWorkspaces || !canGoForward}
           onClick={requestGoForward}
         >
@@ -168,7 +208,10 @@ const NavigationBar = ({
         <IconButton
           title="Reload"
           aria-label="Reload"
-          className={classes.iconButton}
+          classes={{
+            root: classes.iconButton,
+            disabled: classes.iconButtonDisabled,
+          }}
           onClick={requestReload}
           disabled={!hasWorkspaces}
         >
@@ -177,7 +220,10 @@ const NavigationBar = ({
         <IconButton
           title="Home"
           aria-label="Home"
-          className={classes.iconButton}
+          classes={{
+            root: classes.iconButton,
+            disabled: classes.iconButtonDisabled,
+          }}
           onClick={requestGoHome}
           disabled={!hasWorkspaces}
         >
@@ -248,7 +294,10 @@ const NavigationBar = ({
       {!isMas() && <BrowserActionList className={classes.browserActionList} />}
       <div>
         <RatingButton
-          className={classes.iconButton}
+          classes={{
+            root: classes.iconButton,
+            disabled: classes.iconButtonDisabled,
+          }}
           iconClassName={classes.icon}
         />
         {window.process.platform === 'darwin' && hasWorkspaces && (
@@ -256,7 +305,10 @@ const NavigationBar = ({
             title="Share"
             aria-label="Share"
             onClick={() => requestShowShareMenu()}
-            className={classes.iconButton}
+            classes={{
+              root: classes.iconButton,
+              disabled: classes.iconButtonDisabled,
+            }}
             size="small"
           >
             <SvgIcon className={classes.icon}>
@@ -268,7 +320,10 @@ const NavigationBar = ({
           title="Notifications"
           aria-label="Notifications"
           onClick={requestShowNotificationsWindow}
-          className={classes.iconButton}
+          classes={{
+            root: classes.iconButton,
+            disabled: classes.iconButtonDisabled,
+          }}
         >
           {shouldPauseNotifications
             ? <NotificationsPausedIcon className={classes.icon} />
@@ -278,7 +333,10 @@ const NavigationBar = ({
           title={muteApp ? 'Unmute' : 'Mute'}
           aria-label={muteApp ? 'Unmute' : 'Mute'}
           onClick={() => requestSetPreference('muteApp', !muteApp)}
-          className={classes.iconButton}
+          classes={{
+            root: classes.iconButton,
+            disabled: classes.iconButtonDisabled,
+          }}
         >
           {muteApp
             ? <VolumeOffIcon className={classes.icon} />
@@ -287,7 +345,10 @@ const NavigationBar = ({
         <IconButton
           title="Preferences"
           aria-label="Preferences"
-          className={classes.iconButton}
+          classes={{
+            root: classes.iconButton,
+            disabled: classes.iconButtonDisabled,
+          }}
           onClick={() => requestShowPreferencesWindow()}
         >
           <SettingsIcon className={classes.icon} />
@@ -299,6 +360,7 @@ const NavigationBar = ({
 
 NavigationBar.defaultProps = {
   address: '',
+  themeColor: null,
 };
 
 NavigationBar.propTypes = {
@@ -306,7 +368,6 @@ NavigationBar.propTypes = {
   addressEdited: PropTypes.bool.isRequired,
   canGoBack: PropTypes.bool.isRequired,
   canGoForward: PropTypes.bool.isRequired,
-  classes: PropTypes.object.isRequired,
   draggable: PropTypes.bool.isRequired,
   hasTrafficLights: PropTypes.bool.isRequired,
   hasWorkspaces: PropTypes.bool.isRequired,
@@ -316,6 +377,7 @@ NavigationBar.propTypes = {
   shouldPauseNotifications: PropTypes.bool.isRequired,
   sidebar: PropTypes.bool.isRequired,
   sidebarSize: PropTypes.oneOf(['compact', 'expanded']).isRequired,
+  themeColor: PropTypes.string,
 };
 
 const mapStateToProps = (state) => ({
@@ -346,5 +408,4 @@ export default connectComponent(
   NavigationBar,
   mapStateToProps,
   actionCreators,
-  styles,
 );

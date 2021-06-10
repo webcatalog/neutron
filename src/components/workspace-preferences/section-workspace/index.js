@@ -17,6 +17,7 @@ import getWorkspaceName from '../../../helpers/get-workspace-name';
 import { open as openDialogEditWorkspace } from '../../../state/dialog-edit-workspace/actions';
 
 import ListItemIcon from './list-item-icon';
+import ListItemColor from './list-item-color';
 import DialogEditWorkspace from './dialog-edit-workspace';
 
 const SectionWorkspace = ({
@@ -49,6 +50,8 @@ const SectionWorkspace = ({
         />
         <ChevronRightIcon color="action" />
       </ListItem>
+      <Divider />
+      <ListItemColor />
     </List>
     <DialogEditWorkspace />
   </>
