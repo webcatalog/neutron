@@ -34,8 +34,10 @@ const {
   setWorkspaceMeta,
   getWorkspaceMeta,
   getWorkspaceMetas,
-  setWorkspaceBadgeCount,
 } = require('./workspace-metas');
+const {
+  setWorkspaceBadgeCount,
+} = require('./workspace-badges');
 const ContextMenuBuilder = require('./context-menu-builder');
 
 const sendToAllWindows = require('./send-to-all-windows');

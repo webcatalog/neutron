@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-const { app } = require('electron');
+const { app, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs-extra');
 const settings = require('electron-settings');
@@ -184,8 +184,12 @@ const setActiveWorkspace = (id) => {
 };
 
 const setWorkspace = (id, opts) => {
-  const workspace = { ...workspaces[id], ...opts };
+  const unchangedWorkspace = workspaces[id];
+
+  const workspace = { ...unchangedWorkspace, ...opts };
   workspaces[id] = workspace;
+
+  ipcMain.emit('request-refresh-badge-count');
   sendToAllWindows('set-workspace', id, workspace);
   settings.setSync(`workspaces.${v}.${id}`, workspace);
 };

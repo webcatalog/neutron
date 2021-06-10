@@ -34,6 +34,7 @@ import SectionAccountLicensing from './section-account-licensing';
 import SectionAppLock from './section-app-lock';
 import SectionAudioVideo from './section-audio-video';
 import SectionAutoReload from './section-auto-reload';
+import SectionBadge from './section-badge';
 import SectionBrowsing from './section-browsing';
 import SectionDevelopers from './section-developers';
 import SectionDownloads from './section-downloads';
@@ -125,6 +126,7 @@ const Preferences = ({
       Icon: NotificationsIcon,
       subSections: {
         notifications: { text: 'Notifications', Component: SectionNotifications },
+        badge: { text: 'Badge', Component: SectionBadge },
       },
     },
     extensions: {

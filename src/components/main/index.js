@@ -233,6 +233,7 @@ const SortableItem = sortableElement(({ value }) => {
     picturePath,
     preferredIconType,
     transparentBackground,
+    preferences,
   } = workspace;
 
   return (
@@ -248,6 +249,7 @@ const SortableItem = sortableElement(({ value }) => {
       preferredIconType={preferredIconType}
       order={index}
       hibernated={hibernated}
+      preferences={preferences}
       onClick={() => requestSetActiveWorkspace(id)}
       onContextMenu={(e) => {
         e.preventDefault();

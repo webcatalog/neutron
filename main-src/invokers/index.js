@@ -11,8 +11,10 @@ const { getSystemPreferences } = require('../libs/system-preferences');
 const { getWorkspaces } = require('../libs/workspaces');
 const {
   getWorkspaceMetas,
-  setWorkspaceBadgeCount,
 } = require('../libs/workspace-metas');
+const {
+  setWorkspaceBadgeCount,
+} = require('../libs/workspace-badges');
 const { getPauseNotificationsInfo } = require('../libs/notifications');
 
 const {

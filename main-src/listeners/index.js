@@ -41,8 +41,11 @@ const {
 const {
   getWorkspaceMeta,
   getWorkspaceMetas,
-  refreshBadgeCount,
 } = require('../libs/workspace-metas');
+
+const {
+  refreshBadgeCount,
+} = require('../libs/workspace-badges');
 
 const {
   clearBrowsingData,

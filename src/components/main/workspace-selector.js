@@ -332,7 +332,9 @@ WorkspaceSelector.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => ({
-  badgeCount: state.preferences.unreadCountBadge && state.workspaceMetas[ownProps.id]
+  badgeCount: state.preferences.unreadCountBadge
+    && (!ownProps.preferences || ownProps.preferences.unreadCountBadge !== false)
+    && state.workspaceMetas[ownProps.id]
     ? state.workspaceMetas[ownProps.id].badgeCount : 0,
   searchEngine: state.preferences.searchEngine,
   shouldUseDarkColors: state.general.shouldUseDarkColors,
