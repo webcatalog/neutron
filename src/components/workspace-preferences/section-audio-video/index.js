@@ -31,7 +31,7 @@ const SectionAudioVideo = ({
           checked={formDisableAudio}
           onChange={(e) => {
             onUpdateForm({
-              disableAudio: e.target.value !== 'global' ? e.target.value : null,
+              disableAudio: e.target.checked,
             });
           }}
         />

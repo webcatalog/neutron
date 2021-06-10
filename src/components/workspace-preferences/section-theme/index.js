@@ -225,7 +225,7 @@ SectionTheme.propTypes = {
 
 const mapStateToProps = (state) => ({
   darkReader: state.preferences.darkReader,
-  formDarkReader: state.dialogWorkspacePreferences.form.darkReader,
+  formDarkReader: state.dialogWorkspacePreferences.form.preferences.darkReader,
   formDarkReaderBrightness: state.dialogWorkspacePreferences.form.preferences.darkReaderBrightness,
   formDarkReaderContrast: state.dialogWorkspacePreferences.form.preferences.darkReaderContrast,
   formDarkReaderGrayscale: state.dialogWorkspacePreferences.form.preferences.darkReaderGrayscale,

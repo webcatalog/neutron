@@ -31,7 +31,7 @@ const SectionNotifications = ({
           checked={formDisableNotifications}
           onChange={(e) => {
             onUpdateForm({
-              disableNotifications: e.target.value !== 'global' ? e.target.value : null,
+              disableNotifications: e.target.checked,
             });
           }}
         />
