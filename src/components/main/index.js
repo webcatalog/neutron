@@ -219,6 +219,12 @@ const useStyles = makeStyles((theme) => {
     iconButton: {
       width: '100%',
       borderRadius: 0,
+      color: (props) => {
+        if (props.themeColor != null) {
+          return theme.palette.getContrastText(themeColors[props.themeColor][800]);
+        }
+        return undefined;
+      },
     },
     browserActionList: {
       display: 'flex',
