@@ -106,16 +106,18 @@ const useStyles = makeStyles((theme) => ({
   },
   textAvatar: {
     background: (props) => {
-      if (props.themeColor != null || theme.palette.type === 'light') {
-        return theme.palette.common.white;
+      if (props.themeColor != null) {
+        return theme.palette.getContrastText(themeColors[props.themeColor][800]);
       }
-      return theme.palette.common.black;
+      return theme.palette.type === 'dark' ? theme.palette.common.white : theme.palette.common.black;
     },
     color: (props) => {
-      if (props.themeColor != null || theme.palette.type === 'light') {
-        return theme.palette.common.black;
+      if (props.themeColor != null) {
+        return theme.palette.getContrastText(
+          theme.palette.getContrastText(themeColors[props.themeColor][800]),
+        );
       }
-      return theme.palette.common.white;
+      return theme.palette.type === 'dark' ? theme.palette.common.black : theme.palette.common.white;
     },
   },
   transparentAvatar: {
@@ -153,13 +155,13 @@ const useStyles = makeStyles((theme) => ({
     whiteSpace: 'nowrap',
   },
   sleepAvatar: {
-    height: 20,
-    width: 20,
+    height: 16,
+    width: 16,
     color: theme.palette.text.primary,
   },
   sleepAvatarIcon: {
-    height: 14,
-    width: 14,
+    height: 12,
+    width: 12,
   },
 }));
 

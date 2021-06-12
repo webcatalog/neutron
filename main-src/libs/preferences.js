@@ -111,7 +111,7 @@ const defaultPreferences = {
   shareWorkspaceBrowsingData: appJson.id.startsWith('group-') || appJson.id === 'clovery',
   sidebar: shouldShowSidebar,
   sidebarSize: 'compact',
-  sidebarTips: 'shortcut',
+  sidebarTips: 'none',
   skipAskingDefaultCalendarClient: false,
   skipAskingDefaultMailClient: false,
   spellcheck: true,
