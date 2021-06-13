@@ -5,6 +5,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
+import { makeStyles } from '@material-ui/core/styles';
+import { fade } from '@material-ui/core/styles/colorManipulator';
+
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -16,15 +19,28 @@ import { requestShowAppMenu } from '../../../senders';
 import connectComponent from '../../../helpers/connect-component';
 import getStaticGlobal from '../../../helpers/get-static-global';
 
+import themeColors from '../../../constants/theme-colors';
+
 const TOOLBAR_HEIGHT = 28;
 const BUTTON_WIDTH = 46;
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   appBar: {
     // leave space for resizing cursor
     // https://github.com/electron/electron/issues/3022
     padding: 2,
-    background: theme.palette.type === 'dark' ? undefined : theme.palette.grey[300],
+    background: (props) => {
+      if (props.themeColor != null) {
+        return themeColors[props.themeColor][900];
+      }
+      return theme.palette.type === 'dark' ? undefined : theme.palette.grey[300];
+    },
+    color: (props) => {
+      if (props.themeColor != null) {
+        return fade(theme.palette.getContrastText(themeColors[props.themeColor][900]), 0.7);
+      }
+      return undefined;
+    },
   },
   toolbar: {
     minHeight: 28,
@@ -44,7 +60,12 @@ const styles = (theme) => ({
     fontSize: '0.8rem',
     height: TOOLBAR_HEIGHT,
     lineHeight: `${TOOLBAR_HEIGHT}px`,
-    color: theme.palette.text.secondary,
+    color: (props) => {
+      if (props.themeColor != null) {
+        return fade(theme.palette.getContrastText(themeColors[props.themeColor][900]), 0.7);
+      }
+      return theme.palette.text.secondary;
+    },
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
@@ -76,14 +97,24 @@ const styles = (theme) => ({
     padding: 0,
     margin: 0,
     '&:hover': {
-      backgroundColor: theme.palette.type === 'dark' ? theme.palette.common.black : theme.palette.grey[400],
+      backgroundColor: (props) => {
+        if (props.themeColor != null) {
+          return themeColors[props.themeColor][800];
+        }
+        return theme.palette.type === 'dark' ? theme.palette.common.black : theme.palette.grey[400];
+      },
     },
   },
   windowsIcon: {
     height: '100%',
     width: '100%',
     maskSize: '23.1%',
-    backgroundColor: theme.palette.type === 'dark' ? theme.palette.common.white : theme.palette.text.primary,
+    backgroundColor: (props) => {
+      if (props.themeColor != null) {
+        return fade(theme.palette.getContrastText(themeColors[props.themeColor][900]), 0.7);
+      }
+      return theme.palette.text.secondary;
+    },
     cursor: 'pointer',
   },
   windowsIconClose: {
@@ -112,15 +143,16 @@ const styles = (theme) => ({
     marginLeft: theme.spacing(1),
     marginRight: 0,
   },
-});
+}));
 
 const EnhancedAppBar = ({
-  classes,
   isMaximized,
   sidebar,
   sidebarSize,
+  themeColor,
   title,
 }) => {
+  const classes = useStyles({ themeColor });
   const onDoubleClick = (e) => {
     // feature: double click on title bar to expand #656
     // https://github.com/webcatalog/webcatalog-app/issues/656
@@ -243,10 +275,11 @@ const EnhancedAppBar = ({
 
 EnhancedAppBar.defaultProps = {
   title: '',
+  themeColor: null,
 };
 
 EnhancedAppBar.propTypes = {
-  classes: PropTypes.object.isRequired,
+  themeColor: PropTypes.string,
   isMaximized: PropTypes.bool.isRequired,
   sidebar: PropTypes.bool.isRequired,
   sidebarSize: PropTypes.oneOf(['compact', 'expanded']).isRequired,
@@ -260,12 +293,23 @@ const mapStateToProps = (state, ownProps) => {
     title: ownProps.title || ((window.mode === 'main' || window.mode === 'menubar') && state.general.title ? state.general.title : appJson.name),
     sidebar: state.preferences.sidebar,
     sidebarSize: state.preferences.sidebarSize,
+    themeColor: (() => {
+      if (window.mode === 'main' || window.mode === 'menubar') {
+        const activeWorkspace = state.workspaces.workspaces[state.workspaces.activeWorkspaceId];
+        if (state.preferences.themeColor === 'auto') {
+          if (activeWorkspace && activeWorkspace.preferences && activeWorkspace.preferences.color) {
+            return activeWorkspace.preferences.color;
+          }
+          return null;
+        }
+        return state.preferences.themeColor;
+      }
+      return null;
+    })(),
   };
 };
 
 export default connectComponent(
   EnhancedAppBar,
   mapStateToProps,
-  null,
-  styles,
 );
