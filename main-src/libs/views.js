@@ -695,7 +695,7 @@ const addViewAsync = async (browserWindow, workspace) => {
               submenu: [
                 {
                   label: 'About',
-                  click: () => ipcMain.emit('request-show-about-window'),
+                  click: () => ipcMain.emit('request-show-preferences-window', null, 'about'),
                 },
                 { type: 'separator' },
                 {

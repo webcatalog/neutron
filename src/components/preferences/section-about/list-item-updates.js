@@ -4,7 +4,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
@@ -84,7 +83,7 @@ const SectionUpdates = ({
   }
 
   return (
-    <List disablePadding dense>
+    <>
       <ListItem
         button
         onClick={requestCheckForUpdates}
@@ -94,7 +93,6 @@ const SectionUpdates = ({
         />
         <ChevronRightIcon color="action" />
       </ListItem>
-      <Divider />
       <ListItem>
         <ListItemText primary="Check for updates automatically" />
         <ListItemSecondaryAction>
@@ -108,7 +106,7 @@ const SectionUpdates = ({
           />
         </ListItemSecondaryAction>
       </ListItem>
-    </List>
+    </>
   );
 };
 
