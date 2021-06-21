@@ -58,7 +58,7 @@ const styles = (theme) => ({
     position: 'fixed',
     width: 204,
     color: theme.palette.text.primary,
-    height: `calc(100% - ${theme.spacing(2)}px)`,
+    height: `calc(100% - ${theme.spacing(4)}px)`,
   },
   inner: {
     width: 'calc(100% - 224px)',
@@ -66,7 +66,7 @@ const styles = (theme) => ({
   },
   globalPrefsButton: {
     position: 'absolute',
-    bottom: theme.spacing(2),
+    bottom: 0,
     left: 0,
   },
 });
