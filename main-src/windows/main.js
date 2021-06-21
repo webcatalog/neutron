@@ -88,7 +88,7 @@ const createAsync = () => new Promise((resolve) => {
       },
       {
         label: `About ${appJson.name}`,
-        click: () => ipcMain.emit('request-show-about-window'),
+        click: () => ipcMain.emit('request-show-preferences-window', null, 'about'),
       },
       ...lockMenuItems,
       {

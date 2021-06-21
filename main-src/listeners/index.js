@@ -90,7 +90,6 @@ const getIapFormattedPriceAsync = require('../libs/get-iap-formatted-price-async
 const getUtmSource = require('../libs/get-utm-source');
 const getWorkspaceFriendlyName = require('../libs/get-workspace-friendly-name');
 
-const aboutWindow = require('../windows/about');
 const addWorkspaceWindow = require('../windows/add-workspace');
 const displayMediaWindow = require('../windows/display-media');
 const licenseRegistrationWindow = require('../windows/license-registration');
@@ -172,10 +171,6 @@ const loadListeners = () => {
 
   ipcMain.on('request-show-main-window', () => {
     mainWindow.show();
-  });
-
-  ipcMain.on('request-show-about-window', () => {
-    aboutWindow.show();
   });
 
   ipcMain.on('request-show-open-source-notices-window', () => {

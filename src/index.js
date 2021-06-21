@@ -22,7 +22,6 @@ import { getReactInitialStateAsync } from './invokers';
 
 const appJson = getStaticGlobal('appJson');
 
-const About = React.lazy(() => import('./components/about'));
 const AddWorkspace = React.lazy(() => import('./components/add-workspace'));
 const Auth = React.lazy(() => import('./components/auth'));
 const DisplayMedia = React.lazy(() => import('./components/display-media'));
@@ -37,7 +36,6 @@ const Main = React.lazy(() => import('./components/main'));
 
 const App = () => {
   switch (window.mode) {
-    case 'about': return <About />;
     case 'add-workspace': return <AddWorkspace />;
     case 'auth': return <Auth />;
     case 'display-media': return <DisplayMedia />;
@@ -71,9 +69,7 @@ const runApp = () => {
       const initialState = await getReactInitialStateAsync();
       const { workspaces } = initialState.workspaces;
 
-      if (window.mode === 'about') {
-        document.title = 'About';
-      } else if (window.mode === 'auth') {
+      if (window.mode === 'auth') {
         document.title = 'Sign In';
       } else if (window.mode === 'preferences') {
         document.title = 'Global Preferences';

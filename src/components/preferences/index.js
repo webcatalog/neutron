@@ -166,7 +166,7 @@ const Preferences = ({
         workspaces: { text: getWorkspaceFriendlyName(true), Component: SectionWorkspaces },
       },
     },
-    miscs: {
+    about: {
       text: 'About',
       Icon: InfoIcon,
       subSections: {
