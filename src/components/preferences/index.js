@@ -54,7 +54,6 @@ import SectionSystem from './section-system';
 import SectionTelemetry from './section-telemetry';
 import SectionTheme from './section-theme';
 import SectionTray from './section-tray';
-import SectionUpdates from './section-updates';
 import SectionView from './section-view';
 import SectionWindow from './section-window';
 import SectionWorkspaces from './section-workspaces';
@@ -171,7 +170,6 @@ const Preferences = ({
       text: 'About',
       Icon: InfoIcon,
       subSections: {
-        updates: { text: 'Updates', Component: SectionUpdates, hidden: isMas() },
         about: { text: 'About', Component: SectionAbout },
         moreApps: { text: 'More Apps', Component: SectionMoreApps },
       },
