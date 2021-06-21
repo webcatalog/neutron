@@ -53,8 +53,10 @@ const show = (workspaceId) => {
   if (win == null) {
     create(workspaceId);
   } else if (workspaceId !== global.workspacePreferencesWorkspaceId) {
+    win.once('closed', () => {
+      create(workspaceId);
+    });
     win.close();
-    create(workspaceId);
   } else {
     win.show();
   }

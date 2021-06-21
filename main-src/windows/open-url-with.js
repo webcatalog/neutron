@@ -49,8 +49,10 @@ const show = (url) => {
   if (win == null) {
     create(url);
   } else {
+    win.once('closed', () => {
+      create(url);
+    });
     win.close();
-    create(url);
   }
 };
 

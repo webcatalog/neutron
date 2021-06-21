@@ -52,9 +52,11 @@ const create = (scrollTo) => {
 const show = (scrollTo) => {
   if (win == null) {
     create(scrollTo);
-  } else if (scrollTo !== global.preferencesScrollTo) {
+  } else if (scrollTo) {
+    win.once('closed', () => {
+      create(scrollTo);
+    });
     win.close();
-    create(scrollTo);
   } else {
     win.show();
   }
