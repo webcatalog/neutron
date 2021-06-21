@@ -1090,6 +1090,19 @@ const addViewAsync = async (browserWindow, workspace) => {
     view.webContents.send('should-pause-notifications-changed', workspace.disableNotifications || shouldPauseNotifications);
   });
 
+  view.openInNewWindow = (url) => {
+    // trigger the 'new-window' event manually
+    handleNewWindow(
+      {
+        sender: view.webContents,
+        preventDefault: () => {},
+      },
+      url,
+      '', // frameName
+      'new-window',
+    );
+  };
+
   views[workspace.id] = view;
 
   if (workspace.active) {

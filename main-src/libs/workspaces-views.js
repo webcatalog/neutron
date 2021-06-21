@@ -168,7 +168,7 @@ const clearBrowsingData = () => {
   session.fromPartition('persist:shared').clearStorageData();
 };
 
-const loadURL = (url, id) => {
+const loadURL = (url, id, openInNewWindow) => {
   if (id) {
     setActiveWorkspace(id);
     setActiveView(mainWindow.get(), id);
@@ -176,8 +176,12 @@ const loadURL = (url, id) => {
 
   const v = mainWindow.get().getBrowserView();
   if (v) {
-    v.webContents.focus();
-    v.webContents.loadURL(url);
+    if (openInNewWindow) {
+      v.openInNewWindow(url);
+    } else {
+      v.webContents.focus();
+      v.webContents.loadURL(url);
+    }
   }
 };
 

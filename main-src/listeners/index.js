@@ -491,8 +491,8 @@ const loadListeners = () => {
     }).catch(console.log); // eslint-disable-line
   });
 
-  ipcMain.on('request-load-url', (e, url, id) => {
-    loadURL(url, id);
+  ipcMain.on('request-load-url', (e, url, id, openInNewWindow) => {
+    loadURL(url, id, openInNewWindow);
   });
 
   ipcMain.on('request-go-home', () => {
