@@ -17,9 +17,7 @@ import InfoIcon from '@material-ui/icons/Info';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import PaletteIcon from '@material-ui/icons/Palette';
 import PowerIcon from '@material-ui/icons/Power';
-import RotateLeftIcon from '@material-ui/icons/RotateLeft';
 import SecurityIcon from '@material-ui/icons/Security';
-import UpdateIcon from '@material-ui/icons/Update';
 import WidgetsIcon from '@material-ui/icons/Widgets';
 import ViewListIcon from '@material-ui/icons/ViewList';
 
@@ -159,6 +157,7 @@ const Preferences = ({
         hardward: { text: 'Hardware', Component: SectionHardware },
         autoReload: { text: 'Auto Reload', Component: SectionAutoReload },
         developers: { text: 'Developers', Component: SectionDevelopers },
+        reset: { text: 'Reset', Component: SectionReset },
       },
     },
     workspaces: {
@@ -168,25 +167,11 @@ const Preferences = ({
         workspaces: { text: getWorkspaceFriendlyName(true), Component: SectionWorkspaces },
       },
     },
-    updates: {
-      text: 'Updates',
-      Icon: UpdateIcon,
-      hidden: isMas(),
-      subSections: {
-        updates: { text: 'Updates', Component: SectionUpdates },
-      },
-    },
-    reset: {
-      text: 'Reset',
-      Icon: RotateLeftIcon,
-      subSections: {
-        reset: { text: 'Reset', Component: SectionReset },
-      },
-    },
     miscs: {
       text: 'About',
       Icon: InfoIcon,
       subSections: {
+        updates: { text: 'Updates', Component: SectionUpdates, hidden: isMas() },
         about: { text: 'About', Component: SectionAbout },
         moreApps: { text: 'More Apps', Component: SectionMoreApps },
       },

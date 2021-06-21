@@ -17,9 +17,11 @@ import getUtmSource from '../../../helpers/get-utm-source';
 
 import {
   requestOpenInBrowser,
-  requestShowAboutWindow,
   requestShowOpenSourceNoticesWindow,
 } from '../../../senders';
+
+import ListItemAbout from './list-item-about';
+import ListItemUpdates from './list-item-updates';
 
 const SectionAbout = () => {
   const appJson = getStaticGlobal('appJson');
@@ -27,10 +29,9 @@ const SectionAbout = () => {
 
   return (
     <List disablePadding dense>
-      <ListItem button onClick={requestShowAboutWindow}>
-        <ListItemText primary="About" />
-        <ChevronRightIcon color="action" />
-      </ListItem>
+      <ListItemAbout />
+      <Divider />
+      <ListItemUpdates />
       <Divider />
       {(() => {
         if (isMas()) {
@@ -116,12 +117,12 @@ const SectionAbout = () => {
         return (
           <>
             <ListItem button onClick={() => requestOpenInBrowser(`https://webcatalog.app?utm_source=${utmSource}`)}>
-              <ListItemText primary="WebCatalog Website" />
+              <ListItemText primary="Website" />
               <ChevronRightIcon color="action" />
             </ListItem>
             <Divider />
             <ListItem button onClick={() => requestOpenInBrowser(`https://help.webcatalog.app?utm_source=${utmSource}`)}>
-              <ListItemText primary="WebCatalog Help" />
+              <ListItemText primary="Help" />
               <ChevronRightIcon color="action" />
             </ListItem>
           </>
@@ -137,15 +138,6 @@ const SectionAbout = () => {
         <ListItemText primary="Open Source Notices" />
         <ChevronRightIcon color="action" />
       </ListItem>
-      {!isMas() && !isStandalone() && (
-        <>
-          <Divider />
-          <ListItem button onClick={() => requestOpenInBrowser('https://twitter.com/webcatalog_app')}>
-            <ListItemText primary="Find Us on Twitter" />
-            <ChevronRightIcon color="action" />
-          </ListItem>
-        </>
-      )}
     </List>
   );
 };

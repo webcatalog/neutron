@@ -26,6 +26,8 @@ import {
   requestShowNotification,
   requestShowNotificationsWindow,
 } from '../../../senders';
+import isStandalone from '../../../helpers/is-standalone';
+import isMas from '../../../helpers/is-mas';
 
 const styles = (theme) => ({
   paper: {
@@ -161,10 +163,11 @@ const SectionNotifications = ({
         <ListItemText
           secondary={(
             <>
-              <span>WebCatalog supports notifications out of the box. </span>
-              <span>But for some web apps, to receive notifications, </span>
-              <span>you will need to manually configure additional </span>
-              <span>web app settings. </span>
+              {isStandalone() || isMas() ? appJson.name : 'WebCatalog'}
+              <span> supports notifications out of the box. </span>
+              <span>But for some web apps such as Gmail or Google Calendar</span>
+              <span>, to receive notifications, you&apos;ll need to manually configure </span>
+              <span>additional web app settings. </span>
               <span
                 role="link"
                 tabIndex={0}
