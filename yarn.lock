@@ -6131,10 +6131,10 @@ electron-builder@22.11.7:
     update-notifier "^5.1.0"
     yargs "^17.0.1"
 
-electron-chrome-extensions@3.6.0:
-  version "3.6.0"
-  resolved "https://registry.yarnpkg.com/electron-chrome-extensions/-/electron-chrome-extensions-3.6.0.tgz#9a81b34b01ef9c0bea7c269a39d77178b3fa421a"
-  integrity sha512-/y4joIFX/+IN1a2K6nndu+5IFMDB5mboot8r9gsBT30J759mKGE+bhhbKzZqphG6TCsnzEoictmcWQeo9gREng==
+electron-chrome-extensions@3.8.0:
+  version "3.8.0"
+  resolved "https://registry.yarnpkg.com/electron-chrome-extensions/-/electron-chrome-extensions-3.8.0.tgz#21ae145ecd9d43fabe2b4124facc5540f0f6f90d"
+  integrity sha512-j0C+oDmEgPV5LC3PBPfgnGaomD4/Wf+GER8Bm4Eu2qSghkQ9970wLRCFy+4WX/yhKS1m5soYaEPATYRGHHjTVg==
   dependencies:
     debug "^4.3.1"
 

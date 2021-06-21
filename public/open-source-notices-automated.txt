@@ -10688,6 +10688,14 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 -----
 
+The following software may be included in this product: electron-chrome-extensions. A copy of the source code may be downloaded from https://github.com/samuelmaddock/electron-browser-shell. This software contains the following license and notice below:
+
+electron-chrome-extensions provides dual licensing.
+
+See [LICENSE-GPL](./LICENSE-GPL) and [LICENSE-PATRON.md](./LICENSE-PATRON.md) for more info.
+
+-----
+
 The following software may be included in this product: electron-notarize. A copy of the source code may be downloaded from https://github.com/electron/electron-notarize.git. This software contains the following license and notice below:
 
 Copyright 2018 Samuel Attard and contributors
