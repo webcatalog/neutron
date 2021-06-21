@@ -36,8 +36,8 @@ const refreshBadgeCount = () => {
   global.badgeCount = count;
   app.badgeCount = count;
 
-  if (process.platform === 'win32') {
-    if (browserWindow && !browserWindow.isDestroyed()) {
+  if (browserWindow && !browserWindow.isDestroyed()) {
+    if (process.platform === 'win32') {
       if (count > 0) {
         browserWindow.setOverlayIcon(
           process.env.NODE_ENV === 'production'
@@ -49,9 +49,9 @@ const refreshBadgeCount = () => {
         browserWindow.setOverlayIcon(null, '');
       }
     }
-  }
 
-  browserWindow.refreshTitle();
+    browserWindow.refreshTitle();
+  }
 };
 
 const setWorkspaceBadgeCount = (workspaceId, badgeCount) => {
