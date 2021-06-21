@@ -4,6 +4,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
+import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -16,9 +17,14 @@ import WidgetsIcon from '@material-ui/icons/Widgets';
 import PaletteIcon from '@material-ui/icons/Palette';
 import PowerIcon from '@material-ui/icons/Power';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 
 import connectComponent from '../../helpers/connect-component';
 import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
+
+import {
+  requestShowPreferencesWindow,
+} from '../../senders';
 
 import SnackbarTrigger from '../shared/snackbar-trigger';
 
@@ -34,11 +40,11 @@ import SectionWorkspace from './section-workspace';
 
 const styles = (theme) => ({
   root: {
-    padding: theme.spacing(2),
     background: theme.palette.background.default,
     height: '100%',
     width: '100%',
     overflow: 'auto',
+    padding: theme.spacing(2),
   },
   sectionTitle: {
     paddingLeft: theme.spacing(2),
@@ -52,10 +58,16 @@ const styles = (theme) => ({
     position: 'fixed',
     width: 204,
     color: theme.palette.text.primary,
+    height: `calc(100% - ${theme.spacing(4)}px)`,
   },
   inner: {
     width: 'calc(100% - 224px)',
     float: 'right',
+  },
+  globalPrefsButton: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
   },
 });
 
@@ -128,6 +140,17 @@ const Preferences = ({ classes }) => {
             );
           })}
         </List>
+
+        <Button
+          variant="link"
+          color="primary"
+          size="small"
+          className={classes.globalPrefsButton}
+          startIcon={<ArrowBackIosIcon />}
+          onClick={() => requestShowPreferencesWindow()}
+        >
+          Global Preferences
+        </Button>
       </div>
       <div className={classes.inner}>
         {Object.keys(activeSection.subSections).map((subSectionKey) => {
