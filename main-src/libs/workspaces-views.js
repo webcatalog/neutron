@@ -153,6 +153,7 @@ const removeWorkspaceView = (id) => {
     setActiveWorkspaceView(getPreviousWorkspace(id).id);
   }
 
+  clearTimeout(hibernationTimeouts[id]);
   workspacePreferencesWindow.close(id);
   removeView(id);
   removeWorkspace(id);
