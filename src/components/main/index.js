@@ -216,9 +216,11 @@ const useStyles = makeStyles((theme) => {
       marginTop: 0,
       marginBottom: '1.5rem',
     },
-    iconButton: {
+    iconButtonVertical: {
       width: '100%',
       borderRadius: 0,
+    },
+    iconButton: {
       color: (props) => {
         if (props.themeColor != null) {
           return theme.palette.getContrastText(themeColors[props.themeColor][800]);
@@ -442,7 +444,9 @@ const Main = ({
                 className={classnames(classes.end, isSidebarExpanded && classes.endExpanded)}
               >
                 <RatingButton
-                  className={classnames(!isSidebarExpanded && classes.iconButton)}
+                  className={classnames(
+                    classes.iconButton, !isSidebarExpanded && classes.iconButtonVertical,
+                  )}
                   size="small"
                 />
                 {window.process.platform === 'darwin' && workspacesList.length > 0 && (
@@ -450,7 +454,9 @@ const Main = ({
                     title="Share"
                     aria-label="Share"
                     onClick={() => requestShowShareMenu()}
-                    className={classnames(!isSidebarExpanded && classes.iconButton)}
+                    className={classnames(
+                      classes.iconButton, !isSidebarExpanded && classes.iconButtonVertical,
+                    )}
                     size="small"
                   >
                     <SvgIcon>
@@ -462,7 +468,9 @@ const Main = ({
                   title="Notifications"
                   aria-label="Notifications"
                   onClick={requestShowNotificationsWindow}
-                  className={classnames(!isSidebarExpanded && classes.iconButton)}
+                  className={classnames(
+                    classes.iconButton, !isSidebarExpanded && classes.iconButtonVertical,
+                  )}
                   size="small"
                 >
                   {shouldPauseNotifications ? <NotificationsPausedIcon /> : <NotificationsIcon />}
@@ -471,7 +479,9 @@ const Main = ({
                   title={muteApp ? 'Unmute' : 'Mute'}
                   aria-label={muteApp ? 'Unmute' : 'Mute'}
                   onClick={() => requestSetPreference('muteApp', !muteApp)}
-                  className={classnames(!isSidebarExpanded && classes.iconButton)}
+                  className={classnames(
+                    classes.iconButton, !isSidebarExpanded && classes.iconButtonVertical,
+                  )}
                   size="small"
                 >
                   {muteApp ? <VolumeOffIcon /> : <VolumeUpIcon />}
@@ -480,7 +490,9 @@ const Main = ({
                   title="Preferences"
                   aria-label="Preferences"
                   onClick={() => requestShowPreferencesWindow()}
-                  className={classnames(!isSidebarExpanded && classes.iconButton)}
+                  className={classnames(
+                    classes.iconButton, !isSidebarExpanded && classes.iconButtonVertical,
+                  )}
                   size="small"
                 >
                   <SettingsIcon />

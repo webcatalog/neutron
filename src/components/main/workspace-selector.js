@@ -153,6 +153,12 @@ const useStyles = makeStyles((theme) => ({
     textOverflow: 'ellipsis',
     overflow: 'hidden',
     whiteSpace: 'nowrap',
+    color: (props) => {
+      if (props.themeColor != null) {
+        return theme.palette.getContrastText(themeColors[props.themeColor][800]);
+      }
+      return theme.palette.text.primary;
+    },
   },
   sleepAvatar: {
     height: 16,
