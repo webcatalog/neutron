@@ -240,7 +240,7 @@ if (!gotTheLock) {
               webcalWorkspaces[0].homeUrl || appJson.url,
             )];
             const u = webcalUrl.replace('%s', url);
-            ipcMain.emit('request-load-url', null, u, webcalWorkspaces[0].id);
+            ipcMain.emit('request-load-url', null, u, webcalWorkspaces[0].id, true);
             return null;
           }
 
@@ -268,7 +268,7 @@ if (!gotTheLock) {
               mailtoWorkspaces[0].homeUrl || appJson.url,
             )];
             const u = mailtoUrl.replace('%s', url);
-            ipcMain.emit('request-load-url', null, u, mailtoWorkspaces[0].id);
+            ipcMain.emit('request-load-url', null, u, mailtoWorkspaces[0].id, true);
             return null;
           }
 
@@ -278,7 +278,7 @@ if (!gotTheLock) {
         // handle https/http
         // pick automically if there's only one choice
         if (workspaces.length === 1) {
-          ipcMain.emit('request-load-url', null, url, workspaces[0].id);
+          ipcMain.emit('request-load-url', null, url, workspaces[0].id, true);
           return null;
         }
 

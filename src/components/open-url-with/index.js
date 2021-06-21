@@ -45,7 +45,7 @@ const OpenUrlWith = ({ workspaces }) => {
         onClick={() => {
           const u = isMailtoUrl ? getMailtoUrl(workspace.homeUrl || appJson.url).replace('%s', incomingUrl) : incomingUrl;
 
-          requestLoadUrl(u, workspace.id);
+          requestLoadUrl(u, workspace.id, true);
           window.remote.getCurrentWindow().close();
         }}
       >

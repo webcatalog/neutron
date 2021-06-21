@@ -30,10 +30,5 @@ window.addEventListener('load', () => {
     setInterval(() => {
       getBadgeCount();
     }, 1000);
-
-    // overwrite gmail email discard button
-    const node = document.createElement('script');
-    node.innerHTML = 'window.close = () => { window.location.href = \'https://mail.google.com\' }';
-    document.body.appendChild(node);
   }
 });

@@ -12,7 +12,7 @@ export const enqueueRequestRestartSnackbar = () => {
 };
 
 export const requestOpenInBrowser = (url) => window.ipcRenderer.send('request-open-in-browser', url);
-export const requestLoadUrl = (url, id) => window.ipcRenderer.send('request-load-url', url, id);
+export const requestLoadUrl = (url, id, openInNewWindow) => window.ipcRenderer.send('request-load-url', url, id, openInNewWindow);
 export const requestShowMessageBox = (message, type) => window.ipcRenderer.send('request-show-message-box', message, type);
 export const requestShowAppMenu = (x, y) => window.ipcRenderer.send('request-show-app-menu', x, y);
 export const requestShowRequireLicenseDialog = () => window.ipcRenderer.send('request-show-require-license-dialog');
