@@ -2,44 +2,17 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import ListItemExtensions from './list-item-extensions';
 
-import connectComponent from '../../../helpers/connect-component';
-
-import { open as openDialogExtensions } from '../../../state/dialog-extensions/actions';
-
-import DialogExtensions from './dialog-extensions';
-
-const SectionExtensions = ({
-  onOpenDialogExtensions,
-}) => (
+const SectionExtensions = () => (
   <>
     <List disablePadding dense>
-      <ListItem button onClick={() => onOpenDialogExtensions()}>
-        <ListItemText primary="Manage extensions (experimental)" />
-        <ChevronRightIcon color="action" />
-      </ListItem>
+      <ListItemExtensions />
     </List>
-    <DialogExtensions />
   </>
 );
 
-SectionExtensions.propTypes = {
-  onOpenDialogExtensions: PropTypes.func.isRequired,
-};
-
-const actionCreators = {
-  openDialogExtensions,
-};
-
-export default connectComponent(
-  SectionExtensions,
-  null,
-  actionCreators,
-);
+export default SectionExtensions;

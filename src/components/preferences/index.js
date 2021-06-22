@@ -88,7 +88,7 @@ const styles = (theme) => ({
 });
 
 const Preferences = ({
-  classes,
+  classes, hasWorkspaces,
 }) => {
   const appJson = getStaticGlobal('appJson');
 
@@ -133,7 +133,7 @@ const Preferences = ({
       Icon: ExtensionIcon,
       hidden: isMas(),
       subSections: {
-        extensions: { text: 'Extensions', Component: SectionExtensions },
+        extensions: { text: 'Extensions (experimental)', Component: SectionExtensions },
       },
     },
     privacySecuriy: {
@@ -162,6 +162,7 @@ const Preferences = ({
     workspaces: {
       text: getWorkspaceFriendlyName(true),
       Icon: ViewListIcon,
+      hidden: !hasWorkspaces,
       subSections: {
         workspaces: { text: getWorkspaceFriendlyName(true), Component: SectionWorkspaces },
       },
@@ -231,11 +232,13 @@ const Preferences = ({
 
 Preferences.propTypes = {
   classes: PropTypes.object.isRequired,
+  hasWorkspaces: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   iapPurchased: state.preferences.iapPurchased,
   standaloneRegistered: state.preferences.standaloneRegistered,
+  hasWorkspaces: Object.keys(state.workspaces.workspaces).length > 0,
 });
 
 export default connectComponent(
