@@ -12478,10 +12478,10 @@ redux@4.1.0, redux@^4.0.0:
   dependencies:
     "@babel/runtime" "^7.9.2"
 
-regedit@3.0.3:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/regedit/-/regedit-3.0.3.tgz#0c2188e15f670de7d5740c5cea9bbebe99497749"
-  integrity sha512-SpHmMKOtiEYx0MiRRC48apBsmThoZ4svZNsYoK8leHd5bdUHV1nYb8pk8gh6Moou7/S9EDi1QsjBTpyXVQrPuQ==
+regedit@4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/regedit/-/regedit-4.0.0.tgz#335845596f409332bfd2245a7bc6b5588d62a0d1"
+  integrity sha512-hyjMHuX1M86CDdA3OKpgj79LiVAVcMAudR8a29Mln39ppiUHPFyh8F8wlkAsLfwulWJFtl1p9HhQ9I9WiOI2dQ==
   dependencies:
     debug "^4.1.0"
     if-async "^3.7.4"
