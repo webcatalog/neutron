@@ -27,7 +27,6 @@ import connectComponent from '../../helpers/connect-component';
 import getWorkspacesAsList from '../../helpers/get-workspaces-as-list';
 import getStaticGlobal from '../../helpers/get-static-global';
 import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
-import isMacOs11 from '../../helpers/is-mac-os-11';
 import isMas from '../../helpers/is-mas';
 
 import themeColors from '../../constants/theme-colors';
@@ -73,8 +72,9 @@ const arrayMove = (array, from, to) => {
 };
 
 const useStyles = makeStyles((theme) => {
-  // big sur increases title bar height
-  const titleBarHeight = isMacOs11() ? 28 : 22;
+  // Big Sur increases title bar height: https://github.com/microsoft/vscode/pull/110592 (28px)
+  // but following Electron@13, somehow the height is now also 22px on Big Sur
+  const titleBarHeight = 22;
 
   return {
     outerRoot: {
