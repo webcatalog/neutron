@@ -27,7 +27,6 @@ import connectComponent from '../../helpers/connect-component';
 import getWorkspacesAsList from '../../helpers/get-workspaces-as-list';
 import getStaticGlobal from '../../helpers/get-static-global';
 import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
-import isMacOs11 from '../../helpers/is-mac-os-11';
 import isMas from '../../helpers/is-mas';
 
 import themeColors from '../../constants/theme-colors';
