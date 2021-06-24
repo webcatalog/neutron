@@ -73,8 +73,9 @@ const arrayMove = (array, from, to) => {
 };
 
 const useStyles = makeStyles((theme) => {
-  // big sur increases title bar height
-  const titleBarHeight = isMacOs11() ? 22 : 22;
+  // Big Sur increases title bar height: https://github.com/microsoft/vscode/pull/110592 (28px)
+  // but following Electron@13, somehow the height is now also 22px on Big Sur
+  const titleBarHeight = 22;
 
   return {
     outerRoot: {

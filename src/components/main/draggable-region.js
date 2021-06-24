@@ -7,13 +7,13 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import connectComponent from '../../helpers/connect-component';
-import isMacOs11 from '../../helpers/is-mac-os-11';
 
 const styles = () => ({
   root: {
-    // big sur increases title bar height
+    // big sur increases title bar height to 28px
+    // but following Electron@13, somehow the height is now also 22px on Big Sur
     // scroll bar width is 20px
-    height: isMacOs11() ? 22 : 22,
+    height: 22,
     width: 'calc(100vw - 16px)',
     WebkitAppRegion: 'drag',
     WebkitUserSelect: 'none',
