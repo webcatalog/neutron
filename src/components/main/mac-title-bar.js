@@ -20,15 +20,17 @@ import {
 
 const useStyles = makeStyles((theme) => {
   // big sur increases title bar height
-  const titleBarHeight = isMacOs11() ? 28 : 22;
+  const titleBarHeight = isMacOs11() ? 22 : 22;
   return {
     root: {
       background: (props) => {
         if (props.themeColor != null) {
           return themeColors[props.themeColor][900];
         }
-        return theme.palette.type === 'dark' ? '#2a2b2c' : 'linear-gradient(top, #e4e4e4, #cecece)';
+        return theme.palette.type === 'dark' ? '#2a2b2c' : '#efefef';
       },
+      borderBottom: '1px solid',
+      borderBottomColor: theme.palette.divider,
       height: titleBarHeight,
       WebkitAppRegion: 'drag',
       WebkitUserSelect: 'none',

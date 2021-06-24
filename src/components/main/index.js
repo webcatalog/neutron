@@ -74,7 +74,7 @@ const arrayMove = (array, from, to) => {
 
 const useStyles = makeStyles((theme) => {
   // big sur increases title bar height
-  const titleBarHeight = isMacOs11() ? 28 : 22;
+  const titleBarHeight = isMacOs11() ? 22 : 22;
 
   return {
     outerRoot: {

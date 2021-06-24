@@ -13,7 +13,7 @@ const styles = () => ({
   root: {
     // big sur increases title bar height
     // scroll bar width is 20px
-    height: isMacOs11() ? 28 : 22,
+    height: isMacOs11() ? 22 : 22,
     width: 'calc(100vw - 16px)',
     WebkitAppRegion: 'drag',
     WebkitUserSelect: 'none',
