@@ -301,7 +301,7 @@ const WorkspaceSelector = ({
       <Badge
         color="error"
         overlap="circle"
-        badgeContent={badgeCount === 'number' && !Number.isNaN(badgeCount) ? badgeCount : 0}
+        badgeContent={typeof badgeCount === 'number' && !Number.isNaN(badgeCount) ? badgeCount : 0}
         anchorOrigin={{
           vertical: 'top',
           horizontal: 'right',
@@ -323,7 +323,7 @@ const WorkspaceSelector = ({
               );
             }
 
-            if (disableNotifications) {
+            if (disableAudio || disableNotifications) {
               return (
                 <>
                   <Avatar variant="circle" className={classnames(classes.sleepAvatar, disableNotifications && disableAudio && classes.sleepAvatarWide)}>
