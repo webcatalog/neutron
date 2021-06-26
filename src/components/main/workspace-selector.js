@@ -13,6 +13,7 @@ import Avatar from '@material-ui/core/Avatar';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
 import NotificationsOffIcon from '@material-ui/icons/NotificationsOff';
+import VolumeOffIcon from '@material-ui/icons/VolumeOff';
 
 import connectComponent from '../../helpers/connect-component';
 import getAvatarText from '../../helpers/get-avatar-text';
@@ -171,6 +172,9 @@ const useStyles = makeStyles((theme) => ({
     height: 12,
     width: 12,
   },
+  sleepAvatarWide: {
+    width: 32,
+  },
 }));
 
 const WorkspaceSelector = ({
@@ -178,6 +182,7 @@ const WorkspaceSelector = ({
   active,
   backgroundColor,
   badgeCount,
+  disableAudio,
   disableNotifications,
   hibernated,
   id,
@@ -320,9 +325,16 @@ const WorkspaceSelector = ({
 
             if (disableNotifications) {
               return (
-                <Avatar variant="circle" className={classes.sleepAvatar}>
-                  <NotificationsOffIcon className={classes.sleepAvatarIcon} />
-                </Avatar>
+                <>
+                  <Avatar variant="circle" className={classnames(classes.sleepAvatar, disableNotifications && disableAudio && classes.sleepAvatarWide)}>
+                    {disableNotifications && (
+                      <NotificationsOffIcon className={classes.sleepAvatarIcon} />
+                    )}
+                    {disableAudio && (
+                      <VolumeOffIcon className={classes.sleepAvatarIcon} />
+                    )}
+                  </Avatar>
+                </>
               );
             }
 
@@ -403,6 +415,7 @@ WorkspaceSelector.defaultProps = {
   preferredIconType: 'auto',
   transparentBackground: false,
   themeColor: null,
+  disableAudio: false,
   disableNotifications: false,
 };
 
@@ -411,6 +424,7 @@ WorkspaceSelector.propTypes = {
   active: PropTypes.bool,
   backgroundColor: PropTypes.string,
   badgeCount: PropTypes.number,
+  disableAudio: PropTypes.bool,
   disableNotifications: PropTypes.bool,
   hibernated: PropTypes.bool,
   id: PropTypes.string.isRequired,
