@@ -210,6 +210,12 @@ const addViewAsync = async (browserWindow, workspace) => {
   const partitionId = global.shareWorkspaceBrowsingData ? 'persist:shared' : `persist:${workspace.id}`;
   const ses = session.fromPartition(partitionId);
 
+  // user agent
+  const customUserAgent = getWorkspacePreference(workspace.id, 'customUserAgent') || getPreference('customUserAgent');
+  if (customUserAgent) {
+    ses.setUserAgent(customUserAgent);
+  }
+
   // proxy
   if (global.proxyMode === 'fixed_servers') {
     ses.setProxy({
@@ -356,8 +362,6 @@ const addViewAsync = async (browserWindow, workspace) => {
   const adjustUserAgentByUrl = (contents, url, occasion) => {
     const currentUaStr = contents.userAgent;
 
-    const customUserAgent = getWorkspacePreference(workspace.id, 'customUserAgent') || getPreference('customUserAgent');
-
     const navigatedDomain = extractDomain(url);
     if (navigatedDomain === 'accounts.google.com') {
       if (currentUaStr !== fakedEdgeUaStr) {
@@ -376,18 +380,13 @@ const addViewAsync = async (browserWindow, workspace) => {
         console.log('Changed user agent to', fakedSafariUaStr, 'for web compatibility URL: ', url, 'when', occasion);
         return true;
       }
-    } else if (customUserAgent) {
-      if (currentUaStr !== customUserAgent) {
-        contents.userAgent = customUserAgent;
-        return true;
-      }
-      return false;
-    } else if (currentUaStr !== app.userAgentFallback) {
-      contents.userAgent = app.userAgentFallback;
-      // eslint-disable-next-line no-console
-      console.log('Changed user agent to', app.userAgentFallback, 'for web compatibility URL: ', url, 'when', occasion);
-      return true;
     }
+
+    // after user-agent is changed
+    // avoid changing it back
+    // as every time user-agent is changed, it causes the page to reload
+    // sometimes, reloading causes important data to be lost (e.g. authentication result)
+
     return false;
   };
 
@@ -527,9 +526,7 @@ const addViewAsync = async (browserWindow, workspace) => {
     // so user agent to needed to be double check here
     // not the best solution as page will be unexpectedly reloaded
     // but it won't happen very often
-    if (adjustUserAgentByUrl(view.webContents, url, 'did-navigate')) {
-      view.webContents.reload();
-    }
+    adjustUserAgentByUrl(view.webContents, url, 'did-navigate'); // page will be reloaded by Electron
 
     if (workspaceObj.active) {
       sendToAllWindows('update-can-go-back', view.webContents.canGoBack());
@@ -788,9 +785,7 @@ const addViewAsync = async (browserWindow, workspace) => {
       // not the best solution as page will be unexpectedly reloaded
       // but it won't happen very often
       popupWin.webContents.on('did-navigate', (ee, url) => {
-        if (adjustUserAgentByUrl(ee.sender, url, 'popup-did-navigate')) {
-          ee.sender.reload();
-        }
+        adjustUserAgentByUrl(ee.sender, url, 'popup-did-navigate');
       });
 
       // if options.webContents is not used
