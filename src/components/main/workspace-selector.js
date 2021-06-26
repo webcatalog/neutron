@@ -12,6 +12,8 @@ import Badge from '@material-ui/core/Badge';
 import Avatar from '@material-ui/core/Avatar';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
+import NotificationsOffIcon from '@material-ui/icons/NotificationsOff';
+
 import connectComponent from '../../helpers/connect-component';
 import getAvatarText from '../../helpers/get-avatar-text';
 import getUrlFromText from '../../helpers/get-url-from-text';
@@ -176,6 +178,7 @@ const WorkspaceSelector = ({
   active,
   backgroundColor,
   badgeCount,
+  disableNotifications,
   hibernated,
   id,
   name,
@@ -188,8 +191,8 @@ const WorkspaceSelector = ({
   shouldUseDarkColors,
   sidebarSize,
   sidebarTips,
-  transparentBackground,
   themeColor,
+  transparentBackground,
 }) => {
   const classes = useStyles({ themeColor });
   const isExpanded = sidebarSize === 'expanded';
@@ -291,70 +294,89 @@ const WorkspaceSelector = ({
       title={hoverText}
     >
       <Badge
-        color={hibernated ? 'default' : 'error'}
+        color="error"
         overlap="circle"
-        badgeContent={(() => {
-          if (hibernated) {
-            return (
-              <Avatar variant="circle" className={classes.sleepAvatar}>
-                <SvgIcon className={classes.sleepAvatarIcon}>
-                  <path fill="currentColor" d="M18.73,18C15.4,21.69 9.71,22 6,18.64C2.33,15.31 2.04,9.62 5.37,5.93C6.9,4.25 9,3.2 11.27,3C7.96,6.7 8.27,12.39 12,15.71C13.63,17.19 15.78,18 18,18C18.25,18 18.5,18 18.73,18Z" />
-                </SvgIcon>
-              </Avatar>
-            );
-          }
-
-          return typeof badgeCount === 'number' && !Number.isNaN(badgeCount) ? badgeCount : 0;
-        })()}
+        badgeContent={badgeCount === 'number' && !Number.isNaN(badgeCount) ? badgeCount : 0}
         anchorOrigin={{
-          vertical: hibernated ? 'bottom' : 'top',
+          vertical: 'top',
           horizontal: 'right',
         }}
         max={99}
         classes={{ badge: classes.badge }}
       >
-        <div
-          className={classnames(
-            classes.avatar,
-            selectedIconType === 'text' && classes.textAvatar,
-            selectedIconType === 'image' && transparentBackground && classes.transparentAvatar,
-          )}
-          style={(() => {
-            if (selectedIconType === 'text' && backgroundColor) {
-              return {
-                backgroundColor,
-                color: Color(backgroundColor).isDark() ? '#fff' : '#000',
-              };
+        <Badge
+          color="default"
+          overlap="circle"
+          badgeContent={(() => {
+            if (hibernated) {
+              return (
+                <Avatar variant="circle" className={classes.sleepAvatar}>
+                  <SvgIcon className={classes.sleepAvatarIcon}>
+                    <path fill="currentColor" d="M18.73,18C15.4,21.69 9.71,22 6,18.64C2.33,15.31 2.04,9.62 5.37,5.93C6.9,4.25 9,3.2 11.27,3C7.96,6.7 8.27,12.39 12,15.71C13.63,17.19 15.78,18 18,18C18.25,18 18.5,18 18.73,18Z" />
+                  </SvgIcon>
+                </Avatar>
+              );
             }
+
+            if (disableNotifications) {
+              return (
+                <Avatar variant="circle" className={classes.sleepAvatar}>
+                  <NotificationsOffIcon className={classes.sleepAvatarIcon} />
+                </Avatar>
+              );
+            }
+
             return null;
           })()}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+          classes={{ badge: classes.badge }}
         >
-          {selectedIconType === 'text' && getAvatarText(id, userDefinedName, order)}
-          {selectedIconType === 'image' && (
-            <img
-              alt="Icon"
-              className={classnames(
-                classes.avatarPicture,
-              )}
-              src={(() => {
-                if (picturePath) return `file://${picturePath}`;
-                return shouldUseDarkColors
-                  ? defaultWorkspaceImageLight : defaultWorkspaceImageDark;
-              })()}
-              draggable={false}
-            />
-          )}
-          {selectedIconType === 'accountInfo' && (
-            <img
-              alt="Icon"
-              className={classnames(
-                classes.avatarPicture,
-              )}
-              src={`file://${accountInfo.picturePath}`}
-              draggable={false}
-            />
-          )}
-        </div>
+          <div
+            className={classnames(
+              classes.avatar,
+              selectedIconType === 'text' && classes.textAvatar,
+              selectedIconType === 'image' && transparentBackground && classes.transparentAvatar,
+            )}
+            style={(() => {
+              if (selectedIconType === 'text' && backgroundColor) {
+                return {
+                  backgroundColor,
+                  color: Color(backgroundColor).isDark() ? '#fff' : '#000',
+                };
+              }
+              return null;
+            })()}
+          >
+            {selectedIconType === 'text' && getAvatarText(id, userDefinedName, order)}
+            {selectedIconType === 'image' && (
+              <img
+                alt="Icon"
+                className={classnames(
+                  classes.avatarPicture,
+                )}
+                src={(() => {
+                  if (picturePath) return `file://${picturePath}`;
+                  return shouldUseDarkColors
+                    ? defaultWorkspaceImageLight : defaultWorkspaceImageDark;
+                })()}
+                draggable={false}
+              />
+            )}
+            {selectedIconType === 'accountInfo' && (
+              <img
+                alt="Icon"
+                className={classnames(
+                  classes.avatarPicture,
+                )}
+                src={`file://${accountInfo.picturePath}`}
+                draggable={false}
+              />
+            )}
+          </div>
+        </Badge>
       </Badge>
       {tipText && (
         <div className={classes.shortcutText}>{tipText}</div>
@@ -381,6 +403,7 @@ WorkspaceSelector.defaultProps = {
   preferredIconType: 'auto',
   transparentBackground: false,
   themeColor: null,
+  disableNotifications: false,
 };
 
 WorkspaceSelector.propTypes = {
@@ -388,6 +411,7 @@ WorkspaceSelector.propTypes = {
   active: PropTypes.bool,
   backgroundColor: PropTypes.string,
   badgeCount: PropTypes.number,
+  disableNotifications: PropTypes.bool,
   hibernated: PropTypes.bool,
   id: PropTypes.string.isRequired,
   name: PropTypes.string,
@@ -400,8 +424,8 @@ WorkspaceSelector.propTypes = {
   shouldUseDarkColors: PropTypes.bool.isRequired,
   sidebarSize: PropTypes.oneOf(['compact', 'expanded']).isRequired,
   sidebarTips: PropTypes.oneOf(['shortcut', 'name', 'none']).isRequired,
-  transparentBackground: PropTypes.bool,
   themeColor: PropTypes.string,
+  transparentBackground: PropTypes.bool,
 };
 
 const mapStateToProps = (state, ownProps) => ({

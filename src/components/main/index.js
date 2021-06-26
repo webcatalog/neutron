@@ -264,6 +264,7 @@ const SortableItem = sortableElement(({ value }) => {
       preferredIconType={preferredIconType}
       order={index}
       hibernated={hibernated}
+      disableNotifications={disableNotifications}
       preferences={preferences}
       onClick={() => requestSetActiveWorkspace(id)}
       themeColor={themeColor}
