@@ -360,6 +360,8 @@ const addViewAsync = async (browserWindow, workspace) => {
   const fakedEdgeUaStr = `${app.userAgentFallback} Edge/18.18875`;
   const fakedSafariUaStr = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15';
   const adjustUserAgentByUrl = (contents, url, occasion) => {
+    if (customUserAgent) return true;
+
     const currentUaStr = contents.userAgent;
 
     const navigatedDomain = extractDomain(url);
