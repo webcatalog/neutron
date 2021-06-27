@@ -16,7 +16,7 @@ import connectComponent from '../../../helpers/connect-component';
 import { close, updateForm, save } from '../../../state/dialog-custom-user-agent/actions';
 
 const CustomUserAgent = ({
-  code,
+  customUserAgent,
   onClose,
   onSave,
   onUpdateForm,
@@ -43,8 +43,8 @@ const CustomUserAgent = ({
         InputLabelProps={{
           shrink: true,
         }}
-        value={code}
-        onChange={(e) => onUpdateForm({ code: e.target.value })}
+        value={customUserAgent}
+        onChange={(e) => onUpdateForm({ customUserAgent: e.target.value })}
       />
     </DialogContent>
     <DialogActions>
@@ -63,7 +63,7 @@ CustomUserAgent.defaultProps = {
 };
 
 CustomUserAgent.propTypes = {
-  code: PropTypes.string.isRequired,
+  customUserAgent: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   onUpdateForm: PropTypes.func.isRequired,

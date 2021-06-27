@@ -127,7 +127,9 @@ const Extensions = ({
                   label="Browser"
                 >
                   {sources.map((source) => (
-                    <MenuItem value={source.browserId}>{source.browserName}</MenuItem>
+                    <MenuItem key={source.browserId} value={source.browserId}>
+                      {source.browserName}
+                    </MenuItem>
                   ))}
                 </Select>
               </FormControl>
@@ -142,7 +144,9 @@ const Extensions = ({
                 >
                   {(currentSource ? currentSource.profiles : [])
                     .map((profile) => (
-                      <MenuItem value={profile.profileDirName}>{profile.name}</MenuItem>
+                      <MenuItem key={profile.profileDirName} value={profile.profileDirName}>
+                        {profile.name}
+                      </MenuItem>
                     ))}
                 </Select>
               </FormControl>

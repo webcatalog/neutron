@@ -23,6 +23,7 @@ const styles = (theme) => ({
   selectRoot: {
     borderRadius: theme.spacing(0.5),
     fontSize: '0.84375rem',
+    maxWidth: 'calc(100vw - 500px)',
   },
   select: {
     paddingTop: theme.spacing(1),
