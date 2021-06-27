@@ -225,7 +225,7 @@ const useStyles = makeStyles((theme) => {
         if (props.themeColor != null) {
           return theme.palette.getContrastText(themeColors[props.themeColor][800]);
         }
-        return undefined;
+        return theme.palette.text.secondary;
       },
     },
     browserActionList: {

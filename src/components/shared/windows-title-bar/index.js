@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
       if (props.themeColor != null) {
         return fade(theme.palette.getContrastText(themeColors[props.themeColor][900]), 0.7);
       }
-      return undefined;
+      return theme.palette.text.secondary;
     },
   },
   toolbar: {

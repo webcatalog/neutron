@@ -93,7 +93,7 @@ const useStyles = makeStyles((theme) => ({
       if (props.themeColor != null) {
         return `${fade(theme.palette.getContrastText(themeColors[props.themeColor][800]), 0.3)} !important`;
       }
-      return undefined;
+      return theme.palette.text.disabled;
     },
   },
   icon: {
