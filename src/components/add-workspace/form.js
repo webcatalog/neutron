@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import Divider from '@material-ui/core/Divider';
 import Badge from '@material-ui/core/Badge';
 
 import CheckIcon from '@material-ui/icons/Check';
@@ -28,6 +29,7 @@ import {
   getIconFromAppSearch,
   save,
   updateForm,
+  resetForm,
 } from '../../state/dialog-add-workspace/actions';
 
 import defaultWorkspaceImageLight from '../../images/default-workspace-image-light.png';
@@ -38,15 +40,23 @@ const styles = (theme) => ({
     background: theme.palette.background.paper,
     height: '100%',
     width: '100%',
-    paddingTop: theme.spacing(3),
-    paddingBottom: theme.spacing(3),
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
     display: 'flex',
     flexDirection: 'column',
+    overflow: 'hidden',
   },
-  flexGrow: {
+  content: {
     flex: 1,
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+    paddingTop: theme.spacing(3),
+    paddingBottom: theme.spacing(3),
+    overflow: 'auto',
+  },
+  actions: {
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
   },
   button: {
     float: 'right',
@@ -56,6 +66,8 @@ const styles = (theme) => ({
   },
   avatarFlex: {
     display: 'flex',
+    flexDirection: 'column',
+    marginTop: theme.spacing(1),
   },
   avatarLeft: {
     paddingTop: theme.spacing(1),
@@ -67,13 +79,14 @@ const styles = (theme) => ({
     flex: 1,
     paddingTop: theme.spacing(1),
     paddingBottom: theme.spacing(1),
-    paddingLeft: theme.spacing(1),
+    paddingLeft: 0,
     paddingRight: 0,
   },
   avatarContainer: {
     position: 'relative',
+    float: 'left',
     '&:not(:first-child)': {
-      marginTop: theme.spacing(2),
+      marginLeft: theme.spacing(2),
     },
   },
   avatar: {
@@ -144,8 +157,8 @@ const styles = (theme) => ({
 });
 
 const AddWorkspaceCustom = ({
-  color,
   classes,
+  color,
   downloadingIcon,
   homeUrl,
   homeUrlError,
@@ -153,8 +166,9 @@ const AddWorkspaceCustom = ({
   isMailApp,
   name,
   nameError,
-  onGetIconFromInternet,
   onGetIconFromAppSearch,
+  onGetIconFromInternet,
+  onResetForm,
   onSave,
   onUpdateForm,
   picturePath,
@@ -223,7 +237,7 @@ const AddWorkspaceCustom = ({
 
   return (
     <div className={classes.root}>
-      <div>
+      <div className={classes.content}>
         <TextField
           label="Name"
           error={Boolean(nameError)}
@@ -254,6 +268,45 @@ const AddWorkspaceCustom = ({
           value={homeUrl}
           onChange={(e) => onUpdateForm({ homeUrl: e.target.value })}
         />
+        <div className={classes.colorPickerRow}>
+          <div
+            className={classnames(
+              classes.colorPicker,
+              color == null && classes.colorPickerSelected,
+            )}
+            title="None"
+            style={{ backgroundColor: shouldUseDarkColors ? '#fff' : '#000' }}
+            aria-label="None"
+            role="button"
+            tabIndex={0}
+            onClick={() => onUpdateForm({
+              color: null,
+            })}
+            onKeyDown={() => onUpdateForm({
+              color: null,
+            })}
+          />
+          {Object.keys(themeColors).map((val) => (
+            <div
+              key={val}
+              title={camelCaseToSentenceCase(val)}
+              className={classnames(
+                classes.colorPicker,
+                color === val && classes.colorPickerSelected,
+              )}
+              style={{ backgroundColor: themeColors[val][600] }}
+              aria-label={val}
+              role="button"
+              tabIndex={0}
+              onClick={() => onUpdateForm({
+                color: val,
+              })}
+              onKeyDown={() => onUpdateForm({
+                color: val,
+              })}
+            />
+          ))}
+        </div>
         <div className={classes.avatarFlex}>
           <div className={classes.avatarLeft}>
             {renderAvatar(
@@ -278,51 +331,6 @@ const AddWorkspaceCustom = ({
             )}
           </div>
           <div className={classes.avatarRight}>
-            {selectedIconType === 'text' && (
-              <>
-                <div className={classes.colorPickerRow}>
-                  <div
-                    className={classnames(
-                      classes.colorPicker,
-                      color == null && classes.colorPickerSelected,
-                    )}
-                    title="default"
-                    style={{ backgroundColor: shouldUseDarkColors ? '#fff' : '#000' }}
-                    aria-label="default"
-                    role="button"
-                    tabIndex={0}
-                    onClick={() => onUpdateForm({
-                      color: null,
-                    })}
-                    onKeyDown={() => onUpdateForm({
-                      color: null,
-                    })}
-                  />
-                </div>
-                <div className={classes.colorPickerRow}>
-                  {Object.keys(themeColors).map((val) => (
-                    <div
-                      key={val}
-                      title={camelCaseToSentenceCase(val)}
-                      className={classnames(
-                        classes.colorPicker,
-                        color === val && classes.colorPickerSelected,
-                      )}
-                      style={{ backgroundColor: themeColors[val][600] }}
-                      aria-label={val}
-                      role="button"
-                      tabIndex={0}
-                      onClick={() => onUpdateForm({
-                        color: val,
-                      })}
-                      onKeyDown={() => onUpdateForm({
-                        color: val,
-                      })}
-                    />
-                  ))}
-                </div>
-              </>
-            )}
             {selectedIconType === 'image' && (
               <>
                 <Button
@@ -385,25 +393,29 @@ const AddWorkspaceCustom = ({
                 >
                   Reset to Default
                 </Button>
+                <FormGroup>
+                  <FormControlLabel
+                    control={(
+                      <Checkbox
+                        checked={transparentBackground}
+                        onChange={(e) => onUpdateForm({ transparentBackground: e.target.checked })}
+                      />
+                    )}
+                    label="Use transparent background"
+                  />
+                </FormGroup>
               </>
             )}
           </div>
         </div>
-        <FormGroup>
-          <FormControlLabel
-            control={(
-              <Checkbox
-                checked={transparentBackground}
-                onChange={(e) => onUpdateForm({ transparentBackground: e.target.checked })}
-              />
-            )}
-            label="Use transparent background"
-          />
-        </FormGroup>
       </div>
-      <div>
+      <Divider />
+      <div className={classes.actions}>
         <Button color="primary" variant="contained" disableElevation className={classes.button} onClick={onSave}>
           Add
+        </Button>
+        <Button color="default" variant="text" disableElevation className={classes.button} onClick={onResetForm}>
+          Reset
         </Button>
       </div>
     </div>
@@ -422,8 +434,8 @@ AddWorkspaceCustom.defaultProps = {
 };
 
 AddWorkspaceCustom.propTypes = {
-  color: PropTypes.string,
   classes: PropTypes.object.isRequired,
+  color: PropTypes.string,
   downloadingIcon: PropTypes.bool.isRequired,
   homeUrl: PropTypes.string,
   homeUrlError: PropTypes.string,
@@ -431,8 +443,9 @@ AddWorkspaceCustom.propTypes = {
   isMailApp: PropTypes.bool.isRequired,
   name: PropTypes.string,
   nameError: PropTypes.string,
-  onGetIconFromInternet: PropTypes.func.isRequired,
   onGetIconFromAppSearch: PropTypes.func.isRequired,
+  onGetIconFromInternet: PropTypes.func.isRequired,
+  onResetForm: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   onUpdateForm: PropTypes.func.isRequired,
   picturePath: PropTypes.string,
@@ -461,6 +474,7 @@ const actionCreators = {
   getIconFromAppSearch,
   save,
   updateForm,
+  resetForm,
 };
 
 export default connectComponent(

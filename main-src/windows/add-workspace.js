@@ -14,8 +14,8 @@ const get = () => win;
 
 const create = () => {
   win = new BrowserWindow({
-    width: 400,
-    height: 565,
+    width: 450,
+    height: 600,
     resizable: false,
     maximizable: false,
     minimizable: true,
