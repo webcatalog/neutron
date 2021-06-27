@@ -31,7 +31,6 @@ export const updateForm = (changes) => (dispatch, getState) => {
     disableNotifications,
     transparentBackground,
     preferredIconType,
-    backgroundColor,
     picturePath,
     preferences,
   } = getState().dialogWorkspacePreferences.form;
@@ -43,7 +42,6 @@ export const updateForm = (changes) => (dispatch, getState) => {
     disableNotifications: Boolean(disableNotifications),
     transparentBackground: Boolean(transparentBackground),
     preferredIconType,
-    backgroundColor,
     preferences,
   });
 
