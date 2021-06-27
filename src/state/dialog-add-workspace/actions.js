@@ -164,7 +164,9 @@ export const save = () => (dispatch, getState) => {
     picture: form.internetIcon || form.picturePath,
     transparentBackground: Boolean(form.transparentBackground),
     preferredIconType: form.preferredIconType,
-    backgroundColor: form.backgroundColor,
+    preferences: {
+      color: form.color,
+    },
   });
 
   // don't close window, only hide it

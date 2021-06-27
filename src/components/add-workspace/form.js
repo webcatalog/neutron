@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Color from 'color';
 
-import * as materialColors from '@material-ui/core/colors';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
@@ -20,6 +19,9 @@ import CheckIcon from '@material-ui/icons/Check';
 import connectComponent from '../../helpers/connect-component';
 import getAvatarText from '../../helpers/get-avatar-text';
 import getMailtoUrl from '../../helpers/get-mailto-url';
+import camelCaseToSentenceCase from '../../helpers/camel-case-to-sentence-case';
+
+import themeColors from '../../constants/theme-colors';
 
 import {
   getIconFromInternet,
@@ -142,7 +144,7 @@ const styles = (theme) => ({
 });
 
 const AddWorkspaceCustom = ({
-  backgroundColor,
+  color,
   classes,
   downloadingIcon,
   homeUrl,
@@ -164,6 +166,8 @@ const AddWorkspaceCustom = ({
   if (((picturePath || internetIcon) && preferredIconType === 'auto') || (preferredIconType === 'image')) {
     selectedIconType = 'image';
   }
+
+  const backgroundColor = color ? themeColors[color][600] : null;
 
   const renderAvatar = (avatarContent, type, title = null, avatarAdditionalClassnames = []) => (
     <div className={classes.avatarContainer} title={title}>
@@ -280,7 +284,7 @@ const AddWorkspaceCustom = ({
                   <div
                     className={classnames(
                       classes.colorPicker,
-                      backgroundColor == null && classes.colorPickerSelected,
+                      color == null && classes.colorPickerSelected,
                     )}
                     title="default"
                     style={{ backgroundColor: shouldUseDarkColors ? '#fff' : '#000' }}
@@ -288,57 +292,34 @@ const AddWorkspaceCustom = ({
                     role="button"
                     tabIndex={0}
                     onClick={() => onUpdateForm({
-                      backgroundColor: null,
+                      color: null,
                     })}
                     onKeyDown={() => onUpdateForm({
-                      backgroundColor: null,
+                      color: null,
                     })}
                   />
-                  {backgroundColor != null && (
+                </div>
+                <div className={classes.colorPickerRow}>
+                  {Object.keys(themeColors).map((val) => (
                     <div
+                      key={val}
+                      title={camelCaseToSentenceCase(val)}
                       className={classnames(
                         classes.colorPicker,
-                        classes.colorPickerSelected,
+                        color === val && classes.colorPickerSelected,
                       )}
-                      title="default"
-                      style={{ backgroundColor }}
-                      aria-label="default"
+                      style={{ backgroundColor: themeColors[val][600] }}
+                      aria-label={val}
                       role="button"
                       tabIndex={0}
                       onClick={() => onUpdateForm({
-                        backgroundColor,
+                        color: val,
                       })}
                       onKeyDown={() => onUpdateForm({
-                        backgroundColor,
+                        color: val,
                       })}
                     />
-                  )}
-                </div>
-                <div className={classes.colorPickerRow}>
-                  {Object.keys(materialColors).map((colorId) => {
-                    const colorScales = materialColors[colorId];
-                    if (!colorScales[500]) return null;
-                    return (
-                      <div
-                        key={colorId}
-                        title={colorId}
-                        className={classnames(
-                          classes.colorPicker,
-                          backgroundColor === colorScales[500] && classes.colorPickerSelected,
-                        )}
-                        style={{ backgroundColor: materialColors[colorId][500] }}
-                        aria-label={colorId}
-                        role="button"
-                        tabIndex={0}
-                        onClick={() => onUpdateForm({
-                          backgroundColor: materialColors[colorId][500],
-                        })}
-                        onKeyDown={() => onUpdateForm({
-                          backgroundColor: materialColors[colorId][500],
-                        })}
-                      />
-                    );
-                  })}
+                  ))}
                 </div>
               </>
             )}
@@ -430,7 +411,7 @@ const AddWorkspaceCustom = ({
 };
 
 AddWorkspaceCustom.defaultProps = {
-  backgroundColor: null,
+  color: null,
   homeUrl: '',
   homeUrlError: null,
   internetIcon: null,
@@ -441,7 +422,7 @@ AddWorkspaceCustom.defaultProps = {
 };
 
 AddWorkspaceCustom.propTypes = {
-  backgroundColor: PropTypes.string,
+  color: PropTypes.string,
   classes: PropTypes.object.isRequired,
   downloadingIcon: PropTypes.bool.isRequired,
   homeUrl: PropTypes.string,
@@ -461,7 +442,7 @@ AddWorkspaceCustom.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  backgroundColor: state.dialogAddWorkspace.form.backgroundColor,
+  color: state.dialogAddWorkspace.form.color,
   downloadingIcon: state.dialogAddWorkspace.downloadingIcon,
   homeUrl: state.dialogAddWorkspace.form.homeUrl,
   homeUrlError: state.dialogAddWorkspace.form.homeUrlError,
