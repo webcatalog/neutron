@@ -71,7 +71,7 @@ CustomUserAgent.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  code: state.dialogCustomUserAgent.form.code || '',
+  customUserAgent: state.dialogCustomUserAgent.form.customUserAgent || '',
   open: state.dialogCustomUserAgent.open,
 });
 

@@ -18,7 +18,7 @@ export const open = () => (dispatch, getState) => {
     const { form } = getState().dialogWorkspacePreferences;
     dispatch({
       type: OPEN_CUSTOM_USER_AGENT_FORM,
-      form: { code: form.customUserAgent },
+      form: { customUserAgent: form.preferences.customUserAgent },
     });
     return;
   }
@@ -26,7 +26,7 @@ export const open = () => (dispatch, getState) => {
   const { preferences } = getState();
   dispatch({
     type: OPEN_CUSTOM_USER_AGENT_FORM,
-    form: { code: preferences.customUserAgent },
+    form: { customUserAgent: preferences.customUserAgent },
   });
 };
 
@@ -44,7 +44,7 @@ export const save = () => (dispatch, getState) => {
 
   if (window.mode === 'workspace-preferences') {
     dispatch(updateFormDialogWorkspacePreferences({
-      customUserAgent: form.code,
+      customUserAgent: form.preferences.customUserAgent,
     }));
   } else {
     requestSetPreference('customUserAgent', form.code);
