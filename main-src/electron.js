@@ -507,9 +507,9 @@ if (!gotTheLock) {
           handleArgv(process.argv);
         }
 
-        if (isStandalone()) {
+        if (isStandalone() && !isSnap()) {
           ipcMain.emit('request-check-for-updates', null, true);
-        } else if (!isMas() && !isSnap() && autoCheckForUpdates) {
+        } else if (!isMas() && autoCheckForUpdates) {
           // only notify user about update again after one week
           const lastShowNewUpdateDialog = getPreference('lastShowNewUpdateDialog');
           const updateInterval = 7 * 24 * 60 * 60 * 1000; // one week
