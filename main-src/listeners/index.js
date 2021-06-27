@@ -86,6 +86,7 @@ const getWebsiteIconUrlAsync = require('../libs/get-website-icon-url-async');
 const getViewBounds = require('../libs/get-view-bounds');
 const isMas = require('../libs/is-mas');
 const isStandalone = require('../libs/is-standalone');
+const isSnap = require('../libs/is-snap');
 const getIapFormattedPriceAsync = require('../libs/get-iap-formatted-price-async');
 const getUtmSource = require('../libs/get-utm-source');
 const getWorkspaceFriendlyName = require('../libs/get-workspace-friendly-name');
@@ -217,7 +218,7 @@ const loadListeners = () => {
       dialog.showMessageBox({
         type: 'question',
         buttons: ['Quit Now', 'Later'],
-        message: 'You need to quit and then manually restart the app for the changes to take affect.',
+        message: 'You need to quit and then manually restart the app for the changes to take effect.',
         cancelId: 1,
       })
         .then(({ response }) => {
@@ -542,7 +543,7 @@ const loadListeners = () => {
   });
 
   ipcMain.on('request-check-for-updates', (e, isSilent) => {
-    if (isStandalone()) {
+    if (isStandalone() && !isSnap()) {
       // eslint-disable-next-line global-require
       const { autoUpdater } = require('electron-updater');
       // https://github.com/electron-userland/electron-builder/issues/4028

@@ -32,7 +32,6 @@ const SectionAbout = () => {
       <ListItemAbout />
       <Divider />
       <ListItemUpdates />
-      <Divider />
       {(() => {
         if (isMas()) {
           return (

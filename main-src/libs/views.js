@@ -48,6 +48,7 @@ const getUtmSource = require('./get-utm-source');
 const getWorkspaceFriendlyName = require('./get-workspace-friendly-name');
 const isStandalone = require('./is-standalone');
 const getExtensionFromProfile = require('./extensions/get-extensions-from-profile');
+const isSnap = require('./is-snap');
 
 const views = {};
 let shouldMuteAudio;
@@ -700,8 +701,9 @@ const addViewAsync = async (browserWindow, workspace) => {
                 {
                   label: 'Check for Updates',
                   click: () => ipcMain.emit('request-check-for-updates'),
-                  visible: !isMas(),
+                  visible: !isMas() && !isSnap(),
                 },
+                { type: 'separator', visible: !isMas() && !isSnap() },
                 {
                   label: 'Preferences...',
                   click: () => ipcMain.emit('request-show-preferences-window'),
