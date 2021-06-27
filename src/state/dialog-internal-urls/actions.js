@@ -20,7 +20,7 @@ export const open = () => (dispatch, getState) => {
     const { form } = getState().dialogWorkspacePreferences;
     dispatch({
       type: OPEN_DIALOG_INTERNAL_URLS,
-      form: { internalUrlRule: form.internalUrlRule },
+      form: { internalUrlRule: form.preferences.internalUrlRule },
     });
     return;
   }
@@ -59,7 +59,9 @@ export const save = () => (dispatch, getState) => {
 
   if (window.mode === 'workspace-preferences') {
     dispatch(updateFormDialogWorkspacePreferences({
-      internalUrlRule: form.internalUrlRule,
+      preferences: {
+        internalUrlRule: form.internalUrlRule,
+      },
     }));
   } else {
     requestSetPreference('internalUrlRule', form.internalUrlRule);

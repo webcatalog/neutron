@@ -61,7 +61,9 @@ export const save = () => (dispatch, getState) => {
 
   if (window.mode === 'workspace-preferences') {
     dispatch(updateFormDialogWorkspacePreferences({
-      autoRefreshInterval,
+      preferences: {
+        autoRefreshInterval,
+      },
     }));
     const workspaceId = getStaticGlobal('workspacePreferencesWorkspaceId');
     requestRequestReloadWorkspaceDialog(workspaceId);
