@@ -26,8 +26,7 @@ import {
   requestShowNotification,
   requestShowNotificationsWindow,
 } from '../../../senders';
-import isStandalone from '../../../helpers/is-standalone';
-import isMas from '../../../helpers/is-mas';
+import isWebcatalog from '../../../helpers/is-webcatalog';
 
 const styles = (theme) => ({
   paper: {
@@ -163,7 +162,7 @@ const SectionNotifications = ({
         <ListItemText
           secondary={(
             <>
-              {isStandalone() || isMas() ? appJson.name : 'WebCatalog'}
+              {isWebcatalog() ? 'WebCatalog' : appJson.name}
               <span> supports notifications out of the box. </span>
               <span>But for some web apps such as Gmail or Google Calendar</span>
               <span>, to receive notifications, you&apos;ll need to manually configure </span>

@@ -18,6 +18,7 @@
     "electron-dev": "concurrently \"cross-env BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\" -k",
     "electron-dev:mas": "cross-env REACT_APP_FORCE_MAS=1 yarn electron-dev",
     "electron-dev:standalone": "cross-env REACT_APP_FORCE_STANDALONE=1 yarn electron-dev",
+    "electron-dev:snap": "cross-env REACT_APP_FORCE_SNAP=1 yarn electron-dev",
     "build-json": "node build-json.js",
     "build-template": "cross-env CSC_IDENTITY_AUTO_DISCOVERY=false node build-template.js",
     "build-zip": "7z a -mm=Deflate -mx=9 -r dist/template.zip dist/template/.",

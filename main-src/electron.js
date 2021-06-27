@@ -89,8 +89,9 @@ const getWorkspaceFriendlyName = require('./libs/get-workspace-friendly-name');
 const MAILTO_URLS = require('./constants/mailto-urls');
 const WEBCAL_URLS = require('./constants/webcal-urls');
 const isStandalone = require('./libs/is-standalone');
+const isSnap = require('./libs/is-snap');
 
-if (isStandalone()) {
+if (isStandalone() && !isSnap()) {
   // eslint-disable-next-line global-require
   require('./libs/electron-updater');
 }
@@ -506,7 +507,7 @@ if (!gotTheLock) {
           handleArgv(process.argv);
         }
 
-        if (isStandalone()) {
+        if (isStandalone() && !isSnap()) {
           ipcMain.emit('request-check-for-updates', null, true);
         } else if (!isMas() && autoCheckForUpdates) {
           // only notify user about update again after one week

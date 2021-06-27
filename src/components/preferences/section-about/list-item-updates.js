@@ -9,11 +9,13 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Switch from '@material-ui/core/Switch';
+import Divider from '@material-ui/core/Divider';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 import connectComponent from '../../../helpers/connect-component';
 import isMas from '../../../helpers/is-mas';
+import isSnap from '../../../helpers/is-snap';
 import isStandalone from '../../../helpers/is-standalone';
 
 import {
@@ -59,7 +61,7 @@ const SectionUpdates = ({
   updaterInfo,
   updaterStatus,
 }) => {
-  if (isMas()) return null;
+  if (isMas() || isSnap()) return null;
 
   if (isStandalone()) {
     return (
@@ -106,6 +108,7 @@ const SectionUpdates = ({
           />
         </ListItemSecondaryAction>
       </ListItem>
+      <Divider />
     </>
   );
 };

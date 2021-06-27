@@ -3,6 +3,10 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import getStaticGlobal from './get-static-global';
 
-const isStandalone = () => Boolean(getStaticGlobal('appJson').standalone || process.env.REACT_APP_FORCE_STANDALONE);
+import isSnap from './is-snap';
+
+// Snap is a variant of standalone
+// Mac App Store is treated as completely different distribution channel
+const isStandalone = () => Boolean(getStaticGlobal('appJson').standalone || process.env.REACT_APP_FORCE_STANDALONE || isSnap());
 
 export default isStandalone;

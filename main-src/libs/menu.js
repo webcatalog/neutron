@@ -33,6 +33,7 @@ const {
   getView,
 } = require('./views');
 const isStandalone = require('./is-standalone');
+const isSnap = require('./is-snap');
 
 // DO NOT require('./workspace-views') here
 // it will cause (node:42042) Warning: Accessing non-existent propertys
@@ -152,11 +153,11 @@ const createMenu = async () => {
         {
           label: 'Check for Updates...',
           click: () => ipcMain.emit('request-check-for-updates'),
-          visible: !isMas(),
+          visible: !isMas() && !isSnap(),
         },
         {
           type: 'separator',
-          visible: !isMas(),
+          visible: !isMas() && !isSnap(),
         },
         {
           label: 'Preferences...',

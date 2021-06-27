@@ -13,9 +13,10 @@ const preferencesWindow = require('../windows/preferences');
 const customizedFetch = require('./customized-fetch');
 const { setPreference } = require('./preferences');
 const isMas = require('./is-mas');
+const isSnap = require('./is-snap');
 
 const checkForUpdates = (silent) => {
-  if (isMas()) {
+  if (isMas() || isSnap()) {
     return;
   }
 
