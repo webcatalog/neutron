@@ -51,6 +51,9 @@ const useStyles = makeStyles((theme) => ({
     borderRight: '2px solid',
     borderRightColor: 'transparent',
   },
+  rootHibernated: {
+    opacity: '0.5',
+  },
   rootExpanded: {
     flexDirection: 'row',
     paddingLeft: theme.spacing(1),
@@ -273,6 +276,7 @@ const WorkspaceSelector = ({
         isExpanded && classes.rootExpanded,
         tipText && classes.rootWithText,
         active && classes.rootActive,
+        hibernated && classes.rootHibernated,
       )}
       onClick={onClick}
       onKeyDown={null}
