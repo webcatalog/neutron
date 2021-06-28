@@ -98,7 +98,7 @@ if (isStandalone() && !isSnap()) {
 
 const gotTheLock = isMas() || app.requestSingleInstanceLock();
 
-if (!gotTheLock) {
+if (!gotTheLock || (process.platform === 'darwin' && app.runningUnderRosettaTranslation)) {
   // eslint-disable-next-line
   app.quit();
 } else {
