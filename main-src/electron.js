@@ -11,6 +11,7 @@ const {
   protocol,
   BrowserWindow,
   inAppPurchase,
+  shell,
 } = require('electron');
 const path = require('path');
 const fs = require('fs-extra');
@@ -348,6 +349,20 @@ if (!gotTheLock) {
         });
 
         ipcMain.emit('request-update-pause-notifications-info');
+
+        if (process.platform === 'darwin' && isStandalone() && app.runningUnderRosettaTranslation) {
+          dialog.showMessageBox(mainWindow.get(), {
+            type: 'question',
+            buttons: ['Download Now', 'Later'],
+            message: `You're running the x64 version of ${appJson.name}. For best performance, please download and install the arm64 version of the app.`,
+            cancelId: 1,
+            defaultId: 0,
+          }).then(({ response }) => {
+            if (response === 0) {
+              shell.openExternal(`https://${appJson.hostname}`);
+            }
+          }).catch(console.log); // eslint-disable-line
+        }
 
         if ((isMas() || isStandalone()) && !privacyConsentAsked) {
           dialog.showMessageBox(mainWindow.get(), {
