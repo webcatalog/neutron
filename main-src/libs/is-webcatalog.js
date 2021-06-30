@@ -6,6 +6,6 @@
 const isMas = require('./is-mas');
 const isStandalone = require('./is-standalone');
 
-const isWebcatalog = () => !isMas() && isStandalone();
+const isWebcatalog = () => !isMas() && !isStandalone();
 
 module.exports = isWebcatalog;
