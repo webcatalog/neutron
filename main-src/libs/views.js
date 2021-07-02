@@ -249,24 +249,6 @@ const addViewAsync = async (browserWindow, workspace) => {
   if (global.spellcheck && process.platform !== 'darwin') {
     ses.setSpellCheckerLanguages(global.spellcheckLanguages);
   }
-  // fixes
-  // fix geolocation causes crashes on macOS (by disabling it)
-  // https://github.com/electron/electron/issues/29343#issuecomment-863832234
-  ses.setPermissionRequestHandler((webContents, permission, callback) => {
-    if (permission === 'geolocation') {
-      callback(false); // denied.
-      return;
-    }
-
-    callback(true);
-  });
-
-  ses.setPermissionCheckHandler((webContents, permission) => {
-    if (permission === 'geolocation') {
-      return false; // denied
-    }
-    return true; // granted for everything else...?
-  });
 
   // ad security header for DarkReader on Overcast
   // VM76 darkreader.js:3704 Refused to apply inline style because
