@@ -61,6 +61,7 @@ const getElectronMainConfig = () => {
     }),
     new webpack.DefinePlugin({
       'process.env.ELECTRON_APP_SENTRY_DSN': JSON.stringify(process.env.ELECTRON_APP_SENTRY_DSN),
+      'process.env.ELECTRON_APP_GOOGLE_API_KEY': JSON.stringify(process.env.ELECTRON_APP_GOOGLE_API_KEY),
     }),
   ];
 
