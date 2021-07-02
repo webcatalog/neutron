@@ -1,0 +1,23 @@
+diff --git a/node_modules/app-builder-lib/out/electron/ElectronFramework.js b/node_modules/app-builder-lib/out/electron/ElectronFramework.js
+index 5b89bbe..8e992f3 100644
+--- a/node_modules/app-builder-lib/out/electron/ElectronFramework.js
++++ b/node_modules/app-builder-lib/out/electron/ElectronFramework.js
+@@ -22,6 +22,18 @@ function createBrandingOpts(opts) {
+ }
+ exports.createBrandingOpts = createBrandingOpts;
+ function createDownloadOpts(opts, platform, arch, electronVersion) {
++    // castlabs/electron-releases is not supported for arm64
++    // so ignore opts.electronDownload
++    // we have to modify it here because we use different version of Electron
++    // for win32 x64 and arm64
++    if (process.arch === 'arm64') {
++        return {
++            platform,
++            arch,
++            version: electronVersion,
++        };
++    }
++
+     return {
+         platform,
+         arch,
