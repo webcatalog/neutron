@@ -3,6 +3,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 require('source-map-support').install();
 
+// for navigator.geolocation API
+process.env.GOOGLE_API_KEY = process.env.ELECTRON_APP_GOOGLE_API_KEY;
+
 const {
   app,
   dialog,
