@@ -245,6 +245,7 @@ const createAsync = () => new Promise((resolve) => {
     y: mainWindowState.y,
     width: mainWindowState.width,
     height: mainWindowState.height,
+    fullscreen: mainWindowState.isFullScreen,
     minHeight: 100,
     minWidth: 400,
     title: global.appJson.name,
@@ -369,6 +370,12 @@ const createAsync = () => new Promise((resolve) => {
   });
 
   win.on('enter-full-screen', () => {
+    // for unknown reason, if BrowserView is added
+    // window button visibility is always true in full screen mode
+    // so we have to overwrite it manually
+    // couldn't reproeduce this behavior in Electron Fiddle :(
+    win.setWindowButtonVisibility(false);
+
     win.webContents.send('is-fullscreen-updated', true);
     // it takes some time for the fullscreen state to populate
     setTimeout(() => {
@@ -376,6 +383,12 @@ const createAsync = () => new Promise((resolve) => {
     }, 500);
   });
   win.on('leave-full-screen', () => {
+    // for unknown reason, if BrowserView is added
+    // window button visibility is always true in full screen mode
+    // so we have to overwrite it manually
+    // couldn't reproeduce this behavior in Electron Fiddle :(
+    win.setWindowButtonVisibility(true);
+
     win.webContents.send('is-fullscreen-updated', false);
     // it takes some time for the fullscreen state to populate
     setTimeout(() => {
