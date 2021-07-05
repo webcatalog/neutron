@@ -383,6 +383,12 @@ const addViewAsync = async (browserWindow, workspace) => {
         console.log('Changed user agent to', fakedSafariUaStr, 'for web compatibility URL: ', url, 'when', occasion);
         return true;
       }
+    } else if (navigatedDomain === 'chat.google.com' || (url && url.startsWith('https://mail.google.com/chat'))) {
+      if (currentUaStr !== app.userAgentFallback) {
+        // must use Chrome user agent for Google Chat to work
+        contents.userAgent = app.userAgentFallback;
+        return true;
+      }
     }
 
     // after user-agent is changed
