@@ -374,7 +374,9 @@ const createAsync = () => new Promise((resolve) => {
     // window button visibility is always true in full screen mode
     // so we have to overwrite it manually
     // couldn't reproeduce this behavior in Electron Fiddle :(
-    win.setWindowButtonVisibility(false);
+    if (process.platform === 'darwin') {
+      win.setWindowButtonVisibility(false);
+    }
 
     win.webContents.send('is-fullscreen-updated', true);
     // it takes some time for the fullscreen state to populate
@@ -387,7 +389,9 @@ const createAsync = () => new Promise((resolve) => {
     // window button visibility is always true in full screen mode
     // so we have to overwrite it manually
     // couldn't reproeduce this behavior in Electron Fiddle :(
-    win.setWindowButtonVisibility(true);
+    if (process.platform === 'darwin') {
+      win.setWindowButtonVisibility(true);
+    }
 
     win.webContents.send('is-fullscreen-updated', false);
     // it takes some time for the fullscreen state to populate
