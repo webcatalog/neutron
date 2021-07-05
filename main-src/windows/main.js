@@ -245,7 +245,6 @@ const createAsync = () => new Promise((resolve) => {
     y: mainWindowState.y,
     width: mainWindowState.width,
     height: mainWindowState.height,
-    fullscreen: mainWindowState.isFullScreen,
     minHeight: 100,
     minWidth: 400,
     title: global.appJson.name,
