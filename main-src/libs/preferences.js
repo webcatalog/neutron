@@ -122,7 +122,7 @@ const defaultPreferences = {
   telemetry: false,
   themeColor: 'auto',
   themeSource: 'system',
-  titleBar: !shouldShowSidebar, // if sidebar is shown, then hide titleBar
+  titleBar: true,
   trayIcon: false,
   unreadCountBadge: true,
   useHardwareAcceleration: true,
