@@ -4,7 +4,6 @@
 const {
   ipcMain,
   nativeTheme,
-  shell,
 } = require('electron');
 const permissions = require('node-mac-permissions');
 
@@ -102,6 +101,7 @@ const loadInvokers = () => {
     // request succeeded or failed; can be authorized or denied.
     if (authType === 'camera') return permissions.askForCalendarAccess();
     if (authType === 'microphone') return permissions.askForMicrophoneAccess();
+    return Promise.resolve('rejected');
   });
 };
 
