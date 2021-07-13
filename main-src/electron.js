@@ -323,6 +323,7 @@ if (!gotTheLock) {
         const {
           themeSource,
           privacyConsentAsked,
+          hibernateUnusedWorkspacesAtLaunch,
         } = getPreferences();
 
         nativeTheme.themeSource = themeSource;
@@ -339,7 +340,9 @@ if (!gotTheLock) {
         Object.keys(workspaceObjects).forEach((id) => {
           const workspace = workspaceObjects[id];
           if (
-            (global.hibernateWhenUnused && global.hibernateWhenUnusedTimeout === 0)
+            (hibernateUnusedWorkspacesAtLaunch || (
+              global.hibernateWhenUnused && global.hibernateWhenUnusedTimeout === 0
+            ))
             && !workspace.active
           ) {
             if (!workspace.hibernated) {

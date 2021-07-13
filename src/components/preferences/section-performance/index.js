@@ -11,6 +11,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Switch from '@material-ui/core/Switch';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
+import Divider from '@material-ui/core/Divider';
 
 import connectComponent from '../../../helpers/connect-component';
 import getWorkspaceFriendlyName from '../../../helpers/get-workspace-friendly-name';
@@ -45,6 +46,7 @@ const SectionPerformance = ({
   classes,
   hibernateWhenUnused,
   hibernateWhenUnusedTimeout,
+  hibernateUnusedWorkspacesAtLaunch,
 }) => (
   <List disablePadding dense>
     <ListItem>
@@ -91,16 +93,36 @@ const SectionPerformance = ({
         ))}
       </Select>
     </ListItem>
+    <Divider />
+    <ListItem>
+      <ListItemText
+        primary={`Hibernate inactive ${getWorkspaceFriendlyName(true).toLowerCase()} at launch`}
+        secondary={`When this is on, only the last active ${getWorkspaceFriendlyName(false).toLowerCase()} will be loaded when the app is started.`}
+      />
+      <ListItemSecondaryAction>
+        <Switch
+          edge="end"
+          color="primary"
+          checked={hibernateUnusedWorkspacesAtLaunch}
+          onChange={(e) => {
+            requestSetPreference('hibernateUnusedWorkspacesAtLaunch', e.target.checked);
+            enqueueRequestRestartSnackbar();
+          }}
+        />
+      </ListItemSecondaryAction>
+    </ListItem>
   </List>
 );
 
 SectionPerformance.propTypes = {
+  classes: PropTypes.object.isRequired,
+  hibernateUnusedWorkspacesAtLaunch: PropTypes.bool.isRequired,
   hibernateWhenUnused: PropTypes.bool.isRequired,
   hibernateWhenUnusedTimeout: PropTypes.number.isRequired,
-  classes: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
+  hibernateUnusedWorkspacesAtLaunch: state.preferences.hibernateUnusedWorkspacesAtLaunch,
   hibernateWhenUnused: state.preferences.hibernateWhenUnused,
   hibernateWhenUnusedTimeout: state.preferences.hibernateWhenUnusedTimeout,
 });
