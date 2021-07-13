@@ -31,12 +31,12 @@ const ListItemDefaultBrowser = () => {
     [],
   );
 
-  // recheck every 1 minutes
+  // recheck every 1s
   useEffect(() => {
     recheckIsDefault();
     const timer = setInterval(() => {
       recheckIsDefault();
-    }, 60 * 1000);
+    }, 1000);
     return () => {
       clearInterval(timer);
     };

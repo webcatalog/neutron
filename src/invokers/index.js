@@ -14,3 +14,7 @@ export const isDefaultCalendarAppAsync = () => window.ipcRenderer.invoke('is-def
 export const getIapFormattedPriceAsync = (productIdentifier) => window.ipcRenderer.invoke('get-iap-formatted-price', productIdentifier);
 export const getExtensionFromProfileAsync = (browserId, profileDirName) => window.ipcRenderer.invoke('get-extensions-from-profile', browserId, profileDirName);
 export const getExtensionSourcesAsync = () => window.ipcRenderer.invoke('get-extension-sources');
+
+// Permission
+export const getPermissionAuthTypeAsync = (authType) => window.ipcRenderer.invoke('get-permission-auth-status', authType);
+export const askForPermissionAsync = (authType) => window.ipcRenderer.invoke('ask-for-permission', authType);

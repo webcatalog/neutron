@@ -4,7 +4,9 @@
 const {
   ipcMain,
   nativeTheme,
+  shell,
 } = require('electron');
+const permissions = require('node-mac-permissions');
 
 const { getPreferences } = require('../libs/preferences');
 const { getSystemPreferences } = require('../libs/system-preferences');
@@ -93,6 +95,14 @@ const loadInvokers = () => {
 
   ipcMain.handle('get-extensions-from-profile', (e, browserId, profileDirName) => getExtensionFromProfile(browserId, profileDirName));
   ipcMain.handle('get-extension-sources', () => getExtensionSources());
+
+  ipcMain.handle('get-permission-auth-status', (e, authType) => permissions.getAuthStatus(authType));
+  ipcMain.handle('ask-for-permission', (e, authType) => {
+    // Returns Promise<String> - Whether or not the
+    // request succeeded or failed; can be authorized or denied.
+    if (authType === 'camera') return permissions.askForCalendarAccess();
+    if (authType === 'microphone') return permissions.askForMicrophoneAccess();
+  });
 };
 
 module.exports = loadInvokers;
