@@ -1,0 +1,28 @@
+diff --git a/node_modules/darkreader/darkreader.js b/node_modules/darkreader/darkreader.js
+index 78f53c7..1c34694 100644
+--- a/node_modules/darkreader/darkreader.js
++++ b/node_modules/darkreader/darkreader.js
+@@ -187,17 +187,15 @@
+     }
+     function readResponseAsDataURL(response) {
+         return __awaiter(this, void 0, void 0, function () {
+-            var blob, dataURL;
++            var _dataURL, dataURL;
+             return __generator(this, function (_a) {
+                 switch (_a.label) {
+-                    case 0: return [4, response.blob()];
++                    // response.blob() is incompatible with Electron preload environment
++                    // as it is not isomorphic
++                    case 0: return [4, response.dataUrl()];
+                     case 1:
+-                        blob = _a.sent();
+-                        return [4, (new Promise(function (resolve) {
+-                                var reader = new FileReader();
+-                                reader.onloadend = function () { return resolve(reader.result); };
+-                                reader.readAsDataURL(blob);
+-                            }))];
++                        _dataURL = _a.sent();
++                        return [4, _dataURL];
+                     case 2:
+                         dataURL = _a.sent();
+                         return [2, dataURL];
