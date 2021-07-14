@@ -672,6 +672,11 @@ const loadListeners = () => {
       refreshBadgeCount(win);
     }
   });
+
+  ipcMain.on('is-popup', (e) => {
+    // webContents.isPopup is set and used internally by Neutron
+    e.returnValue = Boolean(e.sender.isPopup);
+  });
 };
 
 module.exports = loadListeners;

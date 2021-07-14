@@ -31,4 +31,13 @@ window.addEventListener('load', () => {
       getBadgeCount();
     }, 1000);
   }
+
+  // Google will attempt to close the window when user discards or sends the email
+  // but as WebCatalog allows the composer to be opened in main window
+  // we overwrite this behavior to avoid Gmail closes the app window
+  if (!window.webcatalog.isPopup()) {
+    const node = document.createElement('script');
+    node.innerHTML = 'window.close = () => { window.location.href = \'https://mail.google.com\' }';
+    document.body.appendChild(node);
+  }
 });

@@ -31,6 +31,7 @@ contextBridge.exposeInMainWorld(
       ipcRenderer.invoke('set-web-contents-badge', count);
     },
     clearSiteData: () => ipcRenderer.invoked('flush-web-contents-app-data'),
+    isPopup: () => ipcRenderer.sendSync('is-popup'),
   },
 );
 
