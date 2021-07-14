@@ -16,6 +16,7 @@ import dialogCodeInjection from './dialog-code-injection/reducers';
 import dialogCustomUserAgent from './dialog-custom-user-agent/reducers';
 import dialogCustomizeFonts from './dialog-customize-fonts/reducers';
 import dialogEditWorkspace from './dialog-edit-workspace/reducers';
+import dialogExternalUrls from './dialog-external-urls/reducers';
 import dialogGoToUrl from './dialog-go-to-url/reducers';
 import dialogInternalUrls from './dialog-internal-urls/reducers';
 import dialogLicenseRegistration from './dialog-license-registration/reducers';
@@ -43,6 +44,7 @@ const rootReducer = combineReducers({
   dialogCustomUserAgent,
   dialogCustomizeFonts,
   dialogEditWorkspace,
+  dialogExternalUrls,
   dialogGoToUrl,
   dialogInternalUrls,
   dialogLicenseRegistration,

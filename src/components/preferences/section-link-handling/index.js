@@ -14,17 +14,29 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import connectComponent from '../../../helpers/connect-component';
 
 import { open as openDialogInternalUrls } from '../../../state/dialog-internal-urls/actions';
+import { open as openDialogExternallUrls } from '../../../state/dialog-external-urls/actions';
 
+import DialogExternalUrls from '../../shared/dialog-external-urls';
 import DialogInternalUrls from '../../shared/dialog-internal-urls';
 import ListItemOpenProtocolUrl from './list-item-open-protocol-url';
 
 const SectionLinkHandling = ({
   internalUrlRule,
+  externalUrlRule,
+  onOpenDialogExternallUrls,
   onOpenDialogInternalUrls,
 }) => (
   <>
     <List disablePadding dense>
       <ListItemOpenProtocolUrl />
+      <Divider />
+      <ListItem button onClick={onOpenDialogExternallUrls}>
+        <ListItemText
+          primary="External URLs"
+          secondary={internalUrlRule ? `/^${externalUrlRule}$/i` : 'Not set'}
+        />
+        <ChevronRightIcon color="action" />
+      </ListItem>
       <Divider />
       <ListItem button onClick={onOpenDialogInternalUrls}>
         <ListItemText
@@ -35,15 +47,19 @@ const SectionLinkHandling = ({
       </ListItem>
     </List>
     <DialogInternalUrls />
+    <DialogExternalUrls />
   </>
 );
 
 SectionLinkHandling.defaultProps = {
+  externalUrlRule: null,
   internalUrlRule: null,
 };
 
 SectionLinkHandling.propTypes = {
+  externalUrlRule: PropTypes.string,
   internalUrlRule: PropTypes.string,
+  onOpenDialogExternallUrls: PropTypes.func.isRequired,
   onOpenDialogInternalUrls: PropTypes.func.isRequired,
 };
 
@@ -52,10 +68,12 @@ const mapStateToProps = (state) => ({
   autoRefreshInterval: state.preferences.autoRefreshInterval,
   autoRefreshOnlyWhenInactive: state.preferences.autoRefreshOnlyWhenInactive,
   defaultFontSize: state.preferences.defaultFontSize,
+  externalUrlRule: state.preferences.externalUrlRule,
   internalUrlRule: state.preferences.internalUrlRule,
 });
 
 const actionCreators = {
+  openDialogExternallUrls,
   openDialogInternalUrls,
 };
 

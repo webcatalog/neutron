@@ -84,6 +84,7 @@ const defaultPreferences = {
   iapPurchased: false,
   ignoreCertificateErrors: false,
   internalUrlRule: '',
+  externalUrlRule: '',
   jsCodeInjection: null,
   lastShowNewUpdateDialog: 0,
   navigationBar: false,

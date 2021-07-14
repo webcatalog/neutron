@@ -408,12 +408,27 @@ const addViewAsync = async (browserWindow, workspace) => {
     const currentUrl = e.sender.getURL();
     const appDomain = extractDomain(appUrl);
     const currentDomain = extractDomain(currentUrl);
+
+    // check external rule set by user
+    // https://docs.webcatalog.io/article/43-how-to-define-external-urls
+    const externalUrlRule = getWorkspacePreference(workspace.id, 'externalUrlRule') || getPreference('externalUrlRule');
+    if (nextUrl && externalUrlRule) {
+      const re = new RegExp(`^${externalUrlRule}$`, 'i');
+      if (re.test(nextUrl)) {
+        e.preventDefault();
+        shell.openExternal(nextUrl);
+        return;
+      }
+    }
+
+    // check our rules
     if (
       ((appDomain && appDomain.includes('github.com')) || (currentDomain && currentDomain.includes('github.com')))
       && !isInternalUrl(nextUrl, [appUrl, currentUrl])
     ) {
       e.preventDefault();
       shell.openExternal(nextUrl);
+      return;
     }
 
     // strip account info when logging out
@@ -818,6 +833,17 @@ const addViewAsync = async (browserWindow, workspace) => {
     };
 
     // Conditions are listed by order of priority
+    // check external rule
+    // https://docs.webcatalog.io/article/43-how-to-define-external-urls
+    const externalUrlRule = getWorkspacePreference(workspace.id, 'externalUrlRule') || getPreference('externalUrlRule');
+    if (nextUrl && externalUrlRule) {
+      const re = new RegExp(`^${externalUrlRule}$`, 'i');
+      if (re.test(nextUrl)) {
+        e.preventDefault();
+        shell.openExternal(nextUrl);
+        return;
+      }
+    }
 
     // check defined internal URL rule
     // https://webcatalog.app/internal-urls
