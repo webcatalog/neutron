@@ -190,6 +190,9 @@ const createAsync = () => new Promise((resolve) => {
         height: menubarWindowState.height,
         minHeight: 100,
         minWidth: 400,
+        // 'hidden' == show traffic light buttons on macOS
+        titleBarStyle: global.windowButtons ? 'hidden' : undefined,
+        fullscreenable: false,
         webPreferences: {
           enableRemoteModule: true,
           contextIsolation: false,
