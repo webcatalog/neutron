@@ -217,6 +217,38 @@ if (!gotTheLock) {
   const handleOpenUrl = (url) => {
     whenTrulyReady()
       .then(() => {
+        const openWithPreferredBehavior = (link, workspaceId) => {
+          const openProtocolUrlInNewWindow = getPreference('openProtocolUrlInNewWindow');
+          if (openProtocolUrlInNewWindow === 'ask') {
+            dialog.showMessageBox(mainWindow.get(), {
+              type: 'question',
+              buttons: ['Open in Main Window', 'Open in New Window', 'Cancel'],
+              message: 'Where do you want to open the link?',
+              cancelId: 2,
+              defaultId: 0,
+              checkboxLabel: 'Remember this preference',
+              checkboxChecked: false,
+            })
+              .then(({ response, checkboxChecked }) => {
+                if (response > 1) return;
+
+                const openInNewWindow = response === 1;
+                ipcMain.emit('request-load-url', null, link, workspaceId, openInNewWindow);
+
+                if (checkboxChecked) {
+                  setPreference(
+                    'openProtocolUrlInNewWindow',
+                    openInNewWindow ? 'newWindow' : 'mainWindow',
+                  );
+                }
+              })
+              .catch(console.log); // eslint-disable-line
+            return;
+          }
+
+          ipcMain.emit('request-load-url', null, link, workspaceId, openProtocolUrlInNewWindow === 'newWindow');
+        };
+
         // focus on window
         mainWindow.show();
 
@@ -224,7 +256,7 @@ if (!gotTheLock) {
 
         if (workspaces.length < 1) return null;
 
-        // handle mailto:
+        // handle webcal:
         if (url.startsWith('webcal:')) {
           const webcalWorkspaces = workspaces
             .filter((workspace) => extractHostname(
@@ -245,7 +277,7 @@ if (!gotTheLock) {
               webcalWorkspaces[0].homeUrl || appJson.url,
             )];
             const u = webcalUrl.replace('%s', url);
-            ipcMain.emit('request-load-url', null, u, webcalWorkspaces[0].id, true);
+            openWithPreferredBehavior(u, webcalWorkspaces[0].id);
             return null;
           }
 
@@ -273,7 +305,7 @@ if (!gotTheLock) {
               mailtoWorkspaces[0].homeUrl || appJson.url,
             )];
             const u = mailtoUrl.replace('%s', url);
-            ipcMain.emit('request-load-url', null, u, mailtoWorkspaces[0].id, true);
+            openWithPreferredBehavior(u, mailtoWorkspaces[0].id);
             return null;
           }
 
@@ -283,7 +315,7 @@ if (!gotTheLock) {
         // handle https/http
         // pick automically if there's only one choice
         if (workspaces.length === 1) {
-          ipcMain.emit('request-load-url', null, url, workspaces[0].id, true);
+          openWithPreferredBehavior(url, workspaces[0].id);
           return null;
         }
 

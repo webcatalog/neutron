@@ -1,12 +1,17 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+
+import { makeStyles } from '@material-ui/core/styles';
 
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import Divider from '@material-ui/core/Divider';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
@@ -18,10 +23,31 @@ import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name'
 
 import { requestLoadUrl } from '../../senders';
 
-const OpenUrlWith = ({ workspaces }) => {
+const useStyles = makeStyles((theme) => ({
+  root: {
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  list: {
+    flex: 1,
+    overflow: 'auto',
+  },
+  checkboxContainer: {
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+    userSelect: 'none',
+  },
+}));
+
+const OpenUrlWith = ({ workspaces, defaultOpenInNewWindow }) => {
+  const classes = useStyles();
+
   const appJson = getStaticGlobal('appJson');
   const incomingUrl = getStaticGlobal('incomingUrl');
   const isMailtoUrl = incomingUrl.startsWith('mailto:');
+
+  const [openInNewWindow, setOpenInNewWindow] = useState(defaultOpenInNewWindow);
 
   const renderWorkspace = (workspace, i) => {
     if (isMailtoUrl && !getMailtoUrl(workspace.homeUrl || appJson.url)) return null;
@@ -45,7 +71,7 @@ const OpenUrlWith = ({ workspaces }) => {
         onClick={() => {
           const u = isMailtoUrl ? getMailtoUrl(workspace.homeUrl || appJson.url).replace('%s', incomingUrl) : incomingUrl;
 
-          requestLoadUrl(u, workspace.id, true);
+          requestLoadUrl(u, workspace.id, openInNewWindow);
           window.remote.getCurrentWindow().close();
         }}
       >
@@ -59,18 +85,36 @@ const OpenUrlWith = ({ workspaces }) => {
   };
 
   return (
-    <List dense>
-      {getWorkspacesAsList(workspaces).map(renderWorkspace)}
-    </List>
+    <div className={classes.root}>
+      <List dense className={classes.list} component="div">
+        {getWorkspacesAsList(workspaces).map(renderWorkspace)}
+      </List>
+      <Divider />
+      <div className={classes.checkboxContainer}>
+        <FormControlLabel
+          control={(
+            <Checkbox
+              checked={openInNewWindow}
+              onChange={(e) => setOpenInNewWindow(e.target.checked)}
+              name="checkedB"
+              color="primary"
+            />
+          )}
+          label="Open in new window"
+        />
+      </div>
+    </div>
   );
 };
 
 OpenUrlWith.propTypes = {
   workspaces: PropTypes.object.isRequired,
+  defaultOpenInNewWindow: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   workspaces: state.workspaces.workspaces,
+  defaultOpenInNewWindow: state.preferences.openProtocolUrlInNewWindow === 'new-window',
 });
 
 export default connectComponent(
