@@ -245,13 +245,6 @@ const setPreference = (name, value) => {
   if (name === 'unreadCountBadge') {
     ipcMain.emit('request-refresh-badge-count');
   }
-
-  if (name === 'attachToMenubar') {
-    // if user switches to menu bar mode, hide the traffic light buttons
-    // if user switches back to standard mode, show the traffic light buttons
-    // users can overwite this manually after changing attachToMenubar
-    setPreference('windowButtons', !value);
-  }
 };
 
 const resetPreferences = () => {

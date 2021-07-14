@@ -53,7 +53,6 @@ import SectionReset from './section-reset';
 import SectionSystem from './section-system';
 import SectionTelemetry from './section-telemetry';
 import SectionTheme from './section-theme';
-import SectionTray from './section-tray';
 import SectionView from './section-view';
 import SectionWindow from './section-window';
 import SectionWorkspaces from './section-workspaces';
@@ -103,7 +102,7 @@ const Preferences = ({
         licensing: { text: 'Licensing', Component: SectionAccountLicensing, hidden: isMas() && appJson.registered },
         home: { text: 'Home', Component: SectionHome, hidden: !(appJson.url && !isMas() && !isStandalone()) },
         mode: { text: 'Mode', Component: SectionMode, hidden: !appJson.id.startsWith('group-') && appJson.id !== 'clovery' },
-        tray: { text: window.process.platform === 'darwin' ? 'Menu Bar' : 'Tray', Component: SectionTray },
+        window: { text: window.process.platform === 'darwin' ? 'Window & Menu Bar' : 'Window & Tray', Component: SectionWindow },
         permissions: { text: 'Permissions', Component: SectionPermissions, hidden: window.process.platform !== 'darwin' },
         general: { text: 'System', Component: SectionSystem },
         downloads: { text: 'Downloads', Component: SectionDownloads },
@@ -118,7 +117,6 @@ const Preferences = ({
         theme: { text: 'Theme', Component: SectionTheme },
         darkReader: { text: 'Dark Reader', Component: SectionDarkReader },
         view: { text: 'View', Component: SectionView },
-        window: { text: 'Window', Component: SectionWindow },
         fonts: { text: 'Fonts', Component: SectionFonts },
       },
     },
