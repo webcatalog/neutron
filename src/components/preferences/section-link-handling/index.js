@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import Divider from '@material-ui/core/Divider';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
@@ -15,6 +16,7 @@ import connectComponent from '../../../helpers/connect-component';
 import { open as openDialogInternalUrls } from '../../../state/dialog-internal-urls/actions';
 
 import DialogInternalUrls from '../../shared/dialog-internal-urls';
+import ListItemOpenProtocolUrl from './list-item-open-protocol-url';
 
 const SectionLinkHandling = ({
   internalUrlRule,
@@ -22,6 +24,8 @@ const SectionLinkHandling = ({
 }) => (
   <>
     <List disablePadding dense>
+      <ListItemOpenProtocolUrl />
+      <Divider />
       <ListItem button onClick={onOpenDialogInternalUrls}>
         <ListItemText
           primary="Internal URLs"

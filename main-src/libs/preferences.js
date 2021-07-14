@@ -89,6 +89,7 @@ const defaultPreferences = {
   navigationBar: false,
   muteApp: false,
   openFolderWhenDoneDownloading: true,
+  openProtocolUrlInNewWindow: 'ask', // 'ask', 'newWindow', 'mainWindow'
   pauseNotifications: null,
   pauseNotificationsBySchedule: false,
   pauseNotificationsByScheduleFrom: getDefaultPauseNotificationsByScheduleFrom(),
