@@ -184,7 +184,7 @@ const createAsync = () => new Promise((resolve) => {
       preloadWindow: true,
       tooltip: appJson.name,
       browserWindow: {
-        alwaysOnTop: getPreference('alwaysOnTop'),
+        alwaysOnTop,
         x: menubarWindowState.x,
         y: menubarWindowState.y,
         width: menubarWindowState.width,
