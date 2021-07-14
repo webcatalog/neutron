@@ -18,6 +18,8 @@ import {
   requestSetPreference,
 } from '../../../senders';
 
+import ListItemTray from './list-item-tray';
+
 const styles = (theme) => ({
   paper: {
     marginTop: theme.spacing(0.5),
@@ -53,12 +55,33 @@ const styles = (theme) => ({
 
 const SectionAppearance = ({
   autoHideMenuBar,
+  attachToMenubar,
   alwaysOnTop,
   windowButtons,
   useSystemTitleBar,
 }) => (
   <>
     <List disablePadding dense>
+      <ListItemTray />
+      <Divider />
+      <ListItem>
+        <ListItemText
+          primary="Keep window always on top"
+          secondary="The window won't be hidden even when you click outside."
+        />
+        <ListItemSecondaryAction>
+          <Switch
+            edge="end"
+            color="primary"
+            checked={alwaysOnTop}
+            onChange={(e) => {
+              requestSetPreference('alwaysOnTop', e.target.checked);
+              enqueueRequestRestartSnackbar();
+            }}
+          />
+        </ListItemSecondaryAction>
+      </ListItem>
+      <Divider />
       {window.process.platform === 'darwin' ? (
         <ListItem>
           <ListItemText
@@ -69,7 +92,14 @@ const SectionAppearance = ({
             <Switch
               edge="end"
               color="primary"
-              checked={windowButtons}
+              checked={(() => {
+                // if window is attched to menu bar
+                // the buttons are hidden
+                // unless alwaysOnTop is enabled
+                if (attachToMenubar) return alwaysOnTop;
+                return windowButtons;
+              })()}
+              disabled={attachToMenubar}
               onChange={(e) => {
                 requestSetPreference('windowButtons', e.target.checked);
                 enqueueRequestRestartSnackbar();
@@ -116,30 +146,13 @@ const SectionAppearance = ({
           </ListItem>
         </>
       )}
-      <Divider />
-      <ListItem>
-        <ListItemText
-          primary="Keep window always on top"
-          secondary="The window won't be hidden even when you click outside."
-        />
-        <ListItemSecondaryAction>
-          <Switch
-            edge="end"
-            color="primary"
-            checked={alwaysOnTop}
-            onChange={(e) => {
-              requestSetPreference('alwaysOnTop', e.target.checked);
-              enqueueRequestRestartSnackbar();
-            }}
-          />
-        </ListItemSecondaryAction>
-      </ListItem>
     </List>
   </>
 );
 
 SectionAppearance.propTypes = {
   alwaysOnTop: PropTypes.bool.isRequired,
+  attachToMenubar: PropTypes.bool.isRequired,
   autoHideMenuBar: PropTypes.bool.isRequired,
   useSystemTitleBar: PropTypes.bool.isRequired,
   windowButtons: PropTypes.bool.isRequired,
@@ -147,6 +160,7 @@ SectionAppearance.propTypes = {
 
 const mapStateToProps = (state) => ({
   alwaysOnTop: state.preferences.alwaysOnTop,
+  attachToMenubar: state.preferences.attachToMenubar,
   autoHideMenuBar: state.preferences.autoHideMenuBar,
   useSystemTitleBar: state.preferences.useSystemTitleBar,
   windowButtons: state.preferences.windowButtons,

@@ -177,19 +177,24 @@ const createAsync = () => new Promise((resolve) => {
       : path.resolve(__dirname, '..', '..', 'public', iconFileName);
     menubarTray.setImage(iconPath);
 
+    const alwaysOnTop = getPreference('alwaysOnTop');
     mb = menubar({
       index: REACT_PATH,
       tray: menubarTray,
       preloadWindow: true,
       tooltip: appJson.name,
       browserWindow: {
-        alwaysOnTop: getPreference('alwaysOnTop'),
+        alwaysOnTop,
         x: menubarWindowState.x,
         y: menubarWindowState.y,
         width: menubarWindowState.width,
         height: menubarWindowState.height,
         minHeight: 100,
         minWidth: 400,
+        // show traffic light buttons on macOS if alwaysOnTop is enabled
+        // so users have mean to close the window
+        titleBarStyle: alwaysOnTop ? 'hidden' : undefined,
+        fullscreenable: false,
         webPreferences: {
           enableRemoteModule: true,
           contextIsolation: false,
