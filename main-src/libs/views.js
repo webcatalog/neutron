@@ -798,6 +798,7 @@ const addViewAsync = async (browserWindow, workspace) => {
       const popupWin = new BrowserWindow(newOptions);
       // WebCatalog internal value to determine whether BrowserWindow is popup
       popupWin.isPopup = true;
+      popupWin.webContents.isPopup = true;
       popupWin.setMenuBarVisibility(false);
       popupWin.webContents.on('new-window', handleNewWindow);
       buildContextMenu(popupWin.webContents, handleNewWindow);
@@ -951,6 +952,7 @@ const addViewAsync = async (browserWindow, workspace) => {
       const popupWin = new BrowserWindow(newOptions);
       // WebCatalog internal value to determine whether BrowserWindow is popup
       popupWin.isPopup = true;
+      popupWin.webContents.isPopup = true;
       popupWin.setMenuBarVisibility(false);
       popupWin.webContents.on('new-window', handleNewWindow);
       popupWin.webContents.once('will-navigate', (_, url) => {
