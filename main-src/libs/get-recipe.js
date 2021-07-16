@@ -15,6 +15,7 @@ const mapper = {
   'instagram.com': 'instagram',
   'feedly.com': 'feedly',
   'voice.google.com': 'google-voice',
+  'tasks.google.com': 'google-tasks',
 };
 
 const getRecipe = (url) => {
