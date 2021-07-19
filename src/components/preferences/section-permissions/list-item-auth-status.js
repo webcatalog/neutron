@@ -64,7 +64,11 @@ const ListItemAuthStatus = ({ authType }) => {
             }
 
             if (!authorized) {
-              askForPermissionAsync(authType);
+              askForPermissionAsync(authType)
+                .then((result) => {
+                  setAuthorized(result === 'authorized');
+                })
+                .catch(() => {});
             } else if (authType === 'camera') {
               requestOpenInBrowser('x-apple.systempreferences:com.apple.preference.security?Privacy_Camera');
             } else if (authType === 'microphone') {
