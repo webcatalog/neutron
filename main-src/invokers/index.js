@@ -108,8 +108,14 @@ const loadInvokers = () => {
     if (process.platform === 'darwin') {
       // eslint-disable-next-line global-require
       const permissions = require('node-mac-permissions');
-      if (authType === 'camera') return permissions.askForCalendarAccess();
-      if (authType === 'microphone') return permissions.askForMicrophoneAccess();
+      if (authType === 'camera') {
+        return permissions.askForCameraAccess()
+          .catch(() => 'rejected');
+      }
+      if (authType === 'microphone') {
+        return permissions.askForMicrophoneAccess()
+          .catch(() => 'rejected');
+      }
     }
     return Promise.resolve('rejected');
   });
