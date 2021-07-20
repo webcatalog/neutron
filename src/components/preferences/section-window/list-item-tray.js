@@ -12,7 +12,7 @@ import Divider from '@material-ui/core/Divider';
 
 import connectComponent from '../../../helpers/connect-component';
 import checkLicense from '../../../helpers/check-license';
-import isMas from '../../../helpers/is-mas';
+import isWebcatalog from '../../../helpers/is-webcatalog';
 
 import {
   enqueueRequestRestartSnackbar,
@@ -59,7 +59,7 @@ const SectionTray = ({
           onChange={(e) => {
             // this feature is free with WebCatalog
             // but not free in MAS apps
-            if (isMas() && !checkLicense()) {
+            if (!isWebcatalog() && !checkLicense()) {
               return;
             }
             requestSetPreference('attachToMenubar', e.target.checked);

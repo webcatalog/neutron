@@ -14,7 +14,7 @@ const isWindows10 = require('./is-windows-10');
 const MAILTO_URLS = require('../constants/mailto-urls');
 
 const appJson = require('../constants/app-json');
-const isStandalone = require('./is-standalone');
+const isWebcatalog = require('./is-webcatalog');
 
 const getDefaultDownloadsPath = () => app.getPath('downloads');
 
@@ -152,7 +152,7 @@ const initCachedPreferences = () => {
   // can be shared across WebCatalog and WebCatalog-Engine-based apps
   // ignore this if error occurs
   // so the more important initialization process can proceed
-  if (!isMas() && !isStandalone()) {
+  if (isWebcatalog()) {
     const sharedPreferences = {
       telemetry: false,
       sentry: false,

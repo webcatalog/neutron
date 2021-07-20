@@ -15,6 +15,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import connectComponent from '../../../helpers/connect-component';
 import isMas from '../../../helpers/is-mas';
 import isSnap from '../../../helpers/is-snap';
+import isAppx from '../../../helpers/is-appx';
 import isStandalone from '../../../helpers/is-standalone';
 
 import {
@@ -60,7 +61,7 @@ const SectionUpdates = ({
   updaterInfo,
   updaterStatus,
 }) => {
-  if (isMas() || isSnap()) return null;
+  if (isMas() || isSnap() || isAppx()) return null;
 
   if (isStandalone()) {
     return (

@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 
 import connectComponent from '../../helpers/connect-component';
 import isMas from '../../helpers/is-mas';
+import isAppx from '../../helpers/is-appx';
 import getStaticGlobal from '../../helpers/get-static-global';
 
 import amplitude from '../../amplitude';
@@ -25,6 +26,7 @@ const TelemetryManager = ({ iapPurchased, telemetry, standaloneRegistered }) => 
       distributionChannel: (() => {
         if (isStandalone()) return 'standalone';
         if (isMas()) return 'macAppStore';
+        if (isAppx()) return 'windowsStore'; // use 'windowsStore' for backward compatibility
         return 'webcatalog';
       })(),
     });

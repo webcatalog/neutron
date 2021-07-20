@@ -11,5 +11,5 @@ const { notarize } = require('electron-notarize');
 const { exec } = require('child_process');
 
 /*
-CLOSED SOURCE
+https://github.com/webcatalog/standalone-builds/blob/master/build-standalone.js
 */

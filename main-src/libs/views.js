@@ -46,9 +46,10 @@ const customizedFetch = require('./customized-fetch');
 const isMas = require('./is-mas');
 const getUtmSource = require('./get-utm-source');
 const getWorkspaceFriendlyName = require('./get-workspace-friendly-name');
-const isStandalone = require('./is-standalone');
 const getExtensionFromProfile = require('./extensions/get-extensions-from-profile');
 const isSnap = require('./is-snap');
+const isAppx = require('./is-appx');
+const isWebcatalog = require('./is-webcatalog');
 
 const views = {};
 let shouldMuteAudio;
@@ -722,15 +723,18 @@ const addViewAsync = async (browserWindow, workspace) => {
                 {
                   label: 'Check for Updates',
                   click: () => ipcMain.emit('request-check-for-updates'),
-                  visible: !isMas() && !isSnap(),
+                  visible: !isMas() && !isSnap() && !isAppx(),
                 },
-                { type: 'separator', visible: !isMas() && !isSnap() },
+                {
+                  type: 'separator',
+                  visible: !isMas() && !isSnap() && !isAppx(),
+                },
                 {
                   label: 'Preferences...',
                   click: () => ipcMain.emit('request-show-preferences-window'),
                 },
                 { type: 'separator' },
-                (!isMas() && !isStandalone()) ? {
+                isWebcatalog() ? {
                   label: 'WebCatalog Help',
                   click: () => shell.openExternal('https://help.webcatalog.app?utm_source=juli_app'),
                 } : {
@@ -742,7 +746,7 @@ const addViewAsync = async (browserWindow, workspace) => {
                     return shell.openExternal(`https://${appJson.id}.app/help?utm_source=${utmSource}`);
                   },
                 },
-                (!isMas() && !isStandalone()) ? {
+                isWebcatalog() ? {
                   label: 'WebCatalog Website',
                   click: () => shell.openExternal('https://webcatalog.app?utm_source=juli_app'),
                 } : {

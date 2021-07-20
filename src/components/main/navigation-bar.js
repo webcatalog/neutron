@@ -25,6 +25,7 @@ import connectComponent from '../../helpers/connect-component';
 import getUrlFromText from '../../helpers/get-url-from-text';
 import getStaticGlobal from '../../helpers/get-static-global';
 import isMas from '../../helpers/is-mas';
+import isAppx from '../../helpers/is-appx';
 
 import searchEngines from '../../constants/search-engines';
 import themeColors from '../../constants/theme-colors';
@@ -291,7 +292,7 @@ const NavigationBar = ({
           }}
         />
       </div>
-      {!isMas() && <BrowserActionList className={classes.browserActionList} />}
+      {!isAppx() && !isMas() && <BrowserActionList className={classes.browserActionList} />}
       <div>
         <RatingButton
           classes={{

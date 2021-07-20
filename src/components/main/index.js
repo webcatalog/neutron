@@ -28,6 +28,7 @@ import getWorkspacesAsList from '../../helpers/get-workspaces-as-list';
 import getStaticGlobal from '../../helpers/get-static-global';
 import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
 import isMas from '../../helpers/is-mas';
+import isAppx from '../../helpers/is-appx';
 
 import themeColors from '../../constants/theme-colors';
 
@@ -438,7 +439,7 @@ const Main = ({
                   }}
                 />
               </div>
-              {!navigationBar && !isMas() && (
+              {!navigationBar && !isMas() && !isAppx() && (
                 <BrowserActionList className={classes.browserActionList} />
               )}
               {!navigationBar && (

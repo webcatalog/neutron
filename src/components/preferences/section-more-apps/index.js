@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 import connectComponent from '../../../helpers/connect-component';
+import isAppx from '../../../helpers/is-appx';
 import isMas from '../../../helpers/is-mas';
 import getUtmSource from '../../../helpers/get-utm-source';
 
@@ -57,7 +58,7 @@ const SectionMoreApps = ({
 
   return (
     <List disablePadding dense>
-      {!isMas() && (
+      {!isMas() && !isAppx() && (
         <>
           <ListItem
             button
@@ -94,6 +95,9 @@ const SectionMoreApps = ({
           if (isMas()) {
             url = 'macappstore://apps.apple.com/app/translatium/id1547052291';
           }
+          if (isAppx()) {
+            url = 'ms-windows-store://pdp/?ProductId=9MWPG56JKS38';
+          }
           requestOpenInBrowser(url);
         }}
         className={classes.listItemPromotion}
@@ -119,7 +123,13 @@ const SectionMoreApps = ({
       <ListItem
         button
         onClick={() => {
-          const url = `https://translatium.app?utm_source=${utmSource}`;
+          let url = `https://singlebox.app?utm_source=${utmSource}`;
+          if (isMas()) {
+            url = 'macappstore://apps.apple.com/us/app/singlebox-all-in-one-messenger/id1551183766';
+          }
+          if (isAppx()) {
+            url = 'ms-windows-store://pdp/?ProductId=9NH85V7VL3RN';
+          }
           requestOpenInBrowser(url);
         }}
         className={classes.listItemPromotion}
@@ -141,13 +151,16 @@ const SectionMoreApps = ({
         </div>
         <ChevronRightIcon color="action" />
       </ListItem>
-      {!isMas() && (
+      {!isAppx() && (
         <>
           <Divider />
           <ListItem
             button
             onClick={() => {
-              const url = `https://switchbar.app?utm_source=${utmSource}`;
+              let url = `https://switchbar.app?utm_source=${utmSource}`;
+              if (isMas()) {
+                url = 'macappstore://apps.apple.com/app/switchbar/id1555467675';
+              }
               requestOpenInBrowser(url);
             }}
             className={classes.listItemPromotion}
@@ -178,6 +191,9 @@ const SectionMoreApps = ({
           let url = `https://clovery.app?utm_source=${utmSource}`;
           if (isMas()) {
             url = 'macappstore://apps.apple.com/us/app/clovery-for-google-apps/id1552618413';
+          }
+          if (isAppx()) {
+            url = 'ms-windows-store://pdp/?ProductId=9NT71213J864';
           }
           requestOpenInBrowser(url);
         }}

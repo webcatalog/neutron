@@ -12,6 +12,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Switch from '@material-ui/core/Switch';
 
 import connectComponent from '../../../helpers/connect-component';
+import isWebcatalog from '../../../helpers/is-webcatalog';
 
 import {
   enqueueRequestRestartSnackbar,
@@ -26,13 +27,16 @@ const SectionTelemetry = ({
     <ListItem>
       <ListItemText
         primary="Allow the app to send anonymous crash reports"
-        secondary="Help us quickly diagnose and fix bugs in the app."
+        secondary={isWebcatalog()
+          ? 'This preference is managed by WebCatalog app.'
+          : 'Help us quickly diagnose and fix bugs in the app.'}
       />
       <ListItemSecondaryAction>
         <Switch
           edge="end"
           color="primary"
           checked={sentry}
+          disabled={isWebcatalog()}
           onChange={(e) => {
             requestSetPreference('sentry', e.target.checked);
             enqueueRequestRestartSnackbar();
@@ -44,13 +48,16 @@ const SectionTelemetry = ({
     <ListItem>
       <ListItemText
         primary="Allow the app to send anonymous usage data"
-        secondary="Help us understand how to improve the product."
+        secondary={isWebcatalog()
+          ? 'This preference is managed by WebCatalog app.'
+          : 'Help us understand how to improve the product.'}
       />
       <ListItemSecondaryAction>
         <Switch
           edge="end"
           color="primary"
           checked={telemetry}
+          disabled={isWebcatalog()}
           onChange={(e) => {
             requestSetPreference('telemetry', e.target.checked);
           }}

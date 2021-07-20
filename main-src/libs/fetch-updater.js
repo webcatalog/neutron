@@ -14,9 +14,10 @@ const customizedFetch = require('./customized-fetch');
 const { setPreference } = require('./preferences');
 const isMas = require('./is-mas');
 const isSnap = require('./is-snap');
+const isAppx = require('./is-appx');
 
 const checkForUpdates = (silent) => {
-  if (isMas() || isSnap()) {
+  if (isMas() || isSnap() || isAppx()) {
     return;
   }
 
