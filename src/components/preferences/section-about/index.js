@@ -12,7 +12,6 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 import isAppx from '../../../helpers/is-appx';
 import isMas from '../../../helpers/is-mas';
-import isStandalone from '../../../helpers/is-standalone';
 import getStaticGlobal from '../../../helpers/get-static-global';
 import getUtmSource from '../../../helpers/get-utm-source';
 
@@ -23,6 +22,7 @@ import {
 
 import ListItemAbout from './list-item-about';
 import ListItemUpdates from './list-item-updates';
+import isWebcatalog from '../../../helpers/is-webcatalog';
 
 const SectionAbout = () => {
   const appJson = getStaticGlobal('appJson');
@@ -33,35 +33,47 @@ const SectionAbout = () => {
       <ListItemAbout />
       <Divider />
       <ListItemUpdates />
-      {(() => {
-        if (isMas()) {
-          return (
+      {isWebcatalog() ? (
+        <>
+          <ListItem button onClick={() => requestOpenInBrowser(`https://webcatalog.app?utm_source=${utmSource}`)}>
+            <ListItemText primary="Website" />
+            <ChevronRightIcon color="action" />
+          </ListItem>
+          <Divider />
+          <ListItem button onClick={() => requestOpenInBrowser(`https://help.webcatalog.app?utm_source=${utmSource}`)}>
+            <ListItemText primary="Help" />
+            <ChevronRightIcon color="action" />
+          </ListItem>
+        </>
+      ) : (
+        <>
+          <ListItem
+            button
+            onClick={() => {
+              if (appJson.hostname) {
+                return requestOpenInBrowser(`https://${appJson.hostname}?utm_source=${utmSource}`);
+              }
+              return requestOpenInBrowser(`https://${appJson.id}.app?utm_source=${utmSource}`);
+            }}
+          >
+            <ListItemText primary="Website" />
+            <ChevronRightIcon color="action" />
+          </ListItem>
+          <Divider />
+          <ListItem
+            button
+            onClick={() => {
+              if (appJson.hostname) {
+                return requestOpenInBrowser(`https://${appJson.hostname}/help?utm_source=${utmSource}`);
+              }
+              return requestOpenInBrowser(`https://${appJson.id}.app/help?utm_source=${utmSource}`);
+            }}
+          >
+            <ListItemText primary="Help" />
+            <ChevronRightIcon color="action" />
+          </ListItem>
+          {isMas() && (
             <>
-              <ListItem
-                button
-                onClick={() => {
-                  if (appJson.hostname) {
-                    return requestOpenInBrowser(`https://${appJson.hostname}?utm_source=${utmSource}`);
-                  }
-                  return requestOpenInBrowser(`https://${appJson.id}.app?utm_source=${utmSource}`);
-                }}
-              >
-                <ListItemText primary="Website" />
-                <ChevronRightIcon color="action" />
-              </ListItem>
-              <Divider />
-              <ListItem
-                button
-                onClick={() => {
-                  if (appJson.hostname) {
-                    return requestOpenInBrowser(`https://${appJson.hostname}/help?utm_source=${utmSource}`);
-                  }
-                  return requestOpenInBrowser(`https://${appJson.id}.app/help?utm_source=${utmSource}`);
-                }}
-              >
-                <ListItemText primary="Help" />
-                <ChevronRightIcon color="action" />
-              </ListItem>
               <Divider />
               <ListItem
                 button
@@ -79,55 +91,29 @@ const SectionAbout = () => {
                 <ChevronRightIcon color="action" />
               </ListItem>
             </>
-          );
-        }
-
-        if (isStandalone() || isAppx()) {
-          return (
+          )}
+          {isAppx() && (
             <>
+              <Divider />
               <ListItem
                 button
-                onClick={() => {
-                  if (appJson.hostname) {
-                    return requestOpenInBrowser(`https://${appJson.hostname}?utm_source=${utmSource}`);
-                  }
-                  return requestOpenInBrowser(`https://${appJson.id}.app?utm_source=${utmSource}`);
-                }}
+                onClick={() => requestOpenInBrowser(`ms-windows-store://pdp/?ProductId=${appJson.microsoftStoreId}`)}
               >
-                <ListItemText primary="Website" />
+                <ListItemText primary="Microsoft Store" />
                 <ChevronRightIcon color="action" />
               </ListItem>
               <Divider />
               <ListItem
                 button
-                onClick={() => {
-                  if (appJson.hostname) {
-                    return requestOpenInBrowser(`https://${appJson.hostname}/help?utm_source=${utmSource}`);
-                  }
-                  return requestOpenInBrowser(`https://${appJson.id}.app/help?utm_source=${utmSource}`);
-                }}
+                onClick={() => requestOpenInBrowser(`macappstore://apps.apple.com/app/id${appJson.macAppStoreId}?action=write-review`)}
               >
-                <ListItemText primary="Help" />
+                <ListItemText primary={`Rate ${appJson.name} on Microsoft Store`} />
                 <ChevronRightIcon color="action" />
               </ListItem>
             </>
-          );
-        }
-
-        return (
-          <>
-            <ListItem button onClick={() => requestOpenInBrowser(`https://webcatalog.app?utm_source=${utmSource}`)}>
-              <ListItemText primary="Website" />
-              <ChevronRightIcon color="action" />
-            </ListItem>
-            <Divider />
-            <ListItem button onClick={() => requestOpenInBrowser(`https://help.webcatalog.app?utm_source=${utmSource}`)}>
-              <ListItemText primary="Help" />
-              <ChevronRightIcon color="action" />
-            </ListItem>
-          </>
-        );
-      })()}
+          )}
+        </>
+      )}
       <Divider />
       <ListItem button onClick={() => requestOpenInBrowser(`https://webcatalog.io/privacy?utm_source=${utmSource}`)}>
         <ListItemText primary="Privacy Policy" />

@@ -9,6 +9,7 @@ import IconButton from '@material-ui/core/IconButton';
 import RateReviewIcon from '@material-ui/icons/RateReview';
 
 import connectComponent from '../../helpers/connect-component';
+import isAppx from '../../helpers/is-appx';
 import isMas from '../../helpers/is-mas';
 import getStaticGlobal from '../../helpers/get-static-global';
 import {
@@ -32,7 +33,7 @@ const RatingButton = ({
 
   // for WebCatalog builds
   // hide this button
-  if (!isMas()) {
+  if (!isMas() && !isAppx()) {
     return null;
   }
 
@@ -55,7 +56,7 @@ const RatingButton = ({
           window.remote.dialog.showMessageBox(window.remote.getCurrentWindow(), {
             type: 'question',
             buttons: [
-              `Rate ${appJson.name} on Mac App Store`,
+              isAppx() ? `Rate ${appJson.name} on Microsoft Store` : `Rate ${appJson.name} on Mac App Store`,
               'Later',
             ],
             message: `Enjoying ${appJson.name}?`,
@@ -68,6 +69,8 @@ const RatingButton = ({
               requestSetPreference('ratingDidRate', true);
               if (isMas()) {
                 requestOpenInBrowser(`macappstore://apps.apple.com/app/id${appJson.macAppStoreId}?action=write-review`);
+              } else if (isAppx()) {
+                requestOpenInBrowser(`ms-windows-store://review/?ProductId=${appJson.microsoftStoreId}`);
               }
             } else {
               requestSetPreference('ratingLastClicked', Date.now());
