@@ -17,7 +17,7 @@ const appVersion = packageJson.version;
 let targets;
 switch (process.platform) {
   case 'win32': {
-    targets = Platform.WINDOWS.createTarget(['appx'], Arch.x64);
+    targets = Platform.WINDOWS.createTarget(['appx'], Arch.x64, Arch.arm64);
     break;
   }
   default: {
