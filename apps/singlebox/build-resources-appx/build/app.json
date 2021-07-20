@@ -1,6 +1,6 @@
 {
-    "id": "pantext",
-    "name": "PanText",
+    "id": "singlebox",
+    "name": "Singlebox",
     "registered": true,
     "microsoftStoreId": "9NH85V7VL3RN",
     "opts": {

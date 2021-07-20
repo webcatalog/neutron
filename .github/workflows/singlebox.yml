@@ -27,16 +27,16 @@ jobs:
     - name: Get tag name
       run: echo ($env:GITHUB_REF.replace('refs/tags/', 'CI_BUILD_TAG=')) | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
       if: startsWith(github.ref, 'refs/tags/')
-    - name: Build PanText
+    - name: Build Singlebox
       run: |
-        cp apps/pantext/config.json neutron/
-        cp -r apps/pantext/build-resources-appx neutron
-        cp build-windows-store.js neutron
+        cp apps/singlebox/config.json neutron/
+        cp -r apps/singlebox/build-resources-appx neutron
+        cp build-appx.js neutron
         cd neutron
         yarn --prefer-offline --network-timeout 600000
         yarn lint
         yarn build
-        node build-windows-store.js
+        node build-appx.js
       env:
         CI: true
         CI_PULL_REQUEST: ${{ github.event_name == 'pull_request' }}

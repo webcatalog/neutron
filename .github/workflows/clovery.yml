@@ -31,12 +31,12 @@ jobs:
       run: |
         cp apps/clovery/config.json neutron/
         cp -r apps/clovery/build-resources-appx neutron
-        cp build-windows-store.js neutron
+        cp build-appx.js neutron
         cd neutron
         yarn --prefer-offline --network-timeout 600000
         yarn lint
         yarn build
-        node build-windows-store.js
+        node build-appx.js
       env:
         CI: true
         CI_PULL_REQUEST: ${{ github.event_name == 'pull_request' }}
