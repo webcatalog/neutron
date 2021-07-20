@@ -16,6 +16,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import connectComponent from '../../helpers/connect-component';
 import getStaticGlobal from '../../helpers/get-static-global';
 import isMas from '../../helpers/is-mas';
+import isAppx from '../../helpers/is-appx';
 import isStandalone from '../../helpers/is-standalone';
 
 import AppCard from './app-card';
@@ -74,8 +75,9 @@ const filters = [
   { field: 'type', values: ['Singlesite'], type: 'all' },
 ];
 if (
-  // widevine is not supported is mas-build
+  // widevine is not supported is mas-build & appx
   isMas()
+  || isAppx()
   // widevine is not supported on ARM64 Linux && Windows
   || (window.process.platform === 'linux' && window.process.arch === 'arm64')
   || (window.process.platform === 'win32' && window.process.arch === 'arm64')

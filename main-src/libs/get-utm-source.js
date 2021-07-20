@@ -3,11 +3,10 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 const appJson = require('../constants/app-json');
-const isStandalone = require('./is-standalone');
-const isMas = require('./is-mas');
+const isWebcatalog = require('./is-webcatalog');
 
 const getUtmSource = () => {
-  if (isMas() || isStandalone()) {
+  if (!isWebcatalog()) {
     if (appJson.id === 'singlebox-plus') return 'singlebox_app';
     return `${appJson.id}_app`;
   }

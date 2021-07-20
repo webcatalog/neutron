@@ -21,6 +21,7 @@ const isMas = require('../libs/is-mas');
 const appJson = require('../constants/app-json');
 const isSnap = require('../libs/is-snap');
 const isWebcatalog = require('../libs/is-webcatalog');
+const isAppx = require('../libs/is-appx');
 
 let win;
 let mb = {};
@@ -95,12 +96,12 @@ const createAsync = () => new Promise((resolve) => {
       ...lockMenuItems,
       {
         type: 'separator',
-        visible: !isMas() && !isSnap(),
+        visible: !isMas() && !isSnap() && !isAppx(),
       },
       {
         label: 'Check for Updates...',
         click: () => ipcMain.emit('request-check-for-updates'),
-        visible: !isMas() && !isSnap(),
+        visible: !isMas() && !isSnap() && !isAppx(),
       },
       {
         type: 'separator',

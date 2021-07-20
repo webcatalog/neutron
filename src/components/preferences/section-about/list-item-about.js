@@ -12,6 +12,7 @@ import connectComponent from '../../../helpers/connect-component';
 import getStaticGlobal from '../../../helpers/get-static-global';
 import isStandalone from '../../../helpers/is-standalone';
 import isMas from '../../../helpers/is-mas';
+import isAppx from '../../../helpers/is-appx';
 
 import cloveryIconPng from '../../../images/products/clovery-mac-icon-128@2x.png';
 import singleboxIconPng from '../../../images/products/singlebox-mac-icon-128@2x.png';
@@ -53,6 +54,7 @@ const About = ({ classes }) => {
 
   let buildSource = 'WebCatalog';
   if (isMas()) buildSource = 'Mac App Store';
+  else if (isAppx()) buildSource = 'Microsoft Store';
   else if (isStandalone()) buildSource = 'Standalone';
 
   return (

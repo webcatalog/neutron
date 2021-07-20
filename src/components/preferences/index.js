@@ -23,6 +23,7 @@ import ViewListIcon from '@material-ui/icons/ViewList';
 
 import connectComponent from '../../helpers/connect-component';
 import isMas from '../../helpers/is-mas';
+import isAppx from '../../helpers/is-appx';
 import isStandalone from '../../helpers/is-standalone';
 import getStaticGlobal from '../../helpers/get-static-global';
 import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
@@ -99,8 +100,12 @@ const Preferences = ({
       text: 'General',
       Icon: WidgetsIcon,
       subSections: {
-        licensing: { text: 'Licensing', Component: SectionAccountLicensing, hidden: isMas() && appJson.registered },
-        home: { text: 'Home', Component: SectionHome, hidden: !(appJson.url && !isMas() && !isStandalone()) },
+        licensing: {
+          text: 'Licensing',
+          Component: SectionAccountLicensing,
+          hidden: isAppx() || (isMas() && appJson.registered),
+        },
+        home: { text: 'Home', Component: SectionHome, hidden: !(appJson.url && !isMas() && !isStandalone() && !isAppx()) },
         mode: { text: 'Mode', Component: SectionMode, hidden: !appJson.id.startsWith('group-') && appJson.id !== 'clovery' },
         window: { text: window.process.platform === 'darwin' ? 'Window & Menu Bar' : 'Window & Tray', Component: SectionWindow },
         permissions: { text: 'Permissions', Component: SectionPermissions, hidden: window.process.platform !== 'darwin' },
@@ -131,7 +136,7 @@ const Preferences = ({
     extensions: {
       text: 'Extensions',
       Icon: ExtensionIcon,
-      hidden: isMas(),
+      hidden: isMas() || isAppx(),
       subSections: {
         extensions: { text: 'Extensions (experimental)', Component: SectionExtensions },
       },
@@ -142,7 +147,7 @@ const Preferences = ({
       subSections: {
         browsingData: { text: 'Browsing', Component: SectionBrowsing },
         appLock: { text: 'App Lock', Component: SectionAppLock },
-        telemetry: { text: 'Telemetry', Component: SectionTelemetry, hidden: !isMas() && !isStandalone() },
+        telemetry: { text: 'Telemetry', Component: SectionTelemetry },
       },
     },
     advanced: {

@@ -10,6 +10,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
+import isAppx from '../../../helpers/is-appx';
 import isMas from '../../../helpers/is-mas';
 import isStandalone from '../../../helpers/is-standalone';
 import getStaticGlobal from '../../../helpers/get-static-global';
@@ -81,7 +82,7 @@ const SectionAbout = () => {
           );
         }
 
-        if (isStandalone()) {
+        if (isStandalone() || isAppx()) {
           return (
             <>
               <ListItem

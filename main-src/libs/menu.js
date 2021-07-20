@@ -13,6 +13,7 @@ const appJson = require('../constants/app-json');
 const goToUrlWindow = require('../windows/go-to-url');
 const mainWindow = require('../windows/main');
 
+const isAppx = require('./is-appx');
 const isMas = require('./is-mas');
 const getViewBounds = require('./get-view-bounds');
 const getUtmSource = require('./get-utm-source');
@@ -99,7 +100,7 @@ const createMenu = async () => {
   ] : [];
 
   const licensingMenuItems = (() => {
-    if (isMas()) {
+    if (isAppx() || isMas()) {
       return [];
     }
 
@@ -153,11 +154,11 @@ const createMenu = async () => {
         {
           label: 'Check for Updates...',
           click: () => ipcMain.emit('request-check-for-updates'),
-          visible: !isMas() && !isSnap(),
+          visible: !isMas() && !isSnap() && !isAppx(),
         },
         {
           type: 'separator',
-          visible: !isMas() && !isSnap(),
+          visible: !isMas() && !isSnap() && !isAppx(),
         },
         {
           label: 'Preferences...',
@@ -498,7 +499,7 @@ const createMenu = async () => {
     },
     {
       role: 'help',
-      submenu: (isMas() || isStandalone()) ? [
+      submenu: (isAppx() || isMas() || isStandalone()) ? [
         {
           label: 'Help',
           click: () => {

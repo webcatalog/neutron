@@ -17,6 +17,7 @@
     "start": "react-scripts start",
     "electron-dev": "concurrently \"cross-env BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\" -k",
     "electron-dev:mas": "cross-env REACT_APP_FORCE_MAS=1 yarn electron-dev",
+    "electron-dev:appx": "cross-env REACT_APP_FORCE_APPX=1 yarn electron-dev",
     "electron-dev:standalone": "cross-env REACT_APP_FORCE_STANDALONE=1 yarn electron-dev",
     "electron-dev:snap": "cross-env REACT_APP_FORCE_SNAP=1 yarn electron-dev",
     "build-json": "node build-json.js",
