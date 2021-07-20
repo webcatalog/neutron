@@ -396,6 +396,8 @@ webFrame.executeJavaScript(`
     webcatalog.setBadgeCount(contents);
     return Promise.resolve();
   };
+
+  window.PushManager = undefined;
 })();
 `);
 // enable pinch zooming (default behavior of Chromium)
