@@ -1,1 +1,1 @@
-Build Pipelines for Microsft Store (Windows Store) Releases of WebCatalog-Engine-based Apps
+Build Pipelines for Microsft Store (Windows Store) Releases of Neutron-based Apps
