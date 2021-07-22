@@ -876,7 +876,7 @@ const addViewAsync = async (browserWindow, workspace) => {
     // load in same window
     if (
       // https://app.slack.com/free-willy/: Slack call -> should still be opened in new window
-      (appDomain.endsWith('slack.com') && nextDomain.endsWith('slack.com') && !nextUrl.startsWith('https://app.slack.com/free-willy/'))
+      (appDomain && nextDomain && appDomain.endsWith('slack.com') && nextDomain.endsWith('slack.com') && !nextUrl.startsWith('https://app.slack.com/free-willy/'))
       // Google: Add account
       || nextDomain === 'accounts.google.com'
       // Google: Switch account
@@ -889,11 +889,11 @@ const addViewAsync = async (browserWindow, workspace) => {
         )
       )
       // https://github.com/webcatalog/webcatalog-app/issues/315
-      || ((appDomain.includes('asana.com') || currentDomain.includes('asana.com')) && nextDomain.includes('asana.com'))
+      || (appDomain && nextDomain && (appDomain.includes('asana.com') || currentDomain.includes('asana.com')) && nextDomain.includes('asana.com'))
       // handle OneDrive login URL
       // https://github.com/webcatalog/webcatalog-app/issues/1250
-      || nextUrl.startsWith('https://go.microsoft.com/fwlink/p/?LinkID=2119709')
-      || nextUrl.startsWith('https://go.microsoft.com/fwlink/p/?LinkID=2116067')
+      || (nextUrl && nextUrl.startsWith('https://go.microsoft.com/fwlink/p/?LinkID=2119709'))
+      || (nextUrl && nextUrl.startsWith('https://go.microsoft.com/fwlink/p/?LinkID=2116067'))
     ) {
       e.preventDefault();
       e.sender.loadURL(nextUrl);
