@@ -44,10 +44,12 @@ export const save = () => (dispatch, getState) => {
 
   if (window.mode === 'workspace-preferences') {
     dispatch(updateFormDialogWorkspacePreferences({
-      customUserAgent: form.preferences.customUserAgent,
+      preferences: {
+        customUserAgent: form.customUserAgent,
+      },
     }));
   } else {
-    requestSetPreference('customUserAgent', form.code);
+    requestSetPreference('customUserAgent', form.customUserAgent);
   }
 
   dispatch(close());
