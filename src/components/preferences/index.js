@@ -136,7 +136,7 @@ const Preferences = ({
     extensions: {
       text: 'Extensions',
       Icon: ExtensionIcon,
-      hidden: isMas() || isAppx(),
+      hidden: process.env.NODE_ENV === 'production' || isMas() || isAppx(),
       subSections: {
         extensions: { text: 'Extensions (experimental)', Component: SectionExtensions },
       },
