@@ -33,6 +33,19 @@ const get = () => {
   return win;
 };
 
+const enableSwipeToNavigate = (_win) => {
+  _win.on('swipe', (e, direction) => {
+    const view = _win.getBrowserView();
+    if (view) {
+      if (direction === 'left') {
+        view.webContents.goBack();
+      } else if (direction === 'right') {
+        view.webContents.goForward();
+      }
+    }
+  });
+};
+
 const createAsync = () => new Promise((resolve) => {
   const refreshTitle = (browserWindow, _browserViewTitle) => {
     let browserViewTitle = cachedBrowserViewTitle;
@@ -226,6 +239,12 @@ const createAsync = () => new Promise((resolve) => {
       });
 
       mb.window.on('app-command', handleAppCommand);
+
+      // Enable swipe to navigate
+      const swipeToNavigate = getPreference('swipeToNavigate');
+      if (swipeToNavigate) {
+        enableSwipeToNavigate(mb.window);
+      }
     });
 
     mb.on('ready', () => {
@@ -289,16 +308,7 @@ const createAsync = () => new Promise((resolve) => {
   // Enable swipe to navigate
   const swipeToNavigate = getPreference('swipeToNavigate');
   if (swipeToNavigate) {
-    win.on('swipe', (e, direction) => {
-      const view = win.getBrowserView();
-      if (view) {
-        if (direction === 'left') {
-          view.webContents.goBack();
-        } else if (direction === 'right') {
-          view.webContents.goForward();
-        }
-      }
-    });
+    enableSwipeToNavigate(win);
   }
 
   // Hide window instead closing on macos
