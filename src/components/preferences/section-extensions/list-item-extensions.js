@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { uniqBy } from 'lodash';
 
 import Button from '@material-ui/core/Button';
 
@@ -78,7 +79,7 @@ const Extensions = ({
   const refresh = useMemo(() => () => {
     getExtensionFromProfileAsync(extensionSourceBrowserId, extensionSourceProfileDirName)
       .then((_extensions) => {
-        setExtensions(_extensions);
+        setExtensions(uniqBy(_extensions, 'id'));
       // eslint-disable-next-line no-console
       }).catch(console.log);
 
@@ -102,7 +103,9 @@ const Extensions = ({
         {sources.length > 0 ? (
           <>
             <Alert severity="warning" className={classes.alert}>
-              Extension support is unstable. Use at your own risk.
+              Extension support is unstable and under development.
+              Some extensions might crash the app or might not function correctly.
+              Use at your own risk.
             </Alert>
 
             <Typography variant="body2" component="p" gutterBottom>
@@ -163,6 +166,7 @@ const Extensions = ({
                   className={classes.button}
                   onClick={() => {
                     requestSetPreference('extensionEnabledExtesionIds', {});
+                    enqueueRequestRestartSnackbar();
                   }}
                 >
                   Disable All
