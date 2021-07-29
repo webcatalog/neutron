@@ -87,6 +87,7 @@
     "hasha": "5.2.2",
     "is-url": "1.2.4",
     "jimp": "0.16.1",
+    "lodash": "4.17.21",
     "menubar": "9.0.5",
     "node-abi": "2.30.0",
     "node-fetch": "2.6.1",
