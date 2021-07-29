@@ -289,7 +289,7 @@ const addViewAsync = async (browserWindow, workspace) => {
   };
 
   // extensions
-  if (process.env.NODE_ENV !== 'production' && global.extensionEnabledExtesionIds
+  if (global.extensionEnabledExtesionIds
       && Object.keys(global.extensionEnabledExtesionIds).length > 0) {
     const enabledExtensions = getExtensionFromProfile(
       global.extensionSourceBrowserId,
