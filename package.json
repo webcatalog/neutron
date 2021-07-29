@@ -1,7 +1,7 @@
 {
   "name": "neutron",
   "description": "AppView template for WebCatalog",
-  "version": "18.8.0",
+  "version": "18.8.1",
   "minimumWebCatalogVersion": "33.0.0-rc",
   "engines": {
     "node": ">=14.0.0 <15.0.0"
@@ -56,7 +56,7 @@
     "classnames": "2.3.1",
     "clean-deep": "3.4.0",
     "clean-webpack-plugin": "3.0.0",
-    "color": "4.0.0",
+    "color": "3.2.1",
     "concurrently": "6.2.0",
     "copy-webpack-plugin": "6.4.1",
     "cross-env": "7.0.3",
