@@ -69,7 +69,7 @@ const SubmitAppCard = (props) => {
             Submit New Service
           </Typography>
           <Typography variant="body2" color="textSecondary" className={classes.appUrl}>
-            Can&apos;t find your favorite web app/service? Submit it!
+            Can&apos;t find your favorite app/service? Submit it!
           </Typography>
         </div>
       </Paper>
