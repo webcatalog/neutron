@@ -25,7 +25,7 @@ const rawMailtoUrls = [
   },
   {
     hostnames: ['mail.zoho.com'],
-    mailtoUrl: 'https://mail.zoho.com/mail/compose.do?extsrc=mailto&mode=compose&tp=zb&ct=%s',
+    mailtoUrl: 'https://mail.zoho.com/zm/comp.do?ct=%s',
   },
   {
     hostnames: ['tutanota.com', 'mail.tutanota.com'],
