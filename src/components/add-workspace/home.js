@@ -237,6 +237,7 @@ const Home = ({ classes }) => {
                       icon128={app.icon_filled_128.raw}
                     />
                   ))}
+                  <SubmitAppCard />
                   <Grid container justify="center">
                     <Paging />
                   </Grid>

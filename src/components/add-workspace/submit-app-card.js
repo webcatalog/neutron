@@ -66,10 +66,10 @@ const SubmitAppCard = (props) => {
         </div>
         <div className={classes.infoContainer}>
           <Typography variant="subtitle1" className={classes.appName}>
-            Submit New App
+            Submit New Service
           </Typography>
           <Typography variant="body2" color="textSecondary" className={classes.appUrl}>
-            Can&apos;t find your favorite app? Submit it!
+            Can&apos;t find your favorite app/service? Submit it!
           </Typography>
         </div>
       </Paper>
