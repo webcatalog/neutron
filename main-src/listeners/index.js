@@ -108,7 +108,8 @@ const loadListeners = () => {
   });
 
   ipcMain.on('request-show-message-box', (e, message, type) => {
-    dialog.showMessageBox(BrowserWindow.fromWebContents(e.sender) || mainWindow.get(), {
+    const senderWindow = e && e.sender ? BrowserWindow.fromWebContents(e.sender) : undefined;
+    dialog.showMessageBox(senderWindow || mainWindow.get(), {
       type: type || 'error',
       message,
       buttons: ['OK'],
@@ -215,7 +216,8 @@ const loadListeners = () => {
     // app.relaunch() is not supported in MAS build
     // calling it would crash th app
     if (isMas()) {
-      dialog.showMessageBox(BrowserWindow.fromWebContents(e.sender), {
+      const senderWindow = e && e.sender ? BrowserWindow.fromWebContents(e.sender) : undefined;
+      dialog.showMessageBox(senderWindow, {
         type: 'question',
         buttons: ['Quit Now', 'Later'],
         message: 'You need to quit and then manually restart the app for the changes to take effect.',
@@ -235,7 +237,8 @@ const loadListeners = () => {
   });
 
   ipcMain.on('request-show-require-reload-workspace-dialog', (e, id) => {
-    const win = BrowserWindow.fromWebContents(e.sender)
+    const senderWindow = e && e.sender ? BrowserWindow.fromWebContents(e.sender) : undefined;
+    const win = senderWindow
       || workspacePreferencesWindow.get() || preferencesWindow.get() || mainWindow.get();
     dialog.showMessageBox(win, {
       type: 'question',
@@ -252,7 +255,8 @@ const loadListeners = () => {
 
   ipcMain.on('request-show-require-license-dialog', (e) => {
     const utmSource = getUtmSource();
-    const win = BrowserWindow.fromWebContents(e.sender)
+    const senderWindow = e && e.sender ? BrowserWindow.fromWebContents(e.sender) : undefined;
+    const win = senderWindow
       || workspacePreferencesWindow.get() || preferencesWindow.get();
 
     if (isStandalone()) {
@@ -440,7 +444,8 @@ const loadListeners = () => {
       return;
     }
 
-    dialog.showMessageBox(BrowserWindow.fromWebContents(e.sender) || mainWindow.get(), {
+    const senderWindow = e && e.sender ? BrowserWindow.fromWebContents(e.sender) : undefined;
+    dialog.showMessageBox(senderWindow || mainWindow.get(), {
       type: 'question',
       buttons: [`Remove ${getWorkspaceFriendlyName()}`, 'Cancel'],
       message: `Are you sure? All browsing data of this ${getWorkspaceFriendlyName().toLowerCase()} will be wiped. This action cannot be undone.`,
@@ -482,7 +487,8 @@ const loadListeners = () => {
   });
 
   ipcMain.on('request-clear-browsing-data', (e) => {
-    dialog.showMessageBox(BrowserWindow.fromWebContents(e.sender) || mainWindow.get(), {
+    const senderWindow = e && e.sender ? BrowserWindow.fromWebContents(e.sender) : undefined;
+    dialog.showMessageBox(senderWindow || mainWindow.get(), {
       type: 'question',
       buttons: ['Clear Now', 'Cancel'],
       message: 'Are you sure? All browsing data will be cleared. This action cannot be undone.',
