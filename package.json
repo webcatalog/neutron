@@ -1,7 +1,7 @@
 {
   "name": "neutron",
   "description": "AppView template for WebCatalog",
-  "version": "18.10.1",
+  "version": "18.10.2",
   "minimumWebCatalogVersion": "33.0.0-rc",
   "engines": {
     "node": ">=14.0.0 <15.0.0"
@@ -96,7 +96,7 @@
     "prop-types": "15.7.2",
     "pupa": "2.1.1",
     "react": "16.14.0",
-    "react-ace": "9.4.1",
+    "react-ace": "9.4.3",
     "react-dom": "16.14.0",
     "react-redux": "7.2.4",
     "react-scripts": "3.4.4",
