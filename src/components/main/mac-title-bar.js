@@ -11,6 +11,8 @@ import { fade } from '@material-ui/core/styles/colorManipulator';
 import connectComponent from '../../helpers/connect-component';
 import getUrlFromText from '../../helpers/get-url-from-text';
 import getStaticGlobal from '../../helpers/get-static-global';
+import isMacOs11 from '../../helpers/is-mac-os-11';
+
 import themeColors from '../../constants/theme-colors';
 
 import {
@@ -19,8 +21,7 @@ import {
 
 const useStyles = makeStyles((theme) => {
   // Big Sur increases title bar height: https://github.com/microsoft/vscode/pull/110592 (28px)
-  // but following Electron@13, somehow the height is now also 22px on Big Sur
-  const titleBarHeight = 22;
+  const titleBarHeight = isMacOs11() ? 28 : 22;
   return {
     root: {
       background: (props) => {
