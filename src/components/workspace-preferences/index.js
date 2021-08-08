@@ -5,7 +5,6 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Button from '@material-ui/core/Button';
-import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -13,11 +12,15 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 
-import WidgetsIcon from '@material-ui/icons/Widgets';
-import PaletteIcon from '@material-ui/icons/Palette';
-import PowerIcon from '@material-ui/icons/Power';
-import NotificationsIcon from '@material-ui/icons/Notifications';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import CodeIcon from '@material-ui/icons/Code';
+import LinkIcon from '@material-ui/icons/Link';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import PaletteIcon from '@material-ui/icons/Palette';
+import PermCameraMicIcon from '@material-ui/icons/PermCameraMic';
+import WidgetsIcon from '@material-ui/icons/Widgets';
+import CachedIcon from '@material-ui/icons/Cached';
+import SaveAltIcon from '@material-ui/icons/SaveAlt';
 
 import connectComponent from '../../helpers/connect-component';
 import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
@@ -43,8 +46,7 @@ const styles = (theme) => ({
     background: theme.palette.background.default,
     height: '100%',
     width: '100%',
-    overflow: 'auto',
-    padding: theme.spacing(2),
+    display: 'flex',
   },
   sectionTitle: {
     paddingLeft: theme.spacing(2),
@@ -55,19 +57,20 @@ const styles = (theme) => ({
     border: theme.palette.type === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)',
   },
   sidebar: {
-    position: 'fixed',
-    width: 204,
+    width: 220,
     color: theme.palette.text.primary,
-    height: `calc(100% - ${theme.spacing(4)}px)`,
+    borderRight: `1px solid ${theme.palette.divider}`,
+    overflow: 'auto',
   },
   inner: {
-    width: 'calc(100% - 224px)',
-    float: 'right',
+    flex: 1,
+    padding: theme.spacing(2),
+    overflow: 'auto',
   },
   globalPrefsButton: {
     position: 'absolute',
-    bottom: 0,
-    left: 0,
+    bottom: theme.spacing(1),
+    left: theme.spacing(1),
   },
 });
 
@@ -80,6 +83,12 @@ const Preferences = ({ classes }) => {
       Icon: WidgetsIcon,
       subSections: {
         workspace: { text: getWorkspaceFriendlyName(), Component: SectionWorkspace },
+      },
+    },
+    downloads: {
+      text: 'Downloads',
+      Icon: SaveAltIcon,
+      subSections: {
         downloads: { text: 'Downloads', Component: SectionDownloads },
       },
     },
@@ -98,13 +107,31 @@ const Preferences = ({ classes }) => {
         badge: { text: 'Badge', Component: SectionBadge },
       },
     },
-    advanced: {
-      text: 'Advanced',
-      Icon: PowerIcon,
+    audioVideo: {
+      text: 'Audio & Video',
+      Icon: PermCameraMicIcon,
+      subSections: {
+        audioVideo: { text: 'Audio & Video', Component: SectionAudioVideo },
+      },
+    },
+    linkHandling: {
+      text: 'Link Handling',
+      Icon: LinkIcon,
       subSections: {
         linkHandling: { text: 'Link Handling', Component: SectionLinkHandling },
-        audioVideo: { text: 'Audio & Video', Component: SectionAudioVideo },
+      },
+    },
+    autoReload: {
+      text: 'Auto Reload',
+      Icon: CachedIcon,
+      subSections: {
         autoReload: { text: 'Auto Reload', Component: SectionAutoReload },
+      },
+    },
+    developers: {
+      text: 'Developers',
+      Icon: CodeIcon,
+      subSections: {
         developers: { text: 'Developers', Component: SectionDevelopers },
       },
     },
@@ -115,15 +142,14 @@ const Preferences = ({ classes }) => {
   return (
     <div className={classes.root}>
       <div className={classes.sidebar}>
-        <List dense disablePadding>
-          {Object.keys(sections).map((sectionKey, i) => {
+        <List dense>
+          {Object.keys(sections).map((sectionKey) => {
             const {
               Icon, text, hidden,
             } = sections[sectionKey];
             if (hidden) return null;
             return (
               <React.Fragment key={sectionKey}>
-                {i > 0 && <Divider />}
                 <ListItem
                   button
                   onClick={() => setActiveSectionKey(sectionKey)}

@@ -4,7 +4,6 @@
 import React from 'react';
 
 import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
 
 import ListItemAuthStatus from '../../shared/list-item-auth-status';
 
@@ -15,9 +14,7 @@ const SectionPermissions = () => {
 
   return (
     <List disablePadding dense>
-      <ListItemAuthStatus authType="camera" />
-      <Divider />
-      <ListItemAuthStatus authType="microphone" />
+      <ListItemAuthStatus authType="location" />
     </List>
   );
 };
