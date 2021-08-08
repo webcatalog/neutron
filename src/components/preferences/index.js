@@ -4,7 +4,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -13,13 +12,25 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
+import AssessmentIcon from '@material-ui/icons/Assessment';
+import CachedIcon from '@material-ui/icons/Cached';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import CodeIcon from '@material-ui/icons/Code';
+import ExtensionIcon from '@material-ui/icons/Extension';
 import InfoIcon from '@material-ui/icons/Info';
+import LinkIcon from '@material-ui/icons/Link';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
+import LockIcon from '@material-ui/icons/Lock';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import PaletteIcon from '@material-ui/icons/Palette';
-import PowerIcon from '@material-ui/icons/Power';
+import PermCameraMicIcon from '@material-ui/icons/PermCameraMic';
+import RotateLeftIcon from '@material-ui/icons/RotateLeft';
+import RouterIcon from '@material-ui/icons/Router';
+import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import SecurityIcon from '@material-ui/icons/Security';
-import WidgetsIcon from '@material-ui/icons/Widgets';
 import ViewListIcon from '@material-ui/icons/ViewList';
+import WebAssetIcon from '@material-ui/icons/WebAsset';
+import WidgetsIcon from '@material-ui/icons/Widgets';
 
 import connectComponent from '../../helpers/connect-component';
 import isMas from '../../helpers/is-mas';
@@ -58,16 +69,16 @@ import SectionView from './section-view';
 import SectionWindow from './section-window';
 import SectionWorkspaces from './section-workspaces';
 import SectionPermissions from './section-permissions';
+import SectionLocationPermission from './section-location-permissions';
 
 import SnackbarTrigger from '../shared/snackbar-trigger';
 
 const styles = (theme) => ({
   root: {
-    padding: theme.spacing(2),
     background: theme.palette.background.default,
     height: '100%',
     width: '100%',
-    overflow: 'auto',
+    display: 'flex',
   },
   sectionTitle: {
     paddingLeft: theme.spacing(2),
@@ -78,13 +89,15 @@ const styles = (theme) => ({
     border: theme.palette.type === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)',
   },
   sidebar: {
-    position: 'fixed',
-    width: 200,
+    width: 220,
     color: theme.palette.text.primary,
+    borderRight: `1px solid ${theme.palette.divider}`,
+    overflow: 'auto',
   },
   inner: {
-    width: 'calc(100% - 224px)',
-    float: 'right',
+    flex: 1,
+    padding: theme.spacing(2),
+    overflow: 'auto',
   },
 });
 
@@ -96,23 +109,36 @@ const Preferences = ({
   const [activeSectionKey, setActiveSectionKey] = useState(getStaticGlobal('preferencesScrollTo') || 'general');
 
   const sections = {
-    general: {
-      text: 'General',
-      Icon: WidgetsIcon,
+    licensing: {
+      Icon: CheckCircleIcon,
+      text: 'Licensing',
+      Component: SectionAccountLicensing,
+      hidden: isAppx() || (isMas() && appJson.registered),
       subSections: {
         licensing: {
           text: 'Licensing',
           Component: SectionAccountLicensing,
-          hidden: isAppx() || (isMas() && appJson.registered),
         },
+      },
+    },
+    general: {
+      text: 'General',
+      Icon: WidgetsIcon,
+      subSections: {
         home: { text: 'Home', Component: SectionHome, hidden: !(appJson.url && !isMas() && !isStandalone() && !isAppx()) },
         mode: { text: 'Mode', Component: SectionMode, hidden: !appJson.id.startsWith('group-') && appJson.id !== 'clovery' },
-        window: { text: window.process.platform === 'darwin' ? 'Window & Menu Bar' : 'Window & Tray', Component: SectionWindow },
-        permissions: { text: 'Permissions', Component: SectionPermissions, hidden: window.process.platform !== 'darwin' },
-        general: { text: 'System', Component: SectionSystem },
-        downloads: { text: 'Downloads', Component: SectionDownloads },
         language: { text: 'Language', Component: SectionLanguage },
+        system: { text: 'System', Component: SectionSystem },
+        hardward: { text: 'Hardware', Component: SectionHardware },
         exit: { text: 'Exit', Component: SectionExit },
+      },
+    },
+    workspaces: {
+      text: getWorkspaceFriendlyName(true),
+      Icon: ViewListIcon,
+      hidden: !hasWorkspaces,
+      subSections: {
+        workspaces: { text: getWorkspaceFriendlyName(true), Component: SectionWorkspaces },
       },
     },
     appearance: {
@@ -125,6 +151,13 @@ const Preferences = ({
         fonts: { text: 'Fonts', Component: SectionFonts },
       },
     },
+    window: {
+      text: window.process.platform === 'darwin' ? 'Window & Menu Bar' : 'Window & Tray',
+      Icon: WebAssetIcon,
+      subSections: {
+        window: { text: window.process.platform === 'darwin' ? 'Window & Menu Bar' : 'Window & Tray', Component: SectionWindow },
+      },
+    },
     notifications: {
       text: 'Notifications',
       Icon: NotificationsIcon,
@@ -133,48 +166,103 @@ const Preferences = ({
         badge: { text: 'Badge', Component: SectionBadge },
       },
     },
-    workspaces: {
-      text: getWorkspaceFriendlyName(true),
-      Icon: ViewListIcon,
-      hidden: !hasWorkspaces,
+    downloads: {
+      text: 'Downloads',
+      Icon: SaveAltIcon,
       subSections: {
-        workspaces: { text: getWorkspaceFriendlyName(true), Component: SectionWorkspaces },
+        downloads: { text: 'Downloads', Component: SectionDownloads },
       },
     },
-    privacySecuriy: {
-      text: 'Privacy & Security',
-      Icon: SecurityIcon,
+    audioVideo: {
+      text: 'Audio & Video',
+      Icon: PermCameraMicIcon,
       subSections: {
-        browsingData: { text: 'Browsing', Component: SectionBrowsing },
-        appLock: { text: 'App Lock', Component: SectionAppLock },
-        telemetry: { text: 'Telemetry', Component: SectionTelemetry },
-      },
-    },
-    advanced: {
-      text: 'Advanced',
-      Icon: PowerIcon,
-      subSections: {
-        linkHandling: { text: 'Link Handling', Component: SectionLinkHandling },
-        performance: { text: 'Performance', Component: SectionPerformance },
+        permissions: { text: 'Permissions', Component: SectionPermissions, hidden: window.process.platform !== 'darwin' },
         audioVideo: { text: 'Audio & Video', Component: SectionAudioVideo },
-        network: { text: 'Network', Component: SectionNetwork },
-        hardward: { text: 'Hardware', Component: SectionHardware },
-        autoReload: { text: 'Auto Reload', Component: SectionAutoReload },
-        developers: { text: 'Developers', Component: SectionDevelopers },
-        reset: { text: 'Reset', Component: SectionReset },
       },
     },
-    experimental: {
-      text: 'Experimental',
+    permision: {
+      text: 'Location',
+      Icon: LocationOnIcon,
+      subSections: {
+        permissions: { text: 'Permissions', Component: SectionLocationPermission },
+      },
+      hidden: window.process.platform !== 'darwin',
+    },
+    network: {
+      text: 'Network',
+      Icon: RouterIcon,
+      subSections: {
+        network: { text: 'Network', Component: SectionNetwork },
+      },
+    },
+    hibernation: {
+      text: 'Hibernation',
       Icon: (props) => (
         // eslint-disable-next-line react/jsx-props-no-spreading
         <SvgIcon {...props}>
-          <path d="M19.8,18.4L14,10.67V6.5l1.35-1.69C15.61,4.48,15.38,4,14.96,4H9.04C8.62,4,8.39,4.48,8.65,4.81L10,6.5v4.17L4.2,18.4 C3.71,19.06,4.18,20,5,20h14C19.82,20,20.29,19.06,19.8,18.4z" />
+          <path fill="currentColor" d="M18.73,18C15.4,21.69 9.71,22 6,18.64C2.33,15.31 2.04,9.62 5.37,5.93C6.9,4.25 9,3.2 11.27,3C7.96,6.7 8.27,12.39 12,15.71C13.63,17.19 15.78,18 18,18C18.25,18 18.5,18 18.73,18Z" />
         </SvgIcon>
       ),
+      subSections: {
+        hibernation: { text: 'Hibernation', Component: SectionPerformance },
+      },
+    },
+    linkHandling: {
+      text: 'Link Handling',
+      Icon: LinkIcon,
+      subSections: {
+        linkHandling: { text: 'Link Handling', Component: SectionLinkHandling },
+      },
+    },
+    autoReload: {
+      text: 'Auto Reload',
+      Icon: CachedIcon,
+      subSections: {
+        autoReload: { text: 'Auto Reload', Component: SectionAutoReload },
+      },
+    },
+    appLock: {
+      text: 'App Lock',
+      Icon: LockIcon,
+      subSections: {
+        appLock: { text: 'App Lock', Component: SectionAppLock },
+      },
+    },
+    privacy: {
+      text: 'Privacy',
+      Icon: SecurityIcon,
+      subSections: {
+        privacy: { text: 'Privacy', Component: SectionBrowsing },
+      },
+    },
+    telemetry: {
+      text: 'Telemetry',
+      Icon: AssessmentIcon,
+      subSections: {
+        telemetry: { text: 'Telemetry', Component: SectionTelemetry },
+      },
+    },
+    developers: {
+      text: 'Developers',
+      Icon: CodeIcon,
+      subSections: {
+        developers: { text: 'Developers', Component: SectionDevelopers },
+      },
+    },
+    extensions: {
+      text: 'Extensions',
+      Icon: ExtensionIcon,
       hidden: isMas() || isAppx(),
       subSections: {
         extensions: { text: 'Extensions (experimental)', Component: SectionExtensions },
+      },
+    },
+    reset: {
+      text: 'Reset',
+      Icon: RotateLeftIcon,
+      subSections: {
+        reset: { text: 'Reset', Component: SectionReset },
       },
     },
     about: {
@@ -192,16 +280,15 @@ const Preferences = ({
   return (
     <div className={classes.root}>
       <div className={classes.sidebar}>
-        <List dense disablePadding>
+        <List dense>
           {Object.keys(sections)
             .filter((sectionKey) => !sections[sectionKey].hidden)
-            .map((sectionKey, i) => {
+            .map((sectionKey) => {
               const {
                 Icon, text,
               } = sections[sectionKey];
               return (
                 <React.Fragment key={sectionKey}>
-                  {i > 0 && <Divider />}
                   <ListItem
                     button
                     onClick={() => setActiveSectionKey(sectionKey)}
