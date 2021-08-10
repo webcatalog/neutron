@@ -9,7 +9,6 @@ const trackAddWorkspaceAsync = (deviceId, appId) => {
   url.searchParams.append('appId', appId);
 
   return fetch(url)
-    .then(() => console.log('Sent...'))
     // eslint-disable-next-line no-console
     .catch((err) => console.log(err));
 };
