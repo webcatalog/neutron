@@ -11,12 +11,11 @@ import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import amplitude from '../../amplitude';
-import { trackAddWorkspaceAsync } from '../../firebase/functions';
 
 import connectComponent from '../../helpers/connect-component';
 import isUrl from '../../helpers/is-url';
 import extractHostname from '../../helpers/extract-hostname';
-import { requestCreateWorkspace } from '../../senders';
+import { requestCreateWorkspace, requestTrackAddWorkspace } from '../../senders';
 
 import { updateForm, updateMode } from '../../state/dialog-add-workspace/actions';
 
@@ -128,6 +127,10 @@ const AppCard = (props) => {
           variant="contained"
           disableElevation
           onClick={() => {
+            // only track installs for apps in the catalog
+            // tracking is only for ranking purpose
+            requestTrackAddWorkspace(amplitude.getInstance().options.deviceId, id);
+
             requestCreateWorkspace({
               name,
               homeUrl: url,
@@ -135,14 +138,7 @@ const AppCard = (props) => {
               catalogId: id,
             });
 
-            // only track installs for apps in the catalog
-            // tracking is only for ranking purpose
-            trackAddWorkspaceAsync(amplitude.getInstance().options.deviceId, id);
-
-            // don't close window, only hide it
-            // 1. it's faster for users (normally people add multiple workspaces at once to set up)
-            // 2. it gives Amplitude time to run
-            window.remote.getCurrentWindow().hide();
+            window.remote.getCurrentWindow().close();
           }}
         >
           Add
