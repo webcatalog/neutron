@@ -90,6 +90,7 @@ const isSnap = require('../libs/is-snap');
 const getIapFormattedPriceAsync = require('../libs/get-iap-formatted-price-async');
 const getUtmSource = require('../libs/get-utm-source');
 const getWorkspaceFriendlyName = require('../libs/get-workspace-friendly-name');
+const trackAddWorkspaceAsync = require('../libs/track-add-workspace-async');
 
 const addWorkspaceWindow = require('../windows/add-workspace');
 const displayMediaWindow = require('../windows/display-media');
@@ -684,6 +685,10 @@ const loadListeners = () => {
   ipcMain.on('is-popup', (e) => {
     // webContents.isPopup is set and used internally by Neutron
     e.returnValue = Boolean(e.sender.isPopup);
+  });
+
+  ipcMain.on('request-track-add-workspace', (_, deviceId, appId) => {
+    trackAddWorkspaceAsync(deviceId, appId);
   });
 };
 

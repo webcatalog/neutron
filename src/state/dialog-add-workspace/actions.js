@@ -169,10 +169,8 @@ export const save = () => (dispatch, getState) => {
     },
   });
 
-  // don't close window, only hide it
-  // 1. it's faster for users (normally people add multiple workspaces at once to set up)
-  // 2. it gives Amplitude time to run
-  window.remote.getCurrentWindow().hide();
+  window.remote.getCurrentWindow().close();
+
   dispatch(resetForm());
   return null;
 };
