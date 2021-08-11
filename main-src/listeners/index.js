@@ -32,7 +32,6 @@ const {
   getWorkspacePreference,
   getWorkspacePreferences,
   getWorkspaces,
-  setWorkspacePicture,
   removeWorkspacePicture,
   setWorkspaceAccountInfo,
   removeWorkspaceAccountInfo,
@@ -469,10 +468,6 @@ const loadListeners = () => {
   ipcMain.on('request-set-workspaces', (e, workspaces) => {
     setWorkspaceViews(workspaces);
     createMenu();
-  });
-
-  ipcMain.on('request-set-workspace-picture', (e, id, imgPath) => {
-    setWorkspacePicture(id, imgPath);
   });
 
   ipcMain.on('request-set-workspace-account-info', (e, id, accountInfo) => {

@@ -76,7 +76,6 @@ export const requestSetActiveWorkspace = (id) => {
 };
 export const requestSetWorkspace = (id, opts) => window.ipcRenderer.send('request-set-workspace', id, opts);
 export const requestSetWorkspaces = (workspaces) => window.ipcRenderer.send('request-set-workspaces', workspaces);
-export const requestSetWorkspacePicture = (id, imgPath) => window.ipcRenderer.send('request-set-workspace-picture', id, imgPath);
 export const requestWakeUpWorkspace = (id) => window.ipcRenderer.send('request-wake-up-workspace', id);
 export const requestReloadViewsDarkReader = () => window.ipcRenderer.send('request-reload-views-dark-reader');
 export const requestReloadViewDarkReader = (id) => window.ipcRenderer.send('request-reload-view-dark-reader', id);

@@ -201,12 +201,12 @@ const setWorkspaces = (newWorkspaces) => {
   settings.setSync(`workspaces.${v}`, newWorkspaces);
 };
 
-const setWorkspacePicture = (id, sourcePicturePath) => {
+const setWorkspacePictureAsync = (id, sourcePicturePath) => {
   const pictureId = uuidv1();
 
   const destPicturePath = getPicturePath(pictureId);
 
-  Promise.resolve()
+  return Promise.resolve()
     .then(() => {
       if (isUrl(sourcePicturePath)) {
         const tmpObj = tmp.dirSync();
@@ -229,9 +229,10 @@ const setWorkspacePicture = (id, sourcePicturePath) => {
         pictureId,
       });
       if (currentPicturePath) {
-        return fs.remove(currentPicturePath);
+        // eslint-disable-next-line no-console
+        fs.remove(currentPicturePath).catch(console.log);
       }
-      return null;
+      return pictureId;
     });
 };
 
@@ -345,6 +346,6 @@ module.exports = {
   setActiveWorkspace,
   setWorkspace,
   setWorkspaceAccountInfo,
-  setWorkspacePicture,
+  setWorkspacePictureAsync,
   setWorkspaces,
 };

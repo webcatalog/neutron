@@ -9,21 +9,23 @@ import {
 import {
   requestSetWorkspace,
   requestReloadViewDarkReader,
-  requestSetWorkspacePicture,
   requestRemoveWorkspacePicture,
 } from '../../senders';
+
+import { setWorkspacePictureAsync } from '../../invokers';
 
 import getStaticGlobal from '../../helpers/get-static-global';
 
 import appSearch from '../../app-search';
 
 export const updateForm = (changes) => (dispatch, getState) => {
+  const workspaceId = getStaticGlobal('workspacePreferencesWorkspaceId');
+
   dispatch({
     type: UPDATE_WORKSPACE_PREFERENCES_FORM,
     changes,
   });
 
-  const workspaceId = getStaticGlobal('workspacePreferencesWorkspaceId');
   const {
     name,
     homeUrl,
@@ -31,7 +33,6 @@ export const updateForm = (changes) => (dispatch, getState) => {
     disableNotifications,
     transparentBackground,
     preferredIconType,
-    imgPath,
     preferences,
   } = getState().dialogWorkspacePreferences.form;
 
@@ -45,16 +46,59 @@ export const updateForm = (changes) => (dispatch, getState) => {
     preferences,
   });
 
-  if (imgPath) {
-    requestSetWorkspacePicture(workspaceId, imgPath);
-  } else {
-    requestRemoveWorkspacePicture(workspaceId);
-  }
-
   const shouldReloadDarkReader = Object.keys(changes).find((key) => key.startsWith('darkReader'));
   if (shouldReloadDarkReader) {
     requestReloadViewDarkReader(workspaceId);
   }
+};
+
+export const removePicture = () => (dispatch) => {
+  const workspaceId = getStaticGlobal('workspacePreferencesWorkspaceId');
+  requestRemoveWorkspacePicture(workspaceId);
+
+  dispatch({
+    type: UPDATE_WORKSPACE_PREFERENCES_FORM,
+    changes: {
+      pictureId: null,
+      imgPath: null,
+    },
+  });
+};
+
+export const setPicture = (imgPath) => (dispatch) => {
+  // show new image temporarily
+  dispatch({
+    type: UPDATE_WORKSPACE_PREFERENCES_FORM,
+    changes: {
+      preferredIconType: 'image',
+      imgPath,
+    },
+  });
+
+  const workspaceId = getStaticGlobal('workspacePreferencesWorkspaceId');
+
+  // process and replace with official one
+  setWorkspacePictureAsync(workspaceId, imgPath)
+    .then((pictureId) => {
+      console.log(pictureId);
+      dispatch({
+        type: UPDATE_WORKSPACE_PREFERENCES_FORM,
+        changes: {
+          pictureId,
+          imgPath: null,
+        },
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      // if failed, revert UI to the previous state
+      dispatch({
+        type: UPDATE_WORKSPACE_PREFERENCES_FORM,
+        changes: {
+          imgPath: null,
+        },
+      });
+    });
 };
 
 // to be replaced with invoke (electron 7+)

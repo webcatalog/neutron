@@ -27,6 +27,8 @@ import {
   updateForm,
   getIconFromInternet,
   getIconFromAppSearch,
+  removePicture,
+  setPicture,
 } from '../../../state/dialog-workspace-preferences/actions';
 
 import defaultWorkspaceImageLight from '../../../images/default-workspace-image-light.png';
@@ -124,6 +126,8 @@ const ListItemIcon = ({
   onGetIconFromAppSearch,
   onGetIconFromInternet,
   onUpdateForm,
+  onSetPicture,
+  onRemovePicture,
   order,
   pictureId,
   preferredIconType,
@@ -265,10 +269,7 @@ const ListItemIcon = ({
                     window.remote.dialog.showOpenDialog(window.remote.getCurrentWindow(), opts)
                       .then(({ canceled, filePaths }) => {
                         if (!canceled && filePaths && filePaths.length > 0) {
-                          onUpdateForm({
-                            preferredIconType: 'image',
-                            imgPath: filePaths[0],
-                          });
+                          onSetPicture(filePaths[0]);
                         }
                       })
                       .catch(console.log); // eslint-disable-line
@@ -304,9 +305,7 @@ const ListItemIcon = ({
                   size="small"
                   className={classes.buttonBot}
                   disabled={Boolean(downloadingIcon)}
-                  onClick={() => onUpdateForm({
-                    imgPath: null,
-                  })}
+                  onClick={() => onRemovePicture()}
                 >
                   Reset to Default
                 </Button>
@@ -350,6 +349,8 @@ ListItemIcon.propTypes = {
   onGetIconFromAppSearch: PropTypes.func.isRequired,
   onGetIconFromInternet: PropTypes.func.isRequired,
   onUpdateForm: PropTypes.func.isRequired,
+  onSetPicture: PropTypes.func.isRequired,
+  onRemovePicture: PropTypes.func.isRequired,
   order: PropTypes.number.isRequired,
   pictureId: PropTypes.string,
   imgPath: PropTypes.string,
@@ -376,6 +377,8 @@ const actionCreators = {
   getIconFromInternet,
   getIconFromAppSearch,
   updateForm,
+  removePicture,
+  setPicture,
 };
 
 export default connectComponent(
