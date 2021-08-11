@@ -247,7 +247,7 @@ const SortableItem = sortableElement(({ value }) => {
     hibernated,
     id,
     name,
-    picturePath,
+    pictureId,
     preferredIconType,
     transparentBackground,
     preferences,
@@ -260,7 +260,7 @@ const SortableItem = sortableElement(({ value }) => {
       key={id}
       name={name}
       accountInfo={accountInfo}
-      picturePath={picturePath}
+      pictureId={pictureId}
       transparentBackground={transparentBackground}
       preferredIconType={preferredIconType}
       order={index}

@@ -8,7 +8,7 @@ const {
 
 const { getPreferences } = require('../libs/preferences');
 const { getSystemPreferences } = require('../libs/system-preferences');
-const { getWorkspaces } = require('../libs/workspaces');
+const { getWorkspaces, setWorkspacePictureAsync } = require('../libs/workspaces');
 const {
   getWorkspaceMetas,
 } = require('../libs/workspace-metas');
@@ -119,6 +119,8 @@ const loadInvokers = () => {
     }
     return Promise.resolve('rejected');
   });
+
+  ipcMain.handle('set-workspace-picture', (e, id, imgPath) => setWorkspacePictureAsync(id, imgPath));
 };
 
 module.exports = loadInvokers;

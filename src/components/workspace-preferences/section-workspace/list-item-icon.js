@@ -19,6 +19,7 @@ import CheckIcon from '@material-ui/icons/Check';
 import connectComponent from '../../../helpers/connect-component';
 import getAvatarText from '../../../helpers/get-avatar-text';
 import isUrl from '../../../helpers/is-url';
+import getPicturePath from '../../../helpers/get-picture-path';
 
 import themeColors from '../../../constants/theme-colors';
 
@@ -26,6 +27,8 @@ import {
   updateForm,
   getIconFromInternet,
   getIconFromAppSearch,
+  removePicture,
+  setPicture,
 } from '../../../state/dialog-workspace-preferences/actions';
 
 import defaultWorkspaceImageLight from '../../../images/default-workspace-image-light.png';
@@ -114,24 +117,27 @@ const styles = (theme) => ({
 
 const ListItemIcon = ({
   accountInfo,
-  color,
   classes,
+  color,
   downloadingIcon,
   id,
+  imgPath,
   name,
-  onGetIconFromInternet,
   onGetIconFromAppSearch,
+  onGetIconFromInternet,
   onUpdateForm,
+  onSetPicture,
+  onRemovePicture,
   order,
-  picturePath,
+  pictureId,
   preferredIconType,
   shouldUseDarkColors,
   transparentBackground,
 }) => {
   let selectedIconType = 'text';
-  if ((picturePath && preferredIconType === 'auto') || (preferredIconType === 'image')) {
+  if ((imgPath && preferredIconType === 'auto') || (pictureId && preferredIconType === 'auto') || (preferredIconType === 'image')) {
     selectedIconType = 'image';
-  } else if (accountInfo && accountInfo.picturePath && (preferredIconType === 'auto' || preferredIconType === 'accountInfo')) {
+  } else if (accountInfo && accountInfo.pictureId && (preferredIconType === 'auto' || preferredIconType === 'accountInfo')) {
     selectedIconType = 'accountInfo';
   }
 
@@ -226,8 +232,13 @@ const ListItemIcon = ({
                 alt="Icon"
                 className={classes.avatarPicture}
                 src={(() => {
-                  if (isUrl(picturePath)) return picturePath;
-                  if (picturePath) return `file://${picturePath}`;
+                  if (imgPath) {
+                    if (isUrl(imgPath)) return imgPath;
+                    if (imgPath) return `file://${imgPath}`;
+                  }
+                  if (pictureId) {
+                    return `file://${getPicturePath(pictureId)}`;
+                  }
                   return shouldUseDarkColors
                     ? defaultWorkspaceImageLight : defaultWorkspaceImageDark;
                 })()}
@@ -235,8 +246,8 @@ const ListItemIcon = ({
               'image',
               'Image',
             )}
-            {(accountInfo && accountInfo.picturePath) && renderAvatar(
-              <img alt="Icon" className={classes.avatarPicture} src={`file://${accountInfo.picturePath}`} />,
+            {(accountInfo && accountInfo.pictureId) && renderAvatar(
+              <img alt="Icon" className={classes.avatarPicture} src={`file://${getPicturePath(accountInfo.pictureId, 'account-pictures')}`} />,
               'accountInfo',
               'Account\'s Picture',
             )}
@@ -258,10 +269,7 @@ const ListItemIcon = ({
                     window.remote.dialog.showOpenDialog(window.remote.getCurrentWindow(), opts)
                       .then(({ canceled, filePaths }) => {
                         if (!canceled && filePaths && filePaths.length > 0) {
-                          onUpdateForm({
-                            preferredIconType: 'image',
-                            picturePath: filePaths[0],
-                          });
+                          onSetPicture(filePaths[0]);
                         }
                       })
                       .catch(console.log); // eslint-disable-line
@@ -297,9 +305,7 @@ const ListItemIcon = ({
                   size="small"
                   className={classes.buttonBot}
                   disabled={Boolean(downloadingIcon)}
-                  onClick={() => onUpdateForm({
-                    picturePath: null,
-                  })}
+                  onClick={() => onRemovePicture()}
                 >
                   Reset to Default
                 </Button>
@@ -328,7 +334,8 @@ const ListItemIcon = ({
 ListItemIcon.defaultProps = {
   accountInfo: null,
   color: null,
-  picturePath: null,
+  imgPath: null,
+  pictureId: null,
   preferredIconType: 'auto',
 };
 
@@ -342,8 +349,11 @@ ListItemIcon.propTypes = {
   onGetIconFromAppSearch: PropTypes.func.isRequired,
   onGetIconFromInternet: PropTypes.func.isRequired,
   onUpdateForm: PropTypes.func.isRequired,
+  onSetPicture: PropTypes.func.isRequired,
+  onRemovePicture: PropTypes.func.isRequired,
   order: PropTypes.number.isRequired,
-  picturePath: PropTypes.string,
+  pictureId: PropTypes.string,
+  imgPath: PropTypes.string,
   preferredIconType: PropTypes.oneOf(['auto', 'text', 'image', 'accountInfo']),
   shouldUseDarkColors: PropTypes.bool.isRequired,
   transparentBackground: PropTypes.bool.isRequired,
@@ -356,7 +366,8 @@ const mapStateToProps = (state) => ({
   id: state.dialogWorkspacePreferences.form.id || '',
   name: state.dialogWorkspacePreferences.form.name || '',
   order: state.dialogWorkspacePreferences.form.order || 0,
-  picturePath: state.dialogWorkspacePreferences.form.picturePath,
+  pictureId: state.dialogWorkspacePreferences.form.pictureId,
+  imgPath: state.dialogWorkspacePreferences.form.imgPath,
   preferredIconType: state.dialogWorkspacePreferences.form.preferredIconType,
   shouldUseDarkColors: state.general.shouldUseDarkColors,
   transparentBackground: Boolean(state.dialogWorkspacePreferences.form.transparentBackground),
@@ -366,6 +377,8 @@ const actionCreators = {
   getIconFromInternet,
   getIconFromAppSearch,
   updateForm,
+  removePicture,
+  setPicture,
 };
 
 export default connectComponent(

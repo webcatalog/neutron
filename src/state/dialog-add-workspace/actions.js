@@ -161,7 +161,7 @@ export const save = () => (dispatch, getState) => {
   requestCreateWorkspace({
     name: form.name,
     homeUrl,
-    picture: form.internetIcon || form.picturePath,
+    picture: form.internetIcon || form.imgPath,
     transparentBackground: Boolean(form.transparentBackground),
     preferredIconType: form.preferredIconType,
     preferences: {

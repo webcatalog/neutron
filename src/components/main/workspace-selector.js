@@ -19,6 +19,7 @@ import connectComponent from '../../helpers/connect-component';
 import getAvatarText from '../../helpers/get-avatar-text';
 import getUrlFromText from '../../helpers/get-url-from-text';
 import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
+import getPicturePath from '../../helpers/get-picture-path';
 import themeColors from '../../constants/theme-colors';
 
 import {
@@ -193,7 +194,7 @@ const WorkspaceSelector = ({
   onClick,
   onContextMenu,
   order,
-  picturePath,
+  pictureId,
   preferredIconType,
   searchEngine,
   shouldUseDarkColors,
@@ -262,9 +263,9 @@ const WorkspaceSelector = ({
   })();
 
   let selectedIconType = 'text';
-  if ((picturePath && preferredIconType === 'auto') || preferredIconType === 'image') {
+  if ((pictureId && preferredIconType === 'auto') || preferredIconType === 'image') {
     selectedIconType = 'image';
-  } else if (accountInfo && accountInfo.picturePath && (preferredIconType === 'auto' || preferredIconType === 'accountInfo')) {
+  } else if (accountInfo && accountInfo.pictureId && (preferredIconType === 'auto' || preferredIconType === 'accountInfo')) {
     selectedIconType = 'accountInfo';
   }
 
@@ -374,7 +375,7 @@ const WorkspaceSelector = ({
                   classes.avatarPicture,
                 )}
                 src={(() => {
-                  if (picturePath) return `file://${picturePath}`;
+                  if (pictureId) return `file://${getPicturePath(pictureId)}`;
                   return shouldUseDarkColors
                     ? defaultWorkspaceImageLight : defaultWorkspaceImageDark;
                 })()}
@@ -387,7 +388,7 @@ const WorkspaceSelector = ({
                 className={classnames(
                   classes.avatarPicture,
                 )}
-                src={`file://${accountInfo.picturePath}`}
+                src={`file://${getPicturePath(accountInfo.pictureId, 'account-pictures')}`}
                 draggable={false}
               />
             )}
@@ -415,7 +416,7 @@ WorkspaceSelector.defaultProps = {
   name: null,
   onContextMenu: null,
   order: 0,
-  picturePath: null,
+  pictureId: null,
   preferredIconType: 'auto',
   transparentBackground: false,
   themeColor: null,
@@ -436,7 +437,7 @@ WorkspaceSelector.propTypes = {
   onClick: PropTypes.func.isRequired,
   onContextMenu: PropTypes.func,
   order: PropTypes.number,
-  picturePath: PropTypes.string,
+  pictureId: PropTypes.string,
   preferredIconType: PropTypes.oneOf(['auto', 'text', 'image', 'accountInfo']),
   searchEngine: PropTypes.string.isRequired,
   shouldUseDarkColors: PropTypes.bool.isRequired,

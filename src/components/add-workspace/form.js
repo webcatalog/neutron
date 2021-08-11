@@ -171,13 +171,13 @@ const AddWorkspaceCustom = ({
   onResetForm,
   onSave,
   onUpdateForm,
-  picturePath,
+  imgPath,
   preferredIconType,
   shouldUseDarkColors,
   transparentBackground,
 }) => {
   let selectedIconType = 'text';
-  if (((picturePath || internetIcon) && preferredIconType === 'auto') || (preferredIconType === 'image')) {
+  if (((imgPath || internetIcon) && preferredIconType === 'auto') || (preferredIconType === 'image')) {
     selectedIconType = 'image';
   }
 
@@ -320,7 +320,7 @@ const AddWorkspaceCustom = ({
                 alt="Icon"
                 className={classes.avatarPicture}
                 src={(() => {
-                  if (picturePath) return `file://${picturePath}`;
+                  if (imgPath) return `file://${imgPath}`;
                   if (internetIcon) return internetIcon;
                   return shouldUseDarkColors
                     ? defaultWorkspaceImageLight : defaultWorkspaceImageDark;
@@ -349,7 +349,7 @@ const AddWorkspaceCustom = ({
                         if (!canceled && filePaths && filePaths.length > 0) {
                           onUpdateForm({
                             preferredIconType: 'image',
-                            picturePath: filePaths[0],
+                            imgPath: filePaths[0],
                           });
                         }
                       })
@@ -387,7 +387,7 @@ const AddWorkspaceCustom = ({
                   className={classes.buttonBot}
                   disabled={Boolean(downloadingIcon)}
                   onClick={() => onUpdateForm({
-                    picturePath: null,
+                    imgPath: null,
                     internetIcon: null,
                   })}
                 >
@@ -429,7 +429,7 @@ AddWorkspaceCustom.defaultProps = {
   internetIcon: null,
   name: '',
   nameError: null,
-  picturePath: null,
+  imgPath: null,
   preferredIconType: 'auto',
 };
 
@@ -448,7 +448,7 @@ AddWorkspaceCustom.propTypes = {
   onResetForm: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   onUpdateForm: PropTypes.func.isRequired,
-  picturePath: PropTypes.string,
+  imgPath: PropTypes.string,
   preferredIconType: PropTypes.oneOf(['auto', 'text', 'image', 'accountInfo']),
   shouldUseDarkColors: PropTypes.bool.isRequired,
   transparentBackground: PropTypes.bool.isRequired,
@@ -463,7 +463,7 @@ const mapStateToProps = (state) => ({
   isMailApp: Boolean(getMailtoUrl(state.dialogAddWorkspace.form.homeUrl)),
   name: state.dialogAddWorkspace.form.name,
   nameError: state.dialogAddWorkspace.form.nameError,
-  picturePath: state.dialogAddWorkspace.form.picturePath,
+  imgPath: state.dialogAddWorkspace.form.imgPath,
   preferredIconType: state.dialogAddWorkspace.form.preferredIconType,
   shouldUseDarkColors: state.general.shouldUseDarkColors,
   transparentBackground: Boolean(state.dialogAddWorkspace.form.transparentBackground),

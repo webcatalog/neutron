@@ -18,3 +18,6 @@ export const getExtensionSourcesAsync = () => window.ipcRenderer.invoke('get-ext
 // Permission
 export const getPermissionAuthTypeAsync = (authType) => window.ipcRenderer.invoke('get-permission-auth-status', authType);
 export const askForPermissionAsync = (authType) => window.ipcRenderer.invoke('ask-for-permission', authType);
+
+// Workspace
+export const setWorkspacePictureAsync = (id, imgPath) => window.ipcRenderer.invoke('set-workspace-picture', id, imgPath);
