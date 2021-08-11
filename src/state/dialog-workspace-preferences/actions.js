@@ -31,7 +31,7 @@ export const updateForm = (changes) => (dispatch, getState) => {
     disableNotifications,
     transparentBackground,
     preferredIconType,
-    picturePath,
+    imgPath,
     preferences,
   } = getState().dialogWorkspacePreferences.form;
 
@@ -45,8 +45,8 @@ export const updateForm = (changes) => (dispatch, getState) => {
     preferences,
   });
 
-  if (picturePath) {
-    requestSetWorkspacePicture(workspaceId, picturePath);
+  if (imgPath) {
+    requestSetWorkspacePicture(workspaceId, imgPath);
   } else {
     requestRemoveWorkspacePicture(workspaceId);
   }
@@ -108,7 +108,7 @@ export const getIconFromInternet = () => (dispatch, getState) => {
       if (form.homeUrl === homeUrl) {
         const changes = {
           preferredIconType: 'image',
-          picturePath: iconUrl || form.picturePath,
+          imgPath: iconUrl || form.imgPath,
         };
         dispatch(updateForm(changes));
         dispatch({
@@ -145,7 +145,7 @@ export const getIconFromAppSearch = () => (dispatch, getState) => {
       if (form.homeUrl === homeUrl) {
         const changes = {
           preferredIconType: 'image',
-          picturePath: iconUrl || form.picturePath,
+          imgPath: iconUrl || form.imgPath,
         };
         dispatch(updateForm(changes));
         dispatch({

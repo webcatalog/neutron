@@ -16,6 +16,7 @@ const tmp = require('tmp');
 const sendToAllWindows = require('./send-to-all-windows');
 const downloadAsync = require('./download-async');
 const { removeWorkspaceMeta } = require('./workspace-metas');
+const getPicturePath = require('./get-picture-path');
 
 const appJson = require('../constants/app-json');
 
@@ -201,14 +202,9 @@ const setWorkspaces = (newWorkspaces) => {
 };
 
 const setWorkspacePicture = (id, sourcePicturePath) => {
-  const workspace = getWorkspace(id);
   const pictureId = uuidv1();
 
-  if (workspace.picturePath === sourcePicturePath) {
-    return;
-  }
-
-  const destPicturePath = path.join(app.getPath('userData'), 'pictures', `${pictureId}.png`);
+  const destPicturePath = getPicturePath(pictureId);
 
   Promise.resolve()
     .then(() => {
@@ -220,7 +216,7 @@ const setWorkspacePicture = (id, sourcePicturePath) => {
 
       return sourcePicturePath;
     })
-    .then((picturePath) => Jimp.read(picturePath))
+    .then((downloadedPicturePath) => Jimp.read(downloadedPicturePath))
     .then((img) => new Promise((resolve) => {
       img.clone()
         .resize(128, 128)
@@ -228,10 +224,9 @@ const setWorkspacePicture = (id, sourcePicturePath) => {
         .write(destPicturePath, resolve);
     }))
     .then(() => {
-      const currentPicturePath = getWorkspace(id).picturePath;
+      const currentPicturePath = getPicturePath(getWorkspace(id).pictureId);
       setWorkspace(id, {
         pictureId,
-        picturePath: destPicturePath,
       });
       if (currentPicturePath) {
         return fs.remove(currentPicturePath);
@@ -242,12 +237,11 @@ const setWorkspacePicture = (id, sourcePicturePath) => {
 
 const removeWorkspacePicture = (id) => {
   const workspace = getWorkspace(id);
-  if (workspace.picturePath) {
-    return fs.remove(workspace.picturePath)
+  if (workspace.pictureId) {
+    return fs.remove(getPicturePath(workspace.pictureId))
       .then(() => {
         setWorkspace(id, {
           pictureId: null,
-          picturePath: null,
         });
       });
   }
@@ -270,11 +264,10 @@ const setWorkspaceAccountInfo = (id, accountInfo) => {
     .then(() => {
       const pictureId = uuidv5(accountInfo.pictureUrl, ACCOUNT_PICTURE_PATH_UUID_NAMESPACE);
       if (currentAccountInfo.pictureUrl !== accountInfo.pictureUrl && accountInfo.pictureUrl) {
-        const picturePath = path.join(app.getPath('userData'), 'account-pictures', `${pictureId}.png`);
-        return downloadAsync(accountInfo.pictureUrl, picturePath)
+        const accountPicturePath = getPicturePath(pictureId, 'account-pictures');
+        return downloadAsync(accountInfo.pictureUrl, accountPicturePath)
           .then(() => {
             newAccountInfo.pictureId = pictureId;
-            newAccountInfo.picturePath = picturePath;
           });
       }
       return null;
@@ -295,8 +288,9 @@ const removeWorkspaceAccountInfo = (id) => {
       setWorkspace(id, {
         accountInfo: null,
       });
-      if (workspace.accountInfo && workspace.accountInfo.picturePath) {
-        return fs.remove(workspace.accountInfo.picturePath);
+      if (workspace.accountInfo && workspace.accountInfo.pictureId) {
+        const accountPicturePath = getPicturePath(workspace.accountInfo.pictureId, 'account-pictures');
+        return fs.remove(accountPicturePath);
       }
       return null;
     });
@@ -315,11 +309,11 @@ const removeWorkspace = (id) => {
   fs.remove(path.join(app.getPath('userData'), 'Partitions', id))
     .then(() => {
       const p = [];
-      if (workspace && workspace.picturePath) {
-        p.push(fs.remove(workspace.picturePath));
+      if (workspace && workspace.pictureId) {
+        p.push(fs.remove(getPicturePath(workspace.pictureId)));
       }
-      if (workspace && workspace.accountInfo && workspace.accountInfo.picturePath) {
-        p.push(fs.remove(workspace.accountInfo.picturePath));
+      if (workspace && workspace.accountInfo && workspace.accountInfo.pictureId) {
+        p.push(fs.remove(getPicturePath(workspace.accountInfo.pictureId, 'account-pictures')));
       }
       return Promise.all(p);
     })

@@ -13,7 +13,7 @@ import {
 const defaultForm = {
   name: '',
   homeUrl: '',
-  picturePath: null,
+  imgPath: null,
 };
 const form = (state = defaultForm, action) => {
   switch (action.type) {

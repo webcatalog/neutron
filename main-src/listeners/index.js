@@ -471,8 +471,8 @@ const loadListeners = () => {
     createMenu();
   });
 
-  ipcMain.on('request-set-workspace-picture', (e, id, picturePath) => {
-    setWorkspacePicture(id, picturePath);
+  ipcMain.on('request-set-workspace-picture', (e, id, imgPath) => {
+    setWorkspacePicture(id, imgPath);
   });
 
   ipcMain.on('request-set-workspace-account-info', (e, id, accountInfo) => {
