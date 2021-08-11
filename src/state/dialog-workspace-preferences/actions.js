@@ -80,7 +80,6 @@ export const setPicture = (imgPath) => (dispatch) => {
   // process and replace with official one
   setWorkspacePictureAsync(workspaceId, imgPath)
     .then((pictureId) => {
-      console.log(pictureId);
       dispatch({
         type: UPDATE_WORKSPACE_PREFERENCES_FORM,
         changes: {
@@ -90,6 +89,7 @@ export const setPicture = (imgPath) => (dispatch) => {
       });
     })
     .catch((err) => {
+      // eslint-disable-next-line no-console
       console.log(err);
       // if failed, revert UI to the previous state
       dispatch({
