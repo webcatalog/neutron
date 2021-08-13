@@ -374,7 +374,11 @@ const addViewAsync = async (browserWindow, workspace) => {
     }
 
     const navigatedDomain = extractDomain(url);
-    if (navigatedDomain === 'accounts.google.com') {
+    // if Chrome UA is used
+    // Google will prevent users from signing in (citing insecure browser)
+    // Google will redirect users to basic HTML interface of Gmail (citing outdated browser)
+    // => use Firefox UA instead
+    if (navigatedDomain === 'accounts.google.com' || navigatedDomain === 'mail.google.com') {
       if (currentUaStr !== fakedFirefoxUaStr) {
         contents.userAgent = fakedFirefoxUaStr;
         // eslint-disable-next-line no-console
