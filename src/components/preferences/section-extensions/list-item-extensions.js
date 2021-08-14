@@ -221,8 +221,9 @@ const Extensions = ({
             </Typography>
 
             <Typography variant="body1" component="p">
-              If nothing shows up, we highly recommends you to install
-              Google Chrome or Microsoft Edge and try again.
+              To continue, please install a supported Chromium-based browser (We
+              recommend you to choose
+              Google Chrome or Microsoft Edge).
             </Typography>
           </>
         )}
