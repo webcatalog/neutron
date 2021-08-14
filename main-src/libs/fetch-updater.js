@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 const { dialog } = require('electron');
 const semver = require('semver');
+const fetch = require('node-fetch').default;
 
 const packageJson = require('../../package.json');
 const appJson = require('../constants/app-json');
@@ -10,7 +11,6 @@ const appJson = require('../constants/app-json');
 const mainWindow = require('../windows/main');
 const preferencesWindow = require('../windows/preferences');
 
-const customizedFetch = require('./customized-fetch');
 const { setPreference } = require('./preferences');
 const isMas = require('./is-mas');
 const isSnap = require('./is-snap');
@@ -26,7 +26,7 @@ const checkForUpdates = (silent) => {
   // to avoid using GitHub API as it has rate limit (60 requests per hour)
   // to avoid bugs with instead of https://github.com/webcatalog/neutron/releases.atom
   // https://github.com/webcatalog/webcatalog-app/issues/890
-  customizedFetch('https://webcatalog.app/juli/releases/latest.json')
+  fetch('https://webcatalog.app/juli/releases/latest.json')
     .then((res) => res.json())
     .then((data) => data.version)
     .then((latestVersion) => {

@@ -3,10 +3,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 const cheerio = require('cheerio');
 const url = require('url');
+const fetch = require('node-fetch').default;
 
-const customizedFetch = require('./customized-fetch');
-
-const getWebsiteIconUrlAsync = (websiteURL) => customizedFetch(websiteURL)
+const getWebsiteIconUrlAsync = (websiteURL) => fetch(websiteURL)
   .then((res) => res.text().then((html) => ({ html, redirectedUrl: res.url })))
   .then(({ html, redirectedUrl }) => {
     const $ = cheerio.load(html);
@@ -80,7 +79,7 @@ const getWebsiteIconUrlAsync = (websiteURL) => customizedFetch(websiteURL)
     const $manifest = $('head > link[rel=manifest]');
     if ($('head > link[rel=manifest]').length > 0) {
       const manifestUrl = url.resolve(redirectedUrl, $manifest.attr('href'));
-      return customizedFetch(manifestUrl)
+      return fetch(manifestUrl)
         .then((res) => res.text().then((manifestJson) => ({
           manifestJson,
           manifestRedirectedUrl: res.url,
@@ -104,7 +103,7 @@ const getWebsiteIconUrlAsync = (websiteURL) => customizedFetch(websiteURL)
     // try to get /apple-touch-icon.png
     // https://apple.stackexchange.com/questions/172204/how-apple-com-set-apple-touch-icon
     const appleTouchIconUrl = url.resolve(websiteURL, '/apple-touch-icon.png');
-    return customizedFetch(appleTouchIconUrl)
+    return fetch(appleTouchIconUrl)
       .then((res) => {
         if (res.status === 200 && res.headers.get('Content-Type') === 'image/png') return appleTouchIconUrl;
         return undefined;

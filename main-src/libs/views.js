@@ -18,6 +18,7 @@ const unusedFilename = require('unused-filename');
 const pupa = require('pupa');
 const extName = require('ext-name');
 const { ElectronChromeExtensions } = require('electron-chrome-extensions');
+const fetch = require('node-fetch').default;
 
 const appJson = require('../constants/app-json');
 
@@ -42,7 +43,6 @@ const ContextMenuBuilder = require('./context-menu-builder');
 
 const sendToAllWindows = require('./send-to-all-windows');
 const getViewBounds = require('./get-view-bounds');
-const customizedFetch = require('./customized-fetch');
 const isMas = require('./is-mas');
 const getUtmSource = require('./get-utm-source');
 const getWorkspaceFriendlyName = require('./get-workspace-friendly-name');
@@ -238,7 +238,7 @@ const addViewAsync = async (browserWindow, workspace) => {
   }
   // blocker
   if (global.blockAds) {
-    ElectronBlocker.fromPrebuiltAdsAndTracking(customizedFetch, {
+    ElectronBlocker.fromPrebuiltAdsAndTracking(fetch, {
       path: path.join(app.getPath('userData'), 'adblocker.bin'),
       read: fsExtra.readFile,
       write: fsExtra.writeFile,
