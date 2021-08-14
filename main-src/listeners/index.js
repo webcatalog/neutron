@@ -11,6 +11,7 @@ const {
   ipcMain,
   nativeTheme,
   shell,
+  BrowserView,
 } = require('electron');
 
 const {
@@ -36,7 +37,9 @@ const {
   setWorkspaceAccountInfo,
   removeWorkspaceAccountInfo,
 } = require('../libs/workspaces');
-
+const {
+  setView,
+} = require('../libs/views');
 const {
   getWorkspaceMeta,
   getWorkspaceMetas,
@@ -65,6 +68,7 @@ const {
   reloadViewsDarkReader,
   reloadViewsWebContentsIfDidFailLoad,
   setViewsAudioPref,
+  setActiveView,
 } = require('../libs/views');
 
 const {
@@ -684,6 +688,25 @@ const loadListeners = () => {
 
   ipcMain.on('request-track-add-workspace', (_, deviceId, appId) => {
     trackAddWorkspaceAsync(deviceId, appId);
+  });
+
+  ipcMain.on('request-new-tab-browser', (e, url) => {
+    const win = mainWindow.get();
+    win.getBrowserView().webContents.loadURL(url);
+
+    const view = new BrowserView();
+    win.setBrowserView(view);
+
+    const contentSize = win.getContentSize();
+    const { x, y, width, height } = getViewBounds(contentSize);
+    view.setBounds({
+      x,
+      y: y + 22,
+      width,
+      height
+    });
+    view.setBackgroundColor('#FFF');
+    view.webContents.loadURL(url);
   });
 };
 

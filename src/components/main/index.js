@@ -62,6 +62,7 @@ import {
 } from '../../senders';
 
 import './main.css';
+import TabBar from './tab-bar';
 
 // https://github.com/sindresorhus/array-move/blob/master/index.js
 const arrayMove = (array, from, to) => {
@@ -506,6 +507,7 @@ const Main = ({
           </ScrollbarContainer>
         )}
         <div className={classes.contentRoot}>
+          <TabBar />
           {navigationBar && <NavigationBar themeColor={themeColor} />}
           <FindInPage />
           <div className={classes.innerContentRoot}>

@@ -10,6 +10,7 @@ import Paper from '@material-ui/core/Paper';
 
 import ViewListIcon from '@material-ui/icons/ViewList';
 import CreateIcon from '@material-ui/icons/Create';
+import GroupIcon from '@material-ui/icons/Group';
 
 import connectComponent from '../../helpers/connect-component';
 import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
@@ -18,6 +19,7 @@ import { updateMode } from '../../state/dialog-add-workspace/actions';
 
 import Home from './home';
 import Form from './form';
+import AccountGroup from './account-group';
 
 const styles = () => ({
   root: {
@@ -49,6 +51,7 @@ const AddWorkspace = ({
   <div className={classes.root}>
     {mode === 'catalog' && <Home />}
     {mode === 'custom' && <Form />}
+    {mode === 'accountGroup' && <AccountGroup />}
 
     <Paper elevation={1} square className={classes.paper}>
       <BottomNavigation
@@ -73,6 +76,15 @@ const AddWorkspace = ({
           label={`Custom ${getWorkspaceFriendlyName()}`}
           value="custom"
           icon={<CreateIcon />}
+          classes={{
+            wrapper: classes.bottomNavigationActionWrapper,
+            label: classes.bottomNavigationActionLabel,
+          }}
+        />
+        <BottomNavigationAction
+          label="Account Group"
+          value="accountGroup"
+          icon={<GroupIcon />}
           classes={{
             wrapper: classes.bottomNavigationActionWrapper,
             label: classes.bottomNavigationActionLabel,
