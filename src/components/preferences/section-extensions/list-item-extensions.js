@@ -109,8 +109,8 @@ const Extensions = ({
             </Alert>
 
             <Typography variant="body2" component="p" gutterBottom>
-              Extensions are installed and updated through supported Chromium-based
-              browsers such as Google Chrome or Microsoft Edge.
+              Extensions are installed and updated through
+              Google Chrome, Microsoft Edge, Vivaldi, Brave or Chromium.
             </Typography>
             <div className={classes.formRow}>
               <Typography variant="body1" component="div" className={classes.text}>
