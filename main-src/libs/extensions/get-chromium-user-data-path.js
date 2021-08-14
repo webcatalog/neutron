@@ -9,6 +9,8 @@ const getChromiumUserDataPath = (browserId) => {
   const chromiumUserDataPath = {
     brave: {
       darwin: path.join(app.getPath('home'), 'Library', 'Application Support', 'BraveSoftware', 'Brave-Browser'),
+      win32: path.join(app.getPath('home'), 'AppData', 'Local', 'BraveSoftware', 'Brave-Browser', 'User Data'),
+      linux: path.join(app.getPath('appData'), 'BraveSoftware', 'Brave-Browser'),
     },
     chrome: {
       darwin: path.join(app.getPath('home'), 'Library', 'Application Support', 'Google', 'Chrome'),
@@ -17,6 +19,8 @@ const getChromiumUserDataPath = (browserId) => {
     },
     chromium: {
       darwin: path.join(app.getPath('home'), 'Library', 'Application Support', 'Chromium'),
+      win32: path.join(app.getPath('home'), 'AppData', 'Local', 'Chromium', 'User Data'),
+      linux: path.join(app.getPath('appData'), 'chromium'),
     },
     edge: {
       darwin: path.join(app.getPath('home'), 'Library', 'Application Support', 'Microsoft Edge'),
@@ -25,6 +29,8 @@ const getChromiumUserDataPath = (browserId) => {
     },
     vivaldi: {
       darwin: path.join(app.getPath('home'), 'Library', 'Application Support', 'Vivaldi'),
+      win32: path.join(app.getPath('home'), 'AppData', 'Local', 'Vivaldi', 'User Data'),
+      linux: path.join(app.getPath('appData'), 'vivaldi'),
     },
   };
 
