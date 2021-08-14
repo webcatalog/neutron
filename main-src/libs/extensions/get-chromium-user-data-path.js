@@ -7,15 +7,24 @@ const { app } = require('electron');
 const getChromiumUserDataPath = (browserId) => {
   // https://stackoverflow.com/a/14544700/5522263
   const chromiumUserDataPath = {
+    brave: {
+      darwin: path.join(app.getPath('home'), 'Library', 'Application Support', 'BraveSoftware', 'Brave-Browser'),
+    },
     chrome: {
       darwin: path.join(app.getPath('home'), 'Library', 'Application Support', 'Google', 'Chrome'),
       win32: path.join(app.getPath('home'), 'AppData', 'Local', 'Google', 'Chrome', 'User Data'),
       linux: path.join(app.getPath('appData'), 'google-chrome'),
     },
+    chromium: {
+      darwin: path.join(app.getPath('home'), 'Library', 'Application Support', 'Chromium'),
+    },
     edge: {
       darwin: path.join(app.getPath('home'), 'Library', 'Application Support', 'Microsoft Edge'),
       win32: path.join(app.getPath('home'), 'AppData', 'Local', 'Microsoft', 'Edge', 'User Data'),
       linux: path.join(app.getPath('appData'), 'microsoft-edge'),
+    },
+    vivaldi: {
+      darwin: path.join(app.getPath('home'), 'Library', 'Application Support', 'Vivaldi'),
     },
   };
 
