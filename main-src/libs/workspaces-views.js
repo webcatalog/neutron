@@ -16,7 +16,7 @@ const {
   removeWorkspace,
   setActiveWorkspace,
   setWorkspace,
-  setWorkspacePicture,
+  setWorkspacePictureAsync,
   setWorkspaces,
 } = require('./workspaces');
 
@@ -59,7 +59,7 @@ const createWorkspaceView = (workspaceObj = {}) => {
       setActiveView(mainWindow.get(), newWorkspace.id);
 
       if (workspaceObj.picture) {
-        setWorkspacePicture(newWorkspace.id, workspaceObj.picture);
+        setWorkspacePictureAsync(newWorkspace.id, workspaceObj.picture);
       }
 
       // if user add workspace for the first time
