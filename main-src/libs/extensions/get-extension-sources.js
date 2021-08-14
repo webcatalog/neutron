@@ -8,15 +8,18 @@ const getChromiumUserDataPath = require('./get-chromium-user-data-path');
 
 const getExtensionSources = () => {
   const browserNames = {
+    brave: 'Brave',
     chrome: 'Google Chrome',
+    chromium: 'Chromium',
     edge: 'Microsoft Edge',
+    vivaldi: 'Vivaldi',
   };
 
   const sources = [];
 
   Object.keys(browserNames).forEach((browserId) => {
     const userDataPath = getChromiumUserDataPath(browserId);
-    if (!fs.existsSync(userDataPath)) return;
+    if (userDataPath && !fs.existsSync(userDataPath)) return;
     const files = fs.readdirSync(userDataPath, { withFileTypes: true });
     const profiles = [];
     files
