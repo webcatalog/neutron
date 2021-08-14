@@ -109,8 +109,8 @@ const Extensions = ({
             </Alert>
 
             <Typography variant="body2" component="p" gutterBottom>
-              Extensions are installed and updated through supported Chromium-based
-              browsers such as Google Chrome or Microsoft Edge.
+              Extensions are installed and updated through
+              Google Chrome, Microsoft Edge, Vivaldi, Brave or Chromium.
             </Typography>
             <div className={classes.formRow}>
               <Typography variant="body1" component="div" className={classes.text}>
@@ -216,14 +216,12 @@ const Extensions = ({
         ) : (
           <>
             <Typography variant="body2" component="p" gutterBottom>
-              Extensions are installed and updated through supported Chromium-based
-              browsers such as Google Chrome or Microsoft Edge.
+              Extensions are installed and updated through
+              Google Chrome, Microsoft Edge, Vivaldi, Brave or Chromium.
             </Typography>
 
             <Typography variant="body1" component="p">
-              To continue, please install a supported Chromium-based browser (We
-              recommend you to choose
-              Google Chrome or Microsoft Edge).
+              To continue, please install Google Chrome, Microsoft Edge, Vivaldi, Brave or Chromium.
             </Typography>
           </>
         )}
