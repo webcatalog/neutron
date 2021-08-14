@@ -81,6 +81,20 @@ const SectionUpdates = ({
           <ChevronRightIcon color="action" />
         </ListItem>
         <Divider />
+        <ListItem>
+          <ListItemText primary="Check for updates automatically" />
+          <ListItemSecondaryAction>
+            <Switch
+              edge="end"
+              color="primary"
+              checked={autoCheckForUpdates}
+              onChange={(e) => {
+                requestSetPreference('autoCheckForUpdates', e.target.checked);
+              }}
+            />
+          </ListItemSecondaryAction>
+        </ListItem>
+        <Divider />
       </>
     );
   }
