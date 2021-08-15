@@ -187,7 +187,7 @@ const Preferences = ({
       subSections: {
         permissions: { text: 'Permissions', Component: SectionLocationPermission },
       },
-      hidden: window.process.platform !== 'darwin',
+      hidden: window.process.platform !== 'darwin' || isMas(),
     },
     network: {
       text: 'Network',
