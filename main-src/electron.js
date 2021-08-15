@@ -3,13 +3,12 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 require('source-map-support').install();
 
-// eslint-disable-next-line import/order
-const isMas = require('./libs/is-mas');
-
 // for navigator.geolocation API
 // disable this Mac App Store build
 // (App Store Review keeps rejecting the app for requesting location permission)
-process.env.GOOGLE_API_KEY = isMas() ? null : process.env.ELECTRON_APP_GOOGLE_API_KEY;
+if (process.mas || process.env.REACT_APP_FORCE_MAS) {
+  process.env.GOOGLE_API_KEY = process.env.ELECTRON_APP_GOOGLE_API_KEY;
+}
 
 const {
   app,
@@ -25,6 +24,7 @@ const path = require('path');
 const fs = require('fs-extra');
 const isDev = require('electron-is-dev');
 const settings = require('electron-settings');
+const isMas = require('./libs/is-mas');
 
 const appJson = require('./constants/app-json');
 
