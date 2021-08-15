@@ -4,7 +4,11 @@
 require('source-map-support').install();
 
 // for navigator.geolocation API
-process.env.GOOGLE_API_KEY = process.env.ELECTRON_APP_GOOGLE_API_KEY;
+// disable this in production Mac App Store build
+// (App Store Review keeps rejecting the app for requesting location permission)
+if (!process.mas) {
+  process.env.GOOGLE_API_KEY = process.env.ELECTRON_APP_GOOGLE_API_KEY;
+}
 
 const {
   app,
