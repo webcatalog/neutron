@@ -36,10 +36,8 @@ const {
   removeWorkspacePicture,
   setWorkspaceAccountInfo,
   removeWorkspaceAccountInfo,
+  setWorkspace,
 } = require('../libs/workspaces');
-const {
-  setView,
-} = require('../libs/views');
 const {
   getWorkspaceMeta,
   getWorkspaceMetas,
@@ -690,9 +688,15 @@ const loadListeners = () => {
     trackAddWorkspaceAsync(deviceId, appId);
   });
 
-  ipcMain.on('request-new-tab-browser', (e, url) => {
+  ipcMain.on('request-new-tab-browser', async (_, tabInfo) => {
+    const { tabIndex, homeUrl } = tabInfo;
+    getActiveWorkspace();
+    setWorkspace(tabIndex, {
+      
+    });
+
     const win = mainWindow.get();
-    win.getBrowserView().webContents.loadURL(url);
+    win.getBrowserView().webContents.loadURL(homeUrl);
 
     const view = new BrowserView();
     win.setBrowserView(view);
@@ -701,7 +705,7 @@ const loadListeners = () => {
     const { x, y, width, height } = getViewBounds(contentSize);
     view.setBounds({
       x,
-      y: y + 22,
+      y: y + 48,
       width,
       height
     });

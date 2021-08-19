@@ -1200,7 +1200,7 @@ const setActiveView = (browserWindow, id) => {
 
       view.setBounds({
         x,
-        y: y + 22,
+        y: y + 48,
         width,
         height
       });
@@ -1247,7 +1247,7 @@ const realignActiveView = (browserWindow, activeId) => {
       console.log(getViewBounds(contentSize))
       view.setBounds({
         x,
-        y: y + 22,
+        y: y + 48,
         width,
         height
       });
