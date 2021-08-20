@@ -14,6 +14,8 @@ import connectComponent from '../../../helpers/connect-component';
 import checkLicense from '../../../helpers/check-license';
 import isWebcatalog from '../../../helpers/is-webcatalog';
 
+import ListItemTrayShortcut from './list-item-tray-shortcut';
+
 import {
   enqueueRequestRestartSnackbar,
   requestSetPreference,
@@ -68,6 +70,7 @@ const SectionTray = ({
         />
       </ListItemSecondaryAction>
     </ListItem>
+    <ListItemTrayShortcut />
   </>
 );
 
