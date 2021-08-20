@@ -5,6 +5,7 @@ const {
   globalShortcut,
 } = require('electron');
 const { captureException } = require('@sentry/electron');
+const mainWindow = require('../windows/main');
 
 const unset = (combinator) => {
   if (combinator) {
@@ -20,19 +21,8 @@ const set = (combinator) => {
   if (!combinator) return;
   try {
     globalShortcut.register(combinator, () => {
-      if (isHidden) {
-        mb.showWindow();
-        const translateClipboardOnShortcut = getPreference('translateClipboardOnShortcut');
-        if (translateClipboardOnShortcut) {
-          const text = clipboard.readText();
-          if (text.length > 0) {
-            mb.window.send('set-input-text', text);
-            mb.window.send('go-to-home');
-          }
-        }
-      } else {
-        mb.hideWindow();
-      }
+      const win = mainWindow.get();
+      if (win.)
     });
   } catch (err) {
     captureException(err);
