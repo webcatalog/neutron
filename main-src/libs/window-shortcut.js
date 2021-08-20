@@ -22,7 +22,15 @@ const set = (combinator) => {
   try {
     globalShortcut.register(combinator, () => {
       const win = mainWindow.get();
-      if (win.)
+      if (win.isVisible() && !win.isMinimized()) {
+        if (global.attachToMenubar) {
+          win.hide();
+        } else {
+          win.minimize();
+        }
+      } else {
+        mainWindow.show();
+      }
     });
   } catch (err) {
     captureException(err);
@@ -30,5 +38,6 @@ const set = (combinator) => {
 };
 
 module.exports = {
+  set,
   unset,
 };

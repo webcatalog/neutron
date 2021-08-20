@@ -96,6 +96,7 @@ const getIapFormattedPriceAsync = require('./libs/get-iap-formatted-price-async'
 const promptSetAsDefaultMailClient = require('./libs/prompt-set-as-default-email-client');
 const promptSetAsDefaultCalendarApp = require('./libs/prompt-set-as-default-calendar-app');
 const getWorkspaceFriendlyName = require('./libs/get-workspace-friendly-name');
+const windowShortcut = require('./libs/window-shortcut');
 
 const MAILTO_URLS = require('./constants/mailto-urls');
 const WEBCAL_URLS = require('./constants/webcal-urls');
@@ -458,6 +459,12 @@ if (!gotTheLock) {
         mainWindow.get().on('focus', () => {
           win.send('log-focus');
         });
+
+        // config window shortcut
+        const windowShortcutCombinator = getPreference('windowShortcut');
+        if (windowShortcutCombinator) {
+          windowShortcut.set(windowShortcutCombinator);
+        }
       })
       .then(() => {
         // trigger whenTrulyReady;

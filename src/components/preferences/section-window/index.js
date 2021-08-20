@@ -18,6 +18,8 @@ import {
   requestSetPreference,
 } from '../../../senders';
 
+import ListItemShortcut from './list-item-shortcut';
+
 const styles = (theme) => ({
   paper: {
     marginTop: theme.spacing(0.5),
@@ -142,6 +144,8 @@ const SectionWindow = ({
           </ListItem>
         </>
       )}
+      <Divider />
+      <ListItemShortcut />
     </List>
   </>
 );

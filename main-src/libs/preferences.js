@@ -48,7 +48,7 @@ const defaultPreferences = {
   // for unknown reason, sometimes, it doesn't show up and gets stuck
   askForDownloadPath: process.platform !== 'darwin',
   attachToMenubar: false,
-  attachToMenubarShortcut: 'alt+shift+o',
+  windowShortcut: null,
   autoCheckForUpdates: true,
   autoRefresh: false,
   autoRefreshInterval: 3600000,

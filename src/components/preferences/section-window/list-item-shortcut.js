@@ -42,7 +42,7 @@ const renderCombinator = (combinator) => combinator
   .replace('meta', '⌘')
   .toUpperCase();
 
-const ListItemTrayShortcut = ({ classes, attachToMenubar, attachToMenubarShortcut }) => {
+const ListItemShortcut = ({ classes, windowShortcut }) => {
   const [open, setOpen] = useState(false);
   const [combinator, setCombinator] = useState(null);
 
@@ -78,7 +78,7 @@ const ListItemTrayShortcut = ({ classes, attachToMenubar, attachToMenubarShortcu
       </DialogTitle>
       <DialogContent>
         <DialogContentText>
-          Type the new keyboard combination.
+          Type the new keyboard combination (e.g. SHIFT+D or ALT+SHIFT+O)
         </DialogContentText>
         <DialogContentText className={classes.combinatorContainer}>
           {combinator && combinator !== '+' && combinator.split('+').map((key, i) => (
@@ -97,7 +97,7 @@ const ListItemTrayShortcut = ({ classes, attachToMenubar, attachToMenubarShortcu
         </Button>
         <Button
           onClick={() => {
-            requestSetPreference('attachToMenubarShortcut', null);
+            requestSetPreference('windowShortcut', null);
             setOpen(false);
           }}
         >
@@ -106,7 +106,7 @@ const ListItemTrayShortcut = ({ classes, attachToMenubar, attachToMenubarShortcu
         <Button
           color="primary"
           onClick={() => {
-            requestSetPreference('attachToMenubarShortcut', combinator);
+            requestSetPreference('windowShortcut', combinator);
             setOpen(false);
             enqueueRequestRestartSnackbar();
           }}
@@ -122,17 +122,15 @@ const ListItemTrayShortcut = ({ classes, attachToMenubar, attachToMenubarShortcu
       {dialogComponent}
       <ListItem
         button
-        key="openOnMenubar"
         onClick={() => {
-          setCombinator(attachToMenubarShortcut);
+          setCombinator(windowShortcut);
           setOpen(true);
         }}
-        disabled={!attachToMenubar}
       >
         <ListItemText
           primary="Define a keyboard shortcut to open the app quickly"
-          secondary={attachToMenubarShortcut
-            ? renderCombinator(attachToMenubarShortcut) : null}
+          secondary={windowShortcut
+            ? renderCombinator(windowShortcut) : null}
         />
         <ChevronRightIcon color="action" />
       </ListItem>
@@ -140,23 +138,21 @@ const ListItemTrayShortcut = ({ classes, attachToMenubar, attachToMenubarShortcu
   );
 };
 
-ListItemTrayShortcut.defaultProps = {
-  attachToMenubarShortcut: null,
+ListItemShortcut.defaultProps = {
+  windowShortcut: null,
 };
 
-ListItemTrayShortcut.propTypes = {
+ListItemShortcut.propTypes = {
   classes: PropTypes.object.isRequired,
-  attachToMenubar: PropTypes.bool.isRequired,
-  attachToMenubarShortcut: PropTypes.string,
+  windowShortcut: PropTypes.string,
 };
 
 const mapStateToProps = (state) => ({
-  attachToMenubar: state.preferences.attachToMenubar,
-  attachToMenubarShortcut: state.preferences.attachToMenubarShortcut,
+  windowShortcut: state.preferences.windowShortcut,
 });
 
 export default connectComponent(
-  ListItemTrayShortcut,
+  ListItemShortcut,
   mapStateToProps,
   null,
   styles,
