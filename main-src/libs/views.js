@@ -378,7 +378,7 @@ const addViewAsync = async (browserWindow, workspace) => {
     // Google will prevent users from signing in (citing insecure browser)
     // Google will redirect users to basic HTML interface of Gmail (citing outdated browser)
     // => use Firefox UA instead
-    if (navigatedDomain === 'accounts.google.com' || navigatedDomain === 'mail.google.com') {
+    if (navigatedDomain === 'accounts.google.com') {
       if (currentUaStr !== fakedFirefoxUaStr) {
         contents.userAgent = fakedFirefoxUaStr;
         // eslint-disable-next-line no-console
@@ -395,7 +395,7 @@ const addViewAsync = async (browserWindow, workspace) => {
         console.log('Changed user agent to', fakedSafariUaStr, 'for web compatibility URL: ', url, 'when', occasion);
         return true;
       }
-    } else if (navigatedDomain === 'chat.google.com' || (url && url.startsWith('https://mail.google.com/chat'))) {
+    } else if (navigatedDomain.endsWith('.google.com')) { // most Google apps works better with Chrome UA
       if (currentUaStr !== app.userAgentFallback) {
         // must use Chrome user agent for Google Chat to work
         contents.userAgent = app.userAgentFallback;
