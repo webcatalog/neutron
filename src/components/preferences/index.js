@@ -67,6 +67,7 @@ import SectionTelemetry from './section-telemetry';
 import SectionTheme from './section-theme';
 import SectionView from './section-view';
 import SectionWindow from './section-window';
+import SectionTray from './section-tray';
 import SectionWorkspaces from './section-workspaces';
 import SectionPermissions from './section-permissions';
 import SectionLocationPermission from './section-location-permissions';
@@ -155,7 +156,8 @@ const Preferences = ({
       text: window.process.platform === 'darwin' ? 'Window & Menu Bar' : 'Window & Tray',
       Icon: WebAssetIcon,
       subSections: {
-        window: { text: window.process.platform === 'darwin' ? 'Window & Menu Bar' : 'Window & Tray', Component: SectionWindow },
+        window: { text: 'Window', Component: SectionWindow },
+        tray: { text: window.process.platform === 'darwin' ? 'Menu Bar' : 'Tray', Component: SectionTray },
       },
     },
     notifications: {
