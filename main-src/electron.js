@@ -24,9 +24,12 @@ const path = require('path');
 const fs = require('fs-extra');
 const isDev = require('electron-is-dev');
 const settings = require('electron-settings');
+const electronRemote = require('@electron/remote/main');
 
 const appJson = require('./constants/app-json');
 const isMas = require('./libs/is-mas');
+
+electronRemote.initialize();
 
 // run before anything else
 // WebCatalog Engine 13.x and lower uses default Electron user data path
