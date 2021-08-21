@@ -561,6 +561,8 @@ if (!gotTheLock) {
     global.extensionEnabledExtesionIds = extensionEnabledExtesionIds;
     global.extensionSourceBrowserId = extensionSourceBrowserId;
     global.extensionSourceProfileDirName = extensionSourceProfileDirName;
+    global.extensionEnabled = extensionEnabledExtesionIds
+      && Object.keys(extensionEnabledExtesionIds).length > 0;
     global.hibernateWhenUnused = hibernateWhenUnused;
     global.hibernateWhenUnusedTimeout = hibernateWhenUnusedTimeout;
 

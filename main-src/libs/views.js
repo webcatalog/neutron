@@ -289,52 +289,49 @@ const addViewAsync = async (browserWindow, workspace) => {
   };
 
   // extensions
-  if (global.extensionEnabledExtesionIds
-      && Object.keys(global.extensionEnabledExtesionIds).length > 0) {
-    const enabledExtensions = getExtensionFromProfile(
+  if (global.extensionEnabled) {
+    const loadableExtensions = getExtensionFromProfile(
       global.extensionSourceBrowserId,
       global.extensionSourceProfileDirName,
     )
       .filter((ext) => global.extensionEnabledExtesionIds[ext.id]);
-    if (enabledExtensions.length > 0) {
-      if (!extensionManagers[partitionId]) {
-        extensionManagers[partitionId] = new ElectronChromeExtensions({
-          session: ses,
-          createTab(details) {
-            const win = new BrowserWindow({
-              show: true,
-              width: 800,
-              height: 600,
-              webPreferences: sharedWebPreferences,
-            });
+    if (!extensionManagers[partitionId]) {
+      extensionManagers[partitionId] = new ElectronChromeExtensions({
+        session: ses,
+        createTab(details) {
+          const win = new BrowserWindow({
+            show: true,
+            width: 800,
+            height: 600,
+            webPreferences: sharedWebPreferences,
+          });
 
-            if (details && details.url) {
-              win.loadURL(details.url);
-            }
+          if (details && details.url) {
+            win.loadURL(details.url);
+          }
 
-            return [win.webContents, win];
-          },
-          createWindow(details) {
-            const win = new BrowserWindow({
-              show: true,
-              width: details.width || 800,
-              height: details.height || 600,
-              webPreferences: sharedWebPreferences,
-            });
+          return [win.webContents, win];
+        },
+        createWindow(details) {
+          const win = new BrowserWindow({
+            show: true,
+            width: details.width || 800,
+            height: details.height || 600,
+            webPreferences: sharedWebPreferences,
+          });
 
-            if (details && details.url) {
-              win.loadURL(details.url);
-            }
+          if (details && details.url) {
+            win.loadURL(details.url);
+          }
 
-            return win;
-          },
-        });
-      }
-      await Promise.all(
-        // eslint-disable-next-line no-console
-        enabledExtensions.map((ext) => ses.loadExtension(ext.path).catch(console.log)),
-      );
+          return win;
+        },
+      });
     }
+    await Promise.all(
+      // eslint-disable-next-line no-console
+      loadableExtensions.map((ext) => ses.loadExtension(ext.path).catch(console.log)),
+    );
   }
   const extensions = extensionManagers[partitionId];
 
