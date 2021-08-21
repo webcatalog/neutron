@@ -9,6 +9,7 @@ import getStaticGlobal from '../../helpers/get-static-global';
 
 const BrowserActionList = ({ className, partitionId }) => {
   if (partitionId == null) return null;
+  if (!getStaticGlobal('extensionEnabled')) return null;
   return (
     <browser-action-list partition={partitionId} class={className} />
   );
