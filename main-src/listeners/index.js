@@ -694,13 +694,10 @@ const loadListeners = () => {
     const { id, tabs } = getActiveWorkspace();
 
     setWorkspace(id, {
-      tabs: [
+      tabs: {
         ...tabs,
-        {
-          tabIndex,
-          homeUrl,
-        }
-      ]
+        [tabIndex]: { homeUrl },
+      },
     });
 
     const win = mainWindow.get();
@@ -727,6 +724,19 @@ const loadListeners = () => {
     const currentWorkspace = getActiveWorkspace();
 
     console.log(currentWorkspace)
+  });
+
+  ipcMain.on('request-close-tab-browser', (_, tabInfo) => {
+    const { tabIndex } = tabInfo;
+    // Workspace ID
+    const { id, tabs } = getActiveWorkspace();
+
+    setWorkspace(id, {
+      tabs: {
+        ...tabs,
+        [tabIndex]: { homeUrl },
+      },
+    });
   });
 };
 
