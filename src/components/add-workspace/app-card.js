@@ -136,6 +136,10 @@ const AppCard = (props) => {
               homeUrl: url,
               picture: icon,
               catalogId: id,
+              tabs: [{
+                tabIndex: 0,
+                homeUrl: url,
+              }]
             });
 
             window.remote.getCurrentWindow().close();

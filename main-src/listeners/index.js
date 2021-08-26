@@ -690,9 +690,17 @@ const loadListeners = () => {
 
   ipcMain.on('request-new-tab-browser', async (_, tabInfo) => {
     const { tabIndex, homeUrl } = tabInfo;
-    getActiveWorkspace();
-    setWorkspace(tabIndex, {
-      
+    // Workspace ID
+    const { id, tabs } = getActiveWorkspace();
+
+    setWorkspace(id, {
+      tabs: [
+        ...tabs,
+        {
+          tabIndex,
+          homeUrl,
+        }
+      ]
     });
 
     const win = mainWindow.get();
@@ -711,6 +719,14 @@ const loadListeners = () => {
     });
     view.setBackgroundColor('#FFF');
     view.webContents.loadURL(url);
+  });
+
+  ipcMain.on('request-open-tab-browser', (_, tabInfo) => {
+    const { tabIndex } = tabInfo;
+  
+    const currentWorkspace = getActiveWorkspace();
+
+    console.log(currentWorkspace)
   });
 };
 

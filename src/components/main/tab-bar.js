@@ -19,7 +19,8 @@ const useStyle = makeStyles((theme) => ({
 const TabBar = () => {
   const classes = useStyle();
 
-  const [tabsCount, updateTabsCount] = useState(0);
+  const [tabsCount, updateTabsCount] = useState(1);
+  const [selectedTabIndex, updateSelectedTabIndex] = useState(0);
 
   const getCurrentWorkspace = () => {
     const workspaces = getWorkspaces();
@@ -36,12 +37,13 @@ const TabBar = () => {
   };
 
   const onTabAdded = () => {
-    updateTabsCount(tabsCount + 1);
+    const tabIndex = tabsCount;
 
     const currentWorkspace = getCurrentWorkspace();
-    const { id, homeUrl } = currentWorkspace;
+    const { homeUrl } = currentWorkspace;
 
-    window.ipcRenderer.send('request-new-tab-browser', { id, tabsCount, homeUrl });
+    updateTabsCount(tabIndex);
+    window.ipcRenderer.send('request-new-tab-browser', { tabIndex, homeUrl });
   };
 
   return (
