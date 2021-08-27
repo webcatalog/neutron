@@ -21,9 +21,9 @@ export const open = (codeInjectionType) => (dispatch, getState) => {
       codeInjectionType,
       form: {
         preferences: {
-          code: form[`${codeInjectionType}CodeInjection`],
+          code: form.preferences[`${codeInjectionType}CodeInjection`],
           // allowNodeInJsCodeInjection is only used for js injection
-          allowNodeInJsCodeInjection: codeInjectionType === 'js' ? form.allowNodeInJsCodeInjection : false,
+          allowNodeInJsCodeInjection: codeInjectionType === 'js' ? form.preferences.allowNodeInJsCodeInjection : false,
         },
       },
     });
