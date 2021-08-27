@@ -7,10 +7,10 @@
   resolved "https://registry.yarnpkg.com/7zip-bin/-/7zip-bin-5.1.1.tgz#9274ec7460652f9c632c59addf24efb1684ef876"
   integrity sha512-sAP4LldeWNz0lNzmTird3uWfFDWWTeg6V/MsmyyLR9X1idwKBWIgt/ZvinqQldJm3LecKEs1emkbquO6PCiLVQ==
 
-"@amplitude/types@^1.8.1":
-  version "1.8.1"
-  resolved "https://registry.yarnpkg.com/@amplitude/types/-/types-1.8.1.tgz#e738fca6678432847f46d249ae754584f5789fde"
-  integrity sha512-r4XzG/m8S8brU2mxcnt+E3/pVuSynIbEtoOCnvbGKaLT1eLloEaSzcs/offLsvp19jn/UShrtF41BqXqfItk4A==
+"@amplitude/types@^1.8.2":
+  version "1.8.2"
+  resolved "https://registry.yarnpkg.com/@amplitude/types/-/types-1.8.2.tgz#34315ba822de569c1d02a7c001913b7ac2fbc04c"
+  integrity sha512-VY0EDZyTes8yDHqCEFYC3nhFxfdlx5ah8YTWvCZoM+BklRO8PHE177H3kpKqs5TKG+M62ToNAiOQ7s/KDYgc6Q==
 
 "@amplitude/ua-parser-js@0.7.24":
   version "0.7.24"
@@ -18,11 +18,11 @@
   integrity sha512-VbQuJymJ20WEw0HtI2np7EdC3NJGUWi8+Xdbc7uk8WfMIF308T0howpzkQ3JFMN7ejnrcSM/OyNGveeE3TP3TA==
 
 "@amplitude/utils@^1.0.5":
-  version "1.8.1"
-  resolved "https://registry.yarnpkg.com/@amplitude/utils/-/utils-1.8.1.tgz#36bdcb0cd2ed61645ef6c48746cb04f2f176a3d2"
-  integrity sha512-TiOuNpp3SZHQ4BHoI1Wuk8vclrx+sqTE0+9U+Y8RbbNgP1R89zDrZ25uW9+HQgvSPjEJYjbJxZRXZUDvNl3eKA==
+  version "1.8.2"
+  resolved "https://registry.yarnpkg.com/@amplitude/utils/-/utils-1.8.2.tgz#77a614e0921ee5b57b994bb82dc3f9a81a0e493d"
+  integrity sha512-b15pp5K/O/9xGjX61iNWob1GLJCP64/jp0+WklPzIJaZFPFe+gS5vi/PJmt7vDt+pCBqVvGLyKv7hX0/OLM9IA==
   dependencies:
-    "@amplitude/types" "^1.8.1"
+    "@amplitude/types" "^1.8.2"
     tslib "^1.9.3"
 
 "@babel/code-frame@7.8.3":
@@ -1190,45 +1190,45 @@
     "@babel/helper-validator-identifier" "^7.14.9"
     to-fast-properties "^2.0.0"
 
-"@cliqz/adblocker-content@^1.22.4":
-  version "1.22.4"
-  resolved "https://registry.yarnpkg.com/@cliqz/adblocker-content/-/adblocker-content-1.22.4.tgz#442f4d9cf5d5854d9783553f7baa5162c95c66ed"
-  integrity sha512-ddWU1Qg2cRA8vj15EcMDNeIYzUN5LpFjAR7bLvuxsp+0jiNNuz3ZxaXmYunXYpZbTsumMEBz1LWzkLX1kk+eow==
+"@cliqz/adblocker-content@^1.22.5":
+  version "1.22.5"
+  resolved "https://registry.yarnpkg.com/@cliqz/adblocker-content/-/adblocker-content-1.22.5.tgz#84a82a630b3824623fff203ffaa9f4831f902eaa"
+  integrity sha512-79UAWMLZ5Na3FJey/RkYbUcPsmRbfkWq7LzUVffRR+yL8B24P6ptd+T7/qBFAULbJ0unp1DBtJ/i1P1QOPktXw==
   dependencies:
-    "@cliqz/adblocker-extended-selectors" "^1.22.4"
+    "@cliqz/adblocker-extended-selectors" "^1.22.5"
 
-"@cliqz/adblocker-electron-preload@^1.22.4":
-  version "1.22.4"
-  resolved "https://registry.yarnpkg.com/@cliqz/adblocker-electron-preload/-/adblocker-electron-preload-1.22.4.tgz#f3507e6f0e3898d4b9fa4f0e4ad6a37f57309f35"
-  integrity sha512-wUuqlfV0kYjqz6HUjZXzWz2NFXTA+e7T61xEt8pUbbgfgA9Bsn66Adb6rFsnRaMKLlgyyab7MWp9uEWMQac2ig==
+"@cliqz/adblocker-electron-preload@^1.22.5":
+  version "1.22.5"
+  resolved "https://registry.yarnpkg.com/@cliqz/adblocker-electron-preload/-/adblocker-electron-preload-1.22.5.tgz#3a9067279bdab0fd5e6d147b5a36c15c2273c83d"
+  integrity sha512-O0Baz5SXT4cSGkwcmPiTFWmeLGFYy/vQxRsh2C8sJzkmCj8593rHOVgvVUL4M9o1wKTh+RycmWpoi6dWu75mZw==
   dependencies:
-    "@cliqz/adblocker-content" "^1.22.4"
+    "@cliqz/adblocker-content" "^1.22.5"
 
-"@cliqz/adblocker-electron@1.22.4":
-  version "1.22.4"
-  resolved "https://registry.yarnpkg.com/@cliqz/adblocker-electron/-/adblocker-electron-1.22.4.tgz#eb62395595179b45fe25027ead52ac51e3e80e4f"
-  integrity sha512-wyI/9UxUdc3fZC4vWgmdNBLm0jKH+DYClNvTAQ6fLRIyhiD5efOsFdpiwr+OWPhgNpKDs9c9dQyApy3SVNdw+Q==
+"@cliqz/adblocker-electron@1.22.5":
+  version "1.22.5"
+  resolved "https://registry.yarnpkg.com/@cliqz/adblocker-electron/-/adblocker-electron-1.22.5.tgz#3b45851d47c1835bb7f6476f4e29ae43606c90cf"
+  integrity sha512-yAfbPszTT5ZDIA4PfPwoImdUJLhAMXZg9G2wfpZP3uadMZHS6E1wJaufjMelDDo/UL5xjH/Mi4ZCRmGZPhZ7Wg==
   dependencies:
-    "@cliqz/adblocker" "^1.22.4"
-    "@cliqz/adblocker-electron-preload" "^1.22.4"
+    "@cliqz/adblocker" "^1.22.5"
+    "@cliqz/adblocker-electron-preload" "^1.22.5"
     tldts-experimental "^5.6.21"
 
-"@cliqz/adblocker-extended-selectors@^1.22.4":
-  version "1.22.4"
-  resolved "https://registry.yarnpkg.com/@cliqz/adblocker-extended-selectors/-/adblocker-extended-selectors-1.22.4.tgz#4069136353a95cb2291d7db9951ea4e85c303e2c"
-  integrity sha512-Puae9uK3gIXUGNY7Nj8TtZZXw/QYOih+tKS3YnQwtLgtFR2TkoKzYyHCu1OPu49NLRbuieiHAkaAG6AHflVtPg==
+"@cliqz/adblocker-extended-selectors@^1.22.5":
+  version "1.22.5"
+  resolved "https://registry.yarnpkg.com/@cliqz/adblocker-extended-selectors/-/adblocker-extended-selectors-1.22.5.tgz#228fdec6a58e313225a0be4266529f495432db0e"
+  integrity sha512-5HTrNq1TaTXpTOddBo7z7GMEE7r44J6HusMVaDmbMpoA115YoQJyMfD82OYgoddj4Zdvp63/pjP+MBlE0WZyJg==
 
-"@cliqz/adblocker@^1.22.4":
-  version "1.22.4"
-  resolved "https://registry.yarnpkg.com/@cliqz/adblocker/-/adblocker-1.22.4.tgz#835be918f4c08b849b68efda5e01787f1041ad4a"
-  integrity sha512-SDgSiKLkWTqX57MUH2DYBVJjh2/EiclUDvXi2oLRLFT9KXXXYNUctSqh5gOchPoWPKreLIeEleLsdTvHKkagaA==
+"@cliqz/adblocker@^1.22.5":
+  version "1.22.5"
+  resolved "https://registry.yarnpkg.com/@cliqz/adblocker/-/adblocker-1.22.5.tgz#26e675078db9d9854f295a87e969db0c95a15764"
+  integrity sha512-hQSyedelwG2+D6RDorJkarIUd9mln5IyxnRKO4ADGXvdQhZ5G/E90bTyJ2apDBdnvaUwXpmhhXs2cK12HhN14g==
   dependencies:
-    "@cliqz/adblocker-content" "^1.22.4"
-    "@cliqz/adblocker-extended-selectors" "^1.22.4"
+    "@cliqz/adblocker-content" "^1.22.5"
+    "@cliqz/adblocker-extended-selectors" "^1.22.5"
     "@remusao/guess-url-type" "^1.1.2"
     "@remusao/small" "^1.1.2"
     "@remusao/smaz" "^1.7.1"
-    "@types/chrome" "^0.0.153"
+    "@types/chrome" "^0.0.154"
     "@types/firefox-webext-browser" "^82.0.0"
     tldts-experimental "^5.6.21"
 
@@ -1399,6 +1399,11 @@
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/@fontsource/roboto/-/roboto-4.5.0.tgz#d6f925668ba6af46707f1040c43aff498ba204bb"
   integrity sha512-ja4XYw/9kNRFM5Ndk9vwzHWsdBMXczyBazFkTXJQ74QQBnT0BbSsHn0pF60AU0Iznig1Wt9x3rADfG8LANvMpw==
+
+"@gar/promisify@^1.0.1":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.2.tgz#30aa825f11d438671d585bd44e7fd564535fc210"
+  integrity sha512-82cpyJyKRoQoRi+14ibCeGPu0CwypgtBAdBhq1WfvagpCZNKqwXbKwXllYSMG91DhmG4jt9gN8eP6lGOtozuaw==
 
 "@hapi/address@2.x.x":
   version "2.1.4"
@@ -2032,6 +2037,14 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@npmcli/fs@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@npmcli/fs/-/fs-1.0.0.tgz#589612cfad3a6ea0feafcb901d29c63fd52db09f"
+  integrity sha512-8ltnOpRR/oJbOp8vaGUnipOi3bqkcW+sLHFlyXIr08OGHmVJLB1Hn7QtGXbYcpVtH1gAYZTlmDXtE4YV0+AMMQ==
+  dependencies:
+    "@gar/promisify" "^1.0.1"
+    semver "^7.3.5"
+
 "@npmcli/move-file@^1.0.1":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@npmcli/move-file/-/move-file-1.1.2.tgz#1a82c3e372f7cae9253eb66d72543d6b8685c674"
@@ -2096,10 +2109,10 @@
     "@sentry/utils" "6.7.1"
     tslib "^1.9.3"
 
-"@sentry/electron@2.5.1":
-  version "2.5.1"
-  resolved "https://registry.yarnpkg.com/@sentry/electron/-/electron-2.5.1.tgz#6d1d42117e074c4b9f2f200def8ffb602c0221b6"
-  integrity sha512-1rVE1IgGZTAy2qlLQxDsuhv7/0sT88oHYyD4f6ZTDzge3lsReeMu4xA32M4ldo4yRlRQM5gpdSS/D7Q/4huH0A==
+"@sentry/electron@2.5.2":
+  version "2.5.2"
+  resolved "https://registry.yarnpkg.com/@sentry/electron/-/electron-2.5.2.tgz#c3033f9878fb27e544625047985fa25e0f440f72"
+  integrity sha512-YAbuQWBJrseaAnIWwnjCUkIo1NO0vLYazoPfEdn19f96EbE3DJ3DJTDd7FLjOsZum/l4GsQnh2lnuGZ3i+k9bg==
   dependencies:
     "@sentry/browser" "6.7.1"
     "@sentry/core" "6.7.1"
@@ -2331,10 +2344,10 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
-"@types/chrome@^0.0.153":
-  version "0.0.153"
-  resolved "https://registry.yarnpkg.com/@types/chrome/-/chrome-0.0.153.tgz#6c3009eb7be1d0fbace82be159122fd99e4a6465"
-  integrity sha512-J8VrwjuJLh6BPmUTmZQd41zJJjVpRnnMZ/E9uHfQZ3RRAESVqYxin8YeCdZUak7+5dUI6wr8Sr6UfR3dehLIdQ==
+"@types/chrome@^0.0.154":
+  version "0.0.154"
+  resolved "https://registry.yarnpkg.com/@types/chrome/-/chrome-0.0.154.tgz#7992e97364f4447e961028ad07ac843d0b052c2d"
+  integrity sha512-6QmP744MeMUZUIUHED4d4L2la5dIF1e6bcrkGF4yGQTyO94ER+r++Ss165wkzA5cAGUYt8kToDa6L9xtNqVMxg==
   dependencies:
     "@types/filesystem" "*"
     "@types/har-format" "*"
@@ -2437,14 +2450,14 @@
   integrity sha512-iiUgKzV9AuaEkZqkOLDIvlQiL6ltuZd9tGcW3gwpnX8JbuiuhFlEGmmFXEXkN50Cvq7Os88IY2v0dkDqXYWVgA==
 
 "@types/node@*":
-  version "16.7.1"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.7.1.tgz#c6b9198178da504dfca1fd0be9b2e1002f1586f0"
-  integrity sha512-ncRdc45SoYJ2H4eWU9ReDfp3vtFqDYhjOsKlFFUDEn8V1Bgr2RjYal8YT5byfadWIRluhPFU6JiDOl0H6Sl87A==
+  version "16.7.4"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.7.4.tgz#68a9384694af63ceab8848e95d76d9a3519e84b6"
+  integrity sha512-25QXpDsTiDnl2rZGUenagVMwO46way8dOUdvoC3R3p+6TrbpxeJBo/v87BEG1IHI31Jhaa8lPeSHcqwxsVBeYQ==
 
 "@types/node@^14.6.2":
-  version "14.17.11"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.17.11.tgz#82d266d657aec5ff01ca59f2ffaff1bb43f7bf0f"
-  integrity sha512-n2OQ+0Bz6WEsUjrvcHD1xZ8K+Kgo4cn9/w94s1bJS690QMUWfJPW/m7CCb7gPkA1fcYwL2UpjXP/rq/Eo41m6w==
+  version "14.17.12"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.17.12.tgz#7a31f720b85a617e54e42d24c4ace136601656c7"
+  integrity sha512-vhUqgjJR1qxwTWV5Ps5txuy2XMdf7Fw+OrdChRboy8BmWUPkckOhphaohzFG6b8DW7CrxaBMdrdJ47SYFq1okw==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.1"
@@ -4496,10 +4509,11 @@ cacache@^13.0.1:
     unique-filename "^1.1.1"
 
 cacache@^15.0.5:
-  version "15.2.0"
-  resolved "https://registry.yarnpkg.com/cacache/-/cacache-15.2.0.tgz#73af75f77c58e72d8c630a7a2858cb18ef523389"
-  integrity sha512-uKoJSHmnrqXgthDFx/IU6ED/5xd+NNGe+Bb+kLZy7Ku4P+BaiWEUflAKPZ7eAzsYGcsAGASJZsybXp+quEcHTw==
+  version "15.3.0"
+  resolved "https://registry.yarnpkg.com/cacache/-/cacache-15.3.0.tgz#dc85380fb2f556fe3dda4c719bfa0ec875a7f1eb"
+  integrity sha512-VVdYzXEn+cnbXpFgWs5hTT7OScegHVmLhJIR8Ufqk3iFD6A6j5iSX1KuBTfNEv4tdJWE2PzA6IVFtcLC7fN9wQ==
   dependencies:
+    "@npmcli/fs" "^1.0.0"
     "@npmcli/move-file" "^1.0.1"
     chownr "^2.0.0"
     fs-minipass "^2.0.0"
@@ -4617,9 +4631,9 @@ caniuse-api@^3.0.0:
     lodash.uniq "^4.5.0"
 
 caniuse-lite@^1.0.0, caniuse-lite@^1.0.30000844, caniuse-lite@^1.0.30000981, caniuse-lite@^1.0.30001035, caniuse-lite@^1.0.30001109, caniuse-lite@^1.0.30001251:
-  version "1.0.30001251"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001251.tgz#6853a606ec50893115db660f82c094d18f096d85"
-  integrity sha512-HOe1r+9VkU4TFmnU70z+r7OLmtR+/chB1rdcJUeQlAinjEeb0cKL20tlAtOagNZhbrtLnCvV19B4FmF1rgzl6A==
+  version "1.0.30001252"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001252.tgz#cb16e4e3dafe948fc4a9bb3307aea054b912019a"
+  integrity sha512-I56jhWDGMtdILQORdusxBOH+Nl/KgQSdDmpJezYddnAkVOmnoU8zwjTV9xAjMIYxr0iPreEAVylCGcmHCjfaOw==
 
 capture-exit@^2.0.0:
   version "2.0.0"
@@ -6235,9 +6249,9 @@ electron-settings@4.0.2:
     write-file-atomic "^3.0.3"
 
 electron-to-chromium@^1.3.378, electron-to-chromium@^1.3.47, electron-to-chromium@^1.3.811:
-  version "1.3.817"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.817.tgz#911b4775b5d9fa0c4729d4694adc81de85d8d8f6"
-  integrity sha512-Vw0Faepf2Id9Kf2e97M/c99qf168xg86JLKDxivvlpBQ9KDtjSeX0v+TiuSE25PqeQfTz+NJs375b64ca3XOIQ==
+  version "1.3.820"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.820.tgz#3b2672b59ed17847ed19f1281547f37bbfda87bb"
+  integrity sha512-5cFwDmo2yzEA9hn55KZ9+cX/b6DSFvpKz8Hb2fiDmriXWB+DBoXKXmncQwNRFBBTlUdsvPHCoy594OoMLAO0Tg==
 
 electron-updater@4.4.3:
   version "4.4.3"
@@ -6261,10 +6275,10 @@ electron-window-state@5.0.3:
     jsonfile "^4.0.0"
     mkdirp "^0.5.1"
 
-electron@13.2.2:
-  version "13.2.2"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-13.2.2.tgz#332d91891d0db4f9a1d22d4d0bc3b500e59dc051"
-  integrity sha512-thGq2YaZqQWK1HexRghxdb26a8hA7ZSebukUSHlnHrY9+Sx9rW7e3uEHbibk/seRXVoXO76HndjKdHyObP9/Kw==
+electron@13.2.3:
+  version "13.2.3"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-13.2.3.tgz#a0fd80a011ba1549147777c9d72e881577904509"
+  integrity sha512-FzWhbKHjq7ZTpPQFaYiLPL64erC8/BOsu5NlNN9nQ6f7rIP8ygKlNAlQit3vbOcksQAwItDUCIw4sW0mcaRpCA==
   dependencies:
     "@electron/get" "^1.0.1"
     "@types/node" "^14.6.2"
@@ -13970,9 +13984,9 @@ tar-stream@^2.1.4:
     readable-stream "^3.1.1"
 
 tar@^6.0.2:
-  version "6.1.10"
-  resolved "https://registry.yarnpkg.com/tar/-/tar-6.1.10.tgz#8a320a74475fba54398fa136cd9883aa8ad11175"
-  integrity sha512-kvvfiVvjGMxeUNB6MyYv5z7vhfFRwbwCXJAeL0/lnbrttBVqcMOnpHUf0X42LrPMR8mMpgapkJMchFH4FSHzNA==
+  version "6.1.11"
+  resolved "https://registry.yarnpkg.com/tar/-/tar-6.1.11.tgz#6760a38f003afa1b2ffd0ffe9e9abbd0eab3d621"
+  integrity sha512-an/KZQzQUkZCkuoAA64hM92X0Urb6VpRhAFllDzz44U2mcD5scmT3zBc4VgVpkugF580+DQn8eAFSyoQt0tznA==
   dependencies:
     chownr "^2.0.0"
     fs-minipass "^2.0.0"
@@ -14106,17 +14120,17 @@ tinycolor2@^1.4.1:
   resolved "https://registry.yarnpkg.com/tinycolor2/-/tinycolor2-1.4.2.tgz#3f6a4d1071ad07676d7fa472e1fac40a719d8803"
   integrity sha512-vJhccZPs965sV/L2sU4oRQVAos0pQXwsvTLkWYdqJ+a8Q5kPFzJTuOFwy7UniPli44NKQGAglksjvOcpo95aZA==
 
-tldts-core@^5.7.40:
-  version "5.7.40"
-  resolved "https://registry.yarnpkg.com/tldts-core/-/tldts-core-5.7.40.tgz#6e084fbff27aed7b6d090ba5633a04d9c6a7c04b"
-  integrity sha512-Qc4WZcQT9FknzAgANMVWJftZmt4+DR7PfzHC0SgUI5XrHLgQe2hDN583AXjwFag5O4qqeR5S8MJ909NYZ2BAWA==
+tldts-core@^5.7.41:
+  version "5.7.41"
+  resolved "https://registry.yarnpkg.com/tldts-core/-/tldts-core-5.7.41.tgz#fed04f3e77644e6da55c850f89d20e5f118be323"
+  integrity sha512-0ttaKCTwrtUybEe/wSwITBPiAQeGDTgQG/F31bbKDJS17HXPKFAH+8yoN5GAH1BQ+rbaVH06Avnr2nsBxtG6qg==
 
 tldts-experimental@^5.6.21:
-  version "5.7.40"
-  resolved "https://registry.yarnpkg.com/tldts-experimental/-/tldts-experimental-5.7.40.tgz#4cde69297ec4d85af54532283aa9295ef07b2258"
-  integrity sha512-w8bsHZE6sus5TYRFp1xPFKBXbg0HZAFCS0C7bu7F2ZHnQMuzh/84HB4iT7xz/K00+XtTr6QMT4lFz/7OKCPIkQ==
+  version "5.7.41"
+  resolved "https://registry.yarnpkg.com/tldts-experimental/-/tldts-experimental-5.7.41.tgz#ae3ac468112dccffd079829b2f8608b85ff307a1"
+  integrity sha512-mo9dq5jnyJ1QwkXSFBbohBJFftE11bWCroOTBwhcrKOWIqomoDmRexXmdfDr3CHyOj7Fip6p077oZJ4fOynhXQ==
   dependencies:
-    tldts-core "^5.7.40"
+    tldts-core "^5.7.41"
 
 tmp-promise@^3.0.2:
   version "3.0.2"
