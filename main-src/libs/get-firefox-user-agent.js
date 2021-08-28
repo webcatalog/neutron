@@ -32,4 +32,4 @@ const getFirefoxUserAgent = () => {
   return rootUA.replace(/FXVERSION/g, fxVersion);
 };
 
-module.exports = getFirefoxUserAgent();
+module.exports = getFirefoxUserAgent;
