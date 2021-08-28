@@ -150,15 +150,13 @@ export const getIconFromInternet = () => (dispatch, getState) => {
     .then((iconUrl) => {
       const { form } = getState().dialogWorkspacePreferences;
       if (form.homeUrl === homeUrl) {
-        const changes = {
-          preferredIconType: 'image',
-          imgPath: iconUrl || form.imgPath,
-        };
-        dispatch(updateForm(changes));
         dispatch({
           type: UPDATE_WORKSPACE_PREFERENCES_DOWNLOADING_ICON,
           downloadingIcon: false,
         });
+        if (iconUrl) {
+          dispatch(setPicture(iconUrl));
+        }
       }
 
       if (!iconUrl) {
@@ -187,15 +185,13 @@ export const getIconFromAppSearch = () => (dispatch, getState) => {
     .then((iconUrl) => {
       const { form } = getState().dialogWorkspacePreferences;
       if (form.homeUrl === homeUrl) {
-        const changes = {
-          preferredIconType: 'image',
-          imgPath: iconUrl || form.imgPath,
-        };
-        dispatch(updateForm(changes));
         dispatch({
           type: UPDATE_WORKSPACE_PREFERENCES_DOWNLOADING_ICON,
           downloadingIcon: false,
         });
+        if (iconUrl) {
+          dispatch(setPicture(iconUrl));
+        }
       }
 
       if (!iconUrl) {
