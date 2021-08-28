@@ -50,6 +50,7 @@ const getExtensionFromProfile = require('./extensions/get-extensions-from-profil
 const isSnap = require('./is-snap');
 const isAppx = require('./is-appx');
 const isWebcatalog = require('./is-webcatalog');
+const getFirefoxUserAgent = require('./get-firefox-user-agent');
 
 const views = {};
 let shouldMuteAudio;
@@ -278,8 +279,7 @@ const addViewAsync = async (browserWindow, workspace) => {
         const url = new URL(details.url);
 
         if (url.hostname === 'accounts.google.com') {
-          const fakedFirefoxUaStr = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:90.0) Gecko/20100101 Firefox/90.0';
-          details.requestHeaders['User-Agent'] = fakedFirefoxUaStr;
+          details.requestHeaders['User-Agent'] = getFirefoxUserAgent();
         }
       // Google uses special code for Chromium-based browsers
       // when screensharing (not working with Electron)
