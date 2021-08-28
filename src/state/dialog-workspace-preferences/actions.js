@@ -154,7 +154,9 @@ export const getIconFromInternet = () => (dispatch, getState) => {
           type: UPDATE_WORKSPACE_PREFERENCES_DOWNLOADING_ICON,
           downloadingIcon: false,
         });
-        dispatch(setPicture(iconUrl));
+        if (iconUrl) {
+          dispatch(setPicture(iconUrl));
+        }
       }
 
       if (!iconUrl) {
@@ -187,7 +189,9 @@ export const getIconFromAppSearch = () => (dispatch, getState) => {
           type: UPDATE_WORKSPACE_PREFERENCES_DOWNLOADING_ICON,
           downloadingIcon: false,
         });
-        dispatch(setPicture(iconUrl));
+        if (iconUrl) {
+          dispatch(setPicture(iconUrl));
+        }
       }
 
       if (!iconUrl) {
