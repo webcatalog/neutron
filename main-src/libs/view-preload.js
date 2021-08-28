@@ -400,6 +400,28 @@ webFrame.executeJavaScript(`
   window.PushManager = undefined;
 })();
 `);
+
+// add navigator.userAgentData API support
+/* Gmail - required for loading standard version (otherwise redirects to basic HTML) */
+// modified from https://github.com/minbrowser/min/blob/58927524e3cc16cc4f59bca09a6c352cec1a16ac/js/preload/siteUnbreak.js (Apache)
+const chromiumVersion = process.versions.chrome.split('.')[0];
+webFrame.executeJavaScript(`
+(function() {
+  const simulatedUAData = {
+    brands: [
+      {brand: "Chromium", version: "${chromiumVersion}"},
+      {brand: "Not A;Brand", version: "99"}
+    ],
+    mobile: false,
+    getHighEntropyValues: function() {
+      console.warn('getHighEntropyValues is unimplemented', arguments)
+      return null
+    }
+  }
+  Object.defineProperty(navigator, 'userAgentData', {get: () => simulatedUAData})
+})()
+`);
+
 // enable pinch zooming (default behavior of Chromium)
 // https://github.com/electron/electron/pull/12679
 webFrame.setVisualZoomLevelLimits(1, 10);
