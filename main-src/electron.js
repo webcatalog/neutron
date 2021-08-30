@@ -24,6 +24,7 @@ const path = require('path');
 const fs = require('fs-extra');
 const isDev = require('electron-is-dev');
 const settings = require('electron-settings');
+const semver = require('semver');
 
 const appJson = require('./constants/app-json');
 const isMas = require('./libs/is-mas');
@@ -551,7 +552,8 @@ if (!gotTheLock) {
     global.extensionEnabledExtesionIds = extensionEnabledExtesionIds;
     global.extensionSourceBrowserId = extensionSourceBrowserId;
     global.extensionSourceProfileDirName = extensionSourceProfileDirName;
-    global.extensionEnabled = extensionEnabledExtesionIds
+    global.extensionEnabled = semver.prerelease(app.getVersion())
+      && extensionEnabledExtesionIds
       && Object.keys(extensionEnabledExtesionIds).length > 0;
     global.hibernateWhenUnused = hibernateWhenUnused;
     global.hibernateWhenUnusedTimeout = hibernateWhenUnusedTimeout;
