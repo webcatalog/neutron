@@ -44,8 +44,8 @@ import {
   requestShowShareMenu,
 } from '../../senders';
 
-import RatingButton from './rating-button';
-import BrowserActionList from './browser-action-list';
+import RatingButton from './RatingButton';
+import BrowserActionList from './BrowserActionList';
 
 const useStyles = makeStyles((theme) => ({
   root: {

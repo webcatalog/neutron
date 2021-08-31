@@ -35,14 +35,14 @@ import themeColors from '../../constants/themeColors';
 import arrowWhite from '../../images/arrow-white.png';
 import arrowBlack from '../../images/arrow-black.png';
 
-import WorkspaceSelector from './workspace-selector';
-import FindInPage from './find-in-page';
-import NavigationBar from './navigation-bar';
-import MacTitleBar from './mac-title-bar';
-import DraggableRegion from './draggable-region';
-import TelemetryManager from './telemetry-manager';
-import RatingButton from './rating-button';
-import BrowserActionList from './browser-action-list';
+import WorkspaceSelector from './WorkspaceSelector';
+import FindInPage from './FindInPage';
+import NavigationBar from './NavigationBar';
+import MacTitleBar from './MacTitleBar';
+import DraggableRegion from './DraggableRegion';
+import TelemetryManager from './TelemetryManager';
+import RatingButton from './RatingButton';
+import BrowserActionList from './BrowserActionList';
 
 import {
   requestCreateWorkspace,

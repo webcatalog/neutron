@@ -16,9 +16,9 @@ import getWorkspaceName from '../../../helpers/getWorkspaceName';
 
 import { open as openDialogEditWorkspace } from '../../../state/dialogEditWorkspace/actions';
 
-import ListItemIcon from './list-item-icon';
-import ListItemColor from './list-item-color';
-import DialogEditWorkspace from './dialog-edit-workspace';
+import ListItemIcon from './ListItemIcon';
+import ListItemColor from './ListItemColor';
+import DialogEditWorkspace from './DialogEditWorkspace';
 
 const SectionWorkspace = ({
   name,
