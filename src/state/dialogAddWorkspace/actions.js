@@ -14,7 +14,7 @@ import hasErrors from '../../helpers/hasErrors';
 
 import { requestCreateWorkspace } from '../../senders';
 
-import appSearch from '../../app-search';
+import appSearch from '../../appSearch';
 
 const getValidationRules = () => ({
   name: {

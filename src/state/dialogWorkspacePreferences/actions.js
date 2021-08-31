@@ -16,7 +16,7 @@ import { setWorkspacePictureAsync } from '../../invokers';
 
 import getStaticGlobal from '../../helpers/getStaticGlobal';
 
-import appSearch from '../../app-search';
+import appSearch from '../../appSearch';
 
 export const updateForm = (changes) => (dispatch, getState) => {
   const workspaceId = getStaticGlobal('workspacePreferencesWorkspaceId');
