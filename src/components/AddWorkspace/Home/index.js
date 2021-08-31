@@ -13,17 +13,17 @@ import Typography from '@material-ui/core/Typography';
 import SearchIcon from '@material-ui/icons/Search';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import connectComponent from '../../helpers/connect-component';
-import getStaticGlobal from '../../helpers/get-static-global';
-import isMas from '../../helpers/is-mas';
-import isAppx from '../../helpers/is-appx';
-import isStandalone from '../../helpers/is-standalone';
+import connectComponent from '../../../helpers/connect-component';
+import getStaticGlobal from '../../../helpers/get-static-global';
+import isMas from '../../../helpers/is-mas';
+import isAppx from '../../../helpers/is-appx';
+import isStandalone from '../../../helpers/is-standalone';
 
-import AppCard from './app-card';
-import SubmitAppCard from './submit-app-card';
-import NoConnection from './no-connection';
-import EmptyState from './empty-state';
-import SearchBox from './search-box';
+import AppCard from './AppCard';
+import SubmitAppCard from './SubmitAppCard';
+import NoConnection from './NoConnection';
+import EmptyState from './EmptyState';
+import SearchBox from './SearchBox';
 
 const styles = (theme) => ({
   paper: {

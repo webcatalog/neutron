@@ -10,14 +10,14 @@ import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
-import amplitude from '../../amplitude';
+import amplitude from '../../../amplitude';
 
-import connectComponent from '../../helpers/connect-component';
-import isUrl from '../../helpers/is-url';
-import extractHostname from '../../helpers/extract-hostname';
-import { requestCreateWorkspace, requestTrackAddWorkspace } from '../../senders';
+import connectComponent from '../../../helpers/connect-component';
+import isUrl from '../../../helpers/is-url';
+import extractHostname from '../../../helpers/extract-hostname';
+import { requestCreateWorkspace, requestTrackAddWorkspace } from '../../../senders';
 
-import { updateForm, updateMode } from '../../state/dialog-add-workspace/actions';
+import { updateForm, updateMode } from '../../../state/dialog-add-workspace/actions';
 
 const styles = (theme) => ({
   card: {

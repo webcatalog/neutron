@@ -16,8 +16,8 @@ import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name'
 
 import { updateMode } from '../../state/dialog-add-workspace/actions';
 
-import Home from './home';
-import Form from './form';
+import Home from './Home';
+import Form from './Form';
 
 const styles = () => ({
   root: {

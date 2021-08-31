@@ -17,12 +17,12 @@ import Badge from '@material-ui/core/Badge';
 
 import CheckIcon from '@material-ui/icons/Check';
 
-import connectComponent from '../../helpers/connect-component';
-import getAvatarText from '../../helpers/get-avatar-text';
-import getMailtoUrl from '../../helpers/get-mailto-url';
-import camelCaseToSentenceCase from '../../helpers/camel-case-to-sentence-case';
+import connectComponent from '../../../helpers/connect-component';
+import getAvatarText from '../../../helpers/get-avatar-text';
+import getMailtoUrl from '../../../helpers/get-mailto-url';
+import camelCaseToSentenceCase from '../../../helpers/camel-case-to-sentence-case';
 
-import themeColors from '../../constants/theme-colors';
+import themeColors from '../../../constants/theme-colors';
 
 import {
   getIconFromInternet,
@@ -30,10 +30,10 @@ import {
   save,
   updateForm,
   resetForm,
-} from '../../state/dialog-add-workspace/actions';
+} from '../../../state/dialog-add-workspace/actions';
 
-import defaultWorkspaceImageLight from '../../images/default-workspace-image-light.png';
-import defaultWorkspaceImageDark from '../../images/default-workspace-image-dark.png';
+import defaultWorkspaceImageLight from '../../../images/default-workspace-image-light.png';
+import defaultWorkspaceImageDark from '../../../images/default-workspace-image-dark.png';
 
 const styles = (theme) => ({
   root: {

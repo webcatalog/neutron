@@ -18,7 +18,7 @@ import connectComponent from '../helpers/connect-component';
 import getStaticGlobal from '../helpers/get-static-global';
 
 import WindowsTitleBar from './shared/windows-title-bar';
-import AppLock from './app-lock';
+import AppLock from './AppLock';
 
 const AppWrapper = ({
   children,
