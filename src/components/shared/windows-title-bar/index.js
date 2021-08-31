@@ -19,7 +19,7 @@ import { requestShowAppMenu } from '../../../senders';
 import connectComponent from '../../../helpers/connect-component';
 import getStaticGlobal from '../../../helpers/get-static-global';
 
-import themeColors from '../../../constants/theme-colors';
+import themeColors from '../../../constants/themeColors';
 
 const TOOLBAR_HEIGHT = 28;
 const BUTTON_WIDTH = 46;

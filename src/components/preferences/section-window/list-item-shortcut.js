@@ -17,7 +17,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 import connectComponent from '../../../helpers/connect-component';
 
-import keyboardMap from '../../../constants/keyboard-map';
+import keyboardMap from '../../../constants/keyboardMap';
 
 import {
   requestSetPreference,

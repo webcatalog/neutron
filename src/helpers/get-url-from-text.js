@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import isUrl from './is-url';
 
-import searchEngines from '../constants/search-engines';
+import searchEngines from '../constants/searchEngines';
 
 // if text is url, return text
 // else, return search query url for that text

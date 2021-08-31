@@ -16,7 +16,7 @@ import Divider from '@material-ui/core/Divider';
 import connectComponent from '../../../helpers/connect-component';
 import getWorkspaceFriendlyName from '../../../helpers/get-workspace-friendly-name';
 
-import autoHibernateTimeouts from '../../../constants/auto-hibernate-timeouts';
+import autoHibernateTimeouts from '../../../constants/autoHibernateTimeouts';
 
 import {
   enqueueRequestRestartSnackbar,

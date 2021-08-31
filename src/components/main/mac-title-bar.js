@@ -13,7 +13,7 @@ import getUrlFromText from '../../helpers/get-url-from-text';
 import getStaticGlobal from '../../helpers/get-static-global';
 import isMacOs11 from '../../helpers/is-mac-os-11';
 
-import themeColors from '../../constants/theme-colors';
+import themeColors from '../../constants/themeColors';
 
 import {
   requestLoadUrl,

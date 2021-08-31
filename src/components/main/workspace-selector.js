@@ -20,7 +20,7 @@ import getAvatarText from '../../helpers/get-avatar-text';
 import getUrlFromText from '../../helpers/get-url-from-text';
 import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
 import getPicturePath from '../../helpers/get-picture-path';
-import themeColors from '../../constants/theme-colors';
+import themeColors from '../../constants/themeColors';
 
 import {
   requestOpenUrlInWorkspace,

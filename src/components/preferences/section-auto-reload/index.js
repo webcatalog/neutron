@@ -26,7 +26,7 @@ import {
 
 import { open as openDialogRefreshInterval } from '../../../state/dialog-refresh-interval/actions';
 
-import autoRefreshIntervals from '../../../constants/auto-refresh-intervals';
+import autoRefreshIntervals from '../../../constants/autoRefreshIntervals';
 
 import DialogRefreshInterval from '../../shared/dialog-refresh-interval';
 

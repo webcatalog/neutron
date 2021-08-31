@@ -21,7 +21,7 @@ import getAvatarText from '../../../helpers/get-avatar-text';
 import isUrl from '../../../helpers/is-url';
 import getPicturePath from '../../../helpers/get-picture-path';
 
-import themeColors from '../../../constants/theme-colors';
+import themeColors from '../../../constants/themeColors';
 
 import {
   updateForm,

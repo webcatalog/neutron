@@ -16,7 +16,7 @@ import {
   requestSetPreference,
 } from '../../../senders';
 
-import searchEngines from '../../../constants/search-engines';
+import searchEngines from '../../../constants/searchEngines';
 
 const styles = (theme) => ({
   selectRoot: {

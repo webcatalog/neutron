@@ -22,7 +22,7 @@ import getAvatarText from '../../../helpers/get-avatar-text';
 import getMailtoUrl from '../../../helpers/get-mailto-url';
 import camelCaseToSentenceCase from '../../../helpers/camel-case-to-sentence-case';
 
-import themeColors from '../../../constants/theme-colors';
+import themeColors from '../../../constants/themeColors';
 
 import {
   getIconFromInternet,

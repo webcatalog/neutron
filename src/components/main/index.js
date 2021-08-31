@@ -30,7 +30,7 @@ import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name'
 import isMas from '../../helpers/is-mas';
 import isAppx from '../../helpers/is-appx';
 
-import themeColors from '../../constants/theme-colors';
+import themeColors from '../../constants/themeColors';
 
 import arrowWhite from '../../images/arrow-white.png';
 import arrowBlack from '../../images/arrow-black.png';

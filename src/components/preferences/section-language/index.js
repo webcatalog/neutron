@@ -22,7 +22,7 @@ import {
 
 import { open as openDialogSpellcheckLanguages } from '../../../state/dialog-spellcheck-languages/actions';
 
-import hunspellLanguagesMap from '../../../constants/hunspell-languages';
+import hunspellLanguagesMap from '../../../constants/hunspellLanguages';
 
 import DialogSpellcheckLanguages from './dialog-spellcheck-languages';
 

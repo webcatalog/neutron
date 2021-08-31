@@ -27,8 +27,8 @@ import getStaticGlobal from '../../helpers/get-static-global';
 import isMas from '../../helpers/is-mas';
 import isAppx from '../../helpers/is-appx';
 
-import searchEngines from '../../constants/search-engines';
-import themeColors from '../../constants/theme-colors';
+import searchEngines from '../../constants/searchEngines';
+import themeColors from '../../constants/themeColors';
 
 import { updateAddressBarInfo } from '../../state/general/actions';
 

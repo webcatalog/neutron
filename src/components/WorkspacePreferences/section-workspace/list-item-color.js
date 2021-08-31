@@ -16,7 +16,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import connectComponent from '../../../helpers/connect-component';
 import camelCaseToSentenceCase from '../../../helpers/camel-case-to-sentence-case';
 
-import themeColors from '../../../constants/theme-colors';
+import themeColors from '../../../constants/themeColors';
 
 import { updateForm } from '../../../state/dialog-workspace-preferences/actions';
 

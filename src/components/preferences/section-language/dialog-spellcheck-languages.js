@@ -16,7 +16,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 
 import connectComponent from '../../../helpers/connect-component';
 
-import hunspellLanguagesMap from '../../../constants/hunspell-languages';
+import hunspellLanguagesMap from '../../../constants/hunspellLanguages';
 
 import {
   close,
