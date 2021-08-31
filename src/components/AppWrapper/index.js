@@ -14,11 +14,11 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 
 import DateFnsUtils from '@date-io/date-fns';
 
-import connectComponent from '../helpers/connectComponent';
-import getStaticGlobal from '../helpers/getStaticGlobal';
+import connectComponent from '../../helpers/connectComponent';
+import getStaticGlobal from '../../helpers/getStaticGlobal';
 
-import WindowsTitleBar from './shared/windows-title-bar';
-import AppLock from './AppLock';
+import WindowsTitleBar from './WindowsTitleBar';
+import AppLock from '../AppLock';
 
 const AppWrapper = ({
   children,

@@ -31,15 +31,15 @@ import {
 
 import SnackbarTrigger from '../shared/snackbar-trigger';
 
-import SectionAudioVideo from './section-audio-video';
-import SectionAutoReload from './section-auto-reload';
-import SectionBadge from './section-badge';
-import SectionDevelopers from './section-developers';
-import SectionDownloads from './section-downloads';
-import SectionLinkHandling from './section-link-handling';
-import SectionNotifications from './section-notifications';
-import SectionDarkReader from './section-dark-reader';
-import SectionWorkspace from './section-workspace';
+import SectionAudioVideo from './SectionAudioVideo';
+import SectionAutoReload from './SectionAutoReload';
+import SectionBadge from './SectionBadge';
+import SectionDevelopers from './SectionDevelopers';
+import SectionDownloads from './SectionDownloads';
+import SectionLinkHandling from './SectionLinkHandling';
+import SectionNotifications from './SectionNotifications';
+import SectionDarkReader from './SectionDarkReader';
+import SectionWorkspace from './SectionWorkspace';
 
 const styles = (theme) => ({
   root: {
