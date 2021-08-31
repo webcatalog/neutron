@@ -12,11 +12,11 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Switch from '@material-ui/core/Switch';
 
-import connectComponent from '../../../helpers/connect-component';
-import getWorkspaceFriendlyName from '../../../helpers/get-workspace-friendly-name';
-import isWebcatalog from '../../../helpers/is-webcatalog';
-import getStaticGlobal from '../../../helpers/get-static-global';
-import getUtmSource from '../../../helpers/get-utm-source';
+import connectComponent from '../../../helpers/connectComponent';
+import getWorkspaceFriendlyName from '../../../helpers/getWorkspaceFriendlyName';
+import isWebcatalog from '../../../helpers/isWebcatalog';
+import getStaticGlobal from '../../../helpers/getStaticGlobal';
+import getUtmSource from '../../../helpers/getUtmSource';
 
 import { updateForm } from '../../../state/dialog-workspace-preferences/actions';
 

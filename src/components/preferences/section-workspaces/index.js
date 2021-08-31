@@ -13,11 +13,11 @@ import Divider from '@material-ui/core/Divider';
 import AddIcon from '@material-ui/icons/Add';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-import connectComponent from '../../../helpers/connect-component';
-import getWorkspacesAsList from '../../../helpers/get-workspaces-as-list';
-import getWorkspaceName from '../../../helpers/get-workspace-name';
-import getStaticGlobal from '../../../helpers/get-static-global';
-import getWorkspaceFriendlyName from '../../../helpers/get-workspace-friendly-name';
+import connectComponent from '../../../helpers/connectComponent';
+import getWorkspacesAsList from '../../../helpers/getWorkspacesAsList';
+import getWorkspaceName from '../../../helpers/getWorkspaceName';
+import getStaticGlobal from '../../../helpers/getStaticGlobal';
+import getWorkspaceFriendlyName from '../../../helpers/getWorkspaceFriendlyName';
 import {
   requestShowWorkspacePreferencesWindow,
   requestShowAddWorkspaceWindow,

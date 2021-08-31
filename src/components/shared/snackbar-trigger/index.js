@@ -8,7 +8,7 @@ import Button from '@material-ui/core/Button';
 
 import { SnackbarProvider } from 'notistack';
 
-import connectComponent from '../../../helpers/connect-component';
+import connectComponent from '../../../helpers/connectComponent';
 
 import Inner from './inner';
 

@@ -13,8 +13,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import Switch from '@material-ui/core/Switch';
 
-import connectComponent from '../../../helpers/connect-component';
-import getWorkspaceFriendlyName from '../../../helpers/get-workspace-friendly-name';
+import connectComponent from '../../../helpers/connectComponent';
+import getWorkspaceFriendlyName from '../../../helpers/getWorkspaceFriendlyName';
 
 import {
   requestRealignActiveWorkspace,

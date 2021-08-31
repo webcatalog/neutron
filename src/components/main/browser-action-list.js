@@ -4,8 +4,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import connectComponent from '../../helpers/connect-component';
-import getStaticGlobal from '../../helpers/get-static-global';
+import connectComponent from '../../helpers/connectComponent';
+import getStaticGlobal from '../../helpers/getStaticGlobal';
 
 const BrowserActionList = ({ className, partitionId }) => {
   if (partitionId == null) return null;

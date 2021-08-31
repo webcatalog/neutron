@@ -12,11 +12,11 @@ import Divider from '@material-ui/core/Divider';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-import connectComponent from '../../../helpers/connect-component';
-import isMas from '../../../helpers/is-mas';
-import isSnap from '../../../helpers/is-snap';
-import isAppx from '../../../helpers/is-appx';
-import isStandalone from '../../../helpers/is-standalone';
+import connectComponent from '../../../helpers/connectComponent';
+import isMas from '../../../helpers/isMas';
+import isSnap from '../../../helpers/isSnap';
+import isAppx from '../../../helpers/isAppx';
+import isStandalone from '../../../helpers/isStandalone';
 
 import {
   requestCheckForUpdates,

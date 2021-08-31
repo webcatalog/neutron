@@ -22,8 +22,8 @@ import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
-import connectComponent from '../../../helpers/connect-component';
-import getUtmSource from '../../../helpers/get-utm-source';
+import connectComponent from '../../../helpers/connectComponent';
+import getUtmSource from '../../../helpers/getUtmSource';
 
 import {
   close,

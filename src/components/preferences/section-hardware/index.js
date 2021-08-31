@@ -11,7 +11,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Switch from '@material-ui/core/Switch';
 
-import connectComponent from '../../../helpers/connect-component';
+import connectComponent from '../../../helpers/connectComponent';
 
 import {
   enqueueRequestRestartSnackbar,

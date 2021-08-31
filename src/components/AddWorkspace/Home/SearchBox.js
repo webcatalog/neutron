@@ -18,7 +18,7 @@ import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import RefreshIcon from '@material-ui/icons/Refresh';
 
-import connectComponent from '../../../helpers/connect-component';
+import connectComponent from '../../../helpers/connectComponent';
 
 const styles = (theme) => ({
   toolbarSearchContainer: {

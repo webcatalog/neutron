@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import getStaticGlobal from './get-static-global';
+import getStaticGlobal from './getStaticGlobal';
 
 // in most apps, we call workspace "Account"
 // if data is shared between workspaces, we call workspace "Service"

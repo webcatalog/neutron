@@ -13,8 +13,8 @@ import Avatar from '@material-ui/core/Avatar';
 
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 
-import connectComponent from '../../../helpers/connect-component';
-import camelCaseToSentenceCase from '../../../helpers/camel-case-to-sentence-case';
+import connectComponent from '../../../helpers/connectComponent';
+import camelCaseToSentenceCase from '../../../helpers/camelCaseToSentenceCase';
 
 import themeColors from '../../../constants/themeColors';
 

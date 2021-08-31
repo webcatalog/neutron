@@ -7,10 +7,10 @@ import {
   UPDATE_EDIT_WORKSPACE_FORM,
 } from '../../constants/actions';
 
-import hasErrors from '../../helpers/has-errors';
-import isUrl from '../../helpers/is-url';
+import hasErrors from '../../helpers/hasErrors';
+import isUrl from '../../helpers/isUrl';
 import validate from '../../helpers/validate';
-import getStaticGlobal from '../../helpers/get-static-global';
+import getStaticGlobal from '../../helpers/getStaticGlobal';
 
 import { updateForm as updateWorkspacePreferencesForm } from '../dialog-workspace-preferences/actions';
 

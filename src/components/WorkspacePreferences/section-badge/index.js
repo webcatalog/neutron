@@ -10,7 +10,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
-import connectComponent from '../../../helpers/connect-component';
+import connectComponent from '../../../helpers/connectComponent';
 
 import { updateForm } from '../../../state/dialog-workspace-preferences/actions';
 

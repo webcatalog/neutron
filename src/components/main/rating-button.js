@@ -8,10 +8,10 @@ import IconButton from '@material-ui/core/IconButton';
 
 import RateReviewIcon from '@material-ui/icons/RateReview';
 
-import connectComponent from '../../helpers/connect-component';
-import isAppx from '../../helpers/is-appx';
-import isMas from '../../helpers/is-mas';
-import getStaticGlobal from '../../helpers/get-static-global';
+import connectComponent from '../../helpers/connectComponent';
+import isAppx from '../../helpers/isAppx';
+import isMas from '../../helpers/isMas';
+import getStaticGlobal from '../../helpers/getStaticGlobal';
 import {
   requestOpenInBrowser,
   requestSetPreference,

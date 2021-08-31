@@ -21,11 +21,11 @@ import SettingsIcon from '@material-ui/icons/SettingsSharp';
 import VolumeUpIcon from '@material-ui/icons/VolumeUp';
 import VolumeOffIcon from '@material-ui/icons/VolumeOff';
 
-import connectComponent from '../../helpers/connect-component';
-import getUrlFromText from '../../helpers/get-url-from-text';
-import getStaticGlobal from '../../helpers/get-static-global';
-import isMas from '../../helpers/is-mas';
-import isAppx from '../../helpers/is-appx';
+import connectComponent from '../../helpers/connectComponent';
+import getUrlFromText from '../../helpers/getUrlFromText';
+import getStaticGlobal from '../../helpers/getStaticGlobal';
+import isMas from '../../helpers/isMas';
+import isAppx from '../../helpers/isAppx';
 
 import searchEngines from '../../constants/searchEngines';
 import themeColors from '../../constants/themeColors';

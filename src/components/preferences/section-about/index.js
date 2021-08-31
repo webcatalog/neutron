@@ -10,10 +10,10 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-import isAppx from '../../../helpers/is-appx';
-import isMas from '../../../helpers/is-mas';
-import getStaticGlobal from '../../../helpers/get-static-global';
-import getUtmSource from '../../../helpers/get-utm-source';
+import isAppx from '../../../helpers/isAppx';
+import isMas from '../../../helpers/isMas';
+import getStaticGlobal from '../../../helpers/getStaticGlobal';
+import getUtmSource from '../../../helpers/getUtmSource';
 
 import {
   requestOpenInBrowser,
@@ -22,7 +22,7 @@ import {
 
 import ListItemAbout from './list-item-about';
 import ListItemUpdates from './list-item-updates';
-import isWebcatalog from '../../../helpers/is-webcatalog';
+import isWebcatalog from '../../../helpers/isWebcatalog';
 
 const SectionAbout = () => {
   const appJson = getStaticGlobal('appJson');

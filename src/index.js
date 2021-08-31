@@ -14,9 +14,9 @@ import configureStore from './state';
 
 import AppWrapper from './components/AppWrapper';
 
-import getWorkspacesAsList from './helpers/get-workspaces-as-list';
-import getStaticGlobal from './helpers/get-static-global';
-import getWorkspaceFriendlyName from './helpers/get-workspace-friendly-name';
+import getWorkspacesAsList from './helpers/getWorkspacesAsList';
+import getStaticGlobal from './helpers/getStaticGlobal';
+import getWorkspaceFriendlyName from './helpers/getWorkspaceFriendlyName';
 
 import { getReactInitialStateAsync } from './invokers';
 

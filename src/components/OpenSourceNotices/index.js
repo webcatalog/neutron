@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 import DialogContent from '@material-ui/core/DialogContent';
 
-import connectComponent from '../../helpers/connect-component';
+import connectComponent from '../../helpers/connectComponent';
 
 const styles = (theme) => ({
   dialogContent: {

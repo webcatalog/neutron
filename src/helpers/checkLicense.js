@@ -1,13 +1,13 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import isMas from './is-mas';
+import isMas from './isMas';
 import {
   requestShowRequireLicenseDialog,
   getPreference,
 } from '../senders';
-import getStaticGlobal from './get-static-global';
-import isStandalone from './is-standalone';
+import getStaticGlobal from './getStaticGlobal';
+import isStandalone from './isStandalone';
 
 const isPlus = () => {
   const appJson = getStaticGlobal('appJson');

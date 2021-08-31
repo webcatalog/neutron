@@ -16,10 +16,10 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 import { TimePicker } from '@material-ui/pickers';
 
-import connectComponent from '../../../helpers/connect-component';
-import getStaticGlobal from '../../../helpers/get-static-global';
-import getUtmSource from '../../../helpers/get-utm-source';
-import isWebcatalog from '../../../helpers/is-webcatalog';
+import connectComponent from '../../../helpers/connectComponent';
+import getStaticGlobal from '../../../helpers/getStaticGlobal';
+import getUtmSource from '../../../helpers/getUtmSource';
+import isWebcatalog from '../../../helpers/isWebcatalog';
 
 import {
   requestOpenInBrowser,

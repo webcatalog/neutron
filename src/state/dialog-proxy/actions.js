@@ -8,7 +8,7 @@ import {
 } from '../../constants/actions';
 
 import validate from '../../helpers/validate';
-import hasErrors from '../../helpers/has-errors';
+import hasErrors from '../../helpers/hasErrors';
 
 import {
   requestSetPreference,

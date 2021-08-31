@@ -16,10 +16,10 @@ import ListItem from '@material-ui/core/ListItem';
 
 import CheckIcon from '@material-ui/icons/Check';
 
-import connectComponent from '../../../helpers/connect-component';
-import getAvatarText from '../../../helpers/get-avatar-text';
-import isUrl from '../../../helpers/is-url';
-import getPicturePath from '../../../helpers/get-picture-path';
+import connectComponent from '../../../helpers/connectComponent';
+import getAvatarText from '../../../helpers/getAvatarText';
+import isUrl from '../../../helpers/isUrl';
+import getPicturePath from '../../../helpers/getPicturePath';
 
 import themeColors from '../../../constants/themeColors';
 

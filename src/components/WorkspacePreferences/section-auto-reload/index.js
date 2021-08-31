@@ -11,10 +11,10 @@ import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 
-import connectComponent from '../../../helpers/connect-component';
-import roundTime from '../../../helpers/round-time';
-import getStaticGlobal from '../../../helpers/get-static-global';
-import getUtmSource from '../../../helpers/get-utm-source';
+import connectComponent from '../../../helpers/connectComponent';
+import roundTime from '../../../helpers/roundTime';
+import getStaticGlobal from '../../../helpers/getStaticGlobal';
+import getUtmSource from '../../../helpers/getUtmSource';
 
 import {
   requestOpenInBrowser,

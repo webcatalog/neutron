@@ -11,8 +11,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-import connectComponent from '../../../helpers/connect-component';
-import getWorkspaceName from '../../../helpers/get-workspace-name';
+import connectComponent from '../../../helpers/connectComponent';
+import getWorkspaceName from '../../../helpers/getWorkspaceName';
 
 import { open as openDialogEditWorkspace } from '../../../state/dialog-edit-workspace/actions';
 

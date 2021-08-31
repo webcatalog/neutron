@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
-import connectComponent from '../../helpers/connect-component';
+import connectComponent from '../../helpers/connectComponent';
 
 import { updateForm, login } from '../../state/dialog-auth/actions';
 

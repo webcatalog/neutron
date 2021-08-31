@@ -11,8 +11,8 @@ import {
   enqueueRequestRestartSnackbar,
   requestRequestReloadWorkspaceDialog,
 } from '../../senders';
-import roundTime from '../../helpers/round-time';
-import getStaticGlobal from '../../helpers/get-static-global';
+import roundTime from '../../helpers/roundTime';
+import getStaticGlobal from '../../helpers/getStaticGlobal';
 
 import { updateForm as updateFormDialogWorkspacePreferences } from '../dialog-workspace-preferences/actions';
 

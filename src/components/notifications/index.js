@@ -19,7 +19,7 @@ import {
   addMinutes, addHours, addDays, addWeeks,
 } from 'date-fns';
 
-import connectComponent from '../../helpers/connect-component';
+import connectComponent from '../../helpers/connectComponent';
 
 import {
   requestSetPreference,

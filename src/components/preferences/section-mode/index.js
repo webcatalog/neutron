@@ -10,7 +10,7 @@ import ListItem from '@material-ui/core/ListItem';
 import Typography from '@material-ui/core/Typography';
 import Radio from '@material-ui/core/Radio';
 
-import connectComponent from '../../../helpers/connect-component';
+import connectComponent from '../../../helpers/connectComponent';
 
 import {
   enqueueRequestRestartSnackbar,

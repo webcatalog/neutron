@@ -9,8 +9,8 @@ import {
 } from '../../constants/actions';
 
 import validate from '../../helpers/validate';
-import isUrl from '../../helpers/is-url';
-import hasErrors from '../../helpers/has-errors';
+import isUrl from '../../helpers/isUrl';
+import hasErrors from '../../helpers/hasErrors';
 
 import { requestCreateWorkspace } from '../../senders';
 

@@ -13,8 +13,8 @@ import Switch from '@material-ui/core/Switch';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-import connectComponent from '../../../helpers/connect-component';
-import isMas from '../../../helpers/is-mas';
+import connectComponent from '../../../helpers/connectComponent';
+import isMas from '../../../helpers/isMas';
 import {
   requestSetPreference,
 } from '../../../senders';

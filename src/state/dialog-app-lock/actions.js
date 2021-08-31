@@ -8,8 +8,8 @@ import {
 } from '../../constants/actions';
 
 import validate from '../../helpers/validate';
-import hasErrors from '../../helpers/has-errors';
-import getUtmSource from '../../helpers/get-utm-source';
+import hasErrors from '../../helpers/hasErrors';
+import getUtmSource from '../../helpers/getUtmSource';
 
 import {
   deleteAppLockPasswordAsync,

@@ -6,7 +6,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-import connectComponent from '../../helpers/connect-component';
+import connectComponent from '../../helpers/connectComponent';
 
 const styles = () => ({
   root: {

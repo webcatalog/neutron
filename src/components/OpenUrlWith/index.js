@@ -15,11 +15,11 @@ import Checkbox from '@material-ui/core/Checkbox';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-import connectComponent from '../../helpers/connect-component';
-import getWorkspacesAsList from '../../helpers/get-workspaces-as-list';
-import getMailtoUrl from '../../helpers/get-mailto-url';
-import getStaticGlobal from '../../helpers/get-static-global';
-import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
+import connectComponent from '../../helpers/connectComponent';
+import getWorkspacesAsList from '../../helpers/getWorkspacesAsList';
+import getMailtoUrl from '../../helpers/getMailtoUrl';
+import getStaticGlobal from '../../helpers/getStaticGlobal';
+import getWorkspaceFriendlyName from '../../helpers/getWorkspaceFriendlyName';
 
 import { requestLoadUrl } from '../../senders';
 

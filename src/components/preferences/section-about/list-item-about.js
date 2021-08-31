@@ -8,11 +8,11 @@ import ListItem from '@material-ui/core/ListItem';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 
-import connectComponent from '../../../helpers/connect-component';
-import getStaticGlobal from '../../../helpers/get-static-global';
-import isStandalone from '../../../helpers/is-standalone';
-import isMas from '../../../helpers/is-mas';
-import isAppx from '../../../helpers/is-appx';
+import connectComponent from '../../../helpers/connectComponent';
+import getStaticGlobal from '../../../helpers/getStaticGlobal';
+import isStandalone from '../../../helpers/isStandalone';
+import isMas from '../../../helpers/isMas';
+import isAppx from '../../../helpers/isAppx';
 
 import cloveryIconPng from '../../../images/products/clovery-mac-icon-128@2x.png';
 import singleboxIconPng from '../../../images/products/singlebox-mac-icon-128@2x.png';

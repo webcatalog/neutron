@@ -14,7 +14,7 @@ import {
 
 import { setWorkspacePictureAsync } from '../../invokers';
 
-import getStaticGlobal from '../../helpers/get-static-global';
+import getStaticGlobal from '../../helpers/getStaticGlobal';
 
 import appSearch from '../../app-search';
 

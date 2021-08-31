@@ -10,8 +10,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Switch from '@material-ui/core/Switch';
 
-import connectComponent from '../../../helpers/connect-component';
-import getWorkspaceFriendlyName from '../../../helpers/get-workspace-friendly-name';
+import connectComponent from '../../../helpers/connectComponent';
+import getWorkspaceFriendlyName from '../../../helpers/getWorkspaceFriendlyName';
 
 import { updateForm } from '../../../state/dialog-workspace-preferences/actions';
 

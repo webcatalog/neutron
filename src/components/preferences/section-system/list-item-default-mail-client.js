@@ -9,9 +9,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-import connectComponent from '../../../helpers/connect-component';
-import getStaticGlobal from '../../../helpers/get-static-global';
-import isWindows10 from '../../../helpers/is-windows-10';
+import connectComponent from '../../../helpers/connectComponent';
+import getStaticGlobal from '../../../helpers/getStaticGlobal';
+import isWindows10 from '../../../helpers/isWindows10';
 
 import { requestOpenInBrowser } from '../../../senders';
 import { isDefaultMailClientAsync } from '../../../invokers';

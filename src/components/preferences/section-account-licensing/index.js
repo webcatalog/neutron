@@ -11,12 +11,12 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-import connectComponent from '../../../helpers/connect-component';
-import checkLicense from '../../../helpers/check-license';
-import isMas from '../../../helpers/is-mas';
-import isStandalone from '../../../helpers/is-standalone';
-import getStaticGlobal from '../../../helpers/get-static-global';
-import getWorkspaceFriendlyName from '../../../helpers/get-workspace-friendly-name';
+import connectComponent from '../../../helpers/connectComponent';
+import checkLicense from '../../../helpers/checkLicense';
+import isMas from '../../../helpers/isMas';
+import isStandalone from '../../../helpers/isStandalone';
+import getStaticGlobal from '../../../helpers/getStaticGlobal';
+import getWorkspaceFriendlyName from '../../../helpers/getWorkspaceFriendlyName';
 
 import {
   getIapFormattedPriceAsync,

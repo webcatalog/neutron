@@ -5,8 +5,8 @@
 // cached it to improve performance
 // https://github.com/electron/electron/issues/1258
 
-import getStaticGlobal from './get-static-global';
+import getStaticGlobal from './getStaticGlobal';
 
-const isMacOs11 = () => getStaticGlobal('isMacOs11');
+const isWindows10 = () => getStaticGlobal('isWindows10');
 
-export default isMacOs11;
+export default isWindows10;

@@ -11,10 +11,10 @@ import Typography from '@material-ui/core/Typography';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-import connectComponent from '../../../helpers/connect-component';
-import isAppx from '../../../helpers/is-appx';
-import isMas from '../../../helpers/is-mas';
-import getUtmSource from '../../../helpers/get-utm-source';
+import connectComponent from '../../../helpers/connectComponent';
+import isAppx from '../../../helpers/isAppx';
+import isMas from '../../../helpers/isMas';
+import getUtmSource from '../../../helpers/getUtmSource';
 
 import {
   requestOpenInBrowser,

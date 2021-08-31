@@ -4,13 +4,13 @@
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 
-import connectComponent from '../../helpers/connect-component';
-import isMas from '../../helpers/is-mas';
-import isAppx from '../../helpers/is-appx';
-import getStaticGlobal from '../../helpers/get-static-global';
+import connectComponent from '../../helpers/connectComponent';
+import isMas from '../../helpers/isMas';
+import isAppx from '../../helpers/isAppx';
+import getStaticGlobal from '../../helpers/getStaticGlobal';
 
 import amplitude from '../../amplitude';
-import isStandalone from '../../helpers/is-standalone';
+import isStandalone from '../../helpers/isStandalone';
 
 const TelemetryManager = ({ iapPurchased, telemetry, standaloneRegistered }) => {
   const appJson = getStaticGlobal('appJson');

@@ -11,7 +11,7 @@ import {
 } from '../../senders';
 
 import validate from '../../helpers/validate';
-import hasErrors from '../../helpers/has-errors';
+import hasErrors from '../../helpers/hasErrors';
 
 import { updateForm as updateFormDialogWorkspacePreferences } from '../dialog-workspace-preferences/actions';
 

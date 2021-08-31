@@ -23,12 +23,12 @@ import VolumeOffIcon from '@material-ui/icons/VolumeOff';
 
 import { sortableContainer, sortableElement } from 'react-sortable-hoc';
 
-import connectComponent from '../../helpers/connect-component';
-import getWorkspacesAsList from '../../helpers/get-workspaces-as-list';
-import getStaticGlobal from '../../helpers/get-static-global';
-import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
-import isMas from '../../helpers/is-mas';
-import isAppx from '../../helpers/is-appx';
+import connectComponent from '../../helpers/connectComponent';
+import getWorkspacesAsList from '../../helpers/getWorkspacesAsList';
+import getStaticGlobal from '../../helpers/getStaticGlobal';
+import getWorkspaceFriendlyName from '../../helpers/getWorkspaceFriendlyName';
+import isMas from '../../helpers/isMas';
+import isAppx from '../../helpers/isAppx';
 
 import themeColors from '../../constants/themeColors';
 

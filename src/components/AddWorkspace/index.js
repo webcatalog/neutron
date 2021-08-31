@@ -11,8 +11,8 @@ import Paper from '@material-ui/core/Paper';
 import ViewListIcon from '@material-ui/icons/ViewList';
 import CreateIcon from '@material-ui/icons/Create';
 
-import connectComponent from '../../helpers/connect-component';
-import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
+import connectComponent from '../../helpers/connectComponent';
+import getWorkspaceFriendlyName from '../../helpers/getWorkspaceFriendlyName';
 
 import { updateMode } from '../../state/dialog-add-workspace/actions';
 

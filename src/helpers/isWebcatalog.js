@@ -3,9 +3,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // return if the app is installed from WebCatalog or from other sources
-import isAppx from './is-appx';
-import isMas from './is-mas';
-import isStandalone from './is-standalone';
+import isAppx from './isAppx';
+import isMas from './isMas';
+import isStandalone from './isStandalone';
 
 const isWebcatalog = () => !isAppx() && !isMas() && !isStandalone();
 

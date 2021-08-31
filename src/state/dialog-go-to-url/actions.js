@@ -2,8 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { UPDATE_GO_TO_URL_FORM } from '../../constants/actions';
-import hasErrors from '../../helpers/has-errors';
-import isUrl from '../../helpers/is-url';
+import hasErrors from '../../helpers/hasErrors';
+import isUrl from '../../helpers/isUrl';
 import validate from '../../helpers/validate';
 import { requestLoadUrl } from '../../senders';
 

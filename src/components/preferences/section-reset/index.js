@@ -9,7 +9,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-import getWorkspaceFriendlyName from '../../../helpers/get-workspace-friendly-name';
+import getWorkspaceFriendlyName from '../../../helpers/getWorkspaceFriendlyName';
 
 import {
   enqueueRequestRestartSnackbar,

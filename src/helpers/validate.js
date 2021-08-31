@@ -1,11 +1,11 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import isUrl from './is-url';
-import isRegExp from './is-reg-exp';
-import isHostname from './is-hostname';
-import isPort from './is-port';
-import isValidLicenseKey from './is-valid-license-key';
+import isUrl from './isUrl';
+import isRegExp from './isRegExp';
+import isHostname from './isHostname';
+import isPort from './isPort';
+import isValidLicenseKey from './isValidLicenseKey';
 
 const kits = {
   required: (val, ruleVal, fieldName) => {

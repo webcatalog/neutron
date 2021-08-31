@@ -33,12 +33,12 @@ import ViewListIcon from '@material-ui/icons/ViewList';
 import WebAssetIcon from '@material-ui/icons/WebAsset';
 import WidgetsIcon from '@material-ui/icons/Widgets';
 
-import connectComponent from '../../helpers/connect-component';
-import isMas from '../../helpers/is-mas';
-import isAppx from '../../helpers/is-appx';
-import isStandalone from '../../helpers/is-standalone';
-import getStaticGlobal from '../../helpers/get-static-global';
-import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
+import connectComponent from '../../helpers/connectComponent';
+import isMas from '../../helpers/isMas';
+import isAppx from '../../helpers/isAppx';
+import isStandalone from '../../helpers/isStandalone';
+import getStaticGlobal from '../../helpers/getStaticGlobal';
+import getWorkspaceFriendlyName from '../../helpers/getWorkspaceFriendlyName';
 
 import SectionAbout from './section-about';
 import SectionAccountLicensing from './section-account-licensing';

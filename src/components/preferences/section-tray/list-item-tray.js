@@ -10,9 +10,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Switch from '@material-ui/core/Switch';
 import Divider from '@material-ui/core/Divider';
 
-import connectComponent from '../../../helpers/connect-component';
-import checkLicense from '../../../helpers/check-license';
-import isWebcatalog from '../../../helpers/is-webcatalog';
+import connectComponent from '../../../helpers/connectComponent';
+import checkLicense from '../../../helpers/checkLicense';
+import isWebcatalog from '../../../helpers/isWebcatalog';
 
 import {
   enqueueRequestRestartSnackbar,

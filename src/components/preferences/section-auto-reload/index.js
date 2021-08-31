@@ -14,9 +14,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import Switch from '@material-ui/core/Switch';
 
-import connectComponent from '../../../helpers/connect-component';
-import roundTime from '../../../helpers/round-time';
-import getUtmSource from '../../../helpers/get-utm-source';
+import connectComponent from '../../../helpers/connectComponent';
+import roundTime from '../../../helpers/roundTime';
+import getUtmSource from '../../../helpers/getUtmSource';
 
 import {
   enqueueRequestRestartSnackbar,

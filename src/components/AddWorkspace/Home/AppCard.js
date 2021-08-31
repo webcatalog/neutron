@@ -12,9 +12,9 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import amplitude from '../../../amplitude';
 
-import connectComponent from '../../../helpers/connect-component';
-import isUrl from '../../../helpers/is-url';
-import extractHostname from '../../../helpers/extract-hostname';
+import connectComponent from '../../../helpers/connectComponent';
+import isUrl from '../../../helpers/isUrl';
+import extractHostname from '../../../helpers/extractHostname';
 import { requestCreateWorkspace, requestTrackAddWorkspace } from '../../../senders';
 
 import { updateForm, updateMode } from '../../../state/dialog-add-workspace/actions';

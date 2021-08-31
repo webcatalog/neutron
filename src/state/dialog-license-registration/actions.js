@@ -6,8 +6,8 @@ import {
 } from '../../constants/actions';
 
 import validate from '../../helpers/validate';
-import hasErrors from '../../helpers/has-errors';
-import getStaticGlobal from '../../helpers/get-static-global';
+import hasErrors from '../../helpers/hasErrors';
+import getStaticGlobal from '../../helpers/getStaticGlobal';
 
 import {
   requestSetPreference,

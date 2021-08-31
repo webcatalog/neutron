@@ -22,8 +22,8 @@ import WidgetsIcon from '@material-ui/icons/Widgets';
 import CachedIcon from '@material-ui/icons/Cached';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
 
-import connectComponent from '../../helpers/connect-component';
-import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
+import connectComponent from '../../helpers/connectComponent';
+import getWorkspaceFriendlyName from '../../helpers/getWorkspaceFriendlyName';
 
 import {
   requestShowPreferencesWindow,

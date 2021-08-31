@@ -15,11 +15,11 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import NotificationsOffIcon from '@material-ui/icons/NotificationsOff';
 import VolumeOffIcon from '@material-ui/icons/VolumeOff';
 
-import connectComponent from '../../helpers/connect-component';
-import getAvatarText from '../../helpers/get-avatar-text';
-import getUrlFromText from '../../helpers/get-url-from-text';
-import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
-import getPicturePath from '../../helpers/get-picture-path';
+import connectComponent from '../../helpers/connectComponent';
+import getAvatarText from '../../helpers/getAvatarText';
+import getUrlFromText from '../../helpers/getUrlFromText';
+import getWorkspaceFriendlyName from '../../helpers/getWorkspaceFriendlyName';
+import getPicturePath from '../../helpers/getPicturePath';
 import themeColors from '../../constants/themeColors';
 
 import {

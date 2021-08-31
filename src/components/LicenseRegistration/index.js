@@ -10,7 +10,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogActions from '@material-ui/core/DialogActions';
 
-import connectComponent from '../../helpers/connect-component';
+import connectComponent from '../../helpers/connectComponent';
 
 import {
   updateForm,
@@ -19,8 +19,8 @@ import {
 
 import { requestOpenInBrowser } from '../../senders';
 
-import getStaticGlobal from '../../helpers/get-static-global';
-import getUtmSource from '../../helpers/get-utm-source';
+import getStaticGlobal from '../../helpers/getStaticGlobal';
+import getUtmSource from '../../helpers/getUtmSource';
 
 const styles = (theme) => ({
   root: {

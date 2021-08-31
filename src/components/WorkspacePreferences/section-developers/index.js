@@ -11,7 +11,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-import connectComponent from '../../../helpers/connect-component';
+import connectComponent from '../../../helpers/connectComponent';
 
 import { open as openDialogCodeInjection } from '../../../state/dialog-code-injection/actions';
 import { open as openDialogCustomUserAgent } from '../../../state/dialog-custom-user-agent/actions';

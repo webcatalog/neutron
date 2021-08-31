@@ -12,7 +12,7 @@ import {
 } from '../../senders';
 
 import validate from '../../helpers/validate';
-import hasErrors from '../../helpers/has-errors';
+import hasErrors from '../../helpers/hasErrors';
 
 export const open = () => (dispatch, getState) => {
   const {

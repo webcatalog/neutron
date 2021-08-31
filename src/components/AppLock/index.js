@@ -18,8 +18,8 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import LockIcon from '@material-ui/icons/Lock';
 
-import connectComponent from '../../helpers/connect-component';
-import getStaticGlobal from '../../helpers/get-static-global';
+import connectComponent from '../../helpers/connectComponent';
+import getStaticGlobal from '../../helpers/getStaticGlobal';
 
 import { updateForm, validateForm } from '../../state/app-lock/actions';
 

@@ -9,8 +9,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-import getStaticGlobal from '../../../helpers/get-static-global';
-import getUtmSource from '../../../helpers/get-utm-source';
+import getStaticGlobal from '../../../helpers/getStaticGlobal';
+import getUtmSource from '../../../helpers/getUtmSource';
 
 import {
   requestOpenInBrowser,

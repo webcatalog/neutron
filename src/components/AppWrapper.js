@@ -14,8 +14,8 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 
 import DateFnsUtils from '@date-io/date-fns';
 
-import connectComponent from '../helpers/connect-component';
-import getStaticGlobal from '../helpers/get-static-global';
+import connectComponent from '../helpers/connectComponent';
+import getStaticGlobal from '../helpers/getStaticGlobal';
 
 import WindowsTitleBar from './shared/windows-title-bar';
 import AppLock from './AppLock';

@@ -11,7 +11,7 @@ import Divider from '@material-ui/core/Divider';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-import connectComponent from '../../../helpers/connect-component';
+import connectComponent from '../../../helpers/connectComponent';
 
 import { open as openDialogInternalUrls } from '../../../state/dialog-internal-urls/actions';
 import { open as openDialogExternallUrls } from '../../../state/dialog-external-urls/actions';

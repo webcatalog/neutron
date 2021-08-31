@@ -10,10 +10,10 @@ import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
-import connectComponent from '../../../helpers/connect-component';
-import getMailtoUrl from '../../../helpers/get-mailto-url';
-import getWebcalUrl from '../../../helpers/get-webcal-url';
-import getStaticGlobal from '../../../helpers/get-static-global';
+import connectComponent from '../../../helpers/connectComponent';
+import getMailtoUrl from '../../../helpers/getMailtoUrl';
+import getWebcalUrl from '../../../helpers/getWebcalUrl';
+import getStaticGlobal from '../../../helpers/getStaticGlobal';
 
 import {
   updateForm,

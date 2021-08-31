@@ -13,11 +13,11 @@ import Typography from '@material-ui/core/Typography';
 import SearchIcon from '@material-ui/icons/Search';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import connectComponent from '../../../helpers/connect-component';
-import getStaticGlobal from '../../../helpers/get-static-global';
-import isMas from '../../../helpers/is-mas';
-import isAppx from '../../../helpers/is-appx';
-import isStandalone from '../../../helpers/is-standalone';
+import connectComponent from '../../../helpers/connectComponent';
+import getStaticGlobal from '../../../helpers/getStaticGlobal';
+import isMas from '../../../helpers/isMas';
+import isAppx from '../../../helpers/isAppx';
+import isStandalone from '../../../helpers/isStandalone';
 
 import AppCard from './AppCard';
 import SubmitAppCard from './SubmitAppCard';

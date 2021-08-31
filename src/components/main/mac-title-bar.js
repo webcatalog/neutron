@@ -8,10 +8,10 @@ import classnames from 'classnames';
 import { makeStyles } from '@material-ui/core/styles';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 
-import connectComponent from '../../helpers/connect-component';
-import getUrlFromText from '../../helpers/get-url-from-text';
-import getStaticGlobal from '../../helpers/get-static-global';
-import isMacOs11 from '../../helpers/is-mac-os-11';
+import connectComponent from '../../helpers/connectComponent';
+import getUrlFromText from '../../helpers/getUrlFromText';
+import getStaticGlobal from '../../helpers/getStaticGlobal';
+import isMacOs11 from '../../helpers/isMacOs11';
 
 import themeColors from '../../constants/themeColors';
 
