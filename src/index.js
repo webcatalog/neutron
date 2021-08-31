@@ -12,27 +12,27 @@ import './amplitude';
 
 import configureStore from './state';
 
-import AppWrapper from './components/app-wrapper';
+import AppWrapper from './components/AppWrapper';
 
-import getWorkspacesAsList from './helpers/get-workspaces-as-list';
-import getStaticGlobal from './helpers/get-static-global';
-import getWorkspaceFriendlyName from './helpers/get-workspace-friendly-name';
+import getWorkspacesAsList from './helpers/getWorkspacesAsList';
+import getStaticGlobal from './helpers/getStaticGlobal';
+import getWorkspaceFriendlyName from './helpers/getWorkspaceFriendlyName';
 
 import { getReactInitialStateAsync } from './invokers';
 
 const appJson = getStaticGlobal('appJson');
 
-const AddWorkspace = React.lazy(() => import('./components/add-workspace'));
-const Auth = React.lazy(() => import('./components/auth'));
-const DisplayMedia = React.lazy(() => import('./components/display-media'));
-const GoToUrl = React.lazy(() => import('./components/go-to-url'));
-const LicenseRegistration = React.lazy(() => import('./components/license-registration'));
-const Notifications = React.lazy(() => import('./components/notifications'));
-const OpenSourceNotices = React.lazy(() => import('./components/open-source-notices'));
-const OpenUrlWith = React.lazy(() => import('./components/open-url-with'));
-const Preferences = React.lazy(() => import('./components/preferences'));
-const WorkspacePreferences = React.lazy(() => import('./components/workspace-preferences'));
-const Main = React.lazy(() => import('./components/main'));
+const AddWorkspace = React.lazy(() => import('./components/AddWorkspace'));
+const Auth = React.lazy(() => import('./components/Auth'));
+const DisplayMedia = React.lazy(() => import('./components/DisplayMedia'));
+const GoToUrl = React.lazy(() => import('./components/GoToUrl'));
+const LicenseRegistration = React.lazy(() => import('./components/LicenseRegistration'));
+const Notifications = React.lazy(() => import('./components/Notifications'));
+const OpenSourceNotices = React.lazy(() => import('./components/OpenSourceNotices'));
+const OpenUrlWith = React.lazy(() => import('./components/OpenUrlWith'));
+const Preferences = React.lazy(() => import('./components/Preferences'));
+const WorkspacePreferences = React.lazy(() => import('./components/WorkspacePreferences'));
+const Main = React.lazy(() => import('./components/Main'));
 
 const App = () => {
   switch (window.mode) {

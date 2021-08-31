@@ -2,9 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { setPreference, setPreferences } from '../state/preferences/actions';
-import { setSystemPreference } from '../state/system-preferences/actions';
+import { setSystemPreference } from '../state/systemPreferences/actions';
 import { setWorkspace, setWorkspaces } from '../state/workspaces/actions';
-import { setWorkspaceMeta, setWorkspaceMetas } from '../state/workspace-metas/actions';
+import { setWorkspaceMeta, setWorkspaceMetas } from '../state/workspaceMetas/actions';
 import {
   updateAddressBarInfo,
   updateCanGoBack,
@@ -19,7 +19,7 @@ import {
   closeFindInPage,
   openFindInPage,
   updateFindInPageMatches,
-} from '../state/find-in-page/actions';
+} from '../state/findInPage/actions';
 import {
   updatePauseNotificationsInfo,
 } from '../state/notifications/actions';
