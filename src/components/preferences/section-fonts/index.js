@@ -21,7 +21,7 @@ import {
   requestSetPreference,
 } from '../../../senders';
 
-import { open as openDialogCustomizeFonts } from '../../../state/dialog-customize-fonts/actions';
+import { open as openDialogCustomizeFonts } from '../../../state/dialogCustomizeFonts/actions';
 
 import DialogCustomizeFonts from './dialog-customize-fonts';
 

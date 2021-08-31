@@ -16,7 +16,7 @@ import Divider from '@material-ui/core/Divider';
 
 import connectComponent from '../../../helpers/connectComponent';
 
-import { updateForm } from '../../../state/dialog-workspace-preferences/actions';
+import { updateForm } from '../../../state/dialogWorkspacePreferences/actions';
 
 const styles = (theme) => ({
   sliderContainer: {

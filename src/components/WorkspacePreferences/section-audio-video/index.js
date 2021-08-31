@@ -13,7 +13,7 @@ import Switch from '@material-ui/core/Switch';
 import connectComponent from '../../../helpers/connectComponent';
 import getWorkspaceFriendlyName from '../../../helpers/getWorkspaceFriendlyName';
 
-import { updateForm } from '../../../state/dialog-workspace-preferences/actions';
+import { updateForm } from '../../../state/dialogWorkspacePreferences/actions';
 
 const SectionAudioVideo = ({
   formDisableAudio,

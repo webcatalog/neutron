@@ -12,7 +12,7 @@ import isUrl from '../../helpers/isUrl';
 import validate from '../../helpers/validate';
 import getStaticGlobal from '../../helpers/getStaticGlobal';
 
-import { updateForm as updateWorkspacePreferencesForm } from '../dialog-workspace-preferences/actions';
+import { updateForm as updateWorkspacePreferencesForm } from '../dialogWorkspacePreferences/actions';
 
 export const open = () => (dispatch, getState) => {
   const {

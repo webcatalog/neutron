@@ -19,7 +19,7 @@ import {
   updateForm,
   save,
   close,
-} from '../../../state/dialog-edit-workspace/actions';
+} from '../../../state/dialogEditWorkspace/actions';
 
 const styles = (theme) => ({
   textField: {

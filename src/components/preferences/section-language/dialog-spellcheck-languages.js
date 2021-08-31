@@ -23,7 +23,7 @@ import {
   addLanguage,
   removeLanguage,
   save,
-} from '../../../state/dialog-spellcheck-languages/actions';
+} from '../../../state/dialogSpellcheckLanguages/actions';
 
 const styles = () => ({
   top: {

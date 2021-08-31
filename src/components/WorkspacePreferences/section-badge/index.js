@@ -12,7 +12,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import connectComponent from '../../../helpers/connectComponent';
 
-import { updateForm } from '../../../state/dialog-workspace-preferences/actions';
+import { updateForm } from '../../../state/dialogWorkspacePreferences/actions';
 
 const styles = (theme) => ({
   selectRoot: {

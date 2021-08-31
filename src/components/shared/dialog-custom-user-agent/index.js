@@ -13,7 +13,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 
 import connectComponent from '../../../helpers/connectComponent';
 
-import { close, updateForm, save } from '../../../state/dialog-custom-user-agent/actions';
+import { close, updateForm, save } from '../../../state/dialogCustomUserAgent/actions';
 
 const CustomUserAgent = ({
   customUserAgent,

@@ -14,7 +14,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import connectComponent from '../../../helpers/connectComponent';
 import getWorkspaceName from '../../../helpers/getWorkspaceName';
 
-import { open as openDialogEditWorkspace } from '../../../state/dialog-edit-workspace/actions';
+import { open as openDialogEditWorkspace } from '../../../state/dialogEditWorkspace/actions';
 
 import ListItemIcon from './list-item-icon';
 import ListItemColor from './list-item-color';

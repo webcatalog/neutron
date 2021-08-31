@@ -17,7 +17,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 
 import connectComponent from '../../../helpers/connectComponent';
 
-import { updateForm, save, close } from '../../../state/dialog-refresh-interval/actions';
+import { updateForm, save, close } from '../../../state/dialogRefreshInterval/actions';
 
 const styles = (theme) => ({
   content: {

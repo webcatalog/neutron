@@ -29,7 +29,7 @@ import {
   save,
   validateCurrentPassword,
   deletePassword,
-} from '../../../state/dialog-app-lock/actions';
+} from '../../../state/dialogAppLock/actions';
 
 import { requestOpenInBrowser } from '../../../senders';
 

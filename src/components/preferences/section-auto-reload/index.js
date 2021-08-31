@@ -24,7 +24,7 @@ import {
   requestSetPreference,
 } from '../../../senders';
 
-import { open as openDialogRefreshInterval } from '../../../state/dialog-refresh-interval/actions';
+import { open as openDialogRefreshInterval } from '../../../state/dialogRefreshInterval/actions';
 
 import autoRefreshIntervals from '../../../constants/autoRefreshIntervals';
 

@@ -18,7 +18,7 @@ import camelCaseToSentenceCase from '../../../helpers/camelCaseToSentenceCase';
 
 import themeColors from '../../../constants/themeColors';
 
-import { updateForm } from '../../../state/dialog-workspace-preferences/actions';
+import { updateForm } from '../../../state/dialogWorkspacePreferences/actions';
 
 const styles = (theme) => ({
   selectRoot: {

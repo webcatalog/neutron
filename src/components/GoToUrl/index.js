@@ -9,7 +9,7 @@ import TextField from '@material-ui/core/TextField';
 
 import connectComponent from '../../helpers/connectComponent';
 
-import { updateForm, go } from '../../state/dialog-go-to-url/actions';
+import { updateForm, go } from '../../state/dialogGoToUrl/actions';
 
 const styles = (theme) => ({
   root: {

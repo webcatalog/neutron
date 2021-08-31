@@ -15,7 +15,7 @@ import connectComponent from '../../helpers/connectComponent';
 import {
   updateForm,
   register,
-} from '../../state/dialog-license-registration/actions';
+} from '../../state/dialogLicenseRegistration/actions';
 
 import { requestOpenInBrowser } from '../../senders';
 

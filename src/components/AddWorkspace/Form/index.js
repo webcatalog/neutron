@@ -30,7 +30,7 @@ import {
   save,
   updateForm,
   resetForm,
-} from '../../../state/dialog-add-workspace/actions';
+} from '../../../state/dialogAddWorkspace/actions';
 
 import defaultWorkspaceImageLight from '../../../images/default-workspace-image-light.png';
 import defaultWorkspaceImageDark from '../../../images/default-workspace-image-dark.png';

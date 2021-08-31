@@ -20,7 +20,7 @@ import {
   requestSetPreference,
 } from '../../../senders';
 
-import { open as openDialogSpellcheckLanguages } from '../../../state/dialog-spellcheck-languages/actions';
+import { open as openDialogSpellcheckLanguages } from '../../../state/dialogSpellcheckLanguages/actions';
 
 import hunspellLanguagesMap from '../../../constants/hunspellLanguages';
 

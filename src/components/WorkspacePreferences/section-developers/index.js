@@ -13,8 +13,8 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 import connectComponent from '../../../helpers/connectComponent';
 
-import { open as openDialogCodeInjection } from '../../../state/dialog-code-injection/actions';
-import { open as openDialogCustomUserAgent } from '../../../state/dialog-custom-user-agent/actions';
+import { open as openDialogCodeInjection } from '../../../state/dialogCodeInjection/actions';
+import { open as openDialogCustomUserAgent } from '../../../state/dialogCustomUserAgent/actions';
 
 import DialogCodeInjection from '../../shared/dialog-code-injection';
 import DialogCustomUserAgent from '../../shared/dialog-custom-user-agent';

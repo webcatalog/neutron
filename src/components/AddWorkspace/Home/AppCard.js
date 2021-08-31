@@ -17,7 +17,7 @@ import isUrl from '../../../helpers/isUrl';
 import extractHostname from '../../../helpers/extractHostname';
 import { requestCreateWorkspace, requestTrackAddWorkspace } from '../../../senders';
 
-import { updateForm, updateMode } from '../../../state/dialog-add-workspace/actions';
+import { updateForm, updateMode } from '../../../state/dialogAddWorkspace/actions';
 
 const styles = (theme) => ({
   card: {

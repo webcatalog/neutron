@@ -18,7 +18,7 @@ import isWebcatalog from '../../../helpers/isWebcatalog';
 import getStaticGlobal from '../../../helpers/getStaticGlobal';
 import getUtmSource from '../../../helpers/getUtmSource';
 
-import { updateForm } from '../../../state/dialog-workspace-preferences/actions';
+import { updateForm } from '../../../state/dialogWorkspacePreferences/actions';
 
 import {
   requestOpenInBrowser,

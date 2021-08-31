@@ -17,7 +17,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import connectComponent from '../../../helpers/connectComponent';
 import isMas from '../../../helpers/isMas';
 
-import { updateForm } from '../../../state/dialog-workspace-preferences/actions';
+import { updateForm } from '../../../state/dialogWorkspacePreferences/actions';
 
 const styles = (theme) => ({
   selectRoot: {

@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 
 import connectComponent from '../../helpers/connectComponent';
 
-import { closeFindInPage, updateFindInPageText } from '../../state/find-in-page/actions';
+import { closeFindInPage, updateFindInPageText } from '../../state/findInPage/actions';
 
 import {
   requestFindInPage,

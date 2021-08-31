@@ -13,9 +13,9 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 import connectComponent from '../../../helpers/connectComponent';
 
-import { updateForm } from '../../../state/dialog-workspace-preferences/actions';
-import { open as openDialogInternalUrls } from '../../../state/dialog-internal-urls/actions';
-import { open as openDialogExternalUrls } from '../../../state/dialog-external-urls/actions';
+import { updateForm } from '../../../state/dialogWorkspacePreferences/actions';
+import { open as openDialogInternalUrls } from '../../../state/dialogInternalUrls/actions';
+import { open as openDialogExternalUrls } from '../../../state/dialogExternalUrls/actions';
 
 import DialogExternalUrls from '../../shared/dialog-external-urls';
 import DialogInternalUrls from '../../shared/dialog-internal-urls';

@@ -12,7 +12,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 import connectComponent from '../../../helpers/connectComponent';
 
-import { open as openDialogProxy } from '../../../state/dialog-proxy/actions';
+import { open as openDialogProxy } from '../../../state/dialogProxy/actions';
 
 import DialogProxy from './dialog-proxy';
 

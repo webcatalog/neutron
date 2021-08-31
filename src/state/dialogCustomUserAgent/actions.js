@@ -11,7 +11,7 @@ import {
   enqueueRequestRestartSnackbar,
 } from '../../senders';
 
-import { updateForm as updateFormDialogWorkspacePreferences } from '../dialog-workspace-preferences/actions';
+import { updateForm as updateFormDialogWorkspacePreferences } from '../dialogWorkspacePreferences/actions';
 
 export const open = () => (dispatch, getState) => {
   if (window.mode === 'workspace-preferences') {

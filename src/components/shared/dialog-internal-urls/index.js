@@ -19,7 +19,7 @@ import connectComponent from '../../../helpers/connectComponent';
 import getStaticGlobal from '../../../helpers/getStaticGlobal';
 import getUtmSource from '../../../helpers/getUtmSource';
 
-import { close, updateForm, save } from '../../../state/dialog-internal-urls/actions';
+import { close, updateForm, save } from '../../../state/dialogInternalUrls/actions';
 
 import {
   requestOpenInBrowser,

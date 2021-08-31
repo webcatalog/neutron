@@ -21,7 +21,7 @@ import LockIcon from '@material-ui/icons/Lock';
 import connectComponent from '../../helpers/connectComponent';
 import getStaticGlobal from '../../helpers/getStaticGlobal';
 
-import { updateForm, validateForm } from '../../state/app-lock/actions';
+import { updateForm, validateForm } from '../../state/appLock/actions';
 
 import {
   requestOpenInBrowser,

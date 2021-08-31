@@ -21,8 +21,8 @@ import {
   requestRequestReloadWorkspaceDialog,
 } from '../../../senders';
 
-import { updateForm } from '../../../state/dialog-workspace-preferences/actions';
-import { open as openDialogRefreshInterval } from '../../../state/dialog-refresh-interval/actions';
+import { updateForm } from '../../../state/dialogWorkspacePreferences/actions';
+import { open as openDialogRefreshInterval } from '../../../state/dialogRefreshInterval/actions';
 
 import autoRefreshIntervals from '../../../constants/autoRefreshIntervals';
 

@@ -29,7 +29,7 @@ import {
   close,
   updateForm,
   save,
-} from '../../../state/dialog-proxy/actions';
+} from '../../../state/dialogProxy/actions';
 
 import { requestOpenInBrowser } from '../../../senders';
 

@@ -29,7 +29,7 @@ import {
   getIconFromAppSearch,
   removePicture,
   setPicture,
-} from '../../../state/dialog-workspace-preferences/actions';
+} from '../../../state/dialogWorkspacePreferences/actions';
 
 import defaultWorkspaceImageLight from '../../../images/default-workspace-image-light.png';
 import defaultWorkspaceImageDark from '../../../images/default-workspace-image-dark.png';

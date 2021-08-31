@@ -17,7 +17,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 
 import connectComponent from '../../../helpers/connectComponent';
 
-import { close, updateForm, save } from '../../../state/dialog-customize-fonts/actions';
+import { close, updateForm, save } from '../../../state/dialogCustomizeFonts/actions';
 
 const styles = (theme) => ({
   selectRoot: {

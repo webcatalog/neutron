@@ -14,7 +14,7 @@ import CreateIcon from '@material-ui/icons/Create';
 import connectComponent from '../../helpers/connectComponent';
 import getWorkspaceFriendlyName from '../../helpers/getWorkspaceFriendlyName';
 
-import { updateMode } from '../../state/dialog-add-workspace/actions';
+import { updateMode } from '../../state/dialogAddWorkspace/actions';
 
 import Home from './Home';
 import Form from './Form';

@@ -13,7 +13,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import connectComponent from '../../../helpers/connectComponent';
 import checkLicense from '../../../helpers/checkLicense';
 
-import { open as openDialogAppLock } from '../../../state/dialog-app-lock/actions';
+import { open as openDialogAppLock } from '../../../state/dialogAppLock/actions';
 
 import DialogAppLock from './dialog-app-lock';
 

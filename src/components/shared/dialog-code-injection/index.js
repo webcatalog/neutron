@@ -23,7 +23,7 @@ import connectComponent from '../../../helpers/connectComponent';
 
 import { requestOpenInBrowser } from '../../../senders';
 
-import { updateForm, save, close } from '../../../state/dialog-code-injection/actions';
+import { updateForm, save, close } from '../../../state/dialogCodeInjection/actions';
 
 const styles = (theme) => ({
   content: {
