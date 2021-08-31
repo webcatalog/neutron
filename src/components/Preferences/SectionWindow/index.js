@@ -18,7 +18,7 @@ import {
   requestSetPreference,
 } from '../../../senders';
 
-import ListItemShortcut from './list-item-shortcut';
+import ListItemShortcut from './ListItemShortcut';
 
 const styles = (theme) => ({
   paper: {

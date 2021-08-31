@@ -14,7 +14,7 @@ import connectComponent from '../../../helpers/connectComponent';
 
 import { open as openDialogProxy } from '../../../state/dialogProxy/actions';
 
-import DialogProxy from './dialog-proxy';
+import DialogProxy from './DialogProxy';
 
 const styles = (theme) => ({
   paper: {

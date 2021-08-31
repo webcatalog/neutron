@@ -20,8 +20,8 @@ import {
   requestShowOpenSourceNoticesWindow,
 } from '../../../senders';
 
-import ListItemAbout from './list-item-about';
-import ListItemUpdates from './list-item-updates';
+import ListItemAbout from './ListItemAbout';
+import ListItemUpdates from './ListItemUpdates';
 import isWebcatalog from '../../../helpers/isWebcatalog';
 
 const SectionAbout = () => {
