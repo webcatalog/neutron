@@ -258,7 +258,7 @@ const Preferences = ({
     extensions: {
       text: 'Extensions',
       Icon: ExtensionIcon,
-      hidden: !semver.prerelease(appVersion) || isMas() || isAppx(),
+      hidden: isMas() || isAppx() || !semver.prerelease(appVersion),
       subSections: {
         extensions: { text: 'Extensions (experimental)', Component: SectionExtensions },
       },

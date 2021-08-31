@@ -29,6 +29,7 @@ const semver = require('semver');
 
 const appJson = require('./constants/app-json');
 const isMas = require('./libs/is-mas');
+const isAppx = require('./libs/is-appx');
 
 electronRemote.initialize();
 
@@ -562,7 +563,8 @@ if (!gotTheLock) {
     global.extensionEnabledExtesionIds = extensionEnabledExtesionIds;
     global.extensionSourceBrowserId = extensionSourceBrowserId;
     global.extensionSourceProfileDirName = extensionSourceProfileDirName;
-    global.extensionEnabled = semver.prerelease(app.getVersion())
+    global.extensionEnabled = !isMas() && !isAppx()
+      && Boolean(semver.prerelease(app.getVersion()))
       && extensionEnabledExtesionIds
       && Object.keys(extensionEnabledExtesionIds).length > 0;
     global.hibernateWhenUnused = hibernateWhenUnused;
