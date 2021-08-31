@@ -17,8 +17,8 @@ import { updateForm } from '../../../state/dialogWorkspacePreferences/actions';
 import { open as openDialogInternalUrls } from '../../../state/dialogInternalUrls/actions';
 import { open as openDialogExternalUrls } from '../../../state/dialogExternalUrls/actions';
 
-import DialogExternalUrls from '../../shared/dialog-external-urls';
-import DialogInternalUrls from '../../shared/dialog-internal-urls';
+import DialogExternalUrls from '../../shared/DialogExternalUrls';
+import DialogInternalUrls from '../../shared/DialogInternalUrls';
 
 const SectionLinkHandling = ({
   externalUrlRule,

@@ -5,7 +5,7 @@ import React from 'react';
 
 import List from '@material-ui/core/List';
 
-import ListItemExtensions from './list-item-extensions';
+import ListItemExtensions from './ListItemExtensions';
 
 const SectionExtensions = () => (
   <>

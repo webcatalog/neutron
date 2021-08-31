@@ -18,8 +18,8 @@ import {
   requestSetPreference,
 } from '../../../senders';
 
-import DialogInternalUrls from '../../shared/dialog-internal-urls';
-import DialogRefreshInterval from '../../shared/dialog-refresh-interval';
+import DialogInternalUrls from '../../shared/DialogInternalUrls';
+import DialogRefreshInterval from '../../shared/DialogRefreshInterval';
 
 const SectionHardward = ({
   swipeToNavigate,

@@ -24,7 +24,7 @@ import { open as openDialogSpellcheckLanguages } from '../../../state/dialogSpel
 
 import hunspellLanguagesMap from '../../../constants/hunspellLanguages';
 
-import DialogSpellcheckLanguages from './dialog-spellcheck-languages';
+import DialogSpellcheckLanguages from './DialogSpellcheckLanguages';
 
 const SectionLanguage = ({
   spellcheck,

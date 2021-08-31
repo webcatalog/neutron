@@ -16,9 +16,9 @@ import connectComponent from '../../../helpers/connectComponent';
 import { open as openDialogInternalUrls } from '../../../state/dialogInternalUrls/actions';
 import { open as openDialogExternallUrls } from '../../../state/dialogExternalUrls/actions';
 
-import DialogExternalUrls from '../../shared/dialog-external-urls';
-import DialogInternalUrls from '../../shared/dialog-internal-urls';
-import ListItemOpenProtocolUrl from './list-item-open-protocol-url';
+import DialogExternalUrls from '../../shared/DialogExternalUrls';
+import DialogInternalUrls from '../../shared/DialogInternalUrls';
+import ListItemOpenProtocolUrl from './ListItemOpenProtocolUrl';
 
 const SectionLinkHandling = ({
   internalUrlRule,

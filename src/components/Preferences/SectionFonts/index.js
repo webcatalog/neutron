@@ -23,7 +23,7 @@ import {
 
 import { open as openDialogCustomizeFonts } from '../../../state/dialogCustomizeFonts/actions';
 
-import DialogCustomizeFonts from './dialog-customize-fonts';
+import DialogCustomizeFonts from './DialogCustomizeFonts';
 
 const styles = (theme) => ({
   selectRoot: {

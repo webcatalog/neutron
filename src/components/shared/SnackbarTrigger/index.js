@@ -10,7 +10,7 @@ import { SnackbarProvider } from 'notistack';
 
 import connectComponent from '../../../helpers/connectComponent';
 
-import Inner from './inner';
+import Inner from './Inner';
 
 const styles = (theme) => ({
   notistackContainerRoot: {

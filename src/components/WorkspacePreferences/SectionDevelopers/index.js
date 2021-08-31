@@ -16,8 +16,8 @@ import connectComponent from '../../../helpers/connectComponent';
 import { open as openDialogCodeInjection } from '../../../state/dialogCodeInjection/actions';
 import { open as openDialogCustomUserAgent } from '../../../state/dialogCustomUserAgent/actions';
 
-import DialogCodeInjection from '../../shared/dialog-code-injection';
-import DialogCustomUserAgent from '../../shared/dialog-custom-user-agent';
+import DialogCodeInjection from '../../shared/DialogCodeInjection';
+import DialogCustomUserAgent from '../../shared/DialogCustomUserAgent';
 
 const SectionDevelopers = ({
   cssCodeInjection,

@@ -29,7 +29,7 @@ import {
   requestShowPreferencesWindow,
 } from '../../senders';
 
-import SnackbarTrigger from '../shared/snackbar-trigger';
+import SnackbarTrigger from '../shared/SnackbarTrigger';
 
 import SectionAudioVideo from './SectionAudioVideo';
 import SectionAutoReload from './SectionAutoReload';

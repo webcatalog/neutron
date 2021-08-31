@@ -73,7 +73,7 @@ import SectionWorkspaces from './SectionWorkspaces';
 import SectionPermissions from './SectionPermissions';
 import SectionLocationPermission from './SectionLocationPermissions';
 
-import SnackbarTrigger from '../shared/snackbar-trigger';
+import SnackbarTrigger from '../shared/SnackbarTrigger';
 
 const styles = (theme) => ({
   root: {

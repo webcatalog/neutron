@@ -28,7 +28,7 @@ import { open as openDialogRefreshInterval } from '../../../state/dialogRefreshI
 
 import autoRefreshIntervals from '../../../constants/autoRefreshIntervals';
 
-import DialogRefreshInterval from '../../shared/dialog-refresh-interval';
+import DialogRefreshInterval from '../../shared/DialogRefreshInterval';
 
 const styles = (theme) => ({
   link: {

@@ -6,7 +6,7 @@ import React from 'react';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 
-import ListItemAuthStatus from '../../shared/list-item-auth-status';
+import ListItemAuthStatus from '../../shared/ListItemAuthStatus';
 
 const SectionPermissions = () => {
   if (window.process.platform !== 'darwin') {
