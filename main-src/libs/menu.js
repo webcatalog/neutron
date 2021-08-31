@@ -402,13 +402,13 @@ const createMenu = async () => {
       submenu: [
         {
           label: 'Home',
-          accelerator: 'Shift+CmdOrCtrl+H',
+          accelerator: process.platform === 'darwin' ? 'Shift+CmdOrCtrl+H' : 'Alt+Home',
           click: () => ipcMain.emit('request-go-home'),
           enabled: !global.locked && hasWorkspaces,
         },
         {
           label: 'Back',
-          accelerator: 'CmdOrCtrl+[',
+          accelerator: process.platform === 'darwin' ? 'CmdOrCtrl+[' : 'Alt+Left',
           click: (menuItem, browserWindow) => {
             // if back is called in popup window
             // navigate in the popup window instead
@@ -422,7 +422,7 @@ const createMenu = async () => {
         },
         {
           label: 'Forward',
-          accelerator: 'CmdOrCtrl+]',
+          accelerator: process.platform === 'darwin' ? 'CmdOrCtrl+]' : 'Alt+Right',
           click: (menuItem, browserWindow) => {
             // if back is called in popup window
             // navigate in the popup window instead
