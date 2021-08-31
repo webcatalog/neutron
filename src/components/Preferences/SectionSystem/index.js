@@ -22,9 +22,9 @@ import {
   requestSetSystemPreference,
 } from '../../../senders';
 
-import ListItemDefaultMailClient from './list-item-default-mail-client';
-import ListItemDefaultBrowser from './list-item-default-browser';
-import ListItemDefaultCalendarApp from './list-item-default-calendar-app';
+import ListItemDefaultMailClient from './ListItemDefaultMailClient';
+import ListItemDefaultBrowser from './ListItemDefaultBrowser';
+import ListItemDefaultCalendarApp from './ListItemDefaultCalendarApp';
 
 const styles = (theme) => ({
   selectRoot: {

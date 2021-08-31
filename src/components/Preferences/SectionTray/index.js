@@ -7,7 +7,7 @@ import List from '@material-ui/core/List';
 
 import connectComponent from '../../../helpers/connectComponent';
 
-import ListItemTray from './list-item-tray';
+import ListItemTray from './ListItemTray';
 
 const styles = (theme) => ({
   paper: {
