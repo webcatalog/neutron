@@ -455,9 +455,19 @@ const createMenu = async () => {
         },
         { type: 'separator' },
         {
-          label: 'Copy URL',
+          label: global.navigationBar ? 'Open Location...' : 'Copy URL',
           accelerator: 'CmdOrCtrl+L',
           click: (menuItem, browserWindow) => {
+            // if address bar is visible
+            // focus on address bar instead of copy URL (same behavior as Chrome)
+            if (global.navigationBar) {
+              if (browserWindow) {
+                browserWindow.webContents.focus();
+                browserWindow.send('focus-on-address-bar');
+              }
+              return;
+            }
+
             // if back is called in popup window
             // copy the popup window URL instead
             if (browserWindow && browserWindow.isPopup) {
