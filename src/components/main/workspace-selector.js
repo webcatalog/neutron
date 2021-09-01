@@ -231,10 +231,6 @@ const WorkspaceSelector = ({
       return null;
     }
 
-    if (sidebarTips !== 'none' && id === 'add') {
-      return 'Add';
-    }
-
     if (sidebarTips === 'shortcut') {
       return shortcutTip;
     }
