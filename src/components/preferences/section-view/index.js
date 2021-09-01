@@ -39,6 +39,7 @@ const SectionAppearance = ({
   classes,
   navigationBar,
   sidebar,
+  sidebarAddButton,
   sidebarSize,
   sidebarTips,
   titleBar,
@@ -138,6 +139,22 @@ const SectionAppearance = ({
           </MenuItem>
         </Select>
       </ListItem>
+      <ListItem>
+        <ListItemText
+          primary="Show add (+) button on sidebar"
+        />
+        <ListItemSecondaryAction>
+          <Switch
+            edge="end"
+            color="primary"
+            checked={sidebarAddButton}
+            onChange={(e) => {
+              requestSetPreference('sidebarAddButton', e.target.checked);
+              requestRealignActiveWorkspace();
+            }}
+          />
+        </ListItemSecondaryAction>
+      </ListItem>
       <Divider />
       <ListItem>
         <ListItemText
@@ -191,6 +208,7 @@ SectionAppearance.propTypes = {
   classes: PropTypes.object.isRequired,
   navigationBar: PropTypes.bool.isRequired,
   sidebar: PropTypes.bool.isRequired,
+  sidebarAddButton: PropTypes.bool.isRequired,
   sidebarSize: PropTypes.oneOf(['compact', 'expanded']).isRequired,
   sidebarTips: PropTypes.oneOf(['shortcut', 'name', 'none']).isRequired,
   titleBar: PropTypes.bool.isRequired,
@@ -200,6 +218,7 @@ const mapStateToProps = (state) => ({
   attachToMenubar: state.preferences.attachToMenubar,
   navigationBar: state.preferences.navigationBar,
   sidebar: state.preferences.sidebar,
+  sidebarAddButton: state.preferences.sidebarAddButton,
   sidebarSize: state.preferences.sidebarSize,
   sidebarTips: state.preferences.sidebarTips,
   titleBar: state.preferences.titleBar,
