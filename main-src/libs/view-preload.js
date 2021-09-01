@@ -41,7 +41,13 @@ const loadDarkReader = (workspaceId) => {
   const darkReader = workspaceDarkReader != null
     ? workspaceDarkReader
     : ipcRenderer.sendSync('get-preference', 'darkReader'); // get fresh value
-  if (shouldUseDarkColor && darkReader) {
+
+  const isWhatsApp = window.location.hostname.includes('web.whatsapp.com');
+
+  // disable Dark Reader in WhatsApp Web
+  // Dark Reader distorts QR Code and prevents users from signing in
+  // also WhatsApp Web already has dark theme
+  if (shouldUseDarkColor && darkReader && !isWhatsApp) {
     let darkReaderBrightness;
     let darkReaderContrast;
     let darkReaderGrayscale;
