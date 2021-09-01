@@ -46,9 +46,11 @@ export const updateForm = (changes) => (dispatch, getState) => {
     preferences,
   });
 
-  const shouldReloadDarkReader = Object.keys(changes).find((key) => key.startsWith('darkReader'));
-  if (shouldReloadDarkReader) {
-    requestReloadViewDarkReader(workspaceId);
+  if (changes.preferences) {
+    const shouldReloadDarkReader = Object.keys(changes.preferences).find((key) => key.startsWith('darkReader'));
+    if (shouldReloadDarkReader) {
+      requestReloadViewDarkReader(workspaceId);
+    }
   }
 };
 
