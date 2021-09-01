@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
@@ -170,6 +170,20 @@ const NavigationBar = ({
   const classes = useStyles({ themeColor });
   const [addressInputClicked, setAddressInputClicked] = useState(false);
   const hasExpandedSidebar = sidebar && sidebarSize === 'expanded';
+  const addressBarRef = useRef(null);
+
+  useEffect(() => {
+    window.ipcRenderer.removeAllListeners('focus-on-address-bar');
+    window.ipcRenderer.on('focus-on-address-bar', () => {
+      if (addressBarRef.current) {
+        addressBarRef.current.focus();
+        addressBarRef.current.select();
+      }
+    });
+    return () => {
+      window.ipcRenderer.removeAllListeners('focus-on-address-bar');
+    };
+  }, [addressBarRef]);
 
   return (
     <div
@@ -245,6 +259,7 @@ const NavigationBar = ({
           disabled={!hasWorkspaces}
           inputProps={{
             spellCheck: false,
+            ref: addressBarRef,
           }}
           endAdornment={addressEdited && address && hasWorkspaces && (
             <IconButton
