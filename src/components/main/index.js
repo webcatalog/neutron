@@ -120,8 +120,7 @@ const useStyles = makeStyles((theme) => {
     },
     sidebarDraggableArea: {
       width: '100%',
-      height: titleBarHeight,
-      minHeight: titleBarHeight,
+      height: titleBarHeight + 4,
       WebkitAppRegion: 'drag',
       WebkitUserSelect: 'none',
     },
