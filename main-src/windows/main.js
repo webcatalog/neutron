@@ -22,6 +22,8 @@ const appJson = require('../constants/app-json');
 const isSnap = require('../libs/is-snap');
 const isWebcatalog = require('../libs/is-webcatalog');
 const isAppx = require('../libs/is-appx');
+const formatBytes = require('../libs/format-bytes');
+const isStandalone = require('../libs/is-standalone');
 
 let win;
 let mb = {};
@@ -83,6 +85,28 @@ const createAsync = () => new Promise((resolve) => {
       },
     ] : [];
 
+    const updaterEnabled = !isMas() && !isSnap() && !isAppx();
+    const updaterMenuItem = {
+      label: 'Check for Updates...',
+      click: () => ipcMain.emit('request-check-for-updates'),
+      visible: updaterEnabled,
+    };
+    if (updaterEnabled && isStandalone()) {
+      if (global.updaterObj && global.updaterObj.status === 'update-downloaded') {
+        updaterMenuItem.label = 'Restart to Apply Updates...';
+      } else if (global.updaterObj && global.updaterObj.status === 'update-available') {
+        updaterMenuItem.label = 'Downloading Updates...';
+        updaterMenuItem.enabled = false;
+      } else if (global.updaterObj && global.updaterObj.status === 'download-progress') {
+        const { transferred, total, bytesPerSecond } = global.updaterObj.info;
+        updaterMenuItem.label = `Downloading Updates (${formatBytes(transferred)}/${formatBytes(total)} at ${formatBytes(bytesPerSecond)}/s)...`;
+        updaterMenuItem.enabled = false;
+      } else if (global.updaterObj && global.updaterObj.status === 'checking-for-update') {
+        updaterMenuItem.label = 'Checking for Updates...';
+        updaterMenuItem.enabled = false;
+      }
+    }
+
     const trayContextMenu = Menu.buildFromTemplate([
       {
         label: `Open ${appJson.name}`,
@@ -109,13 +133,9 @@ const createAsync = () => new Promise((resolve) => {
       ...lockMenuItems,
       {
         type: 'separator',
-        visible: !isMas() && !isSnap() && !isAppx(),
+        visible: updaterEnabled,
       },
-      {
-        label: 'Check for Updates...',
-        click: () => ipcMain.emit('request-check-for-updates'),
-        visible: !isMas() && !isSnap() && !isAppx(),
-      },
+      updaterMenuItem,
       {
         type: 'separator',
       },
