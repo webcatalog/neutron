@@ -359,6 +359,7 @@ const Main = ({
   navigationBar,
   shouldPauseNotifications,
   sidebar,
+  sidebarAddButton,
   sidebarSize,
   themeColor,
   titleBar,
@@ -411,33 +412,35 @@ const Main = ({
                     <SortableItem key={`item-${workspace.id}`} index={i} value={{ index: i, workspace, themeColor }} />
                   ))}
                 </SortableContainer>
-                <WorkspaceSelector
-                  id="add"
-                  themeColor={themeColor}
-                  onClick={() => {
-                    if (!appJson.url) {
-                      requestShowAddWorkspaceWindow();
-                      return;
-                    }
-                    requestCreateWorkspace();
-                  }}
-                  onContextMenu={!appJson.url ? null : (e) => {
-                    e.preventDefault();
-                    const template = [
-                      {
-                        label: `Add ${appJson.name} ${getWorkspaceFriendlyName()}`,
-                        click: () => requestCreateWorkspace(),
-                      },
-                      {
-                        label: `Add Custom ${getWorkspaceFriendlyName()}`,
-                        click: () => requestShowAddWorkspaceWindow(),
-                      },
-                    ];
+                {sidebarAddButton && (
+                  <WorkspaceSelector
+                    id="add"
+                    themeColor={themeColor}
+                    onClick={() => {
+                      if (!appJson.url) {
+                        requestShowAddWorkspaceWindow();
+                        return;
+                      }
+                      requestCreateWorkspace();
+                    }}
+                    onContextMenu={!appJson.url ? null : (e) => {
+                      e.preventDefault();
+                      const template = [
+                        {
+                          label: `Add ${appJson.name} ${getWorkspaceFriendlyName()}`,
+                          click: () => requestCreateWorkspace(),
+                        },
+                        {
+                          label: `Add Custom ${getWorkspaceFriendlyName()}`,
+                          click: () => requestShowAddWorkspaceWindow(),
+                        },
+                      ];
 
-                    const menu = window.remote.Menu.buildFromTemplate(template);
-                    menu.popup(window.remote.getCurrentWindow());
-                  }}
-                />
+                      const menu = window.remote.Menu.buildFromTemplate(template);
+                      menu.popup(window.remote.getCurrentWindow());
+                    }}
+                  />
+                )}
               </div>
               {!navigationBar && !isMas() && !isAppx() && (
                 <BrowserActionList className={classes.browserActionList} />
@@ -598,6 +601,7 @@ Main.propTypes = {
   navigationBar: PropTypes.bool.isRequired,
   shouldPauseNotifications: PropTypes.bool.isRequired,
   sidebar: PropTypes.bool.isRequired,
+  sidebarAddButton: PropTypes.bool.isRequired,
   sidebarSize: PropTypes.oneOf(['compact', 'expanded']).isRequired,
   themeColor: PropTypes.string,
   titleBar: PropTypes.bool.isRequired,
@@ -621,6 +625,7 @@ const mapStateToProps = (state) => {
       || state.preferences.navigationBar,
     shouldPauseNotifications: state.notifications.pauseNotificationsInfo !== null,
     sidebar: state.preferences.sidebar,
+    sidebarAddButton: state.preferences.sidebarAddButton,
     sidebarSize: state.preferences.sidebarSize,
     titleBar: state.preferences.titleBar,
     muteApp: state.preferences.muteApp,

@@ -116,6 +116,7 @@ const defaultPreferences = {
   sidebar: shouldShowSidebar,
   sidebarSize: 'compact',
   sidebarTips: 'shortcut',
+  sidebarAddButton: true,
   skipAskingDefaultCalendarClient: false,
   skipAskingDefaultMailClient: false,
   spellcheck: true,
