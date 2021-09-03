@@ -1,7 +1,7 @@
 {
   "name": "neutron",
   "description": "AppView template for WebCatalog",
-  "version": "19.0.0-rc.3",
+  "version": "19.0.0",
   "minimumWebCatalogVersion": "36.3.0",
   "engines": {
     "node": ">=14.0.0 <15.0.0"
@@ -69,7 +69,7 @@
     "electron-chrome-extensions": "3.8.0",
     "electron-context-menu": "3.1.1",
     "electron-is-dev": "2.0.0",
-    "electron-notarize": "1.1.0",
+    "electron-notarize": "1.1.1",
     "electron-settings": "4.0.2",
     "electron-updater": "4.4.6",
     "electron-window-state": "5.0.3",
@@ -82,7 +82,7 @@
     "eslint-plugin-react-hooks": "2.5.1",
     "ext-name": "5.0.0",
     "extract-zip": "2.0.1",
-    "follow-redirects": "1.14.2",
+    "follow-redirects": "1.14.3",
     "fs-extra": "10.0.0",
     "glob": "7.1.7",
     "hasha": "5.2.2",
