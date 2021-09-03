@@ -10,11 +10,14 @@ import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import Divider from '@material-ui/core/Divider';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import Switch from '@material-ui/core/Switch';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 import connectComponent from '../../../helpers/connect-component';
 import checkLicense from '../../../helpers/check-license';
+import getWorkspaceFriendlyName from '../../../helpers/get-workspace-friendly-name';
 
 import { open as openDialogAppLock } from '../../../state/dialog-app-lock/actions';
 
@@ -52,6 +55,7 @@ const styles = (theme) => ({
 
 const SectionPrivacySecurity = ({
   appLockTimeout,
+  appLockWhenSwitchingWorkspace,
   classes,
   dialogAppLockOpen,
   onOpenDialogAppLock,
@@ -92,7 +96,6 @@ const SectionPrivacySecurity = ({
           />
           <ChevronRightIcon color="action" />
         </ListItem>
-        <Divider />
         <ListItem>
           <ListItemText
             primary="Lock the app after"
@@ -120,6 +123,24 @@ const SectionPrivacySecurity = ({
             ))}
           </Select>
         </ListItem>
+        <Divider />
+        <ListItem>
+          <ListItemText
+            primary={`Ask for password when switching between ${getWorkspaceFriendlyName(true).toLowerCase()}`}
+          />
+          <ListItemSecondaryAction>
+            <Switch
+              edge="end"
+              color="primary"
+              checked={appLockWhenSwitchingWorkspace}
+              onChange={(e) => {
+                requestSetPreference('appLockWhenSwitchingWorkspace', e.target.checked);
+                enqueueRequestRestartSnackbar();
+              }}
+              disabled={!appLockEnabled}
+            />
+          </ListItemSecondaryAction>
+        </ListItem>
       </List>
       <DialogAppLock />
     </>
@@ -128,6 +149,7 @@ const SectionPrivacySecurity = ({
 
 SectionPrivacySecurity.propTypes = {
   appLockTimeout: PropTypes.number.isRequired,
+  appLockWhenSwitchingWorkspace: PropTypes.bool.isRequired,
   classes: PropTypes.object.isRequired,
   dialogAppLockOpen: PropTypes.bool.isRequired,
   onOpenDialogAppLock: PropTypes.func.isRequired,
@@ -139,6 +161,7 @@ const actionCreators = {
 
 const mapStateToProps = (state) => ({
   appLockTimeout: state.preferences.appLockTimeout,
+  appLockWhenSwitchingWorkspace: state.preferences.appLockWhenSwitchingWorkspace,
   dialogAppLockOpen: state.dialogAppLock.open,
 });
 
