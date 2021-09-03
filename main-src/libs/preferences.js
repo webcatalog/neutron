@@ -41,6 +41,7 @@ const shouldShowSidebar = !appJson.url || Boolean(MAILTO_URLS[extractHostname(ap
 const defaultPreferences = {
   allowNodeInJsCodeInjection: false,
   alwaysOnTop: false, // for menubar
+  appLockTimeout: 300000,
   autoHideMenuBar: false,
   // on macOS, save to ~/Downloads by default
   // because we can bounce the file in dock
