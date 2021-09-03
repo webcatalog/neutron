@@ -64,7 +64,7 @@
     "darkreader": "4.9.34",
     "date-fns": "2.23.0",
     "del": "6.0.0",
-    "electron": "14.0.0",
+    "electron": "15.0.0-beta.2",
     "electron-builder": "22.11.11",
     "electron-chrome-extensions": "3.8.0",
     "electron-context-menu": "3.1.1",
