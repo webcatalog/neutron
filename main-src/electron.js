@@ -715,7 +715,7 @@ if (!gotTheLock) {
       if (allBlurred) {
         ipcMain.emit('request-lock-app');
       }
-    }, 5 * 60 * 1000);
+    }, getPreference('appLockTimeout'));
   });
 
   // by default, castlabs/electron-releases terminates the app (process.exit(1))
