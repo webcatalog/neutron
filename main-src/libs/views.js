@@ -1136,6 +1136,11 @@ const setActiveView = (browserWindow, id) => {
   if (currentView) {
     currentView.webContents.stopFindInPage('clearSelection');
     browserWindow.send('close-find-in-page');
+
+    const appLockWhenSwitchingWorkspace = getPreference('appLockWhenSwitchingWorkspace');
+    if (appLockWhenSwitchingWorkspace) {
+      ipcMain.emit('request-lock-app');
+    }
   }
 
   if (views[id] == null) {

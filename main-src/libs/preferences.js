@@ -42,6 +42,7 @@ const defaultPreferences = {
   allowNodeInJsCodeInjection: false,
   alwaysOnTop: false, // for menubar
   appLockTimeout: 300000,
+  appLockWhenSwitchingWorkspace: false,
   autoHideMenuBar: false,
   // on macOS, save to ~/Downloads by default
   // because we can bounce the file in dock
