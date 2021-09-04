@@ -15,6 +15,7 @@
     "eject": "react-scripts eject",
     "lint": "eslint ./main-src ./src ./build-*.js --ext js",
     "start": "react-scripts start",
+    "electron-only": "electron .",
     "electron-dev": "concurrently \"cross-env BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\" -k",
     "electron-dev:mas": "cross-env REACT_APP_FORCE_MAS=1 yarn electron-dev",
     "electron-dev:appx": "cross-env REACT_APP_FORCE_APPX=1 yarn electron-dev",
