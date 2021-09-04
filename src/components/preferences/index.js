@@ -14,6 +14,7 @@ import Paper from '@material-ui/core/Paper';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
 import AssessmentIcon from '@material-ui/icons/Assessment';
+import AssignmentIcon from '@material-ui/icons/Assignment';
 import CachedIcon from '@material-ui/icons/Cached';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CodeIcon from '@material-ui/icons/Code';
@@ -168,6 +169,13 @@ const Preferences = ({
       Icon: NotificationsIcon,
       subSections: {
         notifications: { text: 'Notifications', Component: SectionNotifications },
+        badge: { text: 'Badge', Component: SectionBadge },
+      },
+    },
+    autofill: {
+      text: 'Autofill',
+      Icon: AssignmentIcon,
+      subSections: {
         badge: { text: 'Badge', Component: SectionBadge },
       },
     },
