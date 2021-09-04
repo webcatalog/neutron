@@ -66,7 +66,7 @@
     "del": "6.0.0",
     "electron": "15.0.0-beta.2",
     "electron-builder": "22.11.11",
-    "electron-chrome-extensions": "3.8.0",
+    "electron-chrome-extensions": "3.9.0",
     "electron-context-menu": "3.1.1",
     "electron-is-dev": "2.0.0",
     "electron-notarize": "1.1.1",
