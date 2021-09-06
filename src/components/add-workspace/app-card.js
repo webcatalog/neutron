@@ -137,7 +137,10 @@ const AppCard = (props) => {
               picture: icon,
               catalogId: id,
               tabs: {
-                '0': { homeUrl: url },
+                '0': {
+                  homeUrl: url,
+                  lastUrl: url
+                },
               }
             });
 

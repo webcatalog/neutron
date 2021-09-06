@@ -689,19 +689,57 @@ const loadListeners = () => {
   });
 
   ipcMain.on('request-new-tab-browser', async (_, tabInfo) => {
+    const win = mainWindow.get();
+    const browserView = win.getBrowserView();
+
     const { tabIndex, homeUrl } = tabInfo;
     // Workspace ID
     const { id, tabs } = getActiveWorkspace();
+    const lastUrl = browserView.webContents.getURL();
 
+    // Update workspace config
     setWorkspace(id, {
       tabs: {
         ...tabs,
-        [tabIndex]: { homeUrl },
+        [tabIndex]: { homeUrl, lastUrl },
       },
     });
 
+    // Update workspace view
+    const view = new BrowserView();
+    win.setBrowserView(view);
+
+    const contentSize = win.getContentSize();
+    const { x, y, width, height } = getViewBounds(contentSize);
+    view.setBounds({
+      x,
+      y: y + 48,
+      width,
+      height
+    });
+    view.setBackgroundColor('#FFF');
+    view.webContents.loadURL(homeUrl);
+  });
+
+  ipcMain.on('request-open-tab-browser', (_, tabInfo) => {
+    const { tabIndex } = tabInfo;
+    const currentWorkspace = getActiveWorkspace();
     const win = mainWindow.get();
-    win.getBrowserView().webContents.loadURL(homeUrl);
+    win.setBrowserView(undefined);
+
+    // Latest Url from tab session.
+    const { id, lastUrl, tabs } = currentWorkspace;
+   
+    // Update workspace config
+    setWorkspace(id, {
+      tabs: {
+        ...tabs,
+        [tabIndex]: {
+          ...tabs[tabIndex],
+          lastUrl,
+        },
+      },
+    });
 
     const view = new BrowserView();
     win.setBrowserView(view);
@@ -715,28 +753,21 @@ const loadListeners = () => {
       height
     });
     view.setBackgroundColor('#FFF');
-    view.webContents.loadURL(url);
-  });
-
-  ipcMain.on('request-open-tab-browser', (_, tabInfo) => {
-    const { tabIndex } = tabInfo;
-  
-    const currentWorkspace = getActiveWorkspace();
-
-    console.log(currentWorkspace)
+    win.getBrowserView().webContents.loadURL(lastUrl);
   });
 
   ipcMain.on('request-close-tab-browser', (_, tabInfo) => {
     const { tabIndex } = tabInfo;
-    // Workspace ID
     const { id, tabs } = getActiveWorkspace();
 
-    setWorkspace(id, {
-      tabs: {
-        ...tabs,
-        [tabIndex]: { homeUrl },
-      },
-    });
+    const win = mainWindow.get();
+    const browserView = win.getBrowserView();
+    const webContents = browserView.webContents;
+
+    delete tabs[tabIndex];
+    webContents.forcefullyCrashRenderer();
+
+    setWorkspace(id, { tabs });
   });
 };
 

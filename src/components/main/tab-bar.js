@@ -13,7 +13,6 @@ import { getWorkspace, getWorkspaces } from '../../senders';
 const useStyle = makeStyles((theme) => ({
   wrapper: {
     display: 'flex',
-    overflowY: 'scroll',
   },
 }));
 
@@ -24,7 +23,7 @@ const TabBar = () => {
   const [selectedTabIndex, updateSelectedTabIndex] = useState(0);
 
   useEffect(() => {
-    const { tabs } = getCurrentWorkspace();
+    const { tabs } = getCurrentWorkspace() || { };
     const tabsCount = Object.keys(tabs || { }).length;
 
     updateTabsCount(tabsCount);
@@ -37,14 +36,19 @@ const TabBar = () => {
     return currentWorkspace[0];
   };
 
-  const onTabSelected = (tabIndex) => {
+  const onTabSelected = (e, tabIndex) => {
+    e.stopPropagation();
+
     const currentWorkspace = getCurrentWorkspace();
     const { id } = currentWorkspace;
 
+    updateSelectedTabIndex(tabIndex);
     window.ipcRenderer.send('request-open-tab-browser', { id, tabIndex });
   };
 
-  const onTabRemoved = (tabIndex) => {
+  const onTabRemoved = (e, tabIndex) => {
+    e.stopPropagation();
+
     updateTabsCount(tabsCount - 1);
 
     window.ipcRenderer.send('request-close-tab-browser', { tabIndex });
@@ -63,17 +67,24 @@ const TabBar = () => {
 
   return (
     <div className={classes.wrapper}>
-      {[...Array(tabsCount).keys()].map((i) => (
-        <Button
-          key={i}
-          disableRipple
-          onClick={() => onTabSelected(i)}>
-          {`New tabs`}
-          <IconButton
-            children={<CloseIcon fontSize="small" />}
-            onClick={onTabRemoved}
-          />
-        </Button>)
+      {[...Array(tabsCount).keys()].map((i) => {
+        const isSelectedTab = (selectedTabIndex === i);
+
+        return (
+          <Button
+            key={i}
+            disableRipple
+            disabled={isSelectedTab}
+            onClick={(e) => onTabSelected(e, i)}>
+            {`New tabs`}
+            {(tabsCount !== 1) && (
+              <IconButton
+                children={<CloseIcon fontSize="small" />}
+                onClick={(e) => onTabRemoved(e, i)}
+              />
+            )}
+          </Button>
+        )}
       )}
       <IconButton
         children={<AddIcon fontSize="small" />}
