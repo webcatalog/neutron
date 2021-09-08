@@ -537,6 +537,20 @@ const addViewAsync = async (browserWindow, workspace) => {
       sendToAllWindows('update-can-go-forward', view.webContents.canGoForward());
       updateAddress(url);
     }
+
+    // Google uses special code for Chromium-based browsers
+    // when screensharing (not working with Electron)
+    // so change user-agent to Safari to make it work
+    const navigatedDomain = extractDomain(url);
+    if (!customUserAgent && navigatedDomain === 'meet.google.com') {
+      const currentUaStr = view.webContents.userAgent;
+      const fakedSafariUaStr = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15';
+      if (currentUaStr !== fakedSafariUaStr) {
+        view.webContents.userAgent = fakedSafariUaStr;
+        // eslint-disable-next-line no-console
+        console.log('Changed user agent to', fakedSafariUaStr, 'for web compatibility URL: ', url, 'when', 'did-navigate');
+      }
+    }
   });
 
   view.webContents.on('did-navigate-in-page', (e, url) => {
