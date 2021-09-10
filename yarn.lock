@@ -12,10 +12,10 @@
   resolved "https://registry.yarnpkg.com/@amplitude/types/-/types-1.8.2.tgz#34315ba822de569c1d02a7c001913b7ac2fbc04c"
   integrity sha512-VY0EDZyTes8yDHqCEFYC3nhFxfdlx5ah8YTWvCZoM+BklRO8PHE177H3kpKqs5TKG+M62ToNAiOQ7s/KDYgc6Q==
 
-"@amplitude/ua-parser-js@0.7.24":
-  version "0.7.24"
-  resolved "https://registry.yarnpkg.com/@amplitude/ua-parser-js/-/ua-parser-js-0.7.24.tgz#2ce605af7d2c38d4a01313fb2385df55fbbd69aa"
-  integrity sha512-VbQuJymJ20WEw0HtI2np7EdC3NJGUWi8+Xdbc7uk8WfMIF308T0howpzkQ3JFMN7ejnrcSM/OyNGveeE3TP3TA==
+"@amplitude/ua-parser-js@0.7.25":
+  version "0.7.25"
+  resolved "https://registry.yarnpkg.com/@amplitude/ua-parser-js/-/ua-parser-js-0.7.25.tgz#ccbeb0bd24fca3759cfc09a3b9ba95a23ea32756"
+  integrity sha512-AUeO9T6vLkUNw0iYxchFBw3FylJAMv5g2sPUsS5XCulAP3TpZg9Y/QESOl+oCLGqTQYumUJZHfoQBemN22eghw==
 
 "@amplitude/utils@^1.0.5":
   version "1.8.2"
@@ -2934,12 +2934,12 @@ alphanum-sort@^1.0.0:
   resolved "https://registry.yarnpkg.com/alphanum-sort/-/alphanum-sort-1.0.2.tgz#97a1119649b211ad33691d9f9f486a8ec9fbe0a3"
   integrity sha1-l6ERlkmyEa0zaR2fn0hqjsn74KM=
 
-amplitude-js@8.5.0:
-  version "8.5.0"
-  resolved "https://registry.yarnpkg.com/amplitude-js/-/amplitude-js-8.5.0.tgz#17f75ca84f5ebee7dab212f4a0a100d606dbd989"
-  integrity sha512-qRt5JghdluTGyaSGJ4Ae1DKX5ObZj46OJPTlI66ewxFCyOPbkxeO22LybIfxDoL6ZylnXVIuICNp0BbzZ6A4tg==
+amplitude-js@8.6.0:
+  version "8.6.0"
+  resolved "https://registry.yarnpkg.com/amplitude-js/-/amplitude-js-8.6.0.tgz#521bec51fe0f3dfcac929f335e249a40556cb654"
+  integrity sha512-5y9po4Dyf+92KFWzK/nyLNq/haQsA6uLDF88/i5Lp9IxdYryUtdHlA1H+0g35qHnbQLalM87qcA0SBoT5jujrQ==
   dependencies:
-    "@amplitude/ua-parser-js" "0.7.24"
+    "@amplitude/ua-parser-js" "0.7.25"
     "@amplitude/utils" "^1.0.5"
     blueimp-md5 "^2.10.0"
     query-string "5"
@@ -6293,10 +6293,10 @@ electron-window-state@5.0.3:
     jsonfile "^4.0.0"
     mkdirp "^0.5.1"
 
-electron@15.0.0-beta.2:
-  version "15.0.0-beta.2"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-15.0.0-beta.2.tgz#63ef67a018d5b850629b9b1aec6f13ee50fb46dd"
-  integrity sha512-Fx1oyPSKrM5x4ecFI3KOkq38OKAs1lS3QPoE7p2LhrWWAeU8r+cs592ktKRuRL2GFa3qzEfxKLL2ayZvTQP2Yw==
+electron@15.0.0-beta.3:
+  version "15.0.0-beta.3"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-15.0.0-beta.3.tgz#86d979eccf3d851805a111d0950906032922a49c"
+  integrity sha512-RP4vl6qR6u++ZhZ1PrpbMzdAwZhmmNhDgHexVK+8vKuPXctkkEwPaXiiMfG3H/rprivG0T5AO6U/DfIO8gKi5g==
   dependencies:
     "@electron/get" "^1.0.1"
     "@types/node" "^14.6.2"
@@ -10366,10 +10366,10 @@ node-addon-api@^3.0.0:
   resolved "https://registry.yarnpkg.com/node-addon-api/-/node-addon-api-3.2.1.tgz#81325e0a2117789c0128dab65e7e38f07ceba161"
   integrity sha512-mmcei9JghVNDYydghQmeDX8KoAm0FAiYyIcUt/N4nhyAipB17pllZQDOJD2fotxABnt4Mdz+dKTO7eftLg4d0A==
 
-node-fetch@2.6.1:
-  version "2.6.1"
-  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.1.tgz#045bd323631f76ed2e2b55573394416b639a0052"
-  integrity sha512-V4aYg89jEoVRxRb2fJdAg8FHvI7cEyYdVAh94HH0UIK8oJxUfkjlDQN9RbMx+bEjP7+ggMiFRprSti032Oipxw==
+node-fetch@2.6.2:
+  version "2.6.2"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.2.tgz#986996818b73785e47b1965cc34eb093a1d464d0"
+  integrity sha512-aLoxToI6RfZ+0NOjmWAgn9+LEd30YCkJKFSyWacNZdEKTit/ZMcKjGkTRo8uWEsnIb/hfKecNPEbln02PdWbcA==
 
 node-forge@^0.10.0:
   version "0.10.0"
@@ -13486,7 +13486,15 @@ source-map-resolve@^0.5.0, source-map-resolve@^0.5.2:
     source-map-url "^0.4.0"
     urix "^0.1.0"
 
-source-map-support@0.5.19, source-map-support@^0.5.19, source-map-support@^0.5.6, source-map-support@~0.5.12:
+source-map-support@0.5.20:
+  version "0.5.20"
+  resolved "https://registry.yarnpkg.com/source-map-support/-/source-map-support-0.5.20.tgz#12166089f8f5e5e8c56926b377633392dd2cb6c9"
+  integrity sha512-n1lZZ8Ve4ksRqizaBQgxXDgKwttHDhyfQjA6YZZn8+AroHbsIz+JjwxQDxbp+7y5OYCI8t1Yk7etjD9CRd2hIw==
+  dependencies:
+    buffer-from "^1.0.0"
+    source-map "^0.6.0"
+
+source-map-support@^0.5.19, source-map-support@^0.5.6, source-map-support@~0.5.12:
   version "0.5.19"
   resolved "https://registry.yarnpkg.com/source-map-support/-/source-map-support-0.5.19.tgz#a98b62f86dcaf4f67399648c085291ab9e8fed61"
   integrity sha512-Wonm7zOCIJzBGQdB+thsPar0kYuCIzYvxZwlBa87yi/Mdjv7Tip2cyVbLj5o0cFPN4EVkuTwb3GDDyUx2DGnGw==
