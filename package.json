@@ -1,8 +1,8 @@
 {
   "name": "neutron",
   "description": "AppView template for WebCatalog",
-  "version": "20.0.0-alpha.5",
-  "minimumWebCatalogVersion": "36.3.0",
+  "version": "20.0.0-alpha.6",
+  "minimumWebCatalogVersion": "36.4.1",
   "engines": {
     "node": ">=14.0.0 <15.0.0"
   },
