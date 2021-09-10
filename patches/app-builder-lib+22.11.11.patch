@@ -21,3 +21,29 @@ index b409046..f1bd5a4 100644
      return {
          platform,
          arch,
+diff --git a/node_modules/app-builder-lib/out/macPackager.js b/node_modules/app-builder-lib/out/macPackager.js
+index 5839b34..a080880 100644
+--- a/node_modules/app-builder-lib/out/macPackager.js
++++ b/node_modules/app-builder-lib/out/macPackager.js
+@@ -104,6 +104,22 @@ class MacPackager extends platformPackager_1.PlatformPackager {
+                     outAppPath: path.join(appOutDir, appFile),
+                     force: true,
+                 });
++
++                const packContext = {
++                    appOutDir,
++                    arch,
++                    targets,
++                    packager: this,
++                    electronPlatformName: platformName,
++                };
++
++                await this.info.afterPack(packContext)
++
++                if (framework.afterPack != null) {
++                    await framework.afterPack(packContext)
++                }
++
+                 await fs.rm(x64AppOutDir, { recursive: true, force: true });
+                 await fs.rm(arm64AppOutPath, { recursive: true, force: true });
+                 await this.doSignAfterPack(outDir, appOutDir, platformName, arch, platformSpecificBuildOptions, targets);
