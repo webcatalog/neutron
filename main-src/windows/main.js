@@ -294,7 +294,7 @@ const createAsync = () => new Promise((resolve) => {
     minWidth: 400,
     title: global.appJson.name,
     // show traffic light buttons on macOS if global.windowButtons = true
-    titleBarStyle: global.windowButtons ? 'hidden' : 'default',
+    titleBarStyle: global.windowButtons && !global.useSystemTitleBar ? 'hidden' : 'default',
     frame: (process.platform === 'darwin' && global.windowButtons) || global.useSystemTitleBar,
     show: false,
     alwaysOnTop: getPreference('alwaysOnTop'),
