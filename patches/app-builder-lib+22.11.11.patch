@@ -32,6 +32,7 @@ index 5839b34..a080880 100644
 +
 +                const packContext = {
 +                    appOutDir,
++                    outDir,
 +                    arch,
 +                    targets,
 +                    packager: this,
