@@ -23,6 +23,8 @@ const create = () => {
     fullscreenable: false,
     show: false,
     frame: process.platform === 'darwin' || global.useSystemTitleBar,
+    titleBarStyle: process.platform === 'win32' && !global.useSystemTitleBar ? 'hidden' : 'default',
+    titleBarOverlay: process.platform === 'win32',
     webPreferences: {
       enableRemoteModule: true,
       contextIsolation: false,

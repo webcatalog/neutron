@@ -204,7 +204,7 @@ const EnhancedAppBar = ({
           {title}
         </div>
         <div className={classes.right} onDoubleClick={onDoubleClick}>
-          {window.process.platform !== 'darwin' && (
+          {window.process.platform === 'linux' && (
             <div className={classes.windowsControl}>
               <button
                 className={classes.windowsIconBg}

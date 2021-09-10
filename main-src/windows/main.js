@@ -296,6 +296,7 @@ const createAsync = () => new Promise((resolve) => {
     // show traffic light buttons on macOS if global.windowButtons = true
     titleBarStyle: global.windowButtons && !global.useSystemTitleBar ? 'hidden' : 'default',
     frame: (process.platform === 'darwin' && global.windowButtons) || global.useSystemTitleBar,
+    titleBarOverlay: process.platform === 'win32',
     show: false,
     alwaysOnTop: getPreference('alwaysOnTop'),
     autoHideMenuBar: global.useSystemTitleBar && getPreference('autoHideMenuBar'),
