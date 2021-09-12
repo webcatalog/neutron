@@ -544,7 +544,7 @@ const Main = ({
             )}
             {Object.keys(workspaces).length < 1 && (
               <div>
-                {sidebar ? (
+                {sidebar && sidebarAddButton ? (
                   <>
                     <div
                       alt="Arrow"
@@ -571,7 +571,11 @@ const Main = ({
                   <div className={classes.tip2}>
                     <span className={classes.inlineBlock}>
                       <span>Click </span>
-                      <strong>{`${getWorkspaceFriendlyName(true)} > Add ${getWorkspaceFriendlyName()}`}</strong>
+                      {appJson.url ? (
+                        <strong>{`${getWorkspaceFriendlyName(true)} > Add ${appJson.name} ${getWorkspaceFriendlyName()}`}</strong>
+                      ) : (
+                        <strong>{`${getWorkspaceFriendlyName(true)} > Add ${getWorkspaceFriendlyName()}`}</strong>
+                      )}
                       <span> to get started!</span>
                     </span>
                   </div>
