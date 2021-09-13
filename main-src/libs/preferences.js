@@ -108,7 +108,7 @@ const defaultPreferences = {
   ratingLastClicked: 0,
   rememberLastPageVisited: false,
   runInBackground: false,
-  searchEngine: 'duckduckgo',
+  searchEngine: 'google',
   sentry: false,
   // branded apps (like Google/Microsoft) share browsing data by default
   // https://github.com/webcatalog/webcatalog-app/issues/986
