@@ -57,21 +57,22 @@ import SectionHardware from './section-hardware';
 import SectionHome from './section-home';
 import SectionLanguage from './section-language';
 import SectionLinkHandling from './section-link-handling';
+import SectionLocationPermission from './section-location-permissions';
 import SectionMode from './section-mode';
 import SectionMoreApps from './section-more-apps';
 import SectionNetwork from './section-network';
 import SectionNotifications from './section-notifications';
 import SectionPerformance from './section-performance';
+import SectionPermissions from './section-permissions';
 import SectionReset from './section-reset';
+import SectionSearch from './section-search';
 import SectionSystem from './section-system';
 import SectionTelemetry from './section-telemetry';
 import SectionTheme from './section-theme';
+import SectionTray from './section-tray';
 import SectionView from './section-view';
 import SectionWindow from './section-window';
-import SectionTray from './section-tray';
 import SectionWorkspaces from './section-workspaces';
-import SectionPermissions from './section-permissions';
-import SectionLocationPermission from './section-location-permissions';
 
 import SnackbarTrigger from '../shared/snackbar-trigger';
 
@@ -132,6 +133,7 @@ const Preferences = ({
         home: { text: 'Home', Component: SectionHome, hidden: !(appJson.url && !isMas() && !isStandalone() && !isAppx()) },
         mode: { text: 'Mode', Component: SectionMode, hidden: !appJson.id.startsWith('group-') && appJson.id !== 'clovery' },
         language: { text: 'Language', Component: SectionLanguage },
+        search: { text: 'Search', Component: SectionSearch },
         system: { text: 'System', Component: SectionSystem },
         hardward: { text: 'Hardware', Component: SectionHardware },
         exit: { text: 'Exit', Component: SectionExit },
