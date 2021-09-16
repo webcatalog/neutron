@@ -3,12 +3,15 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useEffect, useState } from 'react';
 
+
+
 import { Button, IconButton, makeStyles } from '@material-ui/core';
 
 import AddIcon from '@material-ui/icons/Add';
 import CloseIcon from '@material-ui/icons/Close';
 
-import { getWorkspace, getWorkspaces } from '../../senders';
+import { getWorkspaces } from '../../senders';
+import { useSelector } from 'react-redux';
 
 const useStyle = makeStyles((theme) => ({
   wrapper: {
@@ -18,6 +21,9 @@ const useStyle = makeStyles((theme) => ({
 
 const TabBar = () => {
   const classes = useStyle();
+
+  const workspaceCount = useSelector((state) => Object.keys((state.workspaceMetas || {})).length);
+  const shouldRenderTabBar = (workspaceCount !== 0);
 
   const [tabsCount, updateTabsCount] = useState(1);
   const [selectedTabIndex, updateSelectedTabIndex] = useState(0);
@@ -66,31 +72,33 @@ const TabBar = () => {
   };
 
   return (
-    <div className={classes.wrapper}>
-      {[...Array(tabsCount).keys()].map((i) => {
-        const isSelectedTab = (selectedTabIndex === i);
+    <>
+      {shouldRenderTabBar && <div className={classes.wrapper}>
+        {[...Array(tabsCount).keys()].map((i) => {
+          const isSelectedTab = (selectedTabIndex === i);
 
-        return (
-          <Button
-            key={i}
-            disableRipple
-            disabled={isSelectedTab}
-            onClick={(e) => onTabSelected(e, i)}>
-            {`New tabs`}
-            {(tabsCount !== 1) && (
-              <IconButton
-                children={<CloseIcon fontSize="small" />}
-                onClick={(e) => onTabRemoved(e, i)}
-              />
-            )}
-          </Button>
+          return (
+            <Button
+              key={i}
+              disableRipple
+              disabled={isSelectedTab}
+              onClick={(e) => onTabSelected(e, i)}>
+              {`New tabs`}
+              {(tabsCount !== 1) && (
+                <IconButton
+                  children={<CloseIcon fontSize="small" />}
+                  onClick={(e) => onTabRemoved(e, i)}
+                />
+              )}
+            </Button>
+          )}
         )}
-      )}
-      <IconButton
-        children={<AddIcon fontSize="small" />}
-        onClick={onTabAdded}
-      />
-    </div>
+        <IconButton
+          children={<AddIcon fontSize="small" />}
+          onClick={onTabAdded}
+        />
+      </div>}
+    </>
   );
 };
 
