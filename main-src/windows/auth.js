@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 const { BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
+const electronRemote = require('@electron/remote/main');
 
 const { REACT_PATH } = require('../constants/paths');
 
@@ -24,12 +25,12 @@ const create = (id) => {
     fullscreenable: false,
     frame: process.platform === 'darwin' || global.useSystemTitleBar,
     webPreferences: {
-      enableRemoteModule: true,
       contextIsolation: false,
       nodeIntegration: true,
       preload: path.join(__dirname, 'auth-preload.js'),
     },
   });
+  electronRemote.enable(wins[id].webContents);
   wins[id].setMenuBarVisibility(false);
 
   const identityValidationListener = (e, windowId, username, password) => {
