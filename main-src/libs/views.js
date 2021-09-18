@@ -19,6 +19,7 @@ const pupa = require('pupa');
 const extName = require('ext-name');
 const { ElectronChromeExtensions } = require('electron-chrome-extensions');
 const fetch = require('node-fetch').default;
+const electronRemote = require('@electron/remote/main');
 
 const appJson = require('../constants/app-json');
 
@@ -313,7 +314,6 @@ const addViewAsync = async (browserWindow, workspace) => {
     nodeIntegration: false,
     contextIsolation: true,
     plugins: true, // PDF reader
-    enableRemoteModule: false,
     scrollBounce: true,
     session: ses,
     preload: path.join(__dirname, 'view-preload.js'),
@@ -373,6 +373,7 @@ const addViewAsync = async (browserWindow, workspace) => {
   const view = new BrowserView({
     webPreferences: sharedWebPreferences,
   });
+  electronRemote.enable(view.webContents);
 
   if (extensions) {
     extensions.addTab(view.webContents, browserWindow);

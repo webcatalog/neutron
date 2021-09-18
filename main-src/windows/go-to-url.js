@@ -4,6 +4,7 @@
 const { BrowserWindow } = require('electron');
 const path = require('path');
 const contextMenu = require('electron-context-menu');
+const electronRemote = require('@electron/remote/main');
 
 const { REACT_PATH } = require('../constants/paths');
 
@@ -23,12 +24,12 @@ const create = () => {
     show: false,
     frame: process.platform === 'darwin' || global.useSystemTitleBar,
     webPreferences: {
-      enableRemoteModule: true,
       contextIsolation: false,
       nodeIntegration: true,
       preload: path.join(__dirname, 'go-to-url-preload.js'),
     },
   });
+  electronRemote.enable(win.webContents);
   win.setMenuBarVisibility(false);
   contextMenu({ window: win });
 
