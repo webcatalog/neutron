@@ -25,6 +25,8 @@ const fs = require('fs-extra');
 const isDev = require('electron-is-dev');
 const settings = require('electron-settings');
 const electronRemote = require('@electron/remote/main');
+const semver = require('semver');
+const rtlDetect = require('rtl-detect');
 
 const appJson = require('./constants/app-json');
 const isMas = require('./libs/is-mas');
@@ -565,6 +567,11 @@ if (!gotTheLock) {
       && Object.keys(extensionEnabledExtesionIds).length > 0;
     global.hibernateWhenUnused = hibernateWhenUnused;
     global.hibernateWhenUnusedTimeout = hibernateWhenUnusedTimeout;
+
+    // on Windows, if the display language is RTL language (Arabic, Hebrew, etc)
+    // the x bounds coordination is reversed
+    // so we have this to handle BrowserViews and related UI correctly
+    global.rtlCoordination = process.platform === 'win32' && rtlDetect.isRtlLang(app.getLocale());
 
     commonInit();
 
