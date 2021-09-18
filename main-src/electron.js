@@ -25,7 +25,6 @@ const fs = require('fs-extra');
 const isDev = require('electron-is-dev');
 const settings = require('electron-settings');
 const electronRemote = require('@electron/remote/main');
-const semver = require('semver');
 const rtlDetect = require('rtl-detect');
 
 const appJson = require('./constants/app-json');
