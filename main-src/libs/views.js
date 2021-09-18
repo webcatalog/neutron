@@ -19,6 +19,7 @@ const pupa = require('pupa');
 const extName = require('ext-name');
 const { ElectronChromeExtensions } = require('electron-chrome-extensions');
 const fetch = require('node-fetch').default;
+const electronRemote = require('@electron/remote/main');
 
 const appJson = require('../constants/app-json');
 
@@ -313,7 +314,6 @@ const addViewAsync = async (browserWindow, workspace) => {
     nodeIntegration: false,
     contextIsolation: true,
     plugins: true, // PDF reader
-    enableRemoteModule: false,
     scrollBounce: true,
     session: ses,
     preload: path.join(__dirname, 'view-preload', 'index.js'),
@@ -331,6 +331,7 @@ const addViewAsync = async (browserWindow, workspace) => {
       .filter((ext) => global.extensionEnabledExtesionIds[ext.id]);
     if (!extensionManagers[partitionId]) {
       extensionManagers[partitionId] = new ElectronChromeExtensions({
+        modulePath: process.env.NODE_ENV === 'production' ? path.join(__dirname, 'electron-chrome-extensions') : undefined,
         session: ses,
         createTab(details) {
           const win = new BrowserWindow({
@@ -372,6 +373,7 @@ const addViewAsync = async (browserWindow, workspace) => {
   const view = new BrowserView({
     webPreferences: sharedWebPreferences,
   });
+  electronRemote.enable(view.webContents);
 
   if (extensions) {
     extensions.addTab(view.webContents, browserWindow);
@@ -535,6 +537,20 @@ const addViewAsync = async (browserWindow, workspace) => {
       sendToAllWindows('update-can-go-back', view.webContents.canGoBack());
       sendToAllWindows('update-can-go-forward', view.webContents.canGoForward());
       updateAddress(url);
+    }
+
+    // Google uses special code for Chromium-based browsers
+    // when screensharing (not working with Electron)
+    // so change user-agent to Safari to make it work
+    const navigatedDomain = extractDomain(url);
+    if (!customUserAgent && navigatedDomain === 'meet.google.com') {
+      const currentUaStr = view.webContents.userAgent;
+      const fakedSafariUaStr = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15';
+      if (currentUaStr !== fakedSafariUaStr) {
+        view.webContents.userAgent = fakedSafariUaStr;
+        // eslint-disable-next-line no-console
+        console.log('Changed user agent to', fakedSafariUaStr, 'for web compatibility URL: ', url, 'when', 'did-navigate');
+      }
     }
   });
 

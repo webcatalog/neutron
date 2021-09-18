@@ -13,6 +13,7 @@ const windowStateKeeper = require('electron-window-state');
 const { menubar } = require('menubar');
 const path = require('path');
 const contextMenu = require('electron-context-menu');
+const electronRemote = require('@electron/remote/main');
 
 const { REACT_PATH } = require('../constants/paths');
 const { setPreference, getPreference } = require('../libs/preferences');
@@ -230,7 +231,6 @@ const createAsync = () => new Promise((resolve) => {
         titleBarStyle: alwaysOnTop ? 'hidden' : undefined,
         fullscreenable: false,
         webPreferences: {
-          enableRemoteModule: true,
           contextIsolation: false,
           nodeIntegration: true,
           webSecurity: process.env.NODE_ENV === 'production',
@@ -240,6 +240,8 @@ const createAsync = () => new Promise((resolve) => {
     });
 
     mb.on('after-create-window', () => {
+      electronRemote.enable(mb.window.webContents);
+
       mb.window.refreshTitle = (...args) => {
         refreshTitle(mb.window, ...args);
       };
@@ -294,13 +296,12 @@ const createAsync = () => new Promise((resolve) => {
     minWidth: 400,
     title: global.appJson.name,
     // show traffic light buttons on macOS if global.windowButtons = true
-    titleBarStyle: global.windowButtons ? 'hidden' : 'default',
+    titleBarStyle: global.windowButtons && !global.useSystemTitleBar ? 'hidden' : 'default',
     frame: (process.platform === 'darwin' && global.windowButtons) || global.useSystemTitleBar,
     show: false,
     alwaysOnTop: getPreference('alwaysOnTop'),
     autoHideMenuBar: global.useSystemTitleBar && getPreference('autoHideMenuBar'),
     webPreferences: {
-      enableRemoteModule: true,
       contextIsolation: false,
       nodeIntegration: true,
       webSecurity: process.env.NODE_ENV === 'production',
@@ -316,6 +317,7 @@ const createAsync = () => new Promise((resolve) => {
       : path.resolve(__dirname, '..', '..', 'public', 'dock-icon.png');
   }
   win = new BrowserWindow(winOpts);
+  electronRemote.enable(win.webContents);
 
   win.refreshTitle = (...args) => {
     refreshTitle(win, ...args);
