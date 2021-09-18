@@ -25,11 +25,9 @@ const fs = require('fs-extra');
 const isDev = require('electron-is-dev');
 const settings = require('electron-settings');
 const electronRemote = require('@electron/remote/main');
-const semver = require('semver');
 
 const appJson = require('./constants/app-json');
 const isMas = require('./libs/is-mas');
-const isAppx = require('./libs/is-appx');
 
 electronRemote.initialize();
 
@@ -563,9 +561,7 @@ if (!gotTheLock) {
     global.extensionEnabledExtesionIds = extensionEnabledExtesionIds;
     global.extensionSourceBrowserId = extensionSourceBrowserId;
     global.extensionSourceProfileDirName = extensionSourceProfileDirName;
-    global.extensionEnabled = !isMas() && !isAppx()
-      && Boolean(semver.prerelease(app.getVersion()))
-      && extensionEnabledExtesionIds
+    global.extensionEnabled = extensionEnabledExtesionIds
       && Object.keys(extensionEnabledExtesionIds).length > 0;
     global.hibernateWhenUnused = hibernateWhenUnused;
     global.hibernateWhenUnusedTimeout = hibernateWhenUnusedTimeout;

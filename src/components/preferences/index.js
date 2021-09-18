@@ -3,7 +3,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import semver from 'semver';
 
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -103,8 +102,6 @@ const styles = (theme) => ({
     overflow: 'auto',
   },
 });
-
-const appVersion = window.remote.app.getVersion();
 
 const Preferences = ({
   classes, hasWorkspaces,
@@ -260,7 +257,7 @@ const Preferences = ({
     extensions: {
       text: 'Extensions',
       Icon: ExtensionIcon,
-      hidden: isMas() || isAppx() || !semver.prerelease(appVersion),
+      hidden: isMas() || isAppx(),
       subSections: {
         extensions: { text: 'Extensions (experimental)', Component: SectionExtensions },
       },
