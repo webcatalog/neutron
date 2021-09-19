@@ -308,6 +308,12 @@ const addViewAsync = async (browserWindow, workspace) => {
     defaultFontSizeMonospace,
   } = getPreferences();
 
+  // set preload script at session level
+  // to ensure that even popup windows have access to the script
+  if (ses.getPreloads().length < 1) {
+    ses.setPreloads([path.join(__dirname, 'view-preload', 'index.js')]);
+  }
+
   const sharedWebPreferences = {
     spellcheck: global.spellcheck,
     nativeWindowOpen: true,
@@ -316,7 +322,6 @@ const addViewAsync = async (browserWindow, workspace) => {
     plugins: true, // PDF reader
     scrollBounce: true,
     session: ses,
-    preload: path.join(__dirname, 'view-preload', 'index.js'),
     defaultFontSize,
     defaultMonospaceFontSize: defaultFontSizeMonospace,
     minimumFontSize: defaultFontSizeMinimum,
