@@ -13,9 +13,8 @@ const {
 } = require('darkreader');
 const nodeFetch = require('node-fetch/lib').default;
 
-const isMas = require('./is-mas');
-
-const getRecipe = require('./get-recipe');
+const isMas = require('../is-mas');
+const getRecipe = require('../get-recipe');
 
 const preferences = ipcRenderer.sendSync('get-preferences');
 
@@ -431,3 +430,5 @@ webFrame.executeJavaScript(`
 // enable pinch zooming (default behavior of Chromium)
 // https://github.com/electron/electron/pull/12679
 webFrame.setVisualZoomLevelLimits(1, 10);
+
+require('./password-fill');

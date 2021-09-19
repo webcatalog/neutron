@@ -20,7 +20,7 @@ const create = (scrollTo) => {
     minWidth: 760,
     minHeight: 640,
     width: 1024,
-    height: 768,
+    height: 800,
     resizable: true,
     maximizable: true,
     minimizable: true,
