@@ -308,6 +308,8 @@ const addViewAsync = async (browserWindow, workspace) => {
     defaultFontSizeMonospace,
   } = getPreferences();
 
+  // set preload script at session level
+  // to ensure that even popup windows have access to the script
   if (ses.getPreloads().length < 1) {
     ses.setPreloads([path.join(__dirname, 'view-preload', 'index.js')]);
   }
