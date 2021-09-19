@@ -1,7 +1,7 @@
 {
   "name": "neutron",
   "description": "AppView template for WebCatalog",
-  "version": "20.0.0-alpha.9",
+  "version": "20.0.0-alpha.10",
   "minimumWebCatalogVersion": "36.4.1",
   "engines": {
     "node": ">=14.0.0 <15.0.0"
@@ -63,7 +63,7 @@
     "copy-webpack-plugin": "6.4.1",
     "cross-env": "7.0.3",
     "darkreader": "4.9.34",
-    "date-fns": "2.23.0",
+    "date-fns": "2.24.0",
     "del": "6.0.0",
     "electron": "15.0.0-beta.7",
     "electron-builder": "22.11.11",
