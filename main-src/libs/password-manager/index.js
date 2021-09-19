@@ -3,18 +3,12 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 /* Modified from https://github.com/minbrowser/min/blob/7749a35ea71a5f373c05e1d587b620a7a5f7c1fc/js/passwordManager/passwordManager.js */
-const { ipcRenderer, ipcMain } = require('electron');
+const { ipcRenderer, ipcMain, dialog } = require('electron');
 
 const Keychain = require('./keychain');
-
-// https://github.com/minbrowser/min/blob/3591f2bdb4dd1f3dd0b4ec05f40027cf1350f7c5/localization/languages/en-US.json
-const localeMap = {
-  passwordManagerUnlock: 'Enter your %p master password to unlock the password store:',
-  password: 'Password',
-  dialogConfirmButton: 'Confirm',
-  dialogSkipButton: 'Cancel',
-};
-const l = (key) => localeMap(key);
+const l = require('./get-locale');
+const { getPreference, setPreference } = require('../preferences');
+const mainWindow = require('../../windows/main');
 
 const PasswordManagers = {
   // List of supported password managers. Each password manager is expected to
@@ -89,6 +83,54 @@ const PasswordManagers = {
     }
     return success;
   },
+  /* https://github.com/minbrowser/min/blob/7749a35ea71a5f373c05e1d587b620a7a5f7c1fc/js/passwordManager/passwordCapture.js */
+  handleRecieveCredentials(e, args) {
+    const [rawDomain, username, password] = args;
+    let domain = rawDomain;
+    if (rawDomain.startsWith('www.')) {
+      domain = domain.slice(4);
+    }
+
+    if (getPreference('passwordsNeverSaveDomains') && getPreference('passwordsNeverSaveDomains').includes(domain)) {
+      return;
+    }
+
+    PasswordManagers.getConfiguredPasswordManager().then((manager) => {
+      if (!manager || !manager.saveCredential) {
+        // the password can't be saved
+        return;
+      }
+
+      // check if this username/password combo is already saved
+      manager.getSuggestions(domain).then((credentials) => {
+        const alreadyExists = credentials
+          .some((cred) => cred.username === username && cred.password === password);
+        if (!alreadyExists) {
+          const goSave = () => manager.saveCredential(domain, username, password);
+
+          const goNeverSave = () => {
+            setPreference('passwordsNeverSaveDomains', (getPreference('passwordsNeverSaveDomains') || []).concat([domain]));
+          };
+
+          dialog.showMessageBox(mainWindow.get(), {
+            type: 'question',
+            buttons: [l('passwordCaptureSave'), l('passwordCaptureDontSave'), l('passwordCaptureNeverSave')],
+            message: l('passwordCaptureSavePassword').replace('%s', domain),
+            cancelId: 1,
+            defaultId: 0,
+          })
+            .then(({ response }) => {
+              if (response === 0) {
+                goSave();
+              } else if (response === 2) {
+                goNeverSave();
+              }
+            })
+            .catch(console.log); // eslint-disable-line
+        }
+      });
+    });
+  },
   // Binds IPC events.
   initialize() {
     // Called when page preload script detects a form with username and password.
@@ -141,6 +183,8 @@ const PasswordManagers = {
         e.sender.send('password-autofill-enabled');
       }
     });
+
+    ipcMain.on('password-form-filled', PasswordManagers.handleRecieveCredentials);
 
     // keybindings.defineShortcut('fillPassword', () => {
     //   webviews.callAsync(tabs.getSelected(), 'send', ['password-autofill-shortcut']);
