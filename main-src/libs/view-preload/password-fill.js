@@ -321,7 +321,7 @@ ipcRenderer.on('password-autofill-enabled', () => {
 
 // Check if password autofill is configured.
 window.addEventListener('load', () => {
-  ipcRenderer.emit('password-autofill-enabled');
+  ipcRenderer.emit('password-autofill-check');
 });
 
 // send passwords back to the main process so they can be saved to storage

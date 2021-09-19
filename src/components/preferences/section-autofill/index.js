@@ -2,22 +2,26 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useState, useEffect, useCallback } from 'react';
+import PropTypes from 'prop-types';
 
 import {
+  Divider,
+  FormControl,
+  IconButton,
+  InputAdornment,
   List,
   ListItem,
+  ListItemSecondaryAction,
   ListItemText,
+  OutlinedInput,
+  Switch,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
-  IconButton,
-  Tooltip,
   TextField,
-  FormControl,
-  OutlinedInput,
-  InputAdornment,
+  Tooltip,
 } from '@material-ui/core';
 
 import ClearIcon from '@material-ui/icons/Clear';
@@ -31,8 +35,11 @@ import {
   deleteCredentialAsync,
   saveCredentialAsync,
 } from '../../../invokers';
+import {
+  requestSetPreference,
+} from '../../../senders';
 
-const SectionAutofill = () => {
+const SectionAutofill = ({ passwordsAskToSave }) => {
   const [credentials, setCredentials] = useState([]);
   const [revealPasswords, setRevealPasswords] = useState({});
 
@@ -63,6 +70,23 @@ const SectionAutofill = () => {
 
   return (
     <List disablePadding dense>
+      <ListItem>
+        <ListItemText
+          primary="Ask to save logins and passwords for websites"
+          secondary={`Passwords are stored locally and securely by ${getKeytarVaultName()}.`}
+        />
+        <ListItemSecondaryAction>
+          <Switch
+            edge="end"
+            color="primary"
+            checked={passwordsAskToSave}
+            onChange={(e) => {
+              requestSetPreference('passwordsAskToSave', e.target.checked);
+            }}
+          />
+        </ListItemSecondaryAction>
+      </ListItem>
+      <Divider />
       {credentials.length < 1 ? (
         <ListItem disabled>
           <ListItemText primary="Saved passwords will appear here." />
@@ -164,7 +188,13 @@ const SectionAutofill = () => {
   );
 };
 
-const mapStateToProps = () => ({});
+SectionAutofill.propTypes = {
+  passwordsAskToSave: PropTypes.bool.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  passwordsAskToSave: state.preferences.passwordsAskToSave,
+});
 
 export default connectComponent(
   SectionAutofill,
