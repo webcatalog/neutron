@@ -85,7 +85,12 @@ const PasswordManagers = {
     return success;
   },
   /* https://github.com/minbrowser/min/blob/7749a35ea71a5f373c05e1d587b620a7a5f7c1fc/js/passwordManager/passwordCapture.js */
+  handlingRecieveCredentials: false,
   handleRecieveCredentials(e, args) {
+    // this helps avoiding showing too many dialogs
+    // as some sites like Help Scout triggers onSubmit multiple times
+    if (PasswordManagers.handlingRecieveCredentials) return;
+
     const [rawDomain, username, password] = args;
     let domain = rawDomain;
     if (rawDomain.startsWith('www.')) {
@@ -121,6 +126,7 @@ const PasswordManagers = {
             setPreference('passwordsNeverSaveDomains', (getPreference('passwordsNeverSaveDomains') || []).concat([domain]));
           };
 
+          PasswordManagers.handlingRecieveCredentials = true;
           dialog.showMessageBox(mainWindow.get(), {
             type: 'question',
             buttons: [l('passwordCaptureSave'), l('passwordCaptureDontSave'), l('passwordCaptureNeverSave')],
@@ -135,7 +141,11 @@ const PasswordManagers = {
                 goNeverSave();
               }
             })
-            .catch(console.log); // eslint-disable-line
+            // eslint-disable-next-line
+            .catch(console.log)
+            .then(() => {
+              PasswordManagers.handlingRecieveCredentials = false;
+            });
         }
       });
     });
