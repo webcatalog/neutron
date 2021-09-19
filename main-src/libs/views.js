@@ -311,7 +311,10 @@ const addViewAsync = async (browserWindow, workspace) => {
   // set preload script at session level
   // to ensure that even popup windows have access to the script
   if (ses.getPreloads().length < 1) {
-    ses.setPreloads([path.join(__dirname, 'view-preload', 'index.js')]);
+    const preloadPath = process.env.NODE_ENV === 'production'
+      ? path.join(__dirname, 'view-preload.js')
+      : path.join(__dirname, 'view-preload', 'index.js');
+    ses.setPreloads([preloadPath]);
   }
 
   const sharedWebPreferences = {
