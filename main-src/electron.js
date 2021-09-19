@@ -98,6 +98,7 @@ const promptSetAsDefaultMailClient = require('./libs/prompt-set-as-default-email
 const promptSetAsDefaultCalendarApp = require('./libs/prompt-set-as-default-calendar-app');
 const getWorkspaceFriendlyName = require('./libs/get-workspace-friendly-name');
 const windowShortcut = require('./libs/window-shortcut');
+const PasswordManagers = require('./libs/password-manager');
 
 const MAILTO_URLS = require('./constants/mailto-urls');
 const WEBCAL_URLS = require('./constants/webcal-urls');
@@ -342,6 +343,7 @@ if (!gotTheLock) {
 
   loadListeners();
   loadInvokers();
+  PasswordManagers.initialize();
 
   const commonInit = () => {
     app.whenReady()

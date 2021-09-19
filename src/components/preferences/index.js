@@ -13,6 +13,7 @@ import Paper from '@material-ui/core/Paper';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
 import AssessmentIcon from '@material-ui/icons/Assessment';
+import AssignmentIcon from '@material-ui/icons/Assignment';
 import CachedIcon from '@material-ui/icons/Cached';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CodeIcon from '@material-ui/icons/Code';
@@ -44,6 +45,7 @@ import SectionAccountLicensing from './section-account-licensing';
 import SectionAppLock from './section-app-lock';
 import SectionAudioVideo from './section-audio-video';
 import SectionAutoReload from './section-auto-reload';
+import SectionAutofill from './section-autofill';
 import SectionBadge from './section-badge';
 import SectionBrowsing from './section-browsing';
 import SectionDarkReader from './section-dark-reader';
@@ -168,6 +170,13 @@ const Preferences = ({
       subSections: {
         notifications: { text: 'Notifications', Component: SectionNotifications },
         badge: { text: 'Badge', Component: SectionBadge },
+      },
+    },
+    autofill: {
+      text: 'Autofill',
+      Icon: AssignmentIcon,
+      subSections: {
+        badge: { text: 'Passwords', Component: SectionAutofill },
       },
     },
     downloads: {

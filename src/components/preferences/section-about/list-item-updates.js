@@ -80,7 +80,6 @@ const SectionUpdates = ({
           />
           <ChevronRightIcon color="action" />
         </ListItem>
-        <Divider />
         <ListItem>
           <ListItemText primary="Check for updates automatically" />
           <ListItemSecondaryAction>

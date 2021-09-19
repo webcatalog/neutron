@@ -316,7 +316,7 @@ const addViewAsync = async (browserWindow, workspace) => {
     plugins: true, // PDF reader
     scrollBounce: true,
     session: ses,
-    preload: path.join(__dirname, 'view-preload.js'),
+    preload: path.join(__dirname, 'view-preload', 'index.js'),
     defaultFontSize,
     defaultMonospaceFontSize: defaultFontSizeMonospace,
     minimumFontSize: defaultFontSizeMinimum,

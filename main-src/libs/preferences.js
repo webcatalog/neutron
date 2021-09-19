@@ -94,6 +94,8 @@ const defaultPreferences = {
   muteApp: false,
   openFolderWhenDoneDownloading: true,
   openProtocolUrlInNewWindow: 'ask', // 'ask', 'newWindow', 'mainWindow'
+  /* Password Manager */
+  passwordsNeverSaveDomains: [],
   pauseNotifications: null,
   pauseNotificationsBySchedule: false,
   pauseNotificationsByScheduleFrom: getDefaultPauseNotificationsByScheduleFrom(),
