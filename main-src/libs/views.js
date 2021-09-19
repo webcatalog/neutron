@@ -308,6 +308,8 @@ const addViewAsync = async (browserWindow, workspace) => {
     defaultFontSizeMonospace,
   } = getPreferences();
 
+  ses.setPreloads([path.join(__dirname, 'view-preload', 'index.js')]);
+
   const sharedWebPreferences = {
     spellcheck: global.spellcheck,
     nativeWindowOpen: true,
@@ -316,7 +318,6 @@ const addViewAsync = async (browserWindow, workspace) => {
     plugins: true, // PDF reader
     scrollBounce: true,
     session: ses,
-    preload: path.join(__dirname, 'view-preload.js'),
     defaultFontSize,
     defaultMonospaceFontSize: defaultFontSizeMonospace,
     minimumFontSize: defaultFontSizeMinimum,
