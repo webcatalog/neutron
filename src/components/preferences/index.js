@@ -45,6 +45,7 @@ import SectionAccountLicensing from './section-account-licensing';
 import SectionAppLock from './section-app-lock';
 import SectionAudioVideo from './section-audio-video';
 import SectionAutoReload from './section-auto-reload';
+import SectionAutofill from './section-autofill';
 import SectionBadge from './section-badge';
 import SectionBrowsing from './section-browsing';
 import SectionDarkReader from './section-dark-reader';
@@ -175,7 +176,7 @@ const Preferences = ({
       text: 'Autofill',
       Icon: AssignmentIcon,
       subSections: {
-        badge: { text: 'Badge', Component: SectionBadge },
+        badge: { text: 'Passwords', Component: SectionAutofill },
       },
     },
     downloads: {

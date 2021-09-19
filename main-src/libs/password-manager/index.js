@@ -9,6 +9,7 @@ const Keychain = require('./keychain');
 const l = require('./get-locale');
 const { getPreference, setPreference } = require('../preferences');
 const mainWindow = require('../../windows/main');
+const preferencesWindow = require('../../windows/preferences');
 
 const PasswordManagers = {
   // List of supported password managers. Each password manager is expected to
@@ -106,7 +107,15 @@ const PasswordManagers = {
         const alreadyExists = credentials
           .some((cred) => cred.username === username && cred.password === password);
         if (!alreadyExists) {
-          const goSave = () => manager.saveCredential(domain, username, password);
+          const goSave = () => {
+            manager.saveCredential(domain, username, password);
+
+            // notify preferences window that credentials have to be reloaded
+            const prefWin = preferencesWindow.get();
+            if (prefWin) {
+              prefWin.send('password-credentials-added');
+            }
+          };
 
           const goNeverSave = () => {
             setPreference('passwordsNeverSaveDomains', (getPreference('passwordsNeverSaveDomains') || []).concat([domain]));
@@ -185,6 +194,13 @@ const PasswordManagers = {
     });
 
     ipcMain.on('password-form-filled', PasswordManagers.handleRecieveCredentials);
+
+    ipcMain.handle('password-get-all-credentials', () => PasswordManagers.getActivePasswordManager()
+      .getAllCredentials());
+    ipcMain.handle('password-save-credential', (e, domain, username, password) => PasswordManagers.getActivePasswordManager()
+      .saveCredential(domain, username, password));
+    ipcMain.handle('password-delete-credential', (e, domain, username) => PasswordManagers.getActivePasswordManager()
+      .deleteCredential(domain, username));
 
     // keybindings.defineShortcut('fillPassword', () => {
     //   webviews.callAsync(tabs.getSelected(), 'send', ['password-autofill-shortcut']);

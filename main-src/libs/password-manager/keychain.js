@@ -45,11 +45,13 @@ class Keychain {
   }
 
   saveCredential(domain, username, password) {
-    keytar.setPassword(this.keychainServiceName, JSON.stringify({ domain, username }), password);
+    return keytar
+      .setPassword(this.keychainServiceName, JSON.stringify({ domain, username }), password);
   }
 
   deleteCredential(domain, username) {
-    keytar.setPassword(this.keychainServiceName, JSON.stringify({ domain, username }));
+    return keytar
+      .deletePassword(this.keychainServiceName, JSON.stringify({ domain, username }));
   }
 
   getAllCredentials() {

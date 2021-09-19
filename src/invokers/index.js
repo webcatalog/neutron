@@ -21,3 +21,8 @@ export const askForPermissionAsync = (authType) => window.ipcRenderer.invoke('as
 
 // Workspace
 export const setWorkspacePictureAsync = (id, imgPath) => window.ipcRenderer.invoke('set-workspace-picture', id, imgPath);
+
+// Password Manager
+export const getAllCredentialsAsync = () => window.ipcRenderer.invoke('password-get-all-credentials');
+export const saveCredentialAsync = (domain, username, password) => window.ipcRenderer.invoke('password-save-credential', domain, username, password);
+export const deleteCredentialAsync = (domain, username) => window.ipcRenderer.invoke('password-delete-credential', domain, username);
