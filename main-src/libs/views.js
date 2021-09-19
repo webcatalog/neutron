@@ -308,7 +308,9 @@ const addViewAsync = async (browserWindow, workspace) => {
     defaultFontSizeMonospace,
   } = getPreferences();
 
-  ses.setPreloads([path.join(__dirname, 'view-preload', 'index.js')]);
+  if (ses.getPreloads().length < 1) {
+    ses.setPreloads([path.join(__dirname, 'view-preload', 'index.js')]);
+  }
 
   const sharedWebPreferences = {
     spellcheck: global.spellcheck,
