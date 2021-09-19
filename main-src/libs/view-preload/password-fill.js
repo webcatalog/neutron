@@ -185,6 +185,11 @@ function addFocusListener(element, credentials) {
 
   // Hide options overlay when user clicks out of the input field.
   document.addEventListener('click', (e) => {
+    // check if user is clicking on unlock button
+    if (currentUnlockButton && (
+      e.target === currentUnlockButton || currentUnlockButton.contains(e.target))) {
+      return;
+    }
     if (e.target !== element) {
       removeAutocompleteList();
     }
@@ -321,7 +326,7 @@ ipcRenderer.on('password-autofill-enabled', () => {
 
 // Check if password autofill is configured.
 window.addEventListener('load', () => {
-  ipcRenderer.emit('password-autofill-check');
+  ipcRenderer.send('password-autofill-check');
 });
 
 // send passwords back to the main process so they can be saved to storage

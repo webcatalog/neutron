@@ -10,7 +10,7 @@ const appJson = require('../../constants/app-json');
 class Keychain {
   constructor() {
     this.name = 'Built-in password manager';
-    this.keychainServiceName = `${appJson.name} Saved Passwords`;
+    this.keychainServiceName = `${appJson.id}/web`;
   }
 
   // eslint-disable-next-line class-methods-use-this

@@ -104,78 +104,82 @@ const SectionAutofill = ({ passwordsAskToSave }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {credentials.map((row) => (
-                  <TableRow key={row.domain}>
-                    <TableCell component="th" scope="row">
-                      {row.domain}
-                    </TableCell>
-                    <TableCell align="right">
-                      <TextField
-                        value={row.username}
-                        margin="dense"
-                        fullWidth
-                        variant="outlined"
-                        inputProps={{ 'aria-label': 'Username' }}
-                        disabled
-                      />
-                    </TableCell>
-                    <TableCell align="right">
-                      <FormControl variant="outlined">
-                        <OutlinedInput
-                          id="outlined-adornment-password"
-                          type={revealPasswords[row.domain] ? 'text' : 'password'}
-                          defaultValue={row.password}
+                {credentials.map((row) => {
+                  const key = `${row.domain}-${row.username}`;
+                  return (
+                    <TableRow key={key}>
+                      <TableCell component="th" scope="row">
+                        {row.domain}
+                      </TableCell>
+                      <TableCell align="right">
+                        <TextField
+                          value={row.username}
                           margin="dense"
-                          endAdornment={(
-                            <InputAdornment position="end">
-                              <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={() => {
-                                  setRevealPasswords({
-                                    [row.domain]: !revealPasswords[row.domain],
-                                  });
-                                }}
-                                edge="end"
-                              >
-                                {revealPasswords[row.domain]
-                                  ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                              </IconButton>
-                            </InputAdornment>
-                          )}
-                          inputProps={{ 'aria-label': 'Password' }}
                           fullWidth
-                          onChange={(e) => {
-                            const newPassword = e.target.value;
-                            saveCredentialAsync(row.domain, row.username, newPassword)
-                              .then(() => reloadCredentials())
-                              .catch((err) => {
-                                // eslint-disable-next-line no-console
-                                console.log(err);
-                              });
-                          }}
+                          variant="outlined"
+                          inputProps={{ 'aria-label': 'Username' }}
+                          disabled
                         />
-                      </FormControl>
-                    </TableCell>
-                    <TableCell align="right">
-                      <Tooltip title="Remove">
-                        <IconButton
-                          aria-label="Remove"
-                          size="small"
-                          onClick={() => {
-                            deleteCredentialAsync(row.domain, row.username)
-                              .then(() => reloadCredentials())
-                              .catch((err) => {
-                                // eslint-disable-next-line no-console
-                                console.log(err);
-                              });
-                          }}
-                        >
-                          <ClearIcon />
-                        </IconButton>
-                      </Tooltip>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                      </TableCell>
+                      <TableCell align="right">
+                        <FormControl variant="outlined">
+                          <OutlinedInput
+                            id="outlined-adornment-password"
+                            type={revealPasswords[key] ? 'text' : 'password'}
+                            defaultValue={row.password}
+                            margin="dense"
+                            endAdornment={(
+                              <InputAdornment position="end">
+                                <IconButton
+                                  aria-label="toggle password visibility"
+                                  onClick={() => {
+                                    setRevealPasswords({
+                                      ...revealPasswords,
+                                      [key]: !revealPasswords[key],
+                                    });
+                                  }}
+                                  edge="end"
+                                >
+                                  {revealPasswords[key]
+                                    ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                                </IconButton>
+                              </InputAdornment>
+                            )}
+                            inputProps={{ 'aria-label': 'Password' }}
+                            fullWidth
+                            onChange={(e) => {
+                              const newPassword = e.target.value;
+                              saveCredentialAsync(row.domain, row.username, newPassword)
+                                .then(() => reloadCredentials())
+                                .catch((err) => {
+                                  // eslint-disable-next-line no-console
+                                  console.log(err);
+                                });
+                            }}
+                          />
+                        </FormControl>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Tooltip title="Remove">
+                          <IconButton
+                            aria-label="Remove"
+                            size="small"
+                            onClick={() => {
+                              deleteCredentialAsync(row.domain, row.username)
+                                .then(() => reloadCredentials())
+                                .catch((err) => {
+                                  // eslint-disable-next-line no-console
+                                  console.log(err);
+                                });
+                            }}
+                          >
+                            <ClearIcon />
+                          </IconButton>
+                        </Tooltip>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
           </ListItem>
