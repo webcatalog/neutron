@@ -326,8 +326,10 @@ window.addEventListener('load', () => {
 
 // send passwords back to the main process so they can be saved to storage
 function handleFormSubmit() {
-  const usernameValue = getBestUsernameField()?.value;
-  const passwordValue = getBestPasswordField()?.value;
+  const usernameField = getBestUsernameField();
+  const passwordField = getBestPasswordField();
+  const usernameValue = usernameField ? usernameField.value : undefined;
+  const passwordValue = passwordField ? passwordField.value : undefined;
 
   if ((usernameValue && usernameValue.length > 0) && (passwordValue && passwordValue.length > 0)) {
     ipcRenderer.send('password-form-filled', [window.location.hostname, usernameValue, passwordValue]);
