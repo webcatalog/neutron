@@ -3,18 +3,19 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useEffect, useState } from 'react';
 
-
-
-import { Button, IconButton, makeStyles } from '@material-ui/core';
+import { IconButton, Tab, makeStyles } from '@material-ui/core';
 
 import AddIcon from '@material-ui/icons/Add';
 import CloseIcon from '@material-ui/icons/Close';
 
-import { getWorkspaces } from '../../senders';
 import { useSelector } from 'react-redux';
+import { getWorkspaces } from '../../senders';
 
-const useStyle = makeStyles((theme) => ({
-  wrapper: {
+const useStyle = makeStyles(() => ({
+  tabsWrapper: {
+    display: 'flex',
+  },
+  tabsBarWrapper: {
     display: 'flex',
   },
 }));
@@ -27,13 +28,6 @@ const TabBar = () => {
 
   const [tabsCount, updateTabsCount] = useState(1);
   const [selectedTabIndex, updateSelectedTabIndex] = useState(0);
-
-  useEffect(() => {
-    const { tabs } = getCurrentWorkspace() || { };
-    const tabsCount = Object.keys(tabs || { }).length;
-
-    updateTabsCount(tabsCount);
-  }, []);
 
   const getCurrentWorkspace = () => {
     const workspaces = getWorkspaces();
@@ -71,33 +65,48 @@ const TabBar = () => {
     window.ipcRenderer.send('request-new-tab-browser', { tabIndex, homeUrl });
   };
 
+  useEffect(() => {
+    const { tabs } = getCurrentWorkspace() || { };
+    const newTabsCount = Object.keys(tabs || { }).length;
+
+    updateTabsCount(newTabsCount);
+  }, []);
+
   return (
     <>
-      {shouldRenderTabBar && <div className={classes.wrapper}>
-        {[...Array(tabsCount).keys()].map((i) => {
-          const isSelectedTab = (selectedTabIndex === i);
-
-          return (
-            <Button
-              key={i}
-              disableRipple
-              disabled={isSelectedTab}
-              onClick={(e) => onTabSelected(e, i)}>
-              {`New tabs`}
-              {(tabsCount !== 1) && (
-                <IconButton
-                  children={<CloseIcon fontSize="small" />}
-                  onClick={(e) => onTabRemoved(e, i)}
+      {shouldRenderTabBar && (
+        <div className={classes.tabsBarWrapper}>
+          <div className={classes.tabsWrapper}>
+            {[...Array(tabsCount).keys()].map((i) => (
+              <>
+                <Tab
+                  key={i}
+                  disableRipple
+                  label={(
+                    <span>
+                      New tabs
+                    </span>
+                  )}
+                  disabled={selectedTabIndex === i}
+                  onClick={(e) => onTabSelected(e, i)}
                 />
-              )}
-            </Button>
-          )}
-        )}
-        <IconButton
-          children={<AddIcon fontSize="small" />}
-          onClick={onTabAdded}
-        />
-      </div>}
+                {(tabsCount !== 1) && (
+                  <IconButton
+                    onClick={(e) => onTabRemoved(e, i)}
+                  >
+                    <CloseIcon fontSize="small" />
+                  </IconButton>
+                )}
+              </>
+            ))}
+          </div>
+          <IconButton
+            onClick={onTabAdded}
+          >
+            <AddIcon fontSize="small" />
+          </IconButton>
+        </div>
+      )}
     </>
   );
 };
