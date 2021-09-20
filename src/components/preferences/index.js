@@ -47,7 +47,7 @@ import SectionAudioVideo from './section-audio-video';
 import SectionAutoReload from './section-auto-reload';
 import SectionAutofill from './section-autofill';
 import SectionBadge from './section-badge';
-import SectionBrowsing from './section-browsing';
+import SectionPrivacy from './section-privacy';
 import SectionDarkReader from './section-dark-reader';
 import SectionDevelopers from './section-developers';
 import SectionDownloads from './section-downloads';
@@ -246,7 +246,7 @@ const Preferences = ({
       text: 'Privacy',
       Icon: SecurityIcon,
       subSections: {
-        privacy: { text: 'Privacy', Component: SectionBrowsing },
+        privacy: { text: 'Privacy', Component: SectionPrivacy },
       },
     },
     telemetry: {

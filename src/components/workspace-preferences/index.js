@@ -13,14 +13,15 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import CachedIcon from '@material-ui/icons/Cached';
 import CodeIcon from '@material-ui/icons/Code';
 import LinkIcon from '@material-ui/icons/Link';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import PaletteIcon from '@material-ui/icons/Palette';
 import PermCameraMicIcon from '@material-ui/icons/PermCameraMic';
-import WidgetsIcon from '@material-ui/icons/Widgets';
-import CachedIcon from '@material-ui/icons/Cached';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
+import SecurityIcon from '@material-ui/icons/Security';
+import WidgetsIcon from '@material-ui/icons/Widgets';
 
 import connectComponent from '../../helpers/connect-component';
 import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
@@ -34,11 +35,12 @@ import SnackbarTrigger from '../shared/snackbar-trigger';
 import SectionAudioVideo from './section-audio-video';
 import SectionAutoReload from './section-auto-reload';
 import SectionBadge from './section-badge';
+import SectionDarkReader from './section-dark-reader';
 import SectionDevelopers from './section-developers';
 import SectionDownloads from './section-downloads';
 import SectionLinkHandling from './section-link-handling';
 import SectionNotifications from './section-notifications';
-import SectionDarkReader from './section-dark-reader';
+import SectionPrivacy from './section-privacy';
 import SectionWorkspace from './section-workspace';
 
 const styles = (theme) => ({
@@ -126,6 +128,13 @@ const Preferences = ({ classes }) => {
       Icon: CachedIcon,
       subSections: {
         autoReload: { text: 'Auto Reload', Component: SectionAutoReload },
+      },
+    },
+    privacy: {
+      text: 'Privacy',
+      Icon: SecurityIcon,
+      subSections: {
+        autoReload: { text: 'Privacy', Component: SectionPrivacy },
       },
     },
     developers: {
