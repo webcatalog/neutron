@@ -130,7 +130,7 @@ const Preferences = ({
       Icon: WidgetsIcon,
       subSections: {
         home: { text: 'Home', Component: SectionHome, hidden: !(appJson.url && !isMas() && !isStandalone() && !isAppx()) },
-        mode: { text: 'Mode', Component: SectionMode, hidden: !appJson.id.startsWith('group-') && appJson.id !== 'clovery' },
+        mode: { text: 'Mode', Component: SectionMode, hidden: Boolean(appJson.url) },
         language: { text: 'Language', Component: SectionLanguage },
         search: { text: 'Search', Component: SectionSearch },
         system: { text: 'System', Component: SectionSystem },

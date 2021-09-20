@@ -75,11 +75,11 @@ const SectionBrowsing = ({
             />
           </ListItemSecondaryAction>
         </ListItem>
-        {!appJson.id.startsWith('group-') && appJson.id !== 'clovery' && (
+        {appJson.url && (
           <>
             <Divider />
             <ListItem>
-              <ListItemText primary="Share browsing data & login credentials between services & accounts" />
+              <ListItemText primary="Share browsing data between services & accounts" />
               <ListItemSecondaryAction>
                 <Switch
                   edge="end"
