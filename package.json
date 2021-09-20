@@ -1,7 +1,7 @@
 {
   "name": "neutron",
   "description": "AppView template for WebCatalog",
-  "version": "20.0.0-alpha.11",
+  "version": "20.0.0-beta",
   "minimumWebCatalogVersion": "36.4.1",
   "engines": {
     "node": ">=14.0.0 <15.0.0"
@@ -33,7 +33,7 @@
     "node-mac-permissions": "2.2.0"
   },
   "devDependencies": {
-    "@cliqz/adblocker-electron": "1.22.5",
+    "@cliqz/adblocker-electron": "1.22.6",
     "@date-io/date-fns": "1.3.13",
     "@elastic/app-search-javascript": "7.14.0",
     "@elastic/react-search-ui": "1.7.0",
@@ -62,7 +62,7 @@
     "concurrently": "6.2.1",
     "copy-webpack-plugin": "6.4.1",
     "cross-env": "7.0.3",
-    "darkreader": "4.9.34",
+    "darkreader": "4.9.35",
     "date-fns": "2.24.0",
     "del": "6.0.0",
     "electron": "15.0.0-beta.7",
@@ -79,7 +79,7 @@
     "eslint-plugin-header": "3.1.1",
     "eslint-plugin-import": "2.24.2",
     "eslint-plugin-jsx-a11y": "6.4.1",
-    "eslint-plugin-react": "7.25.2",
+    "eslint-plugin-react": "7.25.3",
     "eslint-plugin-react-hooks": "2.5.1",
     "ext-name": "5.0.0",
     "extract-zip": "2.0.1",
