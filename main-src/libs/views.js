@@ -239,7 +239,8 @@ const addViewAsync = async (browserWindow, workspace) => {
     });
   }
   // blocker
-  if (global.blockAds) {
+  const shouldBlockAds = getWorkspacePreference(workspace.id, 'blockAds') || global.blockAds;
+  if (shouldBlockAds) {
     ElectronBlocker.fromPrebuiltAdsAndTracking(fetch, {
       path: path.join(app.getPath('userData'), 'adblocker.bin'),
       read: fsExtra.readFile,
