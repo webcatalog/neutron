@@ -66,7 +66,10 @@ const {
   reloadViewsDarkReader,
   reloadViewsWebContentsIfDidFailLoad,
   setViewsAudioPref,
-  setActiveView,
+  setBrowserView,
+  constructBrowserViewKey,
+  getBrowserViews,
+  getBrowserView,
 } = require('../libs/views');
 
 const {
@@ -688,7 +691,7 @@ const loadListeners = () => {
     trackAddWorkspaceAsync(deviceId, appId);
   });
 
-  ipcMain.on('request-new-tab-browser', async (_, tabInfo) => {
+  ipcMain.on('request-new-tab-browser', (_, tabInfo) => {
     const win = mainWindow.get();
     const browserView = win.getBrowserView();
 
@@ -704,56 +707,64 @@ const loadListeners = () => {
         [tabIndex]: { homeUrl, lastUrl },
       },
     });
-
-    // Update workspace view
-    const view = new BrowserView();
-    win.setBrowserView(view);
-
-    const contentSize = win.getContentSize();
-    const { x, y, width, height } = getViewBounds(contentSize);
-    view.setBounds({
-      x,
-      y: y + 48,
-      width,
-      height
-    });
-    view.setBackgroundColor('#FFF');
-    view.webContents.loadURL(homeUrl);
   });
 
   ipcMain.on('request-open-tab-browser', (_, tabInfo) => {
-    const { tabIndex } = tabInfo;
+    const { newTabIndex, selectedTabIndex } = tabInfo;
     const currentWorkspace = getActiveWorkspace();
     const win = mainWindow.get();
-    win.setBrowserView(undefined);
+    const currentBrowserView = win.getBrowserView();
 
     // Latest Url from tab session.
     const { id, lastUrl, tabs } = currentWorkspace;
-   
+
+    // Construct keys for new browserView to be added and browserView to update.
+    const currentBrowserViewKey = constructBrowserViewKey(id, selectedTabIndex);
+    const newBrowserViewKey = constructBrowserViewKey(id, newTabIndex);
+
+    // Get new browserView from current dataset.
+    const newBrowserView = getBrowserView(newBrowserViewKey);
+
+    // Preserve current browserView.
+    setBrowserView(currentBrowserViewKey, currentBrowserView);
+
     // Update workspace config
     setWorkspace(id, {
       tabs: {
         ...tabs,
-        [tabIndex]: {
-          ...tabs[tabIndex],
+        tabIndex: {
+          ...tabs[newTabIndex],
           lastUrl,
         },
       },
     });
 
-    const view = new BrowserView();
-    win.setBrowserView(view);
+    // Clear current browserView to prevent memory leaks.
+    win.setBrowserView(undefined);
 
-    const contentSize = win.getContentSize();
-    const { x, y, width, height } = getViewBounds(contentSize);
-    view.setBounds({
-      x,
-      y: y + 48,
-      width,
-      height
-    });
-    view.setBackgroundColor('#FFF');
-    win.getBrowserView().webContents.loadURL(lastUrl);
+    if (newBrowserView) {
+      win.setBrowserView(newBrowserView);
+    } else {
+      const browserView = new BrowserView();
+      win.setBrowserView(browserView);
+
+      const contentSize = win.getContentSize();
+      const {
+        x,
+        y,
+        width,
+        height,
+      } = getViewBounds(contentSize);
+
+      browserView.setBounds({
+        x,
+        y: y + 48,
+        width,
+        height,
+      });
+      browserView.setBackgroundColor('#FFF');
+      browserView.webContents.loadURL(lastUrl);
+    }
   });
 
   ipcMain.on('request-close-tab-browser', (_, tabInfo) => {

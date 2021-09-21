@@ -52,6 +52,7 @@ const isAppx = require('./is-appx');
 const isWebcatalog = require('./is-webcatalog');
 
 const views = {};
+const browserViews = {};
 let shouldMuteAudio;
 let shouldPauseNotifications;
 
@@ -1174,6 +1175,18 @@ const addViewAsync = async (browserWindow, workspace) => {
   }
 };
 
+const getBrowserViews = () => browserViews;
+const getBrowserView = (id) => browserViews[id];
+const setBrowserView = (id, browserView) => {
+  browserViews[id] = browserView;
+};
+const removeBrowserView = (id) => {
+  if (browserViews[id]) {
+    delete browserViews[id];
+  }
+};
+const constructBrowserViewKey = (id, tabIndex) => `${id}/${tabIndex}`;
+
 const getView = (id) => views[id];
 
 const setActiveView = (browserWindow, id) => {
@@ -1365,4 +1378,9 @@ module.exports = {
   setActiveView,
   setViewsAudioPref,
   setViewsNotificationsPref,
+  getBrowserViews,
+  getBrowserView,
+  setBrowserView,
+  removeBrowserView,
+  constructBrowserViewKey,
 };

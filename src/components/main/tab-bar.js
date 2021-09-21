@@ -31,13 +31,13 @@ const TabBar = () => {
   const [tabsCount, updateTabsCount] = useState(1);
   const [selectedTabIndex, updateSelectedTabIndex] = useState(0);
 
-  const onTabSelected = (e, tabIndex) => {
+  const onTabSelected = (e, newTabIndex) => {
     e.stopPropagation();
 
     const { id } = currentWorkspace;
 
-    updateSelectedTabIndex(tabIndex);
-    window.ipcRenderer.send('request-open-tab-browser', { id, tabIndex });
+    window.ipcRenderer.send('request-open-tab-browser', { id, newTabIndex, selectedTabIndex });
+    updateSelectedTabIndex(newTabIndex);
   };
 
   const onTabRemoved = (e, tabIndex) => {
@@ -54,8 +54,8 @@ const TabBar = () => {
 
     const { homeUrl } = currentWorkspace;
 
-    updateTabsCount(tabIndex + 1);
     window.ipcRenderer.send('request-new-tab-browser', { tabIndex, homeUrl });
+    updateTabsCount(tabIndex + 1);
   };
 
   useEffect(() => {
