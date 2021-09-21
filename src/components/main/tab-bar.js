@@ -24,22 +24,16 @@ const TabBar = () => {
   const classes = useStyle();
 
   const workspaceCount = useSelector((state) => Object.keys((state.workspaceMetas || {})).length);
+  const activeWorkspaceId = useSelector((state) => state.workspaces.activeWorkspaceId);
+  const currentWorkspace = useSelector((state) => state.workspaces.workspaces[activeWorkspaceId]);
   const shouldRenderTabBar = (workspaceCount !== 0);
 
   const [tabsCount, updateTabsCount] = useState(1);
   const [selectedTabIndex, updateSelectedTabIndex] = useState(0);
 
-  const getCurrentWorkspace = () => {
-    const workspaces = getWorkspaces();
-    const currentWorkspace = Object.values(workspaces).filter((workspace) => workspace.active);
-
-    return currentWorkspace[0];
-  };
-
   const onTabSelected = (e, tabIndex) => {
     e.stopPropagation();
 
-    const currentWorkspace = getCurrentWorkspace();
     const { id } = currentWorkspace;
 
     updateSelectedTabIndex(tabIndex);
@@ -58,7 +52,6 @@ const TabBar = () => {
     // tabIndex start at 0
     const tabIndex = tabsCount;
 
-    const currentWorkspace = getCurrentWorkspace();
     const { homeUrl } = currentWorkspace;
 
     updateTabsCount(tabIndex + 1);
@@ -66,11 +59,11 @@ const TabBar = () => {
   };
 
   useEffect(() => {
-    const { tabs } = getCurrentWorkspace() || { };
+    const { tabs } = currentWorkspace || { };
     const newTabsCount = Object.keys(tabs || { }).length;
 
     updateTabsCount(newTabsCount);
-  }, []);
+  }, [activeWorkspaceId]);
 
   return (
     <>
@@ -78,9 +71,8 @@ const TabBar = () => {
         <div className={classes.tabsBarWrapper}>
           <div className={classes.tabsWrapper}>
             {[...Array(tabsCount).keys()].map((i) => (
-              <>
+              <div key={i}>
                 <Tab
-                  key={i}
                   disableRipple
                   label={(
                     <span>
@@ -97,7 +89,7 @@ const TabBar = () => {
                     <CloseIcon fontSize="small" />
                   </IconButton>
                 )}
-              </>
+              </div>
             ))}
           </div>
           <IconButton
