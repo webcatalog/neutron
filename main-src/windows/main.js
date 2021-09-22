@@ -27,12 +27,12 @@ const formatBytes = require('../libs/format-bytes');
 const isStandalone = require('../libs/is-standalone');
 
 let win;
-let mb = {};
+let mb;
 let tray;
 let cachedBrowserViewTitle = '';
 
 const get = () => {
-  if (global.attachToMenubar) return mb.window;
+  if (global.attachToMenubar) return mb ? mb.window : undefined;
   return win;
 };
 
@@ -254,6 +254,7 @@ const createAsync = () => new Promise((resolve) => {
       });
 
       mb.window.on('focus', () => {
+        if (!mb.window) return;
         const view = mb.window.getBrowserView();
         if (view && view.webContents) {
           view.webContents.focus();
