@@ -1,32 +1,30 @@
 diff --git a/node_modules/@cliqz/adblocker-electron/dist/cjs/adblocker.js b/node_modules/@cliqz/adblocker-electron/dist/cjs/adblocker.js
-index c9694a6..f0b57fb 100644
+index ec18894..b013343 100644
 --- a/node_modules/@cliqz/adblocker-electron/dist/cjs/adblocker.js
 +++ b/node_modules/@cliqz/adblocker-electron/dist/cjs/adblocker.js
-@@ -21,7 +21,10 @@ exports.ElectronBlocker = exports.BlockingContext = exports.fromElectronDetails
+@@ -21,7 +21,9 @@ exports.ElectronBlocker = exports.BlockingContext = exports.fromElectronDetails
  const electron_1 = require("electron");
  const tldts_experimental_1 = require("tldts-experimental");
  const adblocker_1 = require("@cliqz/adblocker");
 -const PRELOAD_PATH = require.resolve('@cliqz/adblocker-electron-preload');
-+const path = require('path');
 +const PRELOAD_PATH = process.env.NODE_ENV === 'production'
 +    ? path.resolve(__dirname, 'adblocker-electron-preload.js')
 +    : require.resolve('@cliqz/adblocker-electron-preload');
  // https://stackoverflow.com/questions/48854265/why-do-i-see-an-electron-security-warning-after-updating-my-electron-project-t
- process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
- /**
+ // tslint:disable no-string-literal
+ process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 diff --git a/node_modules/@cliqz/adblocker-electron/dist/es6/adblocker.js b/node_modules/@cliqz/adblocker-electron/dist/es6/adblocker.js
-index 66348c0..994641b 100644
+index ffc913b..d08808e 100644
 --- a/node_modules/@cliqz/adblocker-electron/dist/es6/adblocker.js
 +++ b/node_modules/@cliqz/adblocker-electron/dist/es6/adblocker.js
-@@ -8,7 +8,10 @@
+@@ -8,7 +8,9 @@
  import { ipcMain } from 'electron';
  import { parse } from 'tldts-experimental';
  import { FiltersEngine, Request } from '@cliqz/adblocker';
 -const PRELOAD_PATH = require.resolve('@cliqz/adblocker-electron-preload');
-+import path from 'path';
 +const PRELOAD_PATH = process.env.NODE_ENV === 'production'
 +    ? path.resolve(__dirname, 'adblocker-electron-preload.js')
 +    : require.resolve('@cliqz/adblocker-electron-preload');
  // https://stackoverflow.com/questions/48854265/why-do-i-see-an-electron-security-warning-after-updating-my-electron-project-t
- process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
- /**
+ // tslint:disable no-string-literal
+ process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
