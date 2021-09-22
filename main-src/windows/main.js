@@ -32,7 +32,7 @@ let tray;
 let cachedBrowserViewTitle = '';
 
 const get = () => {
-  if (global.attachToMenubar) return mb.window;
+  if (global.attachToMenubar) return mb ? mb.window : undefined;
   return win;
 };
 
