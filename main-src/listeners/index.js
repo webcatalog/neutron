@@ -68,8 +68,8 @@ const {
   setViewsAudioPref,
   setBrowserView,
   constructBrowserViewKey,
-  getBrowserViews,
   getBrowserView,
+  removeBrowserView,
 } = require('../libs/views');
 
 const {
@@ -716,7 +716,8 @@ const loadListeners = () => {
     const currentBrowserView = win.getBrowserView();
 
     // Latest Url from tab session.
-    const { id, lastUrl, tabs } = currentWorkspace;
+    const { id, tabs } = currentWorkspace;
+    const lastUrl = currentBrowserView.webContents.getURL();
 
     // Construct keys for new browserView to be added and browserView to update.
     const currentBrowserViewKey = constructBrowserViewKey(id, selectedTabIndex);
@@ -732,11 +733,12 @@ const loadListeners = () => {
     setWorkspace(id, {
       tabs: {
         ...tabs,
-        tabIndex: {
+        [selectedTabIndex]: {
           ...tabs[newTabIndex],
           lastUrl,
         },
       },
+      selectedTabIndex,
     });
 
     // Clear current browserView to prevent memory leaks.
@@ -745,6 +747,10 @@ const loadListeners = () => {
     if (newBrowserView) {
       win.setBrowserView(newBrowserView);
     } else {
+      console.log(tabs[selectedTabIndex]);
+      const { homeUrl } = tabs[selectedTabIndex];
+      const url = homeUrl;
+
       const browserView = new BrowserView();
       win.setBrowserView(browserView);
 
@@ -763,20 +769,31 @@ const loadListeners = () => {
         height,
       });
       browserView.setBackgroundColor('#FFF');
-      browserView.webContents.loadURL(lastUrl);
+      browserView.webContents.loadURL(url);
     }
   });
 
   ipcMain.on('request-close-tab-browser', (_, tabInfo) => {
     const { tabIndex } = tabInfo;
-    const { id, tabs } = getActiveWorkspace();
+    const { id, tabs, selectedTabIndex } = getActiveWorkspace();
+    const isCloseTabCurrent = (selectedTabIndex === tabIndex);
+
+    const browserKey = constructBrowserViewKey(id, tabIndex);
 
     const win = mainWindow.get();
-    const browserView = win.getBrowserView();
-    const webContents = browserView.webContents;
+    const currentBrowserView = win.getBrowserView();
 
     delete tabs[tabIndex];
-    webContents.forcefullyCrashRenderer();
+    removeBrowserView(browserKey);
+    // Clean browserView contents;
+    win.setBrowserView(undefined);
+    currentBrowserView.webContents.forcefullyCrashRenderer();
+
+    // TODO:
+    // split to 2 cases
+    // if the closed one are the current view
+    // or the closed one are another view
+    // for 2nd case should consider which tab to fall back on.
 
     setWorkspace(id, { tabs });
   });
