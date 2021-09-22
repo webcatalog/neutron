@@ -747,7 +747,6 @@ const loadListeners = () => {
     if (newBrowserView) {
       win.setBrowserView(newBrowserView);
     } else {
-      console.log(tabs[selectedTabIndex]);
       const { homeUrl } = tabs[selectedTabIndex];
       const url = homeUrl;
 
