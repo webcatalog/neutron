@@ -122,7 +122,7 @@ const defaultPreferences = {
   standaloneLicenseKey: undefined,
   standaloneRegistered: false,
   swipeToNavigate: true,
-  tabsEnabble: false,
+  tabsEnable: false,
   telemetry: false,
   themeColor: 'auto',
   themeSource: 'system',
