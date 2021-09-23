@@ -111,7 +111,7 @@ Promise.resolve()
     const opts = {
       targets,
       config: {
-        buildDependenciesFromSource: true,
+        buildDependenciesFromSource: process.platform === 'darwin',
         directories: {
           output: APP_PATH,
         },
