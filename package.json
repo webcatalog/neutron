@@ -22,7 +22,7 @@
     "electron-dev:standalone": "cross-env REACT_APP_FORCE_STANDALONE=1 yarn electron-dev",
     "electron-dev:snap": "cross-env REACT_APP_FORCE_SNAP=1 yarn electron-dev",
     "build-json": "node build-json.js",
-    "build-template": "cross-env CSC_IDENTITY_AUTO_DISCOVERY=false node build-template.js",
+    "build-template": "cross-env CSC_IDENTITY_AUTO_DISCOVERY=false npm_config_build_from_source=true node build-template.js",
     "build-zip": "7z a -mm=Deflate -mx=9 -r dist/template.zip dist/template/.",
     "dist": "yarn build && yarn build-template && yarn build-zip && yarn build-json"
   },
