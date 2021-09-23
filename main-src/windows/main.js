@@ -240,8 +240,6 @@ const createAsync = () => new Promise((resolve) => {
     });
 
     mb.on('after-create-window', () => {
-      electronRemote.enable(mb.window.webContents);
-
       mb.window.refreshTitle = (...args) => {
         refreshTitle(mb.window, ...args);
       };
