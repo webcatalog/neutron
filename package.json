@@ -1,7 +1,7 @@
 {
   "name": "neutron",
   "description": "AppView template for WebCatalog",
-  "version": "20.0.1",
+  "version": "20.0.2",
   "minimumWebCatalogVersion": "36.4.1",
   "engines": {
     "node": ">=14.0.0 <15.0.0"
@@ -48,7 +48,7 @@
     "@material-ui/pickers": "3.3.10",
     "@sentry/electron": "2.5.4",
     "ace-builds": "1.4.12",
-    "amplitude-js": "8.7.0",
+    "amplitude-js": "8.8.0",
     "auto-launch": "5.0.5",
     "babel-eslint": "10.1.0",
     "babel-preset-env": "1.7.0",
@@ -85,7 +85,7 @@
     "extract-zip": "2.0.1",
     "follow-redirects": "1.14.4",
     "fs-extra": "10.0.0",
-    "glob": "7.1.7",
+    "glob": "7.2.0",
     "hasha": "5.2.2",
     "is-url": "1.2.4",
     "jimp": "0.16.1",

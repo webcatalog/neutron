@@ -11,6 +11,7 @@ on:
     paths:
       - '.github/workflows/macos-x64.yml'
       - 'build-template.js'
+      - 'patches'
 
 jobs:
   build:
@@ -41,6 +42,9 @@ jobs:
           ${{ runner.os }}-yarn-
     # https://github.com/mui-org/material-ui/issues/12432
     - run: yarn --prefer-offline --network-timeout 600000
+      env:
+        # https://github.com/actions/virtual-environments/issues/2486#issuecomment-777773283
+        SDKROOT: /Library/Developer/CommandLineTools/SDKs/MacOSX11.1.sdk
     - run: yarn lint
     - run: brew install p7zip
     - name: Set up Castlabs EVS
@@ -59,6 +63,8 @@ jobs:
         REACT_APP_ELASTIC_CLOUD_APP_SEARCH_ENGINE_NAME: ${{ secrets.REACT_APP_ELASTIC_CLOUD_APP_SEARCH_ENGINE_NAME }}
         ELECTRON_APP_SENTRY_DSN: ${{ secrets.ELECTRON_APP_SENTRY_DSN }}
         ELECTRON_APP_GOOGLE_API_KEY: ${{ secrets.ELECTRON_APP_GOOGLE_API_KEY }}
+        # https://github.com/actions/virtual-environments/issues/2486#issuecomment-777773283
+        SDKROOT: /Library/Developer/CommandLineTools/SDKs/MacOSX11.1.sdk
     - name: Create Release
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
