@@ -6,7 +6,7 @@ index 91141b7..e70d398 100644
 +For unknown reason, if the app is built on GitHub Actions, `app-x64.asar.unpacked/node_modules/keytar/build/Release/keytar.node` is ARM64 binary (couldn't reproduce to on M1 Mac) so we opt to use universal binary instead.
 +
  # keytar - Node module to manage system keychain
-
+ 
  [![Travis Build Status](https://travis-ci.org/atom/node-keytar.svg?branch=master)](https://travis-ci.org/atom/node-keytar)
 diff --git a/node_modules/keytar/binding.gyp b/node_modules/keytar/binding.gyp
 index 9be3dcb..df66b96 100644
@@ -32,26 +32,3 @@ index 9be3dcb..df66b96 100644
          'CLANG_CXX_LIBRARY': 'libc++',
          'MACOSX_DEPLOYMENT_TARGET': '10.7',
        },
-diff --git a/node_modules/keytar/package.json b/node_modules/keytar/package.json
-index 4616f65..1108853 100644
---- a/node_modules/keytar/package.json
-+++ b/node_modules/keytar/package.json
-@@ -30,7 +30,7 @@
-   ],
-   "types": "./keytar.d.ts",
-   "scripts": {
--    "install": "prebuild-install || npm run build",
-+    "install": "npm run build",
-     "build": "node-gyp rebuild",
-     "lint": "npm run cpplint",
-     "cpplint": "node-cpplint --filters legal-copyright,build-include,build-namespaces src/*.cc",
-@@ -50,8 +50,7 @@
-     "prebuild": "^10.0.1"
-   },
-   "dependencies": {
--    "node-addon-api": "^3.0.0",
--    "prebuild-install": "^6.0.0"
-+    "node-addon-api": "^3.0.0"
-   },
-   "binary": {
-     "napi_versions": [
