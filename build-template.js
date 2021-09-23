@@ -111,6 +111,7 @@ Promise.resolve()
     const opts = {
       targets,
       config: {
+        buildDependenciesFromSource: platform === 'darwin',
         directories: {
           output: APP_PATH,
         },
@@ -145,7 +146,7 @@ Promise.resolve()
     };
 
     // arm64 is only supported on macOS
-    if (arch === 'arm64' && process.platform !== 'darwin') {
+    if (arch === 'arm64' && platform !== 'darwin') {
       console.log('Packaging using Electron@electron/electron');
     } else {
       console.log('Packaging using Electron@castlabs/electron-releases');
@@ -163,7 +164,7 @@ Promise.resolve()
   // sign with Castlabs EVS
   // https://github.com/castlabs/electron-releases/wiki/EVS
   .then(() => {
-    if (process.platform === 'linux' || process.platform === 'win32') return null;
+    if (platform === 'linux' || platform === 'win32') return null;
     return Promise.resolve()
       .then(() => {
         const cmd = `python3 -m castlabs_evs.vmp sign-pkg "${getPackageDirPath()}"`;
@@ -215,7 +216,7 @@ Promise.resolve()
     ];
 
     // signature files for Castlabs EVS
-    if (process.platform === 'darwin') {
+    if (platform === 'darwin') {
       tasks.push(fs.copy(
         path.join(dotAppPath, 'Contents', 'Frameworks', 'Electron Framework.framework', 'Versions', 'A', 'Resources', 'Electron Framework.sig'),
         path.join(TEMPLATE_PATH, 'evs', 'Electron Framework.sig'),
