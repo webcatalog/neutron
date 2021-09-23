@@ -111,6 +111,7 @@ Promise.resolve()
     const opts = {
       targets,
       config: {
+        buildDependenciesFromSource: true,
         directories: {
           output: APP_PATH,
         },
