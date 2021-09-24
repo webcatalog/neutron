@@ -43,8 +43,7 @@ const styles = (theme) => ({
     marginRight: theme.spacing(1),
   },
   buttonRight: {
-    float: 'right',
-    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
   },
   formRow: {
     display: 'flex',
@@ -173,11 +172,6 @@ const Extensions = ({
                   Disable All
                 </Button>
               </div>
-              <div className={classes.actionsRight}>
-                <Button variant="contained" disableElevation className={classes.buttonRight} onClick={() => requestOpenInBrowser('https://github.com/webcatalog/webcatalog-app/issues/710')}>
-                  Report Bugs
-                </Button>
-              </div>
             </div>
 
             <List dense>
@@ -192,6 +186,13 @@ const Extensions = ({
                   </ListItemAvatar>
                   <ListItemText primary={ext.name} secondary={`ID: ${ext.id}`} />
                   <ListItemSecondaryAction>
+                    <Button
+                      variant="text"
+                      className={classes.buttonRight}
+                      onClick={() => requestOpenInBrowser(`https://docs.google.com/forms/d/e/1FAIpQLSfF4IhgsyYDbiGVx0sz0JKLd9Rs0g71lUqTpw8Jv_nixpQqiw/viewform?entry.1002721177=${encodeURIComponent(ext.name)}&entry.1851347571=${encodeURIComponent(window.remote.app.getVersion())}`)}
+                    >
+                      Report Problems
+                    </Button>
                     <Switch
                       checked={extensionEnabledExtesionIds[ext.id]}
                       onChange={(e) => {
