@@ -21,7 +21,7 @@ const PasswordManagers = {
   // Returns an active password manager, which is the one that is selected in app's
   // settings.
   getActivePasswordManager() {
-    if (!getPreference('passwordsAskToSave') && PasswordManagers.managers.length === 0) {
+    if (!getPreference('passwordsAskToSave') || PasswordManagers.managers.length === 0) {
       return null;
     }
 
