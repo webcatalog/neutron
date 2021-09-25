@@ -29,6 +29,7 @@ const rtlDetect = require('rtl-detect');
 
 const appJson = require('./constants/app-json');
 const isMas = require('./libs/is-mas');
+const getExtensionFromProfile = require('./libs/extensions/get-extensions-from-profile');
 
 electronRemote.initialize();
 
@@ -561,11 +562,23 @@ if (!gotTheLock) {
     global.proxyPacScript = proxyPacScript;
     global.proxyRules = `${proxyProtocol}://${proxyAddress}:${proxyPort || '80'}`;
     global.proxyMode = proxyMode;
+
     global.extensionEnabledExtesionIds = extensionEnabledExtesionIds;
     global.extensionSourceBrowserId = extensionSourceBrowserId;
     global.extensionSourceProfileDirName = extensionSourceProfileDirName;
     global.extensionEnabled = extensionEnabledExtesionIds
       && Object.keys(extensionEnabledExtesionIds).length > 0;
+    // disable built-in password manager and Dark Reader if external extensions are detected
+    if (global.extensionEnabled) {
+      const loadableExtensions = getExtensionFromProfile(
+        global.extensionSourceBrowserId,
+        global.extensionSourceProfileDirName,
+      )
+        .filter((ext) => global.extensionEnabledExtesionIds[ext.id]);
+
+      global.darkReaderExtensionDetected = Boolean(loadableExtensions.find((ext) => ext.name && ext.name.toLowerCase().includes('dark reader')));
+    }
+
     global.hibernateWhenUnused = hibernateWhenUnused;
     global.hibernateWhenUnusedTimeout = hibernateWhenUnusedTimeout;
 

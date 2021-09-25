@@ -37,9 +37,18 @@ contextBridge.exposeInMainWorld(
 const loadDarkReader = (workspaceId) => {
   const shouldUseDarkColor = ipcRenderer.sendSync('get-should-use-dark-colors');
   const workspaceDarkReader = ipcRenderer.sendSync('get-workspace-preference', workspaceId, 'darkReader');
-  const darkReader = workspaceDarkReader != null
-    ? workspaceDarkReader
-    : ipcRenderer.sendSync('get-preference', 'darkReader'); // get fresh value
+
+  // only load built-in Dark Reader if users are not using external Dark Reader extension
+  const darkReaderExtensionDetected = ipcRenderer.sendSync('get-global', 'darkReaderExtensionDetected');
+  console.log('darkReaderExtensionDetected', darkReaderExtensionDetected);
+  let darkReader = false;
+  if (!darkReaderExtensionDetected) {
+    darkReader = workspaceDarkReader != null
+      ? workspaceDarkReader
+      : ipcRenderer.sendSync('get-preference', 'darkReader'); // get fresh value
+  }
+
+  console.log('darkReader', darkReader);
 
   const isWhatsApp = window.location.hostname.includes('web.whatsapp.com');
 

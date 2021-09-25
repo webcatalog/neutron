@@ -15,6 +15,7 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 
 import connectComponent from '../../../helpers/connect-component';
+import getStaticGlobal from '../../../helpers/get-static-global';
 
 import { updateForm } from '../../../state/dialog-workspace-preferences/actions';
 
@@ -58,10 +59,18 @@ const SectionDarkReader = ({
     <ListItem>
       <ListItemText
         primary="Dark Reader"
-        secondary="Create unofficial dark theme for every service & account."
+        secondary={getStaticGlobal('darkReaderExtensionDetected')
+          ? 'The built-in Dark Reader feature has been taken over by the external Dark Reader extension.'
+          : 'Create unofficial dark theme for every service & account.'}
       />
       <Select
-        value={formDarkReader != null ? formDarkReader : 'global'}
+        value={(() => {
+          if (getStaticGlobal('darkReaderExtensionDetected')) {
+            return false;
+          }
+          return formDarkReader != null ? formDarkReader : 'global';
+        })()}
+        disabled={getStaticGlobal('darkReaderExtensionDetected')}
         onChange={(e) => onUpdateForm({
           preferences: {
             darkReader: e.target.value !== 'global' ? e.target.value : null,
@@ -80,8 +89,8 @@ const SectionDarkReader = ({
         <MenuItem dense value={false}>No</MenuItem>
       </Select>
     </ListItem>
-    {formDarkReader && <Divider />}
-    {formDarkReader && (
+    {formDarkReader && !getStaticGlobal('darkReaderExtensionDetected') && <Divider />}
+    {formDarkReader && !getStaticGlobal('darkReaderExtensionDetected') && (
       <ListItem>
         <ListItemText className={classes.sliderContainer}>
           <Grid container spacing={2}>
