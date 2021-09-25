@@ -338,7 +338,7 @@ const addViewAsync = async (browserWindow, workspace) => {
       global.extensionSourceProfileDirName,
     )
       .filter((ext) => global.extensionEnabledExtesionIds[ext.id]);
-    if (!extensionManagers[partitionId]) {
+    if (loadableExtensions.length > 0 && !extensionManagers[partitionId]) {
       extensionManagers[partitionId] = new ElectronChromeExtensions({
         modulePath: process.env.NODE_ENV === 'production' ? path.join(__dirname, 'electron-chrome-extensions') : undefined,
         session: ses,
