@@ -1197,17 +1197,7 @@ const setActiveView = (browserWindow, id) => {
         getViewBounds(contentSize, false, 0, 0),
       ); // hide browserView to show error message
     } else {
-      const {
-        x, y, width, height,
-      } = getViewBounds(contentSize);
-
-      view.setBounds({
-        x,
-        y: y + 48,
-        width,
-        height,
-      });
-      // view.setBounds(getViewBounds(contentSize));
+      view.setBounds(getViewBounds(contentSize));
     }
     view.setAutoResize({
       width: true,
@@ -1245,16 +1235,7 @@ const realignActiveView = (browserWindow, activeId) => {
         getViewBounds(contentSize, false, 0, 0),
       ); // hide browserView to show error message
     } else {
-      const {
-        x, y, width, height,
-      } = getViewBounds(contentSize);
-
-      view.setBounds({
-        x,
-        y: y + 48,
-        width,
-        height,
-      });
+      view.setBounds(getViewBounds(contentSize));
     }
   }
 };

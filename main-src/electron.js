@@ -502,6 +502,8 @@ if (!gotTheLock) {
       extensionEnabledExtesionIds,
       extensionSourceBrowserId,
       extensionSourceProfileDirName,
+      hibernateWhenUnused,
+      hibernateWhenUnusedTimeout,
       navigationBar,
       proxyAddress,
       proxyBypassRules,
@@ -519,9 +521,8 @@ if (!gotTheLock) {
       titleBar,
       trayIcon,
       useSystemTitleBar,
+      useTabs,
       windowButtons,
-      hibernateWhenUnused,
-      hibernateWhenUnusedTimeout,
     } = getPreferences();
 
     if (customUserAgent) {
@@ -540,6 +541,7 @@ if (!gotTheLock) {
 
     global.isMacOs11 = isMacOs11();
     global.isWindows10 = isWindows10();
+    global.useTabs = useTabs;
     global.attachToMenubar = attachToMenubar;
     global.runInBackground = process.platform !== 'darwin' && runInBackground;
     global.sidebar = sidebar;

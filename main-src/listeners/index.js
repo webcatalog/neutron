@@ -760,19 +760,7 @@ const loadListeners = () => {
       win.setBrowserView(browserView);
 
       const contentSize = win.getContentSize();
-      const {
-        x,
-        y,
-        width,
-        height,
-      } = getViewBounds(contentSize);
-
-      browserView.setBounds({
-        x,
-        y: y + 48,
-        width,
-        height,
-      });
+      browserView.setBounds(getViewBounds(contentSize));
       browserView.setBackgroundColor('#FFF');
       browserView.webContents.loadURL(url);
     }
@@ -780,8 +768,8 @@ const loadListeners = () => {
 
   ipcMain.on('request-close-tab-browser', (_, tabInfo) => {
     const { tabIndex } = tabInfo;
-    const { id, tabs, selectedTabIndex } = getActiveWorkspace();
-    const isCloseTabCurrent = (selectedTabIndex === tabIndex);
+    const { id, tabs } = getActiveWorkspace();
+    // const isCloseTabCurrent = (selectedTabIndex === tabIndex);
 
     const browserKey = constructBrowserViewKey(id, tabIndex);
 
