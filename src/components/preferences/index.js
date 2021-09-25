@@ -170,7 +170,7 @@ const Preferences = ({
       text: 'Tabs',
       Icon: LayersIcon,
       subSections: {
-        telemetry: { text: 'Tabs', Component: SectionTabs },
+        tabs: { text: 'Tabs', Component: SectionTabs },
       },
     },
     notifications: {
