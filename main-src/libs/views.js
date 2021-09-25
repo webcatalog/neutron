@@ -208,7 +208,7 @@ const updateAddress = (url) => {
 };
 
 const addViewAsync = async (browserWindow, workspace, _viewId) => {
-  const viewId = !_viewId || workspace.id;
+  const viewId = _viewId || workspace.id;
 
   if (views[viewId] != null) return;
 

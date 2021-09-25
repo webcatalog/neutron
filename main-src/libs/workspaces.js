@@ -54,7 +54,6 @@ const initWorkspaces = () => {
       name: '',
       order: 0,
       active: true,
-      // tabsData: [],
     };
     settings.setSync(`workspaces.${v}`, loadedWorkspaces);
   }
