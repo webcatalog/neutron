@@ -9,7 +9,6 @@ import AddIcon from '@material-ui/icons/Add';
 import CloseIcon from '@material-ui/icons/Close';
 
 import { useSelector } from 'react-redux';
-import { getWorkspaces } from '../../senders';
 
 const useStyle = makeStyles(() => ({
   tabsWrapper: {
@@ -17,16 +16,16 @@ const useStyle = makeStyles(() => ({
   },
   tabsBarWrapper: {
     display: 'flex',
+    height: 36,
+    overflow: 'hidden',
   },
 }));
 
 const TabBar = () => {
   const classes = useStyle();
 
-  const workspaceCount = useSelector((state) => Object.keys((state.workspaceMetas || {})).length);
   const activeWorkspaceId = useSelector((state) => state.workspaces.activeWorkspaceId);
   const currentWorkspace = useSelector((state) => state.workspaces.workspaces[activeWorkspaceId]);
-  const shouldRenderTabBar = (workspaceCount !== 0);
 
   const [tabsCount, updateTabsCount] = useState(1);
   const [selectedTabIndex, updateSelectedTabIndex] = useState(0);
@@ -66,40 +65,36 @@ const TabBar = () => {
   }, [activeWorkspaceId]);
 
   return (
-    <>
-      {shouldRenderTabBar && (
-        <div className={classes.tabsBarWrapper}>
-          <div className={classes.tabsWrapper}>
-            {[...Array(tabsCount).keys()].map((i) => (
-              <div key={i}>
-                <Tab
-                  disableRipple
-                  label={(
-                    <span>
-                      New tabs
-                    </span>
-                  )}
-                  disabled={selectedTabIndex === i}
-                  onClick={(e) => onTabSelected(e, i)}
-                />
-                {(tabsCount !== 1) && (
-                  <IconButton
-                    onClick={(e) => onTabRemoved(e, i)}
-                  >
-                    <CloseIcon fontSize="small" />
-                  </IconButton>
-                )}
-              </div>
-            ))}
+    <div className={classes.tabsBarWrapper}>
+      <div className={classes.tabsWrapper}>
+        {[...Array(tabsCount).keys()].map((i) => (
+          <div key={i}>
+            <Tab
+              disableRipple
+              label={(
+                <span>
+                  New tabs
+                </span>
+              )}
+              disabled={selectedTabIndex === i}
+              onClick={(e) => onTabSelected(e, i)}
+            />
+            {(tabsCount !== 1) && (
+              <IconButton
+                onClick={(e) => onTabRemoved(e, i)}
+              >
+                <CloseIcon fontSize="small" />
+              </IconButton>
+            )}
           </div>
-          <IconButton
-            onClick={onTabAdded}
-          >
-            <AddIcon fontSize="small" />
-          </IconButton>
-        </div>
-      )}
-    </>
+        ))}
+      </div>
+      <IconButton
+        onClick={onTabAdded}
+      >
+        <AddIcon fontSize="small" />
+      </IconButton>
+    </div>
   );
 };
 

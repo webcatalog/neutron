@@ -19,6 +19,7 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CodeIcon from '@material-ui/icons/Code';
 import ExtensionIcon from '@material-ui/icons/Extension';
 import InfoIcon from '@material-ui/icons/Info';
+import LayersIcon from '@material-ui/icons/Layers';
 import LinkIcon from '@material-ui/icons/Link';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import LockIcon from '@material-ui/icons/Lock';
@@ -29,7 +30,6 @@ import RotateLeftIcon from '@material-ui/icons/RotateLeft';
 import RouterIcon from '@material-ui/icons/Router';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import SecurityIcon from '@material-ui/icons/Security';
-import TabIcon from '@material-ui/icons/Tab';
 import ViewListIcon from '@material-ui/icons/ViewList';
 import WebAssetIcon from '@material-ui/icons/WebAsset';
 import WidgetsIcon from '@material-ui/icons/Widgets';
@@ -168,7 +168,7 @@ const Preferences = ({
     },
     tabs: {
       text: 'Tabs',
-      Icon: TabIcon,
+      Icon: LayersIcon,
       subSections: {
         telemetry: { text: 'Tabs', Component: SectionTabs },
       },
