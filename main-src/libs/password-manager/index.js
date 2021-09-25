@@ -186,9 +186,11 @@ const PasswordManagers = {
     });
 
     ipcMain.on('password-autofill-check', (e) => {
-      if (!getPreference('passwordsAskToSave') || PasswordManagers.managers.length === 0) {
-        e.sender.send('password-autofill-enabled');
+      if (global.passwordManagerExtensionDetected || !getPreference('passwordsAskToSave') || PasswordManagers.managers.length < 1) {
+        return;
       }
+
+      e.sender.send('password-autofill-enabled');
     });
 
     ipcMain.on('password-form-filled', PasswordManagers.handleRecieveCredentials);

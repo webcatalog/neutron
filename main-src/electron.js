@@ -103,6 +103,7 @@ const PasswordManagers = require('./libs/password-manager');
 
 const MAILTO_URLS = require('./constants/mailto-urls');
 const WEBCAL_URLS = require('./constants/webcal-urls');
+const PASSWORD_MANAGERS = require('./constants/password-managers');
 const isStandalone = require('./libs/is-standalone');
 const isSnap = require('./libs/is-snap');
 
@@ -576,7 +577,20 @@ if (!gotTheLock) {
       )
         .filter((ext) => global.extensionEnabledExtesionIds[ext.id]);
 
-      global.darkReaderExtensionDetected = Boolean(loadableExtensions.find((ext) => ext.name && ext.name.toLowerCase().includes('dark reader')));
+      global.darkReaderExtensionDetected = Boolean(
+        loadableExtensions.find((ext) => ext.name && ext.name.toLowerCase().includes('dark reader')),
+      );
+
+      const passwordManagerExt = loadableExtensions.find((ext) => {
+        const found = PASSWORD_MANAGERS.find(
+          (passwordManagerName) => ext.name
+            && ext.name.toLowerCase().includes(passwordManagerName.toLowerCase()),
+        );
+        return Boolean(found);
+      });
+      if (passwordManagerExt) {
+        global.passwordManagerExtensionDetected = passwordManagerExt.name;
+      }
     }
 
     global.hibernateWhenUnused = hibernateWhenUnused;
