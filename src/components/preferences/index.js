@@ -70,7 +70,7 @@ import SectionReset from './section-reset';
 import SectionSearch from './section-search';
 import SectionSystem from './section-system';
 import SectionTelemetry from './section-telemetry';
-import SectionTab from './section-tab';
+import SectionTabs from './section-tabs';
 import SectionTheme from './section-theme';
 import SectionTray from './section-tray';
 import SectionView from './section-view';
@@ -166,6 +166,13 @@ const Preferences = ({
         tray: { text: window.process.platform === 'darwin' ? 'Menu Bar' : 'Tray', Component: SectionTray },
       },
     },
+    tabs: {
+      text: 'Tabs',
+      Icon: TabIcon,
+      subSections: {
+        telemetry: { text: 'Tabs', Component: SectionTabs },
+      },
+    },
     notifications: {
       text: 'Notifications',
       Icon: NotificationsIcon,
@@ -249,13 +256,6 @@ const Preferences = ({
       Icon: SecurityIcon,
       subSections: {
         privacy: { text: 'Privacy', Component: SectionPrivacy },
-      },
-    },
-    tabs: {
-      text: 'Tabs',
-      Icon: TabIcon,
-      subSections: {
-        telemetry: { text: 'Tabs', Component: SectionTab },
       },
     },
     telemetry: {

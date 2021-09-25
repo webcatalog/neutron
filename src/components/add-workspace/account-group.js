@@ -3,7 +3,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
 
-import { Avatar, Grid, makeStyles, Paper, TextField } from '@material-ui/core';
+import {
+  Avatar, Grid, makeStyles, Paper, TextField,
+} from '@material-ui/core';
 
 const useStyle = makeStyles((theme) => ({
   container: {

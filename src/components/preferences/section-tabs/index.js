@@ -15,23 +15,23 @@ import {
   requestSetPreference,
 } from '../../../senders';
 
-const SectionTab = () => {
-  const tabsEnable = useSelector((state) => state.preferences.tabsEnable ?? true);
+const SectionTabs = () => {
+  const useTabs = useSelector((state) => state.preferences.useTabs ?? true);
 
   return (
     <List disablePadding dense>
       <ListItem>
         <ListItemText
-          primary="Enable tabs"
-          secondary="Enable tabs feature for app."
+          primary="Tabs (experimental)"
+          secondary="Open links and documents in tabs instead of separate windows."
         />
         <ListItemSecondaryAction>
           <Switch
             edge="end"
             color="primary"
-            defaultChecked={tabsEnable}
+            defaultChecked={useTabs}
             onChange={(e) => {
-              requestSetPreference('tabsEnable', e.target.checked);
+              requestSetPreference('useTabs', e.target.checked);
               enqueueRequestRestartSnackbar();
             }}
           />
@@ -41,4 +41,4 @@ const SectionTab = () => {
   );
 };
 
-export default SectionTab;
+export default SectionTabs;
