@@ -161,6 +161,12 @@ const loadListeners = () => {
     setSystemPreference(name, value);
   });
 
+  // Global
+  ipcMain.on('get-global', (e, name) => {
+    const val = global[name];
+    e.returnValue = val;
+  });
+
   // Preferences
   ipcMain.on('get-preference', (e, name) => {
     const val = getPreference(name);

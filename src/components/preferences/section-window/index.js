@@ -18,7 +18,7 @@ import {
   requestSetPreference,
 } from '../../../senders';
 
-import ListItemTray from './list-item-tray';
+import ListItemShortcut from './list-item-shortcut';
 
 const styles = (theme) => ({
   paper: {
@@ -53,7 +53,7 @@ const styles = (theme) => ({
   },
 });
 
-const SectionAppearance = ({
+const SectionWindow = ({
   autoHideMenuBar,
   attachToMenubar,
   alwaysOnTop,
@@ -62,8 +62,6 @@ const SectionAppearance = ({
 }) => (
   <>
     <List disablePadding dense>
-      <ListItemTray />
-      <Divider />
       <ListItem>
         <ListItemText
           primary="Keep window always on top"
@@ -146,11 +144,13 @@ const SectionAppearance = ({
           </ListItem>
         </>
       )}
+      <Divider />
+      <ListItemShortcut />
     </List>
   </>
 );
 
-SectionAppearance.propTypes = {
+SectionWindow.propTypes = {
   alwaysOnTop: PropTypes.bool.isRequired,
   attachToMenubar: PropTypes.bool.isRequired,
   autoHideMenuBar: PropTypes.bool.isRequired,
@@ -167,7 +167,7 @@ const mapStateToProps = (state) => ({
 });
 
 export default connectComponent(
-  SectionAppearance,
+  SectionWindow,
   mapStateToProps,
   null,
   styles,

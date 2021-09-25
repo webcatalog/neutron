@@ -26,6 +26,14 @@ const DIST_PATH = path.join(__dirname, 'dist');
 const APP_PATH = tmp.dirSync().name;
 const TEMPLATE_PATH = path.join(DIST_PATH, 'template');
 
+// '14.0.0-beta.9' to '14.0.0-wvvmp-beta.9'
+// '14.0.0' to '14.0.0-wvvmp'
+const getWvvmpElectronVersion = (electronVersion) => {
+  const versionParts = electronVersion.split('-');
+  versionParts.splice(1, 0, 'wvvmp');
+  return versionParts.join('-');
+};
+
 const execAsync = (cmd, opts = {}) => new Promise((resolve, reject) => {
   exec(cmd, opts, (e, stdout, stderr) => {
     if (e instanceof Error) {
@@ -103,6 +111,7 @@ Promise.resolve()
     const opts = {
       targets,
       config: {
+        buildDependenciesFromSource: platform === 'darwin',
         directories: {
           output: APP_PATH,
         },
@@ -137,7 +146,7 @@ Promise.resolve()
     };
 
     // arm64 is only supported on macOS
-    if (arch === 'arm64' && process.platform !== 'darwin') {
+    if (arch === 'arm64' && platform !== 'darwin') {
       console.log('Packaging using Electron@electron/electron');
     } else {
       console.log('Packaging using Electron@castlabs/electron-releases');
@@ -145,7 +154,7 @@ Promise.resolve()
       // to support widevinedrm
       // https://github.com/castlabs/electron-releases/issues/70#issuecomment-731360649
       opts.config.electronDownload = {
-        version: `${electronVersion}-wvvmp`,
+        version: getWvvmpElectronVersion(electronVersion),
         mirror: 'https://github.com/castlabs/electron-releases/releases/download/v',
       };
     }
@@ -155,7 +164,7 @@ Promise.resolve()
   // sign with Castlabs EVS
   // https://github.com/castlabs/electron-releases/wiki/EVS
   .then(() => {
-    if (process.platform === 'linux' || process.platform === 'win32') return null;
+    if (platform === 'linux' || platform === 'win32') return null;
     return Promise.resolve()
       .then(() => {
         const cmd = `python3 -m castlabs_evs.vmp sign-pkg "${getPackageDirPath()}"`;
@@ -207,7 +216,7 @@ Promise.resolve()
     ];
 
     // signature files for Castlabs EVS
-    if (process.platform === 'darwin') {
+    if (platform === 'darwin') {
       tasks.push(fs.copy(
         path.join(dotAppPath, 'Contents', 'Frameworks', 'Electron Framework.framework', 'Versions', 'A', 'Resources', 'Electron Framework.sig'),
         path.join(TEMPLATE_PATH, 'evs', 'Electron Framework.sig'),

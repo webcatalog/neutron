@@ -19,6 +19,7 @@ const pupa = require('pupa');
 const extName = require('ext-name');
 const { ElectronChromeExtensions } = require('electron-chrome-extensions');
 const fetch = require('node-fetch').default;
+const electronRemote = require('@electron/remote/main');
 
 const appJson = require('../constants/app-json');
 
@@ -50,6 +51,7 @@ const getExtensionFromProfile = require('./extensions/get-extensions-from-profil
 const isSnap = require('./is-snap');
 const isAppx = require('./is-appx');
 const isWebcatalog = require('./is-webcatalog');
+const getFirefoxUserAgent = require('./get-firefox-user-agent');
 
 const views = {};
 const browserViews = {};
@@ -238,7 +240,8 @@ const addViewAsync = async (browserWindow, workspace) => {
     });
   }
   // blocker
-  if (global.blockAds) {
+  const shouldBlockAds = getWorkspacePreference(workspace.id, 'blockAds') || global.blockAds;
+  if (shouldBlockAds) {
     ElectronBlocker.fromPrebuiltAdsAndTracking(fetch, {
       path: path.join(app.getPath('userData'), 'adblocker.bin'),
       read: fsExtra.readFile,
@@ -256,17 +259,54 @@ const addViewAsync = async (browserWindow, workspace) => {
   // VM76 darkreader.js:3704 Refused to apply inline style because
   // it violates the following Content Security Policy directive:
   // a nonce ('nonce-...') is required to enable inline execution.
-  ses.webRequest.onHeadersReceived(
-    {
-      urls: ['*://*.overcast.fm/*'], // only need this for Overcast.fm (at least for now)
-    },
-    (details, callback) => {
-      if (details && details.responseHeaders && details.responseHeaders['Content-Security-Policy']) {
-        delete details.responseHeaders['Content-Security-Policy'];
+  if (!global.darkReaderExtensionDetected) {
+    // if external extension is being used, built-in Dark Reader is not used
+    // so we can ignore this code
+    ses.webRequest.onHeadersReceived(
+      {
+        urls: ['*://*.overcast.fm/*'], // only need this for Overcast.fm (at least for now)
+      },
+      (details, callback) => {
+        if (details && details.responseHeaders && details.responseHeaders['Content-Security-Policy']) {
+          delete details.responseHeaders['Content-Security-Policy'];
+        }
+        callback(details);
+      },
+    );
+  }
+
+  // UA adjustment
+  // modifed from https://github.com/minbrowser/min/blob/58927524e3cc16cc4f59bca09a6c352cec1a16ac/main/UASwitcher.js (Apache License)
+  if (!customUserAgent) {
+    ses.webRequest.onBeforeSendHeaders((details, callback) => {
+      // fix Google prevents signing in because of security concerns
+      // https://github.com/webcatalog/webcatalog-app/issues/455
+      // https://github.com/meetfranz/franz/issues/1720#issuecomment-566460763
+      if (details.url.includes('accounts.google.com')) {
+        const url = new URL(details.url);
+
+        if (url.hostname === 'accounts.google.com') {
+          details.requestHeaders['User-Agent'] = getFirefoxUserAgent();
+        }
+      // Google uses special code for Chromium-based browsers
+      // when screensharing (not working with Electron)
+      // so change user-agent to Safari to make it work
+      } else if (details.url.includes('meet.google.com')) {
+        const url = new URL(details.url);
+
+        if (url.hostname === 'meet.google.com') {
+          const fakedSafariUaStr = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15';
+          details.requestHeaders['User-Agent'] = fakedSafariUaStr;
+        }
+      } else {
+        const chromiumVersion = process.versions.chrome.split('.')[0];
+        details.requestHeaders['SEC-CH-UA'] = `"Chromium";v="${chromiumVersion}", " Not A;Brand";v="99"`;
+        details.requestHeaders['SEC-CH-UA-MOBILE'] = '?0';
       }
-      callback(details);
-    },
-  );
+
+      callback({ cancel: false, requestHeaders: details.requestHeaders });
+    });
+  }
 
   const {
     defaultFontSize,
@@ -274,74 +314,80 @@ const addViewAsync = async (browserWindow, workspace) => {
     defaultFontSizeMonospace,
   } = getPreferences();
 
+  // set preload script at session level
+  // to ensure that even popup windows have access to the script
+  if (ses.getPreloads().length < 1) {
+    const preloadPath = process.env.NODE_ENV === 'production'
+      ? path.join(__dirname, 'view-preload.js')
+      : path.join(__dirname, 'view-preload', 'index.js');
+    ses.setPreloads([preloadPath]);
+  }
+
   const sharedWebPreferences = {
     spellcheck: global.spellcheck,
     nativeWindowOpen: true,
     nodeIntegration: false,
     contextIsolation: true,
     plugins: true, // PDF reader
-    enableRemoteModule: false,
     scrollBounce: true,
     session: ses,
-    preload: path.join(__dirname, 'view-preload.js'),
     defaultFontSize,
     defaultMonospaceFontSize: defaultFontSizeMonospace,
     minimumFontSize: defaultFontSizeMinimum,
   };
 
   // extensions
-  if (global.extensionEnabledExtesionIds
-      && Object.keys(global.extensionEnabledExtesionIds).length > 0) {
-    const enabledExtensions = getExtensionFromProfile(
+  if (global.extensionEnabled) {
+    const loadableExtensions = getExtensionFromProfile(
       global.extensionSourceBrowserId,
       global.extensionSourceProfileDirName,
     )
       .filter((ext) => global.extensionEnabledExtesionIds[ext.id]);
-    if (enabledExtensions.length > 0) {
-      if (!extensionManagers[partitionId]) {
-        extensionManagers[partitionId] = new ElectronChromeExtensions({
-          session: ses,
-          createTab(details) {
-            const win = new BrowserWindow({
-              show: true,
-              width: 800,
-              height: 600,
-              webPreferences: sharedWebPreferences,
-            });
+    if (loadableExtensions.length > 0 && !extensionManagers[partitionId]) {
+      extensionManagers[partitionId] = new ElectronChromeExtensions({
+        modulePath: process.env.NODE_ENV === 'production' ? path.join(__dirname, 'electron-chrome-extensions') : undefined,
+        session: ses,
+        createTab(details) {
+          const win = new BrowserWindow({
+            show: true,
+            width: 800,
+            height: 600,
+            webPreferences: sharedWebPreferences,
+          });
 
-            if (details && details.url) {
-              win.loadURL(details.url);
-            }
+          if (details && details.url) {
+            win.loadURL(details.url);
+          }
 
-            return [win.webContents, win];
-          },
-          createWindow(details) {
-            const win = new BrowserWindow({
-              show: true,
-              width: details.width || 800,
-              height: details.height || 600,
-              webPreferences: sharedWebPreferences,
-            });
+          return [win.webContents, win];
+        },
+        createWindow(details) {
+          const win = new BrowserWindow({
+            show: true,
+            width: details.width || 800,
+            height: details.height || 600,
+            webPreferences: sharedWebPreferences,
+          });
 
-            if (details && details.url) {
-              win.loadURL(details.url);
-            }
+          if (details && details.url) {
+            win.loadURL(details.url);
+          }
 
-            return win;
-          },
-        });
-      }
-      await Promise.all(
-        // eslint-disable-next-line no-console
-        enabledExtensions.map((ext) => ses.loadExtension(ext.path).catch(console.log)),
-      );
+          return win;
+        },
+      });
     }
+    await Promise.all(
+      // eslint-disable-next-line no-console
+      loadableExtensions.map((ext) => ses.loadExtension(ext.path).catch(console.log)),
+    );
   }
   const extensions = extensionManagers[partitionId];
 
   const view = new BrowserView({
     webPreferences: sharedWebPreferences,
   });
+  electronRemote.enable(view.webContents);
 
   if (extensions) {
     extensions.addTab(view.webContents, browserWindow);
@@ -356,61 +402,6 @@ const addViewAsync = async (browserWindow, workspace) => {
   // https://github.com/webcatalog/webcatalog-app/issues/723
   // https://github.com/electron/electron/issues/16212
   view.setBackgroundColor('#FFF');
-
-  // fix Google prevents signing in because of security concerns
-  // https://github.com/webcatalog/webcatalog-app/issues/455
-  // https://github.com/meetfranz/franz/issues/1720#issuecomment-566460763
-  const fakedFirefoxUaStr = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:90.0) Gecko/20100101 Firefox/90.0';
-  const fakedSafariUaStr = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15';
-  const adjustUserAgentByUrl = (contents, url, occasion) => {
-    const currentUaStr = contents.userAgent;
-
-    if (customUserAgent) {
-      if (currentUaStr !== customUserAgent) {
-        contents.userAgent = customUserAgent;
-        // eslint-disable-next-line no-console
-        console.log('Changed user agent to', customUserAgent, 'based of user preference', 'when', occasion);
-        return true;
-      }
-    }
-
-    const navigatedDomain = extractDomain(url);
-    // if Chrome UA is used
-    // Google will prevent users from signing in (citing insecure browser)
-    // Google will redirect users to basic HTML interface of Gmail (citing outdated browser)
-    // => use Firefox UA instead
-    if (navigatedDomain === 'accounts.google.com' || navigatedDomain === 'mail.google.com') {
-      if (currentUaStr !== fakedFirefoxUaStr) {
-        contents.userAgent = fakedFirefoxUaStr;
-        // eslint-disable-next-line no-console
-        console.log('Changed user agent to', fakedFirefoxUaStr, 'for web compatibility URL: ', url, 'when', occasion);
-        return true;
-      }
-    } else if (navigatedDomain === 'meet.google.com') {
-      // Google uses special code for Chromium-based browsers
-      // when screensharing (not working with Electron)
-      // so change user-agent to Safari to make it work
-      if (currentUaStr !== fakedSafariUaStr) {
-        contents.userAgent = fakedSafariUaStr;
-        // eslint-disable-next-line no-console
-        console.log('Changed user agent to', fakedSafariUaStr, 'for web compatibility URL: ', url, 'when', occasion);
-        return true;
-      }
-    } else if (navigatedDomain === 'chat.google.com' || (url && url.startsWith('https://mail.google.com/chat'))) {
-      if (currentUaStr !== app.userAgentFallback) {
-        // must use Chrome user agent for Google Chat to work
-        contents.userAgent = app.userAgentFallback;
-        return true;
-      }
-    }
-
-    // after user-agent is changed
-    // avoid changing it back
-    // as every time user-agent is changed, it causes the page to reload
-    // sometimes, reloading causes important data to be lost (e.g. authentication result)
-
-    return false;
-  };
 
   view.webContents.on('will-navigate', (e, nextUrl) => {
     // open external links in browser
@@ -556,19 +547,24 @@ const addViewAsync = async (browserWindow, workspace) => {
       view.webContents.loadURL(`https://chat.google.com${ref}`);
     }
 
-    // fix Google prevents signing in because of security concerns
-    // https://github.com/webcatalog/webcatalog-app/issues/455
-    // https://github.com/meetfranz/franz/issues/1720#issuecomment-566460763
-    // will-navigate doesn't trigger for loadURL, goBack, goForward
-    // so user agent to needed to be double check here
-    // not the best solution as page will be unexpectedly reloaded
-    // but it won't happen very often
-    adjustUserAgentByUrl(view.webContents, url, 'did-navigate'); // page will be reloaded by Electron
-
     if (workspaceObj.active) {
       sendToAllWindows('update-can-go-back', view.webContents.canGoBack());
       sendToAllWindows('update-can-go-forward', view.webContents.canGoForward());
       updateAddress(url);
+    }
+
+    // Google uses special code for Chromium-based browsers
+    // when screensharing (not working with Electron)
+    // so change user-agent to Safari to make it work
+    const navigatedDomain = extractDomain(url);
+    if (!customUserAgent && navigatedDomain === 'meet.google.com') {
+      const currentUaStr = view.webContents.userAgent;
+      const fakedSafariUaStr = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15';
+      if (currentUaStr !== fakedSafariUaStr) {
+        view.webContents.userAgent = fakedSafariUaStr;
+        // eslint-disable-next-line no-console
+        console.log('Changed user agent to', fakedSafariUaStr, 'for web compatibility URL: ', url, 'when', 'did-navigate');
+      }
     }
   });
 
@@ -819,17 +815,6 @@ const addViewAsync = async (browserWindow, workspace) => {
       popupWin.webContents.on('new-window', handleNewWindow);
       buildContextMenu(popupWin.webContents, handleNewWindow);
 
-      // fix Google prevents signing in because of security concerns
-      // https://github.com/webcatalog/webcatalog-app/issues/455
-      // https://github.com/meetfranz/franz/issues/1720#issuecomment-566460763
-      // will-navigate doesn't trigger for loadURL, goBack, goForward
-      // so user agent to needed to be double check here
-      // not the best solution as page will be unexpectedly reloaded
-      // but it won't happen very often
-      popupWin.webContents.on('did-navigate', (ee, url) => {
-        adjustUserAgentByUrl(ee.sender, url, 'popup-did-navigate');
-      });
-
       // if options.webContents is not used
       // loadURL won't be triggered automatically
       if (!useProvidedOptions) {
@@ -842,7 +827,6 @@ const addViewAsync = async (browserWindow, workspace) => {
           loadOptions.postData = data;
           loadOptions.extraHeaders = `content-type: ${contentType}; boundary=${boundary}`;
         }
-        adjustUserAgentByUrl(popupWin.webContents, nextUrl);
         popupWin.loadURL(nextUrl, loadOptions);
       }
 
@@ -1169,7 +1153,6 @@ const addViewAsync = async (browserWindow, workspace) => {
 
   const initialUrl = (global.rememberLastPageVisited && workspace.lastUrl)
   || workspace.homeUrl || appJson.url;
-  adjustUserAgentByUrl(view.webContents, initialUrl);
   if (initialUrl) {
     view.webContents.loadURL(initialUrl);
   }
@@ -1195,6 +1178,11 @@ const setActiveView = (browserWindow, id) => {
   if (currentView) {
     currentView.webContents.stopFindInPage('clearSelection');
     browserWindow.send('close-find-in-page');
+
+    const appLockWhenSwitchingWorkspace = getPreference('appLockWhenSwitchingWorkspace');
+    if (appLockWhenSwitchingWorkspace) {
+      ipcMain.emit('request-lock-app');
+    }
   }
 
   if (views[id] == null) {

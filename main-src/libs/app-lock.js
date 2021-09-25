@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 /* eslint-disable global-require */
 const { ipcMain, systemPreferences } = require('electron');
+const keytar = require('keytar');
 
 const sendToAllWindows = require('./send-to-all-windows');
 const { createMenu } = require('./menu');
@@ -11,9 +12,9 @@ const appJson = require('../constants/app-json');
 
 const getAppLockStatusAsync = async () => {
   try {
-    const currentPassword = await require('keytar').getPassword(appJson.id, 'app-lock-password');
+    const currentPassword = await keytar.getPassword(appJson.id, 'app-lock-password');
     const useTouchId = process.platform === 'darwin' && systemPreferences.canPromptTouchID()
-      ? await require('keytar').getPassword(appJson.id, 'app-lock-touch-id') === '1'
+      ? await keytar.getPassword(appJson.id, 'app-lock-touch-id') === '1'
       : false;
     return {
       supported: true,
@@ -33,7 +34,7 @@ const getAppLockStatusAsync = async () => {
 };
 
 const validateAppLockPasswordAsync = async (inputPassword) => {
-  const currentPassword = await require('keytar').getPassword(appJson.id, 'app-lock-password');
+  const currentPassword = await keytar.getPassword(appJson.id, 'app-lock-password');
   if (currentPassword && inputPassword !== currentPassword) return false;
   return true;
 };
@@ -41,7 +42,7 @@ const validateAppLockPasswordAsync = async (inputPassword) => {
 const deleteAppLockPasswordAsync = async (inputPassword) => {
   const validPassword = await validateAppLockPasswordAsync(inputPassword);
   if (!validPassword) return null;
-  return require('keytar').deletePassword(appJson.id, 'app-lock-password')
+  return keytar.deletePassword(appJson.id, 'app-lock-password')
     .then(() => {
       global.appLock = false;
       ipcMain.emit('request-realign-active-workspace');
@@ -52,7 +53,7 @@ const deleteAppLockPasswordAsync = async (inputPassword) => {
 const setAppLockPasswordAsync = async (inputPassword, newPassword) => {
   const validPassword = await validateAppLockPasswordAsync(inputPassword);
   if (!validPassword) return null;
-  return require('keytar').setPassword(appJson.id, 'app-lock-password', newPassword)
+  return keytar.setPassword(appJson.id, 'app-lock-password', newPassword)
     .then(() => {
       global.appLock = true;
       ipcMain.emit('request-realign-active-workspace');
@@ -64,9 +65,9 @@ const setAppLockTouchIdAsync = async (inputPassword, useTouchId) => {
   const validPassword = await validateAppLockPasswordAsync(inputPassword);
   if (!validPassword) return null;
   if (useTouchId) {
-    return require('keytar').setPassword(appJson.id, 'app-lock-touch-id', '1');
+    return keytar.setPassword(appJson.id, 'app-lock-touch-id', '1');
   }
-  return require('keytar').deletePassword(appJson.id, 'app-lock-touch-id');
+  return keytar.deletePassword(appJson.id, 'app-lock-touch-id');
 };
 
 const lockApp = () => {
@@ -100,7 +101,7 @@ const unlockApp = (inputPassword) => {
 const unlockAppUsingTouchId = () => {
   if (process.platform !== 'darwin') return;
   if (!global.locked) return;
-  require('keytar').getPassword(appJson.id, 'app-lock-touch-id')
+  keytar.getPassword(appJson.id, 'app-lock-touch-id')
     .then((val) => {
       if (systemPreferences.canPromptTouchID() && val === '1') {
         return systemPreferences.promptTouchID('Unlock app');

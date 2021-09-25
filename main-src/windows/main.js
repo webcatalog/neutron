@@ -13,6 +13,7 @@ const windowStateKeeper = require('electron-window-state');
 const { menubar } = require('menubar');
 const path = require('path');
 const contextMenu = require('electron-context-menu');
+const electronRemote = require('@electron/remote/main');
 
 const { REACT_PATH } = require('../constants/paths');
 const { setPreference, getPreference } = require('../libs/preferences');
@@ -22,14 +23,16 @@ const appJson = require('../constants/app-json');
 const isSnap = require('../libs/is-snap');
 const isWebcatalog = require('../libs/is-webcatalog');
 const isAppx = require('../libs/is-appx');
+const formatBytes = require('../libs/format-bytes');
+const isStandalone = require('../libs/is-standalone');
 
 let win;
-let mb = {};
+let mb;
 let tray;
 let cachedBrowserViewTitle = '';
 
 const get = () => {
-  if (global.attachToMenubar) return mb.window;
+  if (global.attachToMenubar) return mb ? mb.window : undefined;
   return win;
 };
 
@@ -83,6 +86,28 @@ const createAsync = () => new Promise((resolve) => {
       },
     ] : [];
 
+    const updaterEnabled = !isMas() && !isSnap() && !isAppx();
+    const updaterMenuItem = {
+      label: 'Check for Updates...',
+      click: () => ipcMain.emit('request-check-for-updates'),
+      visible: updaterEnabled,
+    };
+    if (updaterEnabled && isStandalone()) {
+      if (global.updaterObj && global.updaterObj.status === 'update-downloaded') {
+        updaterMenuItem.label = 'Restart to Apply Updates...';
+      } else if (global.updaterObj && global.updaterObj.status === 'update-available') {
+        updaterMenuItem.label = 'Downloading Updates...';
+        updaterMenuItem.enabled = false;
+      } else if (global.updaterObj && global.updaterObj.status === 'download-progress') {
+        const { transferred, total, bytesPerSecond } = global.updaterObj.info;
+        updaterMenuItem.label = `Downloading Updates (${formatBytes(transferred)}/${formatBytes(total)} at ${formatBytes(bytesPerSecond)}/s)...`;
+        updaterMenuItem.enabled = false;
+      } else if (global.updaterObj && global.updaterObj.status === 'checking-for-update') {
+        updaterMenuItem.label = 'Checking for Updates...';
+        updaterMenuItem.enabled = false;
+      }
+    }
+
     const trayContextMenu = Menu.buildFromTemplate([
       {
         label: `Open ${appJson.name}`,
@@ -109,13 +134,9 @@ const createAsync = () => new Promise((resolve) => {
       ...lockMenuItems,
       {
         type: 'separator',
-        visible: !isMas() && !isSnap() && !isAppx(),
+        visible: updaterEnabled,
       },
-      {
-        label: 'Check for Updates...',
-        click: () => ipcMain.emit('request-check-for-updates'),
-        visible: !isMas() && !isSnap() && !isAppx(),
-      },
+      updaterMenuItem,
       {
         type: 'separator',
       },
@@ -210,7 +231,6 @@ const createAsync = () => new Promise((resolve) => {
         titleBarStyle: alwaysOnTop ? 'hidden' : undefined,
         fullscreenable: false,
         webPreferences: {
-          enableRemoteModule: true,
           contextIsolation: false,
           nodeIntegration: true,
           webSecurity: process.env.NODE_ENV === 'production',
@@ -232,6 +252,7 @@ const createAsync = () => new Promise((resolve) => {
       });
 
       mb.window.on('focus', () => {
+        if (!mb.window) return;
         const view = mb.window.getBrowserView();
         if (view && view.webContents) {
           view.webContents.focus();
@@ -274,13 +295,12 @@ const createAsync = () => new Promise((resolve) => {
     minWidth: 400,
     title: global.appJson.name,
     // show traffic light buttons on macOS if global.windowButtons = true
-    titleBarStyle: global.windowButtons ? 'hidden' : 'default',
+    titleBarStyle: global.windowButtons && !global.useSystemTitleBar ? 'hidden' : 'default',
     frame: (process.platform === 'darwin' && global.windowButtons) || global.useSystemTitleBar,
     show: false,
     alwaysOnTop: getPreference('alwaysOnTop'),
     autoHideMenuBar: global.useSystemTitleBar && getPreference('autoHideMenuBar'),
     webPreferences: {
-      enableRemoteModule: true,
       contextIsolation: false,
       nodeIntegration: true,
       webSecurity: process.env.NODE_ENV === 'production',
@@ -296,6 +316,7 @@ const createAsync = () => new Promise((resolve) => {
       : path.resolve(__dirname, '..', '..', 'public', 'dock-icon.png');
   }
   win = new BrowserWindow(winOpts);
+  electronRemote.enable(win.webContents);
 
   win.refreshTitle = (...args) => {
     refreshTitle(win, ...args);

@@ -13,6 +13,7 @@ import Paper from '@material-ui/core/Paper';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
 import AssessmentIcon from '@material-ui/icons/Assessment';
+import AssignmentIcon from '@material-ui/icons/Assignment';
 import CachedIcon from '@material-ui/icons/Cached';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CodeIcon from '@material-ui/icons/Code';
@@ -45,8 +46,9 @@ import SectionAccountLicensing from './section-account-licensing';
 import SectionAppLock from './section-app-lock';
 import SectionAudioVideo from './section-audio-video';
 import SectionAutoReload from './section-auto-reload';
+import SectionAutofill from './section-autofill';
 import SectionBadge from './section-badge';
-import SectionBrowsing from './section-browsing';
+import SectionPrivacy from './section-privacy';
 import SectionDarkReader from './section-dark-reader';
 import SectionDevelopers from './section-developers';
 import SectionDownloads from './section-downloads';
@@ -57,21 +59,23 @@ import SectionHardware from './section-hardware';
 import SectionHome from './section-home';
 import SectionLanguage from './section-language';
 import SectionLinkHandling from './section-link-handling';
+import SectionLocationPermission from './section-location-permissions';
 import SectionMode from './section-mode';
 import SectionMoreApps from './section-more-apps';
 import SectionNetwork from './section-network';
 import SectionNotifications from './section-notifications';
 import SectionPerformance from './section-performance';
+import SectionPermissions from './section-permissions';
 import SectionReset from './section-reset';
+import SectionSearch from './section-search';
 import SectionSystem from './section-system';
 import SectionTelemetry from './section-telemetry';
 import SectionTab from './section-tab';
 import SectionTheme from './section-theme';
+import SectionTray from './section-tray';
 import SectionView from './section-view';
 import SectionWindow from './section-window';
 import SectionWorkspaces from './section-workspaces';
-import SectionPermissions from './section-permissions';
-import SectionLocationPermission from './section-location-permissions';
 
 import SnackbarTrigger from '../shared/snackbar-trigger';
 
@@ -128,8 +132,9 @@ const Preferences = ({
       Icon: WidgetsIcon,
       subSections: {
         home: { text: 'Home', Component: SectionHome, hidden: !(appJson.url && !isMas() && !isStandalone() && !isAppx()) },
-        mode: { text: 'Mode', Component: SectionMode, hidden: !appJson.id.startsWith('group-') && appJson.id !== 'clovery' },
+        mode: { text: 'Mode', Component: SectionMode, hidden: Boolean(appJson.url) },
         language: { text: 'Language', Component: SectionLanguage },
+        search: { text: 'Search', Component: SectionSearch },
         system: { text: 'System', Component: SectionSystem },
         hardward: { text: 'Hardware', Component: SectionHardware },
         exit: { text: 'Exit', Component: SectionExit },
@@ -157,7 +162,8 @@ const Preferences = ({
       text: window.process.platform === 'darwin' ? 'Window & Menu Bar' : 'Window & Tray',
       Icon: WebAssetIcon,
       subSections: {
-        window: { text: window.process.platform === 'darwin' ? 'Window & Menu Bar' : 'Window & Tray', Component: SectionWindow },
+        window: { text: 'Window', Component: SectionWindow },
+        tray: { text: window.process.platform === 'darwin' ? 'Menu Bar' : 'Tray', Component: SectionTray },
       },
     },
     notifications: {
@@ -166,6 +172,13 @@ const Preferences = ({
       subSections: {
         notifications: { text: 'Notifications', Component: SectionNotifications },
         badge: { text: 'Badge', Component: SectionBadge },
+      },
+    },
+    autofill: {
+      text: 'Autofill',
+      Icon: AssignmentIcon,
+      subSections: {
+        badge: { text: 'Passwords', Component: SectionAutofill },
       },
     },
     downloads: {
@@ -189,7 +202,7 @@ const Preferences = ({
       subSections: {
         permissions: { text: 'Permissions', Component: SectionLocationPermission },
       },
-      hidden: window.process.platform !== 'darwin',
+      hidden: window.process.platform !== 'darwin' || isMas(),
     },
     network: {
       text: 'Network',
@@ -235,7 +248,7 @@ const Preferences = ({
       text: 'Privacy',
       Icon: SecurityIcon,
       subSections: {
-        privacy: { text: 'Privacy', Component: SectionBrowsing },
+        privacy: { text: 'Privacy', Component: SectionPrivacy },
       },
     },
     tabs: {

@@ -4,7 +4,11 @@
 require('source-map-support').install();
 
 // for navigator.geolocation API
-process.env.GOOGLE_API_KEY = process.env.ELECTRON_APP_GOOGLE_API_KEY;
+// disable this in production Mac App Store build
+// (App Store Review keeps rejecting the app for requesting location permission)
+if (!process.mas) {
+  process.env.GOOGLE_API_KEY = process.env.ELECTRON_APP_GOOGLE_API_KEY;
+}
 
 const {
   app,
@@ -20,9 +24,14 @@ const path = require('path');
 const fs = require('fs-extra');
 const isDev = require('electron-is-dev');
 const settings = require('electron-settings');
+const electronRemote = require('@electron/remote/main');
+const rtlDetect = require('rtl-detect');
 
 const appJson = require('./constants/app-json');
 const isMas = require('./libs/is-mas');
+const getExtensionFromProfile = require('./libs/extensions/get-extensions-from-profile');
+
+electronRemote.initialize();
 
 // run before anything else
 // WebCatalog Engine 13.x and lower uses default Electron user data path
@@ -89,9 +98,12 @@ const getIapFormattedPriceAsync = require('./libs/get-iap-formatted-price-async'
 const promptSetAsDefaultMailClient = require('./libs/prompt-set-as-default-email-client');
 const promptSetAsDefaultCalendarApp = require('./libs/prompt-set-as-default-calendar-app');
 const getWorkspaceFriendlyName = require('./libs/get-workspace-friendly-name');
+const windowShortcut = require('./libs/window-shortcut');
+const PasswordManagers = require('./libs/password-manager');
 
 const MAILTO_URLS = require('./constants/mailto-urls');
 const WEBCAL_URLS = require('./constants/webcal-urls');
+const PASSWORD_MANAGERS = require('./constants/password-managers');
 const isStandalone = require('./libs/is-standalone');
 const isSnap = require('./libs/is-snap');
 
@@ -333,6 +345,7 @@ if (!gotTheLock) {
 
   loadListeners();
   loadInvokers();
+  PasswordManagers.initialize();
 
   const commonInit = () => {
     app.whenReady()
@@ -451,6 +464,12 @@ if (!gotTheLock) {
         mainWindow.get().on('focus', () => {
           win.send('log-focus');
         });
+
+        // config window shortcut
+        const windowShortcutCombinator = getPreference('windowShortcut');
+        if (windowShortcutCombinator) {
+          windowShortcut.set(windowShortcutCombinator);
+        }
       })
       .then(() => {
         // trigger whenTrulyReady;
@@ -544,11 +563,43 @@ if (!gotTheLock) {
     global.proxyPacScript = proxyPacScript;
     global.proxyRules = `${proxyProtocol}://${proxyAddress}:${proxyPort || '80'}`;
     global.proxyMode = proxyMode;
+
     global.extensionEnabledExtesionIds = extensionEnabledExtesionIds;
     global.extensionSourceBrowserId = extensionSourceBrowserId;
     global.extensionSourceProfileDirName = extensionSourceProfileDirName;
+    global.extensionEnabled = extensionEnabledExtesionIds
+      && Object.keys(extensionEnabledExtesionIds).length > 0;
+    // disable built-in password manager and Dark Reader if external extensions are detected
+    if (global.extensionEnabled) {
+      const loadableExtensions = getExtensionFromProfile(
+        global.extensionSourceBrowserId,
+        global.extensionSourceProfileDirName,
+      )
+        .filter((ext) => global.extensionEnabledExtesionIds[ext.id]);
+
+      global.darkReaderExtensionDetected = Boolean(
+        loadableExtensions.find((ext) => ext.name && ext.name.toLowerCase().includes('dark reader')),
+      );
+
+      const passwordManagerExt = loadableExtensions.find((ext) => {
+        const found = PASSWORD_MANAGERS.find(
+          (passwordManagerName) => ext.name
+            && ext.name.toLowerCase().includes(passwordManagerName.toLowerCase()),
+        );
+        return Boolean(found);
+      });
+      if (passwordManagerExt) {
+        global.passwordManagerExtensionDetected = passwordManagerExt.name;
+      }
+    }
+
     global.hibernateWhenUnused = hibernateWhenUnused;
     global.hibernateWhenUnusedTimeout = hibernateWhenUnusedTimeout;
+
+    // on Windows, if the display language is RTL language (Arabic, Hebrew, etc)
+    // the x bounds coordination is reversed
+    // so we have this to handle BrowserViews and related UI correctly
+    global.rtlCoordination = process.platform === 'win32' && rtlDetect.isRtlLang(app.getLocale());
 
     commonInit();
 
@@ -695,7 +746,7 @@ if (!gotTheLock) {
       if (allBlurred) {
         ipcMain.emit('request-lock-app');
       }
-    }, 5 * 60 * 1000);
+    }, getPreference('appLockTimeout'));
   });
 
   // by default, castlabs/electron-releases terminates the app (process.exit(1))

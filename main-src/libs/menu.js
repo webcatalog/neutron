@@ -22,6 +22,7 @@ const {
   setPreference,
   getPreference,
 } = require('./preferences');
+const formatBytes = require('./format-bytes');
 
 const {
   getWorkspaces,
@@ -140,6 +141,28 @@ const createMenu = async () => {
 
   const muteApp = getPreference('muteApp');
 
+  const updaterEnabled = !isMas() && !isSnap() && !isAppx();
+  const updaterMenuItem = {
+    label: 'Check for Updates...',
+    click: () => ipcMain.emit('request-check-for-updates'),
+    visible: updaterEnabled,
+  };
+  if (updaterEnabled && isStandalone()) {
+    if (global.updaterObj && global.updaterObj.status === 'update-downloaded') {
+      updaterMenuItem.label = 'Restart to Apply Updates...';
+    } else if (global.updaterObj && global.updaterObj.status === 'update-available') {
+      updaterMenuItem.label = 'Downloading Updates...';
+      updaterMenuItem.enabled = false;
+    } else if (global.updaterObj && global.updaterObj.status === 'download-progress') {
+      const { transferred, total, bytesPerSecond } = global.updaterObj.info;
+      updaterMenuItem.label = `Downloading Updates (${formatBytes(transferred)}/${formatBytes(total)} at ${formatBytes(bytesPerSecond)}/s)...`;
+      updaterMenuItem.enabled = false;
+    } else if (global.updaterObj && global.updaterObj.status === 'checking-for-update') {
+      updaterMenuItem.label = 'Checking for Updates...';
+      updaterMenuItem.enabled = false;
+    }
+  }
+
   const template = [
     {
       label: appJson.name,
@@ -151,14 +174,10 @@ const createMenu = async () => {
         { type: 'separator' },
         ...licensingMenuItems,
         ...lockMenuItems,
-        {
-          label: 'Check for Updates...',
-          click: () => ipcMain.emit('request-check-for-updates'),
-          visible: !isMas() && !isSnap() && !isAppx(),
-        },
+        updaterMenuItem,
         {
           type: 'separator',
-          visible: !isMas() && !isSnap() && !isAppx(),
+          visible: updaterEnabled,
         },
         {
           label: 'Preferences...',
@@ -402,13 +421,13 @@ const createMenu = async () => {
       submenu: [
         {
           label: 'Home',
-          accelerator: 'Shift+CmdOrCtrl+H',
+          accelerator: process.platform === 'darwin' ? 'Shift+CmdOrCtrl+H' : 'Alt+Home',
           click: () => ipcMain.emit('request-go-home'),
           enabled: !global.locked && hasWorkspaces,
         },
         {
           label: 'Back',
-          accelerator: 'CmdOrCtrl+[',
+          accelerator: process.platform === 'darwin' ? 'CmdOrCtrl+[' : 'Alt+Left',
           click: (menuItem, browserWindow) => {
             // if back is called in popup window
             // navigate in the popup window instead
@@ -422,7 +441,7 @@ const createMenu = async () => {
         },
         {
           label: 'Forward',
-          accelerator: 'CmdOrCtrl+]',
+          accelerator: process.platform === 'darwin' ? 'CmdOrCtrl+]' : 'Alt+Right',
           click: (menuItem, browserWindow) => {
             // if back is called in popup window
             // navigate in the popup window instead
@@ -436,9 +455,19 @@ const createMenu = async () => {
         },
         { type: 'separator' },
         {
-          label: 'Copy URL',
+          label: global.navigationBar ? 'Open Location...' : 'Copy URL',
           accelerator: 'CmdOrCtrl+L',
           click: (menuItem, browserWindow) => {
+            // if address bar is visible
+            // focus on address bar instead of copy URL (same behavior as Chrome)
+            if (global.navigationBar) {
+              if (browserWindow) {
+                browserWindow.webContents.focus();
+                browserWindow.send('focus-on-address-bar');
+              }
+              return;
+            }
+
             // if back is called in popup window
             // copy the popup window URL instead
             if (browserWindow && browserWindow.isPopup) {

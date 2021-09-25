@@ -41,6 +41,8 @@ const shouldShowSidebar = !appJson.url || Boolean(MAILTO_URLS[extractHostname(ap
 const defaultPreferences = {
   allowNodeInJsCodeInjection: false,
   alwaysOnTop: false, // for menubar
+  appLockTimeout: 300000,
+  appLockWhenSwitchingWorkspace: false,
   autoHideMenuBar: false,
   // on macOS, save to ~/Downloads by default
   // because we can bounce the file in dock
@@ -48,6 +50,7 @@ const defaultPreferences = {
   // for unknown reason, sometimes, it doesn't show up and gets stuck
   askForDownloadPath: process.platform !== 'darwin',
   attachToMenubar: false,
+  windowShortcut: null,
   autoCheckForUpdates: true,
   autoRefresh: false,
   autoRefreshInterval: 3600000,
@@ -56,7 +59,7 @@ const defaultPreferences = {
   cssCodeInjection: null,
   customUserAgent: null,
   // default Dark Reader settings from its Chrome extension */
-  darkReader: appJson.id === 'clovery',
+  darkReader: false,
   darkReaderBrightness: 100,
   darkReaderContrast: 100,
   darkReaderGrayscale: 0,
@@ -91,6 +94,9 @@ const defaultPreferences = {
   muteApp: false,
   openFolderWhenDoneDownloading: true,
   openProtocolUrlInNewWindow: 'ask', // 'ask', 'newWindow', 'mainWindow'
+  /* Password Manager */
+  passwordsAskToSave: true,
+  passwordsNeverSaveDomains: [],
   pauseNotifications: null,
   pauseNotificationsBySchedule: false,
   pauseNotificationsByScheduleFrom: getDefaultPauseNotificationsByScheduleFrom(),
@@ -107,7 +113,7 @@ const defaultPreferences = {
   ratingLastClicked: 0,
   rememberLastPageVisited: false,
   runInBackground: false,
-  searchEngine: 'duckduckgo',
+  searchEngine: 'google',
   sentry: false,
   // branded apps (like Google/Microsoft) share browsing data by default
   // https://github.com/webcatalog/webcatalog-app/issues/986
@@ -115,6 +121,7 @@ const defaultPreferences = {
   sidebar: shouldShowSidebar,
   sidebarSize: 'compact',
   sidebarTips: 'shortcut',
+  sidebarAddButton: true,
   skipAskingDefaultCalendarClient: false,
   skipAskingDefaultMailClient: false,
   spellcheck: true,

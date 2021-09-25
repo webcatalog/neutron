@@ -8,8 +8,8 @@ const getChromiumUserDataPath = require('./get-chromium-user-data-path');
 
 const cached = {};
 
-const getExtensionsFromProfile = (browserId, profileDirName) => {
-  if (cached[`${browserId}:${profileDirName}`]) return cached[`${browserId}:${profileDirName}`];
+const getExtensionsFromProfile = (browserId, profileDirName, skipCache = false) => {
+  if (!skipCache && cached[`${browserId}:${profileDirName}`]) return cached[`${browserId}:${profileDirName}`];
 
   const extensionsPath = path.join(getChromiumUserDataPath(browserId), profileDirName, 'Extensions');
   if (!fs.existsSync(extensionsPath)) return [];

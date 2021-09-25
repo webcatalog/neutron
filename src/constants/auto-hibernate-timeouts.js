@@ -4,7 +4,7 @@
 const autoHibernateTimeouts = [
   { name: 'Immediately', value: 0 },
   { name: '30 seconds', value: 30000 },
-  { name: '1 minutes', value: 60000 },
+  { name: '1 minute', value: 60000 },
   { name: '5 minutes', value: 300000 },
   { name: '10 minutes', value: 600000 },
   { name: '15 minutes', value: 900000 },

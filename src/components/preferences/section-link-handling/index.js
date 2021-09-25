@@ -33,7 +33,7 @@ const SectionLinkHandling = ({
       <ListItem button onClick={onOpenDialogExternallUrls}>
         <ListItemText
           primary="External URLs"
-          secondary={internalUrlRule ? `/^${externalUrlRule}$/i` : 'Not set'}
+          secondary={externalUrlRule ? `/^${externalUrlRule}$/i` : 'Not set'}
         />
         <ChevronRightIcon color="action" />
       </ListItem>
