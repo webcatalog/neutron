@@ -54,7 +54,6 @@ const isWebcatalog = require('./is-webcatalog');
 const getFirefoxUserAgent = require('./get-firefox-user-agent');
 
 const views = {};
-const browserViews = {};
 let shouldMuteAudio;
 let shouldPauseNotifications;
 
@@ -208,8 +207,10 @@ const updateAddress = (url) => {
   ipcMain.emit('create-menu');
 };
 
-const addViewAsync = async (browserWindow, workspace) => {
-  if (views[workspace.id] != null) return;
+const addViewAsync = async (browserWindow, workspace, _viewId) => {
+  const viewId = !_viewId || workspace.id;
+
+  if (views[viewId] != null) return;
 
   // configure session & ad blocker
   const partitionId = global.shareWorkspaceBrowsingData ? 'persist:shared' : `persist:${workspace.id}`;
@@ -1136,7 +1137,7 @@ const addViewAsync = async (browserWindow, workspace) => {
     );
   };
 
-  views[workspace.id] = view;
+  views[viewId] = view;
 
   if (workspace.active) {
     browserWindow.setBrowserView(view);
@@ -1157,18 +1158,6 @@ const addViewAsync = async (browserWindow, workspace) => {
     view.webContents.loadURL(initialUrl);
   }
 };
-
-const getBrowserViews = () => browserViews;
-const getBrowserView = (id) => browserViews[id];
-const setBrowserView = (id, browserView) => {
-  browserViews[id] = browserView;
-};
-const removeBrowserView = (id) => {
-  if (browserViews[id]) {
-    delete browserViews[id];
-  }
-};
-const constructBrowserViewKey = (id, tabIndex) => `${id}/${tabIndex}`;
 
 const getView = (id) => views[id];
 
@@ -1350,9 +1339,4 @@ module.exports = {
   setActiveView,
   setViewsAudioPref,
   setViewsNotificationsPref,
-  getBrowserViews,
-  getBrowserView,
-  setBrowserView,
-  removeBrowserView,
-  constructBrowserViewKey,
 };

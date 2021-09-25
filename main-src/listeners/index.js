@@ -11,7 +11,6 @@ const {
   ipcMain,
   nativeTheme,
   shell,
-  BrowserView,
 } = require('electron');
 
 const {
@@ -61,15 +60,14 @@ const {
 } = require('../libs/workspaces-views');
 
 const {
+  addViewAsync,
+  getView,
   reloadView,
   reloadViewDarkReader,
   reloadViewsDarkReader,
   reloadViewsWebContentsIfDidFailLoad,
+  removeView,
   setViewsAudioPref,
-  setBrowserView,
-  constructBrowserViewKey,
-  getBrowserView,
-  removeBrowserView,
 } = require('../libs/views');
 
 const {
@@ -697,20 +695,24 @@ const loadListeners = () => {
     trackAddWorkspaceAsync(deviceId, appId);
   });
 
+  const constructBrowserViewKey = (id, tabIndex) => `${id}/${tabIndex}`;
+
   ipcMain.on('request-new-tab-browser', (_, tabInfo) => {
     const win = mainWindow.get();
-    const browserView = win.getBrowserView();
+    const currentWorkspace = getActiveWorkspace();
 
     const { tabIndex, homeUrl } = tabInfo;
     // Workspace ID
     const { id, tabs } = getActiveWorkspace();
-    const lastUrl = browserView.webContents.getURL();
+
+    const newBrowserViewKey = constructBrowserViewKey(id, tabIndex);
+    addViewAsync(win, currentWorkspace, newBrowserViewKey);
 
     // Update workspace config
     setWorkspace(id, {
       tabs: {
         ...tabs,
-        [tabIndex]: { homeUrl, lastUrl },
+        [tabIndex + 1]: { homeUrl },
       },
     });
   });
@@ -719,21 +721,15 @@ const loadListeners = () => {
     const { newTabIndex, selectedTabIndex } = tabInfo;
     const currentWorkspace = getActiveWorkspace();
     const win = mainWindow.get();
-    const currentBrowserView = win.getBrowserView();
 
     // Latest Url from tab session.
     const { id, tabs } = currentWorkspace;
-    const lastUrl = currentBrowserView.webContents.getURL();
 
     // Construct keys for new browserView to be added and browserView to update.
-    const currentBrowserViewKey = constructBrowserViewKey(id, selectedTabIndex);
     const newBrowserViewKey = constructBrowserViewKey(id, newTabIndex);
 
     // Get new browserView from current dataset.
-    const newBrowserView = getBrowserView(newBrowserViewKey);
-
-    // Preserve current browserView.
-    setBrowserView(currentBrowserViewKey, currentBrowserView);
+    const newBrowserView = getView(newBrowserViewKey);
 
     // Update workspace config
     setWorkspace(id, {
@@ -741,7 +737,6 @@ const loadListeners = () => {
         ...tabs,
         [selectedTabIndex]: {
           ...tabs[newTabIndex],
-          lastUrl,
         },
       },
       selectedTabIndex,
@@ -753,16 +748,7 @@ const loadListeners = () => {
     if (newBrowserView) {
       win.setBrowserView(newBrowserView);
     } else {
-      const { homeUrl } = tabs[selectedTabIndex];
-      const url = homeUrl;
-
-      const browserView = new BrowserView();
-      win.setBrowserView(browserView);
-
-      const contentSize = win.getContentSize();
-      browserView.setBounds(getViewBounds(contentSize));
-      browserView.setBackgroundColor('#FFF');
-      browserView.webContents.loadURL(url);
+      addViewAsync(win, currentWorkspace, newBrowserViewKey);
     }
   });
 
@@ -773,14 +759,8 @@ const loadListeners = () => {
 
     const browserKey = constructBrowserViewKey(id, tabIndex);
 
-    const win = mainWindow.get();
-    const currentBrowserView = win.getBrowserView();
-
     delete tabs[tabIndex];
-    removeBrowserView(browserKey);
-    // Clean browserView contents;
-    win.setBrowserView(undefined);
-    currentBrowserView.webContents.forcefullyCrashRenderer();
+    removeView(browserKey);
 
     // TODO:
     // split to 2 cases
