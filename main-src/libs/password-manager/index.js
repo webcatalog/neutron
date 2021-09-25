@@ -21,18 +21,7 @@ const PasswordManagers = {
   // Returns an active password manager, which is the one that is selected in app's
   // settings.
   getActivePasswordManager() {
-    if (!getPreference('passwordsAskToSave') || PasswordManagers.managers.length === 0) {
-      return null;
-    }
-
     return PasswordManagers.managers[0];
-
-    // const managerSetting = settings.get('passwordManager');
-    // if (managerSetting == null) {
-    //   return PasswordManagers.managers.find((mgr) => mgr.name === 'Built-in password manager');
-    // }
-
-    // return PasswordManagers.managers.find((mgr) => mgr.name === managerSetting.name);
   },
   async getConfiguredPasswordManager() {
     const manager = PasswordManagers.getActivePasswordManager();
@@ -197,7 +186,7 @@ const PasswordManagers = {
     });
 
     ipcMain.on('password-autofill-check', (e) => {
-      if (PasswordManagers.getActivePasswordManager()) {
+      if (!getPreference('passwordsAskToSave') || PasswordManagers.managers.length === 0) {
         e.sender.send('password-autofill-enabled');
       }
     });
