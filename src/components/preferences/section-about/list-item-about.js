@@ -1,12 +1,14 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import PropTypes from 'prop-types';
 
 import ListItem from '@material-ui/core/ListItem';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
+import Link from '@material-ui/core/Link';
 
 import connectComponent from '../../../helpers/connect-component';
 import getStaticGlobal from '../../../helpers/get-static-global';
@@ -16,6 +18,10 @@ import isAppx from '../../../helpers/is-appx';
 
 import cloveryIconPng from '../../../images/products/clovery-mac-icon-128@2x.png';
 import singleboxIconPng from '../../../images/products/singlebox-mac-icon-128@2x.png';
+
+import {
+  requestOpenInBrowser,
+} from '../../../senders';
 
 const styles = (theme) => ({
   icon: {
@@ -76,9 +82,23 @@ const About = ({ classes }) => {
             <Typography variant="h6" className={classes.title}>{appJson.name}</Typography>
             <Typography
               variant="body2"
-              className={classes.version}
             >
               {`Version ${appVersion} (${buildSource}, ${window.process.arch})`}
+            </Typography>
+            <Typography
+              variant="body2"
+              className={classes.version}
+            >
+              <Link
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  const changelogUrl = appJson.changelogUrl || 'https://webcatalog.io/webcatalog/changelog/neutron/';
+                  requestOpenInBrowser(changelogUrl);
+                }}
+              >
+                (What&apos;s New)
+              </Link>
             </Typography>
           </Box>
           <Box>
