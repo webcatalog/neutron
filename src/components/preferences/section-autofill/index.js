@@ -38,6 +38,7 @@ import {
 import {
   requestSetPreference,
 } from '../../../senders';
+import getStaticGlobal from '../../../helpers/get-static-global';
 
 const SectionAutofill = ({ passwordsAskToSave }) => {
   const [credentials, setCredentials] = useState([]);
@@ -73,13 +74,16 @@ const SectionAutofill = ({ passwordsAskToSave }) => {
       <ListItem>
         <ListItemText
           primary="Ask to save logins and passwords for websites"
-          secondary={`Passwords are stored locally and securely by ${getKeytarVaultName()}.`}
+          secondary={getStaticGlobal('passwordManagerExtensionDetected')
+            ? `The built-in autofill feature has been taken over by the '${getStaticGlobal('passwordManagerExtensionDetected')}'.`
+            : `Passwords are stored locally and securely by ${getKeytarVaultName()}.`}
         />
         <ListItemSecondaryAction>
           <Switch
             edge="end"
             color="primary"
-            checked={passwordsAskToSave}
+            checked={getStaticGlobal('passwordManagerExtensionDetected') ? false : passwordsAskToSave}
+            disabled={getStaticGlobal('passwordManagerExtensionDetected')}
             onChange={(e) => {
               requestSetPreference('passwordsAskToSave', e.target.checked);
             }}
