@@ -19,6 +19,7 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CodeIcon from '@material-ui/icons/Code';
 import ExtensionIcon from '@material-ui/icons/Extension';
 import InfoIcon from '@material-ui/icons/Info';
+import LayersIcon from '@material-ui/icons/Layers';
 import LinkIcon from '@material-ui/icons/Link';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import LockIcon from '@material-ui/icons/Lock';
@@ -69,6 +70,7 @@ import SectionReset from './section-reset';
 import SectionSearch from './section-search';
 import SectionSystem from './section-system';
 import SectionTelemetry from './section-telemetry';
+import SectionTabs from './section-tabs';
 import SectionTheme from './section-theme';
 import SectionTray from './section-tray';
 import SectionView from './section-view';
@@ -162,6 +164,13 @@ const Preferences = ({
       subSections: {
         window: { text: 'Window', Component: SectionWindow },
         tray: { text: window.process.platform === 'darwin' ? 'Menu Bar' : 'Tray', Component: SectionTray },
+      },
+    },
+    tabs: {
+      text: 'Tabs',
+      Icon: LayersIcon,
+      subSections: {
+        tabs: { text: 'Tabs', Component: SectionTabs },
       },
     },
     notifications: {

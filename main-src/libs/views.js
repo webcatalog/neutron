@@ -207,8 +207,10 @@ const updateAddress = (url) => {
   ipcMain.emit('create-menu');
 };
 
-const addViewAsync = async (browserWindow, workspace) => {
-  if (views[workspace.id] != null) return;
+const addViewAsync = async (browserWindow, workspace, _viewId) => {
+  const viewId = _viewId || workspace.id;
+
+  if (views[viewId] != null) return;
 
   // configure session & ad blocker
   const partitionId = global.shareWorkspaceBrowsingData ? 'persist:shared' : `persist:${workspace.id}`;
@@ -1135,7 +1137,7 @@ const addViewAsync = async (browserWindow, workspace) => {
     );
   };
 
-  views[workspace.id] = view;
+  views[viewId] = view;
 
   if (workspace.active) {
     browserWindow.setBrowserView(view);
