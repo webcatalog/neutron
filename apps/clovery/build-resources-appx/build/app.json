@@ -1,8 +1,9 @@
 {
     "id": "clovery",
     "name": "Clovery",
-    "microsoftStoreId": "9NT71213J864",
     "registered": true,
+    "microsoftStoreId": "9NT71213J864",
+    "changelogUrl": "https://webcatalog.io/clovery/changelog/",
     "opts": {
         "legacyUserData": true
     }
