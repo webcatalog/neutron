@@ -11,13 +11,22 @@ import CloseIcon from '@material-ui/icons/Close';
 import { useSelector } from 'react-redux';
 
 const useStyle = makeStyles(() => ({
+  addTabButton: {
+    width: 36,
+    height: 36,
+  },
   tabsWrapper: {
     display: 'flex',
+    width: '90vw',
+    overflow: 'scroll',
   },
   tabsBarWrapper: {
     display: 'flex',
     height: 36,
-    overflow: 'hidden',
+  },
+  tabItem: {
+    display: 'flex',
+    flexDirection: 'row',
   },
 }));
 
@@ -68,7 +77,10 @@ const TabBar = () => {
     <div className={classes.tabsBarWrapper}>
       <div className={classes.tabsWrapper}>
         {[...Array(tabsCount).keys()].map((i) => (
-          <div key={i}>
+          <div
+            key={i}
+            className={classes.tabItem}
+          >
             <Tab
               disableRipple
               label={(
@@ -77,6 +89,7 @@ const TabBar = () => {
                 </span>
               )}
               disabled={selectedTabIndex === i}
+              style={{ minHeight: '36px' }}
               onClick={(e) => onTabSelected(e, i)}
             />
             {(tabsCount !== 1) && (
@@ -89,11 +102,15 @@ const TabBar = () => {
           </div>
         ))}
       </div>
-      <IconButton
-        onClick={onTabAdded}
+      <div
+        className={classes.addTabButton}
       >
-        <AddIcon fontSize="small" />
-      </IconButton>
+        <IconButton
+          onClick={onTabAdded}
+        >
+          <AddIcon fontSize="small" />
+        </IconButton>
+      </div>
     </div>
   );
 };
