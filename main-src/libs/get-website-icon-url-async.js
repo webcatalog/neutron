@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 const cheerio = require('cheerio');
 const url = require('url');
-const fetch = require('node-fetch').default;
+const fetch = require('electron-fetch').default;
 
 const getWebsiteIconUrlAsync = (websiteURL) => fetch(websiteURL)
   .then((res) => res.text().then((html) => ({ html, redirectedUrl: res.url })))
