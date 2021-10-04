@@ -11,7 +11,7 @@ const {
   disable: disableDarkMode,
   setFetchMethod: setFetchMethodDarkMode,
 } = require('darkreader');
-const nodeFetch = require('node-fetch/lib').default;
+const nodeFetch = require('electron-fetch').default;
 
 const isMas = require('../is-mas');
 const getRecipe = require('../get-recipe');
