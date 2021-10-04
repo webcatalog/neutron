@@ -705,9 +705,6 @@ const loadListeners = () => {
     // Workspace ID
     const { id, tabs } = getActiveWorkspace();
 
-    const newBrowserViewKey = constructBrowserViewKey(id, tabIndex);
-    addViewAsync(win, currentWorkspace, newBrowserViewKey);
-
     // Update workspace config
     setWorkspace(id, {
       tabs: {
@@ -754,9 +751,9 @@ const loadListeners = () => {
 
   ipcMain.on('request-close-tab-browser', (_, tabInfo) => {
     const { tabIndex } = tabInfo;
-    const { id, tabs } = getActiveWorkspace();
-    // const isCloseTabCurrent = (selectedTabIndex === tabIndex);
-
+    const { id, tabs, selectedTabIndex } = getActiveWorkspace();
+    const isCloseTabCurrent = (selectedTabIndex === tabIndex);
+    const isCloseTabLast = (selectedTabIndex === Object.keys(tabs).length);
     const browserKey = constructBrowserViewKey(id, tabIndex);
 
     delete tabs[tabIndex];
@@ -767,6 +764,12 @@ const loadListeners = () => {
     // if the closed one are the current view
     // or the closed one are another view
     // for 2nd case should consider which tab to fall back on.
+
+    if (isCloseTabCurrent) {
+      
+    } else {
+
+    }
 
     setWorkspace(id, { tabs });
   });
