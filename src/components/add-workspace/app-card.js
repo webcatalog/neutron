@@ -137,7 +137,7 @@ const AppCard = (props) => {
               picture: icon,
               catalogId: id,
               tabs: {
-                '1': {
+                1: {
                   homeUrl: url,
                   lastUrl: url,
                 },

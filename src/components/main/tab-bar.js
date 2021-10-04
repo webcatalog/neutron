@@ -27,7 +27,7 @@ const useStyle = makeStyles(() => ({
   tabItem: {
     display: 'flex',
     flexDirection: 'row',
-  }
+  },
 }));
 
 const TabBar = () => {
@@ -103,7 +103,7 @@ const TabBar = () => {
         ))}
       </div>
       <div
-        class={classes.addTabButton}
+        className={classes.addTabButton}
       >
         <IconButton
           onClick={onTabAdded}

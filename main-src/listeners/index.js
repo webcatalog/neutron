@@ -698,9 +698,6 @@ const loadListeners = () => {
   const constructBrowserViewKey = (id, tabIndex) => `${id}/${tabIndex}`;
 
   ipcMain.on('request-new-tab-browser', (_, tabInfo) => {
-    const win = mainWindow.get();
-    const currentWorkspace = getActiveWorkspace();
-
     const { tabIndex, homeUrl } = tabInfo;
     // Workspace ID
     const { id, tabs } = getActiveWorkspace();
@@ -753,7 +750,6 @@ const loadListeners = () => {
     const { tabIndex } = tabInfo;
     const { id, tabs, selectedTabIndex } = getActiveWorkspace();
     const isCloseTabCurrent = (selectedTabIndex === tabIndex);
-    const isCloseTabLast = (selectedTabIndex === Object.keys(tabs).length);
     const browserKey = constructBrowserViewKey(id, tabIndex);
 
     delete tabs[tabIndex];
@@ -764,12 +760,6 @@ const loadListeners = () => {
     // if the closed one are the current view
     // or the closed one are another view
     // for 2nd case should consider which tab to fall back on.
-
-    if (isCloseTabCurrent) {
-      
-    } else {
-
-    }
 
     setWorkspace(id, { tabs });
   });
