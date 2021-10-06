@@ -6,12 +6,14 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import { makeStyles } from '@material-ui/core/styles';
+import { fade } from '@material-ui/core/styles/colorManipulator';
 
 import SimpleBar from 'simplebar-react';
 import 'simplebar/dist/simplebar.min.css';
 
 import IconButton from '@material-ui/core/IconButton';
 import SvgIcon from '@material-ui/core/SvgIcon';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import NotificationsPausedIcon from '@material-ui/icons/NotificationsPaused';
@@ -145,6 +147,20 @@ const useStyles = makeStyles((theme) => {
       flexDirection: 'column',
       gap: theme.spacing(0.5),
     },
+    progressContainer: {
+      width: '100%',
+      display: 'flex',
+      justifyContent: 'center',
+      padding: theme.spacing(1),
+    },
+    progress: {
+      color: (props) => {
+        if (props.themeColor != null) {
+          return fade(theme.palette.getContrastText(themeColors[props.themeColor][900]), 0.7);
+        }
+        return theme.palette.type === 'dark' ? 'rgba(255, 255, 255, 0.7)' : 'rgb(77, 77, 77)';
+      },
+    },
   };
 });
 
@@ -264,6 +280,7 @@ ScrollbarContainer.propTypes = {
 
 const Sidebar = ({
   isFullScreen,
+  isLoading,
   muteApp,
   navigationBar,
   shouldPauseNotifications,
@@ -354,13 +371,18 @@ const Sidebar = ({
         <div
           className={classnames(classes.end, isSidebarExpanded && classes.endExpanded)}
         >
+          {isLoading && (
+            <div className={classes.progressContainer}>
+              <CircularProgress size={20} className={classes.progress} />
+            </div>
+          )}
           <RatingButton
             className={classnames(
               classes.iconButton, !isSidebarExpanded && classes.iconButtonVertical,
             )}
             size="small"
           />
-          {window.process.platform === 'darwin' && workspacesList.length > 0 && (
+          {window.process.platform === 'darwin' && (
             <IconButton
               title="Share"
               aria-label="Share"
@@ -369,6 +391,7 @@ const Sidebar = ({
                 classes.iconButton, !isSidebarExpanded && classes.iconButtonVertical,
               )}
               size="small"
+              disabled={workspacesList.length < 1}
             >
               <SvgIcon>
                 <path fill="currentColor" d="M12,1L8,5H11V14H13V5H16M18,23H6C4.89,23 4,22.1 4,21V9A2,2 0 0,1 6,7H9V9H6V21H18V9H15V7H18A2,2 0 0,1 20,9V21A2,2 0 0,1 18,23Z" />
@@ -416,6 +439,7 @@ const Sidebar = ({
 };
 
 Sidebar.defaultProps = {
+  isLoading: false,
   themeColor: null,
 };
 
