@@ -445,6 +445,7 @@ Sidebar.defaultProps = {
 
 Sidebar.propTypes = {
   isFullScreen: PropTypes.bool.isRequired,
+  isLoading: PropTypes.bool,
   muteApp: PropTypes.bool.isRequired,
   navigationBar: PropTypes.bool.isRequired,
   shouldPauseNotifications: PropTypes.bool.isRequired,
