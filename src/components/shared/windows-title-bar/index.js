@@ -161,6 +161,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const EnhancedAppBar = ({
+  isLoading,
   isMaximized,
   sidebar,
   sidebarSize,
@@ -218,9 +219,11 @@ const EnhancedAppBar = ({
         <div className={classes.center} onDoubleClick={onDoubleClick}>
           {title}
         </div>
-        <div className={classes.progressContainer}>
-          <CircularProgress size={18} className={classes.progress} />
-        </div>
+        {isLoading && (
+          <div className={classes.progressContainer}>
+            <CircularProgress size={18} className={classes.progress} />
+          </div>
+        )}
         <div className={classes.right} onDoubleClick={onDoubleClick}>
           {window.process.platform !== 'darwin' && (
             <div className={classes.windowsControl}>
@@ -292,28 +295,34 @@ const EnhancedAppBar = ({
 };
 
 EnhancedAppBar.defaultProps = {
+  isLoading: false,
   title: '',
   themeColor: null,
 };
 
 EnhancedAppBar.propTypes = {
-  themeColor: PropTypes.string,
+  isLoading: PropTypes.bool,
   isMaximized: PropTypes.bool.isRequired,
   sidebar: PropTypes.bool.isRequired,
   sidebarSize: PropTypes.oneOf(['compact', 'expanded']).isRequired,
+  themeColor: PropTypes.string,
   title: PropTypes.string,
 };
 
 const mapStateToProps = (state, ownProps) => {
   const appJson = getStaticGlobal('appJson');
+  const activeWorkspace = state.workspaces.workspaces[state.workspaces.activeWorkspaceId];
+
   return {
+    isLoading: activeWorkspace && state.workspaceMetas[activeWorkspace.id]
+      ? Boolean(state.workspaceMetas[activeWorkspace.id].isLoading)
+      : false,
     isMaximized: state.general.isMaximized,
     title: ownProps.title || ((window.mode === 'main' || window.mode === 'menubar') && state.general.title ? state.general.title : appJson.name),
     sidebar: state.preferences.sidebar,
     sidebarSize: state.preferences.sidebarSize,
     themeColor: (() => {
       if (window.mode === 'main' || window.mode === 'menubar') {
-        const activeWorkspace = state.workspaces.workspaces[state.workspaces.activeWorkspaceId];
         if (state.preferences.themeColor === 'auto') {
           if (activeWorkspace && activeWorkspace.preferences && activeWorkspace.preferences.color) {
             return activeWorkspace.preferences.color;
