@@ -489,6 +489,9 @@ const addViewAsync = async (browserWindow, workspace) => {
     setWorkspace(workspace.id, {
       lastUrl: currentUrl,
     });
+    setWorkspaceMeta(workspace.id, {
+      isLoading: false,
+    });
     ipcMain.emit('request-realign-active-workspace');
   });
 
