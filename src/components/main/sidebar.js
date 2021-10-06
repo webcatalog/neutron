@@ -142,6 +142,14 @@ const useStyles = makeStyles((theme) => {
         return theme.palette.text.secondary;
       },
     },
+    iconButtonDisabled: {
+      color: (props) => {
+        if (props.themeColor != null) {
+          return `${fade(theme.palette.getContrastText(themeColors[props.themeColor][800]), 0.3)} !important`;
+        }
+        return theme.palette.text.disabled;
+      },
+    },
     browserActionList: {
       display: 'flex',
       flexDirection: 'column',
@@ -387,9 +395,12 @@ const Sidebar = ({
               title="Share"
               aria-label="Share"
               onClick={() => requestShowShareMenu()}
-              className={classnames(
-                classes.iconButton, !isSidebarExpanded && classes.iconButtonVertical,
-              )}
+              classes={{
+                root: classnames(
+                  classes.iconButton, !isSidebarExpanded && classes.iconButtonVertical,
+                ),
+                disabled: classes.iconButtonDisabled,
+              }}
               size="small"
               disabled={workspacesList.length < 1}
             >
@@ -402,9 +413,12 @@ const Sidebar = ({
             title="Notifications"
             aria-label="Notifications"
             onClick={requestShowNotificationsWindow}
-            className={classnames(
-              classes.iconButton, !isSidebarExpanded && classes.iconButtonVertical,
-            )}
+            classes={{
+              root: classnames(
+                classes.iconButton, !isSidebarExpanded && classes.iconButtonVertical,
+              ),
+              disabled: classes.iconButtonDisabled,
+            }}
             size="small"
           >
             {shouldPauseNotifications ? <NotificationsPausedIcon /> : <NotificationsIcon />}
@@ -413,9 +427,12 @@ const Sidebar = ({
             title={muteApp ? 'Unmute' : 'Mute'}
             aria-label={muteApp ? 'Unmute' : 'Mute'}
             onClick={() => requestSetPreference('muteApp', !muteApp)}
-            className={classnames(
-              classes.iconButton, !isSidebarExpanded && classes.iconButtonVertical,
-            )}
+            classes={{
+              root: classnames(
+                classes.iconButton, !isSidebarExpanded && classes.iconButtonVertical,
+              ),
+              disabled: classes.iconButtonDisabled,
+            }}
             size="small"
           >
             {muteApp ? <VolumeOffIcon /> : <VolumeUpIcon />}
@@ -424,9 +441,12 @@ const Sidebar = ({
             title="Preferences"
             aria-label="Preferences"
             onClick={() => requestShowPreferencesWindow()}
-            className={classnames(
-              classes.iconButton, !isSidebarExpanded && classes.iconButtonVertical,
-            )}
+            classes={{
+              root: classnames(
+                classes.iconButton, !isSidebarExpanded && classes.iconButtonVertical,
+              ),
+              disabled: classes.iconButtonDisabled,
+            }}
             size="small"
           >
             <SettingsIcon />
