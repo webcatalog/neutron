@@ -207,8 +207,8 @@ const updateAddress = (url) => {
   ipcMain.emit('create-menu');
 };
 
-const addViewAsync = async (browserWindow, workspace, _viewId) => {
-  const viewId = _viewId || workspace.id;
+const addViewAsync = async (browserWindow, workspace) => {
+  const viewId = workspace.id;
 
   if (views[viewId] != null) return;
 
