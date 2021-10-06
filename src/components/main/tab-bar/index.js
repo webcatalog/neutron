@@ -62,6 +62,8 @@ const TabBar = ({ themeColor }) => {
 
   const tabs = useSelector((state) => state.workspaceTabs[activeWorkspaceId]) || {};
 
+  if (!currentWorkspace) return null;
+
   return (
     <div className={classes.root}>
       <Tab
