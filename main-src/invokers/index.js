@@ -13,6 +13,9 @@ const {
   getWorkspaceMetas,
 } = require('../libs/workspace-metas');
 const {
+  getWorkspaceTabs,
+} = require('../libs/workspace-tabs');
+const {
   setWorkspaceBadgeCount,
 } = require('../libs/workspace-badges');
 const { getPauseNotificationsInfo } = require('../libs/notifications');
@@ -50,6 +53,7 @@ const loadInvokers = () => {
         workspaces,
       },
       workspaceMetas: getWorkspaceMetas(),
+      workspaceTabs: getWorkspaceTabs(),
       notifications: {
         pauseNotificationsInfo: getPauseNotificationsInfo(),
       },
