@@ -11,6 +11,7 @@ import { fade } from '@material-ui/core/styles/colorManipulator';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import MenuIcon from '@material-ui/icons/Menu';
 
@@ -143,6 +144,20 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(1),
     marginRight: 0,
   },
+  progressContainer: {
+    height: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    paddingRight: theme.spacing(1),
+  },
+  progress: {
+    color: (props) => {
+      if (props.themeColor != null) {
+        return fade(theme.palette.getContrastText(themeColors[props.themeColor][900]), 0.7);
+      }
+      return theme.palette.type === 'dark' ? 'rgba(255, 255, 255, 0.7)' : 'rgb(77, 77, 77)';
+    },
+  },
 }));
 
 const EnhancedAppBar = ({
@@ -202,6 +217,9 @@ const EnhancedAppBar = ({
         </div>
         <div className={classes.center} onDoubleClick={onDoubleClick}>
           {title}
+        </div>
+        <div className={classes.progressContainer}>
+          <CircularProgress size={18} className={classes.progress} />
         </div>
         <div className={classes.right} onDoubleClick={onDoubleClick}>
           {window.process.platform !== 'darwin' && (
