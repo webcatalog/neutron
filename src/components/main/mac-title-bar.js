@@ -138,7 +138,6 @@ FakeTitleBar.propTypes = {
 const mapStateToProps = (state) => {
   const activeWorkspace = state.workspaces.workspaces[state.workspaces.activeWorkspaceId];
 
-  console.log(state.workspaceMetas);
   return {
     title: state.general.title,
     searchEngine: state.preferences.searchEngine,
