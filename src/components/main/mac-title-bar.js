@@ -7,6 +7,7 @@ import classnames from 'classnames';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { fade } from '@material-ui/core/styles/colorManipulator';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import connectComponent from '../../helpers/connect-component';
 import getUrlFromText from '../../helpers/get-url-from-text';
@@ -56,14 +57,28 @@ const useStyles = makeStyles((theme) => {
       paddingLeft: theme.spacing(1),
       paddingRight: theme.spacing(1),
     },
+    progressContainer: {
+      position: 'absolute',
+      right: theme.spacing(1),
+      top: (titleBarHeight - 18) / 2 - 1,
+    },
+    progress: {
+      color: (props) => {
+        if (props.themeColor != null) {
+          return fade(theme.palette.getContrastText(themeColors[props.themeColor][900]), 0.7);
+        }
+        return theme.palette.type === 'dark' ? 'rgba(255, 255, 255, 0.7)' : 'rgb(77, 77, 77)';
+      },
+    },
   };
 });
 
 const FakeTitleBar = (props) => {
   const {
-    title,
+    isLoading,
     searchEngine,
     themeColor,
+    title,
   } = props;
 
   const classes = useStyles({ themeColor });
@@ -97,25 +112,41 @@ const FakeTitleBar = (props) => {
       } : null}
     >
       {(window.mode === 'main' || window.mode === 'menubar') && title ? title : appJson.name}
+
+      {isLoading && (
+        <div className={classes.progressContainer}>
+          <CircularProgress size={18} className={classes.progress} />
+        </div>
+      )}
     </div>
   );
 };
 
 FakeTitleBar.defaultProps = {
-  title: '',
+  isLoading: false,
   themeColor: null,
+  title: '',
 };
 
 FakeTitleBar.propTypes = {
-  title: PropTypes.string,
+  isLoading: PropTypes.bool,
   searchEngine: PropTypes.string.isRequired,
   themeColor: PropTypes.string,
+  title: PropTypes.string,
 };
 
-const mapStateToProps = (state) => ({
-  title: state.general.title,
-  searchEngine: state.preferences.searchEngine,
-});
+const mapStateToProps = (state) => {
+  const activeWorkspace = state.workspaces.workspaces[state.workspaces.activeWorkspaceId];
+
+  console.log(state.workspaceMetas);
+  return {
+    title: state.general.title,
+    searchEngine: state.preferences.searchEngine,
+    isLoading: activeWorkspace && state.workspaceMetas[activeWorkspace.id]
+      ? Boolean(state.workspaceMetas[activeWorkspace.id].isLoading)
+      : false,
+  };
+};
 
 export default connectComponent(
   FakeTitleBar,
