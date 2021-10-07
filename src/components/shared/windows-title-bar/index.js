@@ -163,6 +163,7 @@ const useStyles = makeStyles((theme) => ({
 const EnhancedAppBar = ({
   isLoading,
   isMaximized,
+  navigationBar,
   sidebar,
   sidebarSize,
   themeColor,
@@ -219,7 +220,7 @@ const EnhancedAppBar = ({
         <div className={classes.center} onDoubleClick={onDoubleClick}>
           {title}
         </div>
-        {isLoading && (
+        {isLoading && !navigationBar && !sidebar && (
           <div className={classes.progressContainer}>
             <CircularProgress size={18} className={classes.progress} />
           </div>
@@ -303,6 +304,7 @@ EnhancedAppBar.defaultProps = {
 EnhancedAppBar.propTypes = {
   isLoading: PropTypes.bool,
   isMaximized: PropTypes.bool.isRequired,
+  navigationBar: PropTypes.bool.isRequired,
   sidebar: PropTypes.bool.isRequired,
   sidebarSize: PropTypes.oneOf(['compact', 'expanded']).isRequired,
   themeColor: PropTypes.string,
@@ -321,6 +323,10 @@ const mapStateToProps = (state, ownProps) => {
     title: ownProps.title || ((window.mode === 'main' || window.mode === 'menubar') && state.general.title ? state.general.title : appJson.name),
     sidebar: state.preferences.sidebar,
     sidebarSize: state.preferences.sidebarSize,
+    navigationBar: (window.process.platform === 'linux'
+      && state.preferences.attachToMenubar
+      && !state.preferences.sidebar)
+      || state.preferences.navigationBar,
     themeColor: (() => {
       if (window.mode === 'main' || window.mode === 'menubar') {
         if (state.preferences.themeColor === 'auto') {
