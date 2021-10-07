@@ -149,6 +149,7 @@ const mapStateToProps = (state) => {
       ? Boolean(state.workspaceMetas[activeWorkspace.id].isLoading)
       : false,
     navigationBar: (window.process.platform === 'linux'
+      && state.preferences.attachToMenubar
       && !state.preferences.sidebar)
       || state.preferences.navigationBar,
     sidebar: state.preferences.sidebar,
