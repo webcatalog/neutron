@@ -20,6 +20,8 @@ import {
   requestLoadUrl,
 } from '../../senders';
 
+const loadingSize = isMacOs11() ? 18 : 14;
+
 const useStyles = makeStyles((theme) => {
   // Big Sur increases title bar height: https://github.com/microsoft/vscode/pull/110592 (28px)
   const titleBarHeight = isMacOs11() ? 28 : 22;
@@ -60,7 +62,7 @@ const useStyles = makeStyles((theme) => {
     progressContainer: {
       position: 'absolute',
       right: theme.spacing(1),
-      top: (titleBarHeight - 18) / 2 - 1,
+      top: (titleBarHeight - loadingSize) / 2 - 1,
     },
     progress: {
       color: (props) => {
@@ -73,14 +75,14 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-const FakeTitleBar = (props) => {
-  const {
-    isLoading,
-    searchEngine,
-    themeColor,
-    title,
-  } = props;
-
+const FakeTitleBar = ({
+  isLoading,
+  navigationBar,
+  searchEngine,
+  sidebar,
+  themeColor,
+  title,
+}) => {
   const classes = useStyles({ themeColor });
 
   if (window.process.platform !== 'darwin') return null;
@@ -113,9 +115,9 @@ const FakeTitleBar = (props) => {
     >
       {(window.mode === 'main' || window.mode === 'menubar') && title ? title : appJson.name}
 
-      {isLoading && (
+      {isLoading && !navigationBar && !sidebar && (
         <div className={classes.progressContainer}>
-          <CircularProgress size={18} className={classes.progress} />
+          <CircularProgress size={loadingSize} className={classes.progress} />
         </div>
       )}
     </div>
@@ -130,7 +132,9 @@ FakeTitleBar.defaultProps = {
 
 FakeTitleBar.propTypes = {
   isLoading: PropTypes.bool,
+  navigationBar: PropTypes.bool.isRequired,
   searchEngine: PropTypes.string.isRequired,
+  sidebar: PropTypes.bool.isRequired,
   themeColor: PropTypes.string,
   title: PropTypes.string,
 };
@@ -144,6 +148,10 @@ const mapStateToProps = (state) => {
     isLoading: activeWorkspace && state.workspaceMetas[activeWorkspace.id]
       ? Boolean(state.workspaceMetas[activeWorkspace.id].isLoading)
       : false,
+    navigationBar: (window.process.platform === 'linux'
+      && !state.preferences.sidebar)
+      || state.preferences.navigationBar,
+    sidebar: state.preferences.sidebar,
   };
 };
 
