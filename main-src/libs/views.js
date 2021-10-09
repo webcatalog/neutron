@@ -53,6 +53,7 @@ const isSnap = require('./is-snap');
 const isAppx = require('./is-appx');
 const isWebcatalog = require('./is-webcatalog');
 const getFirefoxUserAgent = require('./get-firefox-user-agent');
+const getSafariUserAgent = require('./get-safari-user-agent');
 
 const views = {};
 let shouldMuteAudio;
@@ -297,7 +298,7 @@ const addViewAsync = async (browserWindow, workspace) => {
         const url = new URL(details.url);
 
         if (url.hostname === 'meet.google.com') {
-          const fakedSafariUaStr = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15';
+          const fakedSafariUaStr = getSafariUserAgent();
           details.requestHeaders['User-Agent'] = fakedSafariUaStr;
         }
       } else {
@@ -553,7 +554,7 @@ const addViewAsync = async (browserWindow, workspace) => {
     const navigatedDomain = extractDomain(url);
     if (!customUserAgent && navigatedDomain === 'meet.google.com') {
       const currentUaStr = contents.userAgent;
-      const fakedSafariUaStr = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15';
+      const fakedSafariUaStr = getSafariUserAgent();
       if (currentUaStr !== fakedSafariUaStr) {
         contents.userAgent = fakedSafariUaStr;
         // eslint-disable-next-line no-console
@@ -569,13 +570,13 @@ const addViewAsync = async (browserWindow, workspace) => {
     // are destroyed. See https://github.com/webcatalog/webcatalog-app/issues/836
     if (!workspaceObj) return;
 
-    handleDidNavigateCompability(view.webContents, url);
-
     if (workspaceObj.active) {
       sendToAllWindows('update-can-go-back', view.webContents.canGoBack());
       sendToAllWindows('update-can-go-forward', view.webContents.canGoForward());
       updateAddress(url);
     }
+
+    handleDidNavigateCompability(view.webContents, url);
   });
 
   view.webContents.on('did-navigate-in-page', (e, url) => {
