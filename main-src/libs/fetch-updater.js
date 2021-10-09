@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 const { dialog, shell } = require('electron');
 const semver = require('semver');
-const fetch = require('electron-fetch').default;
+const fetch = require('./customized-fetch');
 
 const packageJson = require('../../package.json');
 const appJson = require('../constants/app-json');

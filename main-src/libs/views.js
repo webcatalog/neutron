@@ -18,8 +18,9 @@ const unusedFilename = require('unused-filename');
 const pupa = require('pupa');
 const extName = require('ext-name');
 const { ElectronChromeExtensions } = require('electron-chrome-extensions');
-const fetch = require('electron-fetch').default;
 const electronRemote = require('@electron/remote/main');
+
+const fetch = require('./customized-fetch');
 
 const appJson = require('../constants/app-json');
 
