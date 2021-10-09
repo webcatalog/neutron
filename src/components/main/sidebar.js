@@ -255,7 +255,9 @@ const SortableItem = sortableElement(({ value }) => {
         }
 
         const menu = window.remote.Menu.buildFromTemplate(template);
-        menu.popup(window.remote.getCurrentWindow());
+        menu.popup({
+          window: window.remote.getCurrentWindow(),
+        });
       }}
     />
   );
@@ -367,7 +369,9 @@ const Sidebar = ({
                 ];
 
                 const menu = window.remote.Menu.buildFromTemplate(template);
-                menu.popup(window.remote.getCurrentWindow());
+                menu.popup({
+                  window: window.remote.getCurrentWindow(),
+                });
               }}
             />
           )}

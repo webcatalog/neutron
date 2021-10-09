@@ -54,7 +54,9 @@ const SectionWorkspaces = ({
               ];
 
               const menu = window.remote.Menu.buildFromTemplate(template);
-              menu.popup(window.remote.getCurrentWindow());
+              menu.popup({
+                window: window.remote.getCurrentWindow(),
+              });
             }}
             dense
           >
