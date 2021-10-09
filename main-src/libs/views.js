@@ -956,6 +956,7 @@ const addViewAsync = async (browserWindow, workspace) => {
         show: false,
       };
       const popupWin = new BrowserWindow(newOptions);
+      buildContextMenu(popupWin.webContents, handleNewWindow);
       // WebCatalog internal value to determine whether BrowserWindow is popup
       popupWin.isPopup = true;
       popupWin.webContents.isPopup = true;
