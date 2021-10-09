@@ -779,7 +779,9 @@ const addViewAsync = async (browserWindow, workspace) => {
             }),
           );
 
-          menu.popup(browserWindow);
+          menu.popup({
+            window: BrowserWindow.fromWebContents(contents),
+          });
         });
     });
   };
