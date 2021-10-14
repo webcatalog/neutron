@@ -3,17 +3,20 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useEffect, useState } from 'react';
 
-import { IconButton, Tab, makeStyles } from '@material-ui/core';
+import { IconButton, makeStyles } from '@material-ui/core';
+
+import Tab from './tab';
 
 import AddIcon from '@material-ui/icons/Add';
 import CloseIcon from '@material-ui/icons/Close';
+import ChromeShape from '../../images/chrome-shape.svg';
 
 import { useSelector } from 'react-redux';
 
 const useStyle = makeStyles(() => ({
   addTabButton: {
     width: 36,
-    height: 36,
+    height: 48,
   },
   tabsWrapper: {
     display: 'flex',
@@ -22,7 +25,7 @@ const useStyle = makeStyles(() => ({
   },
   tabsBarWrapper: {
     display: 'flex',
-    height: 36,
+    height: 'fit-content',
   },
   tabItem: {
     display: 'flex',
@@ -75,36 +78,19 @@ const TabBar = () => {
 
   return (
     <div className={classes.tabsBarWrapper}>
-      <div className={classes.tabsWrapper}>
+      <div className={'chrome-tabs'}>
         {[...Array(tabsCount).keys()].map((i) => (
           <div
             key={i}
             className={classes.tabItem}
           >
             <Tab
-              disableRipple
-              label={(
-                <span>
-                  New tabs
-                </span>
-              )}
-              disabled={selectedTabIndex === i}
-              style={{ minHeight: '36px' }}
-              onClick={(e) => onTabSelected(e, i)}
+              index={i}
             />
-            {(tabsCount !== 1) && (
-              <IconButton
-                onClick={(e) => onTabRemoved(e, i)}
-              >
-                <CloseIcon fontSize="small" />
-              </IconButton>
-            )}
           </div>
         ))}
       </div>
-      <div
-        className={classes.addTabButton}
-      >
+      <div className={classes.addTabButton}>
         <IconButton
           onClick={onTabAdded}
         >
