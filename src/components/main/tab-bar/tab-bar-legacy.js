@@ -1,11 +1,12 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+/* eslint-disable */
 import React, { useEffect, useState } from 'react';
 
 import { IconButton, makeStyles } from '@material-ui/core';
 
-import Tab from './tab';
+import Tab from './tab-legacy';
 
 import AddIcon from '@material-ui/icons/Add';
 import CloseIcon from '@material-ui/icons/Close';

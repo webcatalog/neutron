@@ -1,6 +1,7 @@
+/* eslint-disable */
 import React from 'react';
 
-import './chrome-tabs.css';
+import './chrome-tabs-legacy.css';
 
 const Tab = ({ index }) => {
   const x = index * 239;
@@ -47,7 +48,7 @@ const Tab = ({ index }) => {
         </svg>
       </div>
 
-      
+
       <div className="chrome-tab-content">
         <div className="chrome-tab-favicon"></div>
         <div className="chrome-tab-title">asdasdasdas</div>
