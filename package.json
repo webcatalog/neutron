@@ -1,7 +1,7 @@
 {
   "name": "neutron",
   "description": "AppView template for WebCatalog",
-  "version": "20.1.0",
+  "version": "21.0.0-alpha.3",
   "minimumWebCatalogVersion": "36.4.1",
   "engines": {
     "node": ">=14.0.0 <15.0.0"
@@ -63,10 +63,10 @@
     "copy-webpack-plugin": "6.4.1",
     "cross-env": "7.0.3",
     "darkreader": "4.9.39",
-    "date-fns": "2.24.0",
+    "date-fns": "2.25.0",
     "del": "6.0.0",
-    "electron": "15.1.0",
-    "electron-builder": "22.11.11",
+    "electron": "15.1.2",
+    "electron-builder": "22.13.1",
     "electron-chrome-extensions": "3.9.0",
     "electron-context-menu": "3.1.1",
     "electron-fetch": "1.7.4",
@@ -92,6 +92,7 @@
     "jimp": "0.16.1",
     "lodash": "4.17.21",
     "menubar": "9.0.5",
+    "node-fetch": "2.6.5",
     "node-machine-id": "1.1.12",
     "notistack": "1.0.10",
     "prop-types": "15.7.2",

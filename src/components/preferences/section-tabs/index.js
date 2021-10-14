@@ -22,7 +22,7 @@ const SectionTabs = () => {
     <List disablePadding dense>
       <ListItem>
         <ListItemText
-          primary="Tabs (experimental)"
+          primary="Tabs (under development)"
           secondary="Open links and documents in tabs instead of separate windows."
         />
         <ListItemSecondaryAction>

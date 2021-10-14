@@ -7,6 +7,7 @@ import classnames from 'classnames';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { fade } from '@material-ui/core/styles/colorManipulator';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import connectComponent from '../../helpers/connect-component';
 import getUrlFromText from '../../helpers/get-url-from-text';
@@ -18,6 +19,8 @@ import themeColors from '../../constants/theme-colors';
 import {
   requestLoadUrl,
 } from '../../senders';
+
+const loadingSize = isMacOs11() ? 18 : 14;
 
 const useStyles = makeStyles((theme) => {
   // Big Sur increases title bar height: https://github.com/microsoft/vscode/pull/110592 (28px)
@@ -56,16 +59,30 @@ const useStyles = makeStyles((theme) => {
       paddingLeft: theme.spacing(1),
       paddingRight: theme.spacing(1),
     },
+    progressContainer: {
+      position: 'absolute',
+      right: theme.spacing(1),
+      top: (titleBarHeight - loadingSize) / 2 - 1,
+    },
+    progress: {
+      color: (props) => {
+        if (props.themeColor != null) {
+          return fade(theme.palette.getContrastText(themeColors[props.themeColor][900]), 0.7);
+        }
+        return theme.palette.type === 'dark' ? 'rgba(255, 255, 255, 0.7)' : 'rgb(77, 77, 77)';
+      },
+    },
   };
 });
 
-const FakeTitleBar = (props) => {
-  const {
-    title,
-    searchEngine,
-    themeColor,
-  } = props;
-
+const FakeTitleBar = ({
+  isLoading,
+  navigationBar,
+  searchEngine,
+  sidebar,
+  themeColor,
+  title,
+}) => {
   const classes = useStyles({ themeColor });
 
   if (window.process.platform !== 'darwin') return null;
@@ -97,25 +114,47 @@ const FakeTitleBar = (props) => {
       } : null}
     >
       {(window.mode === 'main' || window.mode === 'menubar') && title ? title : appJson.name}
+
+      {isLoading && !navigationBar && !sidebar && (
+        <div className={classes.progressContainer}>
+          <CircularProgress size={loadingSize} className={classes.progress} />
+        </div>
+      )}
     </div>
   );
 };
 
 FakeTitleBar.defaultProps = {
-  title: '',
+  isLoading: false,
   themeColor: null,
+  title: '',
 };
 
 FakeTitleBar.propTypes = {
-  title: PropTypes.string,
+  isLoading: PropTypes.bool,
+  navigationBar: PropTypes.bool.isRequired,
   searchEngine: PropTypes.string.isRequired,
+  sidebar: PropTypes.bool.isRequired,
   themeColor: PropTypes.string,
+  title: PropTypes.string,
 };
 
-const mapStateToProps = (state) => ({
-  title: state.general.title,
-  searchEngine: state.preferences.searchEngine,
-});
+const mapStateToProps = (state) => {
+  const activeWorkspace = state.workspaces.workspaces[state.workspaces.activeWorkspaceId];
+
+  return {
+    title: state.general.title,
+    searchEngine: state.preferences.searchEngine,
+    isLoading: activeWorkspace && state.workspaceMetas[activeWorkspace.id]
+      ? Boolean(state.workspaceMetas[activeWorkspace.id].isLoading)
+      : false,
+    navigationBar: (window.process.platform === 'linux'
+      && state.preferences.attachToMenubar
+      && !state.preferences.sidebar)
+      || state.preferences.navigationBar,
+    sidebar: state.preferences.sidebar,
+  };
+};
 
 export default connectComponent(
   FakeTitleBar,

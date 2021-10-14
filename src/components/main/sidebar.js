@@ -6,12 +6,14 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import { makeStyles } from '@material-ui/core/styles';
+import { fade } from '@material-ui/core/styles/colorManipulator';
 
 import SimpleBar from 'simplebar-react';
 import 'simplebar/dist/simplebar.min.css';
 
 import IconButton from '@material-ui/core/IconButton';
 import SvgIcon from '@material-ui/core/SvgIcon';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import NotificationsPausedIcon from '@material-ui/icons/NotificationsPaused';
@@ -140,10 +142,32 @@ const useStyles = makeStyles((theme) => {
         return theme.palette.text.secondary;
       },
     },
+    iconButtonDisabled: {
+      color: (props) => {
+        if (props.themeColor != null) {
+          return `${fade(theme.palette.getContrastText(themeColors[props.themeColor][800]), 0.3)} !important`;
+        }
+        return theme.palette.text.disabled;
+      },
+    },
     browserActionList: {
       display: 'flex',
       flexDirection: 'column',
       gap: theme.spacing(0.5),
+    },
+    progressContainer: {
+      width: '100%',
+      display: 'flex',
+      justifyContent: 'center',
+      padding: theme.spacing(1),
+    },
+    progress: {
+      color: (props) => {
+        if (props.themeColor != null) {
+          return fade(theme.palette.getContrastText(themeColors[props.themeColor][900]), 0.7);
+        }
+        return theme.palette.type === 'dark' ? 'rgba(255, 255, 255, 0.7)' : 'rgb(77, 77, 77)';
+      },
     },
   };
 });
@@ -231,7 +255,9 @@ const SortableItem = sortableElement(({ value }) => {
         }
 
         const menu = window.remote.Menu.buildFromTemplate(template);
-        menu.popup(window.remote.getCurrentWindow());
+        menu.popup({
+          window: window.remote.getCurrentWindow(),
+        });
       }}
     />
   );
@@ -264,6 +290,7 @@ ScrollbarContainer.propTypes = {
 
 const Sidebar = ({
   isFullScreen,
+  isLoading,
   muteApp,
   navigationBar,
   shouldPauseNotifications,
@@ -342,7 +369,9 @@ const Sidebar = ({
                 ];
 
                 const menu = window.remote.Menu.buildFromTemplate(template);
-                menu.popup(window.remote.getCurrentWindow());
+                menu.popup({
+                  window: window.remote.getCurrentWindow(),
+                });
               }}
             />
           )}
@@ -354,21 +383,30 @@ const Sidebar = ({
         <div
           className={classnames(classes.end, isSidebarExpanded && classes.endExpanded)}
         >
+          {isLoading && (
+            <div className={classes.progressContainer}>
+              <CircularProgress size={20} className={classes.progress} />
+            </div>
+          )}
           <RatingButton
             className={classnames(
               classes.iconButton, !isSidebarExpanded && classes.iconButtonVertical,
             )}
             size="small"
           />
-          {window.process.platform === 'darwin' && workspacesList.length > 0 && (
+          {window.process.platform === 'darwin' && (
             <IconButton
               title="Share"
               aria-label="Share"
               onClick={() => requestShowShareMenu()}
-              className={classnames(
-                classes.iconButton, !isSidebarExpanded && classes.iconButtonVertical,
-              )}
+              classes={{
+                root: classnames(
+                  classes.iconButton, !isSidebarExpanded && classes.iconButtonVertical,
+                ),
+                disabled: classes.iconButtonDisabled,
+              }}
               size="small"
+              disabled={workspacesList.length < 1}
             >
               <SvgIcon>
                 <path fill="currentColor" d="M12,1L8,5H11V14H13V5H16M18,23H6C4.89,23 4,22.1 4,21V9A2,2 0 0,1 6,7H9V9H6V21H18V9H15V7H18A2,2 0 0,1 20,9V21A2,2 0 0,1 18,23Z" />
@@ -379,9 +417,12 @@ const Sidebar = ({
             title="Notifications"
             aria-label="Notifications"
             onClick={requestShowNotificationsWindow}
-            className={classnames(
-              classes.iconButton, !isSidebarExpanded && classes.iconButtonVertical,
-            )}
+            classes={{
+              root: classnames(
+                classes.iconButton, !isSidebarExpanded && classes.iconButtonVertical,
+              ),
+              disabled: classes.iconButtonDisabled,
+            }}
             size="small"
           >
             {shouldPauseNotifications ? <NotificationsPausedIcon /> : <NotificationsIcon />}
@@ -390,9 +431,12 @@ const Sidebar = ({
             title={muteApp ? 'Unmute' : 'Mute'}
             aria-label={muteApp ? 'Unmute' : 'Mute'}
             onClick={() => requestSetPreference('muteApp', !muteApp)}
-            className={classnames(
-              classes.iconButton, !isSidebarExpanded && classes.iconButtonVertical,
-            )}
+            classes={{
+              root: classnames(
+                classes.iconButton, !isSidebarExpanded && classes.iconButtonVertical,
+              ),
+              disabled: classes.iconButtonDisabled,
+            }}
             size="small"
           >
             {muteApp ? <VolumeOffIcon /> : <VolumeUpIcon />}
@@ -401,9 +445,12 @@ const Sidebar = ({
             title="Preferences"
             aria-label="Preferences"
             onClick={() => requestShowPreferencesWindow()}
-            className={classnames(
-              classes.iconButton, !isSidebarExpanded && classes.iconButtonVertical,
-            )}
+            classes={{
+              root: classnames(
+                classes.iconButton, !isSidebarExpanded && classes.iconButtonVertical,
+              ),
+              disabled: classes.iconButtonDisabled,
+            }}
             size="small"
           >
             <SettingsIcon />
@@ -416,11 +463,13 @@ const Sidebar = ({
 };
 
 Sidebar.defaultProps = {
+  isLoading: false,
   themeColor: null,
 };
 
 Sidebar.propTypes = {
   isFullScreen: PropTypes.bool.isRequired,
+  isLoading: PropTypes.bool,
   muteApp: PropTypes.bool.isRequired,
   navigationBar: PropTypes.bool.isRequired,
   shouldPauseNotifications: PropTypes.bool.isRequired,

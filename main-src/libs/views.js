@@ -18,8 +18,9 @@ const unusedFilename = require('unused-filename');
 const pupa = require('pupa');
 const extName = require('ext-name');
 const { ElectronChromeExtensions } = require('electron-chrome-extensions');
-const fetch = require('electron-fetch').default;
 const electronRemote = require('@electron/remote/main');
+
+const fetch = require('./customized-fetch');
 
 const appJson = require('../constants/app-json');
 
@@ -52,6 +53,7 @@ const isSnap = require('./is-snap');
 const isAppx = require('./is-appx');
 const isWebcatalog = require('./is-webcatalog');
 const getFirefoxUserAgent = require('./get-firefox-user-agent');
+const getSafariUserAgent = require('./get-safari-user-agent');
 
 const views = {};
 let shouldMuteAudio;
@@ -207,8 +209,8 @@ const updateAddress = (url) => {
   ipcMain.emit('create-menu');
 };
 
-const addViewAsync = async (browserWindow, workspace, _viewId) => {
-  const viewId = _viewId || workspace.id;
+const addViewAsync = async (browserWindow, workspace) => {
+  const viewId = workspace.id;
 
   if (views[viewId] != null) return;
 
@@ -296,7 +298,7 @@ const addViewAsync = async (browserWindow, workspace, _viewId) => {
         const url = new URL(details.url);
 
         if (url.hostname === 'meet.google.com') {
-          const fakedSafariUaStr = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15';
+          const fakedSafariUaStr = getSafariUserAgent();
           details.requestHeaders['User-Agent'] = fakedSafariUaStr;
         }
       } else {
@@ -489,6 +491,9 @@ const addViewAsync = async (browserWindow, workspace, _viewId) => {
     setWorkspace(workspace.id, {
       lastUrl: currentUrl,
     });
+    setWorkspaceMeta(workspace.id, {
+      isLoading: false,
+    });
     ipcMain.emit('request-realign-active-workspace');
   });
 
@@ -534,24 +539,13 @@ const addViewAsync = async (browserWindow, workspace, _viewId) => {
     }
   });
 
-  view.webContents.on('did-navigate', (e, url) => {
-    const workspaceObj = getWorkspace(workspace.id);
-    // this event might be triggered
-    // even after the workspace obj and BrowserView
-    // are destroyed. See https://github.com/webcatalog/webcatalog-app/issues/836
-    if (!workspaceObj) return;
-
+  const handleDidNavigateCompability = (contents, url) => {
     // fix "Google Chat isn't supported on your current browser"
     // https://github.com/webcatalog/webcatalog-app/issues/820
     if (url && url.indexOf('error/browser-not-supported') > -1 && url.startsWith('https://chat.google.com')) {
       const ref = new URL(url).searchParams.get('ref') || '';
-      view.webContents.loadURL(`https://chat.google.com${ref}`);
-    }
-
-    if (workspaceObj.active) {
-      sendToAllWindows('update-can-go-back', view.webContents.canGoBack());
-      sendToAllWindows('update-can-go-forward', view.webContents.canGoForward());
-      updateAddress(url);
+      contents.loadURL(`https://chat.google.com${ref}`);
+      return;
     }
 
     // Google uses special code for Chromium-based browsers
@@ -559,14 +553,30 @@ const addViewAsync = async (browserWindow, workspace, _viewId) => {
     // so change user-agent to Safari to make it work
     const navigatedDomain = extractDomain(url);
     if (!customUserAgent && navigatedDomain === 'meet.google.com') {
-      const currentUaStr = view.webContents.userAgent;
-      const fakedSafariUaStr = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15';
+      const currentUaStr = contents.userAgent;
+      const fakedSafariUaStr = getSafariUserAgent();
       if (currentUaStr !== fakedSafariUaStr) {
-        view.webContents.userAgent = fakedSafariUaStr;
+        contents.userAgent = fakedSafariUaStr;
         // eslint-disable-next-line no-console
         console.log('Changed user agent to', fakedSafariUaStr, 'for web compatibility URL: ', url, 'when', 'did-navigate');
       }
     }
+  };
+
+  view.webContents.on('did-navigate', (e, url) => {
+    const workspaceObj = getWorkspace(workspace.id);
+    // this event might be triggered
+    // even after the workspace obj and BrowserView
+    // are destroyed. See https://github.com/webcatalog/webcatalog-app/issues/836
+    if (!workspaceObj) return;
+
+    if (workspaceObj.active) {
+      sendToAllWindows('update-can-go-back', view.webContents.canGoBack());
+      sendToAllWindows('update-can-go-forward', view.webContents.canGoForward());
+      updateAddress(url);
+    }
+
+    handleDidNavigateCompability(view.webContents, url);
   });
 
   view.webContents.on('did-navigate-in-page', (e, url) => {
@@ -776,7 +786,9 @@ const addViewAsync = async (browserWindow, workspace, _viewId) => {
             }),
           );
 
-          menu.popup(browserWindow);
+          menu.popup({
+            window: BrowserWindow.fromWebContents(contents),
+          });
         });
     });
   };
@@ -814,6 +826,9 @@ const addViewAsync = async (browserWindow, workspace, _viewId) => {
       popupWin.webContents.isPopup = true;
       popupWin.setMenuBarVisibility(false);
       popupWin.webContents.on('new-window', handleNewWindow);
+      popupWin.webContents.on('did-navigate', (_, url) => {
+        handleDidNavigateCompability(popupWin.webContents, url);
+      });
       buildContextMenu(popupWin.webContents, handleNewWindow);
 
       // if options.webContents is not used
@@ -951,6 +966,7 @@ const addViewAsync = async (browserWindow, workspace, _viewId) => {
         show: false,
       };
       const popupWin = new BrowserWindow(newOptions);
+      buildContextMenu(popupWin.webContents, handleNewWindow);
       // WebCatalog internal value to determine whether BrowserWindow is popup
       popupWin.isPopup = true;
       popupWin.webContents.isPopup = true;
@@ -965,6 +981,9 @@ const addViewAsync = async (browserWindow, workspace, _viewId) => {
           shell.openExternal(url);
           popupWin.close();
         }
+      });
+      popupWin.webContents.on('did-navigate', (_, url) => {
+        handleDidNavigateCompability(popupWin.webContents, url);
       });
       e.newGuest = popupWin;
     }

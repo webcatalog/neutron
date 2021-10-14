@@ -14,6 +14,8 @@ import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import HomeIcon from '@material-ui/icons/Home';
 import IconButton from '@material-ui/core/IconButton';
 import InputBase from '@material-ui/core/InputBase';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import NotificationsPausedIcon from '@material-ui/icons/NotificationsPaused';
 import RefreshIcon from '@material-ui/icons/Refresh';
@@ -149,6 +151,14 @@ const useStyles = makeStyles((theme) => ({
       width: 20,
     },
   },
+  progress: {
+    color: (props) => {
+      if (props.themeColor != null) {
+        return fade(theme.palette.getContrastText(themeColors[props.themeColor][900]), 0.7);
+      }
+      return theme.palette.type === 'dark' ? 'rgba(255, 255, 255, 0.7)' : 'rgb(77, 77, 77)';
+    },
+  },
 }));
 
 const NavigationBar = ({
@@ -159,6 +169,7 @@ const NavigationBar = ({
   draggable,
   hasTrafficLights,
   hasWorkspaces,
+  isLoading,
   muteApp,
   onUpdateAddressBarInfo,
   searchEngine,
@@ -228,9 +239,13 @@ const NavigationBar = ({
             disabled: classes.iconButtonDisabled,
           }}
           onClick={requestReload}
-          disabled={!hasWorkspaces}
+          disabled={!hasWorkspaces || isLoading}
         >
-          <RefreshIcon className={classes.icon} />
+          {isLoading ? (
+            <CircularProgress size={18} className={classes.progress} />
+          ) : (
+            <RefreshIcon className={classes.icon} />
+          )}
         </IconButton>
         <IconButton
           title="Home"
@@ -376,6 +391,7 @@ const NavigationBar = ({
 
 NavigationBar.defaultProps = {
   address: '',
+  isLoading: false,
   themeColor: null,
 };
 
@@ -387,6 +403,7 @@ NavigationBar.propTypes = {
   draggable: PropTypes.bool.isRequired,
   hasTrafficLights: PropTypes.bool.isRequired,
   hasWorkspaces: PropTypes.bool.isRequired,
+  isLoading: PropTypes.bool,
   muteApp: PropTypes.bool.isRequired,
   onUpdateAddressBarInfo: PropTypes.func.isRequired,
   searchEngine: PropTypes.string.isRequired,
@@ -396,25 +413,32 @@ NavigationBar.propTypes = {
   themeColor: PropTypes.string,
 };
 
-const mapStateToProps = (state) => ({
-  address: state.general.address || '',
-  addressEdited: Boolean(state.general.addressEdited),
-  canGoBack: state.general.canGoBack,
-  canGoForward: state.general.canGoForward,
-  draggable: window.process.platform === 'darwin' && !state.preferences.titleBar,
-  hasTrafficLights: window.process.platform === 'darwin'
-    && getStaticGlobal('windowButtons')
-    && window.mode !== 'menubar'
-    && !state.preferences.titleBar
-    && !state.preferences.sidebar
-    && !state.general.isFullScreen,
-  hasWorkspaces: Object.keys(state.workspaces.workspaces).length > 0,
-  muteApp: state.preferences.muteApp,
-  searchEngine: state.preferences.searchEngine,
-  shouldPauseNotifications: state.notifications.pauseNotificationsInfo !== null,
-  sidebar: state.preferences.sidebar,
-  sidebarSize: state.preferences.sidebarSize,
-});
+const mapStateToProps = (state) => {
+  const activeWorkspace = state.workspaces.workspaces[state.workspaces.activeWorkspaceId];
+
+  return {
+    address: state.general.address || '',
+    addressEdited: Boolean(state.general.addressEdited),
+    canGoBack: state.general.canGoBack,
+    canGoForward: state.general.canGoForward,
+    draggable: window.process.platform === 'darwin' && !state.preferences.titleBar,
+    hasTrafficLights: window.process.platform === 'darwin'
+      && getStaticGlobal('windowButtons')
+      && window.mode !== 'menubar'
+      && !state.preferences.titleBar
+      && !state.preferences.sidebar
+      && !state.general.isFullScreen,
+    hasWorkspaces: Object.keys(state.workspaces.workspaces).length > 0,
+    muteApp: state.preferences.muteApp,
+    searchEngine: state.preferences.searchEngine,
+    shouldPauseNotifications: state.notifications.pauseNotificationsInfo !== null,
+    sidebar: state.preferences.sidebar,
+    sidebarSize: state.preferences.sidebarSize,
+    isLoading: activeWorkspace && state.workspaceMetas[activeWorkspace.id]
+      ? Boolean(state.workspaceMetas[activeWorkspace.id].isLoading)
+      : false,
+  };
+};
 
 const actionCreators = {
   updateAddressBarInfo,

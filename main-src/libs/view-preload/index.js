@@ -11,10 +11,10 @@ const {
   disable: disableDarkMode,
   setFetchMethod: setFetchMethodDarkMode,
 } = require('darkreader');
-const nodeFetch = require('electron-fetch').default;
 
 const isMas = require('../is-mas');
 const getRecipe = require('../get-recipe');
+const fetch = require('../customized-fetch');
 
 const preferences = ipcRenderer.sendSync('get-preferences');
 
@@ -76,7 +76,7 @@ const loadDarkReader = (workspaceId) => {
     // use node-fetch
     // to avoid CORS-related issues
     // see https://github.com/webcatalog/webcatalog-app/issues/993
-    setFetchMethodDarkMode((url) => nodeFetch(url));
+    setFetchMethodDarkMode((url) => fetch(url));
     enableDarkMode({
       brightness: darkReaderBrightness,
       contrast: darkReaderContrast,
