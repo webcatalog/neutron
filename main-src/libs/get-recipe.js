@@ -16,6 +16,7 @@ const mapper = {
   'feedly.com': 'feedly',
   'voice.google.com': 'google-voice',
   'tasks.google.com': 'google-tasks',
+  'linear.app': 'linear',
 };
 
 const getRecipe = (url) => {
