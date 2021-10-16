@@ -5,21 +5,21 @@
 window.addEventListener('load', () => {
   // Linear badge count
   const getBadgeCount = () => {
-    let count = 0
+    let count = 0;
 
-    const spanTags = document.getElementsByTagName('span')
-    const inboxTag = [...spanTags].find(tag => tag.innerText === 'Inbox')
+    const spanTags = document.getElementsByTagName('span');
+    const inboxTag = [...spanTags].find((tag) => tag.innerText === 'Inbox');
     if (inboxTag) {
-        const inboxBadge = inboxTag.nextSibling
-        if (inboxBadge) {
-            const badgeCount = inboxBadge.innerText
-            if (badgeCount) count = Number(badgeCount)
-        }
+      const inboxBadge = inboxTag.nextSibling;
+      if (inboxBadge) {
+        const badgeCount = inboxBadge.innerText;
+        if (badgeCount) count = Number(badgeCount);
+      }
     }
 
-    window.webcatalog.setBadgeCount(count)
-  }
+    window.webcatalog.setBadgeCount(count);
+  };
 
-  getBadgeCount()
-  setInterval(getBadgeCount, 1000)
-})
+  getBadgeCount();
+  setInterval(getBadgeCount, 1000);
+});
