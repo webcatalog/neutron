@@ -99,6 +99,8 @@ const SearchBox = ({
                   {...getInputProps({
                     className: classes.input,
                     placeholder: 'Search apps...',
+                    // App Search API can only handle up to 128 chars
+                    maxLength: 128,
                     onFocus: () => {
                       window.preventClosingWindow = true;
                     },
