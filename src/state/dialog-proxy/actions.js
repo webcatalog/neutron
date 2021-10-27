@@ -15,7 +15,33 @@ import {
   enqueueRequestRestartSnackbar,
 } from '../../senders';
 
+import { updateForm as updateFormDialogWorkspacePreferences } from '../dialog-workspace-preferences/actions';
+
 export const open = () => (dispatch, getState) => {
+  if (window.mode === 'workspace-preferences') {
+    const {
+      proxyAddress,
+      proxyBypassRules,
+      proxyMode,
+      proxyPacScript,
+      proxyPort,
+      proxyProtocol,
+    } = getState().dialogWorkspacePreferences.form.preferences;
+
+    dispatch({
+      type: DIALOG_PROXY_OPEN,
+      form: {
+        proxyAddress,
+        proxyBypassRules,
+        proxyMode,
+        proxyPacScript,
+        proxyPort,
+        proxyProtocol,
+      },
+    });
+    return;
+  }
+
   const {
     proxyAddress,
     proxyBypassRules,
@@ -105,19 +131,40 @@ export const save = () => (dispatch, getState) => {
     return dispatch(updateForm(validatedChanges));
   }
 
-  if (form.proxyMode === 'fixed_servers') {
-    requestSetPreference('proxyAddress', form.proxyAddress.trim());
-    requestSetPreference('proxyPort', form.proxyPort.trim());
-    requestSetPreference('proxyProtocol', form.proxyProtocol.trim());
-    requestSetPreference('proxyBypassRules', form.proxyBypassRules);
+  if (window.mode === 'workspace-preferences') {
+    const updatedPreferences = {};
+    updatedPreferences.proxyMode = form.proxyMode;
+    if (form.proxyMode === 'fixed_servers') {
+      updatedPreferences.proxyAddress = form.proxyAddress.trim();
+      updatedPreferences.proxyPort = form.proxyPort.trim();
+      updatedPreferences.proxyProtocol = form.proxyProtocol.trim();
+      updatedPreferences.proxyBypassRules = form.proxyBypassRules;
+    }
+
+    if (form.proxyMode === 'pac_script') {
+      updatedPreferences.proxyPacScript = form.proxyPacScript.trim();
+      updatedPreferences.proxyBypassRules = form.proxyBypassRules;
+    }
+
+    dispatch(updateFormDialogWorkspacePreferences({
+      preferences: updatedPreferences,
+    }));
+  } else {
+    if (form.proxyMode === 'fixed_servers') {
+      requestSetPreference('proxyAddress', form.proxyAddress.trim());
+      requestSetPreference('proxyPort', form.proxyPort.trim());
+      requestSetPreference('proxyProtocol', form.proxyProtocol.trim());
+      requestSetPreference('proxyBypassRules', form.proxyBypassRules);
+    }
+
+    if (form.proxyMode === 'pac_script') {
+      requestSetPreference('proxyPacScript', form.proxyPacScript.trim());
+      requestSetPreference('proxyBypassRules', form.proxyBypassRules);
+    }
+
+    requestSetPreference('proxyMode', form.proxyMode);
   }
 
-  if (form.proxyMode === 'pac_script') {
-    requestSetPreference('proxyPacScript', form.proxyPacScript.trim());
-    requestSetPreference('proxyBypassRules', form.proxyBypassRules);
-  }
-
-  requestSetPreference('proxyMode', form.proxyMode);
   enqueueRequestRestartSnackbar();
 
   dispatch(close());

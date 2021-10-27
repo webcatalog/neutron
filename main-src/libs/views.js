@@ -225,23 +225,46 @@ const addViewAsync = async (browserWindow, workspace) => {
   }
 
   // proxy
-  if (global.proxyMode === 'fixed_servers') {
+  let {
+    proxyMode,
+    proxyRules,
+    proxyBypassRules,
+    proxyPacScript,
+  } = global.proxyMode;
+
+  // if the workspaces share the same session
+  // users won't be able to set proxy per workspace
+  if (!global.shareWorkspaceBrowsingData
+      && getWorkspacePreference(workspace.id, 'proxyMode') !== null) {
+    proxyMode = getWorkspacePreference(workspace.id, 'proxyMode');
+
+    const proxyProtocol = getWorkspacePreference(workspace.id, 'proxyProtocol');
+    const proxyAddress = getWorkspacePreference(workspace.id, 'proxyAddress');
+    const proxyPort = getWorkspacePreference(workspace.id, 'proxyPort');
+    proxyRules = `${proxyProtocol}://${proxyAddress}:${proxyPort || '80'}`;
+
+    proxyBypassRules = getWorkspacePreference(workspace.id, 'proxyBypassRules');
+    proxyPacScript = getWorkspacePreference(workspace.id, 'proxyPacScript');
+  }
+
+  if (proxyMode === 'fixed_servers') {
     ses.setProxy({
       mode: 'fixed_servers',
-      proxyRules: global.proxyRules,
-      proxyBypassRules: global.proxyBypassRules,
+      proxyRules,
+      proxyBypassRules,
     });
-  } else if (global.proxyMode === 'pac_script') {
+  } else if (proxyMode === 'pac_script') {
     ses.setProxy({
       mode: 'pac_script',
-      proxyPacScript: global.proxyPacScript,
-      proxyBypassRules: global.proxyBypassRules,
+      proxyPacScript,
+      proxyBypassRules,
     });
-  } else if (global.proxyMode === 'system') {
+  } else if (proxyMode === 'system') {
     ses.setProxy({
       mode: 'system',
     });
   }
+
   // blocker
   const shouldBlockAds = getWorkspacePreference(workspace.id, 'blockAds') || global.blockAds;
   if (shouldBlockAds) {

@@ -255,12 +255,28 @@ const DialogProxy = (props) => {
                 control={<Radio color="primary" size="small" />}
                 label="Do not use proxy (default)"
                 labelPlacement="end"
-                checked={proxyMode !== 'fixed_servers' && proxyMode !== 'pac_script' && proxyMode !== 'system'}
+                checked={proxyMode === 'direct'}
                 value="direct"
                 onChange={(e) => onUpdateForm({ proxyMode: e.target.value })}
               />
             </div>
           </ListItem>
+          {window.mode === 'workspace-preferences' && (
+            <ListItem>
+              <div style={{ width: '100%' }}>
+                <ListItemText primary="" />
+                <FormControlLabel
+                  classes={{ label: classes.radioLabel }}
+                  control={<Radio color="primary" size="small" />}
+                  label="Use global preference"
+                  labelPlacement="end"
+                  checked={proxyMode == null}
+                  value="direct"
+                  onChange={() => onUpdateForm({ proxyMode: null })}
+                />
+              </div>
+            </ListItem>
+          )}
         </List>
       </DialogContent>
       <DialogActions>
