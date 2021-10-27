@@ -24,8 +24,26 @@ const styles = (theme) => ({
   },
 });
 
-const Preferences = ({
+const getProxyModeDesc = (proxyMode) => {
+  switch (proxyMode) {
+    case 'fixed_servers': {
+      return 'Using proxy server';
+    }
+    case 'pac_script': {
+      return 'Using PAC script (automatic proxy configuration script)';
+    }
+    case 'system': {
+      return 'Using system proxy configurations';
+    }
+    default: {
+      return 'Do not use proxy';
+    }
+  }
+};
+
+const SectionNetwork = ({
   proxyMode,
+  formProxyMode,
   onOpenDialogProxy,
 }) => (
   <>
@@ -34,20 +52,11 @@ const Preferences = ({
         <ListItemText
           primary="Proxy"
           secondary={(() => {
-            switch (proxyMode) {
-              case 'fixed_servers': {
-                return 'Using proxy server.';
-              }
-              case 'pac_script': {
-                return 'Using PAC script (automatic proxy configuration script).';
-              }
-              case 'system': {
-                return 'Using system proxy configurations.';
-              }
-              default: {
-                return 'Not configured.';
-              }
+            if (formProxyMode == null) {
+              return `Use global preference (${getProxyModeDesc(proxyMode)}).`;
             }
+
+            return `${getProxyModeDesc(formProxyMode)}.`;
           })()}
         />
         <ChevronRightIcon color="action" />
@@ -57,13 +66,19 @@ const Preferences = ({
   </>
 );
 
-Preferences.propTypes = {
+SectionNetwork.defaultProps = {
+  formProxyMode: null,
+};
+
+SectionNetwork.propTypes = {
   proxyMode: PropTypes.oneOf(['direct', 'fixed_servers', 'pac_script', 'system']).isRequired,
+  formProxyMode: PropTypes.oneOf(['direct', 'fixed_servers', 'pac_script', 'system']),
   onOpenDialogProxy: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   proxyMode: state.preferences.proxyMode,
+  formProxyMode: state.dialogWorkspacePreferences.form.preferences.proxyMode,
 });
 
 const actionCreators = {
@@ -71,7 +86,7 @@ const actionCreators = {
 };
 
 export default connectComponent(
-  Preferences,
+  SectionNetwork,
   mapStateToProps,
   actionCreators,
   styles,

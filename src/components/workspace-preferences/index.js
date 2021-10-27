@@ -19,6 +19,7 @@ import LinkIcon from '@material-ui/icons/Link';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import PaletteIcon from '@material-ui/icons/Palette';
 import PermCameraMicIcon from '@material-ui/icons/PermCameraMic';
+import RouterIcon from '@material-ui/icons/Router';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import SecurityIcon from '@material-ui/icons/Security';
 import WidgetsIcon from '@material-ui/icons/Widgets';
@@ -39,9 +40,11 @@ import SectionDarkReader from './section-dark-reader';
 import SectionDevelopers from './section-developers';
 import SectionDownloads from './section-downloads';
 import SectionLinkHandling from './section-link-handling';
+import SectionNetwork from './section-network';
 import SectionNotifications from './section-notifications';
 import SectionPrivacy from './section-privacy';
 import SectionWorkspace from './section-workspace';
+import getStaticGlobal from '../../helpers/get-static-global';
 
 const styles = (theme) => ({
   root: {
@@ -114,6 +117,17 @@ const Preferences = ({ classes }) => {
       Icon: PermCameraMicIcon,
       subSections: {
         audioVideo: { text: 'Audio & Video', Component: SectionAudioVideo },
+      },
+    },
+    network: {
+      text: 'Network',
+      Icon: RouterIcon,
+      // if the workspaces share the same session
+      // users won't be able to set proxy per workspace
+      hidden: window.mode === 'workspace-preferences'
+        && getStaticGlobal('shareWorkspaceBrowsingData'),
+      subSections: {
+        network: { text: 'Network', Component: SectionNetwork },
       },
     },
     linkHandling: {
