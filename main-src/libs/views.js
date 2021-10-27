@@ -666,7 +666,7 @@ const addViewAsync = async (browserWindow, workspace) => {
                   },
                   info.linkURL,
                   '', // frameName
-                  'new-window',
+                  'neutron:new-window-forced',
                 );
               },
             }));
@@ -825,9 +825,20 @@ const addViewAsync = async (browserWindow, workspace) => {
     const currentDomain = extractDomain(currentUrl);
     const nextDomain = extractDomain(nextUrl);
 
-    const openInNewWindow = () => {
+    const openInNewWindow = (forced) => {
       // https://gist.github.com/Gvozd/2cec0c8c510a707854e439fb15c561b0
       e.preventDefault();
+
+      // use user preference unless the action is forced
+      if (!forced) {
+        const alwaysOpenInMainWindow = getWorkspacePreference(workspace.id, 'alwaysOpenInMainWindow') == null
+          ? getPreference('alwaysOpenInMainWindow')
+          : getWorkspacePreference(workspace.id, 'alwaysOpenInMainWindow');
+        if (alwaysOpenInMainWindow) {
+          e.sender.loadURL(nextUrl);
+          return;
+        }
+      }
 
       // have to use options.webContents
       // because if not, it would break certain sites, such as Gmail
@@ -871,6 +882,12 @@ const addViewAsync = async (browserWindow, workspace) => {
 
       e.newGuest = popupWin;
     };
+
+    // 'neutron:new-window-forced' // use internally by Neutron to force opening new window
+    if (disposition === 'neutron:new-window-forced') {
+      openInNewWindow(true);
+      return;
+    }
 
     // Conditions are listed by order of priority
     // check external rule
@@ -1175,7 +1192,7 @@ const addViewAsync = async (browserWindow, workspace) => {
       },
       url,
       '', // frameName
-      'new-window',
+      'neutron:new-window-forced',
     );
   };
 

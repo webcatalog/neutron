@@ -41,6 +41,7 @@ const shouldShowSidebar = !appJson.url || Boolean(MAILTO_URLS[extractHostname(ap
 const defaultPreferences = {
   allowNodeInJsCodeInjection: false,
   alwaysOnTop: false, // for menubar
+  alwaysOpenInMainWindow: false,
   appLockTimeout: 300000,
   appLockWhenSwitchingWorkspace: false,
   autoHideMenuBar: false,
