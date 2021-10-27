@@ -169,6 +169,7 @@ const Preferences = ({
     tabs: {
       text: 'Tabs',
       Icon: LayersIcon,
+      hidden: process.env.NODE_ENV === 'production',
       subSections: {
         tabs: { text: 'Tabs', Component: SectionTabs },
       },
