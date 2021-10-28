@@ -55,9 +55,7 @@ const styles = (theme) => ({
 
 const SectionWindow = ({
   autoHideMenuBar,
-  attachToMenubar,
   alwaysOnTop,
-  windowButtons,
   useSystemTitleBar,
 }) => (
   <>
@@ -79,34 +77,9 @@ const SectionWindow = ({
           />
         </ListItemSecondaryAction>
       </ListItem>
-      <Divider />
-      {window.process.platform === 'darwin' ? (
-        <ListItem>
-          <ListItemText
-            primary="Show window buttons"
-            secondary={'Show "traffic light" (red/yellow/green) buttons.'}
-          />
-          <ListItemSecondaryAction>
-            <Switch
-              edge="end"
-              color="primary"
-              checked={(() => {
-                // if window is attched to menu bar
-                // the buttons are hidden
-                // unless alwaysOnTop is enabled
-                if (attachToMenubar) return alwaysOnTop;
-                return windowButtons;
-              })()}
-              disabled={attachToMenubar}
-              onChange={(e) => {
-                requestSetPreference('windowButtons', e.target.checked);
-                enqueueRequestRestartSnackbar();
-              }}
-            />
-          </ListItemSecondaryAction>
-        </ListItem>
-      ) : (
+      {window.process.platform !== 'darwin' && (
         <>
+          <Divider />
           <ListItem>
             <ListItemText
               primary="Use native title bar and borders"
@@ -152,18 +125,14 @@ const SectionWindow = ({
 
 SectionWindow.propTypes = {
   alwaysOnTop: PropTypes.bool.isRequired,
-  attachToMenubar: PropTypes.bool.isRequired,
   autoHideMenuBar: PropTypes.bool.isRequired,
   useSystemTitleBar: PropTypes.bool.isRequired,
-  windowButtons: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   alwaysOnTop: state.preferences.alwaysOnTop,
-  attachToMenubar: state.preferences.attachToMenubar,
   autoHideMenuBar: state.preferences.autoHideMenuBar,
   useSystemTitleBar: state.preferences.useSystemTitleBar,
-  windowButtons: state.preferences.windowButtons,
 });
 
 export default connectComponent(
