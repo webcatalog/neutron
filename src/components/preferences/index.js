@@ -76,6 +76,7 @@ import SectionTray from './section-tray';
 import SectionView from './section-view';
 import SectionWindow from './section-window';
 import SectionWorkspaces from './section-workspaces';
+import SectionPopupWindows from './section-popup-windows';
 
 import SnackbarTrigger from '../shared/snackbar-trigger';
 
@@ -155,6 +156,7 @@ const Preferences = ({
         theme: { text: 'Theme', Component: SectionTheme },
         darkReader: { text: 'Dark Reader', Component: SectionDarkReader },
         view: { text: 'View', Component: SectionView },
+        popupWindows: { text: 'Popup Windows', Component: SectionPopupWindows, hidden: window.process.platform !== 'darwin' },
         fonts: { text: 'Fonts', Component: SectionFonts },
       },
     },

@@ -847,12 +847,20 @@ const addViewAsync = async (browserWindow, workspace) => {
       const useProvidedOptions = options && options.webContents && nextDomain !== 'meet.google.com';
       const newOptions = useProvidedOptions ? options : {
         show: true,
-        width: options && options.width ? options.width : 800,
-        height: options && options.width ? options.height : 600,
+        width: options && options.width ? options.width : 1366,
+        height: options && options.width ? options.height : 768,
         x: options && options.x ? options.x : undefined,
         y: options && options.y ? options.y : undefined,
         webPreferences: sharedWebPreferences,
       };
+
+      // customize popup window
+      // based on user preferences
+      if (getPreference('popupFrameless')) {
+        newOptions.frame = false;
+      } else if (!getPreference('popupTitleBar')) {
+        newOptions.titleBarStyle = 'hidden';
+      }
 
       const popupWin = new BrowserWindow(newOptions);
       // WebCatalog internal value to determine whether BrowserWindow is popup

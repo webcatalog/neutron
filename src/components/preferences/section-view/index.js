@@ -19,6 +19,7 @@ import getWorkspaceFriendlyName from '../../../helpers/get-workspace-friendly-na
 import {
   requestRealignActiveWorkspace,
   requestSetPreference,
+  enqueueRequestRestartSnackbar,
 } from '../../../senders';
 
 const styles = (theme) => ({
@@ -35,6 +36,7 @@ const styles = (theme) => ({
 });
 
 const SectionAppearance = ({
+  alwaysOnTop,
   attachToMenubar,
   classes,
   navigationBar,
@@ -43,6 +45,7 @@ const SectionAppearance = ({
   sidebarSize,
   sidebarTips,
   titleBar,
+  windowButtons,
 }) => (
   <>
     <List disablePadding dense>
@@ -197,6 +200,31 @@ const SectionAppearance = ({
               />
             </ListItemSecondaryAction>
           </ListItem>
+          <Divider />
+          <ListItem>
+            <ListItemText
+              primary="Show window buttons"
+              secondary={'Show "traffic light" (red/yellow/green) buttons.'}
+            />
+            <ListItemSecondaryAction>
+              <Switch
+                edge="end"
+                color="primary"
+                checked={(() => {
+                  // if window is attched to menu bar
+                  // the buttons are hidden
+                  // unless alwaysOnTop is enabled
+                  if (attachToMenubar) return alwaysOnTop;
+                  return windowButtons;
+                })()}
+                disabled={attachToMenubar}
+                onChange={(e) => {
+                  requestSetPreference('windowButtons', e.target.checked);
+                  enqueueRequestRestartSnackbar();
+                }}
+              />
+            </ListItemSecondaryAction>
+          </ListItem>
         </>
       )}
     </List>
@@ -204,6 +232,7 @@ const SectionAppearance = ({
 );
 
 SectionAppearance.propTypes = {
+  alwaysOnTop: PropTypes.bool.isRequired,
   attachToMenubar: PropTypes.bool.isRequired,
   classes: PropTypes.object.isRequired,
   navigationBar: PropTypes.bool.isRequired,
@@ -212,9 +241,11 @@ SectionAppearance.propTypes = {
   sidebarSize: PropTypes.oneOf(['compact', 'expanded']).isRequired,
   sidebarTips: PropTypes.oneOf(['shortcut', 'name', 'none']).isRequired,
   titleBar: PropTypes.bool.isRequired,
+  windowButtons: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
+  alwaysOnTop: state.preferences.alwaysOnTop,
   attachToMenubar: state.preferences.attachToMenubar,
   navigationBar: state.preferences.navigationBar,
   sidebar: state.preferences.sidebar,
@@ -222,6 +253,7 @@ const mapStateToProps = (state) => ({
   sidebarSize: state.preferences.sidebarSize,
   sidebarTips: state.preferences.sidebarTips,
   titleBar: state.preferences.titleBar,
+  windowButtons: state.preferences.windowButtons,
 });
 
 export default connectComponent(

@@ -145,6 +145,9 @@ const defaultPreferences = {
   useSystemTitleBar: process.platform === 'win32' && !isWindows10(),
   warnBeforeQuitting: false,
   windowButtons: true, // traffic light buttons on macOS
+  // popup Windows
+  popupFrameless: false,
+  popupTitleBar: true,
 };
 
 let cachedPreferences = null;
