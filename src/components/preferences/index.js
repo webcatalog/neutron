@@ -300,8 +300,6 @@ const Preferences = ({
     },
   };
 
-  console.log(sections);
-
   const activeSection = sections[activeSectionKey];
 
   return (
