@@ -18,6 +18,7 @@ const mapper = {
   'tasks.google.com': 'google-tasks',
   'linear.app': 'linear',
   'web.telegram.org': 'telegram',
+  'chat.zalo.me': 'zalo',
 };
 
 const getRecipe = (url) => {
