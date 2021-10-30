@@ -4,7 +4,9 @@
 window.addEventListener('load', () => {
   // Slack badge count
   const getBadgeCount = () => {
-    const count = document.querySelectorAll('.p-channel_sidebar__channel--unread:not(.p-channel_sidebar__channel--muted) .p-channel_sidebar__badge, .p-channel_sidebar__link--unread').length;
+    // derived from https://github.com/getferdi/recipes/blob/master/recipes/slack/webview.js (MIT license)
+    const SELECTOR_CHANNELS_UNREAD = '.p-channel_sidebar__channel--unread:not(.p-channel_sidebar__channel--muted)';
+    const count = document.querySelectorAll(SELECTOR_CHANNELS_UNREAD).length;
 
     window.webcatalog.setBadgeCount(count);
   };
