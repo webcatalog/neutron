@@ -17,6 +17,7 @@ const mapper = {
   'voice.google.com': 'google-voice',
   'tasks.google.com': 'google-tasks',
   'linear.app': 'linear',
+  'web.telegram.org': 'telegram',
 };
 
 const getRecipe = (url) => {
