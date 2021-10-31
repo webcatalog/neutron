@@ -41,6 +41,15 @@ const getPreloadScriptsConfig = () => {
     },
     externals,
     entry,
+    module: {
+      rules: [
+        {
+          test: /\.(js)$/,
+          exclude: /node_modules/,
+          use: ['babel-loader'],
+        },
+      ],
+    },
     target: 'electron-renderer',
     output: {
       path: path.join(__dirname, 'build'),
@@ -88,6 +97,15 @@ const getElectronMainConfig = () => {
     entry: {
       electron: path.join(__dirname, 'main-src', 'electron.js'),
     },
+    module: {
+      rules: [
+        {
+          test: /\.(js)$/,
+          exclude: /node_modules/,
+          use: ['babel-loader'],
+        },
+      ],
+    },
     target: 'electron-main',
     output: {
       path: path.join(__dirname, 'build'),
@@ -119,6 +137,15 @@ const getRecipeConfig = () => {
     },
     externals,
     entry,
+    module: {
+      rules: [
+        {
+          test: /\.(js)$/,
+          exclude: /node_modules/,
+          use: ['babel-loader'],
+        },
+      ],
+    },
     target: 'web',
     output: {
       path: path.join(__dirname, 'build', 'recipes'),
