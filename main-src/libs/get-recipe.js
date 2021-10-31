@@ -19,6 +19,7 @@ const mapper = {
   'linear.app': 'linear',
   'web.telegram.org': 'telegram',
   'chat.zalo.me': 'zalo',
+  'teams.microsoft.com': 'microsoft-teams',
   'fastmail.com': 'fastmail',
 };
 
