@@ -93,6 +93,7 @@
     "is-url": "1.2.4",
     "jimp": "0.16.1",
     "lodash": "4.17.21",
+    "menubar": "9.1.0",
     "node-fetch": "2.6.5",
     "node-machine-id": "1.1.12",
     "notistack": "1.0.10",
