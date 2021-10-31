@@ -6,5 +6,8 @@
       }
     }],
     "react"
+  ],
+  "plugins": [
+    "syntax-optional-chaining"
   ]
 }
