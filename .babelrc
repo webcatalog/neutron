@@ -1,13 +1,10 @@
 {
   "presets": [
-    ["env", {
+    ["@babel/preset-env", {
       "targets": {
         "electron": "12"
       }
     }],
-    "react"
-  ],
-  "plugins": [
-    "syntax-optional-chaining"
+    "@babel/preset-react"
   ]
 }
