@@ -26,13 +26,9 @@ const DIST_PATH = path.join(__dirname, 'dist');
 const APP_PATH = tmp.dirSync().name;
 const TEMPLATE_PATH = path.join(DIST_PATH, 'template');
 
-// '14.0.0-beta.9' to '14.0.0-wvvmp-beta.9'
-// '14.0.0' to '14.0.0-wvvmp'
-const getWvvmpElectronVersion = (electronVersion) => {
-  const versionParts = electronVersion.split('-');
-  versionParts.splice(1, 0, 'wvvmp');
-  return versionParts.join('-');
-};
+// '14.0.0-beta.9' to '14.0.0-beta.9+wvcus'
+// '14.0.0' to '14.0.0+wvcus'
+const getWvvmpElectronVersion = (electronVersion) => `${electronVersion}+wvcus`;
 
 const execAsync = (cmd, opts = {}) => new Promise((resolve, reject) => {
   exec(cmd, opts, (e, stdout, stderr) => {
