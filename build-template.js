@@ -28,9 +28,7 @@ const TEMPLATE_PATH = path.join(DIST_PATH, 'template');
 
 // '14.0.0-beta.9' to '14.0.0-beta.9+wvcus'
 // '14.0.0' to '14.0.0+wvcus'
-const getWvvmpElectronVersion = (electronVersion) => {
-  return `${electronVersion}+wvcus`;
-};
+const getWvvmpElectronVersion = (electronVersion) => `${electronVersion}+wvcus`;
 
 const execAsync = (cmd, opts = {}) => new Promise((resolve, reject) => {
   exec(cmd, opts, (e, stdout, stderr) => {
