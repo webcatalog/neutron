@@ -354,10 +354,6 @@ webFrame.executeJavaScript(`
     }
   }
 
-  window.electronSafeIpc = {
-    send: () => null,
-    on: () => null,
-  };
   window.desktop = undefined;
 
   if (window.navigator.mediaDevices) {
