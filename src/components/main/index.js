@@ -64,6 +64,10 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     width: '100%',
   },
+  contentRootActive: {
+    // background should always be set to #fff (for web compatiblity)
+    background: theme.palette.common.white,
+  },
   arrow: {
     height: 202,
     width: 150,
@@ -160,6 +164,7 @@ const Main = ({
   const isSidebarExpanded = sidebarSize === 'expanded';
   const rtl = getStaticGlobal('rtlCoordination');
   const useTabs = getStaticGlobal('useTabs');
+  const hasWorkspaces = Object.keys(workspaces).length > 0;
 
   return (
     <div className={classes.outerRoot}>
@@ -167,7 +172,7 @@ const Main = ({
       <DraggableRegion />
       <div className={classnames(classes.root, rtl && classes.rootRtl)}>
         {sidebar && <Sidebar />}
-        <div className={classes.contentRoot}>
+        <div className={classnames(classes.contentRoot, hasWorkspaces && classes.contentRootActive)}>
           {useTabs && <TabBar themeColor={themeColor} />}
           {navigationBar && <NavigationBar themeColor={themeColor} />}
           <FindInPage />
@@ -198,12 +203,7 @@ const Main = ({
                 </Button>
               </div>
             )}
-            {isLoading && (
-              <Typography type="body1" color="textSecondary">
-                Loading...
-              </Typography>
-            )}
-            {Object.keys(workspaces).length < 1 && (
+            {!hasWorkspaces && (
               <div>
                 {sidebar && sidebarAddButton ? (
                   <>
