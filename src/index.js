@@ -90,7 +90,8 @@ const runApp = () => {
 
         document.title = `Edit ${getWorkspaceFriendlyName()} "${getWorkspaceName(workspace)}"`;
       } else if (window.mode === 'open-url-with') {
-        document.title = 'Open Link With';
+        const incomingUrl = getStaticGlobal('incomingUrl');
+        document.title = `Open ${incomingUrl} With`;
       } else if (window.mode === 'notifications') {
         document.title = 'Notifications';
       } else if (window.mode === 'display-media') {
