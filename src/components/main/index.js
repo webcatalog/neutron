@@ -72,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
     // always use #FFF as default page background
     // https://github.com/webcatalog/webcatalog-app/issues/723
     // https://github.com/electron/electron/issues/16212
-    // background: theme.palette.common.white,
+    background: theme.palette.common.white,
   },
   arrow: {
     height: 202,
