@@ -305,25 +305,25 @@ const addViewAsync = async (browserWindow, workspace) => {
   // modifed from https://github.com/minbrowser/min/blob/58927524e3cc16cc4f59bca09a6c352cec1a16ac/main/UASwitcher.js (Apache License)
   if (!customUserAgent) {
     ses.webRequest.onBeforeSendHeaders((details, callback) => {
+      let urlObj;
+      try {
+        urlObj = new URL(details.url);
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.log(err);
+      }
+
       // fix Google prevents signing in because of security concerns
       // https://github.com/webcatalog/webcatalog-app/issues/455
       // https://github.com/meetfranz/franz/issues/1720#issuecomment-566460763
-      if (details.url.includes('accounts.google.com')) {
-        const url = new URL(details.url);
-
-        if (url.hostname === 'accounts.google.com') {
-          details.requestHeaders['User-Agent'] = getFirefoxUserAgent();
-        }
+      if (urlObj && urlObj.hostname === 'accounts.google.com') {
+        details.requestHeaders['User-Agent'] = getFirefoxUserAgent();
       // Google uses special code for Chromium-based browsers
       // when screensharing (not working with Electron)
       // so change user-agent to Safari to make it work
-      } else if (details.url.includes('meet.google.com')) {
-        const url = new URL(details.url);
-
-        if (url.hostname === 'meet.google.com') {
-          const fakedSafariUaStr = getSafariUserAgent();
-          details.requestHeaders['User-Agent'] = fakedSafariUaStr;
-        }
+      } else if (urlObj && (urlObj.hostname === 'meet.google.com' || urlObj.hostname === 'hangouts.google.com')) {
+        const fakedSafariUaStr = getSafariUserAgent();
+        details.requestHeaders['User-Agent'] = fakedSafariUaStr;
       } else {
         const chromiumVersion = process.versions.chrome.split('.')[0];
         details.requestHeaders['SEC-CH-UA'] = `"Chromium";v="${chromiumVersion}", " Not A;Brand";v="99"`;
