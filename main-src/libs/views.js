@@ -427,7 +427,7 @@ const addViewAsync = async (browserWindow, workspace) => {
   // always use #FFF as default page background
   // https://github.com/webcatalog/webcatalog-app/issues/723
   // https://github.com/electron/electron/issues/16212
-  view.setBackgroundColor('#FFF');
+  view.setBackgroundColor('#FFFFFFFF'); // not actually working, currently handling this in the renderer
 
   view.webContents.on('will-navigate', (e, nextUrl) => {
     // open external links in browser

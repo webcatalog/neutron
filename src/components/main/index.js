@@ -66,7 +66,13 @@ const useStyles = makeStyles((theme) => ({
   },
   contentRootActive: {
     // background should always be set to #fff (for web compatiblity)
-    background: theme.palette.common.white,
+    // if not, by default, the background of BrowserView is transparent
+    // which would break the CSS of certain websites
+    // even with dark mode, all major browsers
+    // always use #FFF as default page background
+    // https://github.com/webcatalog/webcatalog-app/issues/723
+    // https://github.com/electron/electron/issues/16212
+    // background: theme.palette.common.white,
   },
   arrow: {
     height: 202,
@@ -172,7 +178,12 @@ const Main = ({
       <DraggableRegion />
       <div className={classnames(classes.root, rtl && classes.rootRtl)}>
         {sidebar && <Sidebar />}
-        <div className={classnames(classes.contentRoot, hasWorkspaces && classes.contentRootActive)}>
+        <div
+          className={classnames(
+            classes.contentRoot,
+            hasWorkspaces && classes.contentRootActive,
+          )}
+        >
           {useTabs && <TabBar themeColor={themeColor} />}
           {navigationBar && <NavigationBar themeColor={themeColor} />}
           <FindInPage />
