@@ -1,110 +1,83 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React from 'react';
-import PropTypes from 'prop-types';
-
-import { IconButton, makeStyles } from '@material-ui/core';
-
-import AddIcon from '@material-ui/icons/Add';
-
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import Tab from './tab';
+import { IconButton, makeStyles, useTheme } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
+
+import Tab from './tabs';
+import Divider from './divider';
 
 import themeColors from '../../../constants/theme-colors';
 
-import {
-  requestAddWorkspaceTab, requestRemoveWorkspaceTab, requestSetWorkspace,
-} from '../../../senders';
-
 const useStyles = makeStyles((theme) => ({
-  root: {
+  tabBarContainer: {
     display: 'flex',
-    overflow: 'auto',
-    height: 36,
-    backgroundColor: (props) => {
-      if (props.themeColor != null) {
-        return themeColors[props.themeColor][900];
-      }
-      return theme.palette.type === 'dark' ? theme.palette.background.default : theme.palette.grey[200];
-    },
-    WebkitUserSelect: 'none',
-    WebkitAppRegion: 'drag',
-  },
-  iconButtonContainer: {
-    display: 'flex',
-    justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: theme.spacing(1),
-    WebkitAppRegion: 'no-drag',
+    flexDirection: 'row',
+    paddingLeft: 12,
+    height: 36,
   },
-  iconButton: {
-    padding: 6,
-    WebkitAppRegion: 'no-drag',
-    color: (props) => {
-      if (props.themeColor != null) {
-        return theme.palette.getContrastText(themeColors[props.themeColor][800]);
-      }
-      return theme.palette.text.primary;
-    },
+  addIconButton: {
+    padding: 4,
+    margin: '6px 0 0 10px',
   },
-  icon: {
-    fontSize: '18px',
+  addIcon: {
+    fontSize: 20,
   },
 }));
 
-const TabBar = ({ themeColor }) => {
-  const classes = useStyles({ themeColor });
+const TabsBar = () => {
+  const classes = useStyles({ backgroundColor, highlightColor });
 
-  const activeWorkspaceId = useSelector((state) => state.workspaces.activeWorkspaceId);
-  const currentWorkspace = useSelector((state) => state.workspaces.workspaces[activeWorkspaceId]);
+  const [tabs, updateTabs] = useState([]);
 
-  const tabs = useSelector((state) => state.workspaceTabs[activeWorkspaceId]) || {};
+  const { backgroundColor, highlightColor } = useSelector((state) => {
+    const { workspaces, activeWorkspaceId } = state.workspaces;
+    const activeWorkspace = workspaces[activeWorkspaceId];
+    const colorKey = activeWorkspace.preferences.color;
 
-  if (!currentWorkspace) return null;
+    if (colorKey) {
+      const backgroundColor = themeColors[colorKey]['800'];
+      const highlightColor = themeColors[colorKey]['600'];
+
+      return { backgroundColor, highlightColor };
+    } else {
+      return { backgroundColor: 'auto', highlightColor: 'auto' };
+    }
+  });
 
   return (
-    <div className={classes.root}>
+    <div
+      className={classes.tabBarContainer}
+      style={{
+        backgroundColor: backgroundColor,
+      }}
+    >
       <Tab
-        active={!currentWorkspace.selectedTabId}
-        themeColor={themeColor}
-        onSelect={() => requestSetWorkspace(activeWorkspaceId, {
-          selectedTabId: null,
-        })}
-      />
-      {Object.keys(tabs).map((tabId) => (
-        <Tab
-          key={tabId}
-          name={tabId}
-          active={currentWorkspace.selectedTabId === tabId}
-          onClose={() => requestRemoveWorkspaceTab(activeWorkspaceId, tabId)}
-          onSelect={() => requestSetWorkspace(activeWorkspaceId, {
-            selectedTabId: tabId,
-          })}
-          themeColor={themeColor}
-        />
-      ))}
-      <div
-        className={classes.iconButtonContainer}
+        key={'green'}
+        imageAlt={'green tab image'}
+        title={'Green'}
+        highlightColor={highlightColor}
       >
-        <IconButton
-          onClick={() => requestAddWorkspaceTab(activeWorkspaceId)}
-          className={classes.iconButton}
-        >
-          <AddIcon className={classes.icon} />
-        </IconButton>
-      </div>
+      </Tab>
+      <Divider/>
+      <Tab
+        key={'blue'}
+        imageAlt={'green tab image'}
+        title={'Green'}
+        highlightColor={highlightColor}>
+      </Tab>
+      <Divider/>
+      <IconButton
+        className={classes.addIconButton}
+      >
+        <AddIcon className={classes.addIcon} />
+      </IconButton>
     </div>
   );
-};
+}
 
-TabBar.defaultProps = {
-  themeColor: undefined,
-};
-
-TabBar.propTypes = {
-  themeColor: PropTypes.string,
-};
-
-export default TabBar;
+export default TabsBar;
