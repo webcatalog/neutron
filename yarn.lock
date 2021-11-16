@@ -1299,34 +1299,34 @@
   dependencies:
     object-hash "^1.3.0"
 
-"@elastic/react-search-ui-views@1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@elastic/react-search-ui-views/-/react-search-ui-views-1.7.0.tgz#b3939c370038fd537ce1086729e8e90a06baae8a"
-  integrity sha512-+gHdrnOxs+k5tgAoTHeoIefJQ9yvSWTJ9VdvT0Zs3x/I61dRrjhmkPefhlwIwkB9FBw2fXPI5N1Z38YdHH+VSg==
+"@elastic/react-search-ui-views@1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@elastic/react-search-ui-views/-/react-search-ui-views-1.8.0.tgz#d51b555c3b07e7d9d524ca033ab39c5eacccdac1"
+  integrity sha512-MEBPeAo2ub+N+PUbtkSLreVNjMdfHHeNPvCEc3JmeLNGX9VlBrTocbkUiIgIpgovgMjUwwu5VgugOghEAyZeeA==
   dependencies:
     downshift "^3.2.10"
     rc-pagination "^1.20.1"
     react-select "^2.4.4"
 
-"@elastic/react-search-ui@1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@elastic/react-search-ui/-/react-search-ui-1.7.0.tgz#c725b578041a0a0c397393f1d374ba432d3c5dda"
-  integrity sha512-3oAOuHFQPQV3fkZkKL6WJB9AMZJAUVwGBMXaBrRU8Ors9h/xutM+XWFMOSEE/S4e5fkm7hh4fexEBs9p4f2kFQ==
+"@elastic/react-search-ui@1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@elastic/react-search-ui/-/react-search-ui-1.8.0.tgz#09c5930cd39cfd7b6164d487e9f48b54b9135dad"
+  integrity sha512-DVf4cLPgsK+juXJyCackyaBOyZfIKixgyeNw43rXZZ/Vj767xz+IuchvoyqpbVgFNjNcK17pHWAjkmbEOgmG7w==
   dependencies:
-    "@elastic/react-search-ui-views" "1.7.0"
-    "@elastic/search-ui" "1.7.0"
+    "@elastic/react-search-ui-views" "1.8.0"
+    "@elastic/search-ui" "1.8.0"
 
-"@elastic/search-ui-app-search-connector@1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@elastic/search-ui-app-search-connector/-/search-ui-app-search-connector-1.7.0.tgz#6d27dc8e7fd6db3fad5a338f5b18bc866543488d"
-  integrity sha512-7u1nslnEGRRLwnwzQc6Bj1QuevYBxmXxXL6iXYbsBn4eNNrZxmcrJFq3qWos3qcTzxGbr0zkB+yxFCTvJQDfdw==
+"@elastic/search-ui-app-search-connector@1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@elastic/search-ui-app-search-connector/-/search-ui-app-search-connector-1.8.0.tgz#d9ec95f6eb4b8a9ed909c36872cf7aac44009531"
+  integrity sha512-9DAVQXxNDcq5cjLfpc002CSjWHpOQMkQlveHgTvZsQKwh2X+Va86Swdlxva/SSkxtcP1R7R85Fy0osluLVi3Ug==
   dependencies:
     "@elastic/app-search-javascript" "^7.13.1"
 
-"@elastic/search-ui@1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@elastic/search-ui/-/search-ui-1.7.0.tgz#2308c3f6d723387d148430dd3fd75ff52ceb1d50"
-  integrity sha512-ZuaSFgKkPuvdq+d6sIhUk14tlOAy4MgbVgCKc0CbpPBGVHJ2v0HJwi+vF4rN0VbLlaX/xdkG8E8KhHqpkmXt4A==
+"@elastic/search-ui@1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@elastic/search-ui/-/search-ui-1.8.0.tgz#f7eff312ca1ccaada58e8e0251f0a203f54265e3"
+  integrity sha512-QT/PMZKxYyf9W89JJy2t0o87+6kcou+pUPYH1oG8rYXo7hx6kqsnQvAy6gRuX99byV0Y+r2NOMJSxklPbtLsEA==
   dependencies:
     date-fns "^1.30.1"
     deep-equal "^1.0.1"
@@ -2522,9 +2522,9 @@
     "@types/react" "*"
 
 "@types/react@*":
-  version "17.0.34"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.34.tgz#797b66d359b692e3f19991b6b07e4b0c706c0102"
-  integrity sha512-46FEGrMjc2+8XhHXILr+3+/sTe3OfzSPU9YGKILLrUYbQ1CLQC9Daqo1KzENGXAWwrFwiY0l4ZbF20gRvgpWTg==
+  version "17.0.35"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.35.tgz#217164cf830267d56cd1aec09dcf25a541eedd4c"
+  integrity sha512-r3C8/TJuri/SLZiiwwxQoLAoavaczARfT9up9b4Jr65+ErAUX3MIkU0oMOQnrpfgHme8zIqZLX7O5nnjm5Wayw==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -2584,9 +2584,9 @@
     source-map "^0.7.3"
 
 "@types/webpack@^4.4.31":
-  version "4.41.31"
-  resolved "https://registry.yarnpkg.com/@types/webpack/-/webpack-4.41.31.tgz#c35f252a3559ddf9c85c0d8b0b42019025e581aa"
-  integrity sha512-/i0J7sepXFIp1ZT7FjUGi1eXMCg8HCCzLJEQkKsOtbJFontsJLolBcDC+3qxn5pPwiCt1G0ZdRmYRzNBtvpuGQ==
+  version "4.41.32"
+  resolved "https://registry.yarnpkg.com/@types/webpack/-/webpack-4.41.32.tgz#a7bab03b72904070162b2f169415492209e94212"
+  integrity sha512-cb+0ioil/7oz5//7tZUSwbrSAN/NWHrQylz5cW8G0dWTcF/g+/dSdMlKVZspBYuMAN1+WnwHrkxiRrLcwd0Heg==
   dependencies:
     "@types/node" "*"
     "@types/tapable" "^1"
@@ -3844,9 +3844,9 @@ browserslist@4.10.0:
     pkg-up "^3.1.0"
 
 browserslist@^4.0.0, browserslist@^4.12.0, browserslist@^4.17.5, browserslist@^4.17.6, browserslist@^4.6.2, browserslist@^4.6.4, browserslist@^4.9.1:
-  version "4.18.0"
-  resolved "https://registry.yarnpkg.com/browserslist/-/browserslist-4.18.0.tgz#849944d9bbbbe5ff6f418a8b558e3effca433cae"
-  integrity sha512-ER2M0g5iAR84fS/zjBDqEgU6iO5fS9JI2EkHr5zxDxYEFk3LjhU9Vpp/INb6RMQphxko7PDV1FH38H/qVP5yCA==
+  version "4.18.1"
+  resolved "https://registry.yarnpkg.com/browserslist/-/browserslist-4.18.1.tgz#60d3920f25b6860eb917c6c7b185576f4d8b017f"
+  integrity sha512-8ScCzdpPwR2wQh8IT82CA2VgDwjHyqMovPBZSNH54+tm4Jk2pCuv90gmAdH6J84OCRWi0b4gMe6O6XPXuJnjgQ==
   dependencies:
     caniuse-lite "^1.0.30001280"
     electron-to-chromium "^1.3.896"
@@ -4118,9 +4118,9 @@ camelcase@5.3.1, camelcase@^5.0.0, camelcase@^5.3.1:
   integrity sha512-L28STB170nwWS63UjtlEOE3dldQApaJXZkOI1uMFfzf3rRuPegHaHesyee+YxQ+W6SvRDQV6UrdOdRiR153wJg==
 
 camelcase@^6.2.0:
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-6.2.0.tgz#924af881c9d525ac9d87f40d964e5cea982a1809"
-  integrity sha512-c7wVvbw3f37nuobQNtgsgG9POC9qMbNuMQmTCqZv23b6MIz0fcYpBiOlv9gEN/hdLdnZTDQhg6e9Dq5M1vKvfg==
+  version "6.2.1"
+  resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-6.2.1.tgz#250fd350cfd555d0d2160b1d51510eaf8326e86e"
+  integrity sha512-tVI4q5jjFV5CavAU8DXfza/TJcZutVKo/5Foskmsqcm0MsL91moHvwiGNnqaa2o6PF/7yT5ikDRcVcl8Rj6LCA==
 
 can-use-dom@^0.1.0:
   version "0.1.0"
@@ -5136,9 +5136,9 @@ csstype@^2.5.2:
   integrity sha512-RSU6Hyeg14am3Ah4VZEmeX8H7kLwEEirXe6aU2IPfKNvhXwTflK5HQRDNI0ypQXoqmm+QPyG2IaPuQE5zMwSIQ==
 
 csstype@^3.0.2:
-  version "3.0.9"
-  resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.0.9.tgz#6410af31b26bd0520933d02cbc64fce9ce3fbf0b"
-  integrity sha512-rpw6JPxK6Rfg1zLOYCSwle2GFOOsnjmDYDaBwEcwoOg4qlsIVCN789VkBZDJAGi4T07gI4YSutR43t9Zz4Lzuw==
+  version "3.0.10"
+  resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.0.10.tgz#2ad3a7bed70f35b965707c092e5f30b327c290e5"
+  integrity sha512-2u44ZG2OcNUO9HDp/Jl8C07x6pU/eTR3ncV91SiK3dhG9TWvRVsCoJw14Ckx5DgWkzGA3waZWO3d7pgqpUI/XA==
 
 cyclist@^1.0.1:
   version "1.0.1"
@@ -5767,9 +5767,9 @@ electron-settings@4.0.2:
     write-file-atomic "^3.0.3"
 
 electron-to-chromium@^1.3.378, electron-to-chromium@^1.3.896:
-  version "1.3.896"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.896.tgz#4a94efe4870b1687eafd5c378198a49da06e8a1b"
-  integrity sha512-NcGkBVXePiuUrPLV8IxP43n1EOtdg+dudVjrfVEUd/bOqpQUFZ2diL5PPYzbgEhZFEltdXV3AcyKwGnEQ5lhMA==
+  version "1.3.897"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.897.tgz#16ddf5943eeec6ae08704b015ecd26b143b03947"
+  integrity sha512-nRNZhAZ7hVCe75jrCUG7xLOqHMwloJMj6GEXEzY4OMahRGgwerAo+ls/qbqUwFH+E20eaSncKkQ4W8KP5SOiAg==
 
 electron-updater@4.5.2:
   version "4.5.2"
@@ -5793,10 +5793,10 @@ electron-window-state@5.0.3:
     jsonfile "^4.0.0"
     mkdirp "^0.5.1"
 
-electron@16.0.0-beta.9:
-  version "16.0.0-beta.9"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-16.0.0-beta.9.tgz#aaa663fa66941e5d3748e3fed5d6e6762d5774b9"
-  integrity sha512-bK0+DlI/ysmQiU1UvEeQGMpPFYutfNGbDPZTZbRLcs63snbpJQcgIhE7EMZy5ymcxqtFfhYsQKsELmKRMqabKQ==
+electron@16.0.0:
+  version "16.0.0"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-16.0.0.tgz#3080cf1ee1e9686990f17eba549379c7107e7151"
+  integrity sha512-B+K/UnEV8NsP7IUOd4VAIYLT0uShLQ/V0p1QQLX0McF8d185AV522faklgMGMtPVWNVL2qifx9rZAsKtHPzmEg==
   dependencies:
     "@electron/get" "^1.13.0"
     "@types/node" "^14.6.2"
@@ -13038,9 +13038,9 @@ spdx-expression-parse@^3.0.0:
     spdx-license-ids "^3.0.0"
 
 spdx-license-ids@^3.0.0:
-  version "3.0.10"
-  resolved "https://registry.yarnpkg.com/spdx-license-ids/-/spdx-license-ids-3.0.10.tgz#0d9becccde7003d6c658d487dd48a32f0bf3014b"
-  integrity sha512-oie3/+gKf7QtpitB0LYLETe+k8SifzsX4KixvpOsbI6S0kRiRQ5MKOio8eMSAKQ17N06+wdEOXRiId+zOxo0hA==
+  version "3.0.11"
+  resolved "https://registry.yarnpkg.com/spdx-license-ids/-/spdx-license-ids-3.0.11.tgz#50c0d8c40a14ec1bf449bae69a0ea4685a9d9f95"
+  integrity sha512-Ctl2BrFiM0X3MANYgj3CkygxhRmr9mi6xhejbdO960nF6EDJApTYpn0BQnDKlnNBULKiCN1n3w9EBkHK8ZWg+g==
 
 spdy-transport@^3.0.0:
   version "3.0.0"
