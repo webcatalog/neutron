@@ -123,7 +123,7 @@ const getBadgeCountFromTitle = (title) => {
   return 0;
 };
 
-const equivalentDomain = (domain) => {
+const getEquivalentDomain = (domain) => {
   if (!domain) return null;
 
   let eDomain = domain;
@@ -153,6 +153,34 @@ const equivalentDomain = (domain) => {
   });
 
   return eDomain;
+};
+
+// return the compatible User-Agent string for the given URL
+// return null if default UA string (app.userAgentFallback) should be used
+const getCompatibleUserAgentString = (url) => {
+  let urlObj;
+  try {
+    urlObj = new URL(url);
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(err);
+  }
+
+  // fix Google prevents signing in because of security concerns
+  // https://github.com/webcatalog/webcatalog-app/issues/455
+  // https://github.com/meetfranz/franz/issues/1720#issuecomment-566460763
+  if (urlObj && urlObj.hostname === 'accounts.google.com') {
+    return getFirefoxUserAgent();
+  }
+
+  // Google uses special code for Chromium-based browsers
+  // when screensharing (not working with Electron)
+  // so change user-agent to Safari to make it work
+  if (urlObj && (urlObj.hostname === 'meet.google.com' || urlObj.hostname === 'hangouts.google.com')) {
+    return getSafariUserAgent();
+  }
+
+  return null;
 };
 
 const isMicrosoftUrl = (url) => /.+(microsoft.com|live.com|1drv.ms|office.com|sharepoint.com|skype.com)/g.test(url);
@@ -187,9 +215,9 @@ const isInternalUrl = (url, currentInternalUrls) => {
     }
   }
 
-  const domain = equivalentDomain(extractDomain(url));
+  const domain = getEquivalentDomain(extractDomain(url));
   const matchedInternalUrl = currentInternalUrls.find((internalUrl) => {
-    const internalDomain = equivalentDomain(extractDomain(internalUrl));
+    const internalDomain = getEquivalentDomain(extractDomain(internalUrl));
 
     // Ex: music.yandex.ru => passport.yandex.ru?retpath=....music.yandex.ru
     // https://github.com/webcatalog/webcatalog-app/issues/546#issuecomment-586639519
@@ -305,25 +333,9 @@ const addViewAsync = async (browserWindow, workspace) => {
   // modifed from https://github.com/minbrowser/min/blob/58927524e3cc16cc4f59bca09a6c352cec1a16ac/main/UASwitcher.js (Apache License)
   if (!customUserAgent) {
     ses.webRequest.onBeforeSendHeaders((details, callback) => {
-      let urlObj;
-      try {
-        urlObj = new URL(details.url);
-      } catch (err) {
-        // eslint-disable-next-line no-console
-        console.log(err);
-      }
-
-      // fix Google prevents signing in because of security concerns
-      // https://github.com/webcatalog/webcatalog-app/issues/455
-      // https://github.com/meetfranz/franz/issues/1720#issuecomment-566460763
-      if (urlObj && urlObj.hostname === 'accounts.google.com') {
-        details.requestHeaders['User-Agent'] = getFirefoxUserAgent();
-      // Google uses special code for Chromium-based browsers
-      // when screensharing (not working with Electron)
-      // so change user-agent to Safari to make it work
-      } else if (urlObj && (urlObj.hostname === 'meet.google.com' || urlObj.hostname === 'hangouts.google.com')) {
-        const fakedSafariUaStr = getSafariUserAgent();
-        details.requestHeaders['User-Agent'] = fakedSafariUaStr;
+      const compatibleUaString = getCompatibleUserAgentString(details.url);
+      if (compatibleUaString) {
+        details.requestHeaders['User-Agent'] = compatibleUaString;
       } else {
         const chromiumVersion = process.versions.chrome.split('.')[0];
         details.requestHeaders['SEC-CH-UA'] = `"Chromium";v="${chromiumVersion}", " Not A;Brand";v="99"`;
@@ -574,14 +586,13 @@ const addViewAsync = async (browserWindow, workspace) => {
     // Google uses special code for Chromium-based browsers
     // when screensharing (not working with Electron)
     // so change user-agent to Safari to make it work
-    const navigatedDomain = extractDomain(url);
-    if (!customUserAgent && navigatedDomain === 'meet.google.com') {
+    if (!customUserAgent) {
+      const compatibleUaString = getCompatibleUserAgentString(url) || app.userAgentFallback;
       const currentUaStr = contents.userAgent;
-      const fakedSafariUaStr = getSafariUserAgent();
-      if (currentUaStr !== fakedSafariUaStr) {
-        contents.userAgent = fakedSafariUaStr;
+      if (currentUaStr !== compatibleUaString) {
+        contents.userAgent = compatibleUaString;
         // eslint-disable-next-line no-console
-        console.log('Changed user agent to', fakedSafariUaStr, 'for web compatibility URL: ', url, 'when', 'did-navigate');
+        console.log('Changed user agent to', compatibleUaString, 'for web compatibility URL: ', url, 'when', 'did-navigate');
       }
     }
   };
