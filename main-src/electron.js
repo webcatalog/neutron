@@ -11,13 +11,14 @@ if (!process.mas) {
 }
 
 const {
+  BrowserWindow,
   app,
+  components,
   dialog,
+  inAppPurchase,
   ipcMain,
   nativeTheme,
   protocol,
-  BrowserWindow,
-  inAppPurchase,
   shell,
 } = require('electron');
 const path = require('path');
@@ -349,6 +350,19 @@ if (!gotTheLock) {
 
   const commonInit = () => {
     app.whenReady()
+      .then(() => {
+        if (components) {
+          components.whenReady()
+            .then(() => {
+              // eslint-disable-next-line no-console
+              console.log('Widevine components ready:', components.status());
+            })
+            .catch((err) => {
+              // eslint-disable-next-line no-console
+              console.log(err);
+            });
+        }
+      })
       // if app lock is in Keychain, lock the app at first launch
       .then(() => getAppLockStatusAsync())
       .then((appLockStatus) => {
