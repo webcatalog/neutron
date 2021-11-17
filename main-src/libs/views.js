@@ -156,7 +156,7 @@ const getEquivalentDomain = (domain) => {
 };
 
 // return the compatible User-Agent string for the given URL
-// return null if not
+// return null if default UA string (app.userAgentFallback) should be used
 const getCompatibleUserAgentString = (url) => {
   let urlObj;
   try {
