@@ -575,14 +575,6 @@ const addViewAsync = async (browserWindow, workspace) => {
   });
 
   const handleDidNavigateCompability = (contents, url) => {
-    // fix "Google Chat isn't supported on your current browser"
-    // https://github.com/webcatalog/webcatalog-app/issues/820
-    if (url && url.indexOf('error/browser-not-supported') > -1 && url.startsWith('https://chat.google.com')) {
-      const ref = new URL(url).searchParams.get('ref') || '';
-      contents.loadURL(`https://chat.google.com${ref}`);
-      return;
-    }
-
     // Google uses special code for Chromium-based browsers
     // when screensharing (not working with Electron)
     // so change user-agent to Safari to make it work
