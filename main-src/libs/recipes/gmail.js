@@ -5,7 +5,7 @@ window.addEventListener('load', () => {
   // fix "Google Chat isn't supported on your current browser"
   // https://github.com/webcatalog/webcatalog-app/issues/820
   if (window.location.href
-      && window.location.href.indexOf('error/browser-not-supported') > -1
+      && window.location.href.includes('error/browser-not-supported')
       && window.location.href.startsWith('https://chat.google.com')) {
     const ref = new URL(window.location.href).searchParams.get('ref') || '';
     window.location.replace(`https://chat.google.com${ref}`);
