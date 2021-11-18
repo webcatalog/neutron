@@ -8,7 +8,7 @@ window.addEventListener('load', () => {
       && window.location.href.indexOf('error/browser-not-supported') > -1
       && window.location.href.startsWith('https://chat.google.com')) {
     const ref = new URL(window.location.href).searchParams.get('ref') || '';
-    window.location.href = `https://chat.google.com${ref}`;
+    window.location.replace(`https://chat.google.com${ref}`);
     return;
   }
 
