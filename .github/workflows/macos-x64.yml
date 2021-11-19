@@ -12,7 +12,7 @@ on:
       - '.github/workflows/macos-x64.yml'
       - 'build-template.js'
       - 'patches'
-#
+
 jobs:
   build:
     runs-on: macos-latest
@@ -44,10 +44,10 @@ jobs:
     - run: yarn --prefer-offline --network-timeout 600000
     - run: yarn lint
     - run: brew install p7zip
-    - name: Set up Castlabs EVS
-      run: |
-        python3 -m pip install --upgrade castlabs-evs
-        python3 -m castlabs_evs.account reauth
+    - name: Install castlabs-evs
+      run: python3 -m pip install --upgrade castlabs-evs
+    - name: Authenticate castlabs-evs
+      run: python3 -m castlabs_evs.account reauth
       env:
         EVS_NO_ASK: 1
         EVS_ACCOUNT_NAME: ${{ secrets.CASTLABS_EVS_ACCOUNT_NAME }}
