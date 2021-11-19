@@ -29,6 +29,11 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 14.x
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        # castlabs-evs doesn't work with Python 3.9.8
+        python-version: 3.9.7
     - run: brew install p7zip
     - name: Install castlabs-evs
       run: python3 -m pip install --upgrade castlabs-evs
