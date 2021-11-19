@@ -579,12 +579,19 @@ const addViewAsync = async (browserWindow, workspace) => {
     // when screensharing (not working with Electron)
     // so change user-agent to Safari to make it work
     if (!customUserAgent) {
-      const compatibleUaString = getCompatibleUserAgentString(url) || app.userAgentFallback;
-      const currentUaStr = contents.userAgent;
-      if (currentUaStr !== compatibleUaString) {
-        contents.userAgent = compatibleUaString;
-        // eslint-disable-next-line no-console
-        console.log('Changed user agent to', compatibleUaString, 'for web compatibility URL: ', url, 'when', 'did-navigate');
+      const compatibleUaString = getCompatibleUserAgentString(url);
+      // if getCompatibleUserAgentString() returns null, it means we suppose to restore
+      // UA back to `app.userAgentFallback`
+      // but we avoid doing that as it might cause problems in some cases
+      // for example,
+      // UA change causes page to reload, causing certain info (e.g. sessions) to be lost
+      if (compatibleUaString != null) {
+        const currentUaStr = contents.userAgent;
+        if (currentUaStr !== compatibleUaString) {
+          contents.userAgent = compatibleUaString;
+          // eslint-disable-next-line no-console
+          console.log('Changed user agent to', compatibleUaString, 'for web compatibility URL: ', url, 'when', 'did-navigate');
+        }
       }
     }
   };
