@@ -279,7 +279,8 @@ if (!gotTheLock) {
           // pick automically if there's only one choice
           if (webcalWorkspaces.length === 0) {
             ipcMain.emit(
-              'request-show-message-box', null,
+              'request-show-message-box',
+              null,
               `None of your ${getWorkspaceFriendlyName().toLowerCase()} supports accessing iCalendar files.`,
               'error',
             );
@@ -307,7 +308,8 @@ if (!gotTheLock) {
           // pick automically if there's only one choice
           if (mailtoWorkspaces.length === 0) {
             ipcMain.emit(
-              'request-show-message-box', null,
+              'request-show-message-box',
+              null,
               `None of your ${getWorkspaceFriendlyName().toLowerCase()} supports composing email messages.`,
               'error',
             );

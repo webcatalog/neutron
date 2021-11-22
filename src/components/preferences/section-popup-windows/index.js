@@ -34,48 +34,46 @@ const SectionPopupWindows = ({
   popupTitleBar,
   popupFrameless,
 }) => (
-  <>
-    <List disablePadding dense>
-      {window.process.platform === 'darwin' && (
-        <>
-          <ListItem>
-            <ListItemText
-              primary="Make popup windows frameless"
-              secondary={'Hide title bar and "traffic light" (red/yellow/green) buttons.'}
-            />
-            <ListItemSecondaryAction>
-              <Switch
-                edge="end"
-                color="primary"
-                checked={popupFrameless}
-                onChange={(e) => {
-                  requestSetPreference('popupFrameless', e.target.checked);
-                }}
-              />
-            </ListItemSecondaryAction>
-          </ListItem>
-          <Divider />
-          <ListItem>
-            <ListItemText
-              primary="Show title bar on popup windows"
-              secondary="Title bar shows you the title of the current page."
-            />
-            <ListItemSecondaryAction>
-              <Switch
-                edge="end"
-                color="primary"
-                checked={popupFrameless ? false : popupTitleBar}
-                disabled={popupFrameless}
-                onChange={(e) => {
-                  requestSetPreference('popupTitleBar', e.target.checked);
-                }}
-              />
-            </ListItemSecondaryAction>
-          </ListItem>
-        </>
-      )}
-    </List>
-  </>
+  <List disablePadding dense>
+    {window.process.platform === 'darwin' && (
+    <>
+      <ListItem>
+        <ListItemText
+          primary="Make popup windows frameless"
+          secondary={'Hide title bar and "traffic light" (red/yellow/green) buttons.'}
+        />
+        <ListItemSecondaryAction>
+          <Switch
+            edge="end"
+            color="primary"
+            checked={popupFrameless}
+            onChange={(e) => {
+              requestSetPreference('popupFrameless', e.target.checked);
+            }}
+          />
+        </ListItemSecondaryAction>
+      </ListItem>
+      <Divider />
+      <ListItem>
+        <ListItemText
+          primary="Show title bar on popup windows"
+          secondary="Title bar shows you the title of the current page."
+        />
+        <ListItemSecondaryAction>
+          <Switch
+            edge="end"
+            color="primary"
+            checked={popupFrameless ? false : popupTitleBar}
+            disabled={popupFrameless}
+            onChange={(e) => {
+              requestSetPreference('popupTitleBar', e.target.checked);
+            }}
+          />
+        </ListItemSecondaryAction>
+      </ListItem>
+    </>
+    )}
+  </List>
 );
 
 SectionPopupWindows.propTypes = {

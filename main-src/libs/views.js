@@ -826,9 +826,7 @@ const addViewAsync = async (browserWindow, workspace) => {
     });
   };
 
-  const handleNewWindow = (
-    e, nextUrl, frameName, disposition, options, additionalFeatures, referrer, postBody,
-  ) => {
+  const handleNewWindow = (e, nextUrl, frameName, disposition, options, additionalFeatures, referrer, postBody) => {
     const appUrl = getWorkspace(workspace.id).homeUrl || appJson.url;
     const appDomain = extractDomain(appUrl);
     const currentUrl = e.sender.getURL();

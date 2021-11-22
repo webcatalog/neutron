@@ -93,25 +93,23 @@ const SearchBox = ({
           searchAsYouType
           debounceLength={300}
           inputView={({ getAutocomplete, getInputProps }) => (
-            <>
-              <div className="sui-search-box__wrapper">
-                <input
-                  {...getInputProps({
-                    className: classes.input,
-                    placeholder: 'Search apps...',
-                    // App Search API can only handle up to 128 chars
-                    maxLength: 128,
-                    onFocus: () => {
-                      window.preventClosingWindow = true;
-                    },
-                    onBlur: () => {
-                      window.preventClosingWindow = false;
-                    },
-                  })}
-                />
-                {getAutocomplete()}
-              </div>
-            </>
+            <div className="sui-search-box__wrapper">
+              <input
+                {...getInputProps({
+                  className: classes.input,
+                  placeholder: 'Search apps...',
+                  // App Search API can only handle up to 128 chars
+                  maxLength: 128,
+                  onFocus: () => {
+                    window.preventClosingWindow = true;
+                  },
+                  onBlur: () => {
+                    window.preventClosingWindow = false;
+                  },
+                })}
+              />
+              {getAutocomplete()}
+            </div>
           )}
           shouldClearFilters={false}
         />

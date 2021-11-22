@@ -58,69 +58,67 @@ const SectionWindow = ({
   alwaysOnTop,
   useSystemTitleBar,
 }) => (
-  <>
-    <List disablePadding dense>
+  <List disablePadding dense>
+    <ListItem>
+      <ListItemText
+        primary="Keep window always on top"
+        secondary="The window won't be hidden even when you click outside."
+      />
+      <ListItemSecondaryAction>
+        <Switch
+          edge="end"
+          color="primary"
+          checked={alwaysOnTop}
+          onChange={(e) => {
+            requestSetPreference('alwaysOnTop', e.target.checked);
+            enqueueRequestRestartSnackbar();
+          }}
+        />
+      </ListItemSecondaryAction>
+    </ListItem>
+    {window.process.platform !== 'darwin' && (
+    <>
+      <Divider />
       <ListItem>
         <ListItemText
-          primary="Keep window always on top"
-          secondary="The window won't be hidden even when you click outside."
+          primary="Use native title bar and borders"
         />
         <ListItemSecondaryAction>
           <Switch
             edge="end"
             color="primary"
-            checked={alwaysOnTop}
+            checked={useSystemTitleBar}
             onChange={(e) => {
-              requestSetPreference('alwaysOnTop', e.target.checked);
+              requestSetPreference('useSystemTitleBar', e.target.checked);
               enqueueRequestRestartSnackbar();
             }}
           />
         </ListItemSecondaryAction>
       </ListItem>
-      {window.process.platform !== 'darwin' && (
-        <>
-          <Divider />
-          <ListItem>
-            <ListItemText
-              primary="Use native title bar and borders"
-            />
-            <ListItemSecondaryAction>
-              <Switch
-                edge="end"
-                color="primary"
-                checked={useSystemTitleBar}
-                onChange={(e) => {
-                  requestSetPreference('useSystemTitleBar', e.target.checked);
-                  enqueueRequestRestartSnackbar();
-                }}
-              />
-            </ListItemSecondaryAction>
-          </ListItem>
-          <Divider />
-          <ListItem>
-            <ListItemText
-              primary="Hide menu bar automatically"
-              secondary="Auto hide the menu bar unless the Alt key is pressed."
-            />
-            <ListItemSecondaryAction>
-              <Switch
-                edge="end"
-                color="primary"
-                disabled={!useSystemTitleBar}
-                checked={useSystemTitleBar && autoHideMenuBar}
-                onChange={(e) => {
-                  requestSetPreference('autoHideMenuBar', e.target.checked);
-                  enqueueRequestRestartSnackbar();
-                }}
-              />
-            </ListItemSecondaryAction>
-          </ListItem>
-        </>
-      )}
       <Divider />
-      <ListItemShortcut />
-    </List>
-  </>
+      <ListItem>
+        <ListItemText
+          primary="Hide menu bar automatically"
+          secondary="Auto hide the menu bar unless the Alt key is pressed."
+        />
+        <ListItemSecondaryAction>
+          <Switch
+            edge="end"
+            color="primary"
+            disabled={!useSystemTitleBar}
+            checked={useSystemTitleBar && autoHideMenuBar}
+            onChange={(e) => {
+              requestSetPreference('autoHideMenuBar', e.target.checked);
+              enqueueRequestRestartSnackbar();
+            }}
+          />
+        </ListItemSecondaryAction>
+      </ListItem>
+    </>
+    )}
+    <Divider />
+    <ListItemShortcut />
+  </List>
 );
 
 SectionWindow.propTypes = {

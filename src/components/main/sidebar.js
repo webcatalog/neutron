@@ -389,9 +389,7 @@ const Sidebar = ({
             </div>
           )}
           <RatingButton
-            className={classnames(
-              classes.iconButton, !isSidebarExpanded && classes.iconButtonVertical,
-            )}
+            className={classnames(classes.iconButton, !isSidebarExpanded && classes.iconButtonVertical)}
             size="small"
           />
           {window.process.platform === 'darwin' && (
@@ -400,9 +398,7 @@ const Sidebar = ({
               aria-label="Share"
               onClick={() => requestShowShareMenu()}
               classes={{
-                root: classnames(
-                  classes.iconButton, !isSidebarExpanded && classes.iconButtonVertical,
-                ),
+                root: classnames(classes.iconButton, !isSidebarExpanded && classes.iconButtonVertical),
                 disabled: classes.iconButtonDisabled,
               }}
               size="small"
@@ -418,9 +414,7 @@ const Sidebar = ({
             aria-label="Notifications"
             onClick={requestShowNotificationsWindow}
             classes={{
-              root: classnames(
-                classes.iconButton, !isSidebarExpanded && classes.iconButtonVertical,
-              ),
+              root: classnames(classes.iconButton, !isSidebarExpanded && classes.iconButtonVertical),
               disabled: classes.iconButtonDisabled,
             }}
             size="small"
@@ -432,9 +426,7 @@ const Sidebar = ({
             aria-label={muteApp ? 'Unmute' : 'Mute'}
             onClick={() => requestSetPreference('muteApp', !muteApp)}
             classes={{
-              root: classnames(
-                classes.iconButton, !isSidebarExpanded && classes.iconButtonVertical,
-              ),
+              root: classnames(classes.iconButton, !isSidebarExpanded && classes.iconButtonVertical),
               disabled: classes.iconButtonDisabled,
             }}
             size="small"
@@ -446,9 +438,7 @@ const Sidebar = ({
             aria-label="Preferences"
             onClick={() => requestShowPreferencesWindow()}
             classes={{
-              root: classnames(
-                classes.iconButton, !isSidebarExpanded && classes.iconButtonVertical,
-              ),
+              root: classnames(classes.iconButton, !isSidebarExpanded && classes.iconButtonVertical),
               disabled: classes.iconButtonDisabled,
             }}
             size="small"

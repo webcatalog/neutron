@@ -5,9 +5,7 @@ const fsExtra = require('fs-extra');
 const fetch = require('./customized-fetch');
 
 // https://github.com/node-fetch/node-fetch/issues/375#issuecomment-385751664
-const downloadAsync = (
-  url, dest, fetchOpts, ...fetchArgs
-) => fsExtra.ensureFile(dest)
+const downloadAsync = (url, dest, fetchOpts, ...fetchArgs) => fsExtra.ensureFile(dest)
   .then(() => fetch(url, fetchOpts, ...fetchArgs))
   .then((res) => new Promise((resolve, reject) => {
     const fileStream = fsExtra.createWriteStream(dest);

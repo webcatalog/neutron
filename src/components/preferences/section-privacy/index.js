@@ -48,104 +48,102 @@ const SectionBrowsing = ({
   const appJson = getStaticGlobal('appJson');
 
   return (
-    <>
-      <List disablePadding dense>
-        <ListItem button onClick={requestClearBrowsingData}>
-          <ListItemText primary="Clear browsing data" secondary="Clear cookies, cache, and more." />
-          <ChevronRightIcon color="action" />
-        </ListItem>
-        <Divider />
-        <ListItem>
-          <ListItemText
-            primary="Block ads &amp; trackers"
-          />
-          <ListItemSecondaryAction>
-            <Switch
-              edge="end"
-              color="primary"
-              checked={blockAds}
-              onChange={(e) => {
-                if (!checkLicense()) {
-                  return;
-                }
+    <List disablePadding dense>
+      <ListItem button onClick={requestClearBrowsingData}>
+        <ListItemText primary="Clear browsing data" secondary="Clear cookies, cache, and more." />
+        <ChevronRightIcon color="action" />
+      </ListItem>
+      <Divider />
+      <ListItem>
+        <ListItemText
+          primary="Block ads &amp; trackers"
+        />
+        <ListItemSecondaryAction>
+          <Switch
+            edge="end"
+            color="primary"
+            checked={blockAds}
+            onChange={(e) => {
+              if (!checkLicense()) {
+                return;
+              }
 
-                requestSetPreference('blockAds', e.target.checked);
-                enqueueRequestRestartSnackbar();
-              }}
-            />
-          </ListItemSecondaryAction>
-        </ListItem>
-        {appJson.url && (
-          <>
-            <Divider />
-            <ListItem>
-              <ListItemText primary="Share browsing data between services & accounts" />
-              <ListItemSecondaryAction>
-                <Switch
-                  edge="end"
-                  color="primary"
-                  checked={shareWorkspaceBrowsingData}
-                  onChange={(e) => {
-                    requestSetPreference('shareWorkspaceBrowsingData', e.target.checked);
-                    enqueueRequestRestartSnackbar();
-                  }}
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
-          </>
-        )}
-        <Divider />
-        <ListItem>
-          <ListItemText primary="Remember last page visited" />
-          <ListItemSecondaryAction>
-            <Switch
-              edge="end"
-              color="primary"
-              checked={rememberLastPageVisited}
-              onChange={(e) => {
-                requestSetPreference('rememberLastPageVisited', e.target.checked);
-                enqueueRequestRestartSnackbar();
-              }}
-            />
-          </ListItemSecondaryAction>
-        </ListItem>
-        <Divider />
-        <ListItem>
-          <ListItemText
-            primary="Ignore certificate errors"
-            secondary={(
-              <>
-                <span>Not recommended. </span>
-                <span
-                  role="link"
-                  tabIndex={0}
-                  className={classes.link}
-                  onClick={() => requestOpenInBrowser('https://groups.google.com/a/chromium.org/d/msg/security-dev/mB2KJv_mMzM/ddMteO9RjXEJ')}
-                  onKeyDown={(e) => {
-                    if (e.key !== 'Enter') return;
-                    requestOpenInBrowser('https://groups.google.com/a/chromium.org/d/msg/security-dev/mB2KJv_mMzM/ddMteO9RjXEJ');
-                  }}
-                >
-                  Learn more
-                </span>
-                .
-              </>
-            )}
+              requestSetPreference('blockAds', e.target.checked);
+              enqueueRequestRestartSnackbar();
+            }}
           />
+        </ListItemSecondaryAction>
+      </ListItem>
+      {appJson.url && (
+      <>
+        <Divider />
+        <ListItem>
+          <ListItemText primary="Share browsing data between services & accounts" />
           <ListItemSecondaryAction>
             <Switch
               edge="end"
               color="primary"
-              checked={ignoreCertificateErrors}
+              checked={shareWorkspaceBrowsingData}
               onChange={(e) => {
-                requestSetPreference('ignoreCertificateErrors', e.target.checked);
+                requestSetPreference('shareWorkspaceBrowsingData', e.target.checked);
                 enqueueRequestRestartSnackbar();
               }}
             />
           </ListItemSecondaryAction>
         </ListItem>
-      </List>
-    </>
+      </>
+      )}
+      <Divider />
+      <ListItem>
+        <ListItemText primary="Remember last page visited" />
+        <ListItemSecondaryAction>
+          <Switch
+            edge="end"
+            color="primary"
+            checked={rememberLastPageVisited}
+            onChange={(e) => {
+              requestSetPreference('rememberLastPageVisited', e.target.checked);
+              enqueueRequestRestartSnackbar();
+            }}
+          />
+        </ListItemSecondaryAction>
+      </ListItem>
+      <Divider />
+      <ListItem>
+        <ListItemText
+          primary="Ignore certificate errors"
+          secondary={(
+            <>
+              <span>Not recommended. </span>
+              <span
+                role="link"
+                tabIndex={0}
+                className={classes.link}
+                onClick={() => requestOpenInBrowser('https://groups.google.com/a/chromium.org/d/msg/security-dev/mB2KJv_mMzM/ddMteO9RjXEJ')}
+                onKeyDown={(e) => {
+                  if (e.key !== 'Enter') return;
+                  requestOpenInBrowser('https://groups.google.com/a/chromium.org/d/msg/security-dev/mB2KJv_mMzM/ddMteO9RjXEJ');
+                }}
+              >
+                Learn more
+              </span>
+              .
+            </>
+            )}
+        />
+        <ListItemSecondaryAction>
+          <Switch
+            edge="end"
+            color="primary"
+            checked={ignoreCertificateErrors}
+            onChange={(e) => {
+              requestSetPreference('ignoreCertificateErrors', e.target.checked);
+              enqueueRequestRestartSnackbar();
+            }}
+          />
+        </ListItemSecondaryAction>
+      </ListItem>
+    </List>
   );
 };
 
