@@ -9,7 +9,6 @@ const fs = require('fs-extra');
 const sendToAllWindows = require('./send-to-all-windows');
 const extractHostname = require('./extract-hostname');
 const isMas = require('./is-mas');
-const isWindows10 = require('./is-windows-10');
 
 const MAILTO_URLS = require('../constants/mailto-urls');
 
