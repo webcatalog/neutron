@@ -22,7 +22,7 @@ index b409046..f1bd5a4 100644
          platform,
          arch,
 diff --git a/node_modules/app-builder-lib/out/macPackager.js b/node_modules/app-builder-lib/out/macPackager.js
-index 5839b34..a080880 100644
+index e0b51e3..20d2d77 100644
 --- a/node_modules/app-builder-lib/out/macPackager.js
 +++ b/node_modules/app-builder-lib/out/macPackager.js
 @@ -104,6 +104,22 @@ class MacPackager extends platformPackager_1.PlatformPackager {
