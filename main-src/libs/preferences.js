@@ -138,11 +138,12 @@ const defaultPreferences = {
   trayIcon: false,
   unreadCountBadge: true,
   useHardwareAcceleration: true,
-  // use system title bar by default on Windows 8 & Windows 7
+  // use system title bar as React-based title bar is not well-optimized
+  // e.g: on Windows 8 & Windows 7
   // because on Windows 10, it's normally for apps not to have border
   // but on prior versions of Windows, apps have border
   // system title bar pref is required for the app have the native border
-  useSystemTitleBar: process.platform === 'win32' && !isWindows10(),
+  useSystemTitleBar: true,
   warnBeforeQuitting: false,
   windowButtons: true, // traffic light buttons on macOS
   // popup Windows
