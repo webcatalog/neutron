@@ -31,12 +31,16 @@ const useStyles = makeStyles((theme) => ({
     // https://github.com/electron/electron/issues/3022
     padding: 2,
     background: (props) => {
+      if (window.process.platform === 'win32') return '#f0f0f0';
+
       if (props.themeColor != null) {
         return themeColors[props.themeColor][900];
       }
       return theme.palette.type === 'dark' ? undefined : theme.palette.grey[300];
     },
     color: (props) => {
+      if (window.process.platform === 'win32') return '#000';
+
       if (props.themeColor != null) {
         return fade(theme.palette.getContrastText(themeColors[props.themeColor][900]), 0.7);
       }
@@ -61,12 +65,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '0.8rem',
     height: TOOLBAR_HEIGHT,
     lineHeight: `${TOOLBAR_HEIGHT}px`,
-    color: (props) => {
-      if (props.themeColor != null) {
-        return fade(theme.palette.getContrastText(themeColors[props.themeColor][900]), 0.7);
-      }
-      return theme.palette.text.secondary;
-    },
+    color: 'inherit',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
