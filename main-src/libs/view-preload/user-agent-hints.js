@@ -29,7 +29,7 @@ try {
       mobile: false,
       platform: "${platformName}",
       getHighEntropyValues: () => Promise.resolve({
-        architecture: "${process.platform}",
+        architecture: "${process.arch === 'arm64' ? 'arm' : 'x86'}",
         bitness: "64",
         brands,
         mobile: false,
