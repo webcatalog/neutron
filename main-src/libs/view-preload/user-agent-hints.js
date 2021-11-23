@@ -30,6 +30,7 @@ try {
       platform: "${platformName}",
       getHighEntropyValues: () => Promise.resolve({
         architecture: "${process.platform}",
+        bitness: "64",
         brands,
         mobile: false,
         model: "",
