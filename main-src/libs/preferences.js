@@ -9,7 +9,6 @@ const fs = require('fs-extra');
 const sendToAllWindows = require('./send-to-all-windows');
 const extractHostname = require('./extract-hostname');
 const isMas = require('./is-mas');
-const isWindows10 = require('./is-windows-10');
 
 const MAILTO_URLS = require('../constants/mailto-urls');
 
@@ -41,6 +40,7 @@ const shouldShowSidebar = !appJson.url || Boolean(MAILTO_URLS[extractHostname(ap
 const defaultPreferences = {
   allowNodeInJsCodeInjection: false,
   alwaysOnTop: false, // for menubar
+  alwaysOpenInMainWindow: false,
   appLockTimeout: 300000,
   appLockWhenSwitchingWorkspace: false,
   autoHideMenuBar: false,
@@ -94,6 +94,9 @@ const defaultPreferences = {
   muteApp: false,
   openFolderWhenDoneDownloading: true,
   openProtocolUrlInNewWindow: 'ask', // 'ask', 'newWindow', 'mainWindow'
+  /* Password Manager */
+  passwordsAskToSave: true,
+  passwordsNeverSaveDomains: [],
   pauseNotifications: null,
   pauseNotificationsBySchedule: false,
   pauseNotificationsByScheduleFrom: getDefaultPauseNotificationsByScheduleFrom(),
@@ -110,7 +113,7 @@ const defaultPreferences = {
   ratingLastClicked: 0,
   rememberLastPageVisited: false,
   runInBackground: false,
-  searchEngine: 'duckduckgo',
+  searchEngine: 'google',
   sentry: false,
   // branded apps (like Google/Microsoft) share browsing data by default
   // https://github.com/webcatalog/webcatalog-app/issues/986
@@ -126,6 +129,7 @@ const defaultPreferences = {
   standaloneLicenseKey: undefined,
   standaloneRegistered: false,
   swipeToNavigate: true,
+  useTabs: false,
   telemetry: false,
   themeColor: 'auto',
   themeSource: 'system',
@@ -133,13 +137,17 @@ const defaultPreferences = {
   trayIcon: false,
   unreadCountBadge: true,
   useHardwareAcceleration: true,
-  // use system title bar by default on Windows 8 & Windows 7
+  // use system title bar as React-based title bar is not well-optimized
+  // e.g: on Windows 8 & Windows 7
   // because on Windows 10, it's normally for apps not to have border
   // but on prior versions of Windows, apps have border
   // system title bar pref is required for the app have the native border
-  useSystemTitleBar: process.platform === 'win32' && !isWindows10(),
+  useSystemTitleBar: process.platform !== 'darwin',
   warnBeforeQuitting: false,
   windowButtons: true, // traffic light buttons on macOS
+  // popup Windows
+  popupFrameless: false,
+  popupTitleBar: true,
 };
 
 let cachedPreferences = null;

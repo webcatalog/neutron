@@ -1,8 +1,8 @@
 diff --git a/node_modules/darkreader/darkreader.js b/node_modules/darkreader/darkreader.js
-index 78f53c7..1c34694 100644
+index 45a9b79..b5c1fb2 100644
 --- a/node_modules/darkreader/darkreader.js
 +++ b/node_modules/darkreader/darkreader.js
-@@ -187,17 +187,15 @@
+@@ -228,17 +228,15 @@
      }
      function readResponseAsDataURL(response) {
          return __awaiter(this, void 0, void 0, function () {

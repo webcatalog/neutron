@@ -6,7 +6,9 @@ import PropTypes from 'prop-types';
 
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
+import Switch from '@material-ui/core/Switch';
 import Divider from '@material-ui/core/Divider';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -20,7 +22,13 @@ import DialogExternalUrls from '../../shared/dialog-external-urls';
 import DialogInternalUrls from '../../shared/dialog-internal-urls';
 import ListItemOpenProtocolUrl from './list-item-open-protocol-url';
 
+import {
+  enqueueRequestRestartSnackbar,
+  requestSetPreference,
+} from '../../../senders';
+
 const SectionLinkHandling = ({
+  alwaysOpenInMainWindow,
   internalUrlRule,
   externalUrlRule,
   onOpenDialogExternallUrls,
@@ -33,7 +41,7 @@ const SectionLinkHandling = ({
       <ListItem button onClick={onOpenDialogExternallUrls}>
         <ListItemText
           primary="External URLs"
-          secondary={internalUrlRule ? `/^${externalUrlRule}$/i` : 'Not set'}
+          secondary={externalUrlRule ? `/^${externalUrlRule}$/i` : 'Not set'}
         />
         <ChevronRightIcon color="action" />
       </ListItem>
@@ -44,6 +52,23 @@ const SectionLinkHandling = ({
           secondary={internalUrlRule ? `/^${internalUrlRule}$/i` : 'Not set'}
         />
         <ChevronRightIcon color="action" />
+      </ListItem>
+      <ListItem>
+        <ListItemText
+          primary="Always open internal URLs in main window"
+          secondary="Otherwise, the app will open internal URLs in main window or popup windows depending on the context."
+        />
+        <ListItemSecondaryAction>
+          <Switch
+            edge="end"
+            color="primary"
+            checked={alwaysOpenInMainWindow}
+            onChange={(e) => {
+              requestSetPreference('alwaysOpenInMainWindow', e.target.checked);
+              enqueueRequestRestartSnackbar();
+            }}
+          />
+        </ListItemSecondaryAction>
       </ListItem>
     </List>
     <DialogInternalUrls />
@@ -61,9 +86,11 @@ SectionLinkHandling.propTypes = {
   internalUrlRule: PropTypes.string,
   onOpenDialogExternallUrls: PropTypes.func.isRequired,
   onOpenDialogInternalUrls: PropTypes.func.isRequired,
+  alwaysOpenInMainWindow: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
+  alwaysOpenInMainWindow: state.preferences.alwaysOpenInMainWindow,
   autoRefresh: state.preferences.autoRefresh,
   autoRefreshInterval: state.preferences.autoRefreshInterval,
   autoRefreshOnlyWhenInactive: state.preferences.autoRefreshOnlyWhenInactive,

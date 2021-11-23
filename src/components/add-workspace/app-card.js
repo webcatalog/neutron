@@ -79,6 +79,7 @@ const AppCard = (props) => {
     name,
     onUpdateForm,
     onUpdateMode,
+    requireInstanceUrl,
     url,
   } = props;
 
@@ -115,7 +116,9 @@ const AppCard = (props) => {
               },
             ];
             const menu = window.remote.Menu.buildFromTemplate(template);
-            menu.popup(window.remote.getCurrentWindow());
+            menu.popup({
+              window: window.remote.getCurrentWindow(),
+            });
           }}
         >
           <MoreVertIcon fontSize="small" />
@@ -127,6 +130,16 @@ const AppCard = (props) => {
           variant="contained"
           disableElevation
           onClick={() => {
+            // if the app requires instance URL
+            // user has to configure the app URL before adding workspace
+            if (requireInstanceUrl) {
+              onUpdateForm({
+                name, homeUrl: url, internetIcon: icon,
+              });
+              onUpdateMode('custom');
+              return;
+            }
+
             // only track installs for apps in the catalog
             // tracking is only for ranking purpose
             requestTrackAddWorkspace(amplitude.getInstance().options.deviceId, id);
@@ -150,6 +163,7 @@ const AppCard = (props) => {
 
 AppCard.defaultProps = {
   icon128: null,
+  requireInstanceUrl: false,
 };
 
 AppCard.propTypes = {
@@ -160,6 +174,7 @@ AppCard.propTypes = {
   name: PropTypes.string.isRequired,
   onUpdateForm: PropTypes.func.isRequired,
   onUpdateMode: PropTypes.func.isRequired,
+  requireInstanceUrl: PropTypes.bool,
   url: PropTypes.string.isRequired,
 };
 

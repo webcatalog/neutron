@@ -51,125 +51,123 @@ const SectionAudioVideo = ({
   }, [setDevices]);
 
   return (
-    <>
-      <List disablePadding dense>
-        <ListItem>
-          <ListItemText primary="Prevent the app from playing sounds" />
-          <ListItemSecondaryAction>
-            <Switch
-              edge="end"
-              color="primary"
-              checked={muteApp}
-              onChange={(e) => {
-                requestSetPreference('muteApp', e.target.checked);
-              }}
-            />
-          </ListItemSecondaryAction>
-        </ListItem>
-        <Divider />
-        <ListItem>
-          <ListItemText
-            primary="Preferred audio input device"
-          />
-          <Select
-            value={(() => {
-              if (defaultAudioInputDeviceLabel) return defaultAudioInputDeviceLabel;
-              if (devices.length > 0) {
-                const audioInputDevice = devices.find((device) => device.kind === 'audioinput');
-                if (audioInputDevice) return audioInputDevice.label;
-              }
-              return '';
-            })()}
-            onChange={(e) => requestSetPreference('defaultAudioInputDeviceLabel', e.target.value)}
-            variant="filled"
-            disableUnderline
-            margin="dense"
-            classes={{
-              root: classes.select,
+    <List disablePadding dense>
+      <ListItem>
+        <ListItemText primary="Prevent the app from playing sounds" />
+        <ListItemSecondaryAction>
+          <Switch
+            edge="end"
+            color="primary"
+            checked={muteApp}
+            onChange={(e) => {
+              requestSetPreference('muteApp', e.target.checked);
             }}
-            className={classes.selectRoot}
-          >
-            {devices.map((device) => device.kind === 'audioinput' && (
-              <MenuItem
-                key={`${device.kind}:${device.deviceId}`}
-                value={device.label}
-                dense
-              >
-                {device.label}
-              </MenuItem>
-            ))}
-          </Select>
-        </ListItem>
-        <Divider />
-        <ListItem>
-          <ListItemText
-            primary="Preferred audio output device"
           />
-          <Select
-            value={(() => {
-              if (defaultAudioOutputDeviceLabel) return defaultAudioOutputDeviceLabel;
-              if (devices.length > 0) {
-                const audioOutputDevice = devices.find((device) => device.kind === 'audiooutput');
-                if (audioOutputDevice) return audioOutputDevice.label;
-              }
-              return '';
-            })()}
-            onChange={(e) => requestSetPreference('defaultAudioOutputDeviceLabel', e.target.value)}
-            variant="filled"
-            disableUnderline
-            margin="dense"
-            classes={{
-              root: classes.select,
-            }}
-            className={classes.selectRoot}
+        </ListItemSecondaryAction>
+      </ListItem>
+      <Divider />
+      <ListItem>
+        <ListItemText
+          primary="Preferred audio input device"
+        />
+        <Select
+          value={(() => {
+            if (defaultAudioInputDeviceLabel) return defaultAudioInputDeviceLabel;
+            if (devices.length > 0) {
+              const audioInputDevice = devices.find((device) => device.kind === 'audioinput');
+              if (audioInputDevice) return audioInputDevice.label;
+            }
+            return '';
+          })()}
+          onChange={(e) => requestSetPreference('defaultAudioInputDeviceLabel', e.target.value)}
+          variant="filled"
+          disableUnderline
+          margin="dense"
+          classes={{
+            root: classes.select,
+          }}
+          className={classes.selectRoot}
+        >
+          {devices.map((device) => device.kind === 'audioinput' && (
+          <MenuItem
+            key={`${device.kind}:${device.deviceId}`}
+            value={device.label}
+            dense
           >
-            {devices.map((device) => device.kind === 'audiooutput' && (
-              <MenuItem
-                key={`${device.kind}:${device.deviceId}`}
-                value={device.label}
-                dense
-              >
-                {device.label}
-              </MenuItem>
-            ))}
-          </Select>
-        </ListItem>
-        <Divider />
-        <ListItem>
-          <ListItemText
-            primary="Preferred video input device"
-          />
-          <Select
-            value={(() => {
-              if (defaultVideoInputDeviceLabel) return defaultVideoInputDeviceLabel;
-              if (devices.length > 0) {
-                const videoInputDevice = devices.find((device) => device.kind === 'videoinput');
-                if (videoInputDevice) return videoInputDevice.label;
-              }
-              return '';
-            })()}
-            onChange={(e) => requestSetPreference('defaultVideoInputDeviceLabel', e.target.value)}
-            variant="filled"
-            disableUnderline
-            margin="dense"
-            classes={{
-              root: classes.select,
-            }}
-            className={classes.selectRoot}
+            {device.label}
+          </MenuItem>
+          ))}
+        </Select>
+      </ListItem>
+      <Divider />
+      <ListItem>
+        <ListItemText
+          primary="Preferred audio output device"
+        />
+        <Select
+          value={(() => {
+            if (defaultAudioOutputDeviceLabel) return defaultAudioOutputDeviceLabel;
+            if (devices.length > 0) {
+              const audioOutputDevice = devices.find((device) => device.kind === 'audiooutput');
+              if (audioOutputDevice) return audioOutputDevice.label;
+            }
+            return '';
+          })()}
+          onChange={(e) => requestSetPreference('defaultAudioOutputDeviceLabel', e.target.value)}
+          variant="filled"
+          disableUnderline
+          margin="dense"
+          classes={{
+            root: classes.select,
+          }}
+          className={classes.selectRoot}
+        >
+          {devices.map((device) => device.kind === 'audiooutput' && (
+          <MenuItem
+            key={`${device.kind}:${device.deviceId}`}
+            value={device.label}
+            dense
           >
-            {devices.map((device) => device.kind === 'videoinput' && (
-              <MenuItem
-                key={`${device.kind}:${device.deviceId}`}
-                value={device.label}
-                dense
-              >
-                {device.label}
-              </MenuItem>
-            ))}
-          </Select>
-        </ListItem>
-      </List>
-    </>
+            {device.label}
+          </MenuItem>
+          ))}
+        </Select>
+      </ListItem>
+      <Divider />
+      <ListItem>
+        <ListItemText
+          primary="Preferred video input device"
+        />
+        <Select
+          value={(() => {
+            if (defaultVideoInputDeviceLabel) return defaultVideoInputDeviceLabel;
+            if (devices.length > 0) {
+              const videoInputDevice = devices.find((device) => device.kind === 'videoinput');
+              if (videoInputDevice) return videoInputDevice.label;
+            }
+            return '';
+          })()}
+          onChange={(e) => requestSetPreference('defaultVideoInputDeviceLabel', e.target.value)}
+          variant="filled"
+          disableUnderline
+          margin="dense"
+          classes={{
+            root: classes.select,
+          }}
+          className={classes.selectRoot}
+        >
+          {devices.map((device) => device.kind === 'videoinput' && (
+          <MenuItem
+            key={`${device.kind}:${device.deviceId}`}
+            value={device.label}
+            dense
+          >
+            {device.label}
+          </MenuItem>
+          ))}
+        </Select>
+      </ListItem>
+    </List>
   );
 };
 

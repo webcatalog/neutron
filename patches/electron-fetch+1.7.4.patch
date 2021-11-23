@@ -1,0 +1,52 @@
+diff --git a/node_modules/electron-fetch/lib/index.es.js b/node_modules/electron-fetch/lib/index.es.js
+index 3474009..effd43f 100644
+--- a/node_modules/electron-fetch/lib/index.es.js
++++ b/node_modules/electron-fetch/lib/index.es.js
+@@ -285,6 +285,21 @@ Body.prototype = {
+     return consumeBody.call(this);
+   },
+ 
++  /**
++  * Decode response as data URL (non-spec api)
++  *
++  * @return  Promise
++  */
++  dataUrl() {
++    let ct = this.headers && this.headers.get('content-type') || '';
++    return consumeBody.call(this)
++      .then((buffer) => {
++          const base64Str = buffer.toString('base64');
++          const dataUrl = `data:${ct};base64,${base64Str}`;
++          return dataUrl;
++      });
++  },
++
+   /**
+    * Decode response as text, while automatically detecting the encoding and
+    * trying to decode to UTF-8 (non-spec api)
+diff --git a/node_modules/electron-fetch/lib/index.js b/node_modules/electron-fetch/lib/index.js
+index c9ea590..03b8558 100644
+--- a/node_modules/electron-fetch/lib/index.js
++++ b/node_modules/electron-fetch/lib/index.js
+@@ -315,6 +315,21 @@ Body.prototype = {
+     return consumeBody.call(this);
+   },
+ 
++  /**
++  * Decode response as data URL (non-spec api)
++  *
++  * @return  Promise
++  */
++    dataUrl() {
++    let ct = this.headers && this.headers.get('content-type') || '';
++    return consumeBody.call(this)
++      .then((buffer) => {
++          const base64Str = buffer.toString('base64');
++          const dataUrl = `data:${ct};base64,${base64Str}`;
++          return dataUrl;
++      });
++  },
++
+   /**
+    * Decode response as text, while automatically detecting the encoding and
+    * trying to decode to UTF-8 (non-spec api)

@@ -11,11 +11,11 @@ const {
   disable: disableDarkMode,
   setFetchMethod: setFetchMethodDarkMode,
 } = require('darkreader');
-const nodeFetch = require('node-fetch/lib').default;
+const os = require('os');
 
-const isMas = require('./is-mas');
-
-const getRecipe = require('./get-recipe');
+const isMas = require('../is-mas');
+const getRecipe = require('../get-recipe');
+const fetch = require('../customized-fetch');
 
 const preferences = ipcRenderer.sendSync('get-preferences');
 
@@ -38,9 +38,15 @@ contextBridge.exposeInMainWorld(
 const loadDarkReader = (workspaceId) => {
   const shouldUseDarkColor = ipcRenderer.sendSync('get-should-use-dark-colors');
   const workspaceDarkReader = ipcRenderer.sendSync('get-workspace-preference', workspaceId, 'darkReader');
-  const darkReader = workspaceDarkReader != null
-    ? workspaceDarkReader
-    : ipcRenderer.sendSync('get-preference', 'darkReader'); // get fresh value
+
+  // only load built-in Dark Reader if users are not using external Dark Reader extension
+  const darkReaderExtensionDetected = ipcRenderer.sendSync('get-global', 'darkReaderExtensionDetected');
+  let darkReader = false;
+  if (!darkReaderExtensionDetected) {
+    darkReader = workspaceDarkReader != null
+      ? workspaceDarkReader
+      : ipcRenderer.sendSync('get-preference', 'darkReader'); // get fresh value
+  }
 
   const isWhatsApp = window.location.hostname.includes('web.whatsapp.com');
 
@@ -71,7 +77,7 @@ const loadDarkReader = (workspaceId) => {
     // use node-fetch
     // to avoid CORS-related issues
     // see https://github.com/webcatalog/webcatalog-app/issues/993
-    setFetchMethodDarkMode((url) => nodeFetch(url));
+    setFetchMethodDarkMode((url) => fetch(url));
     enableDarkMode({
       brightness: darkReaderBrightness,
       contrast: darkReaderContrast,
@@ -349,10 +355,6 @@ webFrame.executeJavaScript(`
     }
   }
 
-  window.electronSafeIpc = {
-    send: () => null,
-    on: () => null,
-  };
   window.desktop = undefined;
 
   if (window.navigator.mediaDevices) {
@@ -411,23 +413,32 @@ webFrame.executeJavaScript(`
 /* Gmail - required for loading standard version (otherwise redirects to basic HTML) */
 // modified from https://github.com/minbrowser/min/blob/58927524e3cc16cc4f59bca09a6c352cec1a16ac/js/preload/siteUnbreak.js (Apache)
 const chromiumVersion = process.versions.chrome.split('.')[0];
+
 webFrame.executeJavaScript(`
-(function() {
+(() => {
+  const brands = [
+    { brand: "Google Chrome", version: "${chromiumVersion}" },
+    { brand: "Chromium", version: "${chromiumVersion}" },
+    { brand: "Not A;Brand", version: "99" },
+  ];
   const simulatedUAData = {
-    brands: [
-      {brand: "Chromium", version: "${chromiumVersion}"},
-      {brand: "Not A;Brand", version: "99"}
-    ],
+    brands,
     mobile: false,
-    getHighEntropyValues: function() {
-      console.warn('getHighEntropyValues is unimplemented', arguments)
-      return null
-    }
-  }
-  Object.defineProperty(navigator, 'userAgentData', {get: () => simulatedUAData})
-})()
+    getHighEntropyValues: () => Promise.resolve({
+      architecture: "${process.platform}",
+      brands,
+      mobile: false,
+      model: "",
+      platformVersion: "${os.release()}",
+      uaFullVersion: "${process.versions.chrome}"
+    })
+  };
+  Object.defineProperty(navigator, 'userAgentData', {get: () => simulatedUAData });
+})();
 `);
 
 // enable pinch zooming (default behavior of Chromium)
 // https://github.com/electron/electron/pull/12679
 webFrame.setVisualZoomLevelLimits(1, 10);
+
+require('./password-fill');

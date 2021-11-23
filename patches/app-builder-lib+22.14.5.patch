@@ -1,0 +1,50 @@
+diff --git a/node_modules/app-builder-lib/out/electron/ElectronFramework.js b/node_modules/app-builder-lib/out/electron/ElectronFramework.js
+index b409046..f1bd5a4 100644
+--- a/node_modules/app-builder-lib/out/electron/ElectronFramework.js
++++ b/node_modules/app-builder-lib/out/electron/ElectronFramework.js
+@@ -22,6 +22,18 @@ function createBrandingOpts(opts) {
+ }
+ exports.createBrandingOpts = createBrandingOpts;
+ function createDownloadOpts(opts, platform, arch, electronVersion) {
++    // castlabs/electron-releases is not supported for arm64
++    // so ignore opts.electronDownload
++    // we have to modify it here because we use different version of Electron
++    // for win32 x64 and arm64
++    if (platform !== 'darwin' && arch === 'arm64') {
++        return {
++            platform,
++            arch,
++            version: electronVersion,
++        };
++    }
++
+     return {
+         platform,
+         arch,
+diff --git a/node_modules/app-builder-lib/out/macPackager.js b/node_modules/app-builder-lib/out/macPackager.js
+index e0b51e3..20d2d77 100644
+--- a/node_modules/app-builder-lib/out/macPackager.js
++++ b/node_modules/app-builder-lib/out/macPackager.js
+@@ -104,6 +104,22 @@ class MacPackager extends platformPackager_1.PlatformPackager {
+                     outAppPath: path.join(appOutDir, appFile),
+                     force: true,
+                 });
++
++                const packContext = {
++                    appOutDir,
++                    outDir,
++                    arch,
++                    targets,
++                    packager: this,
++                    electronPlatformName: platformName,
++                };
++
++                await this.info.afterPack(packContext)
++
++                if (framework.afterPack != null) {
++                    await framework.afterPack(packContext)
++                }
++
+                 await fs.rm(x64AppOutDir, { recursive: true, force: true });
+                 await fs.rm(arm64AppOutPath, { recursive: true, force: true });
+                 await this.doSignAfterPack(outDir, appOutDir, platformName, arch, platformSpecificBuildOptions, targets);

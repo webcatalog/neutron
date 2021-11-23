@@ -137,6 +137,7 @@ const Home = ({ classes }) => {
             url: { raw: {} },
             icon_filled: { raw: {} },
             icon_filled_128: { raw: {} },
+            require_instance_url: { raw: {} },
           },
         },
       }}
@@ -235,6 +236,8 @@ const Home = ({ classes }) => {
                       url={app.url.raw}
                       icon={app.icon_filled.raw}
                       icon128={app.icon_filled_128.raw}
+                      requireInstanceUrl={app.require_instance_url
+                        && app.require_instance_url.raw === 1}
                     />
                   ))}
                   <SubmitAppCard />
@@ -249,14 +252,10 @@ const Home = ({ classes }) => {
         <WithSearch
           mapContextToProps={({ isLoading }) => ({ isLoading })}
         >
-          {({ isLoading }) => (
-            <>
-              {isLoading && (
-                <div className={classes.progressContainer}>
-                  <CircularProgress size={20} />
-                </div>
-              )}
-            </>
+          {({ isLoading }) => isLoading && (
+            <div className={classes.progressContainer}>
+              <CircularProgress size={20} />
+            </div>
           )}
         </WithSearch>
       </div>

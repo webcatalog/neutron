@@ -13,6 +13,7 @@ const windowStateKeeper = require('electron-window-state');
 const { menubar } = require('menubar');
 const path = require('path');
 const contextMenu = require('electron-context-menu');
+const electronRemote = require('@electron/remote/main');
 
 const { REACT_PATH } = require('../constants/paths');
 const { setPreference, getPreference } = require('../libs/preferences');
@@ -26,12 +27,12 @@ const formatBytes = require('../libs/format-bytes');
 const isStandalone = require('../libs/is-standalone');
 
 let win;
-let mb = {};
+let mb;
 let tray;
 let cachedBrowserViewTitle = '';
 
 const get = () => {
-  if (global.attachToMenubar) return mb.window;
+  if (global.attachToMenubar) return mb ? mb.window : undefined;
   return win;
 };
 
@@ -230,7 +231,6 @@ const createAsync = () => new Promise((resolve) => {
         titleBarStyle: alwaysOnTop ? 'hidden' : undefined,
         fullscreenable: false,
         webPreferences: {
-          enableRemoteModule: true,
           contextIsolation: false,
           nodeIntegration: true,
           webSecurity: process.env.NODE_ENV === 'production',
@@ -252,6 +252,7 @@ const createAsync = () => new Promise((resolve) => {
       });
 
       mb.window.on('focus', () => {
+        if (!mb.window) return;
         const view = mb.window.getBrowserView();
         if (view && view.webContents) {
           view.webContents.focus();
@@ -301,7 +302,6 @@ const createAsync = () => new Promise((resolve) => {
     alwaysOnTop: getPreference('alwaysOnTop'),
     autoHideMenuBar: global.useSystemTitleBar && getPreference('autoHideMenuBar'),
     webPreferences: {
-      enableRemoteModule: true,
       contextIsolation: false,
       nodeIntegration: true,
       webSecurity: process.env.NODE_ENV === 'production',
@@ -317,6 +317,7 @@ const createAsync = () => new Promise((resolve) => {
       : path.resolve(__dirname, '..', '..', 'public', 'dock-icon.png');
   }
   win = new BrowserWindow(winOpts);
+  electronRemote.enable(win.webContents);
 
   win.refreshTitle = (...args) => {
     refreshTitle(win, ...args);

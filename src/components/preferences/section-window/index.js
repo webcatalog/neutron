@@ -55,115 +55,82 @@ const styles = (theme) => ({
 
 const SectionWindow = ({
   autoHideMenuBar,
-  attachToMenubar,
   alwaysOnTop,
-  windowButtons,
   useSystemTitleBar,
 }) => (
-  <>
-    <List disablePadding dense>
+  <List disablePadding dense>
+    <ListItem>
+      <ListItemText
+        primary="Keep window always on top"
+        secondary="The window won't be hidden even when you click outside."
+      />
+      <ListItemSecondaryAction>
+        <Switch
+          edge="end"
+          color="primary"
+          checked={alwaysOnTop}
+          onChange={(e) => {
+            requestSetPreference('alwaysOnTop', e.target.checked);
+            enqueueRequestRestartSnackbar();
+          }}
+        />
+      </ListItemSecondaryAction>
+    </ListItem>
+    {window.process.platform !== 'darwin' && (
+    <>
+      <Divider />
       <ListItem>
         <ListItemText
-          primary="Keep window always on top"
-          secondary="The window won't be hidden even when you click outside."
+          primary="Use native title bar and borders"
         />
         <ListItemSecondaryAction>
           <Switch
             edge="end"
             color="primary"
-            checked={alwaysOnTop}
+            checked={useSystemTitleBar}
             onChange={(e) => {
-              requestSetPreference('alwaysOnTop', e.target.checked);
+              requestSetPreference('useSystemTitleBar', e.target.checked);
               enqueueRequestRestartSnackbar();
             }}
           />
         </ListItemSecondaryAction>
       </ListItem>
       <Divider />
-      {window.process.platform === 'darwin' ? (
-        <ListItem>
-          <ListItemText
-            primary="Show window buttons"
-            secondary={'Show "traffic light" (red/yellow/green) buttons.'}
+      <ListItem>
+        <ListItemText
+          primary="Hide menu bar automatically"
+          secondary="Auto hide the menu bar unless the Alt key is pressed."
+        />
+        <ListItemSecondaryAction>
+          <Switch
+            edge="end"
+            color="primary"
+            disabled={!useSystemTitleBar}
+            checked={useSystemTitleBar && autoHideMenuBar}
+            onChange={(e) => {
+              requestSetPreference('autoHideMenuBar', e.target.checked);
+              enqueueRequestRestartSnackbar();
+            }}
           />
-          <ListItemSecondaryAction>
-            <Switch
-              edge="end"
-              color="primary"
-              checked={(() => {
-                // if window is attched to menu bar
-                // the buttons are hidden
-                // unless alwaysOnTop is enabled
-                if (attachToMenubar) return alwaysOnTop;
-                return windowButtons;
-              })()}
-              disabled={attachToMenubar}
-              onChange={(e) => {
-                requestSetPreference('windowButtons', e.target.checked);
-                enqueueRequestRestartSnackbar();
-              }}
-            />
-          </ListItemSecondaryAction>
-        </ListItem>
-      ) : (
-        <>
-          <ListItem>
-            <ListItemText
-              primary="Use native title bar and borders"
-            />
-            <ListItemSecondaryAction>
-              <Switch
-                edge="end"
-                color="primary"
-                checked={useSystemTitleBar}
-                onChange={(e) => {
-                  requestSetPreference('useSystemTitleBar', e.target.checked);
-                  enqueueRequestRestartSnackbar();
-                }}
-              />
-            </ListItemSecondaryAction>
-          </ListItem>
-          <Divider />
-          <ListItem>
-            <ListItemText
-              primary="Hide menu bar automatically"
-              secondary="Auto hide the menu bar unless the Alt key is pressed."
-            />
-            <ListItemSecondaryAction>
-              <Switch
-                edge="end"
-                color="primary"
-                disabled={!useSystemTitleBar}
-                checked={useSystemTitleBar && autoHideMenuBar}
-                onChange={(e) => {
-                  requestSetPreference('autoHideMenuBar', e.target.checked);
-                  enqueueRequestRestartSnackbar();
-                }}
-              />
-            </ListItemSecondaryAction>
-          </ListItem>
-        </>
-      )}
-      <Divider />
-      <ListItemShortcut />
-    </List>
-  </>
+        </ListItemSecondaryAction>
+      </ListItem>
+    </>
+    )}
+    <Divider />
+    <ListItemShortcut />
+  </List>
 );
 
 SectionWindow.propTypes = {
   alwaysOnTop: PropTypes.bool.isRequired,
-  attachToMenubar: PropTypes.bool.isRequired,
   autoHideMenuBar: PropTypes.bool.isRequired,
   useSystemTitleBar: PropTypes.bool.isRequired,
-  windowButtons: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   alwaysOnTop: state.preferences.alwaysOnTop,
-  attachToMenubar: state.preferences.attachToMenubar,
   autoHideMenuBar: state.preferences.autoHideMenuBar,
   useSystemTitleBar: state.preferences.useSystemTitleBar,
-  windowButtons: state.preferences.windowButtons,
 });
 
 export default connectComponent(

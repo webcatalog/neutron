@@ -20,7 +20,7 @@ Object.keys(packageJson.dependencies)
 
 const getPreloadScriptsConfig = () => {
   const entry = {
-    'view-preload': path.join(__dirname, 'main-src', 'libs', 'view-preload.js'),
+    'view-preload': path.join(__dirname, 'main-src', 'libs', 'view-preload', 'index.js'),
     'electron-chrome-extensions/dist/preload': path.join(__dirname, 'node_modules', 'electron-chrome-extensions', 'dist', 'preload.js'),
     'adblocker-electron-preload': path.join(__dirname, 'node_modules', '@cliqz', 'adblocker-electron-preload', 'dist', 'es6', 'preload.js'),
   };
@@ -41,6 +41,15 @@ const getPreloadScriptsConfig = () => {
     },
     externals,
     entry,
+    module: {
+      rules: [
+        {
+          test: /\.(js)$/,
+          exclude: /node_modules/,
+          use: ['babel-loader'],
+        },
+      ],
+    },
     target: 'electron-renderer',
     output: {
       path: path.join(__dirname, 'build'),
@@ -88,6 +97,15 @@ const getElectronMainConfig = () => {
     entry: {
       electron: path.join(__dirname, 'main-src', 'electron.js'),
     },
+    module: {
+      rules: [
+        {
+          test: /\.(js)$/,
+          exclude: /node_modules/,
+          use: ['babel-loader'],
+        },
+      ],
+    },
     target: 'electron-main',
     output: {
       path: path.join(__dirname, 'build'),
@@ -119,6 +137,15 @@ const getRecipeConfig = () => {
     },
     externals,
     entry,
+    module: {
+      rules: [
+        {
+          test: /\.(js)$/,
+          exclude: /node_modules/,
+          use: ['babel-loader'],
+        },
+      ],
+    },
     target: 'web',
     output: {
       path: path.join(__dirname, 'build', 'recipes'),

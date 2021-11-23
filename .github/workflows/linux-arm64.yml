@@ -11,6 +11,7 @@ on:
     paths:
       - '.github/workflows/linux-arm64.yml'
       - 'build-template.js'
+      - 'patches'
 
 jobs:
   build:

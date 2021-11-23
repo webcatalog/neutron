@@ -13,6 +13,9 @@ const {
   getWorkspaceMetas,
 } = require('../libs/workspace-metas');
 const {
+  getWorkspaceTabs,
+} = require('../libs/workspace-tabs');
+const {
   setWorkspaceBadgeCount,
 } = require('../libs/workspace-badges');
 const { getPauseNotificationsInfo } = require('../libs/notifications');
@@ -50,6 +53,7 @@ const loadInvokers = () => {
         workspaces,
       },
       workspaceMetas: getWorkspaceMetas(),
+      workspaceTabs: getWorkspaceTabs(),
       notifications: {
         pauseNotificationsInfo: getPauseNotificationsInfo(),
       },
@@ -91,7 +95,7 @@ const loadInvokers = () => {
 
   ipcMain.handle('get-app-json', () => appJson);
 
-  ipcMain.handle('get-extensions-from-profile', (e, browserId, profileDirName) => getExtensionFromProfile(browserId, profileDirName));
+  ipcMain.handle('get-extensions-from-profile', (e, browserId, profileDirName) => getExtensionFromProfile(browserId, profileDirName, true));
   ipcMain.handle('get-extension-sources', () => getExtensionSources());
 
   ipcMain.handle('get-permission-auth-status', (e, authType) => {

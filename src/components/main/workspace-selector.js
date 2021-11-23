@@ -326,16 +326,14 @@ const WorkspaceSelector = ({
 
             if (disableAudio || disableNotifications) {
               return (
-                <>
-                  <Avatar variant="circle" className={classnames(classes.sleepAvatar, disableNotifications && disableAudio && classes.sleepAvatarWide)}>
-                    {disableNotifications && (
-                      <NotificationsOffIcon className={classes.sleepAvatarIcon} />
-                    )}
-                    {disableAudio && (
-                      <VolumeOffIcon className={classes.sleepAvatarIcon} />
-                    )}
-                  </Avatar>
-                </>
+                <Avatar variant="circle" className={classnames(classes.sleepAvatar, disableNotifications && disableAudio && classes.sleepAvatarWide)}>
+                  {disableNotifications && (
+                  <NotificationsOffIcon className={classes.sleepAvatarIcon} />
+                  )}
+                  {disableAudio && (
+                  <VolumeOffIcon className={classes.sleepAvatarIcon} />
+                  )}
+                </Avatar>
               );
             }
 

@@ -33,6 +33,8 @@ import {
 
 import { requestOpenInBrowser } from '../../../senders';
 
+import getKeytarVaultName from '../../../helpers/get-keytar-vault-name';
+
 const styles = (theme) => ({
   actions: {
     display: 'flex',
@@ -67,21 +69,7 @@ const DialogAppLock = ({
   const canPromptTouchId = window.process.platform === 'darwin'
     && window.remote.systemPreferences.canPromptTouchID();
 
-  // https://github.com/atom/node-keytar
-  let vaultName;
-  switch (window.process.platform) {
-    case 'darwin':
-      vaultName = 'Apple Keychain';
-      break;
-    case 'linux':
-      vaultName = 'Secret Service API/libsecret';
-      break;
-    case 'win32':
-      vaultName = 'Windows Credential Manager';
-      break;
-    default:
-      vaultName = 'Unknown Vault';
-  }
+  const vaultName = getKeytarVaultName();
 
   const passwordRecovery = (
     <Link

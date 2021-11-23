@@ -1,5 +1,5 @@
 {
-  "parser": "babel-eslint",
+  "parser": "@babel/eslint-parser",
   "extends": "airbnb",
   "globals": {
     "window": true,
@@ -16,6 +16,12 @@
     "import/prefer-default-export": [0],
     "camelcase": [0],
     "import/no-cycle": [0],
-    "linebreak-style": [0]
+    "linebreak-style": [0],
+    "default-param-last": [0],
+    "react/no-unstable-nested-components": [0],
+    "react/function-component-definition": [1, {
+      "namedComponents": "arrow-function",
+      "unnamedComponents": "arrow-function"
+    }]
   }
 }

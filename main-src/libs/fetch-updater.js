@@ -1,9 +1,9 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-const { dialog } = require('electron');
+const { dialog, shell } = require('electron');
 const semver = require('semver');
-const fetch = require('node-fetch').default;
+const fetch = require('./customized-fetch');
 
 const packageJson = require('../../package.json');
 const appJson = require('../constants/app-json');
@@ -43,10 +43,17 @@ const checkForUpdates = (silent) => {
           dialog.showMessageBox(mainWindow.get(), {
             type: 'info',
             message: `An update (${appJson.name} ${latestVersion}) is available. Open WebCatalog to update this app.`,
-            buttons: ['OK'],
+            buttons: ['OK', 'What\'s New'],
             cancelId: 0,
             defaultId: 0,
-          }).catch(console.log); // eslint-disable-line
+          })
+            .then(({ response }) => {
+              if (response === 1) {
+                const changelogUrl = appJson.changelogUrl || 'https://webcatalog.io/webcatalog/changelog/neutron/';
+                shell.openExternal(changelogUrl);
+              }
+            })
+            .catch(console.log); // eslint-disable-line
           const now = Date.now();
 
           // save last time new update dialog is shown

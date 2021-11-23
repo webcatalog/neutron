@@ -15,6 +15,7 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 
 import connectComponent from '../../../helpers/connect-component';
+import getStaticGlobal from '../../../helpers/get-static-global';
 
 import {
   requestSetPreference,
@@ -43,24 +44,28 @@ const SectionDarkReader = ({
   darkReaderGrayscale,
   darkReaderSepia,
 }) => (
-  <>
-    <List disablePadding dense>
-      <ListItem>
-        <ListItemText
-          primary="Dark Reader"
-          secondary="Create unofficial dark theme for every service & account."
+  <List disablePadding dense>
+    <ListItem>
+      <ListItemText
+        primary="Dark Reader (beta)"
+        secondary={getStaticGlobal('darkReaderExtensionDetected')
+          ? 'The built-in Dark Reader feature has been taken over by the external Dark Reader extension.'
+          : 'Create unofficial dark theme for every service & account.'}
+      />
+      <ListItemSecondaryAction>
+        <Switch
+          edge="end"
+          color="primary"
+          checked={getStaticGlobal('darkReaderExtensionDetected') ? false : darkReader}
+          disabled={getStaticGlobal('darkReaderExtensionDetected')}
+          onChange={(e) => {
+            requestSetPreference('darkReader', e.target.checked);
+          }}
         />
-        <ListItemSecondaryAction>
-          <Switch
-            edge="end"
-            color="primary"
-            checked={darkReader}
-            onChange={(e) => {
-              requestSetPreference('darkReader', e.target.checked);
-            }}
-          />
-        </ListItemSecondaryAction>
-      </ListItem>
+      </ListItemSecondaryAction>
+    </ListItem>
+    {!getStaticGlobal('darkReaderExtensionDetected') && (
+    <>
       <Divider />
       <ListItem>
         <ListItemText className={classes.sliderContainer}>
@@ -74,7 +79,7 @@ const SectionDarkReader = ({
               <Slider
                 classes={{ markLabel: classes.sliderMarkLabel }}
                 value={darkReaderBrightness - 100}
-                disabled={!darkReader}
+                disabled={getStaticGlobal('darkReaderExtensionDetected') || !darkReader}
                 aria-labelledby="brightness-slider"
                 valueLabelDisplay="auto"
                 step={5}
@@ -106,7 +111,7 @@ const SectionDarkReader = ({
               <Slider
                 classes={{ markLabel: classes.sliderMarkLabel }}
                 value={darkReaderContrast - 100}
-                disabled={!darkReader}
+                disabled={getStaticGlobal('darkReaderExtensionDetected') || !darkReader}
                 aria-labelledby="contrast-slider"
                 valueLabelDisplay="auto"
                 step={5}
@@ -138,7 +143,7 @@ const SectionDarkReader = ({
               <Slider
                 classes={{ markLabel: classes.sliderMarkLabel }}
                 value={darkReaderSepia}
-                disabled={!darkReader}
+                disabled={getStaticGlobal('darkReaderExtensionDetected') || !darkReader}
                 aria-labelledby="sepia-slider"
                 valueLabelDisplay="auto"
                 step={5}
@@ -166,7 +171,7 @@ const SectionDarkReader = ({
               <Slider
                 classes={{ markLabel: classes.sliderMarkLabel }}
                 value={darkReaderGrayscale}
-                disabled={!darkReader}
+                disabled={getStaticGlobal('darkReaderExtensionDetected') || !darkReader}
                 aria-labelledby="grayscale-slider"
                 valueLabelDisplay="auto"
                 step={5}
@@ -186,8 +191,9 @@ const SectionDarkReader = ({
           </Grid>
         </ListItemText>
       </ListItem>
-    </List>
-  </>
+    </>
+    )}
+  </List>
 );
 
 SectionDarkReader.propTypes = {

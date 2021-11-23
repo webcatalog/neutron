@@ -175,7 +175,9 @@ const DialogPauseNotifications = (props) => {
                     click: () => onUpdateShowDateTimePicker(true),
                   });
                   const menu = window.remote.Menu.buildFromTemplate(template);
-                  menu.popup(window.remote.getCurrentWindow());
+                  menu.popup({
+                    window: window.remote.getCurrentWindow(),
+                  });
                 }}
               >
                 <ListItemText primary="Adjust time" />

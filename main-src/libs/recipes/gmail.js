@@ -2,6 +2,16 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 window.addEventListener('load', () => {
+  // fix "Google Chat isn't supported on your current browser"
+  // https://github.com/webcatalog/webcatalog-app/issues/820
+  if (window.location.href
+      && window.location.href.includes('error/browser-not-supported')
+      && window.location.href.startsWith('https://chat.google.com')) {
+    const ref = new URL(window.location.href).searchParams.get('ref') || '';
+    window.location.replace(`https://chat.google.com${ref}`);
+    return;
+  }
+
   // Gmail badge count
   const getBadgeCount = () => {
     let count = 0;

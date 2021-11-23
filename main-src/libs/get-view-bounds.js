@@ -4,6 +4,15 @@
 const mainWindow = require('../windows/main');
 
 const getViewBounds = (contentSize, findInPage = false, height, width) => {
+  if (global.locked) {
+    return {
+      x: 0,
+      y: 0,
+      height: 0,
+      width: 0,
+    };
+  }
+
   const showSidebar = global.sidebar;
   const sidebarSize = global.sidebarSize || 'compact';
   const isFullScreen = mainWindow.get() && mainWindow.get().isFullScreen();
@@ -21,16 +30,11 @@ const getViewBounds = (contentSize, findInPage = false, height, width) => {
     titlebarHeight = 32;
   }
   const offsetTitlebar = showTitleBar ? titlebarHeight : 0;
-  const x = showSidebar ? sidebarWidth : 0;
-  const y = showNavigationBar ? 36 + offsetTitlebar : 0 + offsetTitlebar;
 
-  if (global.locked) {
-    return {
-      x: 0,
-      y: 0,
-      height: 0,
-      width: 0,
-    };
+  const x = showSidebar ? sidebarWidth : 0;
+  let y = showNavigationBar ? 36 + offsetTitlebar : 0 + offsetTitlebar;
+  if (global.useTabs) {
+    y += 36;
   }
 
   if (findInPage) {

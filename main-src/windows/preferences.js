@@ -4,6 +4,7 @@
 const { BrowserWindow } = require('electron');
 const path = require('path');
 const contextMenu = require('electron-context-menu');
+const electronRemote = require('@electron/remote/main');
 
 const { REACT_PATH } = require('../constants/paths');
 
@@ -19,7 +20,7 @@ const create = (scrollTo) => {
     minWidth: 760,
     minHeight: 640,
     width: 1024,
-    height: 768,
+    height: 840,
     resizable: true,
     maximizable: true,
     minimizable: true,
@@ -29,13 +30,13 @@ const create = (scrollTo) => {
     titleBarStyle: process.platform === 'win32' && !global.useSystemTitleBar ? 'hidden' : 'default',
     titleBarOverlay: process.platform === 'win32',
     webPreferences: {
-      enableRemoteModule: true,
       contextIsolation: false,
       nodeIntegration: true,
       webSecurity: process.env.NODE_ENV === 'production',
       preload: path.join(__dirname, 'preferences-preload.js'),
     },
   });
+  electronRemote.enable(win.webContents);
   win.setMenuBarVisibility(false);
   contextMenu({ window: win });
 

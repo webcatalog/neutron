@@ -19,6 +19,7 @@ import getWorkspaceFriendlyName from '../../../helpers/get-workspace-friendly-na
 import {
   requestRealignActiveWorkspace,
   requestSetPreference,
+  enqueueRequestRestartSnackbar,
 } from '../../../senders';
 
 const styles = (theme) => ({
@@ -35,6 +36,7 @@ const styles = (theme) => ({
 });
 
 const SectionAppearance = ({
+  alwaysOnTop,
   attachToMenubar,
   classes,
   navigationBar,
@@ -43,113 +45,155 @@ const SectionAppearance = ({
   sidebarSize,
   sidebarTips,
   titleBar,
+  windowButtons,
 }) => (
-  <>
-    <List disablePadding dense>
-      <ListItem>
-        <ListItemText
-          primary="Show sidebar"
-          secondary={`Sidebar lets you switch easily between ${getWorkspaceFriendlyName(true).toLowerCase()}.`}
-        />
-        <ListItemSecondaryAction>
-          <Switch
-            edge="end"
-            color="primary"
-            checked={sidebar}
-            onChange={(e) => {
-              requestSetPreference('sidebar', e.target.checked);
-              requestRealignActiveWorkspace();
-            }}
-          />
-        </ListItemSecondaryAction>
-      </ListItem>
-      <ListItem>
-        <ListItemText
-          primary="Sidebar size"
-        />
-        <Select
-          value={sidebarSize}
+  <List disablePadding dense>
+    <ListItem>
+      <ListItemText
+        primary="Show sidebar"
+        secondary={`Sidebar lets you switch easily between ${getWorkspaceFriendlyName(true).toLowerCase()}.`}
+      />
+      <ListItemSecondaryAction>
+        <Switch
+          edge="end"
+          color="primary"
+          checked={sidebar}
           onChange={(e) => {
-            requestSetPreference('sidebarSize', e.target.value);
+            requestSetPreference('sidebar', e.target.checked);
             requestRealignActiveWorkspace();
           }}
-          variant="filled"
-          disableUnderline
-          margin="dense"
-          classes={{
-            root: classes.select,
-          }}
-          className={classes.selectRoot}
-        >
-          <MenuItem
-            value="compact"
-            dense
-          >
-            Compact
-          </MenuItem>
-          <MenuItem
-            value="expanded"
-            dense
-          >
-            Expanded
-          </MenuItem>
-        </Select>
-      </ListItem>
-      <ListItem>
-        <ListItemText
-          primary="Show tips on sidebar"
         />
-        <Select
-          value={sidebarSize === 'expanded' ? 'name+shortcut' : sidebarTips}
-          onChange={(e) => requestSetPreference('sidebarTips', e.target.value)}
-          variant="filled"
-          disableUnderline
-          margin="dense"
-          classes={{
-            root: classes.select,
-          }}
-          className={classes.selectRoot}
-          disabled={sidebarSize === 'expanded'}
+      </ListItemSecondaryAction>
+    </ListItem>
+    <ListItem>
+      <ListItemText
+        primary="Sidebar size"
+      />
+      <Select
+        value={sidebarSize}
+        onChange={(e) => {
+          requestSetPreference('sidebarSize', e.target.value);
+          requestRealignActiveWorkspace();
+        }}
+        variant="filled"
+        disableUnderline
+        margin="dense"
+        classes={{
+          root: classes.select,
+        }}
+        className={classes.selectRoot}
+      >
+        <MenuItem
+          value="compact"
+          dense
         >
-          {sidebarSize === 'expanded' && (
-            <MenuItem
-              value="name+shortcut"
-              dense
-            >
-              {`${getWorkspaceFriendlyName()} names & keyboard shortcuts`}
-            </MenuItem>
-          )}
-          <MenuItem
-            value="shortcut"
-            dense
-          >
-            {`${getWorkspaceFriendlyName()} keyboard shortcuts`}
-          </MenuItem>
-          <MenuItem
-            value="name"
-            dense
-          >
-            {`${getWorkspaceFriendlyName()} names`}
-          </MenuItem>
-          <MenuItem
-            value="none"
-            dense
-          >
-            None
-          </MenuItem>
-        </Select>
-      </ListItem>
+          Compact
+        </MenuItem>
+        <MenuItem
+          value="expanded"
+          dense
+        >
+          Expanded
+        </MenuItem>
+      </Select>
+    </ListItem>
+    <ListItem>
+      <ListItemText
+        primary="Show tips on sidebar"
+      />
+      <Select
+        value={sidebarSize === 'expanded' ? 'name+shortcut' : sidebarTips}
+        onChange={(e) => requestSetPreference('sidebarTips', e.target.value)}
+        variant="filled"
+        disableUnderline
+        margin="dense"
+        classes={{
+          root: classes.select,
+        }}
+        className={classes.selectRoot}
+        disabled={sidebarSize === 'expanded'}
+      >
+        {sidebarSize === 'expanded' && (
+        <MenuItem
+          value="name+shortcut"
+          dense
+        >
+          {`${getWorkspaceFriendlyName()} names & keyboard shortcuts`}
+        </MenuItem>
+        )}
+        <MenuItem
+          value="shortcut"
+          dense
+        >
+          {`${getWorkspaceFriendlyName()} keyboard shortcuts`}
+        </MenuItem>
+        <MenuItem
+          value="name"
+          dense
+        >
+          {`${getWorkspaceFriendlyName()} names`}
+        </MenuItem>
+        <MenuItem
+          value="none"
+          dense
+        >
+          None
+        </MenuItem>
+      </Select>
+    </ListItem>
+    <ListItem>
+      <ListItemText
+        primary="Show add (+) button on sidebar"
+      />
+      <ListItemSecondaryAction>
+        <Switch
+          edge="end"
+          color="primary"
+          checked={sidebarAddButton}
+          onChange={(e) => {
+            requestSetPreference('sidebarAddButton', e.target.checked);
+            requestRealignActiveWorkspace();
+          }}
+        />
+      </ListItemSecondaryAction>
+    </ListItem>
+    <Divider />
+    <ListItem>
+      <ListItemText
+        primary="Show navigation bar"
+        secondary="Navigation bar lets you go back, forward, home and reload."
+      />
+      <ListItemSecondaryAction>
+        <Switch
+          edge="end"
+          color="primary"
+            // must show sidebar or navigation bar on Linux
+            // if not, as user can't right-click on menu bar icon
+            // they can't access preferences or notifications
+          checked={(window.process.platform === 'linux' && attachToMenubar && !sidebar) || navigationBar}
+          disabled={(window.process.platform === 'linux' && attachToMenubar && !sidebar)}
+          onChange={(e) => {
+            requestSetPreference('navigationBar', e.target.checked);
+            requestRealignActiveWorkspace();
+          }}
+        />
+      </ListItemSecondaryAction>
+    </ListItem>
+    {window.process.platform === 'darwin' && (
+    <>
+      <Divider />
       <ListItem>
         <ListItemText
-          primary="Show add (+) button on sidebar"
+          primary="Show title bar"
+          secondary="Title bar shows you the title of the current page."
         />
         <ListItemSecondaryAction>
           <Switch
             edge="end"
             color="primary"
-            checked={sidebarAddButton}
+            checked={titleBar}
             onChange={(e) => {
-              requestSetPreference('sidebarAddButton', e.target.checked);
+              requestSetPreference('titleBar', e.target.checked);
               requestRealignActiveWorkspace();
             }}
           />
@@ -158,52 +202,35 @@ const SectionAppearance = ({
       <Divider />
       <ListItem>
         <ListItemText
-          primary="Show navigation bar"
-          secondary="Navigation bar lets you go back, forward, home and reload."
+          primary="Show window buttons"
+          secondary={'Show "traffic light" (red/yellow/green) buttons.'}
         />
         <ListItemSecondaryAction>
           <Switch
             edge="end"
             color="primary"
-            // must show sidebar or navigation bar on Linux
-            // if not, as user can't right-click on menu bar icon
-            // they can't access preferences or notifications
-            checked={(window.process.platform === 'linux' && attachToMenubar && !sidebar) || navigationBar}
-            disabled={(window.process.platform === 'linux' && attachToMenubar && !sidebar)}
+            checked={(() => {
+              // if window is attched to menu bar
+              // the buttons are hidden
+              // unless alwaysOnTop is enabled
+              if (attachToMenubar) return alwaysOnTop;
+              return windowButtons;
+            })()}
+            disabled={attachToMenubar}
             onChange={(e) => {
-              requestSetPreference('navigationBar', e.target.checked);
-              requestRealignActiveWorkspace();
+              requestSetPreference('windowButtons', e.target.checked);
+              enqueueRequestRestartSnackbar();
             }}
           />
         </ListItemSecondaryAction>
       </ListItem>
-      {window.process.platform === 'darwin' && (
-        <>
-          <Divider />
-          <ListItem>
-            <ListItemText
-              primary="Show title bar"
-              secondary="Title bar shows you the title of the current page."
-            />
-            <ListItemSecondaryAction>
-              <Switch
-                edge="end"
-                color="primary"
-                checked={titleBar}
-                onChange={(e) => {
-                  requestSetPreference('titleBar', e.target.checked);
-                  requestRealignActiveWorkspace();
-                }}
-              />
-            </ListItemSecondaryAction>
-          </ListItem>
-        </>
-      )}
-    </List>
-  </>
+    </>
+    )}
+  </List>
 );
 
 SectionAppearance.propTypes = {
+  alwaysOnTop: PropTypes.bool.isRequired,
   attachToMenubar: PropTypes.bool.isRequired,
   classes: PropTypes.object.isRequired,
   navigationBar: PropTypes.bool.isRequired,
@@ -212,9 +239,11 @@ SectionAppearance.propTypes = {
   sidebarSize: PropTypes.oneOf(['compact', 'expanded']).isRequired,
   sidebarTips: PropTypes.oneOf(['shortcut', 'name', 'none']).isRequired,
   titleBar: PropTypes.bool.isRequired,
+  windowButtons: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
+  alwaysOnTop: state.preferences.alwaysOnTop,
   attachToMenubar: state.preferences.attachToMenubar,
   navigationBar: state.preferences.navigationBar,
   sidebar: state.preferences.sidebar,
@@ -222,6 +251,7 @@ const mapStateToProps = (state) => ({
   sidebarSize: state.preferences.sidebarSize,
   sidebarTips: state.preferences.sidebarTips,
   titleBar: state.preferences.titleBar,
+  windowButtons: state.preferences.windowButtons,
 });
 
 export default connectComponent(

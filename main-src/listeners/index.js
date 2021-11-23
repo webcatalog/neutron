@@ -36,7 +36,6 @@ const {
   setWorkspaceAccountInfo,
   removeWorkspaceAccountInfo,
 } = require('../libs/workspaces');
-
 const {
   getWorkspaceMeta,
   getWorkspaceMetas,
@@ -102,6 +101,8 @@ const workspacePreferencesWindow = require('../windows/workspace-preferences');
 
 const appJson = require('../constants/app-json');
 
+const workspaceTabsListenrs = require('./workspace-tabs-listeners');
+
 const loadListeners = () => {
   ipcMain.on('request-open-in-browser', (e, url) => {
     shell.openExternal(url);
@@ -154,6 +155,12 @@ const loadListeners = () => {
 
   ipcMain.on('request-set-system-preference', (e, name, value) => {
     setSystemPreference(name, value);
+  });
+
+  // Global
+  ipcMain.on('get-global', (e, name) => {
+    const val = global[name];
+    e.returnValue = val;
   });
 
   // Preferences
@@ -685,6 +692,8 @@ const loadListeners = () => {
   ipcMain.on('request-track-add-workspace', (_, deviceId, appId) => {
     trackAddWorkspaceAsync(deviceId, appId);
   });
+
+  workspaceTabsListenrs.load();
 };
 
 module.exports = loadListeners;

@@ -11,13 +11,14 @@ if (!process.mas) {
 }
 
 const {
+  BrowserWindow,
   app,
+  components,
   dialog,
+  inAppPurchase,
   ipcMain,
   nativeTheme,
   protocol,
-  BrowserWindow,
-  inAppPurchase,
   shell,
 } = require('electron');
 const path = require('path');
@@ -25,11 +26,11 @@ const fs = require('fs-extra');
 const isDev = require('electron-is-dev');
 const settings = require('electron-settings');
 const electronRemote = require('@electron/remote/main');
-const semver = require('semver');
+const rtlDetect = require('rtl-detect');
 
 const appJson = require('./constants/app-json');
 const isMas = require('./libs/is-mas');
-const isAppx = require('./libs/is-appx');
+const getExtensionFromProfile = require('./libs/extensions/get-extensions-from-profile');
 
 electronRemote.initialize();
 
@@ -99,9 +100,11 @@ const promptSetAsDefaultMailClient = require('./libs/prompt-set-as-default-email
 const promptSetAsDefaultCalendarApp = require('./libs/prompt-set-as-default-calendar-app');
 const getWorkspaceFriendlyName = require('./libs/get-workspace-friendly-name');
 const windowShortcut = require('./libs/window-shortcut');
+const PasswordManagers = require('./libs/password-manager');
 
 const MAILTO_URLS = require('./constants/mailto-urls');
 const WEBCAL_URLS = require('./constants/webcal-urls');
+const PASSWORD_MANAGERS = require('./constants/password-managers');
 const isStandalone = require('./libs/is-standalone');
 const isSnap = require('./libs/is-snap');
 
@@ -276,7 +279,8 @@ if (!gotTheLock) {
           // pick automically if there's only one choice
           if (webcalWorkspaces.length === 0) {
             ipcMain.emit(
-              'request-show-message-box', null,
+              'request-show-message-box',
+              null,
               `None of your ${getWorkspaceFriendlyName().toLowerCase()} supports accessing iCalendar files.`,
               'error',
             );
@@ -304,7 +308,8 @@ if (!gotTheLock) {
           // pick automically if there's only one choice
           if (mailtoWorkspaces.length === 0) {
             ipcMain.emit(
-              'request-show-message-box', null,
+              'request-show-message-box',
+              null,
               `None of your ${getWorkspaceFriendlyName().toLowerCase()} supports composing email messages.`,
               'error',
             );
@@ -343,9 +348,23 @@ if (!gotTheLock) {
 
   loadListeners();
   loadInvokers();
+  PasswordManagers.initialize();
 
   const commonInit = () => {
     app.whenReady()
+      .then(() => {
+        if (components) {
+          components.whenReady()
+            .then(() => {
+              // eslint-disable-next-line no-console
+              console.log('Widevine components ready:', components.status());
+            })
+            .catch((err) => {
+              // eslint-disable-next-line no-console
+              console.log(err);
+            });
+        }
+      })
       // if app lock is in Keychain, lock the app at first launch
       .then(() => getAppLockStatusAsync())
       .then((appLockStatus) => {
@@ -499,6 +518,8 @@ if (!gotTheLock) {
       extensionEnabledExtesionIds,
       extensionSourceBrowserId,
       extensionSourceProfileDirName,
+      hibernateWhenUnused,
+      hibernateWhenUnusedTimeout,
       navigationBar,
       proxyAddress,
       proxyBypassRules,
@@ -516,9 +537,8 @@ if (!gotTheLock) {
       titleBar,
       trayIcon,
       useSystemTitleBar,
+      useTabs,
       windowButtons,
-      hibernateWhenUnused,
-      hibernateWhenUnusedTimeout,
     } = getPreferences();
 
     if (customUserAgent) {
@@ -537,6 +557,7 @@ if (!gotTheLock) {
 
     global.isMacOs11 = isMacOs11();
     global.isWindows10 = isWindows10();
+    global.useTabs = process.env.NODE_ENV !== 'production' && useTabs;
     global.attachToMenubar = attachToMenubar;
     global.runInBackground = process.platform !== 'darwin' && runInBackground;
     global.sidebar = sidebar;
@@ -544,7 +565,7 @@ if (!gotTheLock) {
     global.titleBar = titleBar;
     global.trayIcon = trayIcon;
     global.navigationBar = navigationBar;
-    global.useSystemTitleBar = useSystemTitleBar;
+    global.useSystemTitleBar = process.platform !== 'darwin' && useSystemTitleBar;
     global.windowButtons = windowButtons;
     global.MAILTO_URLS = MAILTO_URLS;
     global.WEBCAL_URLS = WEBCAL_URLS;
@@ -560,15 +581,43 @@ if (!gotTheLock) {
     global.proxyPacScript = proxyPacScript;
     global.proxyRules = `${proxyProtocol}://${proxyAddress}:${proxyPort || '80'}`;
     global.proxyMode = proxyMode;
+
     global.extensionEnabledExtesionIds = extensionEnabledExtesionIds;
     global.extensionSourceBrowserId = extensionSourceBrowserId;
     global.extensionSourceProfileDirName = extensionSourceProfileDirName;
-    global.extensionEnabled = !isMas() && !isAppx()
-      && Boolean(semver.prerelease(app.getVersion()))
-      && extensionEnabledExtesionIds
+    global.extensionEnabled = extensionEnabledExtesionIds
       && Object.keys(extensionEnabledExtesionIds).length > 0;
+    // disable built-in password manager and Dark Reader if external extensions are detected
+    if (global.extensionEnabled) {
+      const loadableExtensions = getExtensionFromProfile(
+        global.extensionSourceBrowserId,
+        global.extensionSourceProfileDirName,
+      )
+        .filter((ext) => global.extensionEnabledExtesionIds[ext.id]);
+
+      global.darkReaderExtensionDetected = Boolean(
+        loadableExtensions.find((ext) => ext.name && ext.name.toLowerCase().includes('dark reader')),
+      );
+
+      const passwordManagerExt = loadableExtensions.find((ext) => {
+        const found = PASSWORD_MANAGERS.find(
+          (passwordManagerName) => ext.name
+            && ext.name.toLowerCase().includes(passwordManagerName.toLowerCase()),
+        );
+        return Boolean(found);
+      });
+      if (passwordManagerExt) {
+        global.passwordManagerExtensionDetected = passwordManagerExt.name;
+      }
+    }
+
     global.hibernateWhenUnused = hibernateWhenUnused;
     global.hibernateWhenUnusedTimeout = hibernateWhenUnusedTimeout;
+
+    // on Windows, if the display language is RTL language (Arabic, Hebrew, etc)
+    // the x bounds coordination is reversed
+    // so we have this to handle BrowserViews and related UI correctly
+    global.rtlCoordination = process.platform === 'win32' && rtlDetect.isRtlLang(app.getLocale());
 
     commonInit();
 

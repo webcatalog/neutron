@@ -8,11 +8,9 @@ import List from '@material-ui/core/List';
 import ListItemExtensions from './list-item-extensions';
 
 const SectionExtensions = () => (
-  <>
-    <List disablePadding dense>
-      <ListItemExtensions />
-    </List>
-  </>
+  <List disablePadding dense>
+    <ListItemExtensions />
+  </List>
 );
 
 export default SectionExtensions;

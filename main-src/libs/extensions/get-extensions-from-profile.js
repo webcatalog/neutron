@@ -8,8 +8,8 @@ const getChromiumUserDataPath = require('./get-chromium-user-data-path');
 
 const cached = {};
 
-const getExtensionsFromProfile = (browserId, profileDirName) => {
-  if (cached[`${browserId}:${profileDirName}`]) return cached[`${browserId}:${profileDirName}`];
+const getExtensionsFromProfile = (browserId, profileDirName, skipCache = false) => {
+  if (!skipCache && cached[`${browserId}:${profileDirName}`]) return cached[`${browserId}:${profileDirName}`];
 
   const extensionsPath = path.join(getChromiumUserDataPath(browserId), profileDirName, 'Extensions');
   if (!fs.existsSync(extensionsPath)) return [];
@@ -49,6 +49,7 @@ const getExtensionsFromProfile = (browserId, profileDirName) => {
               const defaultLocale = manifest.default_locale || 'en';
               const messageJsonPath = path.join(versionPath, '_locales', defaultLocale, 'messages.json');
               const messages = fs.readJsonSync(messageJsonPath);
+              // eslint-disable-next-line prefer-regex-literals
               const nameMessageId = name.match(new RegExp('__MSG_(.*)__'))[1];
               if (nameMessageId && messages[nameMessageId] && messages[nameMessageId].message) {
                 name = messages[nameMessageId].message;
