@@ -48,7 +48,6 @@ import SectionAudioVideo from './section-audio-video';
 import SectionAutoReload from './section-auto-reload';
 import SectionAutofill from './section-autofill';
 import SectionBadge from './section-badge';
-import SectionPrivacy from './section-privacy';
 import SectionDarkReader from './section-dark-reader';
 import SectionDevelopers from './section-developers';
 import SectionDownloads from './section-downloads';
@@ -66,17 +65,19 @@ import SectionNetwork from './section-network';
 import SectionNotifications from './section-notifications';
 import SectionPerformance from './section-performance';
 import SectionPermissions from './section-permissions';
+import SectionPopupWindows from './section-popup-windows';
+import SectionPrivacy from './section-privacy';
 import SectionReset from './section-reset';
 import SectionSearch from './section-search';
 import SectionSystem from './section-system';
-import SectionTelemetry from './section-telemetry';
 import SectionTabs from './section-tabs';
+import SectionTelemetry from './section-telemetry';
 import SectionTheme from './section-theme';
+import SectionTitlebar from './section-titlebar';
 import SectionTray from './section-tray';
 import SectionView from './section-view';
 import SectionWindow from './section-window';
 import SectionWorkspaces from './section-workspaces';
-import SectionPopupWindows from './section-popup-windows';
 
 import SnackbarTrigger from '../shared/snackbar-trigger';
 
@@ -163,16 +164,17 @@ const Preferences = ({
         theme: { text: 'Theme', Component: SectionTheme },
         darkReader: { text: 'Dark Reader', Component: SectionDarkReader },
         view: { text: 'View', Component: SectionView },
-        popupWindows: { text: 'Popup Windows', Component: SectionPopupWindows, hidden: window.process.platform !== 'darwin' },
         fonts: { text: 'Fonts', Component: SectionFonts },
       },
     },
     window: {
-      text: window.process.platform === 'darwin' ? 'Window & Menu Bar' : 'Window & Tray',
+      text: window.process.platform === 'darwin' ? 'Windows & Menu Bar' : 'Windows & Tray',
       Icon: WebAssetIcon,
       subSections: {
-        window: { text: 'Window', Component: SectionWindow },
+        titlebar: { text: 'Title Bar', Component: SectionTitlebar, hidden: window.process.platform === 'darwin' },
         tray: { text: window.process.platform === 'darwin' ? 'Menu Bar' : 'Tray', Component: SectionTray },
+        window: { text: 'Main Window', Component: SectionWindow },
+        popupWindows: { text: 'Popup Windows', Component: SectionPopupWindows, hidden: window.process.platform !== 'darwin' },
       },
     },
     tabs: {

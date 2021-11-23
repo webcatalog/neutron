@@ -18,43 +18,60 @@ import {
   requestSetPreference,
 } from '../../../senders';
 
-import ListItemShortcut from './list-item-shortcut';
-
-const SectionWindow = ({
-  alwaysOnTop,
-}) => (
+const SectionTitlebar = ({
+  autoHideMenuBar,
+  useSystemTitleBar,
+}) => window.process.platform !== 'darwin' && (
   <List disablePadding dense>
     <ListItem>
       <ListItemText
-        primary="Keep window always on top"
-        secondary="The window won't be hidden even when you click outside."
+        primary="Use native title bar and borders"
       />
       <ListItemSecondaryAction>
         <Switch
           edge="end"
           color="primary"
-          checked={alwaysOnTop}
+          checked={useSystemTitleBar}
           onChange={(e) => {
-            requestSetPreference('alwaysOnTop', e.target.checked);
+            requestSetPreference('useSystemTitleBar', e.target.checked);
             enqueueRequestRestartSnackbar();
           }}
         />
       </ListItemSecondaryAction>
     </ListItem>
     <Divider />
-    <ListItemShortcut />
+    <ListItem>
+      <ListItemText
+        primary="Hide menu bar automatically"
+        secondary="Auto hide the menu bar unless the Alt key is pressed."
+      />
+      <ListItemSecondaryAction>
+        <Switch
+          edge="end"
+          color="primary"
+          disabled={!useSystemTitleBar}
+          checked={useSystemTitleBar && autoHideMenuBar}
+          onChange={(e) => {
+            requestSetPreference('autoHideMenuBar', e.target.checked);
+            enqueueRequestRestartSnackbar();
+          }}
+        />
+      </ListItemSecondaryAction>
+    </ListItem>
   </List>
 );
 
-SectionWindow.propTypes = {
-  alwaysOnTop: PropTypes.bool.isRequired,
+SectionTitlebar.propTypes = {
+  autoHideMenuBar: PropTypes.bool.isRequired,
+  useSystemTitleBar: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  alwaysOnTop: state.preferences.alwaysOnTop,
+  autoHideMenuBar: state.preferences.autoHideMenuBar,
+  useSystemTitleBar: state.preferences.useSystemTitleBar,
 });
 
 export default connectComponent(
-  SectionWindow,
+  SectionTitlebar,
   mapStateToProps,
 );
