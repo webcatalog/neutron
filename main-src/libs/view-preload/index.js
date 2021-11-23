@@ -2,91 +2,17 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 const {
-  contextBridge,
   ipcRenderer,
   webFrame,
 } = require('electron');
-const {
-  enable: enableDarkMode,
-  disable: disableDarkMode,
-  setFetchMethod: setFetchMethodDarkMode,
-} = require('darkreader');
 
 const isMas = require('../is-mas');
-const getRecipe = require('../get-recipe');
-const fetch = require('../customized-fetch');
+const { get: getRecipe } = require('./recipes');
+const { load: loadDarkReader } = require('./dark-reader');
 
 const preferences = ipcRenderer.sendSync('get-preferences');
 
-contextBridge.exposeInMainWorld(
-  'webcatalog',
-  {
-    setBadgeCount: (count = 0) => {
-      if (typeof count !== 'number') {
-        // eslint-disable-next-line no-console
-        console.log('webcatalog.setBadgeCount() only accepts number as input');
-        return;
-      }
-      ipcRenderer.invoke('set-web-contents-badge', count);
-    },
-    clearSiteData: () => ipcRenderer.invoked('flush-web-contents-app-data'),
-    isPopup: () => ipcRenderer.sendSync('is-popup'),
-  },
-);
-
-const loadDarkReader = (workspaceId) => {
-  const shouldUseDarkColor = ipcRenderer.sendSync('get-should-use-dark-colors');
-  const workspaceDarkReader = ipcRenderer.sendSync('get-workspace-preference', workspaceId, 'darkReader');
-
-  // only load built-in Dark Reader if users are not using external Dark Reader extension
-  const darkReaderExtensionDetected = ipcRenderer.sendSync('get-global', 'darkReaderExtensionDetected');
-  let darkReader = false;
-  if (!darkReaderExtensionDetected) {
-    darkReader = workspaceDarkReader != null
-      ? workspaceDarkReader
-      : ipcRenderer.sendSync('get-preference', 'darkReader'); // get fresh value
-  }
-
-  const isWhatsApp = window.location.hostname.includes('web.whatsapp.com');
-
-  // disable Dark Reader in WhatsApp Web
-  // Dark Reader distorts QR Code and prevents users from signing in
-  // also WhatsApp Web already has dark theme
-  if (shouldUseDarkColor && darkReader && !isWhatsApp) {
-    let darkReaderBrightness;
-    let darkReaderContrast;
-    let darkReaderGrayscale;
-    let darkReaderSepia;
-
-    // if workspaceDarkReader is defined
-    // use darkReader config
-    if (workspaceDarkReader != null) {
-      const workspacePreferences = ipcRenderer.sendSync('get-workspace-preferences', workspaceId);
-      darkReaderBrightness = workspacePreferences.darkReaderBrightness || 100;
-      darkReaderContrast = workspacePreferences.darkReaderContrast || 100;
-      darkReaderGrayscale = workspacePreferences.darkReaderGrayscale || 0;
-      darkReaderSepia = workspacePreferences.darkReaderSepia || 0;
-    } else {
-      const freshPreferences = ipcRenderer.sendSync('get-preferences'); // get fresh values
-      darkReaderBrightness = freshPreferences.darkReaderBrightness;
-      darkReaderContrast = freshPreferences.darkReaderContrast;
-      darkReaderGrayscale = freshPreferences.darkReaderGrayscale;
-      darkReaderSepia = freshPreferences.darkReaderSepia;
-    }
-    // use node-fetch
-    // to avoid CORS-related issues
-    // see https://github.com/webcatalog/webcatalog-app/issues/993
-    setFetchMethodDarkMode((url) => fetch(url));
-    enableDarkMode({
-      brightness: darkReaderBrightness,
-      contrast: darkReaderContrast,
-      grayscale: darkReaderGrayscale,
-      sepia: darkReaderSepia,
-    });
-  } else {
-    disableDarkMode();
-  }
-};
+require('./webcatalog-api');
 
 let handled = false;
 const handleLoaded = async (event) => {
