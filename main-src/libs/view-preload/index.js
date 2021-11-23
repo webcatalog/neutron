@@ -381,23 +381,6 @@ webFrame.executeJavaScript(`
           });
         });
     };
-
-    const nativeEnumerateDevices = window.navigator.mediaDevices.enumerateDevices.bind(window.navigator.mediaDevices);
-    const preferredDeviceLabels = [
-      '${preferences.defaultAudioInputDeviceLabel || ''}',
-      '${preferences.defaultAudioOutputDeviceLabel || ''}',
-      '${preferences.defaultVideoInputDeviceLabel || ''}',
-    ];
-    window.navigator.mediaDevices.enumerateDevices = async (...args) => {
-      const unsortedDevices = await nativeEnumerateDevices(...args);
-      const sortedDevices = [...unsortedDevices];
-      sortedDevices.sort((a, b) => {
-        const aPreferred = preferredDeviceLabels.includes(a.label) ? 0 : 1;
-        const bPreferred = preferredDeviceLabels.includes(b.label) ? 0 : 1;
-        return aPreferred - bPreferred;
-      });
-      return sortedDevices;
-    };
   }
 
   window.navigator.setAppBadge = (contents) => {
