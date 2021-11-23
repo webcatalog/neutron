@@ -142,7 +142,7 @@ const defaultPreferences = {
   // because on Windows 10, it's normally for apps not to have border
   // but on prior versions of Windows, apps have border
   // system title bar pref is required for the app have the native border
-  useSystemTitleBar: true,
+  useSystemTitleBar: process.platform !== 'darwin',
   warnBeforeQuitting: false,
   windowButtons: true, // traffic light buttons on macOS
   // popup Windows

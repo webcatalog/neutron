@@ -170,14 +170,17 @@ const getCompatibleUserAgentString = (url) => {
   // fix Google prevents signing in because of security concerns
   // https://github.com/webcatalog/webcatalog-app/issues/455
   // https://github.com/meetfranz/franz/issues/1720#issuecomment-566460763
-  if (urlObj && urlObj.hostname === 'accounts.google.com') {
+
+  // Google Earth will attempt to use `SharedArrayBuffer` API if it detects Chrome UA
+  // `SharedArrayBuffer` is disabled to prevent Spectre-related security issues
+  if (urlObj && ['accounts.google.com', 'earth.google.com'].includes(urlObj.hostname)) {
     return getFirefoxUserAgent();
   }
 
   // Google uses special code for Chromium-based browsers
   // when screensharing (not working with Electron)
   // so change user-agent to Safari to make it work
-  if (urlObj && (urlObj.hostname === 'meet.google.com' || urlObj.hostname === 'hangouts.google.com')) {
+  if (urlObj && ['meet.google.com', 'hangouts.google.com'].includes(urlObj.hostname)) {
     return getSafariUserAgent();
   }
 
