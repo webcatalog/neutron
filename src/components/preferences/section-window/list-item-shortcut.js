@@ -128,7 +128,7 @@ const ListItemShortcut = ({ classes, windowShortcut }) => {
         }}
       >
         <ListItemText
-          primary="Define a keyboard shortcut to open the app quickly"
+          primary="Define a keyboard shortcut to switch to the app window quickly"
           secondary={windowShortcut
             ? renderCombinator(windowShortcut) : null}
         />
