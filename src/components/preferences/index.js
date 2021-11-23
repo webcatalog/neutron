@@ -44,7 +44,6 @@ import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name'
 import SectionAbout from './section-about';
 import SectionAccountLicensing from './section-account-licensing';
 import SectionAppLock from './section-app-lock';
-import SectionAudioVideo from './section-audio-video';
 import SectionAutoReload from './section-auto-reload';
 import SectionAutofill from './section-autofill';
 import SectionBadge from './section-badge';
@@ -212,7 +211,6 @@ const Preferences = ({
       Icon: PermCameraMicIcon,
       subSections: {
         permissions: { text: 'Permissions', Component: SectionPermissions, hidden: window.process.platform !== 'darwin' },
-        audioVideo: { text: 'Audio & Video', Component: SectionAudioVideo },
       },
     },
     permision: {

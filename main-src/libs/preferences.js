@@ -69,12 +69,6 @@ const defaultPreferences = {
   defaultFontSize: 16,
   defaultFontSizeMinimum: 0,
   defaultFontSizeMonospace: 13,
-  /* audio & video */
-  // deviceId is not constant
-  // so use label for now
-  defaultAudioInputDeviceLabel: null,
-  defaultAudioOutputDeviceLabel: null,
-  defaultVideoInputDeviceLabel: null,
   /* Font Settings (same as Chrome/Edge) */
   downloadPath: getDefaultDownloadsPath(),
   // extensions
