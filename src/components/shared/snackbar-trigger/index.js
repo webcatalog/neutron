@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React from 'react';
+import React, { useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
 
 import Button from '@material-ui/core/Button';
@@ -19,10 +19,18 @@ const styles = (theme) => ({
 });
 
 const SnackbarTrigger = ({ classes }) => {
-  const notistackRef = React.createRef();
-  const onClickDismiss = (key) => () => {
-    notistackRef.current.closeSnackbar(key);
-  };
+  const notistackRef = useRef(null);
+  const action = useCallback((key) => {
+    const onClickDismiss = () => {
+      notistackRef.current.closeSnackbar(key);
+    };
+
+    return (
+      <Button color="inherit" onClick={onClickDismiss}>
+        Dismiss
+      </Button>
+    );
+  }, notistackRef);
 
   return (
     <SnackbarProvider
@@ -38,11 +46,7 @@ const SnackbarTrigger = ({ classes }) => {
       classes={{
         containerRoot: classes.notistackContainerRoot,
       }}
-      action={(key) => (
-        <Button color="inherit" onClick={onClickDismiss(key)}>
-          Dismiss
-        </Button>
-      )}
+      action={action}
     >
       <Inner />
     </SnackbarProvider>

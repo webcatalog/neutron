@@ -91,6 +91,7 @@ const extractDomain = (fullUrl) => {
 
 // https://stackoverflow.com/a/14645182
 const isSubdomain = (url) => {
+  // eslint-disable-next-line prefer-regex-literals
   const regex = new RegExp(/^([a-z]+:\/{2})?([\w-]+\.[\w-]+\.\w+)$/);
   return !!url.match(regex); // make sure it returns boolean
 };
@@ -826,7 +827,16 @@ const addViewAsync = async (browserWindow, workspace) => {
     });
   };
 
-  const handleNewWindow = (e, nextUrl, frameName, disposition, options, additionalFeatures, referrer, postBody) => {
+  const handleNewWindow = (
+    e,
+    nextUrl,
+    frameName,
+    disposition,
+    options,
+    additionalFeatures,
+    referrer,
+    postBody,
+  ) => {
     const appUrl = getWorkspace(workspace.id).homeUrl || appJson.url;
     const appDomain = extractDomain(appUrl);
     const currentUrl = e.sender.getURL();

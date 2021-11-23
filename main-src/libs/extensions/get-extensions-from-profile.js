@@ -49,6 +49,7 @@ const getExtensionsFromProfile = (browserId, profileDirName, skipCache = false) 
               const defaultLocale = manifest.default_locale || 'en';
               const messageJsonPath = path.join(versionPath, '_locales', defaultLocale, 'messages.json');
               const messages = fs.readJsonSync(messageJsonPath);
+              // eslint-disable-next-line prefer-regex-literals
               const nameMessageId = name.match(new RegExp('__MSG_(.*)__'))[1];
               if (nameMessageId && messages[nameMessageId] && messages[nameMessageId].message) {
                 name = messages[nameMessageId].message;

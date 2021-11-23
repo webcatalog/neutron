@@ -88,8 +88,8 @@ switch (platform) {
     targets = Platform.WINDOWS.createTarget(['dir'], Arch[arch]);
     break;
   }
-  default:
-  case 'linux': {
+  case 'linux':
+  default: {
     targets = Platform.LINUX.createTarget(['dir'], Arch[arch]);
     break;
   }
