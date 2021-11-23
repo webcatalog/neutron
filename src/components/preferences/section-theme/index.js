@@ -51,57 +51,54 @@ const SectionTheme = ({
   themeSource,
   themeColor,
 }) => (
-  <>
-    <List disablePadding dense>
-      <ListItem>
-        <ListItemText primary="Theme" />
-        <Select
-          value={themeSource}
-          onChange={(e) => requestSetPreference('themeSource', e.target.value)}
-          variant="filled"
-          disableUnderline
-          margin="dense"
-          classes={{
-            root: classes.select,
-          }}
-          className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
-        >
-          <MenuItem dense value="system">System default</MenuItem>
-          <MenuItem dense value="light">Light</MenuItem>
-          <MenuItem dense value="dark">Dark</MenuItem>
-        </Select>
-      </ListItem>
-      <Divider />
-      <ListItem>
-        <ListItemText primary="Color" />
-        <Select
-          value={themeColor == null ? 'none' : themeColor}
-          onChange={(e) => requestSetPreference('themeColor', e.target.value === 'none' ? null : e.target.value)}
-          variant="filled"
-          disableUnderline
-          margin="dense"
-          classes={{
-            root: classes.select,
-          }}
-          className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
-          // renderValue={(value) => camelCaseToSentenceCase(value)}
-        >
-          <MenuItem dense value="none">None</MenuItem>
-          <MenuItem dense value="auto">
-            {`Matches with active ${getWorkspaceFriendlyName().toLowerCase()}'s color`}
+  <List disablePadding dense>
+    <ListItem>
+      <ListItemText primary="Theme" />
+      <Select
+        value={themeSource}
+        onChange={(e) => requestSetPreference('themeSource', e.target.value)}
+        variant="filled"
+        disableUnderline
+        margin="dense"
+        classes={{
+          root: classes.select,
+        }}
+        className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
+      >
+        <MenuItem dense value="system">System default</MenuItem>
+        <MenuItem dense value="light">Light</MenuItem>
+        <MenuItem dense value="dark">Dark</MenuItem>
+      </Select>
+    </ListItem>
+    <Divider />
+    <ListItem>
+      <ListItemText primary="Color" />
+      <Select
+        value={themeColor == null ? 'none' : themeColor}
+        onChange={(e) => requestSetPreference('themeColor', e.target.value === 'none' ? null : e.target.value)}
+        variant="filled"
+        disableUnderline
+        margin="dense"
+        classes={{
+          root: classes.select,
+        }}
+        className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
+      >
+        <MenuItem dense value="none">None</MenuItem>
+        <MenuItem dense value="auto">
+          {`Matches with active ${getWorkspaceFriendlyName().toLowerCase()}'s color`}
+        </MenuItem>
+        {Object.keys(themeColors).map((val) => (
+          <MenuItem dense value={val} key={val}>
+            <ListItemIcon>
+              <Avatar className={classes.avatar} style={{ backgroundColor: themeColors[val][600] }}>{' '}</Avatar>
+            </ListItemIcon>
+            <ListItemText primary={camelCaseToSentenceCase(val)} />
           </MenuItem>
-          {Object.keys(themeColors).map((val) => (
-            <MenuItem dense value={val} key={val}>
-              <ListItemIcon>
-                <Avatar className={classes.avatar} style={{ backgroundColor: themeColors[val][600] }}>{' '}</Avatar>
-              </ListItemIcon>
-              <ListItemText primary={camelCaseToSentenceCase(val)} />
-            </MenuItem>
-          ))}
-        </Select>
-      </ListItem>
-    </List>
-  </>
+        ))}
+      </Select>
+    </ListItem>
+  </List>
 );
 
 SectionTheme.defaultProps = {

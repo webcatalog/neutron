@@ -390,7 +390,8 @@ const Sidebar = ({
           )}
           <RatingButton
             className={classnames(
-              classes.iconButton, !isSidebarExpanded && classes.iconButtonVertical,
+              classes.iconButton,
+              !isSidebarExpanded && classes.iconButtonVertical,
             )}
             size="small"
           />
@@ -401,7 +402,8 @@ const Sidebar = ({
               onClick={() => requestShowShareMenu()}
               classes={{
                 root: classnames(
-                  classes.iconButton, !isSidebarExpanded && classes.iconButtonVertical,
+                  classes.iconButton,
+                  !isSidebarExpanded && classes.iconButtonVertical,
                 ),
                 disabled: classes.iconButtonDisabled,
               }}
@@ -419,7 +421,8 @@ const Sidebar = ({
             onClick={requestShowNotificationsWindow}
             classes={{
               root: classnames(
-                classes.iconButton, !isSidebarExpanded && classes.iconButtonVertical,
+                classes.iconButton,
+                !isSidebarExpanded && classes.iconButtonVertical,
               ),
               disabled: classes.iconButtonDisabled,
             }}
@@ -433,7 +436,8 @@ const Sidebar = ({
             onClick={() => requestSetPreference('muteApp', !muteApp)}
             classes={{
               root: classnames(
-                classes.iconButton, !isSidebarExpanded && classes.iconButtonVertical,
+                classes.iconButton,
+                !isSidebarExpanded && classes.iconButtonVertical,
               ),
               disabled: classes.iconButtonDisabled,
             }}
@@ -447,7 +451,8 @@ const Sidebar = ({
             onClick={() => requestShowPreferencesWindow()}
             classes={{
               root: classnames(
-                classes.iconButton, !isSidebarExpanded && classes.iconButtonVertical,
+                classes.iconButton,
+                !isSidebarExpanded && classes.iconButtonVertical,
               ),
               disabled: classes.iconButtonDisabled,
             }}

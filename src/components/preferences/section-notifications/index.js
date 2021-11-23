@@ -134,26 +134,21 @@ const SectionNotifications = ({
       >
         <ListItemText
           primary="Test notifications"
-          secondary={(() => {
-            // only show this message on macOS Catalina 10.15 & above
-            if (
-              window.process.platform === 'darwin'
-              && semver.gte(window.remote.process.getSystemVersion(), '10.15.0')
-            ) {
-              return (
-                <>
-                  <span>If notifications don&apos;t show up,</span>
-                  <span> make sure you enable notifications in </span>
-                  <b>
-                    <span>macOS Preferences &gt; Notifications &gt; </span>
-                    {appJson.name}
-                  </b>
-                  <span>.</span>
-                </>
-              );
-            }
-            return null;
-          })()}
+           // only show this message on macOS Catalina 10.15 & above
+          secondary={(
+            window.process.platform === 'darwin'
+            && semver.gte(window.remote.process.getSystemVersion(), '10.15.0')
+          ) && ((
+            <>
+              <span>If notifications don&apos;t show up,</span>
+              <span> make sure you enable notifications in </span>
+              <b>
+                <span>macOS Preferences &gt; Notifications &gt; </span>
+                {appJson.name}
+              </b>
+              <span>.</span>
+            </>
+          ))}
         />
         <ChevronRightIcon color="action" />
       </ListItem>

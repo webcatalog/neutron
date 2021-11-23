@@ -252,14 +252,10 @@ const Home = ({ classes }) => {
         <WithSearch
           mapContextToProps={({ isLoading }) => ({ isLoading })}
         >
-          {({ isLoading }) => (
-            <>
-              {isLoading && (
-                <div className={classes.progressContainer}>
-                  <CircularProgress size={20} />
-                </div>
-              )}
-            </>
+          {({ isLoading }) => isLoading && (
+            <div className={classes.progressContainer}>
+              <CircularProgress size={20} />
+            </div>
           )}
         </WithSearch>
       </div>

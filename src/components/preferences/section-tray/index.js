@@ -43,11 +43,9 @@ const styles = (theme) => ({
 });
 
 const SectionTray = () => (
-  <>
-    <List disablePadding dense>
-      <ListItemTray />
-    </List>
-  </>
+  <List disablePadding dense>
+    <ListItemTray />
+  </List>
 );
 
 const mapStateToProps = (state) => ({

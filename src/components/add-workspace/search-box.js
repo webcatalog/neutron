@@ -93,25 +93,23 @@ const SearchBox = ({
           searchAsYouType
           debounceLength={300}
           inputView={({ getAutocomplete, getInputProps }) => (
-            <>
-              <div className="sui-search-box__wrapper">
-                <input
-                  {...getInputProps({
-                    className: classes.input,
-                    placeholder: 'Search apps...',
-                    // App Search API can only handle up to 128 chars
-                    maxLength: 128,
-                    onFocus: () => {
-                      window.preventClosingWindow = true;
-                    },
-                    onBlur: () => {
-                      window.preventClosingWindow = false;
-                    },
-                  })}
-                />
-                {getAutocomplete()}
-              </div>
-            </>
+            <div className="sui-search-box__wrapper">
+              <input
+                {...getInputProps({
+                  className: classes.input,
+                  placeholder: 'Search apps...',
+                  // App Search API can only handle up to 128 chars
+                  maxLength: 128,
+                  onFocus: () => {
+                    window.preventClosingWindow = true;
+                  },
+                  onBlur: () => {
+                    window.preventClosingWindow = false;
+                  },
+                })}
+              />
+              {getAutocomplete()}
+            </div>
           )}
           shouldClearFilters={false}
         />
@@ -127,9 +125,9 @@ const SearchBox = ({
           isLoading,
         })}
       >
-        {({ searchTerm, setSearchTerm, isLoading }) => (
-          <>
-            {searchTerm.length > 0 ? (
+        {({ searchTerm, setSearchTerm, isLoading }) => {
+          if (searchTerm.length > 0) {
+            return (
               <Tooltip title="Clear">
                 <IconButton
                   color="default"
@@ -144,30 +142,31 @@ const SearchBox = ({
                   <CloseIcon fontSize="small" />
                 </IconButton>
               </Tooltip>
-            ) : (
-              <Tooltip title="Refresh">
-                <IconButton
-                  color="default"
-                  className={classes.iconButton}
-                  aria-label="Refresh"
-                  onClick={() => {
-                    // clear cache first
-                    if (window.elasticAppSearchQueryCache) {
-                      window.elasticAppSearchQueryCache.clear();
-                    }
-                    setSearchTerm('', {
-                      refresh: true,
-                      debounce: 0,
-                    });
-                  }}
-                  disabled={isLoading}
-                >
-                  <RefreshIcon fontSize="small" />
-                </IconButton>
-              </Tooltip>
-            )}
-          </>
-        )}
+            );
+          }
+          return (
+            <Tooltip title="Refresh">
+              <IconButton
+                color="default"
+                className={classes.iconButton}
+                aria-label="Refresh"
+                onClick={() => {
+                  // clear cache first
+                  if (window.elasticAppSearchQueryCache) {
+                    window.elasticAppSearchQueryCache.clear();
+                  }
+                  setSearchTerm('', {
+                    refresh: true,
+                    debounce: 0,
+                  });
+                }}
+                disabled={isLoading}
+              >
+                <RefreshIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+          );
+        }}
       </WithSearch>
     </div>
   </Paper>

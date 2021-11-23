@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-/* global Node Event */
+/* global Node */
 
 // Modified from https://github.com/minbrowser/min/blob/519f8c486bf6bcba863d940161b06ee7d4942a8e/js/preload/passwordFill.js (Apache license)
 /**
