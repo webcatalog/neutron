@@ -395,23 +395,30 @@ webFrame.executeJavaScript(`
 // add navigator.userAgentData API support
 /* Gmail - required for loading standard version (otherwise redirects to basic HTML) */
 // modified from https://github.com/minbrowser/min/blob/58927524e3cc16cc4f59bca09a6c352cec1a16ac/js/preload/siteUnbreak.js (Apache)
-const chromiumVersion = process.versions.chrome.split('.')[0];
+const chromiumMajorVersion = process.versions.chrome.split('.')[0]; // e.g. "90"
+
+// Follow Chrome/Edge naming
+let platformName = 'Linux';
+if (process.platform === 'darwin') platformName = 'macOS';
+else if (process.platform === 'win32') platformName = 'Windows';
 
 webFrame.executeJavaScript(`
 (() => {
   const brands = [
-    { brand: "Google Chrome", version: "${chromiumVersion}" },
-    { brand: "Chromium", version: "${chromiumVersion}" },
+    { brand: "WebCatalog Neutron", version: "${chromiumMajorVersion}" },
+    { brand: "Chromium", version: "${chromiumMajorVersion}" },
     { brand: "Not A;Brand", version: "99" },
   ];
   const simulatedUAData = {
     brands,
     mobile: false,
+    platform: "${platformName}",
     getHighEntropyValues: () => Promise.resolve({
       architecture: "${process.platform}",
       brands,
       mobile: false,
       model: "",
+      platform: "${platformName}",
       platformVersion: "${os.release()}",
       uaFullVersion: "${process.versions.chrome}"
     })
