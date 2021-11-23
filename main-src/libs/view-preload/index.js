@@ -417,6 +417,7 @@ const chromiumVersion = process.versions.chrome.split('.')[0];
 webFrame.executeJavaScript(`
 (() => {
   const brands = [
+    { brand: "Google Chrome", version: "${chromiumVersion}" },
     { brand: "Chromium", version: "${chromiumVersion}" },
     { brand: "Not A;Brand", version: "99" },
   ];
