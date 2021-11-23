@@ -563,7 +563,7 @@ if (!gotTheLock) {
     global.titleBar = titleBar;
     global.trayIcon = trayIcon;
     global.navigationBar = navigationBar;
-    global.useSystemTitleBar = useSystemTitleBar;
+    global.useSystemTitleBar = process.platform !== 'darwin' && useSystemTitleBar;
     global.windowButtons = windowButtons;
     global.MAILTO_URLS = MAILTO_URLS;
     global.WEBCAL_URLS = WEBCAL_URLS;
