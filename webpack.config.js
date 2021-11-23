@@ -123,9 +123,10 @@ const getRecipeConfig = () => {
   const plugins = [];
   const entry = {};
 
-  fs.readdirSync(path.join(__dirname, 'main-src', 'libs', 'recipes'))
+  fs.readdirSync(path.join(__dirname, 'main-src', 'libs', 'view-preload', 'recipes'))
+    .filter((fileName) => fileName !== 'index.js')
     .forEach((fileName) => {
-      entry[fileName.replace('.js', '')] = path.join(__dirname, 'main-src', 'libs', 'recipes', fileName);
+      entry[fileName.replace('.js', '')] = path.join(__dirname, 'main-src', 'libs', 'view-preload', 'recipes', fileName);
     });
 
   return {
