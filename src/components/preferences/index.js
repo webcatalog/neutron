@@ -209,8 +209,9 @@ const Preferences = ({
     audioVideo: {
       text: 'Audio & Video',
       Icon: PermCameraMicIcon,
+      hidden: window.process.platform !== 'darwin',
       subSections: {
-        permissions: { text: 'Permissions', Component: SectionPermissions, hidden: window.process.platform !== 'darwin' },
+        permissions: { text: 'Permissions', Component: SectionPermissions },
       },
     },
     permision: {
