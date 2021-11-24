@@ -85,6 +85,7 @@ const getViewBounds = require('../libs/get-view-bounds');
 const isMas = require('../libs/is-mas');
 const isStandalone = require('../libs/is-standalone');
 const isSnap = require('../libs/is-snap');
+const isWebcatalog = require('../libs/is-webcatalog');
 const getIapFormattedPriceAsync = require('../libs/get-iap-formatted-price-async');
 const getUtmSource = require('../libs/get-utm-source');
 const getWorkspaceFriendlyName = require('../libs/get-workspace-friendly-name');
@@ -584,7 +585,9 @@ const loadListeners = () => {
       return;
     }
 
-    fetchUpdater.checkForUpdates(isSilent);
+    if (isWebcatalog()) {
+      fetchUpdater.checkForUpdates(isSilent);
+    }
   });
 
   ipcMain.on('request-show-display-media-window', (e) => {
