@@ -244,6 +244,10 @@ const loadListeners = () => {
     app.exit(0);
   });
 
+  ipcMain.on('request-reload-workspace', (e, id) => {
+    reloadView(id);
+  });
+
   ipcMain.on('request-show-require-reload-workspace-dialog', (e, id) => {
     const senderWindow = e && e.sender ? BrowserWindow.fromWebContents(e.sender) : undefined;
     const win = senderWindow

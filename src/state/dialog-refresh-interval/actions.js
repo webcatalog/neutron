@@ -9,7 +9,7 @@ import {
 import {
   requestSetPreference,
   enqueueRequestRestartSnackbar,
-  requestRequestReloadWorkspaceDialog,
+  requestShowReloadWorkspaceDialog,
 } from '../../senders';
 import roundTime from '../../helpers/round-time';
 import getStaticGlobal from '../../helpers/get-static-global';
@@ -66,7 +66,7 @@ export const save = () => (dispatch, getState) => {
       },
     }));
     const workspaceId = getStaticGlobal('workspacePreferencesWorkspaceId');
-    requestRequestReloadWorkspaceDialog(workspaceId);
+    requestShowReloadWorkspaceDialog(workspaceId);
   } else {
     requestSetPreference('autoRefreshInterval', autoRefreshInterval);
     enqueueRequestRestartSnackbar();

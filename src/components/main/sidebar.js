@@ -39,16 +39,17 @@ import BrowserActionList from './browser-action-list';
 import {
   requestCreateWorkspace,
   requestHibernateWorkspace,
+  requestReloadWorkspace,
   requestRemoveWorkspace,
   requestSetActiveWorkspace,
   requestSetPreference,
   requestSetWorkspace,
   requestSetWorkspaces,
   requestShowAddWorkspaceWindow,
-  requestShowWorkspacePreferencesWindow,
   requestShowNotificationsWindow,
   requestShowPreferencesWindow,
   requestShowShareMenu,
+  requestShowWorkspacePreferencesWindow,
   requestWakeUpWorkspace,
 } from '../../senders';
 
@@ -210,6 +211,21 @@ const SortableItem = sortableElement(({ value }) => {
 
         const template = [
           {
+            label: `Reload ${getWorkspaceFriendlyName()}`,
+            click: () => requestReloadWorkspace(id),
+          },
+          {
+            label: hibernated ? `Wake Up ${getWorkspaceFriendlyName()}` : `Hibernate ${getWorkspaceFriendlyName()}`,
+            click: () => {
+              if (hibernated) {
+                return requestWakeUpWorkspace(id);
+              }
+              return requestHibernateWorkspace(id);
+            },
+            visible: !active,
+          },
+          { type: 'separator' },
+          {
             label: `Edit ${getWorkspaceFriendlyName()}`,
             click: () => requestShowWorkspacePreferencesWindow(id),
           },
@@ -241,18 +257,6 @@ const SortableItem = sortableElement(({ value }) => {
             },
           },
         ];
-
-        if (!active) {
-          template.splice(1, 0, {
-            label: hibernated ? `Wake Up ${getWorkspaceFriendlyName()}` : `Hibernate ${getWorkspaceFriendlyName()}`,
-            click: () => {
-              if (hibernated) {
-                return requestWakeUpWorkspace(id);
-              }
-              return requestHibernateWorkspace(id);
-            },
-          });
-        }
 
         const menu = window.remote.Menu.buildFromTemplate(template);
         menu.popup({
