@@ -144,14 +144,6 @@ const useStyles = makeStyles((theme) => ({
       width: 20,
     },
   },
-  progress: {
-    color: (props) => {
-      if (props.themeColor != null) {
-        return fade(theme.palette.getContrastText(themeColors[props.themeColor][900]), 0.7);
-      }
-      return theme.palette.type === 'dark' ? 'rgba(255, 255, 255, 0.7)' : 'rgb(77, 77, 77)';
-    },
-  },
 }));
 
 const NavigationBar = ({
