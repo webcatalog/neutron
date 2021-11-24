@@ -22,6 +22,10 @@ import {
   getIapFormattedPriceAsync,
 } from '../../../invokers';
 
+import {
+  requestRestorePurchase,
+} from '../../../senders';
+
 const SectionAccountLicensing = ({
   iapPurchased,
   standaloneRegistered,
@@ -44,15 +48,26 @@ const SectionAccountLicensing = ({
   return (
     <List disablePadding dense>
       <ListItem button onClick={null} disabled>
-        <ListItemText primary={registered ? `${isMas() || isStandalone() ? `${appJson.name} Plus` : 'WebCatalog Lifetime'} is activated.` : `Upgrade to ${isMas() || isStandalone() ? `${appJson.name} Plus` : 'WebCatalog Lifetime'} (${formattedPrice ? `${formattedPrice}, ` : ''}one-time payment for lifetime use) to unlock all features & add unlimited number of ${getWorkspaceFriendlyName(true).toLowerCase()}.`} />
+        <ListItemText
+          primary={registered ? `${isMas() || isStandalone() ? `${appJson.name} Plus` : 'WebCatalog Lifetime'} is activated.` : `Upgrade to ${isMas() || isStandalone() ? `${appJson.name} Plus` : 'WebCatalog Lifetime'} (${formattedPrice ? `${formattedPrice}, ` : ''}one-time payment for lifetime use) to unlock all features & add unlimited number of ${getWorkspaceFriendlyName(true).toLowerCase()}.`}
+        />
       </ListItem>
       {!registered && (
         <>
           <Divider />
           <ListItem button onClick={checkLicense}>
-            <ListItemText primary={`Upgrade to ${isMas() || isStandalone() ? `${appJson.name} Plus` : 'WebCatalog Lifetime'}`} />
+            <ListItemText primary={`Upgrade to ${isMas() || isStandalone() ? `${appJson.name} Plus` : 'WebCatalog Lifetime'}...`} />
             <ChevronRightIcon color="action" />
           </ListItem>
+          {isMas && (
+            <>
+              <Divider />
+              <ListItem button onClick={requestRestorePurchase}>
+                <ListItemText primary="Restore Purchase..." />
+                <ChevronRightIcon color="action" />
+              </ListItem>
+            </>
+          )}
         </>
       )}
     </List>
