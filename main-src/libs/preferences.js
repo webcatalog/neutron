@@ -91,9 +91,9 @@ const defaultPreferences = {
   openProtocolUrlInNewWindow: 'ask', // 'ask', 'newWindow', 'mainWindow'
   /* Password Manager */
   // Apps generated with WebCatalog are not code-signed
-  // causing Keychain not to recognize the apps after re-generating (updating)
+  // causing macOS Keychain not to recognize the apps after re-generating (updating)
   // so it's not good UX => disable password autofill by default
-  passwordsAskToSave: !isWebcatalog(),
+  passwordsAskToSave: process.platform === 'darwin' && !isWebcatalog(),
   passwordsNeverSaveDomains: [],
   pauseNotifications: null,
   pauseNotificationsBySchedule: false,
