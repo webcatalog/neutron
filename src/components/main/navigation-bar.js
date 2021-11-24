@@ -81,7 +81,7 @@ const useStyles = makeStyles((theme) => ({
       if (props.themeColor != null) {
         return theme.palette.getContrastText(themeColors[props.themeColor][800]);
       }
-      return theme.palette.text.primary;
+      return theme.palette.text.secondary;
     },
   },
   iconButtonDisabled: {
@@ -197,7 +197,7 @@ const NavigationBar = ({
       <div
         className={classnames(classes.left, hasExpandedSidebar && classes.leftWithExpandedSidebar)}
       >
-        <NavigationButtons />
+        <NavigationButtons themeColor={themeColor} />
       </div>
       <div
         className={classnames(
