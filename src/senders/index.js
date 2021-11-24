@@ -80,7 +80,8 @@ export const requestSetWorkspaces = (workspaces) => window.ipcRenderer.send('req
 export const requestWakeUpWorkspace = (id) => window.ipcRenderer.send('request-wake-up-workspace', id);
 export const requestReloadViewsDarkReader = () => window.ipcRenderer.send('request-reload-views-dark-reader');
 export const requestReloadViewDarkReader = (id) => window.ipcRenderer.send('request-reload-view-dark-reader', id);
-export const requestRequestReloadWorkspaceDialog = (id) => window.ipcRenderer.send('request-show-require-reload-workspace-dialog', id);
+export const requestReloadWorkspace = (id) => window.ipcRenderer.send('request-reload-workspace', id);
+export const requestShowReloadWorkspaceDialog = (id) => window.ipcRenderer.send('request-show-require-reload-workspace-dialog', id);
 export const requestSetViewsAudioPrefs = () => window.ipcRenderer.send('request-set-views-audio-prefs');
 
 // Workspace Meta

@@ -18,7 +18,7 @@ import getUtmSource from '../../../helpers/get-utm-source';
 
 import {
   requestOpenInBrowser,
-  requestRequestReloadWorkspaceDialog,
+  requestShowReloadWorkspaceDialog,
 } from '../../../senders';
 
 import { updateForm } from '../../../state/dialog-workspace-preferences/actions';
@@ -87,7 +87,7 @@ const SectionAutoReload = ({
               },
             });
             const workspaceId = getStaticGlobal('workspacePreferencesWorkspaceId');
-            requestRequestReloadWorkspaceDialog(workspaceId);
+            requestShowReloadWorkspaceDialog(workspaceId);
           }}
           variant="filled"
           disableUnderline
@@ -119,7 +119,7 @@ const SectionAutoReload = ({
                   },
                 });
                 const workspaceId = getStaticGlobal('workspacePreferencesWorkspaceId');
-                requestRequestReloadWorkspaceDialog(workspaceId);
+                requestShowReloadWorkspaceDialog(workspaceId);
               }}
               variant="filled"
               disableUnderline
@@ -181,7 +181,7 @@ const SectionAutoReload = ({
                   },
                 });
                 const workspaceId = getStaticGlobal('workspacePreferencesWorkspaceId');
-                requestRequestReloadWorkspaceDialog(workspaceId);
+                requestShowReloadWorkspaceDialog(workspaceId);
               }}
               variant="filled"
               disableUnderline
