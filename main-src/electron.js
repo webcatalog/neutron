@@ -88,7 +88,6 @@ const {
   addViewAsync,
   reloadViewsDarkReader,
 } = require('./libs/views');
-const fetchUpdater = require('./libs/fetch-updater');
 const { getWorkspaces, setWorkspace } = require('./libs/workspaces');
 const sendToAllWindows = require('./libs/send-to-all-windows');
 const extractHostname = require('./libs/extract-hostname');
@@ -630,17 +629,7 @@ if (!gotTheLock) {
         }
 
         if (autoCheckForUpdates) {
-          if (isStandalone() && !isSnap()) {
-            ipcMain.emit('request-check-for-updates', null, true);
-          } else if (!isMas()) {
-            // only notify user about update again after one week
-            const lastShowNewUpdateDialog = getPreference('lastShowNewUpdateDialog');
-            const updateInterval = 7 * 24 * 60 * 60 * 1000; // one week
-            const now = Date.now();
-            if (now - lastShowNewUpdateDialog > updateInterval) {
-              fetchUpdater.checkForUpdates(true);
-            }
-          }
+          ipcMain.emit('request-check-for-updates', null, true);
         }
 
         // pre-cache pricing for (Singlebox|...) Plus
