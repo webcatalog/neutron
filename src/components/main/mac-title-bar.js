@@ -19,7 +19,7 @@ import {
   requestLoadUrl,
 } from '../../senders';
 
-import NavigationButtons from './navigation-buttons';
+import NavigationButtons from '../shared/navigation-buttons';
 
 const useStyles = makeStyles((theme) => {
   // Big Sur increases title bar height: https://github.com/microsoft/vscode/pull/110592 (28px)

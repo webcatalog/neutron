@@ -11,7 +11,6 @@ import { fade } from '@material-ui/core/styles/colorManipulator';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
-import CircularProgress from '@material-ui/core/CircularProgress';
 
 import MenuIcon from '@material-ui/icons/Menu';
 
@@ -21,6 +20,8 @@ import connectComponent from '../../../helpers/connect-component';
 import getStaticGlobal from '../../../helpers/get-static-global';
 
 import themeColors from '../../../constants/theme-colors';
+
+import NavigationButtons from '../navigation-buttons';
 
 const TOOLBAR_HEIGHT = 28;
 const BUTTON_WIDTH = 46;
@@ -133,6 +134,12 @@ const useStyles = makeStyles((theme) => ({
     width: BUTTON_WIDTH,
     borderRadius: 0,
     height: TOOLBAR_HEIGHT,
+    '&:hover, &:focus': {
+      backgroundColor: () => {
+        if (window.process.platform === 'win32') return 'rgba(0, 0, 0, 0.04)';
+        return undefined;
+      },
+    },
   },
   iconButtonWithCompactSidebar: {
     marginLeft: 9,
@@ -143,24 +150,9 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(1),
     marginRight: 0,
   },
-  progressContainer: {
-    height: '100%',
-    display: 'flex',
-    justifyContent: 'center',
-    paddingRight: theme.spacing(1),
-  },
-  progress: {
-    color: (props) => {
-      if (props.themeColor != null) {
-        return fade(theme.palette.getContrastText(themeColors[props.themeColor][900]), 0.7);
-      }
-      return theme.palette.type === 'dark' ? 'rgba(255, 255, 255, 0.7)' : 'rgb(77, 77, 77)';
-    },
-  },
 }));
 
 const EnhancedAppBar = ({
-  isLoading,
   isMaximized,
   navigationBar,
   sidebar,
@@ -215,15 +207,13 @@ const EnhancedAppBar = ({
               <MenuIcon fontSize="small" />
             </IconButton>
           )}
+          {window.mode === 'main' && !navigationBar && (
+            <NavigationButtons forceLightTheme />
+          )}
         </div>
         <div className={classes.center} onDoubleClick={onDoubleClick}>
           {title}
         </div>
-        {isLoading && !navigationBar && !sidebar && (
-          <div className={classes.progressContainer}>
-            <CircularProgress size={18} className={classes.progress} />
-          </div>
-        )}
         <div className={classes.right} onDoubleClick={onDoubleClick}>
           {window.process.platform === 'linux' && (
             <div className={classes.windowsControl}>
@@ -295,13 +285,11 @@ const EnhancedAppBar = ({
 };
 
 EnhancedAppBar.defaultProps = {
-  isLoading: false,
   title: '',
   themeColor: null,
 };
 
 EnhancedAppBar.propTypes = {
-  isLoading: PropTypes.bool,
   isMaximized: PropTypes.bool.isRequired,
   navigationBar: PropTypes.bool.isRequired,
   sidebar: PropTypes.bool.isRequired,
@@ -315,9 +303,6 @@ const mapStateToProps = (state, ownProps) => {
   const activeWorkspace = state.workspaces.workspaces[state.workspaces.activeWorkspaceId];
 
   return {
-    isLoading: activeWorkspace && state.workspaceMetas[activeWorkspace.id]
-      ? Boolean(state.workspaceMetas[activeWorkspace.id].isLoading)
-      : false,
     isMaximized: state.general.isMaximized,
     title: ownProps.title || ((window.mode === 'main' || window.mode === 'menubar') && state.general.title ? state.general.title : appJson.name),
     sidebar: state.preferences.sidebar,
