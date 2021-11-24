@@ -196,7 +196,7 @@ const Preferences = ({
       text: 'Autofill',
       Icon: AssignmentIcon,
       subSections: {
-        badge: { text: 'Passwords', Component: SectionAutofill },
+        passwordAutofill: { text: 'Password Autofill (BETA)', Component: SectionAutofill },
       },
     },
     downloads: {
