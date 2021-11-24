@@ -322,6 +322,10 @@ const loadListeners = () => {
       .catch(console.log); // eslint-disable-line no-console
   });
 
+  ipcMain.on('request-restore-purchase', () => {
+    inAppPurchase.restoreCompletedTransactions();
+  });
+
   // Notifications
   ipcMain.on('request-show-notification', (e, opts) => {
     if (Notification.isSupported()) {
