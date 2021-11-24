@@ -9,16 +9,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 
 import SvgIcon from '@material-ui/core/SvgIcon';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
-import HomeIcon from '@material-ui/icons/Home';
 import IconButton from '@material-ui/core/IconButton';
 import InputBase from '@material-ui/core/InputBase';
-import CircularProgress from '@material-ui/core/CircularProgress';
 
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import NotificationsPausedIcon from '@material-ui/icons/NotificationsPaused';
-import RefreshIcon from '@material-ui/icons/Refresh';
 import SettingsIcon from '@material-ui/icons/SettingsSharp';
 import VolumeUpIcon from '@material-ui/icons/VolumeUp';
 import VolumeOffIcon from '@material-ui/icons/VolumeOff';
@@ -35,11 +31,7 @@ import themeColors from '../../constants/theme-colors';
 import { updateAddressBarInfo } from '../../state/general/actions';
 
 import {
-  requestGoBack,
-  requestGoForward,
-  requestGoHome,
   requestLoadUrl,
-  requestReload,
   requestSetPreference,
   requestShowNotificationsWindow,
   requestShowPreferencesWindow,
@@ -48,6 +40,7 @@ import {
 
 import RatingButton from './rating-button';
 import BrowserActionList from './browser-action-list';
+import NavigationButtons from './navigation-buttons';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -88,7 +81,7 @@ const useStyles = makeStyles((theme) => ({
       if (props.themeColor != null) {
         return theme.palette.getContrastText(themeColors[props.themeColor][800]);
       }
-      return theme.palette.text.primary;
+      return theme.palette.text.secondary;
     },
   },
   iconButtonDisabled: {
@@ -151,25 +144,14 @@ const useStyles = makeStyles((theme) => ({
       width: 20,
     },
   },
-  progress: {
-    color: (props) => {
-      if (props.themeColor != null) {
-        return fade(theme.palette.getContrastText(themeColors[props.themeColor][900]), 0.7);
-      }
-      return theme.palette.type === 'dark' ? 'rgba(255, 255, 255, 0.7)' : 'rgb(77, 77, 77)';
-    },
-  },
 }));
 
 const NavigationBar = ({
   address,
   addressEdited,
-  canGoBack,
-  canGoForward,
   draggable,
   hasTrafficLights,
   hasWorkspaces,
-  isLoading,
   muteApp,
   onUpdateAddressBarInfo,
   searchEngine,
@@ -207,58 +189,7 @@ const NavigationBar = ({
       <div
         className={classnames(classes.left, hasExpandedSidebar && classes.leftWithExpandedSidebar)}
       >
-        <IconButton
-          title="Back"
-          aria-label="Back"
-          classes={{
-            root: classes.iconButton,
-            disabled: classes.iconButtonDisabled,
-          }}
-          disabled={!hasWorkspaces || !canGoBack}
-          onClick={requestGoBack}
-        >
-          <ArrowBackIcon className={classes.icon} />
-        </IconButton>
-        <IconButton
-          title="Forward"
-          aria-label="Forward"
-          classes={{
-            root: classes.iconButton,
-            disabled: classes.iconButtonDisabled,
-          }}
-          disabled={!hasWorkspaces || !canGoForward}
-          onClick={requestGoForward}
-        >
-          <ArrowForwardIcon className={classes.icon} />
-        </IconButton>
-        <IconButton
-          title="Reload"
-          aria-label="Reload"
-          classes={{
-            root: classes.iconButton,
-            disabled: classes.iconButtonDisabled,
-          }}
-          onClick={requestReload}
-          disabled={!hasWorkspaces || isLoading}
-        >
-          {isLoading ? (
-            <CircularProgress size={18} className={classes.progress} />
-          ) : (
-            <RefreshIcon className={classes.icon} />
-          )}
-        </IconButton>
-        <IconButton
-          title="Home"
-          aria-label="Home"
-          classes={{
-            root: classes.iconButton,
-            disabled: classes.iconButtonDisabled,
-          }}
-          onClick={requestGoHome}
-          disabled={!hasWorkspaces}
-        >
-          <HomeIcon className={classes.icon} />
-        </IconButton>
+        <NavigationButtons themeColor={themeColor} />
       </div>
       <div
         className={classnames(
@@ -391,19 +322,15 @@ const NavigationBar = ({
 
 NavigationBar.defaultProps = {
   address: '',
-  isLoading: false,
   themeColor: null,
 };
 
 NavigationBar.propTypes = {
   address: PropTypes.string,
   addressEdited: PropTypes.bool.isRequired,
-  canGoBack: PropTypes.bool.isRequired,
-  canGoForward: PropTypes.bool.isRequired,
   draggable: PropTypes.bool.isRequired,
   hasTrafficLights: PropTypes.bool.isRequired,
   hasWorkspaces: PropTypes.bool.isRequired,
-  isLoading: PropTypes.bool,
   muteApp: PropTypes.bool.isRequired,
   onUpdateAddressBarInfo: PropTypes.func.isRequired,
   searchEngine: PropTypes.string.isRequired,
@@ -413,32 +340,23 @@ NavigationBar.propTypes = {
   themeColor: PropTypes.string,
 };
 
-const mapStateToProps = (state) => {
-  const activeWorkspace = state.workspaces.workspaces[state.workspaces.activeWorkspaceId];
-
-  return {
-    address: state.general.address || '',
-    addressEdited: Boolean(state.general.addressEdited),
-    canGoBack: state.general.canGoBack,
-    canGoForward: state.general.canGoForward,
-    draggable: window.process.platform === 'darwin' && !state.preferences.titleBar,
-    hasTrafficLights: window.process.platform === 'darwin'
-      && getStaticGlobal('windowButtons')
-      && window.mode !== 'menubar'
-      && !state.preferences.titleBar
-      && !state.preferences.sidebar
-      && !state.general.isFullScreen,
-    hasWorkspaces: Object.keys(state.workspaces.workspaces).length > 0,
-    muteApp: state.preferences.muteApp,
-    searchEngine: state.preferences.searchEngine,
-    shouldPauseNotifications: state.notifications.pauseNotificationsInfo !== null,
-    sidebar: state.preferences.sidebar,
-    sidebarSize: state.preferences.sidebarSize,
-    isLoading: activeWorkspace && state.workspaceMetas[activeWorkspace.id]
-      ? Boolean(state.workspaceMetas[activeWorkspace.id].isLoading)
-      : false,
-  };
-};
+const mapStateToProps = (state) => ({
+  address: state.general.address || '',
+  addressEdited: Boolean(state.general.addressEdited),
+  draggable: window.process.platform === 'darwin' && !state.preferences.titleBar,
+  hasTrafficLights: window.process.platform === 'darwin'
+    && getStaticGlobal('windowButtons')
+    && window.mode !== 'menubar'
+    && !state.preferences.titleBar
+    && !state.preferences.sidebar
+    && !state.general.isFullScreen,
+  hasWorkspaces: Object.keys(state.workspaces.workspaces).length > 0,
+  muteApp: state.preferences.muteApp,
+  searchEngine: state.preferences.searchEngine,
+  shouldPauseNotifications: state.notifications.pauseNotificationsInfo !== null,
+  sidebar: state.preferences.sidebar,
+  sidebarSize: state.preferences.sidebarSize,
+});
 
 const actionCreators = {
   updateAddressBarInfo,

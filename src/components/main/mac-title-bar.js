@@ -7,7 +7,6 @@ import classnames from 'classnames';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { fade } from '@material-ui/core/styles/colorManipulator';
-import CircularProgress from '@material-ui/core/CircularProgress';
 
 import connectComponent from '../../helpers/connect-component';
 import getUrlFromText from '../../helpers/get-url-from-text';
@@ -20,7 +19,7 @@ import {
   requestLoadUrl,
 } from '../../senders';
 
-const loadingSize = isMacOs11() ? 18 : 14;
+import NavigationButtons from './navigation-buttons';
 
 const useStyles = makeStyles((theme) => {
   // Big Sur increases title bar height: https://github.com/microsoft/vscode/pull/110592 (28px)
@@ -50,7 +49,7 @@ const useStyles = makeStyles((theme) => {
       fontFamily: '-apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif',
       fontWeight: 500,
       paddingLeft: 72,
-      paddingRight: 72,
+      paddingRight: 160,
       overflow: 'hidden',
       textOverflow: 'ellipsis',
       whiteSpace: 'nowrap',
@@ -59,27 +58,17 @@ const useStyles = makeStyles((theme) => {
       paddingLeft: theme.spacing(1),
       paddingRight: theme.spacing(1),
     },
-    progressContainer: {
+    topRight: {
       position: 'absolute',
+      top: -1,
       right: theme.spacing(1),
-      top: (titleBarHeight - loadingSize) / 2 - 1,
-    },
-    progress: {
-      color: (props) => {
-        if (props.themeColor != null) {
-          return fade(theme.palette.getContrastText(themeColors[props.themeColor][900]), 0.7);
-        }
-        return theme.palette.type === 'dark' ? 'rgba(255, 255, 255, 0.7)' : 'rgb(77, 77, 77)';
-      },
     },
   };
 });
 
 const FakeTitleBar = ({
-  isLoading,
   navigationBar,
   searchEngine,
-  sidebar,
   themeColor,
   title,
 }) => {
@@ -115,9 +104,9 @@ const FakeTitleBar = ({
     >
       {(window.mode === 'main' || window.mode === 'menubar') && title ? title : appJson.name}
 
-      {isLoading && !navigationBar && !sidebar && (
-        <div className={classes.progressContainer}>
-          <CircularProgress size={loadingSize} className={classes.progress} />
+      {!navigationBar && window.mode !== 'menubar' && (
+        <div className={classes.topRight}>
+          <NavigationButtons />
         </div>
       )}
     </div>
@@ -125,16 +114,14 @@ const FakeTitleBar = ({
 };
 
 FakeTitleBar.defaultProps = {
-  isLoading: false,
   themeColor: null,
   title: '',
 };
 
 FakeTitleBar.propTypes = {
-  isLoading: PropTypes.bool,
   navigationBar: PropTypes.bool.isRequired,
   searchEngine: PropTypes.string.isRequired,
-  sidebar: PropTypes.bool.isRequired,
+  // sidebar: PropTypes.bool.isRequired,
   themeColor: PropTypes.string,
   title: PropTypes.string,
 };

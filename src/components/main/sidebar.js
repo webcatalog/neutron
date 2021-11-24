@@ -383,7 +383,7 @@ const Sidebar = ({
         <div
           className={classnames(classes.end, isSidebarExpanded && classes.endExpanded)}
         >
-          {isLoading && (
+          {!titleBar && isLoading && (
             <div className={classes.progressContainer}>
               <CircularProgress size={20} className={classes.progress} />
             </div>
