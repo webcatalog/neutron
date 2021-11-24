@@ -40,7 +40,7 @@ import {
 
 import RatingButton from './rating-button';
 import BrowserActionList from './browser-action-list';
-import NavigationButtons from './navigation-buttons';
+import NavigationButtons from '../shared/navigation-buttons';
 
 const useStyles = makeStyles((theme) => ({
   root: {

@@ -15,35 +15,43 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 import RefreshIcon from '@material-ui/icons/Refresh';
 
-import connectComponent from '../../helpers/connect-component';
-import themeColors from '../../constants/theme-colors';
+import connectComponent from '../../../helpers/connect-component';
+import themeColors from '../../../constants/theme-colors';
 
-import { updateAddressBarInfo } from '../../state/general/actions';
+import { updateAddressBarInfo } from '../../../state/general/actions';
 
 import {
   requestGoBack,
   requestGoForward,
   requestGoHome,
   requestReload,
-} from '../../senders';
+} from '../../../senders';
 
 const useStyles = makeStyles((theme) => ({
   iconButton: {
     padding: 6,
     WebkitAppRegion: 'no-drag',
     color: (props) => {
+      if (props.forceLightTheme) return 'rgba(0, 0, 0, 0.54)';
       if (props.themeColor != null) {
         return theme.palette.getContrastText(themeColors[props.themeColor][800]);
       }
       return theme.palette.text.secondary;
     },
+    '&:hover, &:focus': {
+      backgroundColor: (props) => {
+        if (props.forceLightTheme) return 'rgba(0, 0, 0, 0.04)';
+        return undefined;
+      },
+    },
   },
   iconButtonDisabled: {
     color: (props) => {
+      if (props.forceLightTheme) return 'rgba(0, 0, 0, 0.36) !important';
       if (props.themeColor != null) {
         return `${fade(theme.palette.getContrastText(themeColors[props.themeColor][800]), 0.3)} !important`;
       }
-      return theme.palette.text.disabled;
+      return `${theme.palette.text.disabled} !important`;
     },
   },
   icon: {
@@ -51,6 +59,7 @@ const useStyles = makeStyles((theme) => ({
   },
   progress: {
     color: (props) => {
+      if (props.forceLightTheme) return 'rgba(0, 0, 0, 0.54)';
       if (props.themeColor != null) {
         return fade(theme.palette.getContrastText(themeColors[props.themeColor][900]), 0.7);
       }
@@ -65,8 +74,9 @@ const NavigationBar = ({
   hasWorkspaces,
   isLoading,
   themeColor,
+  forceLightTheme,
 }) => {
-  const classes = useStyles({ themeColor });
+  const classes = useStyles({ themeColor, forceLightTheme });
 
   return (
     <>
@@ -129,6 +139,7 @@ const NavigationBar = ({
 NavigationBar.defaultProps = {
   isLoading: false,
   themeColor: null,
+  forceLightTheme: false,
 };
 
 NavigationBar.propTypes = {
@@ -137,6 +148,7 @@ NavigationBar.propTypes = {
   hasWorkspaces: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool,
   themeColor: PropTypes.string,
+  forceLightTheme: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => {
