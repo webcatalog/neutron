@@ -27,9 +27,13 @@ const get = (url) => {
   const hostname = extractHostname(url);
   const recipeId = mapper[hostname];
   if (recipeId) {
+    const recipePath = process.env.NODE_ENV === 'production'
+      ? path.join(__dirname, 'recipes', `${recipeId}.js`)
+      : path.join(__dirname, `${recipeId}.js`);
+
     return {
       id: recipeId,
-      code: fs.readFileSync(path.join(__dirname, `${recipeId}.js`), 'utf8'),
+      code: fs.readFileSync(recipePath, 'utf8'),
     };
   }
   return null;
