@@ -557,7 +557,7 @@ const loadListeners = () => {
     }
   });
 
-  ipcMain.on('request-check-for-updates', (e, isSilent) => {
+  ipcMain.on('request-check-for-updates', (_, isSilent) => {
     if (isStandalone() && !isSnap()) {
       // eslint-disable-next-line global-require
       const { autoUpdater } = require('electron-updater');
@@ -584,7 +584,7 @@ const loadListeners = () => {
       return;
     }
 
-    fetchUpdater.checkForUpdates();
+    fetchUpdater.checkForUpdates(isSilent);
   });
 
   ipcMain.on('request-show-display-media-window', (e) => {

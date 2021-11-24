@@ -11,14 +11,26 @@ const appJson = require('../constants/app-json');
 const mainWindow = require('../windows/main');
 const preferencesWindow = require('../windows/preferences');
 
-const { setPreference } = require('./preferences');
+const { setPreference, getPreference } = require('./preferences');
 const isMas = require('./is-mas');
 const isSnap = require('./is-snap');
 const isAppx = require('./is-appx');
+const isTester = require('./is-tester');
 
 const checkForUpdates = (silent) => {
   if (isMas() || isSnap() || isAppx()) {
     return;
+  }
+
+  if (silent && !isTester) {
+    // only notify user about update again after one week
+    // (unless user is using pre-release version)
+    const lastShowNewUpdateDialog = getPreference('lastShowNewUpdateDialog');
+    const updateInterval = 7 * 24 * 60 * 60 * 1000; // one week
+    const now = Date.now();
+    if (now - lastShowNewUpdateDialog < updateInterval) {
+      return;
+    }
   }
 
   console.log('Checking for updates...'); // eslint-disable-line no-console
@@ -31,7 +43,8 @@ const checkForUpdates = (silent) => {
     .then((data) => data.version)
     .then((latestVersion) => {
       // in silent mode, only show popup, if there's a major update
-      const hasNewUpdate = silent
+      // (unless user is using pre-release version)
+      const hasNewUpdate = silent && !isTester
         ? semver.major(latestVersion) > semver.major(packageJson.version)
         : semver.gt(latestVersion, packageJson.version);
 
