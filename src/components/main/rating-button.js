@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 import IconButton from '@material-ui/core/IconButton';
 
-import RateReviewIcon from '@material-ui/icons/RateReview';
+import ThumbsUpIcon from '@material-ui/icons/ThumbUp';
 
 import connectComponent from '../../helpers/connect-component';
 import isAppx from '../../helpers/is-appx';
@@ -78,7 +78,7 @@ const RatingButton = ({
           }).catch(console.log); // eslint-disable-line
         }}
       >
-        <RateReviewIcon className={iconClassName} />
+        <ThumbsUpIcon className={iconClassName} />
       </IconButton>
     );
   }
