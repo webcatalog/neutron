@@ -10,7 +10,7 @@ const {
   setFetchMethod: setFetchMethodDarkMode,
 } = require('darkreader');
 
-const fetch = require('../customized-fetch');
+const fetch = require('node-fetch').default;
 
 require('./webcatalog-api');
 
