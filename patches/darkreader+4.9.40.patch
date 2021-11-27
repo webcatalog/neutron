@@ -1,8 +1,8 @@
 diff --git a/node_modules/darkreader/darkreader.js b/node_modules/darkreader/darkreader.js
-index 45a9b79..b5c1fb2 100644
+index 45a9b79..2d2c3f6 100644
 --- a/node_modules/darkreader/darkreader.js
 +++ b/node_modules/darkreader/darkreader.js
-@@ -228,17 +228,15 @@
+@@ -228,17 +228,13 @@
      }
      function readResponseAsDataURL(response) {
          return __awaiter(this, void 0, void 0, function () {
@@ -10,10 +10,7 @@ index 45a9b79..b5c1fb2 100644
 +            var _dataURL, dataURL;
              return __generator(this, function (_a) {
                  switch (_a.label) {
--                    case 0: return [4, response.blob()];
-+                    // response.blob() is incompatible with Electron preload environment
-+                    // as it is not isomorphic
-+                    case 0: return [4, response.dataUrl()];
+                     case 0: return [4, response.blob()];
                      case 1:
 -                        blob = _a.sent();
 -                        return [4, (new Promise(function (resolve) {
