@@ -106,7 +106,7 @@ const FakeTitleBar = ({
 
       {!navigationBar && window.mode !== 'menubar' && (
         <div className={classes.topRight}>
-          <NavigationButtons />
+          <NavigationButtons themeColor={themeColor} />
         </div>
       )}
     </div>
