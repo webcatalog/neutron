@@ -22,7 +22,7 @@ const checkForUpdates = (silent) => {
     return;
   }
 
-  if (silent && !isTester) {
+  if (silent && !isTester()) {
     // only notify user about update again after one week
     // (unless user is using pre-release version)
     const lastShowNewUpdateDialog = getPreference('lastShowNewUpdateDialog');
@@ -44,7 +44,7 @@ const checkForUpdates = (silent) => {
     .then((latestVersion) => {
       // in silent mode, only show popup, if there's a major update
       // (unless user is using pre-release version)
-      const hasNewUpdate = silent && !isTester
+      const hasNewUpdate = silent && !isTester()
         ? semver.major(latestVersion) > semver.major(packageJson.version)
         : semver.gt(latestVersion, packageJson.version);
 
