@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { fade } from '@material-ui/core/styles/colorManipulator';
@@ -45,13 +46,13 @@ const useStyles = makeStyles((theme) => ({
       },
     },
   },
-  iconButtonDisabled: {
+  iconDisabledWithThemeColor: {
     color: (props) => {
-      if (props.forceLightTheme) return 'rgba(0, 0, 0, 0.36) !important';
+      if (props.forceLightTheme) return 'rgba(0, 0, 0, 0.36)';
       if (props.themeColor != null) {
-        return `${fade(theme.palette.getContrastText(themeColors[props.themeColor][800]), 0.3)} !important`;
+        return fade(theme.palette.getContrastText(themeColors[props.themeColor][800]), 0.3);
       }
-      return `${theme.palette.text.disabled} !important`;
+      return theme.palette.text.disabled;
     },
   },
   icon: {
@@ -85,31 +86,42 @@ const NavigationBar = ({
         aria-label="Back"
         classes={{
           root: classes.iconButton,
-          disabled: classes.iconButtonDisabled,
         }}
         disabled={!hasWorkspaces || !canGoBack}
         onClick={requestGoBack}
       >
-        <ArrowBackIcon className={classes.icon} />
+        <ArrowBackIcon
+          className={classnames(
+            classes.icon,
+            // has to apply it here
+            // somehow, JSS is not applied correctly for IconButton disabled class
+            (!hasWorkspaces || !canGoBack) && classes.iconDisabledWithThemeColor,
+          )}
+        />
       </IconButton>
       <IconButton
         title="Forward"
         aria-label="Forward"
         classes={{
           root: classes.iconButton,
-          disabled: classes.iconButtonDisabled,
         }}
         disabled={!hasWorkspaces || !canGoForward}
         onClick={requestGoForward}
       >
-        <ArrowForwardIcon className={classes.icon} />
+        <ArrowForwardIcon
+          className={classnames(
+            classes.icon,
+            // has to apply it here
+            // somehow, JSS is not applied correctly for IconButton disabled class
+            (!hasWorkspaces || !canGoForward) && classes.iconDisabledWithThemeColor,
+          )}
+        />
       </IconButton>
       <IconButton
         title="Reload"
         aria-label="Reload"
         classes={{
           root: classes.iconButton,
-          disabled: classes.iconButtonDisabled,
         }}
         onClick={requestReload}
         disabled={!hasWorkspaces || isLoading}
@@ -117,7 +129,14 @@ const NavigationBar = ({
         {isLoading ? (
           <CircularProgress size={18} className={classes.progress} />
         ) : (
-          <RefreshIcon className={classes.icon} />
+          <RefreshIcon
+            className={classnames(
+              classes.icon,
+              // has to apply it here
+              // somehow, JSS is not applied correctly for IconButton disabled class
+              classes.iconDisabledWithThemeColor,
+            )}
+          />
         )}
       </IconButton>
       <IconButton
@@ -125,12 +144,18 @@ const NavigationBar = ({
         aria-label="Home"
         classes={{
           root: classes.iconButton,
-          disabled: classes.iconButtonDisabled,
         }}
         onClick={requestGoHome}
         disabled={!hasWorkspaces}
       >
-        <HomeIcon className={classes.icon} />
+        <HomeIcon
+          className={classnames(
+            classes.icon,
+            // has to apply it here
+            // somehow, JSS is not applied correctly for IconButton disabled class
+            !hasWorkspaces && classes.iconDisabledWithThemeColor,
+          )}
+        />
       </IconButton>
     </>
   );
