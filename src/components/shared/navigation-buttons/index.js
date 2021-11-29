@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
     color: (props) => {
       if (props.forceLightTheme) return 'rgba(0, 0, 0, 0.36)';
       if (props.themeColor != null) {
-        return `${fade(theme.palette.getContrastText(themeColors[props.themeColor][800]), 0.3)}`;
+        return fade(theme.palette.getContrastText(themeColors[props.themeColor][800]), 0.3);
       }
       return theme.palette.text.disabled;
     },
