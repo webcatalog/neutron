@@ -11,14 +11,14 @@ const {
 } = require('../preferences');
 
 const getMainSubmenu = () => {
-  const macMenuItems = [
+  const macMenuItems = process.platform === 'darwin' ? [
     { type: 'separator' },
     { role: 'services', submenu: [] },
     { type: 'separator' },
     { role: 'hide' },
     { role: 'hideothers' },
     { role: 'unhide' },
-  ];
+  ] : [];
 
   const lockMenuItems = Boolean(global.appLock) && !global.locked ? [
     {
