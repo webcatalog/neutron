@@ -33,22 +33,14 @@ const useStyles = makeStyles((theme) => ({
     padding: 6,
     WebkitAppRegion: 'no-drag',
     color: (props) => {
-      if (props.forceLightTheme) return 'rgba(0, 0, 0, 0.54)';
       if (props.themeColor != null) {
         return theme.palette.getContrastText(themeColors[props.themeColor][800]);
       }
       return theme.palette.text.secondary;
     },
-    '&:hover, &:focus': {
-      backgroundColor: (props) => {
-        if (props.forceLightTheme) return 'rgba(0, 0, 0, 0.04)';
-        return undefined;
-      },
-    },
   },
   iconDisabledWithThemeColor: {
     color: (props) => {
-      if (props.forceLightTheme) return 'rgba(0, 0, 0, 0.36)';
       if (props.themeColor != null) {
         return fade(theme.palette.getContrastText(themeColors[props.themeColor][800]), 0.3);
       }
@@ -60,7 +52,6 @@ const useStyles = makeStyles((theme) => ({
   },
   progress: {
     color: (props) => {
-      if (props.forceLightTheme) return 'rgba(0, 0, 0, 0.54)';
       if (props.themeColor != null) {
         return fade(theme.palette.getContrastText(themeColors[props.themeColor][900]), 0.7);
       }
@@ -75,9 +66,8 @@ const NavigationBar = ({
   hasWorkspaces,
   isLoading,
   themeColor,
-  forceLightTheme,
 }) => {
-  const classes = useStyles({ themeColor, forceLightTheme });
+  const classes = useStyles({ themeColor });
 
   return (
     <>
@@ -164,7 +154,6 @@ const NavigationBar = ({
 NavigationBar.defaultProps = {
   isLoading: false,
   themeColor: null,
-  forceLightTheme: false,
 };
 
 NavigationBar.propTypes = {
@@ -173,7 +162,6 @@ NavigationBar.propTypes = {
   hasWorkspaces: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool,
   themeColor: PropTypes.string,
-  forceLightTheme: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => {
