@@ -320,8 +320,10 @@ const loadAsync = async () => {
     requestAutofill();
   });
 
+  let enabled = false;
   // Autofill enabled event handler. Initializes focus listeners for input fields.
   ipcRenderer.on('password-autofill-enabled', () => {
+    enabled = true;
     checkInitialFocus();
 
     // Add default focus event listeners.
@@ -350,15 +352,15 @@ const loadAsync = async () => {
   window.addEventListener('submit', handleFormSubmit);
 
   webFrame.executeJavaScript(`
-  var origSubmit = HTMLFormElement.prototype.submit;
-  HTMLFormElement.prototype.submit = function () {
-    window.postMessage({message: 'formSubmit'})
-    origSubmit.apply(this, arguments)
-  }
+var origSubmit = HTMLFormElement.prototype.submit;
+HTMLFormElement.prototype.submit = function () {
+  window.postMessage({message: 'formSubmit'})
+  origSubmit.apply(this, arguments)
+}
   `);
 
   window.addEventListener('message', (e) => {
-    if (e.data && e.data.message && e.data.message === 'formSubmit') {
+    if (enabled && e.data && e.data.message && e.data.message === 'formSubmit') {
       handleFormSubmit();
     }
   });
