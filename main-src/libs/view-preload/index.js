@@ -40,16 +40,19 @@ const handleLoaded = async (event) => {
 
     const workspaceId = await ipcRenderer.invoke('get-web-contents-workspace-id');
 
-    webcatalogApi.loadAsync(workspaceId);
-
     darkReader.loadAsync(workspaceId);
     ipcRenderer.on('reload-dark-reader', () => {
       darkReader.loadAsync(workspaceId);
     });
 
     autoRefresh.loadAsync(workspaceId);
-    codeInjection.loadAsync(workspaceId);
-    recipes.loadAsync();
+
+    webcatalogApi.loadAsync(workspaceId)
+      .then(() => {
+        // these modules need webcatalog APIs
+        codeInjection.loadAsync(workspaceId);
+        recipes.loadAsync();
+      });
   }
 
   window.addEventListener('message', (e) => {
