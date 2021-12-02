@@ -13,6 +13,7 @@ const darkReader = require('./dark-reader');
 const webcatalogApi = require('./webcatalog-api');
 const passwordFill = require('./password-fill');
 const userAgentHints = require('./user-agent-hints');
+const displayMedia = require('./display-media');
 
 const preferences = ipcRenderer.sendSync('get-preferences');
 
@@ -29,6 +30,7 @@ const handleLoaded = async (event) => {
   if (isGoogleLoginPage) {
     webcatalogApi.load();
     userAgentHints.load();
+    displayMedia.load();
   }
 
   const workspaceId = await ipcRenderer.invoke('get-web-contents-workspace-id');
@@ -238,16 +240,8 @@ const handleLoaded = async (event) => {
     window.postMessage({ type: 'should-pause-notifications-changed', val });
   });
 
-  ipcRenderer.on('display-media-id-received', (e, val) => {
-    window.postMessage({ type: 'return-display-media-id', val });
-  });
-
   window.addEventListener('message', (e) => {
     if (!e.data) return;
-
-    if (e.data.type === 'get-display-media-id') {
-      ipcRenderer.send('request-show-display-media-window');
-    }
 
     // set workspace to active when its notification is clicked
     if (e.data.type === 'focus-workspace') {
@@ -297,32 +291,6 @@ webFrame.executeJavaScript(`
   }
 
   window.desktop = undefined;
-
-  if (window.navigator.mediaDevices) {
-    window.navigator.mediaDevices.getDisplayMedia = () => {
-      return new Promise((resolve, reject) => {
-        const listener = (e) => {
-          if (!e.data || e.data.type !== 'return-display-media-id') return;
-          if (e.data.val) { resolve(e.data.val); }
-          else { reject(new Error('Rejected')); }
-          window.removeEventListener('message', listener);
-        };
-        window.postMessage({ type: 'get-display-media-id' });
-        window.addEventListener('message', listener);
-      })
-        .then((id) => {
-          return navigator.mediaDevices.getUserMedia({
-            audio: false,
-            video: {
-              mandatory: {
-                chromeMediaSource: 'desktop',
-                chromeMediaSourceId: id,
-              }
-            }
-          });
-        });
-    };
-  }
 
   window.navigator.setAppBadge = (contents) => {
     webcatalog.setBadgeCount(contents);
