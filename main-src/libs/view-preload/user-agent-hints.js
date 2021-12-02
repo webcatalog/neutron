@@ -6,7 +6,7 @@ const {
 } = require('electron');
 const os = require('os');
 
-const loadAsync = async () => {
+const load = () => {
   try {
     // add navigator.userAgentData API support
     /* Gmail - required for loading standard version (otherwise redirects to basic HTML) */
@@ -49,4 +49,4 @@ const loadAsync = async () => {
   }
 };
 
-module.exports = { loadAsync };
+module.exports = { load };

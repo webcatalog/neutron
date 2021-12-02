@@ -6,7 +6,7 @@ const {
   ipcRenderer,
 } = require('electron');
 
-const loadAsync = async () => {
+const load = () => {
   contextBridge.exposeInMainWorld(
     'webcatalog',
     {
@@ -32,4 +32,4 @@ const loadAsync = async () => {
   );
 };
 
-module.exports = { loadAsync };
+module.exports = { load };

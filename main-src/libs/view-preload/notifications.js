@@ -9,7 +9,7 @@ const {
   webFrame,
 } = require('electron');
 
-const loadAsync = async (workspaceId) => {
+const load = (workspaceId) => {
   const initialShouldPauseNotifications = ipcRenderer.sendSync('get-pause-notifications-info') != null;
   webFrame.executeJavaScript(`
 (function() {
@@ -47,4 +47,4 @@ const loadAsync = async (workspaceId) => {
   });
 };
 
-module.exports = { loadAsync };
+module.exports = { load };

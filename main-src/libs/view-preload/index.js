@@ -65,13 +65,13 @@ const handleLoaded = async (event) => {
   handled = true;
 };
 
-// try to load as soon as dom is loaded
-document.addEventListener('DOMContentLoaded', () => handleLoaded('document.on("DOMContentLoaded")'));
-// if user navigates between the same website
-// DOMContentLoaded might not be triggered so double check with 'onload'
-// https://github.com/webcatalog/webcatalog-app/issues/797
-window.addEventListener('load', () => handleLoaded('window.on("onload")'));
-
+// critical web APIs
+// must load synchronously before loading other components
+userAgentHints.load();
+displayMedia.load();
+notifications.load();
+webcatalogApi.load();
+passwordFill.load();
 // Fix Can't show file list of Google Drive
 // https://github.com/electron/electron/issues/16587
 webFrame.executeJavaScript(`
@@ -85,11 +85,12 @@ webFrame.executeJavaScript(`
 })();
 `);
 
-passwordFill.loadAsync();
-userAgentHints.loadAsync();
-webcatalogApi.loadAsync();
-displayMedia.loadAsync();
-notifications.loadAsync();
+// try to load as soon as dom is loaded
+document.addEventListener('DOMContentLoaded', () => handleLoaded('document.on("DOMContentLoaded")'));
+// if user navigates between the same website
+// DOMContentLoaded might not be triggered so double check with 'onload'
+// https://github.com/webcatalog/webcatalog-app/issues/797
+window.addEventListener('load', () => handleLoaded('window.on("onload")'));
 
 // enable pinch zooming (default behavior of Chromium)
 // https://github.com/electron/electron/pull/12679

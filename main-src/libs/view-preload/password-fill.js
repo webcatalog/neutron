@@ -30,7 +30,7 @@ const {
   webFrame,
 } = require('electron');
 
-const loadAsync = async () => {
+const load = async () => {
   // Ref to added unlock button.
   let currentUnlockButton = null;
   let currentAutocompleteList = null;
@@ -366,4 +366,4 @@ HTMLFormElement.prototype.submit = function () {
   });
 };
 
-module.exports = { loadAsync };
+module.exports = { load };
