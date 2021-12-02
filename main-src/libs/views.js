@@ -593,12 +593,6 @@ const addViewAsync = async (browserWindow, workspace) => {
         const currentUaStr = contents.userAgent;
         if (currentUaStr !== compatibleUaString) {
           contents.userAgent = compatibleUaString;
-
-          // webContents must be reloaded manually
-          // if not, UA is not fully updated
-          // e.g. removing this might cause accounts.google.com to still block Neutron
-          contents.reload();
-
           // eslint-disable-next-line no-console
           console.log('Changed user agent to', compatibleUaString, 'for web compatibility URL: ', url, 'when', 'did-navigate');
         }
