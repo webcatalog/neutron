@@ -7,7 +7,6 @@ const {
 } = require('electron');
 
 const autoRefresh = require('./auto-refresh');
-const chromeApi = require('./chrome-api');
 const codeInjection = require('./code-injection');
 const darkReader = require('./dark-reader');
 const displayMedia = require('./display-media');
@@ -27,15 +26,9 @@ const handleLoaded = async (event) => {
 
   const isGoogleLoginPage = document.location && document.location.href && document.location.href.startsWith('https://accounts.google.com');
 
-  passwordFill.loadAsync();
-
   // don't load these modules when visiting accounts.google.com
   // to avoid Google blocking the app ("insecure")
   if (!isGoogleLoginPage) {
-    userAgentHints.loadAsync();
-    displayMedia.loadAsync();
-    chromeApi.loadAsync();
-    notifications.loadAsync();
     linkPreview.loadAsync();
 
     const workspaceId = await ipcRenderer.invoke('get-web-contents-workspace-id');
@@ -46,13 +39,9 @@ const handleLoaded = async (event) => {
     });
 
     autoRefresh.loadAsync(workspaceId);
-
-    webcatalogApi.loadAsync(workspaceId)
-      .then(() => {
-        // these modules need webcatalog APIs
-        codeInjection.loadAsync(workspaceId);
-        recipes.loadAsync();
-      });
+    // these modules need webcatalog APIs
+    codeInjection.loadAsync(workspaceId);
+    recipes.loadAsync();
   }
 
   window.addEventListener('message', (e) => {
@@ -95,6 +84,12 @@ webFrame.executeJavaScript(`
   window.PushManager = undefined;
 })();
 `);
+
+passwordFill.loadAsync();
+userAgentHints.loadAsync();
+webcatalogApi.loadAsync();
+displayMedia.loadAsync();
+notifications.loadAsync();
 
 // enable pinch zooming (default behavior of Chromium)
 // https://github.com/electron/electron/pull/12679
