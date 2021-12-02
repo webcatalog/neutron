@@ -8,24 +8,37 @@ const {
 
 const isMas = require('../is-mas');
 const { get: getRecipe } = require('./recipes');
-const { load: loadDarkReader } = require('./dark-reader');
+
+const darkReader = require('./dark-reader');
+const webcatalogApi = require('./webcatalog-api');
+const passwordFill = require('./password-fill');
+const userAgentHints = require('./user-agent-hints');
 
 const preferences = ipcRenderer.sendSync('get-preferences');
-
-require('./webcatalog-api');
 
 let handled = false;
 const handleLoaded = async (event) => {
   if (handled) return;
+
+  const isGoogleLoginPage = document.location && document.location.href && document.location.href.startsWith('https://accounts.google.com');
+
+  passwordFill.load();
+
+  // don't load these modules when visiting accounts.google.com
+  // to avoid Google blocking the app ("insecure")
+  if (isGoogleLoginPage) {
+    webcatalogApi.load();
+    userAgentHints.load();
+  }
 
   const workspaceId = await ipcRenderer.invoke('get-web-contents-workspace-id');
 
   // eslint-disable-next-line no-console
   console.log(`Preload script is loading on ${event}...`);
 
-  loadDarkReader(workspaceId);
+  darkReader.load(workspaceId);
   ipcRenderer.on('reload-dark-reader', () => {
-    loadDarkReader(workspaceId);
+    darkReader.load(workspaceId);
   });
 
   const workspacePreferences = ipcRenderer.sendSync('get-workspace-preferences', workspaceId);
@@ -323,6 +336,3 @@ webFrame.executeJavaScript(`
 // enable pinch zooming (default behavior of Chromium)
 // https://github.com/electron/electron/pull/12679
 webFrame.setVisualZoomLevelLimits(1, 10);
-
-require('./password-fill');
-require('./user-agent-hints');

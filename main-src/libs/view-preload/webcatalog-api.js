@@ -6,21 +6,22 @@ const {
   ipcRenderer,
 } = require('electron');
 
-contextBridge.exposeInMainWorld(
-  'webcatalog',
-  {
-    setBadgeCount: (count = 0) => {
-      if (typeof count !== 'number') {
-        // eslint-disable-next-line no-console
-        console.log('webcatalog.setBadgeCount() only accepts number as input');
-        return;
-      }
-      ipcRenderer.invoke('set-web-contents-badge', count);
+const load = () => {
+  contextBridge.exposeInMainWorld(
+    'webcatalog',
+    {
+      setBadgeCount: (count = 0) => {
+        if (typeof count !== 'number') {
+          // eslint-disable-next-line no-console
+          console.log('webcatalog.setBadgeCount() only accepts number as input');
+          return;
+        }
+        ipcRenderer.invoke('set-web-contents-badge', count);
+      },
+      clearSiteData: () => ipcRenderer.invoked('flush-web-contents-app-data'),
+      isPopup: () => ipcRenderer.sendSync('is-popup'),
     },
-    clearSiteData: () => ipcRenderer.invoked('flush-web-contents-app-data'),
-    isPopup: () => ipcRenderer.sendSync('is-popup'),
-  },
-);
+  );
+};
 
-require('./password-fill');
-require('./user-agent-hints');
+module.exports = { load };
