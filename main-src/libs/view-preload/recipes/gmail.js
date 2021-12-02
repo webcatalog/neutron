@@ -20,7 +20,8 @@ window.addEventListener('load', () => {
     if (sidebarItemNodes.length > 0) {
       const primaryBadgeNode = sidebarItemNodes[0].parentNode.nextSibling; // .bsU
       if (primaryBadgeNode) {
-        count = parseInt(primaryBadgeNode.innerText, 10);
+        // primaryBadgeNode.innerText return empty string if primaryBadgeNode is hidden
+        count = parseInt(primaryBadgeNode.innerText || primaryBadgeNode.innerHTML, 10);
       }
     }
 
