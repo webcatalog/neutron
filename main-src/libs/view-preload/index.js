@@ -70,6 +70,8 @@ const handleLoaded = async (event) => {
 userAgentHints.load();
 displayMedia.load();
 notifications.load();
+webcatalogApi.load();
+passwordFill.load();
 // Fix Can't show file list of Google Drive
 // https://github.com/electron/electron/issues/16587
 webFrame.executeJavaScript(`
@@ -89,9 +91,6 @@ document.addEventListener('DOMContentLoaded', () => handleLoaded('document.on("D
 // DOMContentLoaded might not be triggered so double check with 'onload'
 // https://github.com/webcatalog/webcatalog-app/issues/797
 window.addEventListener('load', () => handleLoaded('window.on("onload")'));
-
-passwordFill.loadAsync();
-webcatalogApi.loadAsync();
 
 // enable pinch zooming (default behavior of Chromium)
 // https://github.com/electron/electron/pull/12679
