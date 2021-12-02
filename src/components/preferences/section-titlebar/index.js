@@ -21,6 +21,7 @@ import {
 const SectionTitlebar = ({
   autoHideMenuBar,
   useSystemTitleBar,
+  useSystemWindowButtons,
 }) => window.process.platform !== 'darwin' && (
   <List disablePadding dense>
     <ListItem>
@@ -39,6 +40,25 @@ const SectionTitlebar = ({
         />
       </ListItemSecondaryAction>
     </ListItem>
+    {window.process.platform === 'win32' && (
+      <ListItem>
+        <ListItemText
+          primary="Use native window (maximizing/minimizing/closing) buttons"
+        />
+        <ListItemSecondaryAction>
+          <Switch
+            edge="end"
+            color="primary"
+            checked={useSystemTitleBar || useSystemWindowButtons}
+            disabled={useSystemTitleBar}
+            onChange={(e) => {
+              requestSetPreference('useSystemWindowButtons', e.target.checked);
+              enqueueRequestRestartSnackbar();
+            }}
+          />
+        </ListItemSecondaryAction>
+      </ListItem>
+    )}
     <Divider />
     <ListItem>
       <ListItemText
@@ -64,11 +84,13 @@ const SectionTitlebar = ({
 SectionTitlebar.propTypes = {
   autoHideMenuBar: PropTypes.bool.isRequired,
   useSystemTitleBar: PropTypes.bool.isRequired,
+  useSystemWindowButtons: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   autoHideMenuBar: state.preferences.autoHideMenuBar,
   useSystemTitleBar: state.preferences.useSystemTitleBar,
+  useSystemWindowButtons: state.preferences.useSystemWindowButtons,
 });
 
 export default connectComponent(

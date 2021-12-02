@@ -212,7 +212,7 @@ const EnhancedAppBar = ({
           {title}
         </div>
         <div className={classes.right} onDoubleClick={onDoubleClick}>
-          {window.process.platform === 'linux' && (
+          {!getStaticGlobal('useSystemWindowButtons') && (
             <div className={classes.windowsControl}>
               <button
                 className={classes.windowsIconBg}
