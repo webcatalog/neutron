@@ -28,7 +28,7 @@ const create = (scrollTo) => {
     show: false,
     frame: process.platform === 'darwin' || global.useSystemTitleBar,
     titleBarStyle: process.platform === 'win32' && !global.useSystemTitleBar ? 'hidden' : 'default',
-    titleBarOverlay: process.platform === 'win32',
+    titleBarOverlay: global.useSystemWindowButtons,
     webPreferences: {
       contextIsolation: false,
       nodeIntegration: true,

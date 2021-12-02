@@ -536,6 +536,7 @@ if (!gotTheLock) {
       titleBar,
       trayIcon,
       useSystemTitleBar,
+      useSystemWindowButtons,
       useTabs,
       windowButtons,
     } = getPreferences();
@@ -565,6 +566,7 @@ if (!gotTheLock) {
     global.trayIcon = trayIcon;
     global.navigationBar = navigationBar;
     global.useSystemTitleBar = process.platform !== 'darwin' && useSystemTitleBar;
+    global.useSystemWindowButtons = process.platform === 'win32' && !useSystemTitleBar && useSystemWindowButtons;
     global.windowButtons = windowButtons;
     global.MAILTO_URLS = MAILTO_URLS;
     global.WEBCAL_URLS = WEBCAL_URLS;
