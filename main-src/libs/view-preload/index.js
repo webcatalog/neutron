@@ -130,10 +130,10 @@ const handleLoaded = async (event) => {
   });
 
   // tie Google account info with workspace
-  ipcRenderer.invoke('get-app-json')
-    .then((appJson) => {
-      // only continue for app, not space
-      if (appJson.url || preferences.shareWorkspaceBrowsingData) {
+  Promise.resolve()
+    .then(() => {
+      // only continue if users don't share cookies between workspaces (multi-account mode)
+      if (preferences.shareWorkspaceBrowsingData) {
         // the whole app uses same Google account
         // eslint-disable-next-line no-console
         console.log('Skip retrieving Google account for workspace');
@@ -184,6 +184,9 @@ const handleLoaded = async (event) => {
           getAccountInfoAsync();
         }, 5 * 60 * 1000);
       }
+    })
+    .catch((err) => {
+      console(err);
     });
 
   const initialShouldPauseNotifications = ipcRenderer.sendSync('get-pause-notifications-info') != null;
