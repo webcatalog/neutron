@@ -352,11 +352,11 @@ const loadAsync = async () => {
   window.addEventListener('submit', handleFormSubmit);
 
   webFrame.executeJavaScript(`
-  var origSubmit = HTMLFormElement.prototype.submit;
-  HTMLFormElement.prototype.submit = function () {
-    window.postMessage({message: 'formSubmit'})
-    origSubmit.apply(this, arguments)
-  }
+var origSubmit = HTMLFormElement.prototype.submit;
+HTMLFormElement.prototype.submit = function () {
+  window.postMessage({message: 'formSubmit'})
+  origSubmit.apply(this, arguments)
+}
   `);
 
   window.addEventListener('message', (e) => {
