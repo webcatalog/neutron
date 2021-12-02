@@ -8,24 +8,39 @@ const {
 
 const isMas = require('../is-mas');
 const { get: getRecipe } = require('./recipes');
-const { load: loadDarkReader } = require('./dark-reader');
+
+const darkReader = require('./dark-reader');
+const webcatalogApi = require('./webcatalog-api');
+const passwordFill = require('./password-fill');
+const userAgentHints = require('./user-agent-hints');
+const displayMedia = require('./display-media');
 
 const preferences = ipcRenderer.sendSync('get-preferences');
-
-require('./webcatalog-api');
 
 let handled = false;
 const handleLoaded = async (event) => {
   if (handled) return;
+
+  const isGoogleLoginPage = document.location && document.location.href && document.location.href.startsWith('https://accounts.google.com');
+
+  passwordFill.load();
+
+  // don't load these modules when visiting accounts.google.com
+  // to avoid Google blocking the app ("insecure")
+  if (isGoogleLoginPage) {
+    webcatalogApi.load();
+    userAgentHints.load();
+    displayMedia.load();
+  }
 
   const workspaceId = await ipcRenderer.invoke('get-web-contents-workspace-id');
 
   // eslint-disable-next-line no-console
   console.log(`Preload script is loading on ${event}...`);
 
-  loadDarkReader(workspaceId);
+  darkReader.load(workspaceId);
   ipcRenderer.on('reload-dark-reader', () => {
-    loadDarkReader(workspaceId);
+    darkReader.load(workspaceId);
   });
 
   const workspacePreferences = ipcRenderer.sendSync('get-workspace-preferences', workspaceId);
@@ -225,16 +240,8 @@ const handleLoaded = async (event) => {
     window.postMessage({ type: 'should-pause-notifications-changed', val });
   });
 
-  ipcRenderer.on('display-media-id-received', (e, val) => {
-    window.postMessage({ type: 'return-display-media-id', val });
-  });
-
   window.addEventListener('message', (e) => {
     if (!e.data) return;
-
-    if (e.data.type === 'get-display-media-id') {
-      ipcRenderer.send('request-show-display-media-window');
-    }
 
     // set workspace to active when its notification is clicked
     if (e.data.type === 'focus-workspace') {
@@ -285,32 +292,6 @@ webFrame.executeJavaScript(`
 
   window.desktop = undefined;
 
-  if (window.navigator.mediaDevices) {
-    window.navigator.mediaDevices.getDisplayMedia = () => {
-      return new Promise((resolve, reject) => {
-        const listener = (e) => {
-          if (!e.data || e.data.type !== 'return-display-media-id') return;
-          if (e.data.val) { resolve(e.data.val); }
-          else { reject(new Error('Rejected')); }
-          window.removeEventListener('message', listener);
-        };
-        window.postMessage({ type: 'get-display-media-id' });
-        window.addEventListener('message', listener);
-      })
-        .then((id) => {
-          return navigator.mediaDevices.getUserMedia({
-            audio: false,
-            video: {
-              mandatory: {
-                chromeMediaSource: 'desktop',
-                chromeMediaSourceId: id,
-              }
-            }
-          });
-        });
-    };
-  }
-
   window.navigator.setAppBadge = (contents) => {
     webcatalog.setBadgeCount(contents);
     return Promise.resolve();
@@ -323,6 +304,3 @@ webFrame.executeJavaScript(`
 // enable pinch zooming (default behavior of Chromium)
 // https://github.com/electron/electron/pull/12679
 webFrame.setVisualZoomLevelLimits(1, 10);
-
-require('./password-fill');
-require('./user-agent-hints');
