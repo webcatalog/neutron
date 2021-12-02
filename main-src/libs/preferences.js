@@ -93,7 +93,7 @@ const defaultPreferences = {
   // Apps generated with WebCatalog are not code-signed
   // causing macOS Keychain not to recognize the apps after re-generating (updating)
   // so it's not good UX => disable password autofill by default
-  passwordsAskToSave: process.platform === 'darwin' && !isWebcatalog(),
+  passwordsAskToSave: false,
   passwordsNeverSaveDomains: [],
   pauseNotifications: null,
   pauseNotificationsBySchedule: false,
