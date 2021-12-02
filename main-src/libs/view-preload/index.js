@@ -25,7 +25,6 @@ const handleLoaded = async (event) => {
   // eslint-disable-next-line no-console
   console.log(`Preload script is loading on ${event}...`);
 
-  const workspaceId = await ipcRenderer.invoke('get-web-contents-workspace-id');
   const isGoogleLoginPage = document.location && document.location.href && document.location.href.startsWith('https://accounts.google.com');
 
   passwordFill.loadAsync();
@@ -38,6 +37,8 @@ const handleLoaded = async (event) => {
     chromeApi.loadAsync();
     notifications.loadAsync();
     linkPreview.loadAsync();
+
+    const workspaceId = await ipcRenderer.invoke('get-web-contents-workspace-id');
 
     webcatalogApi.loadAsync(workspaceId);
 
