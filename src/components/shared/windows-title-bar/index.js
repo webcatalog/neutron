@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   appBar: {
     // leave space for resizing cursor
     // https://github.com/electron/electron/issues/3022
-    padding: 2,
+    padding: 1,
     background: (props) => {
       if (props.themeColor != null) {
         return themeColors[props.themeColor][900];

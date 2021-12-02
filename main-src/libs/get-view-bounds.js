@@ -27,7 +27,7 @@ const getViewBounds = (contentSize, findInPage = false, height, width) => {
     // Big Sur increases title bar height: https://github.com/microsoft/vscode/pull/110592 (28px)
     titlebarHeight = global.isMacOs11 ? 28 : 22;
   } else if (!global.useSystemTitleBar) {
-    titlebarHeight = 32;
+    titlebarHeight = 30;
   }
   const offsetTitlebar = showTitleBar ? titlebarHeight : 0;
 
