@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 const { ipcRenderer } = require('electron');
 
-const load = async (workspaceId) => {
+const loadAsync = async (workspaceId) => {
   const preferences = ipcRenderer.sendSync('get-preferences');
   const workspacePreferences = ipcRenderer.sendSync('get-workspace-preferences', workspaceId);
 
@@ -52,4 +52,4 @@ const load = async (workspaceId) => {
   }
 };
 
-module.exports = { load };
+module.exports = { loadAsync };

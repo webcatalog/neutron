@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 const { webFrame } = require('electron');
 
-const load = () => {
+const loadAsync = async () => {
 // Fix chrome.runtime.sendMessage is undefined for FastMail
 // https://github.com/quanglam2807/singlebox/issues/21
   webFrame.executeJavaScript(`
@@ -34,4 +34,4 @@ const load = () => {
 `);
 };
 
-module.exports = { load };
+module.exports = { loadAsync };

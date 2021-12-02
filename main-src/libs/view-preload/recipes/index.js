@@ -40,7 +40,7 @@ const get = (url) => {
   return null;
 };
 
-const load = () => {
+const loadAsync = async () => {
   try {
     const recipe = get(window.location.href);
     if (recipe) {
@@ -55,4 +55,4 @@ const load = () => {
   }
 };
 
-module.exports = { load };
+module.exports = { loadAsync };

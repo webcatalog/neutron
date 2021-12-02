@@ -28,27 +28,27 @@ const handleLoaded = async (event) => {
   const workspaceId = await ipcRenderer.invoke('get-web-contents-workspace-id');
   const isGoogleLoginPage = document.location && document.location.href && document.location.href.startsWith('https://accounts.google.com');
 
-  passwordFill.load();
+  passwordFill.loadAsync();
 
   // don't load these modules when visiting accounts.google.com
   // to avoid Google blocking the app ("insecure")
   if (!isGoogleLoginPage) {
-    userAgentHints.load();
-    displayMedia.load();
-    chromeApi.load();
-    notifications.load();
-    linkPreview.load();
+    userAgentHints.loadAsync();
+    displayMedia.loadAsync();
+    chromeApi.loadAsync();
+    notifications.loadAsync();
+    linkPreview.loadAsync();
 
-    webcatalogApi.load(workspaceId);
+    webcatalogApi.loadAsync(workspaceId);
 
-    darkReader.load(workspaceId);
+    darkReader.loadAsync(workspaceId);
     ipcRenderer.on('reload-dark-reader', () => {
-      darkReader.load(workspaceId);
+      darkReader.loadAsync(workspaceId);
     });
 
-    autoRefresh.load(workspaceId);
-    codeInjection.load(workspaceId);
-    recipes.load();
+    autoRefresh.loadAsync(workspaceId);
+    codeInjection.loadAsync(workspaceId);
+    recipes.loadAsync();
   }
 
   window.addEventListener('message', (e) => {
