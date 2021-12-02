@@ -14,7 +14,7 @@ const fetch = require('node-fetch').default;
 
 require('./webcatalog-api');
 
-const load = (workspaceId) => {
+const loadAsync = async (workspaceId) => {
   const shouldUseDarkColor = ipcRenderer.sendSync('get-should-use-dark-colors');
   const workspaceDarkReader = ipcRenderer.sendSync('get-workspace-preference', workspaceId, 'darkReader');
 
@@ -68,4 +68,4 @@ const load = (workspaceId) => {
   }
 };
 
-module.exports = { load };
+module.exports = { loadAsync };

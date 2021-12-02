@@ -6,7 +6,7 @@ const {
   ipcRenderer,
 } = require('electron');
 
-const load = () => {
+const loadAsync = async (workspaceId) => {
   contextBridge.exposeInMainWorld(
     'webcatalog',
     {
@@ -20,8 +20,13 @@ const load = () => {
       },
       clearSiteData: () => ipcRenderer.invoked('flush-web-contents-app-data'),
       isPopup: () => ipcRenderer.sendSync('is-popup'),
+      setAccountInfo: (pictureUrl, name, email) => ipcRenderer.send('request-set-workspace-account-info', workspaceId, {
+        pictureUrl,
+        name,
+        email,
+      }),
     },
   );
 };
 
-module.exports = { load };
+module.exports = { loadAsync };

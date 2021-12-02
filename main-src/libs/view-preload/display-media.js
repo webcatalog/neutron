@@ -6,7 +6,7 @@
 
 const { ipcRenderer, webFrame } = require('electron');
 
-const load = () => {
+const loadAsync = async () => {
   ipcRenderer.on('display-media-id-received', (e, val) => {
     window.postMessage({ type: 'return-display-media-id', val });
   });
@@ -50,4 +50,4 @@ const load = () => {
 `);
 };
 
-module.exports = { load };
+module.exports = { loadAsync };

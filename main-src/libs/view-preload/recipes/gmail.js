@@ -45,9 +45,50 @@ window.addEventListener('load', () => {
   // Google will attempt to close the window when user discards or sends the email
   // but as WebCatalog allows the composer to be opened in main window
   // we overwrite this behavior to avoid Gmail closes the app window
-  if (!window.webcatalog.isPopup()) {
+  if (window.webcatalog && !window.webcatalog.isPopup()) {
     const node = document.createElement('script');
     node.innerHTML = 'window.close = () => { window.location.href = \'https://mail.google.com\' }';
     document.body.appendChild(node);
+  }
+
+  if (window.webcatalog) {
+    let accountInfoRetrieved = false;
+    const getAccountInfoAsync = () => Promise.resolve()
+      .then(() => {
+        if (accountInfoRetrieved) return;
+        // eslint-disable-next-line no-console
+        console.log('Getting Google account info...');
+        const pictureUrl = document.querySelector('img[title="Profile"')
+          .getAttribute('data-srcset')
+          .split(',')
+          .pop()
+          .trim()
+          .split(' ')[0];
+        const name = document.querySelector('.gb_lb.gb_mb').innerText;
+        const email = document.querySelector('.gb_nb').innerText;
+        window.webcatalog.setAccountInfo(pictureUrl, name, email);
+        // eslint-disable-next-line no-console
+        console.log('Google account info retrieved.', {
+          pictureUrl,
+          name,
+          email,
+        });
+        accountInfoRetrieved = true;
+      })
+      // eslint-disable-next-line no-console
+      .catch(console.log);
+    // run once immediately
+    getAccountInfoAsync();
+    // run again after 30 seconds, 1 minute, every 5 minutes
+    // as the script fails if the page is not fully loaded
+    setTimeout(() => {
+      getAccountInfoAsync();
+    }, 30 * 1000);
+    setTimeout(() => {
+      getAccountInfoAsync();
+    }, 60 * 1000);
+    setInterval(() => {
+      getAccountInfoAsync();
+    }, 5 * 60 * 1000);
   }
 });

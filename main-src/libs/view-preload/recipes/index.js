@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 const fs = require('fs');
 const path = require('path');
+const { webFrame } = require('electron');
 const extractHostname = require('../../extract-hostname');
 
 const mapper = {
@@ -39,4 +40,19 @@ const get = (url) => {
   return null;
 };
 
-module.exports = { get };
+const loadAsync = async () => {
+  try {
+    const recipe = get(window.location.href);
+    if (recipe) {
+      // eslint-disable-next-line no-console
+      console.log('loaded recipe', recipe.id);
+      webFrame.executeJavaScript(recipe.code);
+    }
+  } catch (err) {
+    /* eslint-disable no-console */
+    console.log(err);
+    /* eslint-enable no-console */
+  }
+};
+
+module.exports = { loadAsync };
