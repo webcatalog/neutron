@@ -133,8 +133,8 @@ const handleLoaded = async (event) => {
   Promise.resolve()
     .then(() => {
       // only continue if users don't share cookies between workspaces (multi-account mode)
-      if (preferences.shareWorkspaceBrowsingData) {
-        // the whole app uses same Google account
+      if (preferences.shareWorkspaceBrowsingData
+        || (document.location && document.location.href && document.location.href.startsWith('https://accounts.google.com'))) {
         // eslint-disable-next-line no-console
         console.log('Skip retrieving Google account for workspace');
         return;
