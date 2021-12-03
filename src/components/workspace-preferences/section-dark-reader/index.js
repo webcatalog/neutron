@@ -58,7 +58,7 @@ const SectionDarkReader = ({
   <List disablePadding dense>
     <ListItem>
       <ListItemText
-        primary="Dark Reader (beta)"
+        primary="Dark Reader"
         secondary={getStaticGlobal('darkReaderExtensionDetected')
           ? 'The built-in Dark Reader feature has been taken over by the external Dark Reader extension.'
           : 'Create unofficial dark theme for every service & account.'}
