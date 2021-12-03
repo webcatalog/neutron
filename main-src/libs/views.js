@@ -54,6 +54,7 @@ const isAppx = require('./is-appx');
 const isWebcatalog = require('./is-webcatalog');
 const getFirefoxUserAgent = require('./get-firefox-user-agent');
 const getSafariUserAgent = require('./get-safari-user-agent');
+const getChromeWithoutVersionUserAgent = require('./get-chrome-without-version-user-agent');
 
 const views = {};
 let shouldMuteAudio;
@@ -170,10 +171,16 @@ const getCompatibleUserAgentString = (url) => {
   // fix Google prevents signing in because of security concerns
   // https://github.com/webcatalog/webcatalog-app/issues/455
   // https://github.com/meetfranz/franz/issues/1720#issuecomment-566460763
+  if (urlObj && ['accounts.google.com'].includes(urlObj.hostname)) {
+    // https://github.com/getferdi/ferdi/blob/5138746ae7d8e7307b5287a240bef9df3bb8fe6c/src/models/UserAgent.js#L62
+    // force Google to use legacy login page
+    return getChromeWithoutVersionUserAgent();
+    // Firefox UA sometimes works (+ modern login page) but sometimes doesn't so we avoid using it
+  }
 
   // Google Earth will attempt to use `SharedArrayBuffer` API if it detects Chrome UA
   // `SharedArrayBuffer` is disabled to prevent Spectre-related security issues
-  if (urlObj && ['accounts.google.com', 'earth.google.com'].includes(urlObj.hostname)) {
+  if (urlObj && ['earth.google.com'].includes(urlObj.hostname)) {
     return getFirefoxUserAgent();
   }
 
@@ -589,13 +596,18 @@ const addViewAsync = async (browserWindow, workspace) => {
       // but we avoid doing that as it might cause problems in some cases
       // for example,
       // UA change causes page to reload, causing certain info (e.g. sessions) to be lost
+      const currentUaStr = contents.userAgent;
       if (compatibleUaString != null) {
-        const currentUaStr = contents.userAgent;
         if (currentUaStr !== compatibleUaString) {
           contents.userAgent = compatibleUaString;
           // eslint-disable-next-line no-console
           console.log('Changed user agent to', compatibleUaString, 'for web compatibility URL: ', url, 'when', 'did-navigate');
         }
+      } else if (currentUaStr === getChromeWithoutVersionUserAgent()) {
+        // restore only if current UA is Chrome UA without version
+        contents.userAgent = app.userAgentFallback;
+        // eslint-disable-next-line no-console
+        console.log('Changed user agent to', compatibleUaString, 'for web compatibility URL: ', url, 'when', 'did-navigate');
       }
     }
   };
