@@ -349,7 +349,11 @@ const load = async () => {
     }
   }
 
-  window.addEventListener('submit', handleFormSubmit);
+  window.addEventListener('submit', () => {
+    if (enabled) {
+      handleFormSubmit();
+    }
+  });
 
   webFrame.executeJavaScript(`
 var origSubmit = HTMLFormElement.prototype.submit;
