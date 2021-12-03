@@ -186,6 +186,12 @@ const PasswordManagers = {
     });
 
     ipcMain.on('password-autofill-check', (e) => {
+      // removed this in the future
+      // we temporarily disable autofill support in production
+      if (process.env.NODE_ENV === 'production') {
+        return;
+      }
+
       if (global.passwordManagerExtensionDetected || !getPreference('passwordsAskToSave') || PasswordManagers.managers.length < 1) {
         return;
       }
