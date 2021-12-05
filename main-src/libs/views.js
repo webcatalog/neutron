@@ -344,7 +344,14 @@ const addViewAsync = async (browserWindow, workspace) => {
   // modifed from https://github.com/minbrowser/min/blob/58927524e3cc16cc4f59bca09a6c352cec1a16ac/main/UASwitcher.js (Apache License)
   if (!customUserAgent) {
     ses.webRequest.onBeforeSendHeaders((details, callback) => {
-      const compatibleUaString = getCompatibleUserAgentString(details.url);
+      let compatibleUaString;
+      if (details.url) {
+        compatibleUaString = getCompatibleUserAgentString(details.url);
+      }
+      if (!compatibleUaString && details.referrer) {
+        compatibleUaString = getCompatibleUserAgentString(details.referrer);
+      }
+
       if (compatibleUaString) {
         details.requestHeaders['User-Agent'] = compatibleUaString;
       } else {
@@ -589,7 +596,7 @@ const addViewAsync = async (browserWindow, workspace) => {
     // Google uses special code for Chromium-based browsers
     // when screensharing (not working with Electron)
     // so change user-agent to Safari to make it work
-    if (!customUserAgent) {
+    if (!customUserAgent && url) {
       const compatibleUaString = getCompatibleUserAgentString(url);
       // if getCompatibleUserAgentString() returns null, it means we suppose to restore
       // UA back to `app.userAgentFallback`
@@ -597,17 +604,16 @@ const addViewAsync = async (browserWindow, workspace) => {
       // for example,
       // UA change causes page to reload, causing certain info (e.g. sessions) to be lost
       const currentUaStr = contents.userAgent;
-      if (compatibleUaString != null) {
+      // we shouldn't change UA for accounts.google.com (Chrome UA without version) here
+      // as we already handle it at request level
+      // also, changing UA back after logging in will
+      // cause Google Oauth to stop working for certain websites
+      if (compatibleUaString != null && !url.startsWith('https://accounts.google.com')) {
         if (currentUaStr !== compatibleUaString) {
           contents.userAgent = compatibleUaString;
           // eslint-disable-next-line no-console
           console.log('Changed user agent to', compatibleUaString, 'for web compatibility URL: ', url, 'when', 'did-navigate');
         }
-      } else if (currentUaStr === getChromeWithoutVersionUserAgent()) {
-        // restore only if current UA is Chrome UA without version
-        contents.userAgent = app.userAgentFallback;
-        // eslint-disable-next-line no-console
-        console.log('Changed user agent to', compatibleUaString, 'for web compatibility URL: ', url, 'when', 'did-navigate');
       }
     }
   };
