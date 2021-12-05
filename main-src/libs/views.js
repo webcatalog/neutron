@@ -320,26 +320,6 @@ const addViewAsync = async (browserWindow, workspace) => {
     ses.setSpellCheckerLanguages(global.spellcheckLanguages);
   }
 
-  // ad security header for DarkReader on Overcast
-  // VM76 darkreader.js:3704 Refused to apply inline style because
-  // it violates the following Content Security Policy directive:
-  // a nonce ('nonce-...') is required to enable inline execution.
-  if (!global.darkReaderExtensionDetected) {
-    // if external extension is being used, built-in Dark Reader is not used
-    // so we can ignore this code
-    ses.webRequest.onHeadersReceived(
-      {
-        urls: ['*://*.overcast.fm/*'], // only need this for Overcast.fm (at least for now)
-      },
-      (details, callback) => {
-        if (details && details.responseHeaders && details.responseHeaders['Content-Security-Policy']) {
-          delete details.responseHeaders['Content-Security-Policy'];
-        }
-        callback(details);
-      },
-    );
-  }
-
   // UA adjustment
   // modifed from https://github.com/minbrowser/min/blob/58927524e3cc16cc4f59bca09a6c352cec1a16ac/main/UASwitcher.js (Apache License)
   if (!customUserAgent) {
