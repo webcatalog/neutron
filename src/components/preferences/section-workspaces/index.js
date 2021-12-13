@@ -9,9 +9,13 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import AddIcon from '@material-ui/icons/Add';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import SettingsIcon from '@material-ui/icons/Settings';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import connectComponent from '../../../helpers/connect-component';
 import getWorkspacesAsList from '../../../helpers/get-workspaces-as-list';
@@ -36,32 +40,28 @@ const SectionWorkspaces = ({
       {workspacesList.map((workspace, i) => (
         <React.Fragment key={workspace.id}>
           {i > 0 && <Divider />}
-          <ListItem
-            button
-            onClick={() => requestShowWorkspacePreferencesWindow(workspace.id)}
-            onContextMenu={(e) => {
-              e.preventDefault();
-
-              const template = [
-                {
-                  label: `Edit ${getWorkspaceFriendlyName()}`,
-                  click: () => requestShowWorkspacePreferencesWindow(workspace.id),
-                },
-                {
-                  label: `Remove ${getWorkspaceFriendlyName()}`,
-                  click: () => requestRemoveWorkspace(workspace.id),
-                },
-              ];
-
-              const menu = window.remote.Menu.buildFromTemplate(template);
-              menu.popup({
-                window: window.remote.getCurrentWindow(),
-              });
-            }}
-            dense
-          >
-            <ListItemText primary={getWorkspaceName(workspace)} />
-            <ChevronRightIcon color="action" />
+          <ListItem dense>
+            <ListItemText primary={`${getWorkspaceName(workspace)} (#${i + 1})`} />
+            <ListItemSecondaryAction>
+              <Tooltip title={`Configure ${getWorkspaceFriendlyName()}`}>
+                <IconButton
+                  edge="end"
+                  aria-label={`Configure ${getWorkspaceFriendlyName()}`}
+                  onClick={() => requestShowWorkspacePreferencesWindow(workspace.id)}
+                >
+                  <SettingsIcon fontSize="small" />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title={`Remove ${getWorkspaceFriendlyName()}`}>
+                <IconButton
+                  edge="end"
+                  aria-label={`Remove ${getWorkspaceFriendlyName()}`}
+                  onClick={() => requestRemoveWorkspace(workspace.id)}
+                >
+                  <DeleteIcon fontSize="small" />
+                </IconButton>
+              </Tooltip>
+            </ListItemSecondaryAction>
           </ListItem>
         </React.Fragment>
       ))}
