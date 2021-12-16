@@ -19,7 +19,6 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CodeIcon from '@material-ui/icons/Code';
 import ExtensionIcon from '@material-ui/icons/Extension';
 import InfoIcon from '@material-ui/icons/Info';
-import LayersIcon from '@material-ui/icons/Layers';
 import LinkIcon from '@material-ui/icons/Link';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import LockIcon from '@material-ui/icons/Lock';
@@ -174,14 +173,7 @@ const Preferences = ({
         tray: { text: window.process.platform === 'darwin' ? 'Menu Bar' : 'Tray', Component: SectionTray },
         window: { text: 'Main Window', Component: SectionWindow },
         popupWindows: { text: 'Popup Windows', Component: SectionPopupWindows, hidden: window.process.platform !== 'darwin' },
-      },
-    },
-    tabs: {
-      text: 'Tabs',
-      Icon: LayersIcon,
-      hidden: process.env.NODE_ENV === 'production',
-      subSections: {
-        tabs: { text: 'Tabs', Component: SectionTabs },
+        tabs: { text: 'Tabs', Component: SectionTabs, hidden: process.env.NODE_ENV === 'production' },
       },
     },
     notifications: {
