@@ -45,6 +45,7 @@ const SectionAppearance = ({
   sidebarSize,
   sidebarTips,
   titleBar,
+  titleBarNavigationButtons,
   windowButtons,
 }) => (
   <List disablePadding dense>
@@ -157,28 +158,6 @@ const SectionAppearance = ({
         />
       </ListItemSecondaryAction>
     </ListItem>
-    <Divider />
-    <ListItem>
-      <ListItemText
-        primary="Show navigation bar"
-        secondary="Navigation bar lets you go back, forward, home and reload."
-      />
-      <ListItemSecondaryAction>
-        <Switch
-          edge="end"
-          color="primary"
-            // must show sidebar or navigation bar on Linux
-            // if not, as user can't right-click on menu bar icon
-            // they can't access preferences or notifications
-          checked={(window.process.platform === 'linux' && attachToMenubar && !sidebar) || navigationBar}
-          disabled={(window.process.platform === 'linux' && attachToMenubar && !sidebar)}
-          onChange={(e) => {
-            requestSetPreference('navigationBar', e.target.checked);
-            requestRealignActiveWorkspace();
-          }}
-        />
-      </ListItemSecondaryAction>
-    </ListItem>
     {window.process.platform === 'darwin' && (
     <>
       <Divider />
@@ -195,6 +174,22 @@ const SectionAppearance = ({
             onChange={(e) => {
               requestSetPreference('titleBar', e.target.checked);
               requestRealignActiveWorkspace();
+            }}
+          />
+        </ListItemSecondaryAction>
+      </ListItem>
+      <ListItem>
+        <ListItemText
+          primary="Show navigation buttons on title bar"
+        />
+        <ListItemSecondaryAction>
+          <Switch
+            edge="end"
+            color="primary"
+            checked={navigationBar ? false : titleBarNavigationButtons}
+            disabled={navigationBar}
+            onChange={(e) => {
+              requestSetPreference('titleBarNavigationButtons', e.target.checked);
             }}
           />
         </ListItemSecondaryAction>
@@ -226,6 +221,28 @@ const SectionAppearance = ({
       </ListItem>
     </>
     )}
+    <Divider />
+    <ListItem>
+      <ListItemText
+        primary="Show navigation bar"
+        secondary="Navigation bar lets you see current URL, go back, forward, home and reload."
+      />
+      <ListItemSecondaryAction>
+        <Switch
+          edge="end"
+          color="primary"
+            // must show sidebar or navigation bar on Linux
+            // if not, as user can't right-click on menu bar icon
+            // they can't access preferences or notifications
+          checked={(window.process.platform === 'linux' && attachToMenubar && !sidebar) || navigationBar}
+          disabled={(window.process.platform === 'linux' && attachToMenubar && !sidebar)}
+          onChange={(e) => {
+            requestSetPreference('navigationBar', e.target.checked);
+            requestRealignActiveWorkspace();
+          }}
+        />
+      </ListItemSecondaryAction>
+    </ListItem>
   </List>
 );
 
@@ -239,6 +256,7 @@ SectionAppearance.propTypes = {
   sidebarSize: PropTypes.oneOf(['compact', 'expanded']).isRequired,
   sidebarTips: PropTypes.oneOf(['shortcut', 'name', 'none']).isRequired,
   titleBar: PropTypes.bool.isRequired,
+  titleBarNavigationButtons: PropTypes.bool.isRequired,
   windowButtons: PropTypes.bool.isRequired,
 };
 
@@ -251,6 +269,7 @@ const mapStateToProps = (state) => ({
   sidebarSize: state.preferences.sidebarSize,
   sidebarTips: state.preferences.sidebarTips,
   titleBar: state.preferences.titleBar,
+  titleBarNavigationButtons: state.preferences.titleBarNavigationButtons,
   windowButtons: state.preferences.windowButtons,
 });
 

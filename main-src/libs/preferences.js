@@ -132,6 +132,7 @@ const defaultPreferences = {
   themeColor: 'auto',
   themeSource: 'system',
   titleBar: true,
+  titleBarNavigationButtons: true,
   trayIcon: false,
   unreadCountBadge: true,
   useHardwareAcceleration: true,
