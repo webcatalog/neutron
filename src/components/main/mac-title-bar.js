@@ -75,12 +75,13 @@ const FakeTitleBar = ({
   searchEngine,
   themeColor,
   title,
+  titleBarNavigationButtons,
 }) => {
   const classes = useStyles({ themeColor });
 
   if (window.process.platform !== 'darwin') return null;
 
-  const showNavigationButtons = !navigationBar && window.mode !== 'menubar';
+  const showNavigationButtons = titleBarNavigationButtons && !navigationBar && window.mode !== 'menubar';
 
   const appJson = getStaticGlobal('appJson');
   return (
@@ -134,6 +135,7 @@ FakeTitleBar.propTypes = {
   // sidebar: PropTypes.bool.isRequired,
   themeColor: PropTypes.string,
   title: PropTypes.string,
+  titleBarNavigationButtons: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => {
@@ -150,6 +152,7 @@ const mapStateToProps = (state) => {
       && !state.preferences.sidebar)
       || state.preferences.navigationBar,
     sidebar: state.preferences.sidebar,
+    titleBarNavigationButtons: state.preferences.titleBarNavigationButtons,
   };
 };
 
