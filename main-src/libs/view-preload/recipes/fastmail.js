@@ -20,10 +20,11 @@ window.addEventListener('load', () => {
     // https://github.com/getferdi/recipes/blob/master/recipes/fastmail/webview.js (MIT license)
     const inbox = document.querySelector('.v-MailboxSource--inbox .v-MailboxSource-badge');
     if (!inbox) {
+      window.webcatalog.setBadgeCount(0);
       return;
     }
-    const messages = safeParseInt(inbox.textContent);
 
+    const messages = safeParseInt(inbox.textContent);
     window.webcatalog.setBadgeCount(messages);
   };
 
