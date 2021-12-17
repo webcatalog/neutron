@@ -49,10 +49,14 @@ const useStyles = makeStyles((theme) => {
       fontFamily: '-apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif',
       fontWeight: 500,
       paddingLeft: 72,
-      paddingRight: 160,
+      paddingRight: 72,
       overflow: 'hidden',
       textOverflow: 'ellipsis',
       whiteSpace: 'nowrap',
+    },
+    rootWithNavigationButtons: {
+      paddingLeft: 148,
+      paddingRight: 148,
     },
     rootMenubar: {
       paddingLeft: theme.spacing(1),
@@ -76,10 +80,16 @@ const FakeTitleBar = ({
 
   if (window.process.platform !== 'darwin') return null;
 
+  const showNavigationButtons = !navigationBar && window.mode !== 'menubar';
+
   const appJson = getStaticGlobal('appJson');
   return (
     <div
-      className={classnames(classes.root, window.mode === 'menubar' && classes.rootMenubar)}
+      className={classnames(
+        classes.root,
+        showNavigationButtons && classes.rootWithNavigationButtons,
+        window.mode === 'menubar' && classes.rootMenubar,
+      )}
       onDoubleClick={() => {
         // feature: double click on title bar to expand #656
         // https://github.com/webcatalog/webcatalog-app/issues/656
@@ -104,7 +114,7 @@ const FakeTitleBar = ({
     >
       {(window.mode === 'main' || window.mode === 'menubar') && title ? title : appJson.name}
 
-      {!navigationBar && window.mode !== 'menubar' && (
+      {showNavigationButtons && (
         <div className={classes.topRight}>
           <NavigationButtons themeColor={themeColor} />
         </div>
