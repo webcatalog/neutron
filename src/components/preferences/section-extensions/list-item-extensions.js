@@ -20,6 +20,7 @@ import Select from '@material-ui/core/Select';
 import Typography from '@material-ui/core/Typography';
 import MenuItem from '@material-ui/core/MenuItem';
 import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
 
 import connectComponent from '../../../helpers/connect-component';
 
@@ -101,7 +102,8 @@ const Extensions = ({
       <div className={classes.container}>
         {sources.length > 0 ? (
           <>
-            <Alert severity="warning" className={classes.alert}>
+            <Alert severity="error" variant="filled" className={classes.alert}>
+              <AlertTitle>Warning</AlertTitle>
               Extension support is unstable and under development.
               Some extensions might crash the app or might not function correctly.
               Use at your own risk.
@@ -191,7 +193,7 @@ const Extensions = ({
                       className={classes.buttonRight}
                       onClick={() => requestOpenInBrowser(`https://docs.google.com/forms/d/e/1FAIpQLSfF4IhgsyYDbiGVx0sz0JKLd9Rs0g71lUqTpw8Jv_nixpQqiw/viewform?entry.1002721177=${encodeURIComponent(ext.name)}&entry.1851347571=${encodeURIComponent(window.remote.app.getVersion())}`)}
                     >
-                      Report Problems
+                      Does it Work?
                     </Button>
                     <Switch
                       checked={extensionEnabledExtesionIds[ext.id]}
