@@ -305,7 +305,8 @@ const addViewAsync = async (browserWindow, workspace) => {
   }
 
   // blocker
-  const shouldBlockAds = getWorkspacePreference(workspace.id, 'blockAds') || global.blockAds;
+  const workspaceBlockAds = getWorkspacePreference(workspace.id, 'blockAds');
+  const shouldBlockAds = workspaceBlockAds == null ? global.blockAds : workspaceBlockAds;
   if (shouldBlockAds) {
     ElectronBlocker.fromPrebuiltAdsAndTracking(fetch, {
       path: path.join(app.getPath('userData'), 'adblocker.bin'),
@@ -345,7 +346,6 @@ const addViewAsync = async (browserWindow, workspace) => {
   }
 
   const {
-    blockJavascript,
     defaultFontSize,
     defaultFontSizeMinimum,
     defaultFontSizeMonospace,
@@ -360,6 +360,9 @@ const addViewAsync = async (browserWindow, workspace) => {
     ses.setPreloads([preloadPath]);
   }
 
+  const workspaceBlockJavascript = getWorkspacePreference(workspace.id, 'blockJavascript');
+  const shouldBlockJavascript = workspaceBlockJavascript == null
+    ? global.blockJavascript : workspaceBlockJavascript;
   const sharedWebPreferences = {
     spellcheck: global.spellcheck,
     nativeWindowOpen: true,
@@ -371,7 +374,7 @@ const addViewAsync = async (browserWindow, workspace) => {
     defaultFontSize,
     defaultMonospaceFontSize: defaultFontSizeMonospace,
     minimumFontSize: defaultFontSizeMinimum,
-    javascript: !blockJavascript,
+    javascript: !shouldBlockJavascript,
   };
 
   // extensions
