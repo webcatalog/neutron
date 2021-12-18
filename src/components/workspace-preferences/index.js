@@ -42,7 +42,7 @@ import SectionDownloads from './section-downloads';
 import SectionLinkHandling from './section-link-handling';
 import SectionNetwork from './section-network';
 import SectionNotifications from './section-notifications';
-import SectionPrivacy from './section-privacy';
+import SectionContents from './section-contents';
 import SectionWorkspace from './section-workspace';
 import getStaticGlobal from '../../helpers/get-static-global';
 
@@ -148,7 +148,7 @@ const Preferences = ({ classes }) => {
       text: 'Privacy',
       Icon: SecurityIcon,
       subSections: {
-        autoReload: { text: 'Privacy', Component: SectionPrivacy },
+        contents: { text: 'Contents', Component: SectionContents },
       },
     },
     developers: {

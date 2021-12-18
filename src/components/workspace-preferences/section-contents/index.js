@@ -10,6 +10,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
+import Divider from '@material-ui/core/Divider';
 
 import connectComponent from '../../../helpers/connect-component';
 
@@ -38,9 +39,11 @@ const styles = (theme) => ({
 
 const SectionPrivacy = ({
   blockAds,
+  blockJavascript,
   classes,
   onUpdateForm,
   formBlockAds,
+  formBlockJavascript,
 }) => (
   <List disablePadding dense>
     <ListItem>
@@ -70,23 +73,56 @@ const SectionPrivacy = ({
         <MenuItem dense value={false}>No</MenuItem>
       </Select>
     </ListItem>
+    <Divider />
+    <ListItem>
+      <ListItemText
+        primary="Disable Javascript"
+      />
+      <Select
+        value={formBlockJavascript != null ? formBlockJavascript : 'global'}
+        onChange={(e) => {
+          onUpdateForm({
+            preferences: {
+              blockJavascript: e.target.value !== 'global' ? e.target.value : null,
+            },
+          });
+          enqueueRequestRestartSnackbar();
+        }}
+        variant="filled"
+        disableUnderline
+        margin="dense"
+        classes={{
+          root: classes.select,
+        }}
+        className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
+      >
+        <MenuItem dense value="global">{`Use global preference (${blockJavascript ? 'Yes' : 'No'})`}</MenuItem>
+        <MenuItem dense value>Yes</MenuItem>
+        <MenuItem dense value={false}>No</MenuItem>
+      </Select>
+    </ListItem>
   </List>
 );
 
 SectionPrivacy.defaultProps = {
   formBlockAds: null,
+  formBlockJavascript: null,
 };
 
 SectionPrivacy.propTypes = {
   blockAds: PropTypes.bool.isRequired,
+  blockJavascript: PropTypes.bool.isRequired,
   classes: PropTypes.object.isRequired,
   formBlockAds: PropTypes.bool,
+  formBlockJavascript: PropTypes.bool,
   onUpdateForm: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   blockAds: state.preferences.blockAds,
   formBlockAds: state.dialogWorkspacePreferences.form.preferences.blockAds,
+  blockJavascript: state.preferences.blockJavascript,
+  formBlockJavascript: state.dialogWorkspacePreferences.form.preferences.blockJavascript,
 });
 
 const actionCreators = {

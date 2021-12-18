@@ -513,6 +513,7 @@ if (!gotTheLock) {
       attachToMenubar,
       autoCheckForUpdates,
       blockAds,
+      blockJavascript,
       customUserAgent,
       extensionEnabledExtesionIds,
       extensionSourceBrowserId,
@@ -574,6 +575,7 @@ if (!gotTheLock) {
     // user needs to restart the app
     // this is to ensure consistency between views
     global.blockAds = blockAds;
+    global.blockJavascript = blockJavascript;
     global.rememberLastPageVisited = rememberLastPageVisited;
     global.shareWorkspaceBrowsingData = shareWorkspaceBrowsingData;
     global.spellcheck = spellcheck;
