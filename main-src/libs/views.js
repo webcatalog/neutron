@@ -248,20 +248,16 @@ const updateAddress = (url) => {
   ipcMain.emit('create-menu');
 };
 
-const addViewAsync = async (browserWindow, workspace) => {
-  const viewId = workspace.id;
-
-  if (views[viewId] != null) return;
-
+let sharedSession;
+const getSession = (workspaceId) => {
   // configure session & ad blocker
-  const partitionId = global.shareWorkspaceBrowsingData ? 'persist:shared' : `persist:${workspace.id}`;
-  const ses = session.fromPartition(partitionId);
+  const partitionId = global.shareWorkspaceBrowsingData ? 'persist:shared' : `persist:${workspaceId}`;
 
-  // user agent
-  const customUserAgent = getWorkspacePreference(workspace.id, 'customUserAgent') || getPreference('customUserAgent');
-  if (customUserAgent) {
-    ses.setUserAgent(customUserAgent);
+  if (global.shareWorkspaceBrowsingData && sharedSession) {
+    return sharedSession;
   }
+
+  const ses = session.fromPartition(partitionId);
 
   // proxy
   let {
@@ -274,16 +270,16 @@ const addViewAsync = async (browserWindow, workspace) => {
   // if the workspaces share the same session
   // users won't be able to set proxy per workspace
   if (!global.shareWorkspaceBrowsingData
-      && getWorkspacePreference(workspace.id, 'proxyMode') !== null) {
-    proxyMode = getWorkspacePreference(workspace.id, 'proxyMode');
+      && getWorkspacePreference(workspaceId, 'proxyMode') !== null) {
+    proxyMode = getWorkspacePreference(workspaceId, 'proxyMode');
 
-    const proxyProtocol = getWorkspacePreference(workspace.id, 'proxyProtocol');
-    const proxyAddress = getWorkspacePreference(workspace.id, 'proxyAddress');
-    const proxyPort = getWorkspacePreference(workspace.id, 'proxyPort');
+    const proxyProtocol = getWorkspacePreference(workspaceId, 'proxyProtocol');
+    const proxyAddress = getWorkspacePreference(workspaceId, 'proxyAddress');
+    const proxyPort = getWorkspacePreference(workspaceId, 'proxyPort');
     proxyRules = `${proxyProtocol}://${proxyAddress}:${proxyPort || '80'}`;
 
-    proxyBypassRules = getWorkspacePreference(workspace.id, 'proxyBypassRules');
-    proxyPacScript = getWorkspacePreference(workspace.id, 'proxyPacScript');
+    proxyBypassRules = getWorkspacePreference(workspaceId, 'proxyBypassRules');
+    proxyPacScript = getWorkspacePreference(workspaceId, 'proxyPacScript');
   }
 
   if (proxyMode === 'fixed_servers') {
@@ -305,7 +301,7 @@ const addViewAsync = async (browserWindow, workspace) => {
   }
 
   // blocker
-  const workspaceBlockAds = getWorkspacePreference(workspace.id, 'blockAds');
+  const workspaceBlockAds = getWorkspacePreference(workspaceId, 'blockAds');
   const shouldBlockAds = workspaceBlockAds == null ? global.blockAds : workspaceBlockAds;
   if (shouldBlockAds) {
     ElectronBlocker.fromPrebuiltAdsAndTracking(fetch, {
@@ -323,33 +319,25 @@ const addViewAsync = async (browserWindow, workspace) => {
 
   // UA adjustment
   // modifed from https://github.com/minbrowser/min/blob/58927524e3cc16cc4f59bca09a6c352cec1a16ac/main/UASwitcher.js (Apache License)
-  if (!customUserAgent) {
-    ses.webRequest.onBeforeSendHeaders((details, callback) => {
-      let compatibleUaString;
-      if (details.url) {
-        compatibleUaString = getCompatibleUserAgentString(details.url);
-      }
-      if (!compatibleUaString && details.referrer) {
-        compatibleUaString = getCompatibleUserAgentString(details.referrer);
-      }
+  ses.webRequest.onBeforeSendHeaders((details, callback) => {
+    let compatibleUaString;
+    if (details.url) {
+      compatibleUaString = getCompatibleUserAgentString(details.url);
+    }
+    if (!compatibleUaString && details.referrer) {
+      compatibleUaString = getCompatibleUserAgentString(details.referrer);
+    }
 
-      if (compatibleUaString) {
-        details.requestHeaders['User-Agent'] = compatibleUaString;
-      } else {
-        const chromiumVersion = process.versions.chrome.split('.')[0];
-        details.requestHeaders['SEC-CH-UA'] = `"Chromium";v="${chromiumVersion}", " Not A;Brand";v="99"`;
-        details.requestHeaders['SEC-CH-UA-MOBILE'] = '?0';
-      }
+    if (compatibleUaString) {
+      details.requestHeaders['User-Agent'] = compatibleUaString;
+    } else {
+      const chromiumVersion = process.versions.chrome.split('.')[0];
+      details.requestHeaders['SEC-CH-UA'] = `"Chromium";v="${chromiumVersion}", " Not A;Brand";v="99"`;
+      details.requestHeaders['SEC-CH-UA-MOBILE'] = '?0';
+    }
 
-      callback({ cancel: false, requestHeaders: details.requestHeaders });
-    });
-  }
-
-  const {
-    defaultFontSize,
-    defaultFontSizeMinimum,
-    defaultFontSizeMonospace,
-  } = getPreferences();
+    callback({ cancel: false, requestHeaders: details.requestHeaders });
+  });
 
   // set preload script at session level
   // to ensure that even popup windows have access to the script
@@ -359,6 +347,28 @@ const addViewAsync = async (browserWindow, workspace) => {
       : path.join(__dirname, 'view-preload', 'index.js');
     ses.setPreloads([preloadPath]);
   }
+
+  if (global.shareWorkspaceBrowsingData) {
+    sharedSession = ses;
+  }
+  return ses;
+};
+
+const addViewAsync = async (browserWindow, workspace) => {
+  const viewId = workspace.id;
+
+  if (views[viewId] != null) return;
+
+  const partitionId = global.shareWorkspaceBrowsingData ? 'persist:shared' : `persist:${workspace.id}`;
+  // user agent
+  const customUserAgent = getWorkspacePreference(workspace.id, 'customUserAgent') || getPreference('customUserAgent');
+  const ses = getSession(workspace.id);
+
+  const {
+    defaultFontSize,
+    defaultFontSizeMinimum,
+    defaultFontSizeMonospace,
+  } = getPreferences();
 
   const workspaceBlockJavascript = getWorkspacePreference(workspace.id, 'blockJavascript');
   const shouldBlockJavascript = workspaceBlockJavascript == null
@@ -429,6 +439,9 @@ const addViewAsync = async (browserWindow, workspace) => {
     webPreferences: sharedWebPreferences,
   });
   electronRemote.enable(view.webContents);
+  if (customUserAgent) {
+    view.webContents.setUserAgent(customUserAgent);
+  }
 
   if (extensions) {
     extensions.addTab(view.webContents, browserWindow);
