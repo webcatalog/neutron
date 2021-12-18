@@ -74,6 +74,7 @@ import SectionTheme from './section-theme';
 import SectionTitlebar from './section-titlebar';
 import SectionTray from './section-tray';
 import SectionView from './section-view';
+import SectionContents from './section-contents';
 import SectionWindow from './section-window';
 import SectionWorkspaces from './section-workspaces';
 
@@ -255,6 +256,7 @@ const Preferences = ({
       Icon: SecurityIcon,
       subSections: {
         privacy: { text: 'Privacy', Component: SectionPrivacy },
+        contents: { text: 'Contents', Component: SectionContents },
       },
     },
     telemetry: {
