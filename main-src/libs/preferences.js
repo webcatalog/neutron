@@ -57,6 +57,7 @@ const defaultPreferences = {
   autoRefreshInterval: 3600000,
   autoRefreshOnlyWhenInactive: false,
   blockAds: false,
+  blockJavascript: false,
   cssCodeInjection: null,
   customUserAgent: null,
   // default Dark Reader settings from its Chrome extension */

@@ -345,6 +345,7 @@ const addViewAsync = async (browserWindow, workspace) => {
   }
 
   const {
+    blockJavascript,
     defaultFontSize,
     defaultFontSizeMinimum,
     defaultFontSizeMonospace,
@@ -370,6 +371,7 @@ const addViewAsync = async (browserWindow, workspace) => {
     defaultFontSize,
     defaultMonospaceFontSize: defaultFontSizeMonospace,
     minimumFontSize: defaultFontSizeMinimum,
+    javascript: !blockJavascript,
   };
 
   // extensions
