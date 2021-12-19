@@ -265,12 +265,12 @@ const getSession = (workspaceId) => {
     proxyRules,
     proxyBypassRules,
     proxyPacScript,
-  } = global.proxyMode;
+  } = global;
 
   // if the workspaces share the same session
   // users won't be able to set proxy per workspace
   if (!global.shareWorkspaceBrowsingData
-      && getWorkspacePreference(workspaceId, 'proxyMode') !== null) {
+      && getWorkspacePreference(workspaceId, 'proxyMode') != null) {
     proxyMode = getWorkspacePreference(workspaceId, 'proxyMode');
 
     const proxyProtocol = getWorkspacePreference(workspaceId, 'proxyProtocol');
