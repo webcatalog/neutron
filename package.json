@@ -30,7 +30,8 @@
   "author": "WebCatalog Ltd <contact@webcatalog.app>",
   "dependencies": {
     "keytar": "7.7.0",
-    "node-mac-permissions": "2.2.0"
+    "node-mac-permissions": "2.2.0",
+    "sqlite3": "https://github.com/mapbox/node-sqlite3"
   },
   "devDependencies": {
     "@babel/core": "7.16.5",
@@ -64,6 +65,7 @@
     "concurrently": "6.5.0",
     "copy-webpack-plugin": "6.4.1",
     "cross-env": "7.0.3",
+    "crypto-js": "4.1.1",
     "darkreader": "4.9.43",
     "date-fns": "2.27.0",
     "del": "6.0.0",
@@ -113,6 +115,7 @@
     "simplebar": "5.3.6",
     "simplebar-react": "2.3.6",
     "source-map-support": "0.5.21",
+    "sqlite": "4.0.23",
     "tmp": "0.2.1",
     "unused-filename": "3.0.1",
     "uuid": "8.3.2",

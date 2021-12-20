@@ -153,7 +153,7 @@ const SectionAutofill = ({ passwordsAskToSave }) => {
                             fullWidth
                             onChange={(e) => {
                               const newPassword = e.target.value;
-                              saveCredentialAsync(row.domain, row.username, newPassword)
+                              saveCredentialAsync(row.domain, row.username, newPassword, row.id)
                                 .then(() => reloadCredentials())
                                 .catch((err) => {
                                   // eslint-disable-next-line no-console
@@ -169,7 +169,7 @@ const SectionAutofill = ({ passwordsAskToSave }) => {
                             aria-label="Remove"
                             size="small"
                             onClick={() => {
-                              deleteCredentialAsync(row.domain, row.username)
+                              deleteCredentialAsync(row.id)
                                 .then(() => reloadCredentials())
                                 .catch((err) => {
                                   // eslint-disable-next-line no-console

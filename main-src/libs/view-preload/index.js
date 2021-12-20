@@ -71,9 +71,7 @@ userAgentHints.load();
 displayMedia.load();
 notifications.load();
 webcatalogApi.load();
-if (process.env.NODE_ENV !== 'production') {
-  passwordFill.load();
-}
+passwordFill.load();
 // Fix Can't show file list of Google Drive
 // https://github.com/electron/electron/issues/16587
 webFrame.executeJavaScript(`

@@ -188,7 +188,6 @@ const Preferences = ({
     autofill: {
       text: 'Autofill',
       Icon: AssignmentIcon,
-      hidden: process.env.NODE_ENV === 'production',
       subSections: {
         passwordAutofill: { text: 'Password Autofill', Component: SectionAutofill },
       },
