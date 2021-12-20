@@ -76,7 +76,7 @@ const SectionAutofill = ({ passwordsAskToSave }) => {
           primary="Ask to save logins and passwords for websites"
           secondary={getStaticGlobal('passwordManagerExtensionDetected')
             ? `The built-in autofill feature has been taken over by the '${getStaticGlobal('passwordManagerExtensionDetected')}'.`
-            : `Passwords are stored locally and securely by ${getKeytarVaultName()}.`}
+            : `Password is stored encrypted locally on disk with the master key stored securely in ${getKeytarVaultName()}.`}
         />
         <ListItemSecondaryAction>
           <Switch
@@ -153,7 +153,7 @@ const SectionAutofill = ({ passwordsAskToSave }) => {
                             fullWidth
                             onChange={(e) => {
                               const newPassword = e.target.value;
-                              saveCredentialAsync(row.domain, row.username, newPassword)
+                              saveCredentialAsync(row.domain, row.username, newPassword, row.id)
                                 .then(() => reloadCredentials())
                                 .catch((err) => {
                                   // eslint-disable-next-line no-console
@@ -169,7 +169,7 @@ const SectionAutofill = ({ passwordsAskToSave }) => {
                             aria-label="Remove"
                             size="small"
                             onClick={() => {
-                              deleteCredentialAsync(row.domain, row.username)
+                              deleteCredentialAsync(row.id)
                                 .then(() => reloadCredentials())
                                 .catch((err) => {
                                   // eslint-disable-next-line no-console
@@ -188,7 +188,7 @@ const SectionAutofill = ({ passwordsAskToSave }) => {
             </Table>
           </ListItem>
           <ListItem disabled>
-            <ListItemText primary={`Passwords are stored locally and securely by ${getKeytarVaultName()}.`} />
+            <ListItemText primary={`Password is stored encrypted locally on disk with the master key stored securely in ${getKeytarVaultName()}.`} />
           </ListItem>
         </>
       )}

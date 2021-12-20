@@ -186,12 +186,6 @@ const PasswordManagers = {
     });
 
     ipcMain.on('password-autofill-check', (e) => {
-      // removed this in the future
-      // we temporarily disable autofill support in production
-      if (process.env.NODE_ENV === 'production') {
-        return;
-      }
-
       if (global.passwordManagerExtensionDetected || !getPreference('passwordsAskToSave') || PasswordManagers.managers.length < 1) {
         return;
       }
@@ -205,8 +199,8 @@ const PasswordManagers = {
       .getAllCredentials());
     ipcMain.handle('password-save-credential', (e, domain, username, password) => PasswordManagers.getActivePasswordManager()
       .saveCredential(domain, username, password));
-    ipcMain.handle('password-delete-credential', (e, domain, username) => PasswordManagers.getActivePasswordManager()
-      .deleteCredential(domain, username));
+    ipcMain.handle('password-delete-credential', (e, id) => PasswordManagers.getActivePasswordManager()
+      .deleteCredential(id));
 
     // keybindings.defineShortcut('fillPassword', () => {
     //   webviews.callAsync(tabs.getSelected(), 'send', ['password-autofill-shortcut']);
