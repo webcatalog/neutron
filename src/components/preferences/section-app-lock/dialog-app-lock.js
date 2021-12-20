@@ -155,7 +155,7 @@ const DialogAppLock = ({
             autoFocus
             label="Password"
             placeholder={hasPassword ? 'Leave this blank if you want no change' : 'Set a password'}
-            helperText={passwordError || `Password is stored encrypted locally on disk with the master key stored securely in ${vaultName}.`}
+            helperText={passwordError || `Password is stored locally and securely by ${vaultName}.`}
             fullWidth
             margin="dense"
             variant="outlined"
