@@ -17,7 +17,6 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 import CachedIcon from '@material-ui/icons/Cached';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CodeIcon from '@material-ui/icons/Code';
-import ExtensionIcon from '@material-ui/icons/Extension';
 import InfoIcon from '@material-ui/icons/Info';
 import LinkIcon from '@material-ui/icons/Link';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
@@ -114,6 +113,13 @@ const HibernationIcon = (props) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
   <SvgIcon {...props}>
     <path fill="currentColor" d="M18.73,18C15.4,21.69 9.71,22 6,18.64C2.33,15.31 2.04,9.62 5.37,5.93C6.9,4.25 9,3.2 11.27,3C7.96,6.7 8.27,12.39 12,15.71C13.63,17.19 15.78,18 18,18C18.25,18 18.5,18 18.73,18Z" />
+  </SvgIcon>
+);
+
+const ScienceIcon = (props) => (
+  // eslint-disable-next-line react/jsx-props-no-spreading
+  <SvgIcon {...props}>
+    <path d="M19.8,18.4L14,10.67V6.5l1.35-1.69C15.61,4.48,15.38,4,14.96,4H9.04C8.62,4,8.39,4.48,8.65,4.81L10,6.5v4.17L4.2,18.4 C3.71,19.06,4.18,20,5,20h14C19.82,20,20.29,19.06,19.8,18.4z" />
   </SvgIcon>
 );
 
@@ -276,9 +282,9 @@ const Preferences = ({
         developers: { text: 'Developers', Component: SectionDevelopers },
       },
     },
-    extensions: {
-      text: 'Extensions',
-      Icon: ExtensionIcon,
+    labs: {
+      text: 'Labs',
+      Icon: ScienceIcon,
       hidden: isMas() || isAppx(),
       subSections: {
         extensions: { text: 'Extensions (experimental)', Component: SectionExtensions },
