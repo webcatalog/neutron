@@ -59,6 +59,7 @@ const {
 } = require('../libs/workspaces-views');
 
 const {
+  clearViewBrowsingData,
   reloadView,
   reloadViewDarkReader,
   reloadViewsDarkReader,
@@ -464,13 +465,41 @@ const loadListeners = () => {
     dialog.showMessageBox(senderWindow || mainWindow.get(), {
       type: 'question',
       buttons: [`Remove ${getWorkspaceFriendlyName()}`, 'Cancel'],
-      message: `Are you sure? All browsing data of this ${getWorkspaceFriendlyName().toLowerCase()} will be wiped. This action cannot be undone.`,
+      message: `Are you sure? All browsing data of this ${getWorkspaceFriendlyName().toLowerCase()} will be cleared. This action cannot be undone.`,
       cancelId: 1,
     })
       .then(({ response }) => {
         if (response === 0) {
           removeWorkspaceView(id);
           createMenu();
+        }
+      })
+      .catch(console.log); // eslint-disable-line
+  });
+
+  ipcMain.on('request-clear-workspace-browsing-data', (e, id) => {
+    if (global.shareWorkspaceBrowsingData) {
+      return;
+    }
+
+    // browsing data is shared and kept globally so it won't be deleted
+    if (getPreference('shareWorkspaceBrowsingData')) {
+      removeWorkspaceView(id);
+      createMenu();
+      return;
+    }
+
+    const senderWindow = e && e.sender ? BrowserWindow.fromWebContents(e.sender) : undefined;
+    dialog.showMessageBox(senderWindow || mainWindow.get(), {
+      type: 'question',
+      buttons: ['Clear Now', 'Cancel'],
+      message: `Are you sure? All browsing data of this ${getWorkspaceFriendlyName().toLowerCase()} will be cleared. This action cannot be undone.`,
+      cancelId: 1,
+    })
+      .then(({ response }) => {
+        if (response === 0) {
+          clearViewBrowsingData(id);
+          reloadView(id);
         }
       })
       .catch(console.log); // eslint-disable-line

@@ -37,6 +37,7 @@ import RatingButton from './rating-button';
 import BrowserActionList from './browser-action-list';
 
 import {
+  requestClearWorkspaceBrowsingData,
   requestCreateWorkspace,
   requestHibernateWorkspace,
   requestReloadWorkspace,
@@ -225,6 +226,15 @@ const SortableItem = sortableElement(({ value }) => {
             visible: !active,
           },
           { type: 'separator' },
+          {
+            label: `Clear ${getWorkspaceFriendlyName()}'s Browsing Data`,
+            click: () => requestClearWorkspaceBrowsingData(id),
+            visible: !getStaticGlobal('shareWorkspaceBrowsingData'),
+          },
+          {
+            type: 'separator',
+            visible: !getStaticGlobal('shareWorkspaceBrowsingData'),
+          },
           {
             label: `Edit ${getWorkspaceFriendlyName()}`,
             click: () => requestShowWorkspacePreferencesWindow(id),

@@ -1333,6 +1333,13 @@ const realignActiveView = (browserWindow, activeId) => {
   }
 };
 
+const clearViewBrowsingData = (id) => {
+  if (global.shareWorkspaceBrowsingData) {
+    return;
+  }
+  session.fromPartition(`persist:${id}`).clearStorageData();
+};
+
 const removeView = (id) => {
   const view = views[id];
   if (view != null) {
@@ -1340,7 +1347,7 @@ const removeView = (id) => {
     // https://github.com/electron/electron/pull/23578#issuecomment-703754455
     view.webContents.forcefullyCrashRenderer();
   }
-  session.fromPartition(`persist:${id}`).clearStorageData();
+  clearViewBrowsingData(id);
   delete views[id];
 
   if (!global.shareWorkspaceBrowsingData) {
@@ -1431,8 +1438,9 @@ const destroyAllViews = () => {
 
 module.exports = {
   addViewAsync,
-  getView,
+  clearViewBrowsingData,
   destroyAllViews,
+  getView,
   hibernateView,
   realignActiveView,
   reloadView,

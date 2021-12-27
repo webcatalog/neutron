@@ -69,6 +69,7 @@ export const requestRemoveWorkspace = (id) => {
   amplitude.getInstance().logEvent('webcatalog-engine: remove workspace');
   window.ipcRenderer.send('request-remove-workspace', id);
 };
+export const requestClearWorkspaceBrowsingData = (id) => window.ipcRenderer.send('request-clear-workspace-browsing-data', id);
 export const requestRemoveWorkspacePicture = (id) => window.ipcRenderer.send('request-remove-workspace-picture', id);
 export const requestSetActiveWorkspace = (id) => {
   // only log event type to protect privacy
