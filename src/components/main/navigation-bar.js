@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import { makeStyles } from '@material-ui/core/styles';
-import { fade } from '@material-ui/core/styles/colorManipulator';
+import { alpha } from '@material-ui/core/styles/colorManipulator';
 
 import SvgIcon from '@material-ui/core/SvgIcon';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
@@ -87,7 +87,7 @@ const useStyles = makeStyles((theme) => ({
   iconButtonDisabled: {
     color: (props) => {
       if (props.themeColor != null) {
-        return `${fade(theme.palette.getContrastText(themeColors[props.themeColor][800]), 0.3)} !important`;
+        return `${alpha(theme.palette.getContrastText(themeColors[props.themeColor][800]), 0.3)} !important`;
       }
       return theme.palette.text.disabled;
     },

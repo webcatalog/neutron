@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import { makeStyles } from '@material-ui/core/styles';
-import { fade } from '@material-ui/core/styles/colorManipulator';
+import { alpha } from '@material-ui/core/styles/colorManipulator';
 
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
     },
     color: (props) => {
       if (props.themeColor != null) {
-        return fade(theme.palette.getContrastText(themeColors[props.themeColor][900]), 0.7);
+        return alpha(theme.palette.getContrastText(themeColors[props.themeColor][900]), 0.7);
       }
       return theme.palette.text.secondary;
     },
@@ -109,7 +109,7 @@ const useStyles = makeStyles((theme) => ({
     maskSize: '23.1%',
     backgroundColor: (props) => {
       if (props.themeColor != null) {
-        return fade(theme.palette.getContrastText(themeColors[props.themeColor][900]), 0.7);
+        return alpha(theme.palette.getContrastText(themeColors[props.themeColor][900]), 0.7);
       }
       return theme.palette.text.secondary;
     },
