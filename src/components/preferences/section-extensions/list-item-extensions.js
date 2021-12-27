@@ -69,6 +69,7 @@ const styles = (theme) => ({
 
 const Extensions = ({
   classes,
+  extensionButtonsVisible,
   extensionSourceBrowserId,
   extensionSourceProfileDirName,
   extensionEnabledExtesionIds,
@@ -202,6 +203,13 @@ const Extensions = ({
                         const newExtensionIds = { ...extensionEnabledExtesionIds };
                         if (checked) {
                           newExtensionIds[ext.id] = true;
+                          // if sidebar and navigation bar are not visible
+                          // it means the extension action buttons are not visible
+                          // so we force navigation bar to show up
+                          // so users can find the buttons
+                          if (!extensionButtonsVisible) {
+                            requestSetPreference('navigationBar', true);
+                          }
                         } else {
                           delete newExtensionIds[ext.id];
                         }
@@ -239,15 +247,18 @@ Extensions.defaultProps = {
 
 Extensions.propTypes = {
   classes: PropTypes.object.isRequired,
+  extensionButtonsVisible: PropTypes.bool.isRequired,
   extensionEnabledExtesionIds: PropTypes.object,
   extensionSourceBrowserId: PropTypes.string.isRequired,
   extensionSourceProfileDirName: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
+  // extension action buttons are only visible on sidebar or navigation bar
+  extensionButtonsVisible: state.preferences.sidebar || state.preferences.navigationBar,
+  extensionEnabledExtesionIds: state.preferences.extensionEnabledExtesionIds,
   extensionSourceBrowserId: state.preferences.extensionSourceBrowserId,
   extensionSourceProfileDirName: state.preferences.extensionSourceProfileDirName,
-  extensionEnabledExtesionIds: state.preferences.extensionEnabledExtesionIds,
 });
 
 export default connectComponent(
