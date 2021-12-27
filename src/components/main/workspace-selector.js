@@ -301,7 +301,7 @@ const WorkspaceSelector = ({
     >
       <Badge
         color="error"
-        overlap="circle"
+        overlap="circular"
         badgeContent={typeof badgeCount === 'number' && !Number.isNaN(badgeCount) ? badgeCount : 0}
         anchorOrigin={{
           vertical: 'top',
@@ -312,7 +312,7 @@ const WorkspaceSelector = ({
       >
         <Badge
           color="default"
-          overlap="circle"
+          overlap="circular"
           badgeContent={(() => {
             if (hibernated) {
               return (
