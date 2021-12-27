@@ -103,6 +103,16 @@ const getWorkspacesSubmenu = () => {
       },
       enabled: !global.locked && hasWorkspaces,
     },
+    { type: 'separator' },
+    {
+      label: `Clear ${getWorkspaceFriendlyName()}'s Browsing Data`,
+      click: () => {
+        const activeWorkspace = getActiveWorkspace();
+        ipcMain.emit('request-clear-workspace-browsing-data', null, activeWorkspace.id);
+      },
+      enabled: !global.locked && hasWorkspaces,
+      visible: !global.shareWorkspaceBrowsingData,
+    },
     {
       label: `Remove Current ${getWorkspaceFriendlyName()}`,
       click: () => {
