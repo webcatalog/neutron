@@ -72,11 +72,6 @@ class Keychain {
     return true;
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  isUnlocked() {
-    return true;
-  }
-
   async getSuggestions(domain) {
     const db = await this.getDb();
 

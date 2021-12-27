@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 /* Modified from https://github.com/minbrowser/min/blob/7749a35ea71a5f373c05e1d587b620a7a5f7c1fc/js/passwordManager/passwordManager.js */
-const { ipcRenderer, ipcMain, dialog } = require('electron');
+const { ipcMain, dialog } = require('electron');
 
 const Keychain = require('./keychain');
 const l = require('./get-locale');
@@ -35,43 +35,6 @@ const PasswordManagers = {
     }
 
     return manager;
-  },
-  // Shows a prompt dialog for password store's master password.
-  async promptForMasterPassword(manager) {
-    return new Promise((resolve, reject) => {
-      const { password } = ipcRenderer.sendSync('prompt', {
-        text: l('passwordManagerUnlock').replace('%p', manager.name),
-        values: [{ placeholder: l('password'), id: 'password', type: 'password' }],
-        ok: l('dialogConfirmButton'),
-        cancel: l('dialogSkipButton'),
-        height: 160,
-      });
-      if (password === null || password === '') {
-        reject(new Error('No password provided'));
-      } else {
-        resolve(password);
-      }
-    });
-  },
-  async unlock(manager) {
-    let success = false;
-    while (!success) {
-      let password;
-      try {
-        // eslint-disable-next-line no-await-in-loop
-        password = await PasswordManagers.promptForMasterPassword(manager);
-      } catch (e) {
-        // dialog was canceled
-        break;
-      }
-      try {
-        // eslint-disable-next-line no-await-in-loop
-        success = await manager.unlockStore(password);
-      } catch (e) {
-        // incorrect password, prompt again
-      }
-    }
-    return success;
   },
   /* https://github.com/minbrowser/min/blob/7749a35ea71a5f373c05e1d587b620a7a5f7c1fc/js/passwordManager/passwordCapture.js */
   handlingRecieveCredentials: false,
@@ -150,10 +113,6 @@ const PasswordManagers = {
       PasswordManagers.getConfiguredPasswordManager().then(async (manager) => {
         if (!manager) {
           return;
-        }
-
-        if (!manager.isUnlocked()) {
-          await PasswordManagers.unlock(manager);
         }
 
         let domain = hostname;

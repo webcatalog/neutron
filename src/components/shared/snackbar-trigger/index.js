@@ -30,7 +30,7 @@ const SnackbarTrigger = ({ classes }) => {
         Dismiss
       </Button>
     );
-  }, notistackRef);
+  }, [notistackRef]);
 
   return (
     <SnackbarProvider
