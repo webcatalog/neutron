@@ -1337,7 +1337,6 @@ const clearViewBrowsingData = (id) => {
   if (global.shareWorkspaceBrowsingData) {
     return;
   }
-  console.log(`persist:${id}`);
   session.fromPartition(`persist:${id}`).clearStorageData();
 };
 

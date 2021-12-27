@@ -234,6 +234,7 @@ const SortableItem = sortableElement(({ value }) => {
           {
             label: `Clear ${getWorkspaceFriendlyName()}'s Browsing Data`,
             click: () => requestClearWorkspaceBrowsingData(id),
+            visible: !getStaticGlobal('shareWorkspaceBrowsingData'),
           },
           {
             label: `Remove ${getWorkspaceFriendlyName()}`,
