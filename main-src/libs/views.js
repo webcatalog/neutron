@@ -244,6 +244,7 @@ const isInternalUrl = (url, currentInternalUrls) => {
 };
 
 const updateAddress = (url) => {
+  if (!url) return;
   sendToAllWindows('update-address', url, false);
   ipcMain.emit('create-menu');
 };
@@ -1259,6 +1260,11 @@ const addViewAsync = async (browserWindow, workspace) => {
   const initialUrl = (global.rememberLastPageVisited && workspace.lastUrl)
   || workspace.homeUrl || appJson.url;
   if (initialUrl) {
+    // update the URL when the workspace is first loaded
+    // if not displayed URL might be blank
+    if (workspace.active) {
+      updateAddress(initialUrl);
+    }
     view.webContents.loadURL(initialUrl);
   }
 };
