@@ -46,6 +46,7 @@ import SectionAppLock from './section-app-lock';
 import SectionAutoReload from './section-auto-reload';
 import SectionAutofill from './section-autofill';
 import SectionBadge from './section-badge';
+import SectionContents from './section-contents';
 import SectionDarkReader from './section-dark-reader';
 import SectionDevelopers from './section-developers';
 import SectionDownloads from './section-downloads';
@@ -60,12 +61,14 @@ import SectionLocationPermission from './section-location-permissions';
 import SectionMode from './section-mode';
 import SectionMoreApps from './section-more-apps';
 import SectionNetwork from './section-network';
+import SectionNeverSaved from './section-never-saved';
 import SectionNotifications from './section-notifications';
 import SectionPerformance from './section-performance';
 import SectionPermissions from './section-permissions';
 import SectionPopupWindows from './section-popup-windows';
 import SectionPrivacy from './section-privacy';
 import SectionReset from './section-reset';
+import SectionSavedPassword from './section-saved-passwords';
 import SectionSearch from './section-search';
 import SectionSystem from './section-system';
 import SectionTabs from './section-tabs';
@@ -74,7 +77,6 @@ import SectionTheme from './section-theme';
 import SectionTitlebar from './section-titlebar';
 import SectionTray from './section-tray';
 import SectionView from './section-view';
-import SectionContents from './section-contents';
 import SectionWindow from './section-window';
 import SectionWorkspaces from './section-workspaces';
 
@@ -189,7 +191,9 @@ const Preferences = ({
       text: 'Autofill',
       Icon: AssignmentIcon,
       subSections: {
-        passwordAutofill: { text: 'Password Autofill', Component: SectionAutofill },
+        autofill: { text: 'Autofill', Component: SectionAutofill },
+        savedPasswords: { text: 'Saved Passwords', Component: SectionSavedPassword },
+        neverSaved: { text: 'Never Saved', Component: SectionNeverSaved },
       },
     },
     downloads: {
