@@ -96,15 +96,6 @@ const getWorkspacesSubmenu = () => {
     },
     { type: 'separator' },
     {
-      label: `Edit Current ${getWorkspaceFriendlyName()}`,
-      click: () => {
-        const activeWorkspace = getActiveWorkspace();
-        ipcMain.emit('request-show-workspace-preferences-window', null, activeWorkspace.id);
-      },
-      enabled: !global.locked && hasWorkspaces,
-    },
-    { type: 'separator' },
-    {
       label: `Clear ${getWorkspaceFriendlyName()}'s Browsing Data`,
       click: () => {
         const activeWorkspace = getActiveWorkspace();
@@ -112,6 +103,18 @@ const getWorkspacesSubmenu = () => {
       },
       enabled: !global.locked && hasWorkspaces,
       visible: !global.shareWorkspaceBrowsingData,
+    },
+    {
+      type: 'separator',
+      visible: !global.shareWorkspaceBrowsingData,
+    },
+    {
+      label: `Edit Current ${getWorkspaceFriendlyName()}`,
+      click: () => {
+        const activeWorkspace = getActiveWorkspace();
+        ipcMain.emit('request-show-workspace-preferences-window', null, activeWorkspace.id);
+      },
+      enabled: !global.locked && hasWorkspaces,
     },
     {
       label: `Remove Current ${getWorkspaceFriendlyName()}`,

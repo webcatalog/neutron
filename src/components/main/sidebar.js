@@ -227,14 +227,17 @@ const SortableItem = sortableElement(({ value }) => {
           },
           { type: 'separator' },
           {
-            label: `Edit ${getWorkspaceFriendlyName()}`,
-            click: () => requestShowWorkspacePreferencesWindow(id),
-          },
-          { type: 'separator' },
-          {
             label: `Clear ${getWorkspaceFriendlyName()}'s Browsing Data`,
             click: () => requestClearWorkspaceBrowsingData(id),
             visible: !getStaticGlobal('shareWorkspaceBrowsingData'),
+          },
+          {
+            type: 'separator',
+            visible: !getStaticGlobal('shareWorkspaceBrowsingData'),
+          },
+          {
+            label: `Edit ${getWorkspaceFriendlyName()}`,
+            click: () => requestShowWorkspacePreferencesWindow(id),
           },
           {
             label: `Remove ${getWorkspaceFriendlyName()}`,
