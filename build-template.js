@@ -127,6 +127,15 @@ Promise.resolve()
           '!**/*/.DS_Store',
         ],
         asarUnpack: [
+          // binaries
+          // we only need to unpack binaries for signing
+          // so actually we don't need to unpack them here
+          // but we do it anyway so the behaviors
+          // of APPX, MAS, standalone, WebCatalog builds are consistent
+          'node_modules/node-mac-permissions/build',
+          'node_modules/keytar/build',
+          'node_modules/sqlite3/lib/binding',
+
           'build/app.json',
           'build/icon.png',
           'build/menubar-icon.png',
