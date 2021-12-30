@@ -55,6 +55,7 @@ const opts = {
     asarUnpack: [
       'node_modules/node-mac-permissions/build',
       'node_modules/keytar/build',
+      'node_modules/sqlite3/lib/binding',
     ],
     appId: configJson.productId,
     // https://github.com/electron-userland/electron-builder/issues/3730
