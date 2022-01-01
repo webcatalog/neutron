@@ -392,6 +392,10 @@ const createAsync = () => new Promise((resolve) => {
     if (view && view.webContents) {
       view.webContents.focus();
     }
+
+    // fix bug: BrowserView size is miscalculated when window is blurred on Windows
+    // https://github.com/webcatalog/webcatalog-app/issues/1599
+    ipcMain.emit('request-realign-active-workspace');
   });
 
   win.once('ready-to-show', () => {
