@@ -98,13 +98,13 @@ const FindInPage = (props) => {
             }
           }}
           onKeyDown={(e) => {
-            if ((e.keyCode || e.which) === 13) { // Enter
+            if (e.key === 'Enter') { // Enter
               const val = e.target.value;
               if (val.length > 0) {
                 requestFindInPage(val, true);
               }
             }
-            if ((e.keyCode || e.which) === 27) { // Escape
+            if (e.key === 'Escape') { // Escape
               requestStopFindInPage(true);
               onCloseFindInPage();
             }
