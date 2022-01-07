@@ -39,6 +39,12 @@ const useStyles = makeStyles((theme) => ({
       return theme.palette.text.secondary;
     },
   },
+  // for title bar on older versions of macOS
+  // (which has 22px title bar instead 28px like on Big Sur)
+  iconButtonDisableGutter: {
+    paddingTop: 0,
+    paddingBottom: 0,
+  },
   iconDisabledWithThemeColor: {
     color: (props) => {
       if (props.themeColor != null) {
@@ -63,6 +69,7 @@ const useStyles = makeStyles((theme) => ({
 const NavigationBar = ({
   canGoBack,
   canGoForward,
+  disableGutter,
   hasWorkspaces,
   isLoading,
   themeColor,
@@ -75,7 +82,7 @@ const NavigationBar = ({
         title="Back"
         aria-label="Back"
         classes={{
-          root: classes.iconButton,
+          root: classnames(classes.iconButton, disableGutter && classes.iconButtonDisableGutter),
         }}
         disabled={!hasWorkspaces || !canGoBack}
         onClick={requestGoBack}
@@ -93,7 +100,7 @@ const NavigationBar = ({
         title="Forward"
         aria-label="Forward"
         classes={{
-          root: classes.iconButton,
+          root: classnames(classes.iconButton, disableGutter && classes.iconButtonDisableGutter),
         }}
         disabled={!hasWorkspaces || !canGoForward}
         onClick={requestGoForward}
@@ -111,7 +118,7 @@ const NavigationBar = ({
         title="Reload"
         aria-label="Reload"
         classes={{
-          root: classes.iconButton,
+          root: classnames(classes.iconButton, disableGutter && classes.iconButtonDisableGutter),
         }}
         onClick={requestReload}
         disabled={!hasWorkspaces || isLoading}
@@ -133,7 +140,7 @@ const NavigationBar = ({
         title="Home"
         aria-label="Home"
         classes={{
-          root: classes.iconButton,
+          root: classnames(classes.iconButton, disableGutter && classes.iconButtonDisableGutter),
         }}
         onClick={requestGoHome}
         disabled={!hasWorkspaces}
@@ -154,11 +161,13 @@ const NavigationBar = ({
 NavigationBar.defaultProps = {
   isLoading: false,
   themeColor: null,
+  disableGutter: false,
 };
 
 NavigationBar.propTypes = {
   canGoBack: PropTypes.bool.isRequired,
   canGoForward: PropTypes.bool.isRequired,
+  disableGutter: PropTypes.bool,
   hasWorkspaces: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool,
   themeColor: PropTypes.string,
