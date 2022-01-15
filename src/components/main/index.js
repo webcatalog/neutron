@@ -181,7 +181,7 @@ const Main = ({
         <div
           className={classnames(
             classes.contentRoot,
-            hasWorkspaces && classes.contentRootActive,
+            hasWorkspaces && !didFailLoad && !isLoading && classes.contentRootActive,
           )}
         >
           {useTabs && <TabBar themeColor={themeColor} />}
@@ -198,7 +198,7 @@ const Main = ({
                 </Typography>
 
                 <br />
-                <Typography align="left" variant="body2">
+                <Typography align="left" variant="body2" component="div">
                   <>
                     Try:
                     <ul className={classes.ul}>
