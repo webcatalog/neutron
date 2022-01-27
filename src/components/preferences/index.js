@@ -169,8 +169,8 @@ const Preferences = ({
       Icon: PaletteIcon,
       subSections: {
         theme: { text: 'Theme', Component: SectionTheme },
-        darkReader: { text: 'Dark Reader', Component: SectionDarkReader },
         view: { text: 'View', Component: SectionView },
+        darkReader: { text: 'Dark Reader', Component: SectionDarkReader },
         fonts: { text: 'Fonts', Component: SectionFonts },
       },
     },

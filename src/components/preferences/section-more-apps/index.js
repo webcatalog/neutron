@@ -175,7 +175,7 @@ const SectionMoreApps = ({
                     Switchbar
                   </Typography>
                   <Typography variant="body2" color="textSecondary">
-                    Choose Where to Open Links
+                    Browser & Email Client Picker
                   </Typography>
                 </div>
               </div>

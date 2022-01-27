@@ -50,7 +50,7 @@ const SectionDarkReader = ({
         primary="Dark Reader"
         secondary={getStaticGlobal('darkReaderExtensionDetected')
           ? 'The built-in Dark Reader feature has been taken over by the external Dark Reader extension.'
-          : 'Create unofficial dark theme for every service & account.'}
+          : 'Create unofficial dark theme for every web service & account.'}
       />
       <ListItemSecondaryAction>
         <Switch
