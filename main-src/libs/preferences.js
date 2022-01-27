@@ -15,6 +15,8 @@ const MAILTO_URLS = require('../constants/mailto-urls');
 
 const appJson = require('../constants/app-json');
 const isWebcatalog = require('./is-webcatalog');
+const isStandalone = require('./is-standalone');
+const isValidLicenseKey = require('./is-valid-license-key');
 
 const getDefaultDownloadsPath = () => app.getPath('downloads');
 
@@ -193,6 +195,11 @@ const initCachedPreferences = () => {
   // note: this feature is always free witH WebCatalog
   if (isMas() && !appJson.registered && !cachedPreferences.iapPurchased) {
     cachedPreferences.attachToMenubar = false;
+  }
+
+  // verify license key
+  if (process.env.NODE_ENV === 'production' && isStandalone()) {
+    cachedPreferences.registered = isValidLicenseKey(cachedPreferences.standaloneLicenseKey);
   }
 };
 
