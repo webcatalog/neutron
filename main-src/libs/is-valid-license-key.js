@@ -1,8 +1,9 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import md5 from 'blueimp-md5';
-import getStaticGlobal from './get-static-global';
+const md5 = require('blueimp-md5');
+
+const appJson = require('../constants/app-json');
 
 const isValidLicenseKey = (licenseKey) => {
   try {
@@ -16,7 +17,7 @@ const isValidLicenseKey = (licenseKey) => {
     const md5Str = parts.slice(2).join('').toUpperCase();
 
     // allow user to activate Singlebox Plus with legacy Singlebox license
-    if (getStaticGlobal('appJson').id === 'singlebox'
+    if (appJson.id === 'singlebox'
       && md5(process.env.REACT_APP_LICENSE_SECRET_LEGACY + quantity + time).toUpperCase()
         === md5Str) {
       return true;
@@ -29,4 +30,4 @@ const isValidLicenseKey = (licenseKey) => {
   }
 };
 
-export default isValidLicenseKey;
+module.exports = isValidLicenseKey;
