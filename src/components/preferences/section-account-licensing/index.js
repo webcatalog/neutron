@@ -59,7 +59,7 @@ const SectionAccountLicensing = ({
             <ListItemText primary={`Upgrade to ${isMas() || isStandalone() ? `${appJson.name} Plus` : 'WebCatalog Lifetime'}...`} />
             <ChevronRightIcon color="action" />
           </ListItem>
-          {isMas && (
+          {isMas() && (
             <>
               <Divider />
               <ListItem button onClick={requestRestorePurchase}>
