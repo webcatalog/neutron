@@ -23,6 +23,8 @@ import NavigationButtons from '../shared/navigation-buttons';
 
 const useStyles = makeStyles((theme) => {
   // Big Sur increases title bar height: https://github.com/microsoft/vscode/pull/110592 (28px)
+  // older macOS versions use 22px
+  // but we use 28px on all versions to fit the navigation buttons
   const titleBarHeight = isMacOs11() ? 28 : 22;
   return {
     root: {
@@ -132,7 +134,7 @@ const FakeTitleBar = ({
 
       {showNavigationButtons && (
         <div className={classes.topRight}>
-          <NavigationButtons themeColor={themeColor} />
+          <NavigationButtons themeColor={themeColor} disableGutter={!isMacOs11()} />
         </div>
       )}
     </div>
