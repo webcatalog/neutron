@@ -54,7 +54,7 @@ const isAppx = require('./is-appx');
 const isWebcatalog = require('./is-webcatalog');
 const getFirefoxUserAgent = require('./get-firefox-user-agent');
 const getSafariUserAgent = require('./get-safari-user-agent');
-const getChromeWithoutVersionUserAgent = require('./get-chrome-without-version-user-agent');
+const getChromeWithoutVersionUserAgentString = require('./get-chrome-without-version-user-agent-string');
 
 const views = {};
 let shouldMuteAudio;
@@ -174,7 +174,7 @@ const getCompatibleUserAgentString = (url) => {
   if (urlObj && ['accounts.google.com'].includes(urlObj.hostname)) {
     // https://github.com/getferdi/ferdi/blob/5138746ae7d8e7307b5287a240bef9df3bb8fe6c/src/models/UserAgent.js#L62
     // force Google to use legacy login page
-    return getChromeWithoutVersionUserAgent();
+    return getChromeWithoutVersionUserAgentString();
     // Firefox UA sometimes works (+ modern login page) but sometimes doesn't so we avoid using it
   }
 

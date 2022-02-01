@@ -106,6 +106,8 @@ const WEBCAL_URLS = require('./constants/webcal-urls');
 const PASSWORD_MANAGERS = require('./constants/password-managers');
 const isStandalone = require('./libs/is-standalone');
 const isSnap = require('./libs/is-snap');
+const getChromeMobileUserAgentString = require('./libs/get-chrome-mobile-user-agent-string');
+const getChromeDesktopUserAgentString = require('./libs/get-chrome-desktop-user-agent-string');
 
 if (isStandalone() && !isSnap()) {
   // eslint-disable-next-line global-require
@@ -518,6 +520,7 @@ if (!gotTheLock) {
       extensionEnabledExtesionIds,
       extensionSourceBrowserId,
       extensionSourceProfileDirName,
+      forceMobileView,
       hibernateWhenUnused,
       hibernateWhenUnusedTimeout,
       navigationBar,
@@ -542,18 +545,14 @@ if (!gotTheLock) {
       windowButtons,
     } = getPreferences();
 
-    if (customUserAgent) {
+    if (forceMobileView) {
+      app.userAgentFallback = getChromeMobileUserAgentString();
+    } else if (customUserAgent) {
       app.userAgentFallback = customUserAgent;
     } else {
       // Hide Electron from UA to improve compatibility
       // https://github.com/webcatalog/webcatalog-app/issues/182
-      app.userAgentFallback = app.userAgentFallback
-        // Fix WhatsApp requires Google Chrome 49+ bug
-        // App Name doesn't have white space in user agent. 'Google Chat' app > GoogleChat/8.1.1
-        .replace(` ${app.name.replace(/ /g, '')}/${app.getVersion()}`, '')
-        // Hide Electron from UA to improve compatibility
-        // https://github.com/webcatalog/webcatalog-app/issues/182
-        .replace(` Electron/${process.versions.electron}`, '');
+      app.userAgentFallback = getChromeDesktopUserAgentString();
     }
 
     global.isMacOs11 = isMacOs11();
