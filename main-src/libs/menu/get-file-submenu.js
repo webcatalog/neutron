@@ -13,6 +13,20 @@ const getFileSubmenu = () => {
 
   const submenu = [
     {
+      label: 'New Window',
+      accelerator: 'CmdOrCtrl+N',
+      click: () => {
+        const win = mainWindow.get();
+
+        if (win != null) {
+          const view = win.getBrowserView();
+          view.openInNewWindow();
+        }
+      },
+      enabled: !global.locked && hasWorkspaces,
+    },
+    { type: 'separator' },
+    {
       label: 'Print...',
       accelerator: 'CmdOrCtrl+P',
       click: () => {
