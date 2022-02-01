@@ -53,7 +53,7 @@ const DialogDevelopers = ({
       <ListItem button onClick={onOpenDialogCustomUserAgent} disabled={forceMobileView}>
         <ListItemText
           primary="Custom User-Agent String"
-          secondary={customUserAgent || 'Not set'}
+          secondary={forceMobileView ? 'Chrome (Android) UA string' : (customUserAgent || 'Not set')}
           secondaryTypographyProps={{ noWrap: true }}
         />
         <ChevronRightIcon color="action" />
