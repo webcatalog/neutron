@@ -68,7 +68,7 @@ const load = async () => {
 
       // We expect the field to have either 'name', 'formcontrolname' or 'id' attribute
       // that we can use to identify it as a login form input field.
-      if (names.length === 0 || checkAttributes(field, ['name', 'formcontrolname', 'id', 'placholder'], names)) {
+      if (names.length === 0 || checkAttributes(field, ['name', 'formcontrolname', 'id', 'placeholder'], names)) {
         if (!checkAttributes(field, ['name', 'formcontrolname', 'id', 'placeholder'], exclusionNames) && field.type !== 'hidden') {
           return true;
         }
