@@ -55,6 +55,7 @@ const isWebcatalog = require('./is-webcatalog');
 const getFirefoxUserAgentString = require('./get-firefox-user-agent-string');
 const getSafariUserAgentString = require('./get-safari-user-agent-string');
 const getChromeWithoutVersionUserAgentString = require('./get-chrome-without-version-user-agent-string');
+const getChromeMobileUserAgentString = require('./get-chrome-mobile-user-agent-string');
 
 const views = {};
 let shouldMuteAudio;
@@ -362,7 +363,12 @@ const addViewAsync = async (browserWindow, workspace) => {
 
   const partitionId = global.shareWorkspaceBrowsingData ? 'persist:shared' : `persist:${workspace.id}`;
   // user agent
-  const customUserAgent = getWorkspacePreference(workspace.id, 'customUserAgent') || getPreference('customUserAgent');
+  let customUserAgent;
+  if (getPreference('forceMobileView')) {
+    customUserAgent = getChromeMobileUserAgentString();
+  } else {
+    customUserAgent = getWorkspacePreference(workspace.id, 'customUserAgent') || getPreference('customUserAgent');
+  }
   const ses = getSession(workspace.id);
 
   const {
