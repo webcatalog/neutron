@@ -116,12 +116,12 @@ const SectionAbout = () => {
       )}
       <Divider />
       <ListItem button onClick={() => requestOpenInBrowser(`https://webcatalog.io/privacy?utm_source=${utmSource}`)}>
-        <ListItemText primary="Privacy Policy" />
+        <ListItemText primary="Privacy policy" />
         <ChevronRightIcon color="action" />
       </ListItem>
       <Divider />
       <ListItem button onClick={requestShowOpenSourceNoticesWindow}>
-        <ListItemText primary="Open Source Notices" />
+        <ListItemText primary="Open source notices" />
         <ChevronRightIcon color="action" />
       </ListItem>
     </List>

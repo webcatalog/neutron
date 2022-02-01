@@ -48,7 +48,7 @@ const SectionDownloads = ({
           }}
         >
           <ListItemText
-            primary="Download Location"
+            primary="Download location"
             secondary={downloadPath}
           />
           <ChevronRightIcon color="action" />
