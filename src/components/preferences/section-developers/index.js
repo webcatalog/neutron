@@ -37,7 +37,7 @@ const DialogDevelopers = ({
       <ListItem>
         <ListItemText
           primary="Force mobile view"
-          secondary="Force some websites to load their mobile versions by using mobile User-Agent string."
+          secondary="Force some websites to use their mobile versions by using mobile User-Agent string."
         />
         <ListItemSecondaryAction>
           <Switch
@@ -52,7 +52,7 @@ const DialogDevelopers = ({
       </ListItem>
       <ListItem button onClick={onOpenDialogCustomUserAgent} disabled={forceMobileView}>
         <ListItemText
-          primary="Custom User-Agent String"
+          primary="Custom User-Agent string"
           secondary={forceMobileView ? 'Chrome (Android) UA string' : (customUserAgent || 'Not set')}
           secondaryTypographyProps={{ noWrap: true }}
         />
@@ -66,7 +66,7 @@ const DialogDevelopers = ({
         }}
       >
         <ListItemText
-          primary="JS Code Injection"
+          primary="JS code injection"
           secondary={jsCodeInjection || 'Not set'}
           secondaryTypographyProps={{ noWrap: true }}
         />
@@ -80,7 +80,7 @@ const DialogDevelopers = ({
         }}
       >
         <ListItemText
-          primary="CSS Code Injection"
+          primary="CSS code injection"
           secondary={cssCodeInjection || 'Not set'}
           secondaryTypographyProps={{ noWrap: true }}
         />

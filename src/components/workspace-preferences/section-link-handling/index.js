@@ -134,7 +134,6 @@ SectionLinkHandling.propTypes = {
 
   alwaysOpenInMainWindow: PropTypes.bool.isRequired,
   formAlwaysOpenInMainWindow: PropTypes.bool,
-
 };
 
 const mapStateToProps = (state) => ({
