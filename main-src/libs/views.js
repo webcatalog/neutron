@@ -1235,6 +1235,9 @@ const addViewAsync = async (browserWindow, workspace) => {
     view.webContents.send('should-pause-notifications-changed', workspace.disableNotifications || shouldPauseNotifications);
   });
 
+  const initialUrl = (global.rememberLastPageVisited && workspace.lastUrl)
+  || workspace.homeUrl || appJson.url;
+
   view.openInNewWindow = (url) => {
     // trigger the 'new-window' event manually
     handleNewWindow(
@@ -1242,7 +1245,7 @@ const addViewAsync = async (browserWindow, workspace) => {
         sender: view.webContents,
         preventDefault: () => {},
       },
-      url,
+      url || initialUrl, // if url is not set, open with initialUrl
       '', // frameName
       'neutron:new-window-forced',
     );
@@ -1263,8 +1266,6 @@ const addViewAsync = async (browserWindow, workspace) => {
     ipcMain.emit('request-hibernate-workspace', null, workspace.id, global.hibernateWhenUnusedTimeout);
   }
 
-  const initialUrl = (global.rememberLastPageVisited && workspace.lastUrl)
-  || workspace.homeUrl || appJson.url;
   if (initialUrl) {
     // update the URL when the workspace is first loaded
     // if not displayed URL might be blank
