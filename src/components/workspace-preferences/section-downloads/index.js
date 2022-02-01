@@ -62,7 +62,7 @@ const SectionDownloads = ({
           }}
         >
           <ListItemText
-            primary="Download Location"
+            primary="Download location"
             secondary={formDownloadPath != null ? formDownloadPath : `Use global preference (${downloadPath})`}
           />
           <ChevronRightIcon color="action" />
