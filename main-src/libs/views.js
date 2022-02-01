@@ -52,8 +52,8 @@ const getExtensionFromProfile = require('./extensions/get-extensions-from-profil
 const isSnap = require('./is-snap');
 const isAppx = require('./is-appx');
 const isWebcatalog = require('./is-webcatalog');
-const getFirefoxUserAgent = require('./get-firefox-user-agent');
-const getSafariUserAgent = require('./get-safari-user-agent');
+const getFirefoxUserAgentString = require('./get-firefox-user-agent-string');
+const getSafariUserAgentString = require('./get-safari-user-agent-string');
 const getChromeWithoutVersionUserAgentString = require('./get-chrome-without-version-user-agent-string');
 
 const views = {};
@@ -181,14 +181,14 @@ const getCompatibleUserAgentString = (url) => {
   // Google Earth will attempt to use `SharedArrayBuffer` API if it detects Chrome UA
   // `SharedArrayBuffer` is disabled to prevent Spectre-related security issues
   if (urlObj && ['earth.google.com'].includes(urlObj.hostname)) {
-    return getFirefoxUserAgent();
+    return getFirefoxUserAgentString();
   }
 
   // Google uses special code for Chromium-based browsers
   // when screensharing (not working with Electron)
   // so change user-agent to Safari to make it work
   if (urlObj && ['meet.google.com', 'hangouts.google.com'].includes(urlObj.hostname)) {
-    return getSafariUserAgent();
+    return getSafariUserAgentString();
   }
 
   return null;
