@@ -364,7 +364,7 @@ const addViewAsync = async (browserWindow, workspace) => {
   const partitionId = global.shareWorkspaceBrowsingData ? 'persist:shared' : `persist:${workspace.id}`;
   // user agent
   let customUserAgent;
-  if (getPreference('forceMobileView')) {
+  if (getWorkspacePreference(workspace.id, 'forceMobileView') || getPreference('forceMobileView')) {
     customUserAgent = getChromeMobileUserAgentString();
   } else {
     customUserAgent = getWorkspacePreference(workspace.id, 'customUserAgent') || getPreference('customUserAgent');
