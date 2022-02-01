@@ -3,6 +3,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 const { app } = require('electron');
 
-const getChromeWithoutVersionUserAgent = () => app.userAgentFallback.replace(/Chrome\/[\d.]+/, 'Chrome');
+const getChromeWithoutVersionUserAgentString = () => app.userAgentFallback.replace(/Chrome\/[\d.]+/, 'Chrome');
 
-module.exports = getChromeWithoutVersionUserAgent;
+module.exports = getChromeWithoutVersionUserAgentString;

@@ -8,10 +8,15 @@ import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import Switch from '@material-ui/core/Switch';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 import connectComponent from '../../../helpers/connect-component';
+import {
+  requestSetPreference,
+} from '../../../senders';
 
 import { open as openDialogCodeInjection } from '../../../state/dialog-code-injection/actions';
 import { open as openDialogCustomUserAgent } from '../../../state/dialog-custom-user-agent/actions';
@@ -22,16 +27,33 @@ import DialogCustomUserAgent from '../../shared/dialog-custom-user-agent';
 const DialogDevelopers = ({
   cssCodeInjection,
   customUserAgent,
+  forceMobileView,
   jsCodeInjection,
   onOpenDialogCodeInjection,
   onOpenDialogCustomUserAgent,
 }) => (
   <>
     <List disablePadding dense>
-      <ListItem button onClick={onOpenDialogCustomUserAgent}>
+      <ListItem>
         <ListItemText
-          primary="Custom User Agent"
-          secondary={customUserAgent || 'Not set'}
+          primary="Force mobile view"
+          secondary="Force some websites to load their mobile versions by using mobile User-Agent string."
+        />
+        <ListItemSecondaryAction>
+          <Switch
+            edge="end"
+            color="primary"
+            checked={forceMobileView}
+            onChange={(e) => {
+              requestSetPreference('forceMobileView', e.target.checked);
+            }}
+          />
+        </ListItemSecondaryAction>
+      </ListItem>
+      <ListItem button onClick={onOpenDialogCustomUserAgent} disabled={forceMobileView}>
+        <ListItemText
+          primary="Custom User-Agent String"
+          secondary={forceMobileView ? 'Chrome (Android) UA string' : (customUserAgent || 'Not set')}
           secondaryTypographyProps={{ noWrap: true }}
         />
         <ChevronRightIcon color="action" />
@@ -79,6 +101,7 @@ DialogDevelopers.defaultProps = {
 DialogDevelopers.propTypes = {
   cssCodeInjection: PropTypes.string,
   customUserAgent: PropTypes.string,
+  forceMobileView: PropTypes.bool.isRequired,
   jsCodeInjection: PropTypes.string,
   onOpenDialogCodeInjection: PropTypes.func.isRequired,
   onOpenDialogCustomUserAgent: PropTypes.func.isRequired,
@@ -87,6 +110,7 @@ DialogDevelopers.propTypes = {
 const mapStateToProps = (state) => ({
   cssCodeInjection: state.preferences.cssCodeInjection,
   customUserAgent: state.preferences.customUserAgent,
+  forceMobileView: state.preferences.forceMobileView,
   jsCodeInjection: state.preferences.jsCodeInjection,
 });
 

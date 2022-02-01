@@ -33,7 +33,7 @@ const SectionDevelopers = ({
     <List disablePadding dense>
       <ListItem button onClick={onOpenDialogCustomUserAgent}>
         <ListItemText
-          primary="Custom User Agent"
+          primary="Custom User-Agent String"
           secondary={(() => {
             if (formCustomUserAgent != null) {
               return formCustomUserAgent;

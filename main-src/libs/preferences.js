@@ -75,6 +75,8 @@ const defaultPreferences = {
   defaultFontSizeMonospace: 13,
   /* Font Settings (same as Chrome/Edge) */
   downloadPath: getDefaultDownloadsPath(),
+  // force app to use mobile User-Agent string
+  forceMobileView: false,
   // extensions
   extensionSourceBrowserId: process.platform === 'win32' ? 'edge' : 'chrome',
   extensionSourceProfileDirName: 'Default',

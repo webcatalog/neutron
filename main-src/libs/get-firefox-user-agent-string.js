@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // modified from https://github.com/minbrowser/min/blob/95020a03e569529433feeee364fe6e7416890ac3/main/UASwitcher.js (Apache license)
-const getFirefoxUserAgent = () => {
+const getFirefoxUserAgentString = () => {
   const rootUAs = {
     mac: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:FXVERSION.0) Gecko/20100101 Firefox/FXVERSION.0',
     windows: 'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:FXVERSION.0) Gecko/20100101 Firefox/FXVERSION.0',
@@ -32,4 +32,4 @@ const getFirefoxUserAgent = () => {
   return rootUA.replace(/FXVERSION/g, fxVersion);
 };
 
-module.exports = getFirefoxUserAgent;
+module.exports = getFirefoxUserAgentString;

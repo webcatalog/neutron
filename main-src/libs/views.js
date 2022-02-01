@@ -52,9 +52,10 @@ const getExtensionFromProfile = require('./extensions/get-extensions-from-profil
 const isSnap = require('./is-snap');
 const isAppx = require('./is-appx');
 const isWebcatalog = require('./is-webcatalog');
-const getFirefoxUserAgent = require('./get-firefox-user-agent');
-const getSafariUserAgent = require('./get-safari-user-agent');
-const getChromeWithoutVersionUserAgent = require('./get-chrome-without-version-user-agent');
+const getFirefoxUserAgentString = require('./get-firefox-user-agent-string');
+const getSafariUserAgentString = require('./get-safari-user-agent-string');
+const getChromeWithoutVersionUserAgentString = require('./get-chrome-without-version-user-agent-string');
+const getChromeMobileUserAgentString = require('./get-chrome-mobile-user-agent-string');
 
 const views = {};
 let shouldMuteAudio;
@@ -174,21 +175,21 @@ const getCompatibleUserAgentString = (url) => {
   if (urlObj && ['accounts.google.com'].includes(urlObj.hostname)) {
     // https://github.com/getferdi/ferdi/blob/5138746ae7d8e7307b5287a240bef9df3bb8fe6c/src/models/UserAgent.js#L62
     // force Google to use legacy login page
-    return getChromeWithoutVersionUserAgent();
+    return getChromeWithoutVersionUserAgentString();
     // Firefox UA sometimes works (+ modern login page) but sometimes doesn't so we avoid using it
   }
 
   // Google Earth will attempt to use `SharedArrayBuffer` API if it detects Chrome UA
   // `SharedArrayBuffer` is disabled to prevent Spectre-related security issues
   if (urlObj && ['earth.google.com'].includes(urlObj.hostname)) {
-    return getFirefoxUserAgent();
+    return getFirefoxUserAgentString();
   }
 
   // Google uses special code for Chromium-based browsers
   // when screensharing (not working with Electron)
   // so change user-agent to Safari to make it work
   if (urlObj && ['meet.google.com', 'hangouts.google.com'].includes(urlObj.hostname)) {
-    return getSafariUserAgent();
+    return getSafariUserAgentString();
   }
 
   return null;
@@ -362,7 +363,12 @@ const addViewAsync = async (browserWindow, workspace) => {
 
   const partitionId = global.shareWorkspaceBrowsingData ? 'persist:shared' : `persist:${workspace.id}`;
   // user agent
-  const customUserAgent = getWorkspacePreference(workspace.id, 'customUserAgent') || getPreference('customUserAgent');
+  let customUserAgent;
+  if (getPreference('forceMobileView')) {
+    customUserAgent = getChromeMobileUserAgentString();
+  } else {
+    customUserAgent = getWorkspacePreference(workspace.id, 'customUserAgent') || getPreference('customUserAgent');
+  }
   const ses = getSession(workspace.id);
 
   const {
