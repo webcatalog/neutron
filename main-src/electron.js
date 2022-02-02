@@ -514,6 +514,7 @@ if (!gotTheLock) {
     const {
       attachToMenubar,
       autoCheckForUpdates,
+      backgroundThrottling,
       blockAds,
       blockJavascript,
       customUserAgent,
@@ -573,6 +574,7 @@ if (!gotTheLock) {
     // ensure that to change the preferences
     // user needs to restart the app
     // this is to ensure consistency between views
+    global.backgroundThrottling = backgroundThrottling;
     global.blockAds = blockAds;
     global.blockJavascript = blockJavascript;
     global.rememberLastPageVisited = rememberLastPageVisited;
