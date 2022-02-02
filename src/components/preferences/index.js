@@ -53,6 +53,7 @@ import SectionExit from './section-exit';
 import SectionExtensions from './section-extensions';
 import SectionFonts from './section-fonts';
 import SectionHardware from './section-hardware';
+import SectionHibernation from './section-hibernation';
 import SectionHome from './section-home';
 import SectionLanguage from './section-language';
 import SectionLinkHandling from './section-link-handling';
@@ -62,7 +63,6 @@ import SectionMoreApps from './section-more-apps';
 import SectionNetwork from './section-network';
 import SectionNeverSaved from './section-never-saved';
 import SectionNotifications from './section-notifications';
-import SectionPerformance from './section-performance';
 import SectionPermissions from './section-permissions';
 import SectionPopupWindows from './section-popup-windows';
 import SectionPrivacy from './section-privacy';
@@ -73,6 +73,7 @@ import SectionSystem from './section-system';
 import SectionTabs from './section-tabs';
 import SectionTelemetry from './section-telemetry';
 import SectionTheme from './section-theme';
+import SectionThrottling from './section-throttling';
 import SectionTitlebar from './section-titlebar';
 import SectionTray from './section-tray';
 import SectionView from './section-view';
@@ -236,7 +237,8 @@ const Preferences = ({
       text: 'Hibernation',
       Icon: HibernationIcon,
       subSections: {
-        hibernation: { text: 'Hibernation', Component: SectionPerformance },
+        hibernation: { text: 'Hibernation', Component: SectionHibernation },
+        throttling: { text: 'Throttling', Component: SectionThrottling },
       },
     },
     linkHandling: {

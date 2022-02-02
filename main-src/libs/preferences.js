@@ -58,6 +58,7 @@ const defaultPreferences = {
   autoRefresh: false,
   autoRefreshInterval: 3600000,
   autoRefreshOnlyWhenInactive: false,
+  backgroundThrottling: true,
   blockAds: false,
   blockJavascript: false,
   cssCodeInjection: null,
