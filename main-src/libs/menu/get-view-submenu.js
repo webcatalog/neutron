@@ -15,6 +15,8 @@ const {
   getWorkspaces,
 } = require('../workspaces');
 
+const getWorkspaceFriendlyName = require('../get-workspace-friendly-name');
+
 const getViewSubmenu = () => {
   const workspaces = getWorkspaces();
   const hasWorkspaces = Object.keys(workspaces).length > 0;
@@ -38,7 +40,7 @@ const getViewSubmenu = () => {
 
   return [
     {
-      label: global.sidebar ? 'Hide Sidebar' : 'Show Sidebar',
+      label: global.sidebar ? `Hide ${getWorkspaceFriendlyName()} Bar` : `Show ${getWorkspaceFriendlyName()} Bar`,
       accelerator: 'CmdOrCtrl+Alt+S',
       click: () => {
         setPreference('sidebar', !global.sidebar);

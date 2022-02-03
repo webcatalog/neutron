@@ -51,8 +51,8 @@ const SectionAppearance = ({
   <List disablePadding dense>
     <ListItem>
       <ListItemText
-        primary="Show sidebar"
-        secondary={`Sidebar lets you switch easily between ${getWorkspaceFriendlyName(true).toLowerCase()}.`}
+        primary={`Show ${getWorkspaceFriendlyName().toLowerCase()} bar`}
+        secondary={`${getWorkspaceFriendlyName()} bar lets you switch easily between ${getWorkspaceFriendlyName(true).toLowerCase()}.`}
       />
       <ListItemSecondaryAction>
         <Switch
@@ -68,7 +68,7 @@ const SectionAppearance = ({
     </ListItem>
     <ListItem>
       <ListItemText
-        primary="Sidebar size"
+        primary={`${getWorkspaceFriendlyName()} bar size`}
       />
       <Select
         value={sidebarSize}
@@ -100,7 +100,7 @@ const SectionAppearance = ({
     </ListItem>
     <ListItem>
       <ListItemText
-        primary="Show tips on sidebar"
+        primary={`Show tips on ${getWorkspaceFriendlyName().toLowerCase()} bar`}
       />
       <Select
         value={sidebarSize === 'expanded' ? 'name+shortcut' : sidebarTips}
@@ -144,7 +144,7 @@ const SectionAppearance = ({
     </ListItem>
     <ListItem>
       <ListItemText
-        primary="Show add (+) button on sidebar"
+        primary={`Show add (+) button on ${getWorkspaceFriendlyName().toLowerCase()} bar`}
       />
       <ListItemSecondaryAction>
         <Switch
