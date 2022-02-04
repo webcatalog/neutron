@@ -36,7 +36,7 @@ export const open = () => (dispatch, getState) => {
         proxyMode,
         proxyPacScript,
         proxyPort,
-        proxyProtocol,
+        proxyProtocol: proxyProtocol || 'socks5',
       },
     });
     return;
