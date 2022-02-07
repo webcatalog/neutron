@@ -13,6 +13,8 @@ import Typography from '@material-ui/core/Typography';
 
 import connectComponent from '../../helpers/connect-component';
 
+import { getDesktopCapturerSourcesAsync } from '../../invokers';
+
 const styles = (theme) => ({
   root: {
     height: '100%',
@@ -38,7 +40,7 @@ class DisplayMedia extends React.Component {
   }
 
   componentDidMount() {
-    window.desktopCapturer.getSources({ types: ['window', 'screen'] })
+    getDesktopCapturerSourcesAsync({ types: ['window', 'screen'] })
       .then((sources) => {
         this.setState({ sources });
       });
