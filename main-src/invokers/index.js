@@ -9,7 +9,8 @@ const {
 
 const { getPreferences } = require('../libs/preferences');
 const { getSystemPreferences } = require('../libs/system-preferences');
-const { getWorkspaces, setWorkspacePictureAsync } = require('../libs/workspaces');
+const { getWorkspaces } = require('../libs/workspaces');
+const { setWorkspaceViewPictureAsync } = require('../libs/workspaces-views');
 const {
   getWorkspaceMetas,
 } = require('../libs/workspace-metas');
@@ -125,7 +126,7 @@ const loadInvokers = () => {
     return Promise.resolve('rejected');
   });
 
-  ipcMain.handle('set-workspace-picture', (e, id, imgPath) => setWorkspacePictureAsync(id, imgPath));
+  ipcMain.handle('set-workspace-picture', (e, id, imgPath) => setWorkspaceViewPictureAsync(id, imgPath));
 
   ipcMain.handle('get-desktop-capturer-sources', (e, options) => desktopCapturer.getSources(options));
 };

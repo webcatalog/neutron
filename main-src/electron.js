@@ -31,6 +31,7 @@ const rtlDetect = require('rtl-detect');
 const appJson = require('./constants/app-json');
 const isMas = require('./libs/is-mas');
 const getExtensionFromProfile = require('./libs/extensions/get-extensions-from-profile');
+const isMenubarBrowser = require('./libs/is-menubar-browser');
 
 electronRemote.initialize();
 
@@ -87,7 +88,7 @@ const { createMenu } = require('./libs/menu');
 const {
   reloadViewsDarkReader,
 } = require('./libs/views');
-const { getWorkspaces } = require('./libs/workspaces');
+const { getWorkspaces, countWorkspaces } = require('./libs/workspaces');
 const sendToAllWindows = require('./libs/send-to-all-windows');
 const extractHostname = require('./libs/extract-hostname');
 const { getAppLockStatusAsync, unlockAppUsingTouchId } = require('./libs/app-lock');
@@ -401,6 +402,15 @@ if (!gotTheLock) {
         });
 
         initWorkspaceViews();
+
+        // if user is in menubar browser mode
+        // if there are no workspace, prompt user to add one
+        if (isMenubarBrowser() && countWorkspaces() < 1) {
+          const { openAsLogin } = app.getLoginItemSettings();
+          if (!openAsLogin) {
+            ipcMain.emit('request-show-add-workspace-window');
+          }
+        }
 
         ipcMain.emit('request-update-pause-notifications-info');
 

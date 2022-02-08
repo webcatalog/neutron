@@ -32,7 +32,6 @@ const {
   getWorkspacePreference,
   getWorkspacePreferences,
   getWorkspaces,
-  removeWorkspacePicture,
   setWorkspaceAccountInfo,
   removeWorkspaceAccountInfo,
 } = require('../libs/workspaces');
@@ -50,12 +49,13 @@ const {
   createWorkspaceView,
   hibernateWorkspaceView,
   loadURL,
+  realignActiveWorkspaceView,
   removeWorkspaceView,
+  removeWorkspaceViewPictureAsync,
   setActiveWorkspaceView,
   setWorkspaceView,
   setWorkspaceViews,
   wakeUpWorkspaceView,
-  realignActiveWorkspaceView,
 } = require('../libs/workspaces-views');
 
 const {
@@ -520,7 +520,7 @@ const loadListeners = () => {
   });
 
   ipcMain.on('request-remove-workspace-picture', (e, id) => {
-    removeWorkspacePicture(id);
+    removeWorkspaceViewPictureAsync(id);
   });
 
   ipcMain.on('request-remove-workspace-account-info', (e, id) => {

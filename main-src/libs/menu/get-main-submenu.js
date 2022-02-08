@@ -36,7 +36,7 @@ const getMainSubmenu = () => {
   const submenu = [
     ...lockMenuItems,
     {
-      label: 'Preferences...',
+      label: 'Global Preferences...',
       accelerator: 'CmdOrCtrl+,',
       click: () => ipcMain.emit('request-show-preferences-window'),
       enabled: !global.locked,

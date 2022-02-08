@@ -17,6 +17,7 @@ import { setWorkspacePictureAsync } from '../../invokers';
 import getStaticGlobal from '../../helpers/get-static-global';
 
 import appSearch from '../../app-search';
+import isMenubarBrowser from '../../helpers/is-menubar-browser';
 
 export const updateForm = (changes) => (dispatch, getState) => {
   const workspaceId = getStaticGlobal('workspacePreferencesWorkspaceId');
@@ -61,6 +62,7 @@ export const removePicture = () => (dispatch) => {
   dispatch({
     type: UPDATE_WORKSPACE_PREFERENCES_FORM,
     changes: {
+      preferredIconType: isMenubarBrowser() ? 'image' : 'auto',
       pictureId: null,
       imgPath: null,
     },

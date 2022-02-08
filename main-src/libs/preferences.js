@@ -16,6 +16,7 @@ const MAILTO_URLS = require('../constants/mailto-urls');
 const appJson = require('../constants/app-json');
 const isWebcatalog = require('./is-webcatalog');
 const isStandalone = require('./is-standalone');
+const isMenubarBrowser = require('./is-menubar-browser');
 const isValidLicenseKey = require('./is-valid-license-key');
 
 const getDefaultDownloadsPath = () => app.getPath('downloads');
@@ -37,8 +38,9 @@ const getDefaultPauseNotificationsByScheduleTo = () => {
 // scope
 const v = '2018.2';
 
-// show sidebar by default for Singlebox, multisite apps & mail apps
-const shouldShowSidebar = !appJson.url || Boolean(MAILTO_URLS[extractHostname(appJson.url)]);
+// show sidebar by default for Singlebox, Clovery & spaces
+const shouldShowSidebar = !isMenubarBrowser()
+  && (!appJson.url || Boolean(MAILTO_URLS[extractHostname(appJson.url)]));
 
 const defaultPreferences = {
   allowNodeInJsCodeInjection: false,
@@ -52,7 +54,7 @@ const defaultPreferences = {
   // also the save dialog is unreliable on macOS, f
   // for unknown reason, sometimes, it doesn't show up and gets stuck
   askForDownloadPath: process.platform !== 'darwin',
-  attachToMenubar: false,
+  attachToMenubar: isMenubarBrowser(),
   windowShortcut: null,
   autoCheckForUpdates: true,
   autoRefresh: false,
@@ -77,7 +79,7 @@ const defaultPreferences = {
   /* Font Settings (same as Chrome/Edge) */
   downloadPath: getDefaultDownloadsPath(),
   // force app to use mobile User-Agent string
-  forceMobileView: false,
+  forceMobileView: isMenubarBrowser(),
   // extensions
   extensionSourceBrowserId: process.platform === 'win32' ? 'edge' : 'chrome',
   extensionSourceProfileDirName: 'Default',
@@ -91,7 +93,7 @@ const defaultPreferences = {
   externalUrlRule: '',
   jsCodeInjection: null,
   lastShowNewUpdateDialog: 0,
-  navigationBar: false,
+  navigationBar: isMenubarBrowser(),
   muteApp: false,
   openFolderWhenDoneDownloading: true,
   openProtocolUrlInNewWindow: 'ask', // 'ask', 'newWindow', 'mainWindow'
@@ -121,7 +123,7 @@ const defaultPreferences = {
   sentry: false,
   // branded apps (like Google/Microsoft) share browsing data by default
   // https://github.com/webcatalog/webcatalog-app/issues/986
-  shareWorkspaceBrowsingData: appJson.id.startsWith('group-') || appJson.id === 'clovery',
+  shareWorkspaceBrowsingData: isMenubarBrowser() || appJson.id.startsWith('group-') || appJson.id === 'clovery',
   sidebar: shouldShowSidebar,
   sidebarSize: 'compact',
   sidebarTips: 'shortcut',
@@ -137,7 +139,7 @@ const defaultPreferences = {
   telemetry: false,
   themeColor: 'auto',
   themeSource: 'system',
-  titleBar: true,
+  titleBar: !isMenubarBrowser(),
   titleBarNavigationButtons: true,
   trayIcon: false,
   unreadCountBadge: true,

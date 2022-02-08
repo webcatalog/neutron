@@ -67,7 +67,7 @@ const SectionWorkspaces = ({
       ))}
       {appJson.url && (
         <>
-          <Divider />
+          {workspacesList.length > 0 && <Divider />}
           <ListItem
             button
             onClick={() => requestCreateWorkspace()}
@@ -80,7 +80,7 @@ const SectionWorkspaces = ({
           </ListItem>
         </>
       )}
-      <Divider />
+      {workspacesList.length > 0 && <Divider />}
       <ListItem
         button
         onClick={() => requestShowAddWorkspaceWindow()}

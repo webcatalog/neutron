@@ -21,6 +21,7 @@ import connectComponent from '../../helpers/connect-component';
 import getAvatarText from '../../helpers/get-avatar-text';
 import getMailtoUrl from '../../helpers/get-mailto-url';
 import camelCaseToSentenceCase from '../../helpers/camel-case-to-sentence-case';
+import isMenubarBrowser from '../../helpers/is-menubar-browser';
 
 import themeColors from '../../constants/theme-colors';
 
@@ -309,7 +310,7 @@ const AddWorkspaceCustom = ({
         </div>
         <div className={classes.avatarFlex}>
           <div className={classes.avatarLeft}>
-            {renderAvatar(
+            {!isMenubarBrowser() && renderAvatar(
               getAvatarText(null, name, null),
               'text',
               'Text',
@@ -393,17 +394,21 @@ const AddWorkspaceCustom = ({
                 >
                   Reset to Default
                 </Button>
-                <FormGroup>
-                  <FormControlLabel
-                    control={(
-                      <Checkbox
-                        checked={transparentBackground}
-                        onChange={(e) => onUpdateForm({ transparentBackground: e.target.checked })}
-                      />
-                    )}
-                    label="Use transparent background"
-                  />
-                </FormGroup>
+                {!isMenubarBrowser() && (
+                  <FormGroup>
+                    <FormControlLabel
+                      control={(
+                        <Checkbox
+                          checked={transparentBackground}
+                          onChange={(e) => onUpdateForm({
+                            transparentBackground: e.target.checked,
+                          })}
+                        />
+                      )}
+                      label="Use transparent background"
+                    />
+                  </FormGroup>
+                )}
               </>
             )}
           </div>

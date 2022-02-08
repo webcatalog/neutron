@@ -236,7 +236,7 @@ const setWorkspacePictureAsync = (id, sourcePicturePath) => {
     });
 };
 
-const removeWorkspacePicture = (id) => {
+const removeWorkspacePictureAsync = (id) => {
   const workspace = getWorkspace(id);
   if (workspace.pictureId) {
     return fs.remove(getPicturePath(workspace.pictureId))
@@ -342,7 +342,7 @@ module.exports = {
   getWorkspacesAsList,
   removeWorkspace,
   removeWorkspaceAccountInfo,
-  removeWorkspacePicture,
+  removeWorkspacePictureAsync,
   setActiveWorkspace,
   setWorkspace,
   setWorkspaceAccountInfo,

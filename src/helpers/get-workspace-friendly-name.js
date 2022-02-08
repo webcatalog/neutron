@@ -3,11 +3,17 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import getStaticGlobal from './get-static-global';
+import isMenubarBrowser from './is-menubar-browser';
 
 // in most apps, we call workspace "Account"
 // if data is shared between workspaces, we call workspace "Service"
 const getWorkspaceFriendlyName = (plural = false) => {
   if (!getStaticGlobal('appJson').url && getStaticGlobal('shareWorkspaceBrowsingData')) {
+    if (isMenubarBrowser()) {
+      if (plural) return 'Tabs';
+      return 'Tab';
+    }
+
     if (plural) return 'Services';
     return 'Service';
   }
