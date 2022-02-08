@@ -178,9 +178,9 @@ const addWorkspaceTrayAsync = async (id) => {
   const img = await getTrayNativeImageFromPathAsync(picturePath);
 
   const tray = new Tray(img);
-  tray.on('click', () => {
+  tray.on('click', (e, bounds) => {
     setActiveWorkspaceView(id);
-    ipcMain.emit('request-show-main-window');
+    ipcMain.emit('request-show-main-window', null, bounds);
   });
 
   tray.on('right-click', () => {

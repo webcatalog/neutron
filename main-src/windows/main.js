@@ -25,6 +25,7 @@ const isWebcatalog = require('../libs/is-webcatalog');
 const isAppx = require('../libs/is-appx');
 const formatBytes = require('../libs/format-bytes');
 const isStandalone = require('../libs/is-standalone');
+const isMenubarBrowser = require('../libs/is-menubar-browser');
 
 let win;
 let mb;
@@ -216,6 +217,7 @@ const createAsync = () => new Promise((resolve) => {
     mb = menubar({
       index: REACT_PATH,
       tray: menubarTray,
+      isMenubarBrowser: isMenubarBrowser(),
       preloadWindow: true,
       tooltip: appJson.name,
       browserWindow: {
@@ -238,6 +240,15 @@ const createAsync = () => new Promise((resolve) => {
         },
       },
     });
+
+    if (isMenubarBrowser()) {
+      menubarTray.on('click', () => {
+        ipcMain.emit('request-show-add-workspace-window');
+      });
+      menubarTray.on('double-click', () => {
+        ipcMain.emit('request-show-add-workspace-window');
+      });
+    }
 
     mb.on('after-create-window', () => {
       mb.window.refreshTitle = (...args) => {
@@ -457,12 +468,12 @@ const createAsync = () => new Promise((resolve) => {
   }
 });
 
-const show = () => {
+const show = (bounds) => {
   if (global.attachToMenubar) {
     if (mb == null) {
       createAsync();
     } else {
-      mb.showWindow();
+      mb.showWindow(bounds);
     }
   } else if (win == null) {
     createAsync();

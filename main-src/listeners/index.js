@@ -180,8 +180,8 @@ const loadListeners = () => {
     setPreference(name, value);
   });
 
-  ipcMain.on('request-show-main-window', () => {
-    mainWindow.show();
+  ipcMain.on('request-show-main-window', (e, bounds) => {
+    mainWindow.show(bounds);
   });
 
   ipcMain.on('request-show-open-source-notices-window', () => {
