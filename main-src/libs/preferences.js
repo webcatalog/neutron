@@ -224,20 +224,8 @@ const getPreferences = () => {
 };
 
 const getPreference = (name) => {
-  // trigger electron-settings before app ready might fails
-  // so catch with default pref as fallback
-  // https://github.com/nathanbuchar/electron-settings/issues/111
-  try {
-    // store in memory to boost performance
-    if (cachedPreferences == null) {
-      initCachedPreferences();
-    }
-    return cachedPreferences[name];
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.log(err);
-    return defaultPreferences[name];
-  }
+  const preferences = getPreferences();
+  return preferences[name];
 };
 
 const hasPreference = (name) => settings.hasSync(`preferences.${v}.${name}`);

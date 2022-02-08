@@ -4,7 +4,11 @@
 const {
   ipcMain,
   session,
+  Tray,
+  Menu,
 } = require('electron');
+
+const { captureException } = require('@sentry/electron');
 
 const {
   countWorkspaces,
@@ -42,45 +46,24 @@ const sendToAllWindows = require('./send-to-all-windows');
 const extractHostname = require('./extract-hostname');
 const promptSetAsDefaultMailClient = require('./prompt-set-as-default-email-client');
 const promptSetAsDefaultCalendarApp = require('./prompt-set-as-default-calendar-app');
+const getPicturePath = require('./get-picture-path');
+const { getPreferences } = require('./preferences');
+
 const MAILTO_URLS = require('../constants/mailto-urls');
 const WEBCAL_URLS = require('../constants/webcal-urls');
 
 const appJson = require('../constants/app-json');
+const isMenubarBrowser = require('./is-menubar-browser');
+const getTrayNativeImageFromPathAsync = require('./get-tray-native-image-from-path-async');
 
 const hibernationTimeouts = {};
+const trays = {};
 
-// isRecreate: whether workspace is created to replace another workspace
-const createWorkspaceView = (workspaceObj = {}) => {
-  const newWorkspace = createWorkspace(workspaceObj);
-  setActiveWorkspace(newWorkspace.id);
-
-  addViewAsync(mainWindow.get(), getWorkspace(newWorkspace.id))
-    .then(() => {
-      setActiveView(mainWindow.get(), newWorkspace.id);
-
-      if (workspaceObj.picture) {
-        setWorkspacePictureAsync(newWorkspace.id, workspaceObj.picture);
-      }
-
-      // if user add workspace for the first time
-      // show sidebar
-      if (!hasPreference('sidebar')) {
-        setPreference('sidebar', true);
-        // if sidebar is shown, then hide title bar if user hasn't overwritten the pref
-        if (!hasPreference('titlebar')) {
-          setPreference('titlebar', false);
-        }
-        ipcMain.emit('request-realign-active-workspace');
-      }
-
-      // ask to set as default mail client
-      // ask to set as default calendar client
-      if (extractHostname(workspaceObj.homeUrl || appJson.url) in MAILTO_URLS) {
-        promptSetAsDefaultMailClient();
-      } else if (extractHostname(workspaceObj.homeUrl || appJson.url) in WEBCAL_URLS) {
-        promptSetAsDefaultCalendarApp();
-      }
-    });
+const removeWorkspaceTray = (id) => {
+  if (trays[id]) {
+    trays[id].destroy();
+    delete trays[id];
+  }
 };
 
 const setWorkspaceView = (id, opts) => {
@@ -155,6 +138,7 @@ const removeWorkspaceView = (id) => {
 
   clearTimeout(hibernationTimeouts[id]);
   workspacePreferencesWindow.close(id);
+  removeWorkspaceTray(id);
   removeView(id);
   removeWorkspace(id);
 };
@@ -186,7 +170,121 @@ const loadURL = (url, id, openInNewWindow) => {
   }
 };
 
+const addWorkspaceTrayAsync = async (id) => {
+  if (trays[id]) return;
+  const workspaceInfo = getWorkspace(id);
+  if (!workspaceInfo || !workspaceInfo.pictureId) return;
+  const picturePath = getPicturePath(workspaceInfo.pictureId);
+  const img = await getTrayNativeImageFromPathAsync(picturePath);
+
+  const tray = new Tray(img);
+  tray.on('click', () => {
+    setActiveWorkspaceView(id);
+    ipcMain.emit('request-show-main-window');
+  });
+
+  tray.on('right-click', () => {
+    const trayContextMenu = Menu.buildFromTemplate([
+      {
+        label: 'Remove',
+        click: () => {
+          removeWorkspaceView(id);
+        },
+      },
+    ]);
+
+    tray.popUpContextMenu(trayContextMenu);
+  });
+
+  trays[id] = tray;
+};
+
+// isRecreate: whether workspace is created to replace another workspace
+const createWorkspaceView = (workspaceObj = {}) => {
+  const newWorkspace = createWorkspace(workspaceObj);
+  setActiveWorkspace(newWorkspace.id);
+
+  addViewAsync(mainWindow.get(), getWorkspace(newWorkspace.id))
+    .then(() => {
+      setActiveView(mainWindow.get(), newWorkspace.id);
+
+      // if user add workspace for the first time
+      // show sidebar
+      if (!hasPreference('sidebar')) {
+        setPreference('sidebar', true);
+        // if sidebar is shown, then hide title bar if user hasn't overwritten the pref
+        if (!hasPreference('titlebar')) {
+          setPreference('titlebar', false);
+        }
+        ipcMain.emit('request-realign-active-workspace');
+      }
+
+      // ask to set as default mail client
+      // ask to set as default calendar client
+      if (extractHostname(workspaceObj.homeUrl || appJson.url) in MAILTO_URLS) {
+        promptSetAsDefaultMailClient();
+      } else if (extractHostname(workspaceObj.homeUrl || appJson.url) in WEBCAL_URLS) {
+        promptSetAsDefaultCalendarApp();
+      }
+    })
+    .then(() => {
+      if (workspaceObj.picture) {
+        return setWorkspacePictureAsync(newWorkspace.id, workspaceObj.picture)
+          // eslint-disable-next-line no-console
+          .catch((err) => console.log(err));
+      }
+      return null;
+    })
+    .then(() => {
+      if (isMenubarBrowser()) {
+        addWorkspaceTrayAsync(newWorkspace.id)
+          .catch((err) => {
+            // eslint-disable-next-line no-console
+            console.log(err);
+            captureException(err);
+          });
+      }
+    });
+};
+
+const initWorkspaceViews = () => {
+  const workspaceObjects = getWorkspaces();
+
+  const {
+    hibernateUnusedWorkspacesAtLaunch,
+  } = getPreferences();
+
+  if (isMenubarBrowser()) {
+    Object.keys(workspaceObjects).forEach(async (id) => {
+      addWorkspaceTrayAsync(id)
+        .catch((err) => {
+          // eslint-disable-next-line no-console
+          console.log(err);
+          captureException(err);
+        });
+    });
+  }
+
+  Object.keys(workspaceObjects).forEach((id) => {
+    const workspace = workspaceObjects[id];
+    if (
+      (hibernateUnusedWorkspacesAtLaunch || (
+        global.hibernateWhenUnused && global.hibernateWhenUnusedTimeout === 0
+      ))
+      && !workspace.active
+    ) {
+      if (!workspace.hibernated) {
+        setWorkspace(workspace.id, { hibernated: true });
+      }
+      return;
+    }
+    setWorkspace(workspace.id, { hibernated: false });
+    addViewAsync(mainWindow.get(), workspace);
+  });
+};
+
 module.exports = {
+  initWorkspaceViews,
   clearBrowsingData,
   createWorkspaceView,
   hibernateWorkspaceView,

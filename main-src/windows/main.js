@@ -196,7 +196,7 @@ const createAsync = () => new Promise((resolve) => {
     const menubarWindowState = windowStateKeeper({
       file: 'window-state-menubar.json',
       defaultWidth: 400,
-      defaultHeight: 400,
+      defaultHeight: 600,
     });
 
     // setImage after Tray instance is created to avoid

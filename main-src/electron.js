@@ -85,10 +85,9 @@ const openUrlWithWindow = require('./windows/open-url-with');
 
 const { createMenu } = require('./libs/menu');
 const {
-  addViewAsync,
   reloadViewsDarkReader,
 } = require('./libs/views');
-const { getWorkspaces, setWorkspace } = require('./libs/workspaces');
+const { getWorkspaces } = require('./libs/workspaces');
 const sendToAllWindows = require('./libs/send-to-all-windows');
 const extractHostname = require('./libs/extract-hostname');
 const { getAppLockStatusAsync, unlockAppUsingTouchId } = require('./libs/app-lock');
@@ -108,6 +107,7 @@ const isStandalone = require('./libs/is-standalone');
 const isSnap = require('./libs/is-snap');
 const getChromeMobileUserAgentString = require('./libs/get-chrome-mobile-user-agent-string');
 const getChromeDesktopUserAgentString = require('./libs/get-chrome-desktop-user-agent-string');
+const { initWorkspaceViews } = require('./libs/workspaces-views');
 
 if (isStandalone() && !isSnap()) {
   // eslint-disable-next-line global-require
@@ -389,7 +389,6 @@ if (!gotTheLock) {
         const {
           themeSource,
           privacyConsentAsked,
-          hibernateUnusedWorkspacesAtLaunch,
         } = getPreferences();
 
         nativeTheme.themeSource = themeSource;
@@ -401,24 +400,7 @@ if (!gotTheLock) {
           reloadViewsDarkReader();
         });
 
-        const workspaceObjects = getWorkspaces();
-
-        Object.keys(workspaceObjects).forEach((id) => {
-          const workspace = workspaceObjects[id];
-          if (
-            (hibernateUnusedWorkspacesAtLaunch || (
-              global.hibernateWhenUnused && global.hibernateWhenUnusedTimeout === 0
-            ))
-            && !workspace.active
-          ) {
-            if (!workspace.hibernated) {
-              setWorkspace(workspace.id, { hibernated: true });
-            }
-            return;
-          }
-          setWorkspace(workspace.id, { hibernated: false });
-          addViewAsync(mainWindow.get(), workspace);
-        });
+        initWorkspaceViews();
 
         ipcMain.emit('request-update-pause-notifications-info');
 
