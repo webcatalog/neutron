@@ -171,7 +171,7 @@ const Preferences = ({
       subSections: {
         theme: { text: 'Theme', Component: SectionTheme },
         view: { text: 'View', Component: SectionView },
-        darkReader: { text: 'Dark Reader', Component: SectionDarkReader },
+        darkReader: { text: 'Dark Reader', Component: SectionDarkReader, hidden: isMenubarBrowser() },
         fonts: { text: 'Fonts', Component: SectionFonts },
       },
     },

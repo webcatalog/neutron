@@ -199,31 +199,35 @@ const SectionAppearance = ({
           />
         </ListItemSecondaryAction>
       </ListItem>
-      <Divider />
-      <ListItem>
-        <ListItemText
-          primary="Show window buttons"
-          secondary={'Show "traffic light" (red/yellow/green) buttons.'}
-        />
-        <ListItemSecondaryAction>
-          <Switch
-            edge="end"
-            color="primary"
-            checked={(() => {
-              // if window is attched to menu bar
-              // the buttons are hidden
-              // unless alwaysOnTop is enabled
-              if (attachToMenubar) return alwaysOnTop;
-              return windowButtons;
-            })()}
-            disabled={attachToMenubar}
-            onChange={(e) => {
-              requestSetPreference('windowButtons', e.target.checked);
-              enqueueRequestRestartSnackbar();
-            }}
-          />
-        </ListItemSecondaryAction>
-      </ListItem>
+      {!isMenubarBrowser() && (
+        <>
+          <Divider />
+          <ListItem>
+            <ListItemText
+              primary="Show window buttons"
+              secondary={'Show "traffic light" (red/yellow/green) buttons.'}
+            />
+            <ListItemSecondaryAction>
+              <Switch
+                edge="end"
+                color="primary"
+                checked={(() => {
+                  // if window is attched to menu bar
+                  // the buttons are hidden
+                  // unless alwaysOnTop is enabled
+                  if (attachToMenubar) return alwaysOnTop;
+                  return windowButtons;
+                })()}
+                disabled={attachToMenubar}
+                onChange={(e) => {
+                  requestSetPreference('windowButtons', e.target.checked);
+                  enqueueRequestRestartSnackbar();
+                }}
+              />
+            </ListItemSecondaryAction>
+          </ListItem>
+        </>
+      )}
     </>
     )}
     <Divider />
