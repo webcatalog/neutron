@@ -20,6 +20,7 @@ import connectComponent from '../../../helpers/connect-component';
 import getAvatarText from '../../../helpers/get-avatar-text';
 import isUrl from '../../../helpers/is-url';
 import getPicturePath from '../../../helpers/get-picture-path';
+import isMenubarBrowser from '../../../helpers/is-menubar-browser';
 
 import themeColors from '../../../constants/theme-colors';
 
@@ -221,7 +222,7 @@ const ListItemIcon = ({
       <div className={classes.flexGrow}>
         <div className={classes.avatarFlex}>
           <div className={classes.avatarLeft}>
-            {renderAvatar(
+            {!isMenubarBrowser() && renderAvatar(
               getAvatarText(id, finalName, order),
               'text',
               'Text',
@@ -313,7 +314,7 @@ const ListItemIcon = ({
             )}
           </div>
         </div>
-        {selectedIconType === 'image' && (
+        {selectedIconType === 'image' && !isMenubarBrowser() && (
           <FormGroup>
             <FormControlLabel
               control={(

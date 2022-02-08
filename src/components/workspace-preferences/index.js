@@ -45,6 +45,7 @@ import SectionNotifications from './section-notifications';
 import SectionContents from './section-contents';
 import SectionWorkspace from './section-workspace';
 import getStaticGlobal from '../../helpers/get-static-global';
+import isMenubarBrowser from '../../helpers/is-menubar-browser';
 
 const styles = (theme) => ({
   root: {
@@ -100,6 +101,7 @@ const Preferences = ({ classes }) => {
     appearance: {
       text: 'Appearance',
       Icon: PaletteIcon,
+      hidden: isMenubarBrowser(),
       subSections: {
         appearance: { text: 'Dark Reader', Component: SectionDarkReader },
       },

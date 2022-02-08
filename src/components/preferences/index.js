@@ -38,6 +38,7 @@ import isAppx from '../../helpers/is-appx';
 import isStandalone from '../../helpers/is-standalone';
 import getStaticGlobal from '../../helpers/get-static-global';
 import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
+import isMenubarBrowser from '../../helpers/is-menubar-browser';
 
 import SectionAbout from './section-about';
 import SectionAccountLicensing from './section-account-licensing';
@@ -125,7 +126,7 @@ const ScienceIcon = (props) => (
 );
 
 const Preferences = ({
-  classes, hasWorkspaces,
+  classes,
 }) => {
   const appJson = getStaticGlobal('appJson');
 
@@ -160,7 +161,6 @@ const Preferences = ({
     workspaces: {
       text: getWorkspaceFriendlyName(true),
       Icon: ViewListIcon,
-      hidden: !hasWorkspaces,
       subSections: {
         workspaces: { text: getWorkspaceFriendlyName(true), Component: SectionWorkspaces },
       },
@@ -171,7 +171,7 @@ const Preferences = ({
       subSections: {
         theme: { text: 'Theme', Component: SectionTheme },
         view: { text: 'View', Component: SectionView },
-        darkReader: { text: 'Dark Reader', Component: SectionDarkReader },
+        darkReader: { text: 'Dark Reader', Component: SectionDarkReader, hidden: isMenubarBrowser() },
         fonts: { text: 'Fonts', Component: SectionFonts },
       },
     },
@@ -180,7 +180,7 @@ const Preferences = ({
       Icon: WebAssetIcon,
       subSections: {
         titlebar: { text: 'Title Bar', Component: SectionTitlebar, hidden: window.process.platform === 'darwin' },
-        tray: { text: window.process.platform === 'darwin' ? 'Menu Bar' : 'Tray', Component: SectionTray },
+        tray: { text: window.process.platform === 'darwin' ? 'Menu Bar' : 'Tray', Component: SectionTray, hidden: isMenubarBrowser() },
         window: { text: 'Main Window', Component: SectionWindow },
         popupWindows: { text: 'Popup Windows', Component: SectionPopupWindows, hidden: window.process.platform !== 'darwin' },
         tabs: { text: 'Tabs', Component: SectionTabs, hidden: process.env.NODE_ENV === 'production' },
@@ -287,7 +287,7 @@ const Preferences = ({
     labs: {
       text: 'Labs',
       Icon: ScienceIcon,
-      hidden: isMas() || isAppx(),
+      hidden: isMas() || isAppx() || isMenubarBrowser(),
       subSections: {
         extensions: { text: 'Extensions (experimental)', Component: SectionExtensions },
       },
@@ -363,13 +363,11 @@ const Preferences = ({
 
 Preferences.propTypes = {
   classes: PropTypes.object.isRequired,
-  hasWorkspaces: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   iapPurchased: state.preferences.iapPurchased,
   standaloneRegistered: state.preferences.standaloneRegistered,
-  hasWorkspaces: Object.keys(state.workspaces.workspaces).length > 0,
 });
 
 export default connectComponent(

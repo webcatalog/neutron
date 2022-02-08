@@ -36,11 +36,13 @@ import {
   requestShowNotificationsWindow,
   requestShowPreferencesWindow,
   requestShowShareMenu,
+  requestShowWorkspacePreferencesWindow,
 } from '../../senders';
 
 import RatingButton from './rating-button';
 import BrowserActionList from './browser-action-list';
 import NavigationButtons from '../shared/navigation-buttons';
+import isMenubarBrowser from '../../helpers/is-menubar-browser';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -147,6 +149,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const NavigationBar = ({
+  activeWorkspaceId,
   address,
   addressEdited,
   draggable,
@@ -311,7 +314,13 @@ const NavigationBar = ({
             root: classes.iconButton,
             disabled: classes.iconButtonDisabled,
           }}
-          onClick={() => requestShowPreferencesWindow()}
+          onClick={() => {
+            if (isMenubarBrowser() && activeWorkspaceId) {
+              requestShowWorkspacePreferencesWindow(activeWorkspaceId);
+            } else {
+              requestShowPreferencesWindow();
+            }
+          }}
         >
           <SettingsIcon className={classes.icon} />
         </IconButton>
@@ -321,11 +330,13 @@ const NavigationBar = ({
 };
 
 NavigationBar.defaultProps = {
+  activeWorkspaceId: null,
   address: '',
   themeColor: null,
 };
 
 NavigationBar.propTypes = {
+  activeWorkspaceId: PropTypes.string,
   address: PropTypes.string,
   addressEdited: PropTypes.bool.isRequired,
   draggable: PropTypes.bool.isRequired,
@@ -341,6 +352,7 @@ NavigationBar.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
+  activeWorkspaceId: state.workspaces.activeWorkspaceId,
   address: state.general.address || '',
   addressEdited: Boolean(state.general.addressEdited),
   draggable: window.process.platform === 'darwin' && !state.preferences.titleBar,

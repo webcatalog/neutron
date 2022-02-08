@@ -25,6 +25,9 @@ const isWebcatalog = require('../libs/is-webcatalog');
 const isAppx = require('../libs/is-appx');
 const formatBytes = require('../libs/format-bytes');
 const isStandalone = require('../libs/is-standalone');
+const isMenubarBrowser = require('../libs/is-menubar-browser');
+const getWorkspaceFriendlyName = require('../libs/get-workspace-friendly-name');
+const { countWorkspaces } = require('../libs/workspaces');
 
 let win;
 let mb;
@@ -78,9 +81,6 @@ const createAsync = () => new Promise((resolve) => {
     const muteApp = getPreference('muteApp');
     const lockMenuItems = Boolean(global.appLock) && !global.locked ? [
       {
-        type: 'separator',
-      },
-      {
         label: 'Lock',
         click: () => ipcMain.emit('request-lock-app'),
       },
@@ -123,6 +123,33 @@ const createAsync = () => new Promise((resolve) => {
             win.show();
           }
         },
+        visible: !isMenubarBrowser(),
+      },
+      {
+        label: `Add ${getWorkspaceFriendlyName()}`,
+        click: () => {
+          ipcMain.emit('request-show-add-workspace-window');
+        },
+        visible: isMenubarBrowser(),
+      },
+      { type: 'separator' },
+      {
+        label: isMenubarBrowser() ? 'Global Preferences...' : 'Preferences...',
+        click: () => ipcMain.emit('request-show-preferences-window'),
+      },
+      {
+        type: 'separator',
+      },
+      ...lockMenuItems,
+      {
+        label: 'Notifications...',
+        click: () => ipcMain.emit('request-show-notifications-window'),
+        enabled: !global.locked,
+      },
+      {
+        label: muteApp ? 'Unmute' : 'Mute',
+        click: () => setPreference('muteApp', !muteApp),
+        enabled: !global.locked,
       },
       {
         type: 'separator',
@@ -131,31 +158,7 @@ const createAsync = () => new Promise((resolve) => {
         label: `About ${appJson.name}`,
         click: () => ipcMain.emit('request-show-preferences-window', null, 'about'),
       },
-      ...lockMenuItems,
-      {
-        type: 'separator',
-        visible: updaterEnabled,
-      },
       updaterMenuItem,
-      {
-        type: 'separator',
-      },
-      {
-        label: 'Notifications...',
-        click: () => ipcMain.emit('request-show-notifications-window'),
-        enabled: !global.locked,
-      },
-      { type: 'separator' },
-      {
-        label: muteApp ? 'Unmute' : 'Mute',
-        click: () => setPreference('muteApp', !muteApp),
-        enabled: !global.locked,
-      },
-      { type: 'separator' },
-      {
-        label: 'Preferences...',
-        click: () => ipcMain.emit('request-show-preferences-window'),
-      },
       { type: 'separator' },
       {
         label: 'Quit',
@@ -196,7 +199,7 @@ const createAsync = () => new Promise((resolve) => {
     const menubarWindowState = windowStateKeeper({
       file: 'window-state-menubar.json',
       defaultWidth: 400,
-      defaultHeight: 400,
+      defaultHeight: 600,
     });
 
     // setImage after Tray instance is created to avoid
@@ -216,6 +219,7 @@ const createAsync = () => new Promise((resolve) => {
     mb = menubar({
       index: REACT_PATH,
       tray: menubarTray,
+      isMenubarBrowser: isMenubarBrowser(),
       preloadWindow: true,
       tooltip: appJson.name,
       browserWindow: {
@@ -238,6 +242,18 @@ const createAsync = () => new Promise((resolve) => {
         },
       },
     });
+
+    if (isMenubarBrowser()) {
+      const handleTrayClick = () => {
+        if (countWorkspaces() < 1) {
+          ipcMain.emit('request-show-add-workspace-window');
+        } else {
+          handleTrayRightClick();
+        }
+      };
+      menubarTray.on('click', handleTrayClick);
+      menubarTray.on('double-click', handleTrayClick);
+    }
 
     mb.on('after-create-window', () => {
       mb.window.refreshTitle = (...args) => {
@@ -459,12 +475,12 @@ const createAsync = () => new Promise((resolve) => {
   }
 });
 
-const show = () => {
+const show = (bounds) => {
   if (global.attachToMenubar) {
     if (mb == null) {
       createAsync();
     } else {
-      mb.showWindow();
+      mb.showWindow(bounds);
     }
   } else if (win == null) {
     createAsync();

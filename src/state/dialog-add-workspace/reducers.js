@@ -10,10 +10,13 @@ import {
   ADD_WORKSPACE_UPDATE_MODE,
 } from '../../constants/actions';
 
+import isMenubarBrowser from '../../helpers/is-menubar-browser';
+
 const defaultForm = {
   name: '',
   homeUrl: '',
   imgPath: null,
+  preferredIconType: isMenubarBrowser() ? 'image' : undefined,
 };
 const form = (state = defaultForm, action) => {
   switch (action.type) {

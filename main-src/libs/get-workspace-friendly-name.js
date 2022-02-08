@@ -5,9 +5,15 @@
 // in most apps, we call workspace "Account"
 // in Clover, we call workspace "Service"
 const appJson = require('../constants/app-json');
+const isMenubarBrowser = require('./is-menubar-browser');
 
 const getWorkspaceFriendlyName = (plural = false) => {
   if (!appJson.url && global.shareWorkspaceBrowsingData) {
+    if (isMenubarBrowser()) {
+      if (plural) return 'Tabs';
+      return 'Tab';
+    }
+
     if (plural) return 'Services';
     return 'Service';
   }

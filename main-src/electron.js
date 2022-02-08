@@ -31,6 +31,7 @@ const rtlDetect = require('rtl-detect');
 const appJson = require('./constants/app-json');
 const isMas = require('./libs/is-mas');
 const getExtensionFromProfile = require('./libs/extensions/get-extensions-from-profile');
+const isMenubarBrowser = require('./libs/is-menubar-browser');
 
 electronRemote.initialize();
 
@@ -85,10 +86,9 @@ const openUrlWithWindow = require('./windows/open-url-with');
 
 const { createMenu } = require('./libs/menu');
 const {
-  addViewAsync,
   reloadViewsDarkReader,
 } = require('./libs/views');
-const { getWorkspaces, setWorkspace } = require('./libs/workspaces');
+const { getWorkspaces, countWorkspaces } = require('./libs/workspaces');
 const sendToAllWindows = require('./libs/send-to-all-windows');
 const extractHostname = require('./libs/extract-hostname');
 const { getAppLockStatusAsync, unlockAppUsingTouchId } = require('./libs/app-lock');
@@ -108,6 +108,7 @@ const isStandalone = require('./libs/is-standalone');
 const isSnap = require('./libs/is-snap');
 const getChromeMobileUserAgentString = require('./libs/get-chrome-mobile-user-agent-string');
 const getChromeDesktopUserAgentString = require('./libs/get-chrome-desktop-user-agent-string');
+const { initWorkspaceViews } = require('./libs/workspaces-views');
 
 if (isStandalone() && !isSnap()) {
   // eslint-disable-next-line global-require
@@ -389,7 +390,6 @@ if (!gotTheLock) {
         const {
           themeSource,
           privacyConsentAsked,
-          hibernateUnusedWorkspacesAtLaunch,
         } = getPreferences();
 
         nativeTheme.themeSource = themeSource;
@@ -401,24 +401,16 @@ if (!gotTheLock) {
           reloadViewsDarkReader();
         });
 
-        const workspaceObjects = getWorkspaces();
+        initWorkspaceViews();
 
-        Object.keys(workspaceObjects).forEach((id) => {
-          const workspace = workspaceObjects[id];
-          if (
-            (hibernateUnusedWorkspacesAtLaunch || (
-              global.hibernateWhenUnused && global.hibernateWhenUnusedTimeout === 0
-            ))
-            && !workspace.active
-          ) {
-            if (!workspace.hibernated) {
-              setWorkspace(workspace.id, { hibernated: true });
-            }
-            return;
+        // if user is in menubar browser mode
+        // if there are no workspace, prompt user to add one
+        if (isMenubarBrowser() && countWorkspaces() < 1) {
+          const { openAsLogin } = app.getLoginItemSettings();
+          if (!openAsLogin) {
+            ipcMain.emit('request-show-add-workspace-window');
           }
-          setWorkspace(workspace.id, { hibernated: false });
-          addViewAsync(mainWindow.get(), workspace);
-        });
+        }
 
         ipcMain.emit('request-update-pause-notifications-info');
 

@@ -15,6 +15,7 @@ import Switch from '@material-ui/core/Switch';
 
 import connectComponent from '../../../helpers/connect-component';
 import getWorkspaceFriendlyName from '../../../helpers/get-workspace-friendly-name';
+import isMenubarBrowser from '../../../helpers/is-menubar-browser';
 
 import {
   requestRealignActiveWorkspace,
@@ -49,118 +50,122 @@ const SectionAppearance = ({
   windowButtons,
 }) => (
   <List disablePadding dense>
-    <ListItem>
-      <ListItemText
-        primary={`Show ${getWorkspaceFriendlyName().toLowerCase()} bar`}
-        secondary={`${getWorkspaceFriendlyName()} bar lets you switch easily between ${getWorkspaceFriendlyName(true).toLowerCase()}.`}
-      />
-      <ListItemSecondaryAction>
-        <Switch
-          edge="end"
-          color="primary"
-          checked={sidebar}
-          onChange={(e) => {
-            requestSetPreference('sidebar', e.target.checked);
-            requestRealignActiveWorkspace();
-          }}
-        />
-      </ListItemSecondaryAction>
-    </ListItem>
-    <ListItem>
-      <ListItemText
-        primary={`${getWorkspaceFriendlyName()} bar size`}
-      />
-      <Select
-        value={sidebarSize}
-        onChange={(e) => {
-          requestSetPreference('sidebarSize', e.target.value);
-          requestRealignActiveWorkspace();
-        }}
-        variant="filled"
-        disableUnderline
-        margin="dense"
-        classes={{
-          root: classes.select,
-        }}
-        className={classes.selectRoot}
-      >
-        <MenuItem
-          value="compact"
-          dense
-        >
-          Compact
-        </MenuItem>
-        <MenuItem
-          value="expanded"
-          dense
-        >
-          Expanded
-        </MenuItem>
-      </Select>
-    </ListItem>
-    <ListItem>
-      <ListItemText
-        primary={`Show tips on ${getWorkspaceFriendlyName().toLowerCase()} bar`}
-      />
-      <Select
-        value={sidebarSize === 'expanded' ? 'name+shortcut' : sidebarTips}
-        onChange={(e) => requestSetPreference('sidebarTips', e.target.value)}
-        variant="filled"
-        disableUnderline
-        margin="dense"
-        classes={{
-          root: classes.select,
-        }}
-        className={classes.selectRoot}
-        disabled={sidebarSize === 'expanded'}
-      >
-        {sidebarSize === 'expanded' && (
-        <MenuItem
-          value="name+shortcut"
-          dense
-        >
-          {`${getWorkspaceFriendlyName()} names & keyboard shortcuts`}
-        </MenuItem>
-        )}
-        <MenuItem
-          value="shortcut"
-          dense
-        >
-          {`${getWorkspaceFriendlyName()} keyboard shortcuts`}
-        </MenuItem>
-        <MenuItem
-          value="name"
-          dense
-        >
-          {`${getWorkspaceFriendlyName()} names`}
-        </MenuItem>
-        <MenuItem
-          value="none"
-          dense
-        >
-          None
-        </MenuItem>
-      </Select>
-    </ListItem>
-    <ListItem>
-      <ListItemText
-        primary={`Show add (+) button on ${getWorkspaceFriendlyName().toLowerCase()} bar`}
-      />
-      <ListItemSecondaryAction>
-        <Switch
-          edge="end"
-          color="primary"
-          checked={sidebarAddButton}
-          onChange={(e) => {
-            requestSetPreference('sidebarAddButton', e.target.checked);
-            requestRealignActiveWorkspace();
-          }}
-        />
-      </ListItemSecondaryAction>
-    </ListItem>
+    {!isMenubarBrowser() && (
+      <>
+        <ListItem>
+          <ListItemText
+            primary={`Show ${getWorkspaceFriendlyName().toLowerCase()} bar`}
+            secondary={`${getWorkspaceFriendlyName()} bar lets you switch easily between ${getWorkspaceFriendlyName(true).toLowerCase()}.`}
+          />
+          <ListItemSecondaryAction>
+            <Switch
+              edge="end"
+              color="primary"
+              checked={sidebar}
+              onChange={(e) => {
+                requestSetPreference('sidebar', e.target.checked);
+                requestRealignActiveWorkspace();
+              }}
+            />
+          </ListItemSecondaryAction>
+        </ListItem>
+        <ListItem>
+          <ListItemText
+            primary={`${getWorkspaceFriendlyName()} bar size`}
+          />
+          <Select
+            value={sidebarSize}
+            onChange={(e) => {
+              requestSetPreference('sidebarSize', e.target.value);
+              requestRealignActiveWorkspace();
+            }}
+            variant="filled"
+            disableUnderline
+            margin="dense"
+            classes={{
+              root: classes.select,
+            }}
+            className={classes.selectRoot}
+          >
+            <MenuItem
+              value="compact"
+              dense
+            >
+              Compact
+            </MenuItem>
+            <MenuItem
+              value="expanded"
+              dense
+            >
+              Expanded
+            </MenuItem>
+          </Select>
+        </ListItem>
+        <ListItem>
+          <ListItemText
+            primary={`Show tips on ${getWorkspaceFriendlyName().toLowerCase()} bar`}
+          />
+          <Select
+            value={sidebarSize === 'expanded' ? 'name+shortcut' : sidebarTips}
+            onChange={(e) => requestSetPreference('sidebarTips', e.target.value)}
+            variant="filled"
+            disableUnderline
+            margin="dense"
+            classes={{
+              root: classes.select,
+            }}
+            className={classes.selectRoot}
+            disabled={sidebarSize === 'expanded'}
+          >
+            {sidebarSize === 'expanded' && (
+            <MenuItem
+              value="name+shortcut"
+              dense
+            >
+              {`${getWorkspaceFriendlyName()} names & keyboard shortcuts`}
+            </MenuItem>
+            )}
+            <MenuItem
+              value="shortcut"
+              dense
+            >
+              {`${getWorkspaceFriendlyName()} keyboard shortcuts`}
+            </MenuItem>
+            <MenuItem
+              value="name"
+              dense
+            >
+              {`${getWorkspaceFriendlyName()} names`}
+            </MenuItem>
+            <MenuItem
+              value="none"
+              dense
+            >
+              None
+            </MenuItem>
+          </Select>
+        </ListItem>
+        <ListItem>
+          <ListItemText
+            primary={`Show add (+) button on ${getWorkspaceFriendlyName().toLowerCase()} bar`}
+          />
+          <ListItemSecondaryAction>
+            <Switch
+              edge="end"
+              color="primary"
+              checked={sidebarAddButton}
+              onChange={(e) => {
+                requestSetPreference('sidebarAddButton', e.target.checked);
+                requestRealignActiveWorkspace();
+              }}
+            />
+          </ListItemSecondaryAction>
+        </ListItem>
+      </>
+    )}
     {window.process.platform === 'darwin' && (
     <>
-      <Divider />
+      {!isMenubarBrowser() && <Divider />}
       <ListItem>
         <ListItemText
           primary="Show title bar"
@@ -194,31 +199,35 @@ const SectionAppearance = ({
           />
         </ListItemSecondaryAction>
       </ListItem>
-      <Divider />
-      <ListItem>
-        <ListItemText
-          primary="Show window buttons"
-          secondary={'Show "traffic light" (red/yellow/green) buttons.'}
-        />
-        <ListItemSecondaryAction>
-          <Switch
-            edge="end"
-            color="primary"
-            checked={(() => {
-              // if window is attched to menu bar
-              // the buttons are hidden
-              // unless alwaysOnTop is enabled
-              if (attachToMenubar) return alwaysOnTop;
-              return windowButtons;
-            })()}
-            disabled={attachToMenubar}
-            onChange={(e) => {
-              requestSetPreference('windowButtons', e.target.checked);
-              enqueueRequestRestartSnackbar();
-            }}
-          />
-        </ListItemSecondaryAction>
-      </ListItem>
+      {!isMenubarBrowser() && (
+        <>
+          <Divider />
+          <ListItem>
+            <ListItemText
+              primary="Show window buttons"
+              secondary={'Show "traffic light" (red/yellow/green) buttons.'}
+            />
+            <ListItemSecondaryAction>
+              <Switch
+                edge="end"
+                color="primary"
+                checked={(() => {
+                  // if window is attched to menu bar
+                  // the buttons are hidden
+                  // unless alwaysOnTop is enabled
+                  if (attachToMenubar) return alwaysOnTop;
+                  return windowButtons;
+                })()}
+                disabled={attachToMenubar}
+                onChange={(e) => {
+                  requestSetPreference('windowButtons', e.target.checked);
+                  enqueueRequestRestartSnackbar();
+                }}
+              />
+            </ListItemSecondaryAction>
+          </ListItem>
+        </>
+      )}
     </>
     )}
     <Divider />
