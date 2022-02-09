@@ -203,8 +203,14 @@ const addWorkspaceTrayAsync = async (id) => {
   tray.setIgnoreDoubleClickEvents(true);
 
   tray.on('click', (e, bounds) => {
-    setActiveWorkspaceView(id);
-    ipcMain.emit('request-toggle-main-window', null, bounds);
+    const currentActiveWorkspace = getActiveWorkspace();
+    const win = mainWindow.get();
+    if (win && win.isVisible() && currentActiveWorkspace && currentActiveWorkspace.id === id) {
+      win.hide();
+    } else {
+      setActiveWorkspaceView(id);
+      mainWindow.show(bounds);
+    }
   });
 
   tray.on('right-click', () => {
