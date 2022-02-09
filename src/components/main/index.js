@@ -181,7 +181,7 @@ const Main = ({
         <div
           className={classnames(
             classes.contentRoot,
-            hasWorkspaces && !didFailLoad && !isLoading && classes.contentRootActive,
+            hasWorkspaces && !didFailLoad && classes.contentRootActive,
           )}
         >
           {useTabs && <TabBar themeColor={themeColor} />}
