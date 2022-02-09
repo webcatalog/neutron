@@ -184,10 +184,6 @@ const loadListeners = () => {
     mainWindow.show(bounds);
   });
 
-  ipcMain.on('request-toggle-main-window', (e, bounds) => {
-    mainWindow.toggle(bounds);
-  });
-
   ipcMain.on('request-show-open-source-notices-window', () => {
     openSourceNoticesWindow.show();
   });
