@@ -4,7 +4,7 @@
   "version": "22.1.4",
   "minimumWebCatalogVersion": "40.0.0-alpha",
   "engines": {
-    "node": ">=16.0.0 <17.0.0"
+    "node": "16"
   },
   "main": "main-src/electron.js",
   "scripts": {
