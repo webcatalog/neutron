@@ -204,7 +204,7 @@ const addWorkspaceTrayAsync = async (id) => {
 
   tray.on('click', (e, bounds) => {
     setActiveWorkspaceView(id);
-    ipcMain.emit('request-show-main-window', null, bounds);
+    ipcMain.emit('request-toggle-main-window', null, bounds);
   });
 
   tray.on('right-click', () => {
