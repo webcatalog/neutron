@@ -322,7 +322,7 @@ const loadListeners = () => {
     })
       .then(({ response }) => {
         if (response === 1) {
-          shell.openExternal(`https://webcatalog.app/pricing?utm_source=${utmSource}`);
+          shell.openExternal(`https://webcatalog.io/webcatalog/pricing/?utm_source=${utmSource}`);
         }
       })
       .catch(console.log); // eslint-disable-line no-console

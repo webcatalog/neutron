@@ -816,26 +816,26 @@ const addViewAsync = async (browserWindow, workspace) => {
                 { type: 'separator' },
                 isWebcatalog() ? {
                   label: 'WebCatalog Help',
-                  click: () => shell.openExternal('https://help.webcatalog.app?utm_source=juli_app'),
+                  click: () => shell.openExternal('https://docs.webcatalog.io?utm_source=juli_app'),
                 } : {
                   label: 'Help',
                   click: () => {
                     if (appJson.hostname) {
                       return shell.openExternal(`https://${appJson.hostname}/help?utm_source=${utmSource}`);
                     }
-                    return shell.openExternal(`https://${appJson.id}.app/help?utm_source=${utmSource}`);
+                    return shell.openExternal(`https://webcatalog.io/contact/?utm_source=${utmSource}`);
                   },
                 },
                 isWebcatalog() ? {
                   label: 'WebCatalog Website',
-                  click: () => shell.openExternal('https://webcatalog.app?utm_source=juli_app'),
+                  click: () => shell.openExternal('https://webcatalog.io/webcatalog/?utm_source=juli_app'),
                 } : {
                   label: 'Website',
                   click: () => {
                     if (appJson.hostname) {
                       return shell.openExternal(`https://${appJson.hostname}?utm_source=${utmSource}`);
                     }
-                    return shell.openExternal(`https://${appJson.id}.app?utm_source=${utmSource}`);
+                    return shell.openExternal(`https://webcatalog.io?utm_source=${utmSource}`);
                   },
                 },
                 { type: 'separator' },
@@ -956,7 +956,6 @@ const addViewAsync = async (browserWindow, workspace) => {
     }
 
     // check defined internal URL rule
-    // https://webcatalog.app/internal-urls
     const internalUrlRule = getWorkspacePreference(workspace.id, 'internalUrlRule') || getPreference('internalUrlRule');
     if (nextUrl && internalUrlRule) {
       const re = new RegExp(`^${internalUrlRule}$`, 'i');

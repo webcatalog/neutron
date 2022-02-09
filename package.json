@@ -29,7 +29,7 @@
     "dist": "yarn build && yarn build-template && yarn build-zip && yarn build-json"
   },
   "repository": "https://github.com/webcatalog/neutron",
-  "author": "WebCatalog Ltd <contact@webcatalog.app>",
+  "author": "WebCatalog Ltd <contact@webcatalog.io>",
   "dependencies": {
     "keytar": "7.8.0",
     "node-mac-permissions": "2.2.0",

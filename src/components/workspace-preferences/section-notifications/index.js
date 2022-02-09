@@ -78,10 +78,10 @@ const SectionNotifications = ({
                 role="link"
                 tabIndex={0}
                 className={classes.link}
-                onClick={() => requestOpenInBrowser(`https://help.webcatalog.app/article/17-how-to-enable-notifications-in-web-apps?utm_source=${utmSource}`)}
+                onClick={() => requestOpenInBrowser(`https://docs.webcatalog.io/article/17-how-to-enable-notifications-in-web-apps?utm_source=${utmSource}`)}
                 onKeyDown={(e) => {
                   if (e.key !== 'Enter') return;
-                  requestOpenInBrowser(`https://help.webcatalog.app/article/17-how-to-enable-notifications-in-web-apps?utm_source=${utmSource}`);
+                  requestOpenInBrowser(`https://docs.webcatalog.io/article/17-how-to-enable-notifications-in-web-apps?utm_source=${utmSource}`);
                 }}
               >
                 Learn more

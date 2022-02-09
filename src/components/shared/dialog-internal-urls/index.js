@@ -72,11 +72,11 @@ const DialogInternalUrls = ({
             href="#"
             onClick={(e) => {
               e.preventDefault();
-              requestOpenInBrowser(`https://webcatalog.app/internal-urls?utm_source=${utmSource}`);
+              requestOpenInBrowser(`https://docs.webcatalog.io/article/16-how-to-define-internal-urls?utm_source=${utmSource}`);
             }}
             onKeyDown={(e) => {
               if (e.key !== 'Enter') return;
-              requestOpenInBrowser(`https://webcatalog.app/internal-urls?utm_source=${utmSource}`);
+              requestOpenInBrowser(`https://docs.webcatalog.io/article/16-how-to-define-internal-urls?utm_source=${utmSource}`);
             }}
           >
             Learn more

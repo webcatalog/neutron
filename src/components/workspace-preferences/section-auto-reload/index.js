@@ -160,10 +160,10 @@ const SectionAutoReload = ({
                     role="link"
                     tabIndex={0}
                     className={classes.link}
-                    onClick={() => requestOpenInBrowser(`https://help.webcatalog.app/article/25-how-to-prevent-apps-from-logging-me-out-on-inactivity?utm_source=${getUtmSource()}`)}
+                    onClick={() => requestOpenInBrowser(`https://docs.webcatalog.io/article/25-how-to-prevent-apps-from-logging-me-out-on-inactivity?utm_source=${getUtmSource()}`)}
                     onKeyDown={(e) => {
                       if (e.key !== 'Enter') return;
-                      requestOpenInBrowser(`https://help.webcatalog.app/article/25-how-to-prevent-apps-from-logging-me-out-on-inactivity?utm_source=${getUtmSource()}`);
+                      requestOpenInBrowser(`https://docs.webcatalog.io/article/25-how-to-prevent-apps-from-logging-me-out-on-inactivity?utm_source=${getUtmSource()}`);
                     }}
                   >
                     Learn more
