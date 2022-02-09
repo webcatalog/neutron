@@ -258,6 +258,7 @@ const Preferences = ({
     appLock: {
       text: 'App Lock',
       Icon: LockIcon,
+      hidden: isMenubarBrowser(),
       subSections: {
         appLock: { text: 'App Lock', Component: SectionAppLock },
       },

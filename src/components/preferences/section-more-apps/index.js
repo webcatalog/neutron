@@ -25,6 +25,7 @@ import translatiumIconPng from '../../../images/products/translatium-mac-icon-12
 import cloveryIconPng from '../../../images/products/clovery-mac-icon-128@2x.png';
 import singleboxIconPng from '../../../images/products/singlebox-mac-icon-128@2x.png';
 import switchbarIconPng from '../../../images/products/switchbar-mac-icon-128@2x.png';
+import skywhaleIconPng from '../../../images/products/skywhale-mac-icon-128@2x.png';
 
 const styles = (theme) => ({
   listItemPromotion: {
@@ -63,7 +64,7 @@ const SectionMoreApps = ({
           <ListItem
             button
             onClick={() => {
-              const url = `https://webcatalog.app?utm_source=${utmSource}`;
+              const url = `https://webcatalog.io/webcatalog/?utm_source=${utmSource}`;
               requestOpenInBrowser(url);
             }}
             className={classes.listItemPromotion}
@@ -91,7 +92,7 @@ const SectionMoreApps = ({
       <ListItem
         button
         onClick={() => {
-          let url = `https://translatium.app?utm_source=${utmSource}`;
+          let url = `https://webcatalog.io/translatium/?utm_source=${utmSource}`;
           if (isMas()) {
             url = 'macappstore://apps.apple.com/app/translatium/id1547052291';
           }
@@ -123,7 +124,7 @@ const SectionMoreApps = ({
       <ListItem
         button
         onClick={() => {
-          let url = `https://singlebox.app?utm_source=${utmSource}`;
+          let url = `https://webcatalog.io/singlebox/?utm_source=${utmSource}`;
           if (isMas()) {
             url = 'macappstore://apps.apple.com/us/app/singlebox-all-in-one-messenger/id1551183766';
           }
@@ -157,7 +158,7 @@ const SectionMoreApps = ({
           <ListItem
             button
             onClick={() => {
-              let url = `https://switchbar.app?utm_source=${utmSource}`;
+              let url = `https://webcatalog.io/switchbar/?utm_source=${utmSource}`;
               if (isMas()) {
                 url = 'macappstore://apps.apple.com/app/switchbar/id1555467675';
               }
@@ -188,7 +189,7 @@ const SectionMoreApps = ({
       <ListItem
         button
         onClick={() => {
-          let url = `https://clovery.app?utm_source=${utmSource}`;
+          let url = `https://webcatalog.io/clovery/?utm_source=${utmSource}`;
           if (isMas()) {
             url = 'macappstore://apps.apple.com/us/app/clovery-for-google-apps/id1552618413';
           }
@@ -216,6 +217,39 @@ const SectionMoreApps = ({
         </div>
         <ChevronRightIcon color="action" />
       </ListItem>
+      {!isAppx() && (
+        <>
+          <Divider />
+          <ListItem
+            button
+            onClick={() => {
+              let url = `https://webcatalog.io/skywhale/?utm_source=${utmSource}`;
+              if (isMas()) {
+                url = 'macappstore://apps.apple.com/us/app/skywhale/id1609165212';
+              }
+              requestOpenInBrowser(url);
+            }}
+            className={classes.listItemPromotion}
+          >
+            <div className={classes.promotionBlock}>
+              <div className={classes.promotionLeft}>
+                <img src={skywhaleIconPng} alt="Skywhale" className={classes.appIcon} />
+              </div>
+              <div className={classes.promotionRight}>
+                <div>
+                  <Typography variant="body1" className={classes.appTitle}>
+                    Skywhale
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    Menu Bar Web Browser
+                  </Typography>
+                </div>
+              </div>
+            </div>
+            <ChevronRightIcon color="action" />
+          </ListItem>
+        </>
+      )}
     </List>
   );
 };

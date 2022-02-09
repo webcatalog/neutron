@@ -198,9 +198,10 @@ const addWorkspaceTrayAsync = async (id) => {
       : path.resolve(__dirname, '..', '..', 'public', defaultIconFileName);
   }
 
-  const img = await getTrayNativeImageFromPathAsync(picturePath);
-
+  const img = await getTrayNativeImageFromPathAsync(picturePath, false);
   const tray = new Tray(img);
+  tray.setIgnoreDoubleClickEvents(true);
+
   tray.on('click', (e, bounds) => {
     setActiveWorkspaceView(id);
     ipcMain.emit('request-show-main-window', null, bounds);
