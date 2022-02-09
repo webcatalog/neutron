@@ -109,10 +109,10 @@ const DialogProxy = (props) => {
             role="link"
             tabIndex={0}
             className={classes.link}
-            onClick={() => requestOpenInBrowser(`https://help.webcatalog.app/article/40-how-to-define-proxy-bypass-rules?utm_source=${utmSource}`)}
+            onClick={() => requestOpenInBrowser(`https://docs.webcatalog.io/article/40-how-to-define-proxy-bypass-rules?utm_source=${utmSource}`)}
             onKeyDown={(e) => {
               if (e.key !== 'Enter') return;
-              requestOpenInBrowser(`https://help.webcatalog.app/article/40-how-to-define-proxy-bypass-rules?utm_source=${utmSource}`);
+              requestOpenInBrowser(`https://docs.webcatalog.io/article/40-how-to-define-proxy-bypass-rules?utm_source=${utmSource}`);
             }}
           >
             Learn more

@@ -35,12 +35,12 @@ const SectionAbout = () => {
       <ListItemUpdates />
       {isWebcatalog() ? (
         <>
-          <ListItem button onClick={() => requestOpenInBrowser(`https://webcatalog.app?utm_source=${utmSource}`)}>
+          <ListItem button onClick={() => requestOpenInBrowser(`https://webcatalog.io/webcatalog/?utm_source=${utmSource}`)}>
             <ListItemText primary="Website" />
             <ChevronRightIcon color="action" />
           </ListItem>
           <Divider />
-          <ListItem button onClick={() => requestOpenInBrowser(`https://help.webcatalog.app?utm_source=${utmSource}`)}>
+          <ListItem button onClick={() => requestOpenInBrowser(`https://docs.webcatalog.io?utm_source=${utmSource}`)}>
             <ListItemText primary="Help" />
             <ChevronRightIcon color="action" />
           </ListItem>
@@ -53,7 +53,7 @@ const SectionAbout = () => {
               if (appJson.hostname) {
                 return requestOpenInBrowser(`https://${appJson.hostname}?utm_source=${utmSource}`);
               }
-              return requestOpenInBrowser(`https://${appJson.id}.app?utm_source=${utmSource}`);
+              return requestOpenInBrowser(`https://webcatalog.io?utm_source=${utmSource}`);
             }}
           >
             <ListItemText primary="Website" />
@@ -66,7 +66,7 @@ const SectionAbout = () => {
               if (appJson.hostname) {
                 return requestOpenInBrowser(`https://${appJson.hostname}/help?utm_source=${utmSource}`);
               }
-              return requestOpenInBrowser(`https://${appJson.id}.app/help?utm_source=${utmSource}`);
+              return requestOpenInBrowser(`https://webcatalog.io/contact/?utm_source=${utmSource}`);
             }}
           >
             <ListItemText primary="Help" />

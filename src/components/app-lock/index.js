@@ -132,7 +132,7 @@ const AppLock = ({
             href="#"
             onClick={(e) => {
               e.preventDefault();
-              requestOpenInBrowser('https://help.webcatalog.app/article/27-how-to-reset-my-app-lock-password');
+              requestOpenInBrowser('https://docs.webcatalog.io/article/27-how-to-reset-my-app-lock-password');
             }}
           >
             Forgot your password?

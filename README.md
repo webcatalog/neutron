@@ -9,12 +9,12 @@
 |[![macOS (arm64)](https://github.com/webcatalog/neutron/workflows/macOS%20(arm64)/badge.svg)](https://github.com/webcatalog/neutron/actions?query=workflow%3A%22macOS+%28arm64%29%22)|[![Linux (arm64)](https://github.com/webcatalog/neutron/workflows/Linux%20(arm64)/badge.svg)](https://github.com/webcatalog/neutron/actions?query=workflow%3A%22Linux+%28arm64%29%22)|[![Windows (arm64)](https://github.com/webcatalog/neutron/workflows/Windows%20(arm64)/badge.svg)](https://github.com/webcatalog/neutron/actions?query=workflow%3A%22Windows+%28arm64%29%22)|
 
 
-This powers the *Neutron (Electron)*-based apps you install from [WebCatalog](https://webcatalog.app).
+This powers the *Neutron (Electron)*-based apps you install from [WebCatalog](https://webcatalog.io/webcatalog/).
 
 ---
 
 ## Development
-This repository only contains the source code of the [Neutron](https://help.webcatalog.app/article/23-what-is-neutron) - the core that powers the apps created with WebCatalog. If you'd like to contribute to the WebCatalog app, check out <https://github.com/webcatalog/webcatalog-app>.
+This repository only contains the source code of the [Neutron](https://docs.webcatalog.io/article/23-what-is-neutron) - the core that powers the apps created with WebCatalog. If you'd like to contribute to the WebCatalog app, check out <https://github.com/webcatalog/webcatalog-app>.
 
 ```bash
 # clone the project:

@@ -29,7 +29,7 @@ const getHelpSubmenu = () => {
           if (appJson.hostname) {
             return shell.openExternal(`https://${appJson.hostname}/help?utm_source=${utmSource}`);
           }
-          return shell.openExternal(`https://${appJson.id}.app/help?utm_source=${utmSource}`);
+          return shell.openExternal(`https://webcatalog.io/contact/?utm_source=${utmSource}`);
         },
       },
       {
@@ -38,7 +38,7 @@ const getHelpSubmenu = () => {
           if (appJson.hostname) {
             return shell.openExternal(`https://${appJson.hostname}?utm_source=${utmSource}`);
           }
-          return shell.openExternal(`https://${appJson.id}.app?utm_source=${utmSource}`);
+          return shell.openExternal(`https://webcatalog.io?utm_source=${utmSource}`);
         },
       },
     ];
@@ -46,11 +46,11 @@ const getHelpSubmenu = () => {
   return [
     {
       label: 'WebCatalog Help',
-      click: () => shell.openExternal(`https://help.webcatalog.app?utm_source=${utmSource}`),
+      click: () => shell.openExternal(`https://docs.webcatalog.io?utm_source=${utmSource}`),
     },
     {
       label: 'WebCatalog Website',
-      click: () => shell.openExternal(`https://webcatalog.app?utm_source=${utmSource}`),
+      click: () => shell.openExternal(`https://webcatalog.io/webcatalog/?utm_source=${utmSource}`),
     },
   ];
 };

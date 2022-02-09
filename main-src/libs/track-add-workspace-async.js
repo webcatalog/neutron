@@ -4,7 +4,7 @@
 const fetch = require('./customized-fetch');
 
 const trackAddWorkspaceAsync = (deviceId, appId) => {
-  const url = new URL('https://functions.webcatalog.app/track-workspace');
+  const url = new URL('https://api.webcatalog.io/track-workspace');
   url.searchParams.append('deviceId', deviceId);
   url.searchParams.append('appId', appId);
 

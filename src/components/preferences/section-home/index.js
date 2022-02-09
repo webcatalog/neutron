@@ -32,7 +32,7 @@ const SectionHome = () => {
             cancelId: 1,
           }).then(({ response }) => {
             if (response === 0) {
-              requestOpenInBrowser(`https://help.webcatalog.app/article/33-can-i-change-the-url-of-an-installed-app?utm_source=${utmSource}`);
+              requestOpenInBrowser(`https://docs.webcatalog.io/article/33-can-i-change-the-url-of-an-installed-app?utm_source=${utmSource}`);
             }
           }).catch(console.log); // eslint-disable-line
         }}

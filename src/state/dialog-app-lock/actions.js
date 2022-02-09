@@ -37,7 +37,7 @@ export const open = () => (dispatch) => {
           .then(({ response }) => {
             if (response === 1) {
               const utmSource = getUtmSource();
-              window.remote.shell.openExternal(`https://help.webcatalog.app/article/29-what-are-the-requirements-to-use-app-lock-feature-on-linux?utm_source=${utmSource}`);
+              window.remote.shell.openExternal(`https://docs.webcatalog.io/article/29-what-are-the-requirements-to-use-app-lock-feature-on-linux?utm_source=${utmSource}`);
             }
           })
           .catch(console.log); // eslint-disable-line no-console

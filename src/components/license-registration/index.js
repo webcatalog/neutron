@@ -61,10 +61,10 @@ const DialogLicenseRegistration = ({
           {appJson.name}
           &nbsp;which does not include&nbsp;
           <span
-            onClick={() => requestOpenInBrowser('https://webcatalog.app/pricing?utm_source=webcatalog_app')}
+            onClick={() => requestOpenInBrowser('https://webcatalog.io/webcatalog/pricing/?utm_source=webcatalog_app')}
             onKeyDown={(e) => {
               if (e.key !== 'Enter') return;
-              requestOpenInBrowser('https://webcatalog.app/pricing?utm_source=webcatalog_app');
+              requestOpenInBrowser('https://webcatalog.io/webcatalog/pricing/?utm_source=webcatalog_app');
             }}
             role="link"
             tabIndex="0"
@@ -72,7 +72,7 @@ const DialogLicenseRegistration = ({
           >
             premium features
           </span>
-          &nbsp;such as adding unlimited number of
+          &nbsp;such as adding unlimited number of&nbsp;
           <span>{getWorkspaceFriendlyName(true).toLowerCase()}</span>
           ,
           blocking ads & trackers and more.
