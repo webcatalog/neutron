@@ -495,9 +495,19 @@ const send = (...args) => {
   }
 };
 
+const toggle = (bounds) => {
+  const browserWindow = get();
+  if (browserWindow && browserWindow.isVisible()) {
+    browserWindow.hide();
+  } else {
+    show(bounds);
+  }
+};
+
 module.exports = {
   createAsync,
   get,
   send,
   show,
+  toggle,
 };
