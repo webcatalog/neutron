@@ -27,6 +27,13 @@ jobs:
     - name: Get tag name
       run: echo ($env:GITHUB_REF.replace('refs/tags/', 'CI_BUILD_TAG=')) | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
       if: startsWith(github.ref, 'refs/tags/')
+    # npm-bundled node-gyp (5.x) can't find  VS2022 used by GH Actions
+    # https://github.com/nodejs/node-gyp/issues/2520
+    - name: Upgrade node-gyp
+      run: |
+        npm install --global node-gyp@latest
+        npm prefix -g | % {npm config set node_gyp "$_\node_modules\node-gyp\bin\node-gyp.js"}
+      shell: powershell
     - name: Build Singlebox
       run: |
         cp apps/singlebox/config.json neutron/
