@@ -248,6 +248,7 @@ const createAsync = () => new Promise((resolve) => {
         if (countWorkspaces() < 1) {
           ipcMain.emit('request-show-add-workspace-window');
         } else {
+          mb.window.hide();
           handleTrayRightClick();
         }
       };
