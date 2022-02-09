@@ -262,7 +262,7 @@ const createAsync = () => new Promise((resolve) => {
       };
 
       menubarWindowState.manage(mb.window);
-      contextMenu({ window: mb.window });
+      contextMenu({ window: mb.window, showServices: true });
 
       mb.window.on('show', () => {
         ipcMain.emit('request-realign-active-workspace');
