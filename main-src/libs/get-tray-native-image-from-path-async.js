@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 const { nativeImage } = require('electron');
-const Jimp = require('jimp');
+const Jimp = process.env.NODE_ENV === 'production' ? require('jimp').default : require('jimp');
 
 const getBufferAsync = (img, mime) => new Promise((resolve, reject) => {
   img.getBuffer(mime, (err, buffer) => {
