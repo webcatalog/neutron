@@ -11,6 +11,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogActions from '@material-ui/core/DialogActions';
 
 import connectComponent from '../../helpers/connect-component';
+import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
 
 import {
   updateForm,
@@ -71,7 +72,9 @@ const DialogLicenseRegistration = ({
           >
             premium features
           </span>
-          &nbsp;such as adding unlimited number of services & accounts,
+          &nbsp;such as adding unlimited number of
+          <span>{getWorkspaceFriendlyName(true).toLowerCase()}</span>
+          ,
           blocking ads & trackers and more.
           To remove the limitations, please purchase&nbsp;
           {appJson.name}

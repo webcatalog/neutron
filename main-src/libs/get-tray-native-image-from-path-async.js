@@ -14,34 +14,52 @@ const getBufferAsync = (img, mime) => new Promise((resolve, reject) => {
   });
 });
 
+const trayIconSize = 16;
+
 // process icon to create tray icon with size 16x16, scale@2x: 32x32
-const getTrayNativeImageFromPathAsync = async (iconPath) => {
+const getTrayNativeImageFromPathAsync = async (iconPath, templateImage = false) => {
   // convert jimp image to electron nativeImagwe
   const img = await Jimp.read(iconPath);
 
+  if (templateImage) {
+    for (let w = 0; w < img.bitmap.width; w += 1) {
+      for (let h = 0; h < img.bitmap.height; h += 1) {
+        const pixelHex = img
+          .getPixelColor(w, h); // returns the colour of that pixel e.g. 0xFFFFFFFF
+        if (pixelHex === 0xFFFFFFFF) {
+          img.setPixelColor(0, w, h);
+        } else {
+          img.setPixelColor(Jimp.rgbaToInt(0, 0, 0, 255), w, h);
+        }
+      }
+    }
+  }
+
   const bufferScale1x = await getBufferAsync(
-    img.resize(16, 16),
+    img.resize(trayIconSize, trayIconSize),
     Jimp.MIME_PNG,
   );
 
   const bufferScale2x = await getBufferAsync(
-    img.resize(32, 32),
+    img.resize(trayIconSize * 2, trayIconSize * 2),
     Jimp.MIME_PNG,
   );
 
   const nImage = nativeImage.createEmpty();
   nImage.addRepresentation({
     scaleFactor: 1,
-    height: 16,
-    width: 16,
+    height: trayIconSize,
+    width: trayIconSize,
     buffer: bufferScale1x,
   });
   nImage.addRepresentation({
     scaleFactor: 2,
-    height: 32,
-    width: 32,
+    height: trayIconSize * 2,
+    width: trayIconSize * 2,
     buffer: bufferScale2x,
   });
+
+  nImage.setTemplateImage(Boolean(templateImage));
 
   return nImage;
 };

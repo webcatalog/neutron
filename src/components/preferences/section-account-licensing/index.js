@@ -41,7 +41,7 @@ const SectionAccountLicensing = ({
           setFormattedPrice(value);
         });
     } else if (isStandalone()) {
-      setFormattedPrice('25 USD');
+      setFormattedPrice(appJson.price || '25 USD');
     }
   }, [appJson, setFormattedPrice, registered]);
 
