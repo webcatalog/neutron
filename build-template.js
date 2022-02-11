@@ -134,7 +134,7 @@ Promise.resolve()
           // of APPX, MAS, standalone, WebCatalog builds are consistent
           'node_modules/node-mac-permissions/build',
           'node_modules/keytar/build',
-          'node_modules/sqlite3/lib/binding',
+          'node_modules/better-sqlite3/build',
 
           'build/app.json',
           'build/icon.png',
