@@ -31,9 +31,9 @@
   "repository": "https://github.com/webcatalog/neutron",
   "author": "WebCatalog Ltd <contact@webcatalog.io>",
   "dependencies": {
+    "better-sqlite3": "7.5.0",
     "keytar": "7.8.0",
-    "node-mac-permissions": "2.2.0",
-    "sqlite3": "https://github.com/mapbox/node-sqlite3"
+    "node-mac-permissions": "2.2.0"
   },
   "devDependencies": {
     "@babel/core": "7.17.2",
@@ -117,7 +117,6 @@
     "simplebar": "5.3.6",
     "simplebar-react": "2.3.6",
     "source-map-support": "0.5.21",
-    "sqlite": "4.0.23",
     "tmp": "0.2.1",
     "unused-filename": "3.0.1",
     "uuid": "8.3.2",
