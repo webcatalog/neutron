@@ -7,8 +7,8 @@ const { app } = require('electron');
 const path = require('path');
 const Database = require('better-sqlite3');
 const CryptoJS = require('crypto-js');
-const keytar = require('keytar');
 
+const keytar = require('../keytar');
 const appJson = require('../../constants/app-json');
 
 const generateStrongPassword = require('./generate-strong-password');
@@ -18,13 +18,18 @@ class Keychain {
     this.name = 'Built-in password manager';
     this.keychainServiceName = `${appJson.id}/web`;
     this.dbPath = path.join(app.getPath('userData'), 'keychain-db.sqlite');
-    this.masterKey = null;
+    this.masterKey = undefined;
+    this.db = undefined;
   }
 
   async getMasterKey() {
     // if the key is found in memory, return it
     if (this.masterKey) {
       return this.masterKey;
+    }
+
+    if (keytar == null) {
+      return null;
     }
 
     const MASTER_KEY_ACCOUNT = 'master';
@@ -44,12 +49,17 @@ class Keychain {
   }
 
   getDb() {
+    if (this.db) {
+      return this.db;
+    }
+
     const db = new Database(this.dbPath);
 
     const stmt = db.prepare('CREATE TABLE IF NOT EXISTS password (id INTEGER PRIMARY KEY AUTOINCREMENT, domain TEXT, username TEXT, password TEXT, UNIQUE(domain, username))');
     stmt.run();
 
-    return db;
+    this.db = db;
+    return this.db;
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -66,16 +76,18 @@ class Keychain {
 
   // eslint-disable-next-line class-methods-use-this
   async checkIfConfigured() {
-    return true;
+    return keytar != null;
   }
 
   async getSuggestions(domain) {
+    const masterKey = await this.getMasterKey();
+    if (!masterKey) return [];
+
     const db = this.getDb();
 
     const stmt = db.prepare('SELECT domain, username, password FROM password WHERE domain=?');
     const results = stmt.all(domain);
 
-    const masterKey = await this.getMasterKey();
     return results.map((item) => ({
       ...item,
       password: this.decryptPassword(masterKey, item.password),
@@ -89,9 +101,10 @@ class Keychain {
   }
 
   async saveCredential(domain, username, password, id) {
-    const db = this.getDb();
-
     const masterKey = await this.getMasterKey();
+    if (!masterKey) return;
+
+    const db = this.getDb();
     const encryptedPassword = this.encryptPassword(masterKey, password);
 
     if (id) {
@@ -104,6 +117,9 @@ class Keychain {
   }
 
   async deleteCredential(id) {
+    const masterKey = await this.getMasterKey();
+    if (!masterKey) return;
+
     const db = this.getDb();
 
     const stmt = db.prepare('DELETE FROM password WHERE id=?');
@@ -117,6 +133,9 @@ class Keychain {
     const results = stmt.all();
 
     const masterKey = await this.getMasterKey();
+
+    if (!masterKey) return [];
+
     return results.map((item) => ({
       ...item,
       password: this.decryptPassword(masterKey, item.password),

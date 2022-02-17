@@ -32,6 +32,7 @@ const appJson = require('./constants/app-json');
 const isMas = require('./libs/is-mas');
 const getExtensionFromProfile = require('./libs/extensions/get-extensions-from-profile');
 const isMenubarBrowser = require('./libs/is-menubar-browser');
+const keytar = require('./libs/keytar');
 
 electronRemote.initialize();
 
@@ -581,6 +582,7 @@ if (!gotTheLock) {
     global.proxyPacScript = proxyPacScript;
     global.proxyRules = `${proxyProtocol}://${proxyAddress}:${proxyPort || '80'}`;
     global.proxyMode = proxyMode;
+    global.keytarLoaded = keytar != null;
 
     global.extensionEnabledExtesionIds = extensionEnabledExtesionIds;
     global.extensionSourceBrowserId = extensionSourceBrowserId;
