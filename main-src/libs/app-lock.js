@@ -3,14 +3,22 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 /* eslint-disable global-require */
 const { ipcMain, systemPreferences } = require('electron');
-const keytar = require('keytar');
 
 const sendToAllWindows = require('./send-to-all-windows');
 const { createMenu } = require('./menu');
 
 const appJson = require('../constants/app-json');
+const keytar = require('./keytar');
 
 const getAppLockStatusAsync = async () => {
+  const unsupportedStatus = {
+    supported: false,
+    useTouchId: false,
+    hasPassword: false,
+  };
+
+  if (!keytar) return unsupportedStatus;
+
   try {
     const currentPassword = await keytar.getPassword(appJson.id, 'app-lock-password');
     const useTouchId = process.platform === 'darwin' && systemPreferences.canPromptTouchID()
@@ -25,11 +33,7 @@ const getAppLockStatusAsync = async () => {
     // eslint-disable-next-line no-console
     console.log(e);
     // keytar might fail on Linux system without libsecret installed
-    return {
-      supported: false,
-      useTouchId: false,
-      hasPassword: false,
-    };
+    return unsupportedStatus;
   }
 };
 

@@ -197,6 +197,7 @@ const Preferences = ({
     autofill: {
       text: 'Autofill',
       Icon: AssignmentIcon,
+      hidden: !getStaticGlobal('keytarLoaded'),
       subSections: {
         autofill: { text: 'Autofill', Component: SectionAutofill },
         savedPasswords: { text: 'Saved Passwords', Component: SectionSavedPassword },
@@ -258,7 +259,7 @@ const Preferences = ({
     appLock: {
       text: 'App Lock',
       Icon: LockIcon,
-      hidden: isMenubarBrowser(),
+      hidden: isMenubarBrowser() || !getStaticGlobal('keytarLoaded'),
       subSections: {
         appLock: { text: 'App Lock', Component: SectionAppLock },
       },
