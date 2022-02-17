@@ -18,8 +18,8 @@ class Keychain {
     this.name = 'Built-in password manager';
     this.keychainServiceName = `${appJson.id}/web`;
     this.dbPath = path.join(app.getPath('userData'), 'keychain-db.sqlite');
-    this.masterKey = null;
-    this.db = null;
+    this.masterKey = undefined;
+    this.db = undefined;
   }
 
   async getMasterKey() {
