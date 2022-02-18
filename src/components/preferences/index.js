@@ -11,6 +11,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import SvgIcon from '@material-ui/core/SvgIcon';
+import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
 
 import AssessmentIcon from '@material-ui/icons/Assessment';
 import AssignmentIcon from '@material-ui/icons/Assignment';
@@ -109,6 +111,9 @@ const styles = (theme) => ({
     padding: theme.spacing(2),
     overflow: 'auto',
   },
+  alert: {
+    marginBottom: theme.spacing(1),
+  },
 });
 
 const HibernationIcon = (props) => (
@@ -125,191 +130,196 @@ const ScienceIcon = (props) => (
   </SvgIcon>
 );
 
+const appJson = getStaticGlobal('appJson');
+const sections = {
+  licensing: {
+    Icon: CheckCircleIcon,
+    text: 'Licensing',
+    Component: SectionAccountLicensing,
+    hidden: isAppx() || (isMas() && appJson.registered),
+    subSections: {
+      licensing: {
+        text: 'Licensing',
+        Component: SectionAccountLicensing,
+      },
+    },
+  },
+  general: {
+    text: 'General',
+    Icon: WidgetsIcon,
+    subSections: {
+      home: { text: 'Home', Component: SectionHome, hidden: !(appJson.url && !isMas() && !isStandalone() && !isAppx()) },
+      mode: { text: 'Mode', Component: SectionMode, hidden: Boolean(appJson.url) },
+      language: { text: 'Language', Component: SectionLanguage },
+      search: { text: 'Search', Component: SectionSearch },
+      system: { text: 'System', Component: SectionSystem },
+      hardward: { text: 'Hardware', Component: SectionHardware },
+      exit: { text: 'Exit', Component: SectionExit },
+    },
+  },
+  workspaces: {
+    text: getWorkspaceFriendlyName(true),
+    Icon: ViewListIcon,
+    subSections: {
+      workspaces: { text: getWorkspaceFriendlyName(true), Component: SectionWorkspaces },
+    },
+  },
+  appearance: {
+    text: 'Appearance',
+    Icon: PaletteIcon,
+    subSections: {
+      theme: { text: 'Theme', Component: SectionTheme },
+      view: { text: 'View', Component: SectionView },
+      darkReader: { text: 'Dark Reader', Component: SectionDarkReader, hidden: isMenubarBrowser() },
+      fonts: { text: 'Fonts', Component: SectionFonts },
+    },
+  },
+  window: {
+    text: window.process.platform === 'darwin' ? 'Windows & Menu Bar' : 'Windows & Tray',
+    Icon: WebAssetIcon,
+    subSections: {
+      titlebar: { text: 'Title Bar', Component: SectionTitlebar, hidden: window.process.platform === 'darwin' },
+      tray: { text: window.process.platform === 'darwin' ? 'Menu Bar' : 'Tray', Component: SectionTray, hidden: isMenubarBrowser() },
+      window: { text: 'Main Window', Component: SectionWindow },
+      popupWindows: { text: 'Popup Windows', Component: SectionPopupWindows, hidden: window.process.platform !== 'darwin' },
+      tabs: { text: 'Tabs', Component: SectionTabs, hidden: process.env.NODE_ENV === 'production' },
+    },
+  },
+  notifications: {
+    text: 'Notifications',
+    Icon: NotificationsIcon,
+    alertMessage: 'Due to technical limitations, web apps which require Web Push API (such as Google Calendar, Messenger or Linear) won\'t be able to push notifications.',
+    alertTitle: 'Notes',
+    alertSeverity: 'info',
+    subSections: {
+      notifications: { text: 'Notifications', Component: SectionNotifications },
+      badge: { text: 'Badge', Component: SectionBadge },
+    },
+  },
+  autofill: {
+    text: 'Autofill',
+    Icon: AssignmentIcon,
+    hidden: !getStaticGlobal('keytarLoaded'),
+    subSections: {
+      autofill: { text: 'Autofill', Component: SectionAutofill },
+      savedPasswords: { text: 'Saved Passwords', Component: SectionSavedPassword },
+      neverSaved: { text: 'Never Saved', Component: SectionNeverSaved },
+    },
+  },
+  downloads: {
+    text: 'Downloads',
+    Icon: SaveAltIcon,
+    subSections: {
+      downloads: { text: 'Downloads', Component: SectionDownloads },
+    },
+  },
+  audioVideo: {
+    text: 'Audio & Video',
+    Icon: PermCameraMicIcon,
+    hidden: window.process.platform !== 'darwin',
+    subSections: {
+      permissions: { text: 'Permissions', Component: SectionPermissions },
+    },
+  },
+  permision: {
+    text: 'Location',
+    Icon: LocationOnIcon,
+    subSections: {
+      permissions: { text: 'Permissions', Component: SectionLocationPermission },
+    },
+    hidden: window.process.platform !== 'darwin' || isMas(),
+  },
+  network: {
+    text: 'Network',
+    Icon: RouterIcon,
+    subSections: {
+      network: { text: 'Network', Component: SectionNetwork },
+    },
+  },
+  hibernation: {
+    text: 'Hibernation',
+    Icon: HibernationIcon,
+    subSections: {
+      hibernation: { text: 'Hibernation', Component: SectionHibernation },
+      throttling: { text: 'Throttling', Component: SectionThrottling },
+    },
+  },
+  linkHandling: {
+    text: 'Link Handling',
+    Icon: LinkIcon,
+    subSections: {
+      linkHandling: { text: 'Link Handling', Component: SectionLinkHandling },
+    },
+  },
+  autoReload: {
+    text: 'Auto Reload',
+    Icon: CachedIcon,
+    subSections: {
+      autoReload: { text: 'Auto Reload', Component: SectionAutoReload },
+    },
+  },
+  appLock: {
+    text: 'App Lock',
+    Icon: LockIcon,
+    hidden: isMenubarBrowser() || !getStaticGlobal('keytarLoaded'),
+    subSections: {
+      appLock: { text: 'App Lock', Component: SectionAppLock },
+    },
+  },
+  privacy: {
+    text: 'Privacy',
+    Icon: SecurityIcon,
+    subSections: {
+      privacy: { text: 'Privacy', Component: SectionPrivacy },
+      contents: { text: 'Contents', Component: SectionContents },
+    },
+  },
+  telemetry: {
+    text: 'Telemetry',
+    Icon: AssessmentIcon,
+    subSections: {
+      telemetry: { text: 'Telemetry', Component: SectionTelemetry },
+    },
+  },
+  developers: {
+    text: 'Developers',
+    Icon: CodeIcon,
+    subSections: {
+      developers: { text: 'Developers', Component: SectionDevelopers },
+    },
+  },
+  labs: {
+    text: 'Labs',
+    Icon: ScienceIcon,
+    hidden: isMas() || isAppx() || isMenubarBrowser(),
+    alertMessage: 'Extension support is unstable and under development. Some extensions might crash the app or might not function correctly. Use at your own risk.',
+    alertTitle: 'Warning',
+    alertSeverity: 'error',
+    subSections: {
+      extensions: { text: 'Extensions (experimental)', Component: SectionExtensions },
+    },
+  },
+  reset: {
+    text: 'Reset',
+    Icon: RotateLeftIcon,
+    subSections: {
+      reset: { text: 'Reset', Component: SectionReset },
+    },
+  },
+  about: {
+    text: 'About',
+    Icon: InfoIcon,
+    subSections: {
+      about: { text: 'About', Component: SectionAbout },
+      moreApps: { text: 'More Apps', Component: SectionMoreApps },
+    },
+  },
+};
+
 const Preferences = ({
   classes,
 }) => {
-  const appJson = getStaticGlobal('appJson');
-
   const [activeSectionKey, setActiveSectionKey] = useState(getStaticGlobal('preferencesScrollTo') || 'general');
-
-  const sections = {
-    licensing: {
-      Icon: CheckCircleIcon,
-      text: 'Licensing',
-      Component: SectionAccountLicensing,
-      hidden: isAppx() || (isMas() && appJson.registered),
-      subSections: {
-        licensing: {
-          text: 'Licensing',
-          Component: SectionAccountLicensing,
-        },
-      },
-    },
-    general: {
-      text: 'General',
-      Icon: WidgetsIcon,
-      subSections: {
-        home: { text: 'Home', Component: SectionHome, hidden: !(appJson.url && !isMas() && !isStandalone() && !isAppx()) },
-        mode: { text: 'Mode', Component: SectionMode, hidden: Boolean(appJson.url) },
-        language: { text: 'Language', Component: SectionLanguage },
-        search: { text: 'Search', Component: SectionSearch },
-        system: { text: 'System', Component: SectionSystem },
-        hardward: { text: 'Hardware', Component: SectionHardware },
-        exit: { text: 'Exit', Component: SectionExit },
-      },
-    },
-    workspaces: {
-      text: getWorkspaceFriendlyName(true),
-      Icon: ViewListIcon,
-      subSections: {
-        workspaces: { text: getWorkspaceFriendlyName(true), Component: SectionWorkspaces },
-      },
-    },
-    appearance: {
-      text: 'Appearance',
-      Icon: PaletteIcon,
-      subSections: {
-        theme: { text: 'Theme', Component: SectionTheme },
-        view: { text: 'View', Component: SectionView },
-        darkReader: { text: 'Dark Reader', Component: SectionDarkReader, hidden: isMenubarBrowser() },
-        fonts: { text: 'Fonts', Component: SectionFonts },
-      },
-    },
-    window: {
-      text: window.process.platform === 'darwin' ? 'Windows & Menu Bar' : 'Windows & Tray',
-      Icon: WebAssetIcon,
-      subSections: {
-        titlebar: { text: 'Title Bar', Component: SectionTitlebar, hidden: window.process.platform === 'darwin' },
-        tray: { text: window.process.platform === 'darwin' ? 'Menu Bar' : 'Tray', Component: SectionTray, hidden: isMenubarBrowser() },
-        window: { text: 'Main Window', Component: SectionWindow },
-        popupWindows: { text: 'Popup Windows', Component: SectionPopupWindows, hidden: window.process.platform !== 'darwin' },
-        tabs: { text: 'Tabs', Component: SectionTabs, hidden: process.env.NODE_ENV === 'production' },
-      },
-    },
-    notifications: {
-      text: 'Notifications',
-      Icon: NotificationsIcon,
-      subSections: {
-        notifications: { text: 'Notifications', Component: SectionNotifications },
-        badge: { text: 'Badge', Component: SectionBadge },
-      },
-    },
-    autofill: {
-      text: 'Autofill',
-      Icon: AssignmentIcon,
-      hidden: !getStaticGlobal('keytarLoaded'),
-      subSections: {
-        autofill: { text: 'Autofill', Component: SectionAutofill },
-        savedPasswords: { text: 'Saved Passwords', Component: SectionSavedPassword },
-        neverSaved: { text: 'Never Saved', Component: SectionNeverSaved },
-      },
-    },
-    downloads: {
-      text: 'Downloads',
-      Icon: SaveAltIcon,
-      subSections: {
-        downloads: { text: 'Downloads', Component: SectionDownloads },
-      },
-    },
-    audioVideo: {
-      text: 'Audio & Video',
-      Icon: PermCameraMicIcon,
-      hidden: window.process.platform !== 'darwin',
-      subSections: {
-        permissions: { text: 'Permissions', Component: SectionPermissions },
-      },
-    },
-    permision: {
-      text: 'Location',
-      Icon: LocationOnIcon,
-      subSections: {
-        permissions: { text: 'Permissions', Component: SectionLocationPermission },
-      },
-      hidden: window.process.platform !== 'darwin' || isMas(),
-    },
-    network: {
-      text: 'Network',
-      Icon: RouterIcon,
-      subSections: {
-        network: { text: 'Network', Component: SectionNetwork },
-      },
-    },
-    hibernation: {
-      text: 'Hibernation',
-      Icon: HibernationIcon,
-      subSections: {
-        hibernation: { text: 'Hibernation', Component: SectionHibernation },
-        throttling: { text: 'Throttling', Component: SectionThrottling },
-      },
-    },
-    linkHandling: {
-      text: 'Link Handling',
-      Icon: LinkIcon,
-      subSections: {
-        linkHandling: { text: 'Link Handling', Component: SectionLinkHandling },
-      },
-    },
-    autoReload: {
-      text: 'Auto Reload',
-      Icon: CachedIcon,
-      subSections: {
-        autoReload: { text: 'Auto Reload', Component: SectionAutoReload },
-      },
-    },
-    appLock: {
-      text: 'App Lock',
-      Icon: LockIcon,
-      hidden: isMenubarBrowser() || !getStaticGlobal('keytarLoaded'),
-      subSections: {
-        appLock: { text: 'App Lock', Component: SectionAppLock },
-      },
-    },
-    privacy: {
-      text: 'Privacy',
-      Icon: SecurityIcon,
-      subSections: {
-        privacy: { text: 'Privacy', Component: SectionPrivacy },
-        contents: { text: 'Contents', Component: SectionContents },
-      },
-    },
-    telemetry: {
-      text: 'Telemetry',
-      Icon: AssessmentIcon,
-      subSections: {
-        telemetry: { text: 'Telemetry', Component: SectionTelemetry },
-      },
-    },
-    developers: {
-      text: 'Developers',
-      Icon: CodeIcon,
-      subSections: {
-        developers: { text: 'Developers', Component: SectionDevelopers },
-      },
-    },
-    labs: {
-      text: 'Labs',
-      Icon: ScienceIcon,
-      hidden: isMas() || isAppx() || isMenubarBrowser(),
-      subSections: {
-        extensions: { text: 'Extensions (experimental)', Component: SectionExtensions },
-      },
-    },
-    reset: {
-      text: 'Reset',
-      Icon: RotateLeftIcon,
-      subSections: {
-        reset: { text: 'Reset', Component: SectionReset },
-      },
-    },
-    about: {
-      text: 'About',
-      Icon: InfoIcon,
-      subSections: {
-        about: { text: 'About', Component: SectionAbout },
-        moreApps: { text: 'More Apps', Component: SectionMoreApps },
-      },
-    },
-  };
 
   const activeSection = sections[activeSectionKey];
 
@@ -343,6 +353,12 @@ const Preferences = ({
         </List>
       </div>
       <div className={classes.inner}>
+        {activeSection.alertMessage && (
+          <Alert severity={activeSection.alertSeverity} variant="standard" className={classes.alert}>
+            <AlertTitle>{activeSection.alertTitle}</AlertTitle>
+            {activeSection.alertMessage}
+          </Alert>
+        )}
         {Object.keys(activeSection.subSections).map((subSectionKey) => {
           const subSection = activeSection.subSections[subSectionKey];
           if (subSection.hidden) return null;

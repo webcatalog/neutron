@@ -11,6 +11,8 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
+import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
 
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import CachedIcon from '@material-ui/icons/Cached';
@@ -78,6 +80,9 @@ const styles = (theme) => ({
     bottom: theme.spacing(1),
     left: theme.spacing(1),
   },
+  alert: {
+    marginBottom: theme.spacing(1),
+  },
 });
 
 const Preferences = ({ classes }) => {
@@ -109,6 +114,9 @@ const Preferences = ({ classes }) => {
     notifications: {
       text: 'Notifications',
       Icon: NotificationsIcon,
+      alertMessage: 'Due to technical limitations, web apps which require Web Push API (such as Google Calendar, Messenger or Linear) won\'t be able to push notifications.',
+      alertTitle: 'Notes',
+      alertSeverity: 'info',
       subSections: {
         notifications: { text: 'Notifications', Component: SectionNotifications },
         badge: { text: 'Badge', Component: SectionBadge },
@@ -204,6 +212,12 @@ const Preferences = ({ classes }) => {
         </Button>
       </div>
       <div className={classes.inner}>
+        {activeSection.alertMessage && (
+          <Alert severity={activeSection.alertSeverity} variant="standard" className={classes.alert}>
+            <AlertTitle>{activeSection.alertTitle}</AlertTitle>
+            {activeSection.alertMessage}
+          </Alert>
+        )}
         {Object.keys(activeSection.subSections).map((subSectionKey) => {
           const subSection = activeSection.subSections[subSectionKey];
           if (subSection.hidden) return null;
