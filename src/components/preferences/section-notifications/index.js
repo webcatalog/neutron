@@ -159,8 +159,8 @@ const SectionNotifications = ({
             <>
               {isWebcatalog() ? 'WebCatalog' : appJson.name}
               <span> supports notifications out of the box. </span>
-              <span>But for some web apps such as Gmail or Messenger</span>
-              <span>, to receive notifications, you&apos;ll need to manually configure </span>
+              <span>But to receive notifications</span>
+              <span>, you might need to manually configure </span>
               <span>additional web app settings. </span>
               <span
                 role="link"
@@ -170,31 +170,6 @@ const SectionNotifications = ({
                 onKeyDown={(e) => {
                   if (e.key !== 'Enter') return;
                   requestOpenInBrowser(`https://docs.webcatalog.io/article/17-how-to-enable-notifications-in-web-apps?utm_source=${utmSource}`);
-                }}
-              >
-                Learn more
-              </span>
-              <span>.</span>
-            </>
-          )}
-        />
-      </ListItem>
-      <Divider />
-      <ListItem>
-        <ListItemText
-          secondary={(
-            <>
-              <span>Due to technical limitations, web apps</span>
-              <span> such as Google Calendar or Linear which</span>
-              <span> require Web Push API won&apos;t be able to push notifications. </span>
-              <span
-                role="link"
-                tabIndex={0}
-                className={classes.link}
-                onClick={() => requestOpenInBrowser(`https://docs.webcatalog.io/article/50-does-webcatalog-singlebox-and-clovery-support-all-w3c-web-standards?utm_source=${utmSource}`)}
-                onKeyDown={(e) => {
-                  if (e.key !== 'Enter') return;
-                  requestOpenInBrowser(`https://docs.webcatalog.io/article/50-does-webcatalog-singlebox-and-clovery-support-all-w3c-web-standards?utm_source=${utmSource}`);
                 }}
               >
                 Learn more

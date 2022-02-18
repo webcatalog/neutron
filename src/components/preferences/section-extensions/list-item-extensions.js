@@ -19,8 +19,6 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Typography from '@material-ui/core/Typography';
 import MenuItem from '@material-ui/core/MenuItem';
-import Alert from '@material-ui/lab/Alert';
-import AlertTitle from '@material-ui/lab/AlertTitle';
 
 import connectComponent from '../../../helpers/connect-component';
 
@@ -54,9 +52,6 @@ const styles = (theme) => ({
   },
   text: {
     lineHeight: '56px',
-  },
-  alert: {
-    marginBottom: theme.spacing(1),
   },
   actions: {
     display: 'flex',
@@ -103,13 +98,6 @@ const Extensions = ({
       <div className={classes.container}>
         {sources.length > 0 ? (
           <>
-            <Alert severity="error" variant="filled" className={classes.alert}>
-              <AlertTitle>Warning</AlertTitle>
-              Extension support is unstable and under development.
-              Some extensions might crash the app or might not function correctly.
-              Use at your own risk.
-            </Alert>
-
             <Typography variant="body2" component="p" gutterBottom>
               Extensions are installed and updated through
               Google Chrome, Microsoft Edge, Vivaldi, Brave or Chromium.
