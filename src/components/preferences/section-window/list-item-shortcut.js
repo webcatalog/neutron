@@ -69,7 +69,7 @@ const ListItemShortcut = ({ classes, windowShortcut }) => {
     return () => {
       window.removeEventListener('keydown', listener);
     };
-  });
+  }, [setCombinator]);
 
   const dialogComponent = (
     <Dialog open={open} onClose={() => setOpen(false)}>
