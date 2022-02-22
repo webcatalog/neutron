@@ -82,7 +82,7 @@ import SectionTray from './section-tray';
 import SectionView from './section-view';
 import SectionWindow from './section-window';
 import SectionWorkspaces from './section-workspaces';
-
+import SectionLabs from './section-labs';
 import SnackbarTrigger from '../shared/snackbar-trigger';
 
 const styles = (theme) => ({
@@ -292,10 +292,11 @@ const sections = {
     text: 'Labs',
     Icon: ScienceIcon,
     hidden: isMas() || isAppx() || isMenubarBrowser(),
-    alertMessage: 'Extension support is unstable and under development. Some extensions might crash the app or might not function correctly. Use at your own risk.',
+    alertMessage: 'Experimental features are unstable and under development. They might crash the app or might not function correctly. Use at your own risk.',
     alertTitle: 'Warning',
     alertSeverity: 'error',
     subSections: {
+      labs: { text: 'Experimental', Component: SectionLabs },
       extensions: { text: 'Extensions (experimental)', Component: SectionExtensions },
     },
   },
