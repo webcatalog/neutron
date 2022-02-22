@@ -5,7 +5,8 @@
 /* Modified from https://github.com/minbrowser/min/blob/7749a35ea71a5f373c05e1d587b620a7a5f7c1fc/js/passwordManager/keychain.js */
 const { app } = require('electron');
 const path = require('path');
-const Database = require('better-sqlite3');
+const sqlite3 = require('sqlite3');
+const { open } = require('sqlite');
 const CryptoJS = require('crypto-js');
 
 const keytar = require('../keytar');
@@ -48,15 +49,17 @@ class Keychain {
     return newMasterKey;
   }
 
-  getDb() {
+  async getDb() {
     if (this.db) {
       return this.db;
     }
 
-    const db = new Database(this.dbPath);
+    const db = await open({
+      filename: this.dbPath,
+      driver: sqlite3.cached.Database,
+    });
 
-    const stmt = db.prepare('CREATE TABLE IF NOT EXISTS password (id INTEGER PRIMARY KEY AUTOINCREMENT, domain TEXT, username TEXT, password TEXT, UNIQUE(domain, username))');
-    stmt.run();
+    await db.exec('CREATE TABLE IF NOT EXISTS password (id INTEGER PRIMARY KEY AUTOINCREMENT, domain TEXT, username TEXT, password TEXT, UNIQUE(domain, username))');
 
     this.db = db;
     return this.db;
@@ -83,10 +86,8 @@ class Keychain {
     const masterKey = await this.getMasterKey();
     if (!masterKey) return [];
 
-    const db = this.getDb();
-
-    const stmt = db.prepare('SELECT domain, username, password FROM password WHERE domain=?');
-    const results = stmt.all(domain);
+    const db = await this.getDb();
+    const results = await db.all('SELECT domain, username, password FROM password WHERE domain=?', [domain]);
 
     return results.map((item) => ({
       ...item,
@@ -104,15 +105,22 @@ class Keychain {
     const masterKey = await this.getMasterKey();
     if (!masterKey) return;
 
-    const db = this.getDb();
+    const db = await this.getDb();
     const encryptedPassword = this.encryptPassword(masterKey, password);
 
     if (id) {
-      const stmt = db.prepare('UPDATE password domain=?, username=?, password=? WHERE id=?');
-      stmt.run(domain, username, encryptedPassword, id);
+      await db.run('UPDATE password domain=:domain, username=:username, password=:password WHERE id=:id', {
+        ':domain': domain,
+        ':username': username,
+        ':password': encryptedPassword,
+        ':id': id,
+      });
     } else {
-      const stmt = db.prepare('REPLACE INTO password (domain, username, password) VALUES (?, ?, ?)');
-      stmt.run(domain, username, encryptedPassword);
+      await db.run('REPLACE INTO password (domain, username, password) VALUES (:domain, :username, :password)', {
+        ':domain': domain,
+        ':username': username,
+        ':password': encryptedPassword,
+      });
     }
   }
 
@@ -120,17 +128,15 @@ class Keychain {
     const masterKey = await this.getMasterKey();
     if (!masterKey) return;
 
-    const db = this.getDb();
+    const db = await this.getDb();
 
-    const stmt = db.prepare('DELETE FROM password WHERE id=?');
-    stmt.run(id);
+    await db.run('DELETE FROM password WHERE id=?', [id]);
   }
 
   async getAllCredentials() {
-    const db = this.getDb();
+    const db = await this.getDb();
 
-    const stmt = db.prepare('SELECT id, domain, username, password FROM password');
-    const results = stmt.all();
+    const results = await db.all('SELECT id, domain, username, password FROM password');
 
     const masterKey = await this.getMasterKey();
 
