@@ -131,7 +131,10 @@ if (!gotTheLock) {
 
   // enable experimental APIs such as FileSystemFileHandle: https://developer.mozilla.org/en-US/docs/Web/API/FileSystemFileHandle
   // https://github.com/electron/electron/issues/28422
-  app.commandLine.appendSwitch('enable-experimental-web-platform-features');
+  const enableExperimentalWebPlatformFeatures = getPreference('enableExperimentalWebPlatformFeatures');
+  if (enableExperimentalWebPlatformFeatures) {
+    app.commandLine.appendSwitch('enable-experimental-web-platform-features');
+  }
 
   const ignoreCertificateErrors = getPreference('ignoreCertificateErrors');
   if (ignoreCertificateErrors) {
