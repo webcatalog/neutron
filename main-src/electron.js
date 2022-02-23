@@ -27,6 +27,7 @@ const isDev = require('electron-is-dev');
 const settings = require('electron-settings');
 const electronRemote = require('@electron/remote/main');
 const rtlDetect = require('rtl-detect');
+const Sentry = require('@sentry/electron/main');
 
 const appJson = require('./constants/app-json');
 const isMas = require('./libs/is-mas');
@@ -73,9 +74,18 @@ const {
 } = require('./libs/preferences');
 
 // Activate the Sentry Electron SDK as early as possible in every process.
-if (!isDev && getPreference('sentry')) {
-  // eslint-disable-next-line global-require
-  require('./libs/sentry');
+const sentryEnabled = !isDev && getPreference('sentry');
+if (sentryEnabled) {
+  // https://github.com/getsentry/sentry-electron/blob/06c9874584f7734fe6cb8297c6455cf6356d29d4/MIGRATION.md
+  Sentry.init({
+    dsn: process.env.REACT_APP_SENTRY_DSN,
+    release: app.getVersion(),
+    autoSessionTracking: false,
+    // disable native crash reporting
+    // as it mostly reports Electron's bugs (upstream bugs)
+    integrations: (defaultIntegrations) => defaultIntegrations
+      .filter((i) => i.name !== Sentry.Integrations.SentryMinidump.Id),
+  });
 }
 
 const loadListeners = require('./listeners');
@@ -618,6 +628,8 @@ if (!gotTheLock) {
 
     global.hibernateWhenUnused = hibernateWhenUnused;
     global.hibernateWhenUnusedTimeout = hibernateWhenUnusedTimeout;
+
+    global.sentry = sentryEnabled;
 
     // on Windows, if the display language is RTL language (Arabic, Hebrew, etc)
     // the x bounds coordination is reversed

@@ -5,13 +5,6 @@ const { ipcRenderer } = require('electron');
 const remote = require('@electron/remote');
 const machineId = require('node-machine-id');
 
-// Activate the Sentry Electron SDK as early as possible in every process.
-const isDev = process.env.NODE_ENV !== 'production';
-if (!isDev && ipcRenderer.sendSync('get-preference', 'sentry')) {
-  // eslint-disable-next-line global-require
-  require('../libs/sentry');
-}
-
 window.remote = remote;
 window.ipcRenderer = ipcRenderer;
 window.machineId = machineId.machineIdSync();
