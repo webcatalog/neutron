@@ -120,7 +120,12 @@ const AppLock = ({
   useEffect(() => {
     getAppLockStatusAsync()
       .then((status) => {
-        setUseTouchId(Boolean(status.useTouchId));
+        const canUseTouchId = Boolean(status.useTouchId);
+        setUseTouchId(canUseTouchId);
+
+        if (canUseTouchId && window.mode === 'main') {
+          requestUnlockAppUsingTouchId();
+        }
       });
   }, [setUseTouchId]);
 
