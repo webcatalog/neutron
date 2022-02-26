@@ -146,11 +146,6 @@ const DialogAppLock = ({
         </DialogContent>
       ) : (
         <DialogContent>
-          <Typography variant="body2">
-            CAUTION: Experimental. Use at your own risk.
-          </Typography>
-          <br />
-
           <TextField
             autoFocus
             label="Password"
