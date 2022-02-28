@@ -36,6 +36,7 @@
     "node-mac-permissions": "2.2.0"
   },
   "devDependencies": {
+    "@aws-sdk/client-s3": "3.53.1",
     "@babel/core": "7.17.5",
     "@babel/eslint-parser": "7.17.0",
     "@babel/preset-env": "7.16.11",
