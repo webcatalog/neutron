@@ -38,7 +38,7 @@ const checkForUpdates = (silent) => {
   // to avoid using GitHub API as it has rate limit (60 requests per hour)
   // to avoid bugs with instead of https://github.com/webcatalog/neutron/releases.atom
   // https://github.com/webcatalog/webcatalog-app/issues/890
-  fetch('https://webcatalog.io/webcatalog/juli/releases/latest.json')
+  fetch('https://cdn-1.webcatalog.io/neutron/versions/stable.json')
     .then((res) => res.json())
     .then((data) => data.version)
     .then((latestVersion) => {
