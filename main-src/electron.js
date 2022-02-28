@@ -629,7 +629,7 @@ if (!gotTheLock) {
     global.hibernateWhenUnused = hibernateWhenUnused;
     global.hibernateWhenUnusedTimeout = hibernateWhenUnusedTimeout;
 
-    global.sentry = sentryEnabled;
+    global.sentryEnabled = sentryEnabled;
 
     // on Windows, if the display language is RTL language (Arabic, Hebrew, etc)
     // the x bounds coordination is reversed
