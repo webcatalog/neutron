@@ -41,6 +41,7 @@ const handleLoaded = async (event) => {
     autoRefresh.loadAsync(workspaceId);
     // these modules need webcatalog APIs
     codeInjection.loadAsync(workspaceId);
+    notifications.load(workspaceId);
     recipes.loadAsync();
   }
 
@@ -69,7 +70,6 @@ const handleLoaded = async (event) => {
 // must load synchronously before loading other components
 userAgentHints.load();
 displayMedia.load();
-notifications.load();
 webcatalogApi.load();
 passwordFill.load();
 // Fix Can't show file list of Google Drive
