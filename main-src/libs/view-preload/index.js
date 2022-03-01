@@ -41,7 +41,7 @@ const handleLoaded = async (event) => {
     autoRefresh.loadAsync(workspaceId);
     // these modules need webcatalog APIs
     codeInjection.loadAsync(workspaceId);
-    notifications.load(workspaceId);
+    notifications.loadAsync(workspaceId);
     recipes.loadAsync();
   }
 
