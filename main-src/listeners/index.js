@@ -91,6 +91,7 @@ const getIapFormattedPriceAsync = require('../libs/get-iap-formatted-price-async
 const getUtmSource = require('../libs/get-utm-source');
 const getWorkspaceFriendlyName = require('../libs/get-workspace-friendly-name');
 const trackAddWorkspaceAsync = require('../libs/track-add-workspace-async');
+const miniMenu = require('../libs/mini-menu');
 
 const addWorkspaceWindow = require('../windows/add-workspace');
 const displayMediaWindow = require('../windows/display-media');
@@ -208,8 +209,8 @@ const loadListeners = () => {
     workspacePreferencesWindow.show(id);
   });
 
-  ipcMain.on('request-show-add-workspace-window', () => {
-    addWorkspaceWindow.show();
+  ipcMain.on('request-show-add-workspace-window', (e, trayBounds) => {
+    addWorkspaceWindow.show(trayBounds);
   });
 
   ipcMain.on('request-show-notifications-window', () => {
@@ -672,9 +673,16 @@ const loadListeners = () => {
   // When ipcRenderer sends mouse click co-ordinates, show menu at that position.
   // https://dev.to/saisandeepvaddi/creating-a-custom-menu-bar-in-electron-1pi3
   ipcMain.on('request-show-app-menu', (e, x, y) => {
-    const win = mainWindow.get();
+    const win = BrowserWindow.fromWebContents(e.sender);
     if (win) {
       showMenu(win, x, y);
+    }
+  });
+
+  ipcMain.on('request-show-app-mini-menu', (e, x, y) => {
+    const win = BrowserWindow.fromWebContents(e.sender);
+    if (win) {
+      miniMenu.show(e.sender, x, y);
     }
   });
 

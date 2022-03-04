@@ -3,7 +3,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 const {
   BrowserWindow,
-  Menu,
   Tray,
   app,
   ipcMain,
@@ -16,23 +15,31 @@ const contextMenu = require('electron-context-menu');
 const electronRemote = require('@electron/remote/main');
 
 const { REACT_PATH } = require('../constants/paths');
-const { setPreference, getPreference } = require('../libs/preferences');
+const { getPreference } = require('../libs/preferences');
 const isKdeAsync = require('../libs/is-kde-async');
-const isMas = require('../libs/is-mas');
 const appJson = require('../constants/app-json');
-const isSnap = require('../libs/is-snap');
 const isWebcatalog = require('../libs/is-webcatalog');
-const isAppx = require('../libs/is-appx');
-const formatBytes = require('../libs/format-bytes');
-const isStandalone = require('../libs/is-standalone');
 const isMenubarBrowser = require('../libs/is-menubar-browser');
-const getWorkspaceFriendlyName = require('../libs/get-workspace-friendly-name');
 const { countWorkspaces } = require('../libs/workspaces');
+const miniMenu = require('../libs/mini-menu');
+
+const addWorkspaceWindow = require('./add-workspace');
 
 let win;
 let mb;
 let tray;
 let cachedBrowserViewTitle = '';
+
+const toggleAddWorkspaceWindow = () => {
+  const configWin = addWorkspaceWindow.get();
+
+  if (configWin && configWin.isVisible()) {
+    configWin.close();
+  } else {
+    const trayBounds = mb.tray.getBounds();
+    addWorkspaceWindow.show(trayBounds);
+  }
+};
 
 const get = () => {
   if (global.attachToMenubar) return mb ? mb.window : undefined;
@@ -78,99 +85,7 @@ const createAsync = () => new Promise((resolve) => {
   };
 
   const handleTrayRightClick = () => {
-    const muteApp = getPreference('muteApp');
-    const lockMenuItems = Boolean(global.appLock) && !global.locked ? [
-      {
-        label: 'Lock',
-        click: () => ipcMain.emit('request-lock-app'),
-      },
-    ] : [];
-
-    const updaterEnabled = !isMas() && !isSnap() && !isAppx();
-    const updaterMenuItem = {
-      label: 'Check for Updates...',
-      click: () => ipcMain.emit('request-check-for-updates'),
-      visible: updaterEnabled,
-    };
-    if (updaterEnabled && isStandalone()) {
-      if (global.updaterObj && global.updaterObj.status === 'update-downloaded') {
-        updaterMenuItem.label = 'Restart to Apply Updates...';
-      } else if (global.updaterObj && global.updaterObj.status === 'update-available') {
-        updaterMenuItem.label = 'Downloading Updates...';
-        updaterMenuItem.enabled = false;
-      } else if (global.updaterObj && global.updaterObj.status === 'download-progress') {
-        const { transferred, total, bytesPerSecond } = global.updaterObj.info;
-        updaterMenuItem.label = `Downloading Updates (${formatBytes(transferred)}/${formatBytes(total)} at ${formatBytes(bytesPerSecond)}/s)...`;
-        updaterMenuItem.enabled = false;
-      } else if (global.updaterObj && global.updaterObj.status === 'checking-for-update') {
-        updaterMenuItem.label = 'Checking for Updates...';
-        updaterMenuItem.enabled = false;
-      }
-    }
-
-    const trayContextMenu = Menu.buildFromTemplate([
-      {
-        label: `Open ${appJson.name}`,
-        click: () => {
-          if (global.attachToMenubar) {
-            mb.showWindow();
-            return;
-          }
-
-          if (win == null) {
-            createAsync();
-          } else {
-            win.show();
-          }
-        },
-        visible: !isMenubarBrowser(),
-      },
-      {
-        label: `Add ${getWorkspaceFriendlyName()}`,
-        click: () => {
-          ipcMain.emit('request-show-add-workspace-window');
-        },
-        visible: isMenubarBrowser(),
-      },
-      { type: 'separator' },
-      {
-        label: isMenubarBrowser() ? 'Global Preferences...' : 'Preferences...',
-        click: () => ipcMain.emit('request-show-preferences-window'),
-      },
-      {
-        type: 'separator',
-      },
-      ...lockMenuItems,
-      {
-        label: 'Notifications...',
-        click: () => ipcMain.emit('request-show-notifications-window'),
-        enabled: !global.locked,
-      },
-      {
-        label: muteApp ? 'Unmute' : 'Mute',
-        click: () => setPreference('muteApp', !muteApp),
-        enabled: !global.locked,
-      },
-      {
-        type: 'separator',
-      },
-      {
-        label: `About ${appJson.name}`,
-        click: () => ipcMain.emit('request-show-preferences-window', null, 'about'),
-      },
-      updaterMenuItem,
-      { type: 'separator' },
-      {
-        label: 'Quit',
-        click: () => {
-          if (global.attachToMenubar) {
-            mb.app.quit();
-            return;
-          }
-          app.quit();
-        },
-      },
-    ]);
+    const trayContextMenu = miniMenu.get();
 
     (global.attachToMenubar ? mb.tray : tray).popUpContextMenu(trayContextMenu);
   };
@@ -244,16 +159,8 @@ const createAsync = () => new Promise((resolve) => {
     });
 
     if (isMenubarBrowser()) {
-      const handleTrayClick = () => {
-        if (countWorkspaces() < 1) {
-          ipcMain.emit('request-show-add-workspace-window');
-        } else {
-          mb.window.hide();
-          handleTrayRightClick();
-        }
-      };
-      menubarTray.on('click', handleTrayClick);
-      menubarTray.on('double-click', handleTrayClick);
+      menubarTray.on('click', toggleAddWorkspaceWindow);
+      menubarTray.on('double-click', toggleAddWorkspaceWindow);
     }
 
     mb.on('after-create-window', () => {
@@ -287,6 +194,15 @@ const createAsync = () => new Promise((resolve) => {
 
     mb.on('ready', () => {
       mb.tray.on('right-click', handleTrayRightClick);
+
+      // if user is in menubar browser mode
+      // if there are no workspace, prompt user to add one
+      if (isMenubarBrowser() && countWorkspaces() < 1) {
+        const { openAsLogin } = app.getLoginItemSettings();
+        if (!openAsLogin) {
+          toggleAddWorkspaceWindow();
+        }
+      }
 
       resolve();
     });

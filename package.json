@@ -79,6 +79,7 @@
     "electron-fetch": "1.7.4",
     "electron-is-dev": "2.0.0",
     "electron-notarize": "1.1.1",
+    "electron-positioner": "4.1.0",
     "electron-settings": "4.0.2",
     "electron-updater": "4.6.5",
     "electron-window-state": "5.0.3",

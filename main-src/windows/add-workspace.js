@@ -6,10 +6,13 @@ const path = require('path');
 const isDev = require('electron-is-dev');
 const contextMenu = require('electron-context-menu');
 const electronRemote = require('@electron/remote/main');
+const Positioner = require('electron-positioner');
 
 const { REACT_PATH } = require('../constants/paths');
+const isMenubarBrowser = require('../libs/is-menubar-browser');
 
 let win;
+let positioner;
 
 const get = () => win;
 
@@ -22,7 +25,7 @@ const create = () => {
     minimizable: true,
     fullscreenable: false,
     show: false,
-    frame: process.platform === 'darwin' || global.useSystemTitleBar,
+    frame: !isMenubarBrowser() && (process.platform === 'darwin' || global.useSystemTitleBar),
     titleBarStyle: process.platform === 'win32' && !global.useSystemTitleBar ? 'hidden' : 'default',
     titleBarOverlay: global.useSystemWindowButtons,
     webPreferences: {
@@ -35,6 +38,9 @@ const create = () => {
   electronRemote.enable(win.webContents);
   win.setMenuBarVisibility(false);
   contextMenu({ window: win });
+  if (isMenubarBrowser()) {
+    positioner = new Positioner(win);
+  }
 
   win.on('closed', () => {
     win = null;
@@ -47,11 +53,15 @@ const create = () => {
   win.loadURL(REACT_PATH);
 };
 
-const show = () => {
+const show = (trayBounds) => {
   if (win == null) {
     create();
   } else {
     win.show();
+  }
+
+  if (trayBounds && positioner) {
+    positioner.move('trayCenter', trayBounds);
   }
 };
 
