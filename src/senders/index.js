@@ -15,6 +15,7 @@ export const requestOpenInBrowser = (url) => window.ipcRenderer.send('request-op
 export const requestLoadUrl = (url, id, openInNewWindow) => window.ipcRenderer.send('request-load-url', url, id, openInNewWindow);
 export const requestShowMessageBox = (message, type) => window.ipcRenderer.send('request-show-message-box', message, type);
 export const requestShowAppMenu = (x, y) => window.ipcRenderer.send('request-show-app-menu', x, y);
+export const requestShowAppMiniMenu = (x, y) => window.ipcRenderer.send('request-show-app-mini-menu', x, y);
 export const requestShowRequireLicenseDialog = () => window.ipcRenderer.send('request-show-require-license-dialog');
 export const requestRestorePurchase = () => window.ipcRenderer.send('request-restore-purchase');
 

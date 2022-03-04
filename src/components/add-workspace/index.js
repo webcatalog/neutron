@@ -10,11 +10,16 @@ import Paper from '@material-ui/core/Paper';
 
 import ViewListIcon from '@material-ui/icons/ViewList';
 import CreateIcon from '@material-ui/icons/Create';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import connectComponent from '../../helpers/connect-component';
 import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
 
 import { updateMode } from '../../state/dialog-add-workspace/actions';
+
+import {
+  requestShowAppMiniMenu,
+} from '../../senders';
 
 import Home from './home';
 import Form from './form';
@@ -31,6 +36,9 @@ const styles = () => ({
   },
   bottomNavigation: {
     height: 40,
+  },
+  bottomNavigationActionRootSmall: {
+    flex: 0,
   },
   bottomNavigationActionWrapper: {
     flexDirection: 'row',
@@ -55,6 +63,9 @@ const AddWorkspace = ({
         showLabels
         value={mode}
         onChange={(e, value) => {
+          if (value === 'more') {
+            return;
+          }
           // custom workspace is disabled in free version of Singlebox
           onUpdateMode(value);
         }}
@@ -76,6 +87,18 @@ const AddWorkspace = ({
           classes={{
             wrapper: classes.bottomNavigationActionWrapper,
             label: classes.bottomNavigationActionLabel,
+          }}
+        />
+        <BottomNavigationAction
+          value="more"
+          icon={<MoreVertIcon />}
+          classes={{
+            root: classes.bottomNavigationActionRootSmall,
+            wrapper: classes.bottomNavigationActionWrapper,
+            label: classes.bottomNavigationActionLabel,
+          }}
+          onClick={(e) => {
+            requestShowAppMiniMenu(e.x, e.y);
           }}
         />
       </BottomNavigation>
