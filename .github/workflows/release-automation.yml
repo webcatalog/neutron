@@ -41,7 +41,7 @@ jobs:
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    - name: Trigger Netlify to rebuild website
-      run: curl -X POST -d '{}' $NETLIFY_HOOK_URL
+    - name: Trigger Cloudflare Pages to rebuild website
+      run: curl -X POST -d '{}' $CLOUDFLARE_PAGES_HOOK_URL
       env:
-        NETLIFY_HOOK_URL: ${{ secrets.NETLIFY_HOOK_URL }}
+        CLOUDFLARE_PAGES_HOOK_URL: ${{ secrets.CLOUDFLARE_PAGES_HOOK_URL }}
