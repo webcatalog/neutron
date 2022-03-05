@@ -39,7 +39,7 @@ autoUpdater.on('update-available', (info) => {
       .then(({ response }) => {
         if (response === 1) {
           const utmSource = getUtmSource();
-          shell.openExternal(`https://${appJson.hostname}/release-notes?utm_source=${utmSource}`);
+          shell.openExternal(`https://${appJson.hostname}/changelog/?utm_source=${utmSource}`);
         }
       })
       .catch(console.log); // eslint-disable-line
@@ -132,7 +132,7 @@ autoUpdater.on('update-downloaded', (info) => {
     .then(({ response }) => {
       if (response === 2) {
         const utmSource = getUtmSource();
-        shell.openExternal(`https://${appJson.hostname}/release-notes?utm_source=${utmSource}`);
+        shell.openExternal(`https://${appJson.hostname}/changelog/?utm_source=${utmSource}`);
       } else if (response === 0) {
         // Fix autoUpdater.quitAndInstall() does not quit immediately
         // https://github.com/electron/electron/issues/3583
