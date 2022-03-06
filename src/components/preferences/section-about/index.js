@@ -64,7 +64,7 @@ const SectionAbout = () => {
             button
             onClick={() => {
               if (appJson.hostname) {
-                return requestOpenInBrowser(`https://${appJson.hostname}/help?utm_source=${utmSource}`);
+                return requestOpenInBrowser(`https://${appJson.hostname}/help/?utm_source=${utmSource}`);
               }
               return requestOpenInBrowser(`https://webcatalog.io/contact/?utm_source=${utmSource}`);
             }}

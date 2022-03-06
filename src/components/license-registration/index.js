@@ -96,7 +96,7 @@ const DialogLicenseRegistration = ({
 
         <DialogContentText className={classes.helpContent}>
           <Button
-            onClick={() => requestOpenInBrowser(`https://${appJson.hostname}/help?utm_source=${utmSource}`)}
+            onClick={() => requestOpenInBrowser(`https://${appJson.hostname}/help/?utm_source=${utmSource}`)}
           >
             Lost your license key?
           </Button>
@@ -105,7 +105,7 @@ const DialogLicenseRegistration = ({
       <DialogActions className={classes.dialogActions}>
         <div style={{ flex: 1 }}>
           <Button
-            onClick={() => requestOpenInBrowser(`https://${appJson.hostname}/pricing?utm_source=${utmSource}`)}
+            onClick={() => requestOpenInBrowser(`https://${appJson.hostname}/pricing/?utm_source=${utmSource}`)}
           >
             Purchase a License...
           </Button>

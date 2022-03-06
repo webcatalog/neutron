@@ -821,7 +821,7 @@ const addViewAsync = async (browserWindow, workspace) => {
                   label: 'Help',
                   click: () => {
                     if (appJson.hostname) {
-                      return shell.openExternal(`https://${appJson.hostname}/help?utm_source=${utmSource}`);
+                      return shell.openExternal(`https://${appJson.hostname}/help/?utm_source=${utmSource}`);
                     }
                     return shell.openExternal(`https://webcatalog.io/contact/?utm_source=${utmSource}`);
                   },
