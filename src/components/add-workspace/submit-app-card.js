@@ -60,7 +60,7 @@ const SubmitAppCard = (props) => {
 
   return (
     <Grid item xs={12}>
-      <Paper elevation={0} className={classes.card} onClick={() => requestOpenInBrowser('https://forms.gle/redZCVMwkuhvuDtb9')}>
+      <Paper elevation={0} className={classes.card} onClick={() => requestOpenInBrowser('https://webcatalog.io/webcatalog/apps/submit/')}>
         <div>
           <AddCircleIcon className={classes.paperIcon} />
         </div>
