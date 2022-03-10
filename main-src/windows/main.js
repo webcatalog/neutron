@@ -72,15 +72,15 @@ const createAsync = () => new Promise((resolve) => {
       badgeCount = 0;
     }
 
-    let prefixTitle = app.name;
+    let suffixTitle = app.name;
     if (badgeCount > 0) {
-      prefixTitle = `${app.name} (${badgeCount})`;
+      suffixTitle = `${app.name} (${badgeCount})`;
     }
 
     if (browserViewTitle !== '') {
-      browserWindow.setTitle(`${prefixTitle} - ${browserViewTitle}`);
+      browserWindow.setTitle(`${browserViewTitle} - ${suffixTitle}`);
     } else {
-      browserWindow.setTitle(prefixTitle);
+      browserWindow.setTitle(suffixTitle);
     }
   };
 
