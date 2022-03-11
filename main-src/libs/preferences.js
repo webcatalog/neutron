@@ -79,7 +79,7 @@ const defaultPreferences = {
   /* Font Settings (same as Chrome/Edge) */
   downloadPath: getDefaultDownloadsPath(),
   // force app to use mobile User-Agent string
-  forceMobileView: isMenubarBrowser(),
+  forceMobileView: false,
   // https://chromium.googlesource.com/chromium/src/+/HEAD/third_party/blink/renderer/platform/RuntimeEnabledFeatures.md
   // enabled by default for apps that require FileSystemFileHandle: https://developer.mozilla.org/en-US/docs/Web/API/FileSystemFileHandle
   // https://github.com/electron/electron/issues/28422
