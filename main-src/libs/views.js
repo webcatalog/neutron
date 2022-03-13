@@ -54,8 +54,8 @@ const isAppx = require('./is-appx');
 const isWebcatalog = require('./is-webcatalog');
 const getFirefoxUserAgentString = require('./get-firefox-user-agent-string');
 const getSafariUserAgentString = require('./get-safari-user-agent-string');
-const getChromeWithoutVersionUserAgentString = require('./get-chrome-without-version-user-agent-string');
 const getChromeMobileUserAgentString = require('./get-chrome-mobile-user-agent-string');
+const getChromeDesktopUserAgentString = require('./get-chrome-desktop-user-agent-string');
 
 const views = {};
 let shouldMuteAudio;
@@ -169,14 +169,10 @@ const getCompatibleUserAgentString = (url) => {
     console.log(err);
   }
 
-  // fix Google prevents signing in because of security concerns
-  // https://github.com/webcatalog/webcatalog-app/issues/455
-  // https://github.com/meetfranz/franz/issues/1720#issuecomment-566460763
-  if (urlObj && ['accounts.google.com'].includes(urlObj.hostname)) {
-    // https://github.com/getferdi/ferdi/blob/5138746ae7d8e7307b5287a240bef9df3bb8fe6c/src/models/UserAgent.js#L62
-    // force Google to use legacy login page
-    return getChromeWithoutVersionUserAgentString();
-    // Firefox UA sometimes works (+ modern login page) but sometimes doesn't so we avoid using it
+  // Google Earth will attempt to use `SharedArrayBuffer` API if it detects Chrome UA
+  // `SharedArrayBuffer` is disabled to prevent Spectre-related security issues
+  if (urlObj && ['web.whatsapp.com'].includes(urlObj.hostname)) {
+    return getChromeDesktopUserAgentString();
   }
 
   // Google Earth will attempt to use `SharedArrayBuffer` API if it detects Chrome UA
