@@ -4,11 +4,9 @@
 const { app } = require('electron');
 
 const getChromeDesktopUserAgentString = () => app.userAgentFallback
-  // Fix WhatsApp requires Google Chrome 49+ bug
-  // App Name doesn't have white space in user agent. 'Google Chat' app > GoogleChat/8.1.1
-  .replace(` ${app.name.replace(/ /g, '')}/${app.getVersion()}`, '')
-  // Hide Electron from UA to improve compatibility
+  // Hide WebCatalogNeutron from UA to improve compatibility
+  // (makes the UA Chrome-like)
   // https://github.com/webcatalog/webcatalog-app/issues/182
-  .replace(` Electron/${process.versions.electron}`, '');
+  .replace(` WebCatalogNeutron/${app.getVersion()}`, '');
 
 module.exports = getChromeDesktopUserAgentString;

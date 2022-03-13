@@ -117,7 +117,7 @@ const PASSWORD_MANAGERS = require('./constants/password-managers');
 const isStandalone = require('./libs/is-standalone');
 const isSnap = require('./libs/is-snap');
 const getChromeMobileUserAgentString = require('./libs/get-chrome-mobile-user-agent-string');
-const getChromeDesktopUserAgentString = require('./libs/get-chrome-desktop-user-agent-string');
+const getChromeDesktopUserAgentString = require('./libs/get-default-user-agent-string');
 const { initWorkspaceViews } = require('./libs/workspaces-views');
 
 if (isStandalone() && !isSnap()) {
