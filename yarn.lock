@@ -6786,10 +6786,10 @@ electron-window-state@5.0.3:
     jsonfile "^4.0.0"
     mkdirp "^0.5.1"
 
-electron@17.0.0-beta.2:
-  version "17.0.0-beta.2"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-17.0.0-beta.2.tgz#0ef6e5b152f204ad7018624ff73ee8287be09cde"
-  integrity sha512-efyWVmk0I//ZuNdjUztaN3fgJNqGBi9kA2+eBAMNVNvHKKyN0yMBzLhOKqceXeCZnA1RuUvzfFtAiOxR/7NprA==
+electron@18.0.0-beta.2:
+  version "18.0.0-beta.2"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-18.0.0-beta.2.tgz#874027ca190ab519c25da4c51e82a0a7d4c45dce"
+  integrity sha512-PC77Js8fKFFVVDy0PvsgMGS0bjqhmIvDvgMf1e32Tf4vMf2PgjDf8pWLZAX8SnSs3VqXcG1GZXwpSi1ksN7S6Q==
   dependencies:
     "@electron/get" "^1.13.0"
     "@types/node" "^14.6.2"
