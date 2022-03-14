@@ -12147,7 +12147,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 -----
 
-The following software may be included in this product: destroy, ee-first, mime-db. A copy of the source code may be downloaded from https://github.com/stream-utils/destroy.git (destroy), https://github.com/jonathanong/ee-first.git (ee-first), https://github.com/jshttp/mime-db.git (mime-db). This software contains the following license and notice below:
+The following software may be included in this product: destroy, ee-first. A copy of the source code may be downloaded from https://github.com/stream-utils/destroy.git (destroy), https://github.com/jonathanong/ee-first.git (ee-first). This software contains the following license and notice below:
 
 The MIT License (MIT)
 
