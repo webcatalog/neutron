@@ -9,7 +9,7 @@ import TextField from '@material-ui/core/TextField';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogActions from '@material-ui/core/DialogActions';
-import { Link, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 
 import connectComponent from '../../helpers/connect-component';
 import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
@@ -42,8 +42,15 @@ const styles = (theme) => ({
     marginTop: theme.spacing(1),
     textAlign: 'right',
   },
-  helpContactText: {
-    marginTop: '-9px',
+  linkButton: {
+    backgroundColor: 'transparent !important',
+    border: 'none',
+    cursor: 'pointer',
+    display: 'inline',
+    color: '#1976d2',
+    margin: '0px 2px 1px 2px',
+    padding: 0,
+    fontSize: '0.7232142857142857rem',
   },
 });
 
@@ -100,10 +107,19 @@ const DialogLicenseRegistration = ({
         <Typography
           className="MuiFormHelperText-root MuiFormHelperText-contained"
         >
-          If you&#39;ve purchased
+          If you&#39;ve purchased&nbsp;
           {appJson.name}
-          from Mac App Store or Windows Store,
-          <Link href="Https://webcatalog.io/contact" underline="hover"> CONTACT US </Link>
+          &nbsp;from Mac App Store or Windows Store,
+          <Button
+            className={classes.linkButton}
+            onClick={(e) => {
+              e.preventDefault();
+              const contactUrl = 'Https://webcatalog.io/contact';
+              requestOpenInBrowser(contactUrl);
+            }}
+          >
+            CONTACT US
+          </Button>
           with your receipt to receive a free license key.
         </Typography>
 
