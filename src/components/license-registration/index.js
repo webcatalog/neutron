@@ -93,6 +93,14 @@ const DialogLicenseRegistration = ({
           variant="outlined"
           helperText={licenseKeyError || `If you have already purchased ${appJson.name} Plus from our website, you should have received a license key via email to enter above.`}
         />
+        <p
+          style={{ marginTop: '-9px' }}
+          className="MuiFormHelperText-root MuiFormHelperText-contained"
+        >
+          If you&#39;ve purchased WebCatalog
+          Plus from Mac App Store or Windows Store, email us at contact@webcatalog
+          with your receipt to receive a free license key.
+        </p>
 
         <DialogContentText className={classes.helpContent}>
           <Button
