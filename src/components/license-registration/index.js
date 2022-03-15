@@ -9,6 +9,7 @@ import TextField from '@material-ui/core/TextField';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogActions from '@material-ui/core/DialogActions';
+import { Link, Typography } from '@material-ui/core';
 
 import connectComponent from '../../helpers/connect-component';
 import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
@@ -40,6 +41,9 @@ const styles = (theme) => ({
   helpContent: {
     marginTop: theme.spacing(1),
     textAlign: 'right',
+  },
+  helpContactText: {
+    marginTop: '-9px',
   },
 });
 
@@ -93,14 +97,15 @@ const DialogLicenseRegistration = ({
           variant="outlined"
           helperText={licenseKeyError || `If you have already purchased ${appJson.name} Plus from our website, you should have received a license key via email to enter above.`}
         />
-        <p
-          style={{ marginTop: '-9px' }}
+        <Typography
           className="MuiFormHelperText-root MuiFormHelperText-contained"
         >
-          If you&#39;ve purchased WebCatalog
-          Plus from Mac App Store or Windows Store, email us at contact@webcatalog
+          If you&#39;ve purchased
+          {appJson.name}
+          from Mac App Store or Windows Store,
+          <Link href="Https://webcatalog.io/contact" underline="hover"> CONTACT US </Link>
           with your receipt to receive a free license key.
-        </p>
+        </Typography>
 
         <DialogContentText className={classes.helpContent}>
           <Button
