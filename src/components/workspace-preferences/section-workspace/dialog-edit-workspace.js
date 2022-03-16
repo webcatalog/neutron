@@ -2,44 +2,47 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
-import PropTypes from 'prop-types';
 
+import { useSelector, useDispatch } from 'react-redux';
+
+import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
-import connectComponent from '../../../helpers/connect-component';
 import getMailtoUrl from '../../../helpers/get-mailto-url';
 import getWebcalUrl from '../../../helpers/get-webcal-url';
 import getStaticGlobal from '../../../helpers/get-static-global';
 
 import {
   updateForm,
-  save,
   close,
 } from '../../../state/dialog-edit-workspace/actions';
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   textField: {
     marginBottom: theme.spacing(3),
   },
-});
+}));
 
-const EditWorkspace = ({
-  accountInfo,
-  classes,
-  homeUrl,
-  homeUrlError,
-  isCalendarApp,
-  isMailApp,
-  name,
-  onClose,
-  onSave,
-  onUpdateForm,
-  open,
-}) => {
+const EditWorkspace = () => {
+  const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const accountInfo = useSelector((state) => state.dialogEditWorkspace.form.accountInfo);
+  const homeUrl = useSelector((state) => state.dialogEditWorkspace.form.homeUrl || '');
+  const homeUrlError = useSelector((state) => state.dialogEditWorkspace.form.homeUrlError);
+  const isCalendarApp = useSelector((state) => Boolean(
+    getWebcalUrl(state.dialogEditWorkspace.form.homeUrl),
+  ));
+  const isMailApp = useSelector((state) => Boolean(
+    getMailtoUrl(state.dialogEditWorkspace.form.homeUrl),
+  ));
+  const name = useSelector((state) => state.dialogEditWorkspace.form.name || '');
+  const open = useSelector((state) => state.dialogEditWorkspace.open);
+
   const appJson = getStaticGlobal('appJson');
 
   let namePlaceholder = 'Optional';
@@ -53,7 +56,7 @@ const EditWorkspace = ({
 
   return (
     <Dialog
-      onClose={onClose}
+      onClose={() => dispatch(close())}
       open={open}
       fullWidth
       maxWidth="sm"
@@ -70,7 +73,7 @@ const EditWorkspace = ({
             shrink: true,
           }}
           value={name}
-          onChange={(e) => onUpdateForm({ name: e.target.value })}
+          onChange={(e) => dispatch(updateForm({ name: e.target.value }))}
         />
         <TextField
           label="Home URL"
@@ -84,7 +87,7 @@ const EditWorkspace = ({
             shrink: true,
           }}
           value={homeUrl}
-          onChange={(e) => onUpdateForm({ homeUrl: e.target.value })}
+          onChange={(e) => dispatch(updateForm({ homeUrl: e.target.value }))}
           helperText={(() => {
             if (!homeUrlError && isMailApp) {
               return 'Email app detected.';
@@ -100,10 +103,10 @@ const EditWorkspace = ({
         />
       </DialogContent>
       <DialogActions>
-        <Button color="default" variant="contained" onClick={onClose}>
+        <Button color="default" variant="contained" onClick={() => dispatch(close())}>
           Cancel
         </Button>
-        <Button color="primary" variant="contained" onClick={onSave}>
+        <Button color="primary" variant="contained" onClick={() => dispatch(close())}>
           Save
         </Button>
       </DialogActions>
@@ -111,44 +114,4 @@ const EditWorkspace = ({
   );
 };
 
-EditWorkspace.defaultProps = {
-  accountInfo: null,
-  homeUrlError: null,
-};
-
-EditWorkspace.propTypes = {
-  accountInfo: PropTypes.object,
-  classes: PropTypes.object.isRequired,
-  homeUrl: PropTypes.string.isRequired,
-  homeUrlError: PropTypes.string,
-  isCalendarApp: PropTypes.bool.isRequired,
-  isMailApp: PropTypes.bool.isRequired,
-  name: PropTypes.string.isRequired,
-  onClose: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
-  onUpdateForm: PropTypes.func.isRequired,
-  open: PropTypes.bool.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  accountInfo: state.dialogEditWorkspace.form.accountInfo,
-  homeUrl: state.dialogEditWorkspace.form.homeUrl || '',
-  homeUrlError: state.dialogEditWorkspace.form.homeUrlError,
-  isCalendarApp: Boolean(getWebcalUrl(state.dialogEditWorkspace.form.homeUrl)),
-  isMailApp: Boolean(getMailtoUrl(state.dialogEditWorkspace.form.homeUrl)),
-  name: state.dialogEditWorkspace.form.name || '',
-  open: state.dialogEditWorkspace.open,
-});
-
-const actionCreators = {
-  updateForm,
-  save,
-  close,
-};
-
-export default connectComponent(
-  EditWorkspace,
-  mapStateToProps,
-  actionCreators,
-  styles,
-);
+export default EditWorkspace;
