@@ -39,7 +39,6 @@ const DisplayMedia = React.lazy(() => import('./components/display-media'));
 const GoToUrl = React.lazy(() => import('./components/go-to-url'));
 const LicenseRegistration = React.lazy(() => import('./components/license-registration'));
 const Notifications = React.lazy(() => import('./components/notifications'));
-const OpenSourceNotices = React.lazy(() => import('./components/open-source-notices'));
 const OpenUrlWith = React.lazy(() => import('./components/open-url-with'));
 const Preferences = React.lazy(() => import('./components/preferences'));
 const WorkspacePreferences = React.lazy(() => import('./components/workspace-preferences'));
@@ -53,7 +52,6 @@ const App = () => {
     case 'go-to-url': return <GoToUrl />;
     case 'license-registration': return <LicenseRegistration />;
     case 'notifications': return <Notifications />;
-    case 'open-source-notices': return <OpenSourceNotices />;
     case 'open-url-with': return <OpenUrlWith />;
     case 'preferences': return <Preferences />;
     case 'workspace-preferences': return <WorkspacePreferences />;
@@ -111,8 +109,6 @@ const runApp = () => {
         document.title = 'Go to URL';
       } else if (window.mode === 'add-workspace') {
         document.title = appJson.url ? `Add Custom ${getWorkspaceFriendlyName()}` : `Add ${getWorkspaceFriendlyName()}`;
-      } else if (window.mode === 'open-source-notices') {
-        document.title = 'Open Source Notices';
       } else if (window.mode === 'license-registration') {
         document.title = 'License Registration';
       } else {
