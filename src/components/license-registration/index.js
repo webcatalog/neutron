@@ -50,7 +50,10 @@ const styles = (theme) => ({
     color: '#1976d2',
     margin: '0px 2px 1px 2px',
     padding: 0,
-    fontSize: '0.7232142857142857rem',
+    fontSize: '0.9rem',
+  },
+  typography: {
+    color: 'rgba(0, 0, 0, 0.54)',
   },
 });
 
@@ -104,9 +107,7 @@ const DialogLicenseRegistration = ({
           variant="outlined"
           helperText={licenseKeyError || `If you have already purchased ${appJson.name} Plus from our website, you should have received a license key via email to enter above.`}
         />
-        <Typography
-          className="MuiFormHelperText-root MuiFormHelperText-contained"
-        >
+        <Typography className={classes.typography}>
           If you&#39;ve purchased&nbsp;
           {appJson.name}
           &nbsp;from Mac App Store or Windows Store,
