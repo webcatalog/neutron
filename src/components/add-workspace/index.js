@@ -50,9 +50,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const AddWorkspace = ({
-  onUpdateMode,
-}) => {
+const AddWorkspace = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const mode = useSelector((state) => state.dialogAddWorkspace.mode);
