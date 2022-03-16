@@ -119,9 +119,9 @@ const DialogLicenseRegistration = ({
               requestOpenInBrowser(contactUrl);
             }}
           >
-            CONTACT US
+            email us
           </Button>
-          with your receipt to receive a free license key.
+          with your purchase receipt attached to receive a free license key.
         </Typography>
 
         <DialogContentText className={classes.helpContent}>
