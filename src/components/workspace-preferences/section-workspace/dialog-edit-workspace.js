@@ -34,14 +34,11 @@ const EditWorkspace = () => {
   const accountInfo = useSelector((state) => state.dialogEditWorkspace.form.accountInfo);
   const homeUrl = useSelector((state) => state.dialogEditWorkspace.form.homeUrl || '');
   const homeUrlError = useSelector((state) => state.dialogEditWorkspace.form.homeUrlError);
-  const isCalendarApp = useSelector((state) => Boolean(
-    getWebcalUrl(state.dialogEditWorkspace.form.homeUrl),
-  ));
-  const isMailApp = useSelector((state) => Boolean(
-    getMailtoUrl(state.dialogEditWorkspace.form.homeUrl),
-  ));
   const name = useSelector((state) => state.dialogEditWorkspace.form.name || '');
   const open = useSelector((state) => state.dialogEditWorkspace.open);
+
+  const isMailApp = getMailtoUrl(homeUrl);
+  const isCalendarApp = getWebcalUrl(homeUrl);
 
   const appJson = getStaticGlobal('appJson');
 
