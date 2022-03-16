@@ -4,11 +4,12 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
+import { makeStyles } from '@material-ui/core/styles';
+
+import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 
-import connectComponent from '../../helpers/connect-component';
-
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   dialogContent: {
     width: '100%',
     height: '100%',
@@ -16,13 +17,17 @@ const styles = (theme) => ({
     paddingBottom: theme.spacing(2),
     overflowX: 'hidden',
   },
-});
+}));
 
-const DialogOpenSourceNotices = ({
-  classes,
-}) => {
-  const [content, setContent] = useState('Loading...');
+const DialogOpenSourceNotices = ({ open, onClose }) => {
+  const classes = useStyles();
+  const [content, setContent] = useState(null);
   useEffect(() => {
+    if (!open) {
+      setContent(null);
+      return;
+    }
+
     const p = [
       window.fetch('./open-source-notices-automated.txt')
         .then((res) => res.text()),
@@ -36,22 +41,23 @@ const DialogOpenSourceNotices = ({
       })
       // eslint-disable-next-line no-console
       .catch(console.log);
-  }, [setContent]);
+  }, [open, setContent]);
 
   return (
-    <DialogContent className={classes.dialogContent}>
-      {content}
-    </DialogContent>
+    <Dialog
+      open={open}
+      onClose={onClose}
+    >
+      <DialogContent className={classes.dialogContent}>
+        {content || 'Loading...'}
+      </DialogContent>
+    </Dialog>
   );
 };
 
 DialogOpenSourceNotices.propTypes = {
-  classes: PropTypes.object.isRequired,
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 
-export default connectComponent(
-  DialogOpenSourceNotices,
-  null,
-  null,
-  styles,
-);
+export default DialogOpenSourceNotices;
