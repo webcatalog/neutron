@@ -2,13 +2,13 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useCallback, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core';
 
-import connectComponent from '../../helpers/connect-component';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { closeFindInPage, updateFindInPageText } from '../../state/find-in-page/actions';
 
@@ -17,7 +17,7 @@ import {
   requestStopFindInPage,
 } from '../../senders';
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     background: theme.palette.background.default,
     display: 'flex',
@@ -32,18 +32,16 @@ const styles = (theme) => ({
     flex: 1,
     padding: '0 12px',
   },
-});
+}));
 
-const FindInPage = (props) => {
-  const {
-    activeMatch,
-    classes,
-    matches,
-    onCloseFindInPage,
-    onUpdateFindInPageText,
-    open,
-    text,
-  } = props;
+const FindInPage = () => {
+  const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const activeMatch = useSelector((state) => state.findInPage.activeMatch);
+  const matches = useSelector((state) => state.findInPage.matches);
+  const open = useSelector((state) => state.findInPage.open);
+  const text = useSelector((state) => state.findInPage.text);
 
   const inputRef = useRef(null);
   // https://stackoverflow.com/a/57556594
@@ -81,7 +79,7 @@ const FindInPage = (props) => {
           margin="dense"
           onChange={(e) => {
             const val = e.target.value;
-            onUpdateFindInPageText(val);
+            dispatch(updateFindInPageText(val));
             if (val.length > 0) {
               requestFindInPage(val, true);
             } else {
@@ -90,7 +88,7 @@ const FindInPage = (props) => {
           }}
           onInput={(e) => {
             const val = e.target.value;
-            onUpdateFindInPageText(val);
+            dispatch(updateFindInPageText(val));
             if (val.length > 0) {
               requestFindInPage(val, true);
             } else {
@@ -106,7 +104,7 @@ const FindInPage = (props) => {
             }
             if (e.key === 'Escape') { // Escape
               requestStopFindInPage(true);
-              onCloseFindInPage();
+              dispatch(closeFindInPage());
             }
           }}
         />
@@ -148,7 +146,7 @@ const FindInPage = (props) => {
         size="small"
         onClick={() => {
           requestStopFindInPage(true);
-          onCloseFindInPage();
+          dispatch(closeFindInPage());
         }}
       >
         Close
@@ -157,31 +155,4 @@ const FindInPage = (props) => {
   );
 };
 
-FindInPage.propTypes = {
-  activeMatch: PropTypes.number.isRequired,
-  classes: PropTypes.object.isRequired,
-  matches: PropTypes.number.isRequired,
-  onCloseFindInPage: PropTypes.func.isRequired,
-  onUpdateFindInPageText: PropTypes.func.isRequired,
-  open: PropTypes.bool.isRequired,
-  text: PropTypes.string.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  open: state.findInPage.open,
-  activeMatch: state.findInPage.activeMatch,
-  matches: state.findInPage.matches,
-  text: state.findInPage.text,
-});
-
-const actionCreators = {
-  closeFindInPage,
-  updateFindInPageText,
-};
-
-export default connectComponent(
-  FindInPage,
-  mapStateToProps,
-  actionCreators,
-  styles,
-);
+export default FindInPage;
