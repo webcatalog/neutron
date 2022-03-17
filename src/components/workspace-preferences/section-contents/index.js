@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import List from '@material-ui/core/List';
@@ -11,8 +10,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import Divider from '@material-ui/core/Divider';
+import { makeStyles } from '@material-ui/core';
 
-import connectComponent from '../../../helpers/connect-component';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { updateForm } from '../../../state/dialog-workspace-preferences/actions';
 
@@ -20,7 +20,7 @@ import {
   enqueueRequestRestartSnackbar,
 } from '../../../senders';
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   selectRoot: {
     borderRadius: theme.spacing(0.5),
     fontSize: '0.84375rem',
@@ -35,103 +35,78 @@ const styles = (theme) => ({
     paddingBottom: theme.spacing(1),
     paddingLeft: theme.spacing(1.5),
   },
-});
+}));
 
-const SectionPrivacy = ({
-  blockAds,
-  blockJavascript,
-  classes,
-  onUpdateForm,
-  formBlockAds,
-  formBlockJavascript,
-}) => (
-  <List disablePadding dense>
-    <ListItem>
-      <ListItemText
-        primary="Block ads &amp; trackers"
-      />
-      <Select
-        value={formBlockAds != null ? formBlockAds : 'global'}
-        onChange={(e) => {
-          onUpdateForm({
-            preferences: {
-              blockAds: e.target.value !== 'global' ? e.target.value : null,
-            },
-          });
-          enqueueRequestRestartSnackbar();
-        }}
-        variant="filled"
-        disableUnderline
-        margin="dense"
-        classes={{
-          root: classes.select,
-        }}
-        className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
-      >
-        <MenuItem dense value="global">{`Use global preference (${blockAds ? 'Yes' : 'No'})`}</MenuItem>
-        <MenuItem dense value>Yes</MenuItem>
-        <MenuItem dense value={false}>No</MenuItem>
-      </Select>
-    </ListItem>
-    <Divider />
-    <ListItem>
-      <ListItemText
-        primary="Disable Javascript"
-      />
-      <Select
-        value={formBlockJavascript != null ? formBlockJavascript : 'global'}
-        onChange={(e) => {
-          onUpdateForm({
-            preferences: {
-              blockJavascript: e.target.value !== 'global' ? e.target.value : null,
-            },
-          });
-          enqueueRequestRestartSnackbar();
-        }}
-        variant="filled"
-        disableUnderline
-        margin="dense"
-        classes={{
-          root: classes.select,
-        }}
-        className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
-      >
-        <MenuItem dense value="global">{`Use global preference (${blockJavascript ? 'Yes' : 'No'})`}</MenuItem>
-        <MenuItem dense value>Yes</MenuItem>
-        <MenuItem dense value={false}>No</MenuItem>
-      </Select>
-    </ListItem>
-  </List>
-);
+const SectionPrivacy = () => {
+  const classes = useStyles();
+  const dispatch = useDispatch();
 
-SectionPrivacy.defaultProps = {
-  formBlockAds: null,
-  formBlockJavascript: null,
+  const blockAds = useSelector((state) => state.preferences.blockAds);
+  // eslint-disable-next-line max-len
+  const formBlockAds = useSelector((state) => state.dialogWorkspacePreferences.form.preferences.blockAds);
+  const blockJavascript = useSelector((state) => state.preferences.blockJavascript);
+  // eslint-disable-next-line max-len
+  const formBlockJavascript = useSelector((state) => state.dialogWorkspacePreferences.form.preferences.blockJavascript);
+
+  return (
+    <List disablePadding dense>
+      <ListItem>
+        <ListItemText
+          primary="Block ads &amp; trackers"
+        />
+        <Select
+          value={formBlockAds != null ? formBlockAds : 'global'}
+          onChange={(e) => {
+            dispatch(updateForm({
+              preferences: {
+                blockAds: e.target.value !== 'global' ? e.target.value : null,
+              },
+            }));
+            enqueueRequestRestartSnackbar();
+          }}
+          variant="filled"
+          disableUnderline
+          margin="dense"
+          classes={{
+            root: classes.select,
+          }}
+          className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
+        >
+          <MenuItem dense value="global">{`Use global preference (${blockAds ? 'Yes' : 'No'})`}</MenuItem>
+          <MenuItem dense value>Yes</MenuItem>
+          <MenuItem dense value={false}>No</MenuItem>
+        </Select>
+      </ListItem>
+      <Divider />
+      <ListItem>
+        <ListItemText
+          primary="Disable Javascript"
+        />
+        <Select
+          value={formBlockJavascript != null ? formBlockJavascript : 'global'}
+          onChange={(e) => {
+            dispatch(updateForm({
+              preferences: {
+                blockJavascript: e.target.value !== 'global' ? e.target.value : null,
+              },
+            }));
+            enqueueRequestRestartSnackbar();
+          }}
+          variant="filled"
+          disableUnderline
+          margin="dense"
+          classes={{
+            root: classes.select,
+          }}
+          className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
+        >
+          <MenuItem dense value="global">{`Use global preference (${blockJavascript ? 'Yes' : 'No'})`}</MenuItem>
+          <MenuItem dense value>Yes</MenuItem>
+          <MenuItem dense value={false}>No</MenuItem>
+        </Select>
+      </ListItem>
+    </List>
+  );
 };
 
-SectionPrivacy.propTypes = {
-  blockAds: PropTypes.bool.isRequired,
-  blockJavascript: PropTypes.bool.isRequired,
-  classes: PropTypes.object.isRequired,
-  formBlockAds: PropTypes.bool,
-  formBlockJavascript: PropTypes.bool,
-  onUpdateForm: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  blockAds: state.preferences.blockAds,
-  formBlockAds: state.dialogWorkspacePreferences.form.preferences.blockAds,
-  blockJavascript: state.preferences.blockJavascript,
-  formBlockJavascript: state.dialogWorkspacePreferences.form.preferences.blockJavascript,
-});
-
-const actionCreators = {
-  updateForm,
-};
-
-export default connectComponent(
-  SectionPrivacy,
-  mapStateToProps,
-  actionCreators,
-  styles,
-);
+export default SectionPrivacy;

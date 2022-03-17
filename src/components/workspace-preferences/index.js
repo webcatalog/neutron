@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 
 import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
@@ -25,8 +24,8 @@ import RouterIcon from '@material-ui/icons/Router';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import SecurityIcon from '@material-ui/icons/Security';
 import WidgetsIcon from '@material-ui/icons/Widgets';
+import { makeStyles } from '@material-ui/core';
 
-import connectComponent from '../../helpers/connect-component';
 import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
 
 import {
@@ -49,7 +48,7 @@ import SectionWorkspace from './section-workspace';
 import getStaticGlobal from '../../helpers/get-static-global';
 import isMenubarBrowser from '../../helpers/is-menubar-browser';
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     background: theme.palette.background.default,
     height: '100%',
@@ -83,9 +82,11 @@ const styles = (theme) => ({
   alert: {
     marginBottom: theme.spacing(1),
   },
-});
+}));
 
-const Preferences = ({ classes }) => {
+const Preferences = () => {
+  const classes = useStyles();
+
   const [activeSectionKey, setActiveSectionKey] = useState('general');
 
   const sections = {
@@ -238,13 +239,4 @@ const Preferences = ({ classes }) => {
   );
 };
 
-Preferences.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default connectComponent(
-  Preferences,
-  null,
-  null,
-  styles,
-);
+export default Preferences;

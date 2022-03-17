@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -17,7 +16,8 @@ import AddIcon from '@material-ui/icons/Add';
 import SettingsIcon from '@material-ui/icons/Settings';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-import connectComponent from '../../../helpers/connect-component';
+import { useSelector } from 'react-redux';
+
 import getWorkspacesAsList from '../../../helpers/get-workspaces-as-list';
 import getWorkspaceName from '../../../helpers/get-workspace-name';
 import getStaticGlobal from '../../../helpers/get-static-global';
@@ -29,9 +29,9 @@ import {
   requestRemoveWorkspace,
 } from '../../../senders';
 
-const SectionWorkspaces = ({
-  workspaces,
-}) => {
+const SectionWorkspaces = () => {
+  const workspaces = useSelector((state) => state.workspaces.workspaces);
+
   const appJson = getStaticGlobal('appJson');
   const workspacesList = getWorkspacesAsList(workspaces);
 
@@ -95,15 +95,4 @@ const SectionWorkspaces = ({
   );
 };
 
-SectionWorkspaces.propTypes = {
-  workspaces: PropTypes.object.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  workspaces: state.workspaces.workspaces,
-});
-
-export default connectComponent(
-  SectionWorkspaces,
-  mapStateToProps,
-);
+export default SectionWorkspaces;

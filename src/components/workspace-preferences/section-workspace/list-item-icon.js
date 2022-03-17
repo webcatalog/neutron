@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Color from 'color';
 
@@ -13,10 +12,12 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Badge from '@material-ui/core/Badge';
 import ListItem from '@material-ui/core/ListItem';
+import { makeStyles } from '@material-ui/core';
+
+import { useSelector, useDispatch } from 'react-redux';
 
 import CheckIcon from '@material-ui/icons/Check';
 
-import connectComponent from '../../../helpers/connect-component';
 import getAvatarText from '../../../helpers/get-avatar-text';
 import isUrl from '../../../helpers/is-url';
 import getPicturePath from '../../../helpers/get-picture-path';
@@ -35,7 +36,7 @@ import {
 import defaultWorkspaceImageLight from '../../../images/default-workspace-image-light.png';
 import defaultWorkspaceImageDark from '../../../images/default-workspace-image-dark.png';
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   flexGrow: {
     flex: 1,
   },
@@ -114,27 +115,26 @@ const styles = (theme) => ({
   caption: {
     display: 'block',
   },
-});
+}));
 
-const ListItemIcon = ({
-  accountInfo,
-  classes,
-  color,
-  downloadingIcon,
-  id,
-  imgPath,
-  name,
-  onGetIconFromAppSearch,
-  onGetIconFromInternet,
-  onUpdateForm,
-  onSetPicture,
-  onRemovePicture,
-  order,
-  pictureId,
-  preferredIconType,
-  shouldUseDarkColors,
-  transparentBackground,
-}) => {
+const ListItemIcon = () => {
+  const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const accountInfo = useSelector((state) => state.dialogWorkspacePreferences.form.accountInfo);
+  const color = useSelector((state) => state.dialogWorkspacePreferences.form.preferences.color);
+  const downloadingIcon = useSelector((state) => state.dialogWorkspacePreferences.downloadingIcon);
+  const id = useSelector((state) => state.dialogWorkspacePreferences.form.id || '');
+  const name = useSelector((state) => state.dialogWorkspacePreferences.form.name || '');
+  const order = useSelector((state) => state.dialogWorkspacePreferences.form.order || 0);
+  const pictureId = useSelector((state) => state.dialogWorkspacePreferences.form.pictureId);
+  const imgPath = useSelector((state) => state.dialogWorkspacePreferences.form.imgPath);
+  // eslint-disable-next-line max-len
+  const preferredIconType = useSelector((state) => state.dialogWorkspacePreferences.form.preferredIconType);
+  const shouldUseDarkColors = useSelector((state) => state.general.shouldUseDarkColors);
+  // eslint-disable-next-line max-len
+  const transparentBackground = useSelector((state) => Boolean(state.dialogWorkspacePreferences.form.transparentBackground));
+
   let selectedIconType = 'text';
   if ((imgPath && preferredIconType === 'auto') || (pictureId && preferredIconType === 'auto') || (preferredIconType === 'image')) {
     selectedIconType = 'image';
@@ -208,8 +208,8 @@ const ListItemIcon = ({
             }
             return null;
           })()}
-          onClick={() => onUpdateForm({ preferredIconType: type })}
-          onKeyDown={() => onUpdateForm({ preferredIconType: type })}
+          onClick={() => dispatch(updateForm({ preferredIconType: type }))}
+          onKeyDown={() => dispatch(updateForm({ preferredIconType: type }))}
         >
           {avatarContent}
         </div>
@@ -270,7 +270,7 @@ const ListItemIcon = ({
                     window.remote.dialog.showOpenDialog(window.remote.getCurrentWindow(), opts)
                       .then(({ canceled, filePaths }) => {
                         if (!canceled && filePaths && filePaths.length > 0) {
-                          onSetPicture(filePaths[0]);
+                          dispatch(setPicture(filePaths[0]));
                         }
                       })
                       .catch(console.log); // eslint-disable-line
@@ -286,7 +286,7 @@ const ListItemIcon = ({
                   size="small"
                   className={classes.buttonBot}
                   disabled={Boolean(downloadingIcon)}
-                  onClick={() => onGetIconFromInternet(true)}
+                  onClick={() => dispatch(getIconFromInternet(true))}
                 >
                   {downloadingIcon ? 'Downloading...' : 'Download Icon from URL'}
                 </Button>
@@ -296,7 +296,7 @@ const ListItemIcon = ({
                   size="small"
                   className={classes.buttonBot}
                   disabled={Boolean(downloadingIcon)}
-                  onClick={() => onGetIconFromAppSearch(true)}
+                  onClick={() => dispatch(getIconFromAppSearch(true))}
                 >
                   {downloadingIcon ? 'Downloading...' : 'Download Icon from Our Database'}
                 </Button>
@@ -306,7 +306,7 @@ const ListItemIcon = ({
                   size="small"
                   className={classes.buttonBot}
                   disabled={Boolean(downloadingIcon)}
-                  onClick={() => onRemovePicture()}
+                  onClick={() => dispatch(removePicture())}
                 >
                   Reset to Default
                 </Button>
@@ -320,7 +320,8 @@ const ListItemIcon = ({
               control={(
                 <Checkbox
                   checked={transparentBackground}
-                  onChange={(e) => onUpdateForm({ transparentBackground: e.target.checked })}
+                  // eslint-disable-next-line max-len
+                  onChange={(e) => dispatch(updateForm({ transparentBackground: e.target.checked }))}
                 />
               )}
               label="Use transparent background"
@@ -332,59 +333,4 @@ const ListItemIcon = ({
   );
 };
 
-ListItemIcon.defaultProps = {
-  accountInfo: null,
-  color: null,
-  imgPath: null,
-  pictureId: null,
-  preferredIconType: 'auto',
-};
-
-ListItemIcon.propTypes = {
-  accountInfo: PropTypes.object,
-  classes: PropTypes.object.isRequired,
-  color: PropTypes.string,
-  downloadingIcon: PropTypes.bool.isRequired,
-  id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  onGetIconFromAppSearch: PropTypes.func.isRequired,
-  onGetIconFromInternet: PropTypes.func.isRequired,
-  onUpdateForm: PropTypes.func.isRequired,
-  onSetPicture: PropTypes.func.isRequired,
-  onRemovePicture: PropTypes.func.isRequired,
-  order: PropTypes.number.isRequired,
-  pictureId: PropTypes.string,
-  imgPath: PropTypes.string,
-  preferredIconType: PropTypes.oneOf(['auto', 'text', 'image', 'accountInfo']),
-  shouldUseDarkColors: PropTypes.bool.isRequired,
-  transparentBackground: PropTypes.bool.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  accountInfo: state.dialogWorkspacePreferences.form.accountInfo,
-  color: state.dialogWorkspacePreferences.form.preferences.color,
-  downloadingIcon: state.dialogWorkspacePreferences.downloadingIcon,
-  id: state.dialogWorkspacePreferences.form.id || '',
-  name: state.dialogWorkspacePreferences.form.name || '',
-  order: state.dialogWorkspacePreferences.form.order || 0,
-  pictureId: state.dialogWorkspacePreferences.form.pictureId,
-  imgPath: state.dialogWorkspacePreferences.form.imgPath,
-  preferredIconType: state.dialogWorkspacePreferences.form.preferredIconType,
-  shouldUseDarkColors: state.general.shouldUseDarkColors,
-  transparentBackground: Boolean(state.dialogWorkspacePreferences.form.transparentBackground),
-});
-
-const actionCreators = {
-  getIconFromInternet,
-  getIconFromAppSearch,
-  updateForm,
-  removePicture,
-  setPicture,
-};
-
-export default connectComponent(
-  ListItemIcon,
-  mapStateToProps,
-  actionCreators,
-  styles,
-);
+export default ListItemIcon;

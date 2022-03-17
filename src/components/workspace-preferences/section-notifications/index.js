@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
@@ -12,7 +11,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Switch from '@material-ui/core/Switch';
 
-import connectComponent from '../../../helpers/connect-component';
+import { useDispatch, useSelector } from 'react-redux';
+
 import getWorkspaceFriendlyName from '../../../helpers/get-workspace-friendly-name';
 import isWebcatalog from '../../../helpers/is-webcatalog';
 import getStaticGlobal from '../../../helpers/get-static-global';
@@ -38,11 +38,13 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const SectionNotifications = ({
-  formDisableNotifications,
-  onUpdateForm,
-}) => {
+const SectionNotifications = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  // eslint-disable-next-line max-len
+  const formDisableNotifications = useSelector((state) => Boolean(state.dialogWorkspacePreferences.form.disableNotifications));
+
   const appJson = getStaticGlobal('appJson');
   const utmSource = getUtmSource();
   return (
@@ -57,9 +59,9 @@ const SectionNotifications = ({
             color="primary"
             checked={formDisableNotifications}
             onChange={(e) => {
-              onUpdateForm({
+              dispatch(updateForm({
                 disableNotifications: e.target.checked,
-              });
+              }));
             }}
           />
         </ListItemSecondaryAction>
@@ -95,21 +97,4 @@ const SectionNotifications = ({
   );
 };
 
-SectionNotifications.propTypes = {
-  onUpdateForm: PropTypes.func.isRequired,
-  formDisableNotifications: PropTypes.bool.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  formDisableNotifications: Boolean(state.dialogWorkspacePreferences.form.disableNotifications),
-});
-
-const actionCreators = {
-  updateForm,
-};
-
-export default connectComponent(
-  SectionNotifications,
-  mapStateToProps,
-  actionCreators,
-);
+export default SectionNotifications;

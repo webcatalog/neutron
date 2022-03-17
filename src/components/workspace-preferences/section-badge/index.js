@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import List from '@material-ui/core/List';
@@ -10,11 +9,13 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
-import connectComponent from '../../../helpers/connect-component';
+
+import { makeStyles } from '@material-ui/core';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { updateForm } from '../../../state/dialog-workspace-preferences/actions';
 
-const styles = (theme) => ({
+const usestyles = makeStyles((theme) => ({
   selectRoot: {
     borderRadius: theme.spacing(0.5),
     fontSize: '0.84375rem',
@@ -29,64 +30,43 @@ const styles = (theme) => ({
     paddingBottom: theme.spacing(1),
     paddingLeft: theme.spacing(1.5),
   },
-});
+}));
 
-const SectionBadge = ({
-  classes,
-  unreadCountBadge,
-  formUnreadCountBadge,
-  onUpdateForm,
-}) => (
-  <List disablePadding dense>
-    <ListItem>
-      <ListItemText
-        primary="Show unread count badge"
-      />
-      <Select
-        value={formUnreadCountBadge === false ? formUnreadCountBadge : 'global'}
-        onChange={(e) => onUpdateForm({
-          preferences: {
-            unreadCountBadge: e.target.value !== 'global' ? e.target.value : null,
-          },
-        })}
-        variant="filled"
-        disableUnderline
-        margin="dense"
-        classes={{
-          root: classes.select,
-        }}
-        className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
-      >
-        <MenuItem dense value="global">{`Use global preference (${unreadCountBadge ? 'Yes' : 'No'})`}</MenuItem>
-        <MenuItem dense value={false}>No</MenuItem>
-      </Select>
-    </ListItem>
-  </List>
-);
+const SectionBadge = () => {
+  const classes = usestyles();
+  const dispatch = useDispatch();
 
-SectionBadge.defaultProps = {
-  formUnreadCountBadge: null,
+  const unreadCountBadge = useSelector((state) => state.preferences.unreadCountBadge);
+  // eslint-disable-next-line max-len
+  const formUnreadCountBadge = useSelector((state) => state.dialogWorkspacePreferences.form.preferences.unreadCountBadge);
+
+  return (
+    <List disablePadding dense>
+      <ListItem>
+        <ListItemText
+          primary="Show unread count badge"
+        />
+        <Select
+          value={formUnreadCountBadge === false ? formUnreadCountBadge : 'global'}
+          onChange={(e) => dispatch(updateForm({
+            preferences: {
+              unreadCountBadge: e.target.value !== 'global' ? e.target.value : null,
+            },
+          }))}
+          variant="filled"
+          disableUnderline
+          margin="dense"
+          classes={{
+            root: classes.select,
+          }}
+          className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
+        >
+          <MenuItem dense value="global">{`Use global preference (${unreadCountBadge ? 'Yes' : 'No'})`}</MenuItem>
+          <MenuItem dense value={false}>No</MenuItem>
+        </Select>
+      </ListItem>
+    </List>
+  );
 };
 
-SectionBadge.propTypes = {
-  classes: PropTypes.object.isRequired,
-  formUnreadCountBadge: PropTypes.bool,
-  onUpdateForm: PropTypes.func.isRequired,
-  unreadCountBadge: PropTypes.bool.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  unreadCountBadge: state.preferences.unreadCountBadge,
-  formUnreadCountBadge: state.dialogWorkspacePreferences.form.preferences.unreadCountBadge,
-});
-
-const actionCreators = {
-  updateForm,
-};
-
-export default connectComponent(
-  SectionBadge,
-  mapStateToProps,
-  actionCreators,
-  styles,
-);
+export default SectionBadge;
