@@ -2,20 +2,20 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
+import { makeStyles } from '@material-ui/core';
 
-import connectComponent from '../../../helpers/connect-component';
+import { useSelector } from 'react-redux';
 
 import {
   requestSetPreference,
 } from '../../../senders';
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   selectRoot: {
     borderRadius: theme.spacing(0.5),
     fontSize: '0.84375rem',
@@ -27,61 +27,51 @@ const styles = (theme) => ({
     paddingBottom: theme.spacing(1),
     paddingLeft: theme.spacing(1.5),
   },
-});
+}));
 
-const ListItemOpenProtocolUrls = ({
-  classes,
-  openProtocolUrlInNewWindow,
-}) => (
-  <ListItem>
-    <ListItemText
-      primary="Preferred behavior when opening links triggered by protocols"
-    />
-    <Select
-      value={openProtocolUrlInNewWindow}
-      onChange={(e) => requestSetPreference('openProtocolUrlInNewWindow', e.target.value)}
-      variant="filled"
-      disableUnderline
-      margin="dense"
-      classes={{
-        root: classes.select,
-      }}
-      className={classes.selectRoot}
-    >
-      <MenuItem
-        value="ask"
-        dense
-      >
-        Always ask
-      </MenuItem>
-      <MenuItem
-        value="mainWindow"
-        dense
-      >
-        Open in main window
-      </MenuItem>
-      <MenuItem
-        value="newWindow"
-        dense
-      >
-        Open in new window
-      </MenuItem>
-    </Select>
-  </ListItem>
-);
+const ListItemOpenProtocolUrls = () => {
+  const classes = useStyles();
 
-ListItemOpenProtocolUrls.propTypes = {
-  classes: PropTypes.object.isRequired,
-  openProtocolUrlInNewWindow: PropTypes.oneOf(['ask', 'newWindow', 'mainWindow']).isRequired,
+  // eslint-disable-next-line max-len
+  const openProtocolUrlInNewWindow = useSelector((state) => state.preferences.openProtocolUrlInNewWindow);
+
+  return (
+    <ListItem>
+      <ListItemText
+        primary="Preferred behavior when opening links triggered by protocols"
+      />
+      <Select
+        value={openProtocolUrlInNewWindow}
+        onChange={(e) => requestSetPreference('openProtocolUrlInNewWindow', e.target.value)}
+        variant="filled"
+        disableUnderline
+        margin="dense"
+        classes={{
+          root: classes.select,
+        }}
+        className={classes.selectRoot}
+      >
+        <MenuItem
+          value="ask"
+          dense
+        >
+          Always ask
+        </MenuItem>
+        <MenuItem
+          value="mainWindow"
+          dense
+        >
+          Open in main window
+        </MenuItem>
+        <MenuItem
+          value="newWindow"
+          dense
+        >
+          Open in new window
+        </MenuItem>
+      </Select>
+    </ListItem>
+  );
 };
 
-const mapStateToProps = (state) => ({
-  openProtocolUrlInNewWindow: state.preferences.openProtocolUrlInNewWindow,
-});
-
-export default connectComponent(
-  ListItemOpenProtocolUrls,
-  mapStateToProps,
-  null,
-  styles,
-);
+export default ListItemOpenProtocolUrls;
