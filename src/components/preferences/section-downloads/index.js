@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
@@ -13,7 +12,8 @@ import Switch from '@material-ui/core/Switch';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-import connectComponent from '../../../helpers/connect-component';
+import { useSelector } from 'react-redux';
+
 import isMas from '../../../helpers/is-mas';
 import {
   requestSetPreference,
@@ -25,83 +25,71 @@ const getFileManagerName = () => {
   return 'file manager';
 };
 
-const SectionDownloads = ({
-  askForDownloadPath,
-  downloadPath,
-  openFolderWhenDoneDownloading,
-}) => (
-  <List disablePadding dense>
-    {!isMas() && (
-      <>
-        <ListItem
-          button
-          onClick={() => {
-            window.remote.dialog.showOpenDialog(window.remote.getCurrentWindow(), {
-              properties: ['openDirectory'],
-            })
-              .then(({ canceled, filePaths }) => {
-                if (!canceled && filePaths && filePaths.length > 0) {
-                  requestSetPreference('downloadPath', filePaths[0]);
-                }
-              })
-              .catch(console.log); // eslint-disable-line
-          }}
-        >
-          <ListItemText
-            primary="Download location"
-            secondary={downloadPath}
-          />
-          <ChevronRightIcon color="action" />
-        </ListItem>
-        <Divider />
-      </>
-    )}
-    <ListItem>
-      <ListItemText
-        primary="Ask where to save each file before downloading"
-        secondary={isMas() ? 'Otherwise, download files are always saved to ~/Downloads folder.' : null}
-      />
-      <ListItemSecondaryAction>
-        <Switch
-          edge="end"
-          color="primary"
-          checked={askForDownloadPath}
-          onChange={(e) => {
-            requestSetPreference('askForDownloadPath', e.target.checked);
-          }}
-        />
-      </ListItemSecondaryAction>
-    </ListItem>
-    <Divider />
-    <ListItem>
-      <ListItemText primary={`Reveal the file in ${getFileManagerName()} when it is downloaded`} />
-      <ListItemSecondaryAction>
-        <Switch
-          edge="end"
-          color="primary"
-          checked={openFolderWhenDoneDownloading}
-          onChange={(e) => {
-            requestSetPreference('openFolderWhenDoneDownloading', e.target.checked);
-          }}
-        />
-      </ListItemSecondaryAction>
-    </ListItem>
-  </List>
-);
+const SectionDownloads = () => {
+  const askForDownloadPath = useSelector((state) => state.preferences.askForDownloadPath);
+  const downloadPath = useSelector((state) => state.preferences.downloadPath);
+  // eslint-disable-next-line max-len
+  const openFolderWhenDoneDownloading = useSelector((state) => state.preferences.openFolderWhenDoneDownloading);
 
-SectionDownloads.propTypes = {
-  askForDownloadPath: PropTypes.bool.isRequired,
-  downloadPath: PropTypes.string.isRequired,
-  openFolderWhenDoneDownloading: PropTypes.bool.isRequired,
+  return (
+    <List disablePadding dense>
+      {!isMas() && (
+        <>
+          <ListItem
+            button
+            onClick={() => {
+              window.remote.dialog.showOpenDialog(window.remote.getCurrentWindow(), {
+                properties: ['openDirectory'],
+              })
+                .then(({ canceled, filePaths }) => {
+                  if (!canceled && filePaths && filePaths.length > 0) {
+                    requestSetPreference('downloadPath', filePaths[0]);
+                  }
+                })
+                .catch(console.log); // eslint-disable-line
+            }}
+          >
+            <ListItemText
+              primary="Download location"
+              secondary={downloadPath}
+            />
+            <ChevronRightIcon color="action" />
+          </ListItem>
+          <Divider />
+        </>
+      )}
+      <ListItem>
+        <ListItemText
+          primary="Ask where to save each file before downloading"
+          secondary={isMas() ? 'Otherwise, download files are always saved to ~/Downloads folder.' : null}
+        />
+        <ListItemSecondaryAction>
+          <Switch
+            edge="end"
+            color="primary"
+            checked={askForDownloadPath}
+            onChange={(e) => {
+              requestSetPreference('askForDownloadPath', e.target.checked);
+            }}
+          />
+        </ListItemSecondaryAction>
+      </ListItem>
+      <Divider />
+      <ListItem>
+        <ListItemText primary={`Reveal the file in ${getFileManagerName()} when it is downloaded`} />
+        <ListItemSecondaryAction>
+          <Switch
+            edge="end"
+            color="primary"
+            checked={openFolderWhenDoneDownloading}
+            onChange={(e) => {
+              requestSetPreference('openFolderWhenDoneDownloading', e.target.checked);
+            }}
+          />
+        </ListItemSecondaryAction>
+      </ListItem>
+    </List>
+  );
 };
 
-const mapStateToProps = (state) => ({
-  askForDownloadPath: state.preferences.askForDownloadPath,
-  downloadPath: state.preferences.downloadPath,
-  openFolderWhenDoneDownloading: state.preferences.openFolderWhenDoneDownloading,
-});
-
-export default connectComponent(
-  SectionDownloads,
-  mapStateToProps,
-);
+export default SectionDownloads;
