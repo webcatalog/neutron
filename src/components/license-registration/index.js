@@ -104,23 +104,6 @@ const DialogLicenseRegistration = () => {
           variant="outlined"
           helperText={licenseKeyError || `If you have already purchased ${appJson.name} Plus from our website, you should have received a license key via email to enter above.`}
         />
-        <Typography className={classes.typography}>
-          If you&#39;ve purchased&nbsp;
-          {appJson.name}
-          &nbsp;from Mac App Store or Windows Store,
-          <Button
-            className={classes.linkButton}
-            onClick={(e) => {
-              e.preventDefault();
-              const contactUrl = 'Https://webcatalog.io/contact';
-              requestOpenInBrowser(contactUrl);
-            }}
-          >
-            CONTACT US
-          </Button>
-          with your receipt to receive a free license key.
-        </Typography>
-
         <DialogContentText className={classes.helpContent}>
           <Button
             onClick={() => requestOpenInBrowser(`https://${appJson.hostname}/help/?utm_source=${utmSource}`)}
