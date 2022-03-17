@@ -31,12 +31,12 @@ const useStyles = makeStyles((theme) => ({
 
 const DisplayMedia = () => {
   const classes = useStyles();
-  const [sources, setSource] = useState([]);
+  const [sources, setSources] = useState([]);
 
   useEffect(() => {
     getDesktopCapturerSourcesAsync({ types: ['window', 'screen'] })
       .then((res) => {
-        setSource({ res });
+        setSources(res);
       });
   }, []);
 
