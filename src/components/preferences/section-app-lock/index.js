@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -12,10 +11,12 @@ import Select from '@material-ui/core/Select';
 import Divider from '@material-ui/core/Divider';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Switch from '@material-ui/core/Switch';
+import { makeStyles } from '@material-ui/core';
+
+import { useDispatch, useSelector } from 'react-redux';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-import connectComponent from '../../../helpers/connect-component';
 import checkLicense from '../../../helpers/check-license';
 import getWorkspaceFriendlyName from '../../../helpers/get-workspace-friendly-name';
 
@@ -34,7 +35,7 @@ import {
 
 import appLockTimeouts from '../../../constants/app-lock-timeouts';
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   selectRoot: {
     borderRadius: theme.spacing(0.5),
     fontSize: '0.84375rem',
@@ -51,15 +52,17 @@ const styles = (theme) => ({
     float: 'right',
     paddingRight: theme.spacing(1),
   },
-});
+}));
 
-const SectionPrivacySecurity = ({
-  appLockTimeout,
-  appLockWhenSwitchingWorkspace,
-  classes,
-  dialogAppLockOpen,
-  onOpenDialogAppLock,
-}) => {
+const SectionPrivacySecurity = () => {
+  const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const appLockTimeout = useSelector((state) => state.preferences.appLockTimeout);
+  // eslint-disable-next-line max-len
+  const appLockWhenSwitchingWorkspace = useSelector((state) => state.preferences.appLockWhenSwitchingWorkspace);
+  const dialogAppLockOpen = useSelector((state) => state.dialogAppLock.open);
+
   const [appLockEnabled, setAppLockEnabled] = useState(false);
   useEffect(() => {
     // re-run whenever the dialog is closed
@@ -87,7 +90,7 @@ const SectionPrivacySecurity = ({
               return;
             }
 
-            onOpenDialogAppLock();
+            dispatch(openDialogAppLock());
           }}
         >
           <ListItemText
@@ -147,27 +150,4 @@ const SectionPrivacySecurity = ({
   );
 };
 
-SectionPrivacySecurity.propTypes = {
-  appLockTimeout: PropTypes.number.isRequired,
-  appLockWhenSwitchingWorkspace: PropTypes.bool.isRequired,
-  classes: PropTypes.object.isRequired,
-  dialogAppLockOpen: PropTypes.bool.isRequired,
-  onOpenDialogAppLock: PropTypes.func.isRequired,
-};
-
-const actionCreators = {
-  openDialogAppLock,
-};
-
-const mapStateToProps = (state) => ({
-  appLockTimeout: state.preferences.appLockTimeout,
-  appLockWhenSwitchingWorkspace: state.preferences.appLockWhenSwitchingWorkspace,
-  dialogAppLockOpen: state.dialogAppLock.open,
-});
-
-export default connectComponent(
-  SectionPrivacySecurity,
-  mapStateToProps,
-  actionCreators,
-  styles,
-);
+export default SectionPrivacySecurity;
