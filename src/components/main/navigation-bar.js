@@ -19,7 +19,8 @@ import SettingsIcon from '@material-ui/icons/SettingsSharp';
 import VolumeUpIcon from '@material-ui/icons/VolumeUp';
 import VolumeOffIcon from '@material-ui/icons/VolumeOff';
 
-import connectComponent from '../../helpers/connect-component';
+import { useDispatch, useSelector } from 'react-redux';
+
 import getUrlFromText from '../../helpers/get-url-from-text';
 import getStaticGlobal from '../../helpers/get-static-global';
 import isMas from '../../helpers/is-mas';
@@ -149,21 +150,29 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const NavigationBar = ({
-  activeWorkspaceId,
-  address,
-  addressEdited,
-  draggable,
-  hasTrafficLights,
-  hasWorkspaces,
-  muteApp,
-  onUpdateAddressBarInfo,
-  searchEngine,
-  shouldPauseNotifications,
-  sidebar,
-  sidebarSize,
   themeColor,
 }) => {
   const classes = useStyles({ themeColor });
+  const dispatch = useDispatch();
+
+  const activeWorkspaceId = useSelector((state) => state.workspaces.activeWorkspaceId);
+  const address = useSelector((state) => state.general.address || '');
+  const addressEdited = useSelector((state) => Boolean(state.general.addressEdited));
+  const draggable = useSelector((state) => window.process.platform === 'darwin' && !state.preferences.titleBar);
+  const hasTrafficLights = useSelector((state) => window.process.platform === 'darwin'
+  && getStaticGlobal('windowButtons')
+  && window.mode !== 'menubar'
+  && !state.preferences.titleBar
+  && !state.preferences.sidebar
+  && !state.general.isFullScreen);
+  const hasWorkspaces = useSelector((state) => Object.keys(state.workspaces.workspaces).length > 0);
+  const muteApp = useSelector((state) => state.preferences.muteApp);
+  const searchEngine = useSelector((state) => state.preferences.searchEngine);
+  // eslint-disable-next-line max-len
+  const shouldPauseNotifications = useSelector((state) => state.notifications.pauseNotificationsInfo !== null);
+  const sidebar = useSelector((state) => state.preferences.sidebar);
+  const sidebarSize = useSelector((state) => state.preferences.sidebarSize);
+
   const [addressInputClicked, setAddressInputClicked] = useState(false);
   const hasExpandedSidebar = sidebar && sidebarSize === 'expanded';
   const addressBarRef = useRef(null);
@@ -217,7 +226,7 @@ const NavigationBar = ({
               className={classes.goButton}
               onClick={() => {
                 const processedUrl = getUrlFromText(address, searchEngine);
-                onUpdateAddressBarInfo(processedUrl, false);
+                dispatch(updateAddressBarInfo(processedUrl, false));
                 requestLoadUrl(processedUrl);
               }}
             >
@@ -225,13 +234,13 @@ const NavigationBar = ({
             </IconButton>
           )}
           onChange={(e) => {
-            onUpdateAddressBarInfo(e.target.value, true);
+            dispatch(updateAddressBarInfo(e.target.value, true));
           }}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
               e.target.blur();
               const processedUrl = getUrlFromText(address, searchEngine);
-              onUpdateAddressBarInfo(processedUrl, false);
+              dispatch(updateAddressBarInfo(processedUrl, false));
               requestLoadUrl(processedUrl);
             }
           }}
@@ -250,7 +259,7 @@ const NavigationBar = ({
             if (text) {
               e.preventDefault();
               const processedUrl = getUrlFromText(text, searchEngine);
-              onUpdateAddressBarInfo(processedUrl, false);
+              dispatch(updateAddressBarInfo(processedUrl, false));
               requestLoadUrl(processedUrl);
             }
           }}
@@ -330,52 +339,11 @@ const NavigationBar = ({
 };
 
 NavigationBar.defaultProps = {
-  activeWorkspaceId: null,
-  address: '',
   themeColor: null,
 };
 
 NavigationBar.propTypes = {
-  activeWorkspaceId: PropTypes.string,
-  address: PropTypes.string,
-  addressEdited: PropTypes.bool.isRequired,
-  draggable: PropTypes.bool.isRequired,
-  hasTrafficLights: PropTypes.bool.isRequired,
-  hasWorkspaces: PropTypes.bool.isRequired,
-  muteApp: PropTypes.bool.isRequired,
-  onUpdateAddressBarInfo: PropTypes.func.isRequired,
-  searchEngine: PropTypes.string.isRequired,
-  shouldPauseNotifications: PropTypes.bool.isRequired,
-  sidebar: PropTypes.bool.isRequired,
-  sidebarSize: PropTypes.oneOf(['compact', 'expanded']).isRequired,
   themeColor: PropTypes.string,
 };
 
-const mapStateToProps = (state) => ({
-  activeWorkspaceId: state.workspaces.activeWorkspaceId,
-  address: state.general.address || '',
-  addressEdited: Boolean(state.general.addressEdited),
-  draggable: window.process.platform === 'darwin' && !state.preferences.titleBar,
-  hasTrafficLights: window.process.platform === 'darwin'
-    && getStaticGlobal('windowButtons')
-    && window.mode !== 'menubar'
-    && !state.preferences.titleBar
-    && !state.preferences.sidebar
-    && !state.general.isFullScreen,
-  hasWorkspaces: Object.keys(state.workspaces.workspaces).length > 0,
-  muteApp: state.preferences.muteApp,
-  searchEngine: state.preferences.searchEngine,
-  shouldPauseNotifications: state.notifications.pauseNotificationsInfo !== null,
-  sidebar: state.preferences.sidebar,
-  sidebarSize: state.preferences.sidebarSize,
-});
-
-const actionCreators = {
-  updateAddressBarInfo,
-};
-
-export default connectComponent(
-  NavigationBar,
-  mapStateToProps,
-  actionCreators,
-);
+export default NavigationBar;
