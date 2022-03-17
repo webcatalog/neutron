@@ -43,12 +43,8 @@ const styles = (theme) => ({
     textAlign: 'right',
   },
   linkButton: {
-    backgroundColor: 'transparent !important',
-    border: 'none',
     cursor: 'pointer',
-    display: 'inline',
-    color: '#1976d2',
-    margin: '0px 2px 1px 2px',
+    margin: theme.spacing(0.4),
     padding: 0,
     fontSize: '0.9rem',
   },
@@ -113,9 +109,11 @@ const DialogLicenseRegistration = ({
           &nbsp;from Mac App Store or Windows Store,
           <Button
             className={classes.linkButton}
+            href="#text-buttons"
+            color="primary"
             onClick={(e) => {
               e.preventDefault();
-              const contactUrl = 'Https://webcatalog.io/contact';
+              const contactUrl = 'https://webcatalog.io/contact';
               requestOpenInBrowser(contactUrl);
             }}
           >
