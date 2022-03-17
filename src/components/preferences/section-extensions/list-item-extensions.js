@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useState, useEffect, useMemo } from 'react';
-import PropTypes from 'prop-types';
 import { uniqBy } from 'lodash';
 
 import Button from '@material-ui/core/Button';
@@ -19,8 +18,9 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Typography from '@material-ui/core/Typography';
 import MenuItem from '@material-ui/core/MenuItem';
+import { makeStyles } from '@material-ui/core';
 
-import connectComponent from '../../../helpers/connect-component';
+import { useSelector } from 'react-redux';
 
 import {
   getExtensionFromProfileAsync,
@@ -33,7 +33,7 @@ import {
   requestOpenInBrowser,
 } from '../../../senders';
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   container: {
     flex: 1,
   },
@@ -60,15 +60,20 @@ const styles = (theme) => ({
   actionsLeft: {
     flex: 1,
   },
-});
+}));
 
-const Extensions = ({
-  classes,
-  extensionButtonsVisible,
-  extensionSourceBrowserId,
-  extensionSourceProfileDirName,
-  extensionEnabledExtesionIds,
-}) => {
+const Extensions = () => {
+  const classes = useStyles();
+  // extension action buttons are only visible on sidebar or navigation bar
+  // eslint-disable-next-line max-len
+  const extensionButtonsVisible = useSelector((state) => state.preferences.sidebar || state.preferences.navigationBar);
+  // eslint-disable-next-line max-len
+  const extensionEnabledExtesionIds = useSelector((state) => state.preferences.extensionEnabledExtesionIds);
+  // eslint-disable-next-line max-len
+  const extensionSourceBrowserId = useSelector((state) => state.preferences.extensionSourceBrowserId);
+  // eslint-disable-next-line max-len
+  const extensionSourceProfileDirName = useSelector((state) => state.preferences.extensionSourceProfileDirName);
+
   const [extensions, setExtensions] = useState([]);
   const [sources, setSources] = useState([]);
 
@@ -229,29 +234,4 @@ const Extensions = ({
   );
 };
 
-Extensions.defaultProps = {
-  extensionEnabledExtesionIds: {},
-};
-
-Extensions.propTypes = {
-  classes: PropTypes.object.isRequired,
-  extensionButtonsVisible: PropTypes.bool.isRequired,
-  extensionEnabledExtesionIds: PropTypes.object,
-  extensionSourceBrowserId: PropTypes.string.isRequired,
-  extensionSourceProfileDirName: PropTypes.string.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  // extension action buttons are only visible on sidebar or navigation bar
-  extensionButtonsVisible: state.preferences.sidebar || state.preferences.navigationBar,
-  extensionEnabledExtesionIds: state.preferences.extensionEnabledExtesionIds,
-  extensionSourceBrowserId: state.preferences.extensionSourceBrowserId,
-  extensionSourceProfileDirName: state.preferences.extensionSourceProfileDirName,
-});
-
-export default connectComponent(
-  Extensions,
-  mapStateToProps,
-  null,
-  styles,
-);
+export default Extensions;
