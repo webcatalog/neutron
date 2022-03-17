@@ -3,7 +3,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -18,7 +17,10 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import LockIcon from '@material-ui/icons/Lock';
 
-import connectComponent from '../../helpers/connect-component';
+import { makeStyles } from '@material-ui/core';
+
+import { useDispatch, useSelector } from 'react-redux';
+
 import getStaticGlobal from '../../helpers/get-static-global';
 
 import { updateForm, validateForm } from '../../state/app-lock/actions';
@@ -34,7 +36,7 @@ import {
 
 import touchIdIcon from '../../images/touch-id-icon.svg';
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   outerRoot: {
     display: 'flex',
     flexDirection: 'column',
@@ -104,15 +106,15 @@ const styles = (theme) => ({
     width: 48,
     height: 48,
   },
-});
+}));
 
-const AppLock = ({
-  classes,
-  onUpdateForm,
-  onValidateForm,
-  password,
-  passwordError,
-}) => {
+const AppLock = () => {
+  const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const password = useSelector((state) => state.appLock.form.password);
+  const passwordError = useSelector((state) => state.appLock.form.passwordError);
+
   const appJson = getStaticGlobal('appJson');
   const [revealPassword, setRevealPassword] = useState(false);
   const [useTouchId, setUseTouchId] = useState(false);
@@ -161,13 +163,13 @@ const AppLock = ({
               multiline={false}
               value={password}
               error={Boolean(passwordError)}
-              onChange={(e) => onUpdateForm({
+              onChange={(e) => dispatch(updateForm({
                 password: e.target.value,
                 passwordError: null,
-              })}
+              }))}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
-                  onValidateForm();
+                  dispatch(validateForm());
                   e.target.blur();
                 }
               }}
@@ -197,7 +199,7 @@ const AppLock = ({
               className={classes.unlockButton}
               startIcon={<LockIcon />}
               disableElevation
-              onClick={onValidateForm}
+              onClick={dispatch(validateForm)}
             >
               Unlock
             </Button>
@@ -220,32 +222,4 @@ const AppLock = ({
   );
 };
 
-AppLock.defaultProps = {
-  password: '',
-  passwordError: null,
-};
-
-AppLock.propTypes = {
-  classes: PropTypes.object.isRequired,
-  onUpdateForm: PropTypes.func.isRequired,
-  onValidateForm: PropTypes.func.isRequired,
-  password: PropTypes.string,
-  passwordError: PropTypes.string,
-};
-
-const mapStateToProps = (state) => ({
-  password: state.appLock.form.password,
-  passwordError: state.appLock.form.passwordError,
-});
-
-const actionCreators = {
-  updateForm,
-  validateForm,
-};
-
-export default connectComponent(
-  AppLock,
-  mapStateToProps,
-  actionCreators,
-  styles,
-);
+export default AppLock;
