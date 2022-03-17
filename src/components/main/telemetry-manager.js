@@ -1,10 +1,10 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 
-import connectComponent from '../../helpers/connect-component';
+import { useSelector } from 'react-redux';
+
 import isMas from '../../helpers/is-mas';
 import isAppx from '../../helpers/is-appx';
 import getStaticGlobal from '../../helpers/get-static-global';
@@ -12,7 +12,12 @@ import getStaticGlobal from '../../helpers/get-static-global';
 import amplitude from '../../amplitude';
 import isStandalone from '../../helpers/is-standalone';
 
-const TelemetryManager = ({ iapPurchased, telemetry, standaloneRegistered }) => {
+const TelemetryManager = () => {
+  const iapPurchased = useSelector((state) => isMas() && state.preferences.iapPurchased);
+  // eslint-disable-next-line max-len
+  const standaloneRegistered = useSelector((state) => isStandalone() && state.preferences.standaloneRegistered);
+  const telemetry = useSelector((state) => state.preferences.telemetry);
+
   const appJson = getStaticGlobal('appJson');
   const registered = appJson.registered || iapPurchased || standaloneRegistered;
 
@@ -52,26 +57,4 @@ const TelemetryManager = ({ iapPurchased, telemetry, standaloneRegistered }) => 
   return null;
 };
 
-TelemetryManager.defaultProps = {
-  iapPurchased: false,
-  standaloneRegistered: false,
-  telemetry: false,
-};
-
-TelemetryManager.propTypes = {
-  iapPurchased: PropTypes.bool,
-  standaloneRegistered: PropTypes.bool,
-  telemetry: PropTypes.bool,
-};
-
-const mapStateToProps = (state) => ({
-  iapPurchased: isMas() && state.preferences.iapPurchased,
-  standaloneRegistered: isStandalone() && state.preferences.standaloneRegistered,
-  telemetry: state.preferences.telemetry,
-});
-
-export default connectComponent(
-  TelemetryManager,
-  mapStateToProps,
-  null,
-);
+export default TelemetryManager;
