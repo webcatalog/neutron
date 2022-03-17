@@ -3,7 +3,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -21,7 +20,9 @@ import Switch from '@material-ui/core/Switch';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 
-import connectComponent from '../../../helpers/connect-component';
+import { makeStyles } from '@material-ui/core';
+
+import { useDispatch, useSelector } from 'react-redux';
 
 import {
   close,
@@ -35,7 +36,7 @@ import { requestOpenInBrowser } from '../../../senders';
 
 import getKeytarVaultName from '../../../helpers/get-keytar-vault-name';
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   actions: {
     display: 'flex',
     width: '100%',
@@ -47,24 +48,23 @@ const styles = (theme) => ({
     float: 'right',
     marginLeft: theme.spacing(1),
   },
-});
+}));
 
-const DialogAppLock = ({
-  classes,
-  password,
-  passwordError,
-  onClose,
-  onSave,
-  onUpdateForm,
-  open,
-  requireCurrentPassword,
-  onValidateCurrentPassword,
-  onDeletePassword,
-  currentPassword,
-  currentPasswordError,
-  useTouchId,
-  hasPassword,
-}) => {
+const DialogAppLock = () => {
+  const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const currentPassword = useSelector((state) => state.dialogAppLock.form.currentPassword);
+  // eslint-disable-next-line max-len
+  const currentPasswordError = useSelector((state) => state.dialogAppLock.form.currentPasswordError);
+  const hasPassword = useSelector((state) => state.dialogAppLock.form.hasPassword);
+  const open = useSelector((state) => state.dialogAppLock.open);
+  const password = useSelector((state) => state.dialogAppLock.form.password);
+  const passwordError = useSelector((state) => state.dialogAppLock.form.passwordError);
+  // eslint-disable-next-line max-len
+  const requireCurrentPassword = useSelector((state) => state.dialogAppLock.form.requireCurrentPassword);
+  const useTouchId = useSelector((state) => state.dialogAppLock.form.useTouchId);
+
   const [revealPassword, setRevealPassword] = useState(false);
   const canPromptTouchId = window.process.platform === 'darwin'
     && window.remote.systemPreferences.canPromptTouchID();
@@ -85,7 +85,7 @@ const DialogAppLock = ({
 
   return (
     <Dialog
-      onClose={onClose}
+      onClose={dispatch(close)}
       open={open}
       fullWidth
       maxWidth="sm"
@@ -118,13 +118,13 @@ const DialogAppLock = ({
             }}
             value={currentPassword}
             error={Boolean(currentPasswordError)}
-            onChange={(e) => onUpdateForm({
+            onChange={(e) => dispatch(updateForm({
               currentPassword: e.target.value,
               currentPasswordError: null,
-            })}
+            }))}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
-                onValidateCurrentPassword();
+                dispatch(validateCurrentPassword());
                 e.target.blur();
               }
             }}
@@ -160,7 +160,7 @@ const DialogAppLock = ({
             }}
             value={password}
             error={Boolean(passwordError)}
-            onChange={(e) => onUpdateForm({ password: e.target.value })}
+            onChange={(e) => dispatch(updateForm({ password: e.target.value }))}
             type={revealPassword ? 'text' : 'password'}
             InputProps={{
               endAdornment: (
@@ -182,7 +182,7 @@ const DialogAppLock = ({
         <div className={classes.actions}>
           <div className={classes.actionsLeft}>
             {hasPassword && !requireCurrentPassword && (
-              <Button variant="contained" disableElevation onClick={onDeletePassword}>
+              <Button variant="contained" disableElevation onClick={dispatch(deletePassword)}>
                 Disable App Lock
               </Button>
             )}
@@ -193,7 +193,7 @@ const DialogAppLock = ({
                 control={(
                   <Switch
                     checked={useTouchId}
-                    onChange={(e) => onUpdateForm({ useTouchId: e.target.checked })}
+                    onChange={(e) => dispatch(updateForm({ useTouchId: e.target.checked }))}
                     color="primary"
                   />
                 )}
@@ -202,15 +202,15 @@ const DialogAppLock = ({
             )}
           </div>
           <div className={classes.actionsRight}>
-            <Button variant="contained" className={classes.button} disableElevation onClick={onClose}>
+            <Button variant="contained" className={classes.button} disableElevation onClick={dispatch(close)}>
               Cancel
             </Button>
             {!requireCurrentPassword ? (
-              <Button color="primary" className={classes.button} variant="contained" disableElevation onClick={onSave}>
+              <Button color="primary" className={classes.button} variant="contained" disableElevation onClick={dispatch(save)}>
                 Save
               </Button>
             ) : (
-              <Button color="primary" className={classes.button} variant="contained" disableElevation onClick={onValidateCurrentPassword}>
+              <Button color="primary" className={classes.button} variant="contained" disableElevation onClick={dispatch(validateCurrentPassword)}>
                 Continue
               </Button>
             )}
@@ -220,56 +220,5 @@ const DialogAppLock = ({
     </Dialog>
   );
 };
-DialogAppLock.defaultProps = {
-  currentPassword: '',
-  currentPasswordError: null,
-  hasPassword: false,
-  open: false,
-  password: '',
-  passwordError: null,
-  requireCurrentPassword: false,
-  useTouchId: false,
-};
 
-DialogAppLock.propTypes = {
-  classes: PropTypes.object.isRequired,
-  currentPassword: PropTypes.string,
-  currentPasswordError: PropTypes.string,
-  hasPassword: PropTypes.bool,
-  onClose: PropTypes.func.isRequired,
-  onDeletePassword: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
-  onUpdateForm: PropTypes.func.isRequired,
-  onValidateCurrentPassword: PropTypes.func.isRequired,
-  open: PropTypes.bool,
-  password: PropTypes.string,
-  passwordError: PropTypes.string,
-  requireCurrentPassword: PropTypes.bool,
-  useTouchId: PropTypes.bool,
-};
-
-const mapStateToProps = (state) => ({
-  currentPassword: state.dialogAppLock.form.currentPassword,
-  currentPasswordError: state.dialogAppLock.form.currentPasswordError,
-  hasPassword: state.dialogAppLock.form.hasPassword,
-  open: state.dialogAppLock.open,
-  password: state.dialogAppLock.form.password,
-  passwordError: state.dialogAppLock.form.passwordError,
-  requireCurrentPassword: state.dialogAppLock.form.requireCurrentPassword,
-  useTouchId: state.dialogAppLock.form.useTouchId,
-});
-
-const actionCreators = {
-  close,
-  updateForm,
-  save,
-  validateCurrentPassword,
-  deletePassword,
-};
-
-export default connectComponent(
-  DialogAppLock,
-  mapStateToProps,
-  actionCreators,
-  styles,
-);
+export default DialogAppLock;
