@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useRef } from 'react';
-import PropTypes from 'prop-types';
 
 import AppSearchAPIConnector from '@elastic/search-ui-app-search-connector';
 import { SearchProvider, WithSearch, Paging } from '@elastic/react-search-ui';
@@ -12,8 +11,8 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import SearchIcon from '@material-ui/icons/Search';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { makeStyles } from '@material-ui/core';
 
-import connectComponent from '../../helpers/connect-component';
 import getStaticGlobal from '../../helpers/get-static-global';
 import isMas from '../../helpers/is-mas';
 import isAppx from '../../helpers/is-appx';
@@ -25,7 +24,7 @@ import NoConnection from './no-connection';
 import EmptyState from './empty-state';
 import SearchBox from './search-box';
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
     zIndex: 1,
   },
@@ -62,7 +61,7 @@ const styles = (theme) => ({
     left: 5,
     zIndex: 2,
   },
-});
+}));
 
 const connector = process.env.REACT_APP_ELASTIC_CLOUD_APP_SEARCH_SEARCH_KEY
   ? new AppSearchAPIConnector({
@@ -95,7 +94,8 @@ if (appJsonId.startsWith('group-')) {
   filters.push({ field: 'group_id', values: ['google'], type: 'all' });
 }
 
-const Home = ({ classes }) => {
+const Home = () => {
+  const classes = useStyles();
   const scrollContainerRef = useRef(null);
 
   if (!connector) {
@@ -263,15 +263,4 @@ const Home = ({ classes }) => {
   );
 };
 
-Home.defaultProps = {};
-
-Home.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default connectComponent(
-  Home,
-  null,
-  null,
-  styles,
-);
+export default Home;
