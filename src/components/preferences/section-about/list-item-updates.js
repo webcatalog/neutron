@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
@@ -12,7 +11,8 @@ import Divider from '@material-ui/core/Divider';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-import connectComponent from '../../../helpers/connect-component';
+import { useSelector } from 'react-redux';
+
 import isMas from '../../../helpers/is-mas';
 import isSnap from '../../../helpers/is-snap';
 import isAppx from '../../../helpers/is-appx';
@@ -56,11 +56,11 @@ const getUpdaterDesc = (status, info) => {
   return null;
 };
 
-const SectionUpdates = ({
-  autoCheckForUpdates,
-  updaterInfo,
-  updaterStatus,
-}) => {
+const SectionUpdates = () => {
+  const autoCheckForUpdates = useSelector((state) => state.preferences.autoCheckForUpdates);
+  const updaterInfo = useSelector((state) => state.updater.info);
+  const updaterStatus = useSelector((state) => state.updater.status);
+
   if (isMas() || isSnap() || isAppx()) return null;
 
   if (isStandalone()) {
@@ -127,24 +127,4 @@ const SectionUpdates = ({
   );
 };
 
-SectionUpdates.defaultProps = {
-  updaterInfo: null,
-  updaterStatus: null,
-};
-
-SectionUpdates.propTypes = {
-  autoCheckForUpdates: PropTypes.bool.isRequired,
-  updaterInfo: PropTypes.object,
-  updaterStatus: PropTypes.string,
-};
-
-const mapStateToProps = (state) => ({
-  autoCheckForUpdates: state.preferences.autoCheckForUpdates,
-  updaterInfo: state.updater.info,
-  updaterStatus: state.updater.status,
-});
-
-export default connectComponent(
-  SectionUpdates,
-  mapStateToProps,
-);
+export default SectionUpdates;
