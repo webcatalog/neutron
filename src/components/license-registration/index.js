@@ -103,6 +103,15 @@ const DialogLicenseRegistration = ({
           variant="outlined"
           helperText={licenseKeyError || `If you have already purchased ${appJson.name} Plus from our website, you should have received a license key via email to enter above.`}
         />
+
+        <DialogContentText className={classes.helpContent}>
+          <Button
+            onClick={() => requestOpenInBrowser(`https://${appJson.hostname}/help/?utm_source=${utmSource}`)}
+          >
+            Lost your license key?
+          </Button>
+        </DialogContentText>
+
         <Typography className={classes.typography}>
           If you&#39;ve purchased&nbsp;
           {appJson.name}
@@ -121,14 +130,6 @@ const DialogLicenseRegistration = ({
           </Button>
           with your purchase receipt attached to receive a free license key.
         </Typography>
-
-        <DialogContentText className={classes.helpContent}>
-          <Button
-            onClick={() => requestOpenInBrowser(`https://${appJson.hostname}/help/?utm_source=${utmSource}`)}
-          >
-            Lost your license key?
-          </Button>
-        </DialogContentText>
       </DialogContent>
       <DialogActions className={classes.dialogActions}>
         <div style={{ flex: 1 }}>
