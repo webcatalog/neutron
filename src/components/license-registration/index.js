@@ -43,12 +43,8 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'right',
   },
   linkButton: {
-    backgroundColor: 'transparent !important',
-    border: 'none',
     cursor: 'pointer',
-    display: 'inline',
-    color: '#1976d2',
-    margin: '0px 2px 1px 2px',
+    margin: theme.spacing(0.4),
     padding: 0,
     fontSize: '0.9rem',
   },
@@ -132,6 +128,25 @@ const DialogLicenseRegistration = () => {
             Lost your license key?
           </Button>
         </DialogContentText>
+
+        <Typography className={classes.typography}>
+          If you&#39;ve purchased&nbsp;
+          {appJson.name}
+          &nbsp;from Mac App Store or Windows Store,
+          <Button
+            className={classes.linkButton}
+            href="#text-buttons"
+            color="primary"
+            onClick={(e) => {
+              e.preventDefault();
+              const contactUrl = 'https://webcatalog.io/contact';
+              requestOpenInBrowser(contactUrl);
+            }}
+          >
+            email us
+          </Button>
+          with your purchase receipt attached to receive a free license key.
+        </Typography>
       </DialogContent>
       <DialogActions className={classes.dialogActions}>
         <div style={{ flex: 1 }}>

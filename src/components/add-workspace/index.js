@@ -2,8 +2,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
-import PropTypes from 'prop-types';
 
+import { useSelector, useDispatch } from 'react-redux';
+
+import { makeStyles } from '@material-ui/core/styles';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import Paper from '@material-ui/core/Paper';
@@ -12,7 +14,6 @@ import ViewListIcon from '@material-ui/icons/ViewList';
 import CreateIcon from '@material-ui/icons/Create';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
-import connectComponent from '../../helpers/connect-component';
 import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
 
 import { updateMode } from '../../state/dialog-add-workspace/actions';
@@ -24,7 +25,7 @@ import {
 import Home from './home';
 import Form from './form';
 
-const styles = () => ({
+const useStyles = makeStyles(() => ({
   root: {
     height: '100%',
     display: 'flex',
@@ -47,82 +48,65 @@ const styles = () => ({
     fontSize: '0.8rem !important',
     paddingLeft: 4,
   },
-});
+}));
 
-const AddWorkspace = ({
-  classes,
-  mode,
-  onUpdateMode,
-}) => (
-  <div className={classes.root}>
-    {mode === 'catalog' && <Home />}
-    {mode === 'custom' && <Form />}
+const AddWorkspace = () => {
+  const classes = useStyles();
+  const dispatch = useDispatch();
+  const mode = useSelector((state) => state.dialogAddWorkspace.mode);
 
-    <Paper elevation={1} square className={classes.paper}>
-      <BottomNavigation
-        showLabels
-        value={mode}
-        onChange={(e, value) => {
-          if (value === 'more') {
-            return;
-          }
-          // custom workspace is disabled in free version of Singlebox
-          onUpdateMode(value);
-        }}
-        classes={{ root: classes.bottomNavigation }}
-      >
-        <BottomNavigationAction
-          label="Catalog"
-          value="catalog"
-          icon={<ViewListIcon />}
-          classes={{
-            wrapper: classes.bottomNavigationActionWrapper,
-            label: classes.bottomNavigationActionLabel,
-          }}
-        />
-        <BottomNavigationAction
-          label={`Custom ${getWorkspaceFriendlyName()}`}
-          value="custom"
-          icon={<CreateIcon />}
-          classes={{
-            wrapper: classes.bottomNavigationActionWrapper,
-            label: classes.bottomNavigationActionLabel,
-          }}
-        />
-        <BottomNavigationAction
-          value="more"
-          icon={<MoreVertIcon />}
-          classes={{
-            root: classes.bottomNavigationActionRootSmall,
-            wrapper: classes.bottomNavigationActionWrapper,
-            label: classes.bottomNavigationActionLabel,
-          }}
-          onClick={(e) => {
-            requestShowAppMiniMenu(e.x, e.y);
-          }}
-        />
-      </BottomNavigation>
-    </Paper>
-  </div>
-);
+  return (
+    <div className={classes.root}>
+      {mode === 'catalog' && <Home />}
+      {mode === 'custom' && <Form />}
 
-AddWorkspace.propTypes = {
-  classes: PropTypes.object.isRequired,
-  mode: PropTypes.string.isRequired,
-  onUpdateMode: PropTypes.func.isRequired,
+      <Paper elevation={1} square className={classes.paper}>
+        <BottomNavigation
+          showLabels
+          value={mode}
+          onChange={(e, value) => {
+            if (value === 'more') {
+              return;
+            }
+            // custom workspace is disabled in free version of Singlebox
+            dispatch(updateMode(value));
+          }}
+          classes={{ root: classes.bottomNavigation }}
+        >
+          <BottomNavigationAction
+            label="Catalog"
+            value="catalog"
+            icon={<ViewListIcon />}
+            classes={{
+              wrapper: classes.bottomNavigationActionWrapper,
+              label: classes.bottomNavigationActionLabel,
+            }}
+          />
+          <BottomNavigationAction
+            label={`Custom ${getWorkspaceFriendlyName()}`}
+            value="custom"
+            icon={<CreateIcon />}
+            classes={{
+              wrapper: classes.bottomNavigationActionWrapper,
+              label: classes.bottomNavigationActionLabel,
+            }}
+          />
+          <BottomNavigationAction
+            value="more"
+            icon={<MoreVertIcon />}
+            classes={{
+              root: classes.bottomNavigationActionRootSmall,
+              wrapper: classes.bottomNavigationActionWrapper,
+              label: classes.bottomNavigationActionLabel,
+            }}
+            onClick={(e) => {
+              requestShowAppMiniMenu(e.x, e.y);
+            }}
+          />
+        </BottomNavigation>
+      </Paper>
+    </div>
+  );
 };
 
-const mapStateToProps = (state) => ({
-  mode: state.dialogAddWorkspace.mode,
-});
-
-const actionCreators = {
-  updateMode,
-};
-
-export default connectComponent(
-  AddWorkspace,
-  mapStateToProps,
-  actionCreators,
-  styles,
-);
+export default AddWorkspace;
