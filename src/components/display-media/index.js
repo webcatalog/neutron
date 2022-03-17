@@ -38,7 +38,7 @@ const DisplayMedia = () => {
       .then((res) => {
         setSources(res);
       });
-  }, []);
+  }, [setSources]);
 
   const screenSources = sources.filter((source) => source.id.startsWith('screen'));
   const windowSources = sources.filter((source) => source.id.startsWith('window'));
