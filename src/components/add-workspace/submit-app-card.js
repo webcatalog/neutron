@@ -1,18 +1,17 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import PropTypes from 'prop-types';
 import React from 'react';
 
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import { makeStyles } from '@material-ui/core';
 
-import connectComponent from '../../helpers/connect-component';
 import { requestOpenInBrowser } from '../../senders';
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   card: {
     width: '100%',
     boxSizing: 'border-box',
@@ -51,12 +50,10 @@ const styles = (theme) => ({
     paddingRight: theme.spacing(1),
     flex: 1,
   },
-});
+}));
 
-const SubmitAppCard = (props) => {
-  const {
-    classes,
-  } = props;
+const SubmitAppCard = () => {
+  const classes = useStyles();
 
   return (
     <Grid item xs={12}>
@@ -77,13 +74,4 @@ const SubmitAppCard = (props) => {
   );
 };
 
-SubmitAppCard.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default connectComponent(
-  SubmitAppCard,
-  null,
-  null,
-  styles,
-);
+export default SubmitAppCard;
