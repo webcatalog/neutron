@@ -9,6 +9,7 @@ import TextField from '@material-ui/core/TextField';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogActions from '@material-ui/core/DialogActions';
+import { Typography } from '@material-ui/core';
 
 import connectComponent from '../../helpers/connect-component';
 import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
@@ -40,6 +41,15 @@ const styles = (theme) => ({
   helpContent: {
     marginTop: theme.spacing(1),
     textAlign: 'right',
+  },
+  linkButton: {
+    cursor: 'pointer',
+    margin: theme.spacing(0.4),
+    padding: 0,
+    fontSize: '0.9rem',
+  },
+  typography: {
+    color: 'rgba(0, 0, 0, 0.54)',
   },
 });
 
@@ -101,6 +111,25 @@ const DialogLicenseRegistration = ({
             Lost your license key?
           </Button>
         </DialogContentText>
+
+        <Typography className={classes.typography}>
+          If you&#39;ve purchased&nbsp;
+          {appJson.name}
+          &nbsp;from Mac App Store or Windows Store,
+          <Button
+            className={classes.linkButton}
+            href="#text-buttons"
+            color="primary"
+            onClick={(e) => {
+              e.preventDefault();
+              const contactUrl = 'https://webcatalog.io/contact';
+              requestOpenInBrowser(contactUrl);
+            }}
+          >
+            email us
+          </Button>
+          with your purchase receipt attached to receive a free license key.
+        </Typography>
       </DialogContent>
       <DialogActions className={classes.dialogActions}>
         <div style={{ flex: 1 }}>
