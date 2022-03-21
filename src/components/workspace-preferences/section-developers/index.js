@@ -93,7 +93,7 @@ const SectionDevelopers = () => {
         </ListItem>
         <ListItem
           button
-          onClick={dispatch(openDialogCustomUserAgent)}
+          onClick={() => dispatch(openDialogCustomUserAgent())}
           disabled={formForceMobileView != null ? formForceMobileView : forceMobileView}
         >
           <ListItemText

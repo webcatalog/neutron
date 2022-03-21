@@ -63,7 +63,7 @@ const GoToUrl = () => {
         />
       </div>
       <div>
-        <Button color="primary" variant="contained" disableElevation className={classes.button} onClick={dispatch(go())}>
+        <Button color="primary" variant="contained" disableElevation className={classes.button} onClick={() => dispatch(go())}>
           Go
         </Button>
         <Button variant="contained" disableElevation className={classes.button} onClick={() => window.remote.getCurrentWindow().close()}>

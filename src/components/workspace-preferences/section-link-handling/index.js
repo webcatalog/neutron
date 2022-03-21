@@ -60,7 +60,7 @@ const SectionLinkHandling = () => {
   return (
     <>
       <List disablePadding dense>
-        <ListItem button onClick={dispatch(openDialogExternalUrls)}>
+        <ListItem button onClick={() => dispatch(openDialogExternalUrls())}>
           <ListItemText
             primary="External URLs"
             secondary={(() => {
@@ -73,7 +73,7 @@ const SectionLinkHandling = () => {
           <ChevronRightIcon color="action" />
         </ListItem>
         <Divider />
-        <ListItem button onClick={dispatch(openDialogInternalUrls)}>
+        <ListItem button onClick={() => dispatch(openDialogInternalUrls())}>
           <ListItemText
             primary="Internal URLs"
             secondary={(() => {
