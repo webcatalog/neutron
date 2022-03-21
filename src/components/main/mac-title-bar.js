@@ -2,13 +2,13 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { alpha } from '@material-ui/core/styles/colorManipulator';
 
-import connectComponent from '../../helpers/connect-component';
+import { useSelector } from 'react-redux';
+
 import getUrlFromText from '../../helpers/get-url-from-text';
 import getStaticGlobal from '../../helpers/get-static-global';
 import isMacOs11 from '../../helpers/is-mac-os-11';
@@ -72,14 +72,18 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-const FakeTitleBar = ({
-  navigationBar,
-  searchEngine,
-  themeColor,
-  title,
-  titleBarNavigationButtons,
-}) => {
+const FakeTitleBar = (themeColor) => {
   const classes = useStyles({ themeColor });
+
+  const title = useSelector((state) => state.general.title);
+  const searchEngine = useSelector((state) => state.preferences.searchEngine);
+  const navigationBar = useSelector((state) => (window.process.platform === 'linux'
+  && state.preferences.attachToMenubar
+  && !state.preferences.sidebar)
+  || state.preferences.navigationBar);
+  const titleBarNavigationButtons = useSelector(
+    (state) => state.preferences.titleBarNavigationButtons,
+  );
 
   if (window.process.platform !== 'darwin') return null;
 
@@ -141,39 +145,4 @@ const FakeTitleBar = ({
   );
 };
 
-FakeTitleBar.defaultProps = {
-  themeColor: null,
-  title: '',
-};
-
-FakeTitleBar.propTypes = {
-  navigationBar: PropTypes.bool.isRequired,
-  searchEngine: PropTypes.string.isRequired,
-  // sidebar: PropTypes.bool.isRequired,
-  themeColor: PropTypes.string,
-  title: PropTypes.string,
-  titleBarNavigationButtons: PropTypes.bool.isRequired,
-};
-
-const mapStateToProps = (state) => {
-  const activeWorkspace = state.workspaces.workspaces[state.workspaces.activeWorkspaceId];
-
-  return {
-    title: state.general.title,
-    searchEngine: state.preferences.searchEngine,
-    isLoading: activeWorkspace && state.workspaceMetas[activeWorkspace.id]
-      ? Boolean(state.workspaceMetas[activeWorkspace.id].isLoading)
-      : false,
-    navigationBar: (window.process.platform === 'linux'
-      && state.preferences.attachToMenubar
-      && !state.preferences.sidebar)
-      || state.preferences.navigationBar,
-    sidebar: state.preferences.sidebar,
-    titleBarNavigationButtons: state.preferences.titleBarNavigationButtons,
-  };
-};
-
-export default connectComponent(
-  FakeTitleBar,
-  mapStateToProps,
-);
+export default FakeTitleBar;

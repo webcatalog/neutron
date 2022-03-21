@@ -9,27 +9,11 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Switch from '@material-ui/core/Switch';
-import { makeStyles } from '@material-ui/core';
 import { useSelector } from 'react-redux';
-
-import connectComponent from '../../../helpers/connect-component';
 
 import {
   requestSetPreference,
 } from '../../../senders';
-
-const useStyles = makeStyles((theme) => ({
-  selectRoot: {
-    borderRadius: theme.spacing(0.5),
-    fontSize: '0.84375rem',
-  },
-  select: {
-    paddingTop: theme.spacing(1),
-    paddingRight: 26,
-    paddingBottom: theme.spacing(1),
-    paddingLeft: theme.spacing(1.5),
-  },
-}));
 
 const SectionPopupWindows = () => {
   const popupTitleBar = useSelector((state) => state.preferences.popupTitleBar);
@@ -79,7 +63,4 @@ const SectionPopupWindows = () => {
   );
 };
 
-export default connectComponent(
-  SectionPopupWindows,
-  useStyles,
-);
+export default SectionPopupWindows;

@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -12,7 +11,8 @@ import 'simplebar/dist/simplebar.min.css';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
-import connectComponent from '../../helpers/connect-component';
+import { useSelector } from 'react-redux';
+
 import getStaticGlobal from '../../helpers/get-static-global';
 import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
 
@@ -152,19 +152,45 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Main = ({
-  didFailLoad,
-  isFullScreen,
-  isLoading,
-  navigationBar,
-  sidebar,
-  sidebarAddButton,
-  sidebarSize,
-  themeColor,
-  titleBar,
-  workspaces,
-}) => {
+const Main = () => {
+  const activeWorkspace = useSelector(
+    (state) => state.workspaces.workspaces[state.workspaces.activeWorkspaceId],
+  );
+
+  const didFailLoad = useSelector(
+    (state) => (activeWorkspace && state.workspaceMetas[activeWorkspace.id]
+      ? state.workspaceMetas[activeWorkspace.id].didFailLoad
+      : null
+    ),
+  );
+
+  const isFullScreen = useSelector((state) => state.general.isFullScreen);
+  const isLoading = useSelector((state) => (
+    activeWorkspace && state.workspaceMetas[activeWorkspace.id]
+      ? Boolean(state.workspaceMetas[activeWorkspace.id].isLoading)
+      : false));
+  const navigationBar = useSelector((state) => (
+    (window.process.platform === 'linux'
+    && state.preferences.attachToMenubar
+    && !state.preferences.sidebar)
+    || state.preferences.navigationBar));
+  const sidebar = useSelector((state) => state.preferences.sidebar);
+  const sidebarAddButton = useSelector((state) => state.preferences.sidebarAddButton);
+  const sidebarSize = useSelector((state) => state.preferences.sidebarSize);
+  const titleBar = useSelector((state) => state.preferences.titleBar);
+  const workspaces = useSelector((state) => state.workspaces.workspaces);
+  const themeColor = useSelector((state) => (() => {
+    if (state.preferences.themeColor === 'auto') {
+      if (activeWorkspace && activeWorkspace.preferences && activeWorkspace.preferences.color) {
+        return activeWorkspace.preferences.color;
+      }
+      return null;
+    }
+    return state.preferences.themeColor;
+  })());
+
   const classes = useStyles({ themeColor });
+
   const appJson = getStaticGlobal('appJson');
   const showMacTitleBar = window.process.platform === 'darwin' && titleBar && !isFullScreen;
   const isSidebarExpanded = sidebarSize === 'expanded';
@@ -267,58 +293,4 @@ const Main = ({
   );
 };
 
-Main.defaultProps = {
-  didFailLoad: null,
-  isLoading: false,
-  themeColor: null,
-};
-
-Main.propTypes = {
-  didFailLoad: PropTypes.string,
-  isFullScreen: PropTypes.bool.isRequired,
-  isLoading: PropTypes.bool,
-  navigationBar: PropTypes.bool.isRequired,
-  sidebar: PropTypes.bool.isRequired,
-  sidebarAddButton: PropTypes.bool.isRequired,
-  sidebarSize: PropTypes.oneOf(['compact', 'expanded']).isRequired,
-  themeColor: PropTypes.string,
-  titleBar: PropTypes.bool.isRequired,
-  workspaces: PropTypes.object.isRequired,
-};
-
-const mapStateToProps = (state) => {
-  const activeWorkspace = state.workspaces.workspaces[state.workspaces.activeWorkspaceId];
-
-  return {
-    didFailLoad: activeWorkspace && state.workspaceMetas[activeWorkspace.id]
-      ? state.workspaceMetas[activeWorkspace.id].didFailLoad
-      : null,
-    isFullScreen: state.general.isFullScreen,
-    isLoading: activeWorkspace && state.workspaceMetas[activeWorkspace.id]
-      ? Boolean(state.workspaceMetas[activeWorkspace.id].isLoading)
-      : false,
-    navigationBar: (window.process.platform === 'linux'
-      && state.preferences.attachToMenubar
-      && !state.preferences.sidebar)
-      || state.preferences.navigationBar,
-    sidebar: state.preferences.sidebar,
-    sidebarAddButton: state.preferences.sidebarAddButton,
-    sidebarSize: state.preferences.sidebarSize,
-    titleBar: state.preferences.titleBar,
-    workspaces: state.workspaces.workspaces,
-    themeColor: (() => {
-      if (state.preferences.themeColor === 'auto') {
-        if (activeWorkspace && activeWorkspace.preferences && activeWorkspace.preferences.color) {
-          return activeWorkspace.preferences.color;
-        }
-        return null;
-      }
-      return state.preferences.themeColor;
-    })(),
-  };
-};
-
-export default connectComponent(
-  Main,
-  mapStateToProps,
-);
+export default Main;
