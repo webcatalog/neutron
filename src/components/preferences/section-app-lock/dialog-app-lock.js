@@ -55,14 +55,16 @@ const DialogAppLock = () => {
   const dispatch = useDispatch();
 
   const currentPassword = useSelector((state) => state.dialogAppLock.form.currentPassword);
-  // eslint-disable-next-line max-len
-  const currentPasswordError = useSelector((state) => state.dialogAppLock.form.currentPasswordError);
+  const currentPasswordError = useSelector(
+    (state) => state.dialogAppLock.form.currentPasswordError,
+  );
   const hasPassword = useSelector((state) => state.dialogAppLock.form.hasPassword);
   const open = useSelector((state) => state.dialogAppLock.open);
   const password = useSelector((state) => state.dialogAppLock.form.password);
   const passwordError = useSelector((state) => state.dialogAppLock.form.passwordError);
-  // eslint-disable-next-line max-len
-  const requireCurrentPassword = useSelector((state) => state.dialogAppLock.form.requireCurrentPassword);
+  const requireCurrentPassword = useSelector(
+    (state) => state.dialogAppLock.form.requireCurrentPassword,
+  );
   const useTouchId = useSelector((state) => state.dialogAppLock.form.useTouchId);
 
   const [revealPassword, setRevealPassword] = useState(false);
@@ -85,7 +87,7 @@ const DialogAppLock = () => {
 
   return (
     <Dialog
-      onClose={dispatch(close)}
+      onClose={() => dispatch(close())}
       open={open}
       fullWidth
       maxWidth="sm"
@@ -182,7 +184,7 @@ const DialogAppLock = () => {
         <div className={classes.actions}>
           <div className={classes.actionsLeft}>
             {hasPassword && !requireCurrentPassword && (
-              <Button variant="contained" disableElevation onClick={dispatch(deletePassword)}>
+              <Button variant="contained" disableElevation onClick={() => dispatch(deletePassword())}>
                 Disable App Lock
               </Button>
             )}
@@ -202,15 +204,15 @@ const DialogAppLock = () => {
             )}
           </div>
           <div className={classes.actionsRight}>
-            <Button variant="contained" className={classes.button} disableElevation onClick={dispatch(close)}>
+            <Button variant="contained" className={classes.button} disableElevation onClick={() => dispatch(close())}>
               Cancel
             </Button>
             {!requireCurrentPassword ? (
-              <Button color="primary" className={classes.button} variant="contained" disableElevation onClick={dispatch(save)}>
+              <Button color="primary" className={classes.button} variant="contained" disableElevation onClick={() => dispatch(save())}>
                 Save
               </Button>
             ) : (
-              <Button color="primary" className={classes.button} variant="contained" disableElevation onClick={dispatch(validateCurrentPassword)}>
+              <Button color="primary" className={classes.button} variant="contained" disableElevation onClick={() => dispatch(validateCurrentPassword())}>
                 Continue
               </Button>
             )}

@@ -42,8 +42,9 @@ const SectionNotifications = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  // eslint-disable-next-line max-len
-  const formDisableNotifications = useSelector((state) => Boolean(state.dialogWorkspacePreferences.form.disableNotifications));
+  const formDisableNotifications = useSelector(
+    (state) => Boolean(state.dialogWorkspacePreferences.form.disableNotifications),
+  );
 
   const appJson = getStaticGlobal('appJson');
   const utmSource = getUtmSource();

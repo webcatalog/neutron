@@ -68,14 +68,18 @@ const SectionAutoReload = () => {
 
   const autoRefresh = useSelector((state) => state.preferences.autoRefresh);
   const autoRefreshInterval = useSelector((state) => state.preferences.autoRefreshInterval);
-  // eslint-disable-next-line max-len
-  const autoRefreshOnlyWhenInactive = useSelector((state) => state.preferences.autoRefreshOnlyWhenInactive);
-  // eslint-disable-next-line max-len
-  const formAutoRefresh = useSelector((state) => state.dialogWorkspacePreferences.form.preferences.autoRefresh);
-  // eslint-disable-next-line max-len
-  const formAutoRefreshInterval = useSelector((state) => state.dialogWorkspacePreferences.form.preferences.autoRefreshInterval);
-  // eslint-disable-next-line max-len
-  const formAutoRefreshOnlyWhenInactive = useSelector((state) => state.dialogWorkspacePreferences.form.preferences.autoRefreshOnlyWhenInactive);
+  const autoRefreshOnlyWhenInactive = useSelector(
+    (state) => state.preferences.autoRefreshOnlyWhenInactive,
+  );
+  const formAutoRefresh = useSelector(
+    (state) => state.dialogWorkspacePreferences.form.preferences.autoRefresh,
+  );
+  const formAutoRefreshInterval = useSelector(
+    (state) => state.dialogWorkspacePreferences.form.preferences.autoRefreshInterval,
+  );
+  const formAutoRefreshOnlyWhenInactive = useSelector(
+    (state) => state.dialogWorkspacePreferences.form.preferences.autoRefreshOnlyWhenInactive,
+  );
 
   return (
     <>

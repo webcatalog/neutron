@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { updateForm } from '../../../state/dialog-workspace-preferences/actions';
 
-const usestyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme) => ({
   selectRoot: {
     borderRadius: theme.spacing(0.5),
     fontSize: '0.84375rem',
@@ -33,12 +33,13 @@ const usestyles = makeStyles((theme) => ({
 }));
 
 const SectionBadge = () => {
-  const classes = usestyles();
+  const classes = useStyles();
   const dispatch = useDispatch();
 
   const unreadCountBadge = useSelector((state) => state.preferences.unreadCountBadge);
-  // eslint-disable-next-line max-len
-  const formUnreadCountBadge = useSelector((state) => state.dialogWorkspacePreferences.form.preferences.unreadCountBadge);
+  const formUnreadCountBadge = useSelector(
+    (state) => state.dialogWorkspacePreferences.form.preferences.unreadCountBadge,
+  );
 
   return (
     <List disablePadding dense>

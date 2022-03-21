@@ -29,8 +29,9 @@ const DialogExternalUrls = () => {
   const dispatch = useDispatch();
 
   const externalUrlRule = useSelector((state) => state.dialogExternalUrls.form.externalUrlRule);
-  // eslint-disable-next-line max-len
-  const externalUrlRuleError = useSelector((state) => state.dialogExternalUrls.form.externalUrlRuleError);
+  const externalUrlRuleError = useSelector(
+    (state) => state.dialogExternalUrls.form.externalUrlRuleError,
+  );
   const open = useSelector((state) => state.dialogExternalUrls.open);
 
   const appJson = getStaticGlobal('appJson');
@@ -38,7 +39,7 @@ const DialogExternalUrls = () => {
 
   return (
     <Dialog
-      onClose={dispatch(close)}
+      onClose={() => dispatch(close())}
       open={open}
       fullWidth
       maxWidth="sm"
@@ -111,10 +112,10 @@ const DialogExternalUrls = () => {
         />
       </DialogContent>
       <DialogActions>
-        <Button variant="contained" disableElevation onClick={dispatch(close)}>
+        <Button variant="contained" disableElevation onClick={() => dispatch(close())}>
           Cancel
         </Button>
-        <Button color="primary" variant="contained" disableElevation onClick={dispatch(save)}>
+        <Button color="primary" variant="contained" disableElevation onClick={() => dispatch(save())}>
           Save
         </Button>
       </DialogActions>

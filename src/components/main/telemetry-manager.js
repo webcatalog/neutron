@@ -14,8 +14,9 @@ import isStandalone from '../../helpers/is-standalone';
 
 const TelemetryManager = () => {
   const iapPurchased = useSelector((state) => isMas() && state.preferences.iapPurchased);
-  // eslint-disable-next-line max-len
-  const standaloneRegistered = useSelector((state) => isStandalone() && state.preferences.standaloneRegistered);
+  const standaloneRegistered = useSelector(
+    (state) => isStandalone() && state.preferences.standaloneRegistered,
+  );
   const telemetry = useSelector((state) => state.preferences.telemetry);
 
   const appJson = getStaticGlobal('appJson');

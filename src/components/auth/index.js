@@ -70,7 +70,7 @@ const Auth = () => {
         />
       </div>
       <div>
-        <Button color="primary" variant="contained" disableElevation className={classes.button} onClick={dispatch(login)}>
+        <Button color="primary" variant="contained" disableElevation className={classes.button} onClick={() => dispatch(login())}>
           Sign in
         </Button>
         <Button variant="contained" disableElevation className={classes.button} onClick={() => window.remote.getCurrentWindow().close()}>

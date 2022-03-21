@@ -152,8 +152,9 @@ const useStyles = makeStyles((theme) => ({
 const EnhancedAppBar = () => {
   const appJson = getStaticGlobal('appJson');
 
-  // eslint-disable-next-line max-len
-  const activeWorkspace = useSelector((state) => state.workspaces.workspaces[state.workspaces.activeWorkspaceId]);
+  const activeWorkspace = useSelector(
+    (state) => state.workspaces.workspaces[state.workspaces.activeWorkspaceId],
+  );
   const isMaximized = useSelector((state) => state.general.isMaximized);
   const title = useSelector((state, ownProps) => ownProps.title || ((window.mode === 'main' || window.mode === 'menubar') && state.general.title ? state.general.title : appJson.name));
   const sidebar = useSelector((state) => state.preferences.sidebar);

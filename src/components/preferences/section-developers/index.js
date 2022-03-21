@@ -51,7 +51,11 @@ const DialogDevelopers = () => {
             />
           </ListItemSecondaryAction>
         </ListItem>
-        <ListItem button onClick={dispatch(openDialogCustomUserAgent)} disabled={forceMobileView}>
+        <ListItem
+          button
+          onClick={() => dispatch(openDialogCustomUserAgent())}
+          disabled={forceMobileView}
+        >
           <ListItemText
             primary="Custom User-Agent string"
             secondary={forceMobileView ? 'Chrome (Android) UA string' : (customUserAgent || 'Not set')}

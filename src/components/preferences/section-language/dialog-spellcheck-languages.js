@@ -37,12 +37,13 @@ const DialogSpellcheckLanguages = () => {
   const dispatch = useDispatch();
 
   const open = useSelector((state) => state.dialogSpellcheckLanguages.open);
-  // eslint-disable-next-line max-len
-  const spellcheckLanguages = useSelector((state) => state.dialogSpellcheckLanguages.form.spellcheckLanguages);
+  const spellcheckLanguages = useSelector(
+    (state) => state.dialogSpellcheckLanguages.form.spellcheckLanguages,
+  );
 
   return (
     <Dialog
-      onClose={dispatch(close)}
+      onClose={() => dispatch(close())}
       open={open}
       fullWidth
       maxWidth="xs"
@@ -80,10 +81,10 @@ const DialogSpellcheckLanguages = () => {
         </List>
       </DialogContent>
       <DialogActions>
-        <Button variant="contained" disableElevation onClick={dispatch(close)}>
+        <Button variant="contained" disableElevation onClick={() => dispatch(close())}>
           Cancel
         </Button>
-        <Button color="primary" variant="contained" disableElevation onClick={dispatch(save)}>
+        <Button color="primary" variant="contained" disableElevation onClick={() => dispatch(save())}>
           Save
         </Button>
       </DialogActions>

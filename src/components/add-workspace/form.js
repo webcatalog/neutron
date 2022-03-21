@@ -167,15 +167,17 @@ const AddWorkspaceCustom = () => {
   const homeUrl = useSelector((state) => state.dialogAddWorkspace.form.homeUrl);
   const homeUrlError = useSelector((state) => state.dialogAddWorkspace.form.homeUrlError);
   const internetIcon = useSelector((state) => state.dialogAddWorkspace.form.internetIcon);
-  // eslint-disable-next-line max-len
-  const isMailApp = useSelector((state) => Boolean(getMailtoUrl(state.dialogAddWorkspace.form.homeUrl)));
+  const isMailApp = useSelector(
+    (state) => Boolean(getMailtoUrl(state.dialogAddWorkspace.form.homeUrl)),
+  );
   const name = useSelector((state) => state.dialogAddWorkspace.form.name);
   const nameError = useSelector((state) => state.dialogAddWorkspace.form.nameError);
   const imgPath = useSelector((state) => state.dialogAddWorkspace.form.imgPath);
   const preferredIconType = useSelector((state) => state.dialogAddWorkspace.form.preferredIconType);
   const shouldUseDarkColors = useSelector((state) => state.general.shouldUseDarkColors);
-  // eslint-disable-next-line max-len
-  const transparentBackground = useSelector((state) => Boolean(state.dialogAddWorkspace.form.transparentBackground));
+  const transparentBackground = useSelector(
+    (state) => Boolean(state.dialogAddWorkspace.form.transparentBackground),
+  );
 
   let selectedIconType = 'text';
   if (((imgPath || internetIcon) && preferredIconType === 'auto') || (preferredIconType === 'image')) {
@@ -417,10 +419,10 @@ const AddWorkspaceCustom = () => {
       </div>
       <Divider />
       <div className={classes.actions}>
-        <Button color="primary" variant="contained" disableElevation className={classes.button} onClick={dispatch(save)}>
+        <Button color="primary" variant="contained" disableElevation className={classes.button} onClick={() => dispatch(save())}>
           Add
         </Button>
-        <Button color="default" variant="text" disableElevation className={classes.button} onClick={dispatch(resetForm)}>
+        <Button color="default" variant="text" disableElevation className={classes.button} onClick={() => dispatch(resetForm())}>
           Reset
         </Button>
       </div>

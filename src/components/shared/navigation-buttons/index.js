@@ -68,13 +68,16 @@ const useStyles = makeStyles((theme) => ({
 const NavigationBar = ({ themeColor, disableGutter }) => {
   const classes = useStyles({ themeColor });
 
-  // eslint-disable-next-line max-len
-  const activeWorkspace = useSelector((state) => state.workspaces.workspaces[state.workspaces.activeWorkspaceId]);
+  const activeWorkspace = useSelector(
+    (state) => state.workspaces.workspaces[state.workspaces.activeWorkspaceId],
+  );
   const canGoBack = useSelector((state) => state.general.canGoBack);
   const canGoForward = useSelector((state) => state.general.canGoForward);
   const hasWorkspaces = useSelector((state) => Object.keys(state.workspaces.workspaces).length > 0);
-  // eslint-disable-next-line max-len
-  const isLoading = useSelector((state) => (activeWorkspace && state.workspaceMetas[activeWorkspace.id] ? Boolean(state.workspaceMetas[activeWorkspace.id].isLoading) : false));
+  const isLoading = useSelector(
+    (state) => (activeWorkspace && state.workspaceMetas[activeWorkspace.id]
+      ? Boolean(state.workspaceMetas[activeWorkspace.id].isLoading) : false),
+  );
 
   return (
     <>

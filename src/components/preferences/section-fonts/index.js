@@ -88,7 +88,7 @@ const SectionFonts = () => {
           </Select>
         </ListItem>
         <Divider />
-        <ListItem button onClick={dispatch(openDialogCustomizeFonts)}>
+        <ListItem button onClick={() => dispatch(openDialogCustomizeFonts())}>
           <ListItemText primary="Advanced font size settings" />
           <ChevronRightIcon color="action" />
         </ListItem>

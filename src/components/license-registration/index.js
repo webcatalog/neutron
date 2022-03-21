@@ -58,8 +58,9 @@ const DialogLicenseRegistration = () => {
   const dispatch = useDispatch();
 
   const licenseKey = useSelector((state) => state.dialogLicenseRegistration.form.licenseKey);
-  // eslint-disable-next-line max-len
-  const licenseKeyError = useSelector((state) => state.dialogLicenseRegistration.form.licenseKeyError);
+  const licenseKeyError = useSelector(
+    (state) => state.dialogLicenseRegistration.form.licenseKeyError,
+  );
 
   const appJson = getStaticGlobal('appJson');
   const utmSource = getUtmSource();
@@ -151,7 +152,7 @@ const DialogLicenseRegistration = () => {
         </Button>
         <Button
           color="primary"
-          onClick={dispatch(register)}
+          onClick={() => dispatch(register())}
         >
           Register
         </Button>

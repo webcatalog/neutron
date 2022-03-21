@@ -17,8 +17,9 @@ import { updateForm } from '../../../state/dialog-workspace-preferences/actions'
 
 const SectionAudioVideo = () => {
   const dispatch = useDispatch();
-  // eslint-disable-next-line max-len
-  const formDisableAudio = useSelector((state) => Boolean(state.dialogWorkspacePreferences.form.disableAudio));
+  const formDisableAudio = useSelector(
+    (state) => Boolean(state.dialogWorkspacePreferences.form.disableAudio),
+  );
 
   return (
     <List disablePadding dense>

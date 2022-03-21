@@ -32,7 +32,7 @@ const Preferences = () => {
   return (
     <>
       <List disablePadding dense>
-        <ListItem button onClick={dispatch(openDialogProxy)}>
+        <ListItem button onClick={() => dispatch(openDialogProxy())}>
           <ListItemText
             primary="Proxy"
             secondary={(() => {

@@ -41,14 +41,16 @@ const DialogCustomizeFonts = () => {
 
   const open = useSelector((state) => state.dialogCustomizeFonts.open);
   const defaultFontSize = useSelector((state) => state.dialogCustomizeFonts.form.defaultFontSize);
-  // eslint-disable-next-line max-len
-  const defaultFontSizeMonospace = useSelector((state) => state.dialogCustomizeFonts.form.defaultFontSizeMonospace);
-  // eslint-disable-next-line max-len
-  const defaultFontSizeMinimum = useSelector((state) => state.dialogCustomizeFonts.form.defaultFontSizeMinimum);
+  const defaultFontSizeMonospace = useSelector(
+    (state) => state.dialogCustomizeFonts.form.defaultFontSizeMonospace,
+  );
+  const defaultFontSizeMinimum = useSelector(
+    (state) => state.dialogCustomizeFonts.form.defaultFontSizeMinimum,
+  );
 
   return (
     <Dialog
-      onClose={dispatch(close)}
+      onClose={() => dispatch(close())}
       open={open}
       fullWidth
       maxWidth="sm"
@@ -106,10 +108,10 @@ const DialogCustomizeFonts = () => {
         </List>
       </DialogContent>
       <DialogActions>
-        <Button variant="contained" disableElevation onClick={dispatch(close)}>
+        <Button variant="contained" disableElevation onClick={() => dispatch(close())}>
           Cancel
         </Button>
-        <Button color="primary" variant="contained" disableElevation onClick={dispatch(save)}>
+        <Button color="primary" variant="contained" disableElevation onClick={() => dispatch(save())}>
           Save
         </Button>
       </DialogActions>

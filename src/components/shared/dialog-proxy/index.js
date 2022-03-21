@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -21,8 +20,10 @@ import Radio from '@material-ui/core/Radio';
 import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core';
 
-import connectComponent from '../../../helpers/connect-component';
+import { useDispatch, useSelector } from 'react-redux';
+
 import getUtmSource from '../../../helpers/get-utm-source';
 
 import {
@@ -33,7 +34,7 @@ import {
 
 import { requestOpenInBrowser } from '../../../senders';
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     background: theme.palette.background.paper,
     height: '100%',
@@ -68,26 +69,23 @@ const styles = (theme) => ({
     flex: 1,
     paddingRight: theme.spacing(1),
   },
-});
+}));
 
-const DialogProxy = (props) => {
-  const {
-    classes,
-    onClose,
-    onSave,
-    onUpdateForm,
-    open,
-    proxyBypassRules,
-    proxyPacScript,
-    proxyPacScriptError,
-    proxyAddress,
-    proxyAddressError,
-    proxyPort,
-    proxyPortError,
-    proxyProtocol,
-    proxyProtocolError,
-    proxyMode,
-  } = props;
+const DialogProxy = () => {
+  const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const open = useSelector((state) => state.dialogProxy.open);
+  const proxyBypassRules = useSelector((state) => state.dialogProxy.form.proxyBypassRules);
+  const proxyPacScript = useSelector((state) => state.dialogProxy.form.proxyPacScript);
+  const proxyPacScriptError = useSelector((state) => state.dialogProxy.form.proxyPacScriptError);
+  const proxyAddress = useSelector((state) => state.dialogProxy.form.proxyAddress);
+  const proxyAddressError = useSelector((state) => state.dialogProxy.form.proxyAddressError);
+  const proxyPort = useSelector((state) => state.dialogProxy.form.proxyPort);
+  const proxyPortError = useSelector((state) => state.dialogProxy.form.proxyPortError);
+  const proxyProtocol = useSelector((state) => state.dialogProxy.form.proxyProtocol);
+  const proxyProtocolError = useSelector((state) => state.dialogProxy.form.proxyProtocolError);
+  const proxyMode = useSelector((state) => state.dialogProxy.form.proxyMode);
 
   const utmSource = getUtmSource();
 
@@ -98,7 +96,7 @@ const DialogProxy = (props) => {
       label="Bypass rules"
       variant="outlined"
       value={proxyBypassRules}
-      onChange={(e) => onUpdateForm({ proxyBypassRules: e.target.value })}
+      onChange={(e) => dispatch(updateForm({ proxyBypassRules: e.target.value }))}
       helperText={(
         <>
           <span>Rules indicating which URLs should bypass the proxy settings. </span>
@@ -124,7 +122,7 @@ const DialogProxy = (props) => {
 
   return (
     <Dialog
-      onClose={onClose}
+      onClose={() => dispatch(close())}
       open={open}
       fullWidth
       maxWidth="sm"
@@ -149,7 +147,7 @@ const DialogProxy = (props) => {
                 labelPlacement="end"
                 checked={proxyMode === 'fixed_servers'}
                 value="fixed_servers"
-                onChange={(e) => onUpdateForm({ proxyMode: e.target.value })}
+                onChange={(e) => dispatch(updateForm({ proxyMode: e.target.value }))}
               />
               {proxyMode === 'fixed_servers' && (
                 <>
@@ -157,7 +155,7 @@ const DialogProxy = (props) => {
                     <InputLabel id="demo-simple-select-error-label">Protocol</InputLabel>
                     <Select
                       value={proxyProtocol}
-                      onChange={(e) => onUpdateForm({ proxyProtocol: e.target.value })}
+                      onChange={(e) => dispatch(updateForm({ proxyProtocol: e.target.value }))}
                     >
                       {['socks5', 'socks4', 'https', 'http', 'ftp'].map((val) => (
                         <MenuItem key={val} value={val}>{val}</MenuItem>
@@ -171,7 +169,7 @@ const DialogProxy = (props) => {
                       label="Address"
                       variant="outlined"
                       value={proxyAddress}
-                      onChange={(e) => onUpdateForm({ proxyAddress: e.target.value })}
+                      onChange={(e) => dispatch(updateForm({ proxyAddress: e.target.value }))}
                       error={Boolean(proxyAddressError)}
                       className={classes.addressTextField}
                     />
@@ -180,7 +178,7 @@ const DialogProxy = (props) => {
                       label="Port"
                       variant="outlined"
                       value={proxyPort}
-                      onChange={(e) => onUpdateForm({ proxyPort: e.target.value })}
+                      onChange={(e) => dispatch(updateForm({ proxyPort: e.target.value }))}
                       error={Boolean(proxyPortError)}
                     />
                   </div>
@@ -198,7 +196,7 @@ const DialogProxy = (props) => {
                 labelPlacement="end"
                 checked={proxyMode === 'pac_script'}
                 value="pac_script"
-                onChange={(e) => onUpdateForm({ proxyMode: e.target.value })}
+                onChange={(e) => dispatch(updateForm({ proxyMode: e.target.value }))}
               />
               {proxyMode === 'pac_script' && (
                 <>
@@ -209,7 +207,7 @@ const DialogProxy = (props) => {
                     variant="outlined"
                     disabled={proxyMode !== 'pac_script'}
                     value={proxyPacScript}
-                    onChange={(e) => onUpdateForm({ proxyPacScript: e.target.value })}
+                    onChange={(e) => dispatch(updateForm({ proxyPacScript: e.target.value }))}
                     error={Boolean(proxyPacScriptError)}
                     helperText={proxyPacScriptError || (
                       <>
@@ -243,7 +241,7 @@ const DialogProxy = (props) => {
                 labelPlacement="end"
                 checked={proxyMode === 'system'}
                 value="system"
-                onChange={(e) => onUpdateForm({ proxyMode: e.target.value })}
+                onChange={(e) => dispatch(updateForm({ proxyMode: e.target.value }))}
               />
             </div>
           </ListItem>
@@ -257,7 +255,7 @@ const DialogProxy = (props) => {
                 labelPlacement="end"
                 checked={proxyMode === 'direct'}
                 value="direct"
-                onChange={(e) => onUpdateForm({ proxyMode: e.target.value })}
+                onChange={(e) => dispatch(updateForm({ proxyMode: e.target.value }))}
               />
             </div>
           </ListItem>
@@ -272,7 +270,7 @@ const DialogProxy = (props) => {
                   labelPlacement="end"
                   checked={proxyMode == null}
                   value="direct"
-                  onChange={() => onUpdateForm({ proxyMode: null })}
+                  onChange={() => dispatch(updateForm({ proxyMode: null }))}
                 />
               </div>
             </ListItem>
@@ -280,14 +278,14 @@ const DialogProxy = (props) => {
         </List>
       </DialogContent>
       <DialogActions>
-        <Button variant="contained" disableElevation onClick={onClose}>
+        <Button variant="contained" disableElevation onClick={() => dispatch(close())}>
           Cancel
         </Button>
         <Button
           color="primary"
           variant="contained"
           disableElevation
-          onClick={onSave}
+          onClick={() => dispatch(save())}
         >
           Save
         </Button>
@@ -296,78 +294,4 @@ const DialogProxy = (props) => {
   );
 };
 
-DialogProxy.defaultProps = {
-  open: false,
-  proxyAddress: '',
-  proxyAddressError: null,
-  proxyBypassRules: '',
-  proxyPacScript: '',
-  proxyPacScriptError: null,
-  proxyPort: '',
-  proxyPortError: null,
-  proxyProtocol: 'socks5',
-  proxyProtocolError: null,
-};
-
-DialogProxy.propTypes = {
-  classes: PropTypes.object.isRequired,
-  onClose: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
-  onUpdateForm: PropTypes.func.isRequired,
-  open: PropTypes.bool,
-  proxyAddress: PropTypes.string,
-  proxyAddressError: PropTypes.string,
-  proxyBypassRules: PropTypes.string,
-  proxyMode: PropTypes.oneOf(['direct', 'fixed_servers', 'pac_script', 'system']).isRequired,
-  proxyPacScript: PropTypes.string,
-  proxyPacScriptError: PropTypes.string,
-  proxyPort: PropTypes.string,
-  proxyPortError: PropTypes.string,
-  proxyProtocol: PropTypes.string,
-  proxyProtocolError: PropTypes.string,
-};
-
-const mapStateToProps = (state) => {
-  const {
-    open,
-    form: {
-      proxyBypassRules,
-      proxyPacScript,
-      proxyPacScriptError,
-      proxyAddress,
-      proxyAddressError,
-      proxyPort,
-      proxyPortError,
-      proxyProtocol,
-      proxyProtocolError,
-      proxyMode,
-    },
-  } = state.dialogProxy;
-
-  return {
-    open,
-    proxyBypassRules,
-    proxyPacScript,
-    proxyPacScriptError,
-    proxyAddress,
-    proxyAddressError,
-    proxyPort,
-    proxyPortError,
-    proxyProtocol,
-    proxyProtocolError,
-    proxyMode,
-  };
-};
-
-const actionCreators = {
-  close,
-  updateForm,
-  save,
-};
-
-export default connectComponent(
-  DialogProxy,
-  mapStateToProps,
-  actionCreators,
-  styles,
-);
+export default DialogProxy;

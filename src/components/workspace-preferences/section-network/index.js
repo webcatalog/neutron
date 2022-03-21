@@ -36,13 +36,14 @@ const SectionNetwork = () => {
   const dispatch = useDispatch();
 
   const proxyMode = useSelector((state) => state.preferences.proxyMode);
-  // eslint-disable-next-line max-len
-  const formProxyMode = useSelector((state) => state.dialogWorkspacePreferences.form.preferences.proxyMode);
+  const formProxyMode = useSelector(
+    (state) => state.dialogWorkspacePreferences.form.preferences.proxyMode,
+  );
 
   return (
     <>
       <List disablePadding dense>
-        <ListItem button onClick={dispatch(openDialogProxy)}>
+        <ListItem button onClick={() => dispatch(openDialogProxy())}>
           <ListItemText
             primary="Proxy"
             secondary={(() => {

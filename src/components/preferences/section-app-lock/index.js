@@ -59,8 +59,9 @@ const SectionPrivacySecurity = () => {
   const dispatch = useDispatch();
 
   const appLockTimeout = useSelector((state) => state.preferences.appLockTimeout);
-  // eslint-disable-next-line max-len
-  const appLockWhenSwitchingWorkspace = useSelector((state) => state.preferences.appLockWhenSwitchingWorkspace);
+  const appLockWhenSwitchingWorkspace = useSelector(
+    (state) => state.preferences.appLockWhenSwitchingWorkspace,
+  );
   const dialogAppLockOpen = useSelector((state) => state.dialogAppLock.open);
 
   const [appLockEnabled, setAppLockEnabled] = useState(false);

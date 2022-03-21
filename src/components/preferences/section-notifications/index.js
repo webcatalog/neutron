@@ -57,14 +57,18 @@ const useStyles = makeStyles((theme) => ({
 const SectionNotifications = () => {
   const classes = useStyles();
 
-  // eslint-disable-next-line max-len
-  const pauseNotificationsBySchedule = useSelector((state) => state.preferences.pauseNotificationsBySchedule);
-  // eslint-disable-next-line max-len
-  const pauseNotificationsByScheduleFrom = useSelector((state) => state.preferences.pauseNotificationsByScheduleFrom);
-  // eslint-disable-next-line max-len
-  const pauseNotificationsByScheduleTo = useSelector((state) => state.preferences.pauseNotificationsByScheduleTo);
-  // eslint-disable-next-line max-len
-  const pauseNotificationsMuteAudio = useSelector((state) => state.preferences.pauseNotificationsMuteAudio);
+  const pauseNotificationsBySchedule = useSelector(
+    (state) => state.preferences.pauseNotificationsBySchedule,
+  );
+  const pauseNotificationsByScheduleFrom = useSelector(
+    (state) => state.preferences.pauseNotificationsByScheduleFrom,
+  );
+  const pauseNotificationsByScheduleTo = useSelector(
+    (state) => state.preferences.pauseNotificationsByScheduleTo,
+  );
+  const pauseNotificationsMuteAudio = useSelector(
+    (state) => state.preferences.pauseNotificationsMuteAudio,
+  );
 
   const appJson = getStaticGlobal('appJson');
   const utmSource = getUtmSource();

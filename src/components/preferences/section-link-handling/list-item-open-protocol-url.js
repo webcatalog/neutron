@@ -32,8 +32,9 @@ const useStyles = makeStyles((theme) => ({
 const ListItemOpenProtocolUrls = () => {
   const classes = useStyles();
 
-  // eslint-disable-next-line max-len
-  const openProtocolUrlInNewWindow = useSelector((state) => state.preferences.openProtocolUrlInNewWindow);
+  const openProtocolUrlInNewWindow = useSelector(
+    (state) => state.preferences.openProtocolUrlInNewWindow,
+  );
 
   return (
     <ListItem>

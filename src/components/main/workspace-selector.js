@@ -209,8 +209,8 @@ const WorkspaceSelector = ({
   const sidebarTips = useSelector((state) => state.preferences.sidebarTips);
   const backgroundColor = useSelector((ownProps) => (ownProps.preferences
   && ownProps.preferences.color
-  // eslint-disable-next-line max-len
-  && ownProps.preferences.color !== ownProps.themeColor ? themeColors[ownProps.preferences.color][600] : null));
+  && ownProps.preferences.color
+  !== ownProps.themeColor ? themeColors[ownProps.preferences.color][600] : null));
 
   const isExpanded = sidebarSize === 'expanded';
   const shortcutTip = order < 9 && id !== 'add'

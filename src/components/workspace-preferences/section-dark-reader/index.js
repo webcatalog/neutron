@@ -50,16 +50,21 @@ const SectionDarkReader = () => {
   const dispatch = useDispatch();
 
   const darkReader = useSelector((state) => state.preferences.darkReader);
-  // eslint-disable-next-line max-len
-  const formDarkReader = useSelector((state) => state.dialogWorkspacePreferences.form.preferences.darkReader);
-  // eslint-disable-next-line max-len
-  const formDarkReaderBrightness = useSelector((state) => state.dialogWorkspacePreferences.form.preferences.darkReaderBrightness);
-  // eslint-disable-next-line max-len
-  const formDarkReaderContrast = useSelector((state) => state.dialogWorkspacePreferences.form.preferences.darkReaderContrast);
-  // eslint-disable-next-line max-len
-  const formDarkReaderGrayscale = useSelector((state) => state.dialogWorkspacePreferences.form.preferences.darkReaderGrayscale);
-  // eslint-disable-next-line max-len
-  const formDarkReaderSepia = useSelector((state) => state.dialogWorkspacePreferences.form.preferences.darkReaderSepia);
+  const formDarkReader = useSelector(
+    (state) => state.dialogWorkspacePreferences.form.preferences.darkReader,
+  );
+  const formDarkReaderBrightness = useSelector(
+    (state) => state.dialogWorkspacePreferences.form.preferences.darkReaderBrightness,
+  );
+  const formDarkReaderContrast = useSelector(
+    (state) => state.dialogWorkspacePreferences.form.preferences.darkReaderContrast,
+  );
+  const formDarkReaderGrayscale = useSelector(
+    (state) => state.dialogWorkspacePreferences.form.preferences.darkReaderGrayscale,
+  );
+  const formDarkReaderSepia = useSelector(
+    (state) => state.dialogWorkspacePreferences.form.preferences.darkReaderSepia,
+  );
 
   return (
     <List disablePadding dense>

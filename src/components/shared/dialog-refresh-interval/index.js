@@ -47,7 +47,7 @@ const RefreshInterval = () => {
 
   return (
     <Dialog
-      onClose={dispatch(close)}
+      onClose={() => dispatch(close())}
       open={open}
       fullWidth
       maxWidth="xs"
@@ -82,10 +82,10 @@ const RefreshInterval = () => {
       <DialogActions>
         <div className={classes.actions}>
           <div className={classes.actionsRight}>
-            <Button color="primary" variant="contained" disableElevation className={classes.button} onClick={dispatch(save)}>
+            <Button color="primary" variant="contained" disableElevation className={classes.button} onClick={() => dispatch(save())}>
               Save
             </Button>
-            <Button variant="contained" disableElevation className={classes.button} onClick={dispatch(close)}>
+            <Button variant="contained" disableElevation className={classes.button} onClick={() => dispatch(close())}>
               Cancel
             </Button>
           </div>

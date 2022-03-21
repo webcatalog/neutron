@@ -47,11 +47,13 @@ const useStyles = makeStyles((theme) => ({
 const SectionPerformance = () => {
   const classes = useStyles();
 
-  // eslint-disable-next-line max-len
-  const hibernateUnusedWorkspacesAtLaunch = useSelector((state) => state.preferences.hibernateUnusedWorkspacesAtLaunch);
+  const hibernateUnusedWorkspacesAtLaunch = useSelector(
+    (state) => state.preferences.hibernateUnusedWorkspacesAtLaunch,
+  );
   const hibernateWhenUnused = useSelector((state) => state.preferences.hibernateWhenUnused);
-  // eslint-disable-next-line max-len
-  const hibernateWhenUnusedTimeout = useSelector((state) => state.preferences.hibernateWhenUnusedTimeout);
+  const hibernateWhenUnusedTimeout = useSelector(
+    (state) => state.preferences.hibernateWhenUnusedTimeout,
+  );
 
   return (
     <List disablePadding dense>

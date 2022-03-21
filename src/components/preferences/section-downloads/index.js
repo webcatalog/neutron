@@ -28,8 +28,9 @@ const getFileManagerName = () => {
 const SectionDownloads = () => {
   const askForDownloadPath = useSelector((state) => state.preferences.askForDownloadPath);
   const downloadPath = useSelector((state) => state.preferences.downloadPath);
-  // eslint-disable-next-line max-len
-  const openFolderWhenDoneDownloading = useSelector((state) => state.preferences.openFolderWhenDoneDownloading);
+  const openFolderWhenDoneDownloading = useSelector(
+    (state) => state.preferences.openFolderWhenDoneDownloading,
+  );
 
   return (
     <List disablePadding dense>

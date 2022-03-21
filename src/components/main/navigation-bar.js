@@ -168,8 +168,9 @@ const NavigationBar = ({
   const hasWorkspaces = useSelector((state) => Object.keys(state.workspaces.workspaces).length > 0);
   const muteApp = useSelector((state) => state.preferences.muteApp);
   const searchEngine = useSelector((state) => state.preferences.searchEngine);
-  // eslint-disable-next-line max-len
-  const shouldPauseNotifications = useSelector((state) => state.notifications.pauseNotificationsInfo !== null);
+  const shouldPauseNotifications = useSelector(
+    (state) => state.notifications.pauseNotificationsInfo !== null,
+  );
   const sidebar = useSelector((state) => state.preferences.sidebar);
   const sidebarSize = useSelector((state) => state.preferences.sidebarSize);
 

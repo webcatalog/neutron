@@ -65,14 +65,18 @@ const useStyles = makeStyles((theme) => ({
 const Extensions = () => {
   const classes = useStyles();
   // extension action buttons are only visible on sidebar or navigation bar
-  // eslint-disable-next-line max-len
-  const extensionButtonsVisible = useSelector((state) => state.preferences.sidebar || state.preferences.navigationBar);
-  // eslint-disable-next-line max-len
-  const extensionEnabledExtesionIds = useSelector((state) => state.preferences.extensionEnabledExtesionIds);
-  // eslint-disable-next-line max-len
-  const extensionSourceBrowserId = useSelector((state) => state.preferences.extensionSourceBrowserId);
-  // eslint-disable-next-line max-len
-  const extensionSourceProfileDirName = useSelector((state) => state.preferences.extensionSourceProfileDirName);
+  const extensionButtonsVisible = useSelector(
+    (state) => state.preferences.sidebar || state.preferences.navigationBar,
+  );
+  const extensionEnabledExtesionIds = useSelector(
+    (state) => state.preferences.extensionEnabledExtesionIds,
+  );
+  const extensionSourceBrowserId = useSelector(
+    (state) => state.preferences.extensionSourceBrowserId,
+  );
+  const extensionSourceProfileDirName = useSelector(
+    (state) => state.preferences.extensionSourceProfileDirName,
+  );
 
   const [extensions, setExtensions] = useState([]);
   const [sources, setSources] = useState([]);

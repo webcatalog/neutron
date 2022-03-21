@@ -24,8 +24,9 @@ import {
 
 const SectionBrowsing = () => {
   const rememberLastPageVisited = useSelector((state) => state.preferences.rememberLastPageVisited);
-  // eslint-disable-next-line max-len
-  const shareWorkspaceBrowsingData = useSelector((state) => state.preferences.shareWorkspaceBrowsingData);
+  const shareWorkspaceBrowsingData = useSelector(
+    (state) => state.preferences.shareWorkspaceBrowsingData,
+  );
 
   const appJson = getStaticGlobal('appJson');
 

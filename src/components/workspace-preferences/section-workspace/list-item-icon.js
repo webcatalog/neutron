@@ -129,11 +129,13 @@ const ListItemIcon = () => {
   const order = useSelector((state) => state.dialogWorkspacePreferences.form.order || 0);
   const pictureId = useSelector((state) => state.dialogWorkspacePreferences.form.pictureId);
   const imgPath = useSelector((state) => state.dialogWorkspacePreferences.form.imgPath);
-  // eslint-disable-next-line max-len
-  const preferredIconType = useSelector((state) => state.dialogWorkspacePreferences.form.preferredIconType);
+  const preferredIconType = useSelector(
+    (state) => state.dialogWorkspacePreferences.form.preferredIconType,
+  );
   const shouldUseDarkColors = useSelector((state) => state.general.shouldUseDarkColors);
-  // eslint-disable-next-line max-len
-  const transparentBackground = useSelector((state) => Boolean(state.dialogWorkspacePreferences.form.transparentBackground));
+  const transparentBackground = useSelector(
+    (state) => Boolean(state.dialogWorkspacePreferences.form.transparentBackground),
+  );
 
   let selectedIconType = 'text';
   if ((imgPath && preferredIconType === 'auto') || (pictureId && preferredIconType === 'auto') || (preferredIconType === 'image')) {
@@ -320,8 +322,9 @@ const ListItemIcon = () => {
               control={(
                 <Checkbox
                   checked={transparentBackground}
-                  // eslint-disable-next-line max-len
-                  onChange={(e) => dispatch(updateForm({ transparentBackground: e.target.checked }))}
+                  onChange={(e) => dispatch(
+                    updateForm({ transparentBackground: e.target.checked }),
+                  )}
                 />
               )}
               label="Use transparent background"

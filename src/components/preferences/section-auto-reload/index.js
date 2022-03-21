@@ -69,8 +69,9 @@ const SectionAutoReload = () => {
 
   const autoRefresh = useSelector((state) => state.preferences.autoRefresh);
   const autoRefreshInterval = useSelector((state) => state.preferences.autoRefreshInterval);
-  // eslint-disable-next-line max-len
-  const autoRefreshOnlyWhenInactive = useSelector((state) => state.preferences.autoRefreshOnlyWhenInactive);
+  const autoRefreshOnlyWhenInactive = useSelector(
+    (state) => state.preferences.autoRefreshOnlyWhenInactive,
+  );
 
   return (
     <>

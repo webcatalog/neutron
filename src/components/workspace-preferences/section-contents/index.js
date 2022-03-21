@@ -42,11 +42,13 @@ const SectionPrivacy = () => {
   const dispatch = useDispatch();
 
   const blockAds = useSelector((state) => state.preferences.blockAds);
-  // eslint-disable-next-line max-len
-  const formBlockAds = useSelector((state) => state.dialogWorkspacePreferences.form.preferences.blockAds);
+  const formBlockAds = useSelector(
+    (state) => state.dialogWorkspacePreferences.form.preferences.blockAds,
+  );
   const blockJavascript = useSelector((state) => state.preferences.blockJavascript);
-  // eslint-disable-next-line max-len
-  const formBlockJavascript = useSelector((state) => state.dialogWorkspacePreferences.form.preferences.blockJavascript);
+  const formBlockJavascript = useSelector(
+    (state) => state.dialogWorkspacePreferences.form.preferences.blockJavascript,
+  );
 
   return (
     <List disablePadding dense>

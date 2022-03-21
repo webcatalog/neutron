@@ -47,12 +47,15 @@ const SectionLinkHandling = () => {
   const alwaysOpenInMainWindow = useSelector((state) => state.preferences.alwaysOpenInMainWindow);
   const externalUrlRule = useSelector((state) => state.preferences.externalUrlRule);
   const internalUrlRule = useSelector((state) => state.preferences.internalUrlRule);
-  // eslint-disable-next-line max-len
-  const formExternalUrlRule = useSelector((state) => state.dialogWorkspacePreferences.form.preferences.externalUrlRule);
-  // eslint-disable-next-line max-len
-  const formInternalUrlRule = useSelector((state) => state.dialogWorkspacePreferences.form.preferences.internalUrlRule);
-  // eslint-disable-next-line max-len
-  const formAlwaysOpenInMainWindow = useSelector((state) => state.dialogWorkspacePreferences.form.preferences.alwaysOpenInMainWindow);
+  const formExternalUrlRule = useSelector(
+    (state) => state.dialogWorkspacePreferences.form.preferences.externalUrlRule,
+  );
+  const formInternalUrlRule = useSelector(
+    (state) => state.dialogWorkspacePreferences.form.preferences.internalUrlRule,
+  );
+  const formAlwaysOpenInMainWindow = useSelector(
+    (state) => state.dialogWorkspacePreferences.form.preferences.alwaysOpenInMainWindow,
+  );
 
   return (
     <>

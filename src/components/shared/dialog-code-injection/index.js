@@ -51,15 +51,16 @@ const CodeInjection = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  // eslint-disable-next-line max-len
-  const allowNodeInJsCodeInjection = useSelector((state) => state.dialogCodeInjection.form.allowNodeInJsCodeInjection);
+  const allowNodeInJsCodeInjection = useSelector(
+    (state) => state.dialogCodeInjection.form.allowNodeInJsCodeInjection,
+  );
   const code = useSelector((state) => state.dialogCodeInjection.form.code || '');
   const codeInjectionType = useSelector((state) => state.dialogCodeInjection.codeInjectionType);
   const open = useSelector((state) => state.dialogCodeInjection.open);
   const shouldUseDarkColors = useSelector((state) => state.general.shouldUseDarkColors);
   return (
     <Dialog
-      onClose={dispatch(close)}
+      onClose={() => dispatch(close())}
       open={open}
       fullWidth
       maxWidth="sm"
@@ -87,8 +88,9 @@ const CodeInjection = () => {
                   control={(
                     <Switch
                       checked={allowNodeInJsCodeInjection}
-                      // eslint-disable-next-line max-len
-                      onChange={(e) => dispatch(updateForm({ allowNodeInJsCodeInjection: e.target.checked }))}
+                      onChange={(e) => dispatch(
+                        updateForm({ allowNodeInJsCodeInjection: e.target.checked }),
+                      )}
                       color="primary"
                     />
                   )}
@@ -98,10 +100,10 @@ const CodeInjection = () => {
             )}
           </div>
           <div className={classes.actionsRight}>
-            <Button color="primary" variant="contained" disableElevation className={classes.button} onClick={dispatch(save)}>
+            <Button color="primary" variant="contained" disableElevation className={classes.button} onClick={() => dispatch(save())}>
               Save
             </Button>
-            <Button variant="contained" disableElevation className={classes.button} onClick={dispatch(close)}>
+            <Button variant="contained" disableElevation className={classes.button} onClick={() => dispatch(close())}>
               Cancel
             </Button>
           </div>

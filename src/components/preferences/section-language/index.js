@@ -51,7 +51,7 @@ const SectionLanguage = () => {
         {window.process.platform !== 'darwin' && (
           <>
             <Divider />
-            <ListItem button onClick={dispatch(openDialogSpellcheckLanguages)}>
+            <ListItem button onClick={() => dispatch(openDialogSpellcheckLanguages())}>
               <ListItemText
                 primary="Spell checking languages"
                 secondary={spellcheckLanguages.map((code) => hunspellLanguagesMap[code]).join(' | ')}

@@ -17,8 +17,9 @@ import {
 } from '../../../senders';
 
 const SectionLabs = () => {
-  // eslint-disable-next-line max-len
-  const enableExperimentalWebPlatformFeatures = useSelector((state) => state.preferences.enableExperimentalWebPlatformFeatures);
+  const enableExperimentalWebPlatformFeatures = useSelector(
+    (state) => state.preferences.enableExperimentalWebPlatformFeatures,
+  );
 
   return (
     <List disablePadding dense>

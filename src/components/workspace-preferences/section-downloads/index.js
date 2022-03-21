@@ -43,10 +43,12 @@ const SectionDownloads = () => {
 
   const askForDownloadPath = useSelector((state) => state.preferences.askForDownloadPath);
   const downloadPath = useSelector((state) => state.preferences.downloadPath);
-  // eslint-disable-next-line max-len
-  const formAskForDownloadPath = useSelector((state) => state.dialogWorkspacePreferences.form.preferences.askForDownloadPath);
-  // eslint-disable-next-line max-len
-  const formDownloadPath = useSelector((state) => state.dialogWorkspacePreferences.form.preferences.downloadPath);
+  const formAskForDownloadPath = useSelector(
+    (state) => state.dialogWorkspacePreferences.form.preferences.askForDownloadPath,
+  );
+  const formDownloadPath = useSelector(
+    (state) => state.dialogWorkspacePreferences.form.preferences.downloadPath,
+  );
 
   return (
     <List disablePadding dense>

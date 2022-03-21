@@ -22,7 +22,7 @@ const CustomUserAgent = () => {
 
   return (
     <Dialog
-      onClose={dispatch(close)}
+      onClose={() => dispatch(close())}
       open={open}
       fullWidth
       maxWidth="sm"
@@ -47,10 +47,10 @@ const CustomUserAgent = () => {
         />
       </DialogContent>
       <DialogActions>
-        <Button variant="contained" disableElevation onClick={dispatch(close)}>
+        <Button variant="contained" disableElevation onClick={() => dispatch(close())}>
           Cancel
         </Button>
-        <Button color="primary" variant="contained" disableElevation onClick={dispatch(save)}>
+        <Button color="primary" variant="contained" disableElevation onClick={() => dispatch(save())}>
           Save
         </Button>
       </DialogActions>

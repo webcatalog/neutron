@@ -30,7 +30,6 @@ const SectionLinkHandling = () => {
   const dispatch = useDispatch();
 
   const alwaysOpenInMainWindow = useSelector((state) => state.preferences.alwaysOpenInMainWindow);
-  // eslint-disable-next-line max-len
   const externalUrlRule = useSelector((state) => state.preferences.externalUrlRule);
   const internalUrlRule = useSelector((state) => state.preferences.internalUrlRule);
 
@@ -39,7 +38,7 @@ const SectionLinkHandling = () => {
       <List disablePadding dense>
         <ListItemOpenProtocolUrl />
         <Divider />
-        <ListItem button onClick={dispatch(openDialogExternallUrls)}>
+        <ListItem button onClick={() => dispatch(openDialogExternallUrls())}>
           <ListItemText
             primary="External URLs"
             secondary={externalUrlRule ? `/^${externalUrlRule}$/i` : 'Not set'}
@@ -47,7 +46,7 @@ const SectionLinkHandling = () => {
           <ChevronRightIcon color="action" />
         </ListItem>
         <Divider />
-        <ListItem button onClick={dispatch(openDialogInternalUrls)}>
+        <ListItem button onClick={() => dispatch(openDialogInternalUrls())}>
           <ListItemText
             primary="Internal URLs"
             secondary={internalUrlRule ? `/^${internalUrlRule}$/i` : 'Not set'}

@@ -30,8 +30,9 @@ const useStyles = makeStyles((theme) => ({
 const SectionMode = () => {
   const classes = useStyles();
 
-  // eslint-disable-next-line max-len
-  const shareWorkspaceBrowsingData = useSelector((state) => state.preferences.shareWorkspaceBrowsingData);
+  const shareWorkspaceBrowsingData = useSelector(
+    (state) => state.preferences.shareWorkspaceBrowsingData,
+  );
 
   return (
     <List disablePadding dense>

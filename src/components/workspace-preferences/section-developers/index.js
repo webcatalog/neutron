@@ -49,15 +49,18 @@ const SectionDevelopers = () => {
   const cssCodeInjection = useSelector((state) => state.preferences.cssCodeInjection);
   const customUserAgent = useSelector((state) => state.preferences.customUserAgent);
   const jsCodeInjection = useSelector((state) => state.preferences.jsCodeInjection);
-  // eslint-disable-next-line max-len
-  const formCssCodeInjection = useSelector((state) => state.dialogWorkspacePreferences.form.preferences.cssCodeInjection);
-  // eslint-disable-next-line max-len
-  const formCustomUserAgent = useSelector((state) => state.dialogWorkspacePreferences.form.preferences.customUserAgent);
-  // eslint-disable-next-line max-len
-  const formJsCodeInjection = useSelector((state) => state.dialogWorkspacePreferences.form.preferences.jsCodeInjection);
-  // eslint-disable-next-line max-len
-  const formForceMobileView = useSelector((state) => state.dialogWorkspacePreferences.form.preferences.forceMobileView);
-
+  const formCssCodeInjection = useSelector(
+    (state) => state.dialogWorkspacePreferences.form.preferences.cssCodeInjection,
+  );
+  const formCustomUserAgent = useSelector(
+    (state) => state.dialogWorkspacePreferences.form.preferences.customUserAgent,
+  );
+  const formJsCodeInjection = useSelector(
+    (state) => state.dialogWorkspacePreferences.form.preferences.jsCodeInjection,
+  );
+  const formForceMobileView = useSelector(
+    (state) => state.dialogWorkspacePreferences.form.preferences.forceMobileView,
+  );
   return (
     <>
       <List disablePadding dense>

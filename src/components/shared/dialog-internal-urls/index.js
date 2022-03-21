@@ -29,8 +29,9 @@ const DialogInternalUrls = () => {
   const dispatch = useDispatch();
 
   const internalUrlRule = useSelector((state) => state.dialogInternalUrls.form.internalUrlRule);
-  // eslint-disable-next-line max-len
-  const internalUrlRuleError = useSelector((state) => state.dialogInternalUrls.form.internalUrlRuleError);
+  const internalUrlRuleError = useSelector(
+    (state) => state.dialogInternalUrls.form.internalUrlRuleError,
+  );
   const open = useSelector((state) => state.dialogInternalUrls.open);
 
   const appJson = getStaticGlobal('appJson');
@@ -38,7 +39,7 @@ const DialogInternalUrls = () => {
 
   return (
     <Dialog
-      onClose={dispatch(close)}
+      onClose={() => dispatch(close())}
       open={open}
       fullWidth
       maxWidth="sm"
@@ -111,10 +112,10 @@ const DialogInternalUrls = () => {
         />
       </DialogContent>
       <DialogActions>
-        <Button variant="contained" disableElevation onClick={dispatch(close)}>
+        <Button variant="contained" disableElevation onClick={() => dispatch(close())}>
           Cancel
         </Button>
-        <Button color="primary" variant="contained" disableElevation onClick={dispatch(save)}>
+        <Button color="primary" variant="contained" disableElevation onClick={() => dispatch(save())}>
           Save
         </Button>
       </DialogActions>

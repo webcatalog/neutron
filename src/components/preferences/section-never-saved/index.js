@@ -22,8 +22,9 @@ import ClearIcon from '@material-ui/icons/Clear';
 import { requestSetPreference } from '../../../senders';
 
 const SectionNeverSaved = () => {
-  // eslint-disable-next-line max-len
-  const passwordsNeverSaveDomains = useSelector((state) => state.preferences.passwordsNeverSaveDomains);
+  const passwordsNeverSaveDomains = useSelector(
+    (state) => state.preferences.passwordsNeverSaveDomains,
+  );
 
   return (
     <List disablePadding dense>

@@ -199,7 +199,7 @@ const AppLock = () => {
               className={classes.unlockButton}
               startIcon={<LockIcon />}
               disableElevation
-              onClick={dispatch(validateForm)}
+              onClick={() => dispatch(validateForm())}
             >
               Unlock
             </Button>

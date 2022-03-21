@@ -48,8 +48,9 @@ const SectionAppearance = () => {
   const sidebarSize = useSelector((state) => state.preferences.sidebarSize);
   const sidebarTips = useSelector((state) => state.preferences.sidebarTips);
   const titleBar = useSelector((state) => state.preferences.titleBar);
-  // eslint-disable-next-line max-len
-  const titleBarNavigationButtons = useSelector((state) => state.preferences.titleBarNavigationButtons);
+  const titleBarNavigationButtons = useSelector(
+    (state) => state.preferences.titleBarNavigationButtons,
+  );
   const windowButtons = useSelector((state) => state.preferences.windowButtons);
 
   return (
