@@ -3549,11 +3549,11 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 -----
 
-The following software may be included in this product: @emotion/babel-utils, @emotion/hash, @emotion/memoize, @emotion/serialize, @emotion/stylis, @emotion/unitless, @emotion/utils, babel-plugin-emotion, create-emotion, emotion. A copy of the source code may be downloaded from https://github.com/emotion-js/emotion/tree/master/next-packages/babel-utils (@emotion/babel-utils), https://github.com/emotion-js/emotion/tree/master/next-packages/hash (@emotion/hash), https://github.com/emotion-js/emotion/tree/master/next-packages/memoize (@emotion/memoize), https://github.com/emotion-js/emotion/tree/master/next-packages/serialize (@emotion/serialize), https://github.com/emotion-js/emotion/tree/master/next-packages/stylis (@emotion/stylis), https://github.com/emotion-js/emotion/tree/master/next-packages/unitless (@emotion/unitless), https://github.com/emotion-js/emotion/tree/master/next-packages/serialize (@emotion/utils), https://github.com/emotion-js/emotion/tree/master/packages/babel-plugin-emotion (babel-plugin-emotion), https://github.com/emotion-js/emotion/tree/master/packages/create-emotion (create-emotion), https://github.com/emotion-js/emotion/tree/master/packages/emotion (emotion). This software contains the following license and notice below:
+The following software may be included in this product: @emotion/babel-plugin, @emotion/cache, @emotion/hash, @emotion/is-prop-valid, @emotion/memoize, @emotion/react, @emotion/serialize, @emotion/sheet, @emotion/styled, @emotion/unitless, @emotion/utils, @emotion/weak-memoize. A copy of the source code may be downloaded from https://github.com/emotion-js/emotion/tree/main/packages/babel-plugin (@emotion/babel-plugin), https://github.com/emotion-js/emotion/tree/main/packages/cache (@emotion/cache), https://github.com/emotion-js/emotion/tree/master/packages/hash (@emotion/hash), https://github.com/emotion-js/emotion/tree/main/packages/is-prop-valid (@emotion/is-prop-valid), https://github.com/emotion-js/emotion/tree/master/packages/memoize (@emotion/memoize), https://github.com/emotion-js/emotion/tree/main/packages/react (@emotion/react), https://github.com/emotion-js/emotion/tree/main/packages/serialize (@emotion/serialize), https://github.com/emotion-js/emotion/tree/main/packages/sheet (@emotion/sheet), https://github.com/emotion-js/emotion/tree/main/packages/styled (@emotion/styled), https://github.com/emotion-js/emotion/tree/master/packages/unitless (@emotion/unitless), https://github.com/emotion-js/emotion/tree/main/packages/utils (@emotion/utils), https://github.com/emotion-js/emotion/tree/master/packages/weak-memoize (@emotion/weak-memoize). This software contains the following license and notice below:
 
-The MIT License (MIT)
+MIT License
 
-Copyright (c) 2016 Kye Hohenberger
+Copyright (c) Emotion team and other contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -3575,11 +3575,11 @@ SOFTWARE.
 
 -----
 
-The following software may be included in this product: @emotion/hash. A copy of the source code may be downloaded from https://github.com/emotion-js/emotion/tree/master/packages/hash. This software contains the following license and notice below:
+The following software may be included in this product: @emotion/babel-utils, @emotion/hash, @emotion/memoize, @emotion/serialize, @emotion/stylis, @emotion/unitless, @emotion/utils, babel-plugin-emotion, create-emotion, emotion. A copy of the source code may be downloaded from https://github.com/emotion-js/emotion/tree/master/next-packages/babel-utils (@emotion/babel-utils), https://github.com/emotion-js/emotion/tree/master/next-packages/hash (@emotion/hash), https://github.com/emotion-js/emotion/tree/master/next-packages/memoize (@emotion/memoize), https://github.com/emotion-js/emotion/tree/master/next-packages/serialize (@emotion/serialize), https://github.com/emotion-js/emotion/tree/master/next-packages/stylis (@emotion/stylis), https://github.com/emotion-js/emotion/tree/master/next-packages/unitless (@emotion/unitless), https://github.com/emotion-js/emotion/tree/master/next-packages/serialize (@emotion/utils), https://github.com/emotion-js/emotion/tree/master/packages/babel-plugin-emotion (babel-plugin-emotion), https://github.com/emotion-js/emotion/tree/master/packages/create-emotion (create-emotion), https://github.com/emotion-js/emotion/tree/master/packages/emotion (emotion). This software contains the following license and notice below:
 
-MIT License
+The MIT License (MIT)
 
-Copyright (c) Emotion team and other contributors
+Copyright (c) 2016 Kye Hohenberger
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -4020,7 +4020,7 @@ SOFTWARE.
 
 -----
 
-The following software may be included in this product: @jest/console, @jest/core, @jest/environment, @jest/fake-timers, @jest/globals, @jest/reporters, @jest/source-map, @jest/test-result, @jest/test-sequencer, @jest/transform, @jest/types, babel-jest, babel-plugin-jest-hoist, babel-preset-jest, diff-sequences, eslint-plugin-react-hooks, expect, jest, jest-changed-files, jest-circus, jest-cli, jest-config, jest-diff, jest-docblock, jest-each, jest-environment-jsdom, jest-environment-node, jest-get-type, jest-haste-map, jest-jasmine2, jest-leak-detector, jest-matcher-utils, jest-message-util, jest-mock, jest-regex-util, jest-resolve, jest-resolve-dependencies, jest-runner, jest-runtime, jest-serializer, jest-snapshot, jest-util, jest-validate, jest-watcher, jest-worker, pretty-format, react, react-dom, react-is, react-refresh, scheduler. A copy of the source code may be downloaded from https://github.com/facebook/jest.git (@jest/console), https://github.com/facebook/jest (@jest/core), https://github.com/facebook/jest.git (@jest/environment), https://github.com/facebook/jest.git (@jest/fake-timers), https://github.com/facebook/jest.git (@jest/globals), https://github.com/facebook/jest (@jest/reporters), https://github.com/facebook/jest.git (@jest/source-map), https://github.com/facebook/jest.git (@jest/test-result), https://github.com/facebook/jest.git (@jest/test-sequencer), https://github.com/facebook/jest.git (@jest/transform), https://github.com/facebook/jest.git (@jest/types), https://github.com/facebook/jest.git (babel-jest), https://github.com/facebook/jest.git (babel-plugin-jest-hoist), https://github.com/facebook/jest.git (babel-preset-jest), https://github.com/facebook/jest.git (diff-sequences), https://github.com/facebook/react.git (eslint-plugin-react-hooks), https://github.com/facebook/jest.git (expect), https://github.com/facebook/jest (jest), https://github.com/facebook/jest.git (jest-changed-files), https://github.com/facebook/jest.git (jest-circus), https://github.com/facebook/jest (jest-cli), https://github.com/facebook/jest.git (jest-config), https://github.com/facebook/jest.git (jest-diff), https://github.com/facebook/jest.git (jest-docblock), https://github.com/facebook/jest.git (jest-each), https://github.com/facebook/jest.git (jest-environment-jsdom), https://github.com/facebook/jest.git (jest-environment-node), https://github.com/facebook/jest.git (jest-get-type), https://github.com/facebook/jest.git (jest-haste-map), https://github.com/facebook/jest.git (jest-jasmine2), https://github.com/facebook/jest.git (jest-leak-detector), https://github.com/facebook/jest.git (jest-matcher-utils), https://github.com/facebook/jest.git (jest-message-util), https://github.com/facebook/jest.git (jest-mock), https://github.com/facebook/jest.git (jest-regex-util), https://github.com/facebook/jest.git (jest-resolve), https://github.com/facebook/jest.git (jest-resolve-dependencies), https://github.com/facebook/jest.git (jest-runner), https://github.com/facebook/jest.git (jest-runtime), https://github.com/facebook/jest.git (jest-serializer), https://github.com/facebook/jest.git (jest-snapshot), https://github.com/facebook/jest.git (jest-util), https://github.com/facebook/jest.git (jest-validate), https://github.com/facebook/jest (jest-watcher), https://github.com/facebook/jest.git (jest-worker), https://github.com/facebook/jest.git (pretty-format), git+https://github.com/facebook/react.git (react), git+https://github.com/facebook/react.git (react-dom), https://github.com/facebook/react.git (react-is), https://github.com/facebook/react.git (react-refresh), https://github.com/facebook/react.git (scheduler). This software contains the following license and notice below:
+The following software may be included in this product: @jest/console, @jest/core, @jest/environment, @jest/fake-timers, @jest/globals, @jest/reporters, @jest/source-map, @jest/test-result, @jest/test-sequencer, @jest/transform, @jest/types, babel-jest, babel-plugin-jest-hoist, babel-preset-jest, diff-sequences, eslint-plugin-react-hooks, expect, jest, jest-changed-files, jest-circus, jest-cli, jest-config, jest-diff, jest-docblock, jest-each, jest-environment-jsdom, jest-environment-node, jest-get-type, jest-haste-map, jest-jasmine2, jest-leak-detector, jest-matcher-utils, jest-message-util, jest-mock, jest-regex-util, jest-resolve, jest-resolve-dependencies, jest-runner, jest-runtime, jest-serializer, jest-snapshot, jest-util, jest-validate, jest-watcher, jest-worker, pretty-format, react, react-dom, react-is, react-refresh, scheduler. A copy of the source code may be downloaded from https://github.com/facebook/jest.git (@jest/console), https://github.com/facebook/jest (@jest/core), https://github.com/facebook/jest.git (@jest/environment), https://github.com/facebook/jest.git (@jest/fake-timers), https://github.com/facebook/jest.git (@jest/globals), https://github.com/facebook/jest (@jest/reporters), https://github.com/facebook/jest.git (@jest/source-map), https://github.com/facebook/jest.git (@jest/test-result), https://github.com/facebook/jest.git (@jest/test-sequencer), https://github.com/facebook/jest.git (@jest/transform), https://github.com/facebook/jest.git (@jest/types), https://github.com/facebook/jest.git (babel-jest), https://github.com/facebook/jest.git (babel-plugin-jest-hoist), https://github.com/facebook/jest.git (babel-preset-jest), https://github.com/facebook/jest.git (diff-sequences), https://github.com/facebook/react.git (eslint-plugin-react-hooks), https://github.com/facebook/jest.git (expect), https://github.com/facebook/jest (jest), https://github.com/facebook/jest.git (jest-changed-files), https://github.com/facebook/jest.git (jest-circus), https://github.com/facebook/jest (jest-cli), https://github.com/facebook/jest.git (jest-config), https://github.com/facebook/jest.git (jest-diff), https://github.com/facebook/jest.git (jest-docblock), https://github.com/facebook/jest.git (jest-each), https://github.com/facebook/jest.git (jest-environment-jsdom), https://github.com/facebook/jest.git (jest-environment-node), https://github.com/facebook/jest.git (jest-get-type), https://github.com/facebook/jest.git (jest-haste-map), https://github.com/facebook/jest.git (jest-jasmine2), https://github.com/facebook/jest.git (jest-leak-detector), https://github.com/facebook/jest.git (jest-matcher-utils), https://github.com/facebook/jest.git (jest-message-util), https://github.com/facebook/jest.git (jest-mock), https://github.com/facebook/jest.git (jest-regex-util), https://github.com/facebook/jest.git (jest-resolve), https://github.com/facebook/jest.git (jest-resolve-dependencies), https://github.com/facebook/jest.git (jest-runner), https://github.com/facebook/jest.git (jest-runtime), https://github.com/facebook/jest.git (jest-serializer), https://github.com/facebook/jest.git (jest-snapshot), https://github.com/facebook/jest.git (jest-util), https://github.com/facebook/jest.git (jest-validate), https://github.com/facebook/jest (jest-watcher), https://github.com/facebook/jest.git (jest-worker), https://github.com/facebook/jest.git (pretty-format), https://github.com/facebook/react.git (react), git+https://github.com/facebook/react.git (react-dom), https://github.com/facebook/react.git (react-is), https://github.com/facebook/react.git (react-refresh), https://github.com/facebook/react.git (scheduler). This software contains the following license and notice below:
 
 MIT License
 
@@ -4376,7 +4376,7 @@ SOFTWARE.
 
 -----
 
-The following software may be included in this product: @material-ui/core, @material-ui/icons, @material-ui/lab, @material-ui/styles, @material-ui/system, @material-ui/utils. A copy of the source code may be downloaded from https://github.com/mui-org/material-ui.git (@material-ui/core), https://github.com/mui-org/material-ui.git (@material-ui/icons), https://github.com/mui-org/material-ui.git (@material-ui/lab), https://github.com/mui-org/material-ui.git (@material-ui/styles), https://github.com/mui-org/material-ui.git (@material-ui/system), https://github.com/mui-org/material-ui.git (@material-ui/utils). This software contains the following license and notice below:
+The following software may be included in this product: @material-ui/core, @material-ui/icons, @material-ui/lab, @material-ui/styles, @material-ui/system, @material-ui/utils, @mui/base, @mui/icons-material, @mui/lab, @mui/material, @mui/private-theming, @mui/styled-engine, @mui/styles, @mui/system, @mui/types, @mui/utils. A copy of the source code may be downloaded from https://github.com/mui-org/material-ui.git (@material-ui/core), https://github.com/mui-org/material-ui.git (@material-ui/icons), https://github.com/mui-org/material-ui.git (@material-ui/lab), https://github.com/mui-org/material-ui.git (@material-ui/styles), https://github.com/mui-org/material-ui.git (@material-ui/system), https://github.com/mui-org/material-ui.git (@material-ui/utils), https://github.com/mui/material-ui.git (@mui/base), https://github.com/mui/material-ui.git (@mui/icons-material), https://github.com/mui/material-ui.git (@mui/lab), https://github.com/mui/material-ui.git (@mui/material), https://github.com/mui/material-ui.git (@mui/private-theming), https://github.com/mui/material-ui.git (@mui/styled-engine), https://github.com/mui/material-ui.git (@mui/styles), https://github.com/mui/material-ui.git (@mui/system), https://github.com/mui/material-ui.git (@mui/types), https://github.com/mui/material-ui.git (@mui/utils). This software contains the following license and notice below:
 
 The MIT License (MIT)
 
@@ -4503,6 +4503,31 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+-----
+
+The following software may be included in this product: @popperjs/core. A copy of the source code may be downloaded from https://github.com/popperjs/popper-core.git. This software contains the following license and notice below:
+
+The MIT License (MIT)
+
+Copyright (c) 2019 Federico Zivolo
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 -----
 
@@ -5374,7 +5399,7 @@ SOFTWARE.
 
 -----
 
-The following software may be included in this product: @types/babel__core, @types/babel__generator, @types/babel__template, @types/babel__traverse, @types/chrome, @types/debug, @types/eslint, @types/estree, @types/filesystem, @types/filewriter, @types/firefox-webext-browser, @types/fs-extra, @types/glob, @types/graceful-fs, @types/har-format, @types/html-minifier-terser, @types/istanbul-lib-coverage, @types/istanbul-reports, @types/json-schema, @types/minimatch, @types/node, @types/normalize-package-data, @types/prettier, @types/prop-types, @types/q, @types/react, @types/react-redux, @types/react-transition-group, @types/scheduler, @types/semver, @types/stack-utils, @types/styled-jsx, @types/tapable, @types/uglify-js, @types/verror, @types/webpack, @types/webpack-sources, @types/yargs, @types/yargs-parser, @types/yauzl. A copy of the source code may be downloaded from https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/babel__core), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/babel__generator), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/babel__template), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/babel__traverse), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/chrome), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/debug), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/eslint), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/estree), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/filesystem), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/filewriter), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/firefox-webext-browser), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/fs-extra), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/glob), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/graceful-fs), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/har-format), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/html-minifier-terser), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/istanbul-lib-coverage), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/istanbul-reports), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/json-schema), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/minimatch), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/node), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/normalize-package-data), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/prettier), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/prop-types), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/q), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/react), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/react-redux), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/react-transition-group), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/scheduler), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/semver), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/stack-utils), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/styled-jsx), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/tapable), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/uglify-js), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/verror), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/webpack), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/webpack-sources), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/yargs), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/yargs-parser), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/yauzl). This software contains the following license and notice below:
+The following software may be included in this product: @types/babel__core, @types/babel__generator, @types/babel__template, @types/babel__traverse, @types/chrome, @types/debug, @types/eslint, @types/estree, @types/filesystem, @types/filewriter, @types/firefox-webext-browser, @types/fs-extra, @types/glob, @types/graceful-fs, @types/har-format, @types/html-minifier-terser, @types/istanbul-lib-coverage, @types/istanbul-reports, @types/json-schema, @types/minimatch, @types/node, @types/normalize-package-data, @types/prettier, @types/prop-types, @types/q, @types/react, @types/react-dom, @types/react-is, @types/react-redux, @types/react-transition-group, @types/scheduler, @types/semver, @types/stack-utils, @types/styled-jsx, @types/tapable, @types/uglify-js, @types/verror, @types/webpack, @types/webpack-sources, @types/yargs, @types/yargs-parser, @types/yauzl. A copy of the source code may be downloaded from https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/babel__core), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/babel__generator), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/babel__template), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/babel__traverse), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/chrome), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/debug), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/eslint), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/estree), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/filesystem), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/filewriter), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/firefox-webext-browser), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/fs-extra), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/glob), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/graceful-fs), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/har-format), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/html-minifier-terser), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/istanbul-lib-coverage), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/istanbul-reports), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/json-schema), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/minimatch), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/node), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/normalize-package-data), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/prettier), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/prop-types), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/q), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/react), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/react-dom), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/react-is), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/react-redux), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/react-transition-group), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/scheduler), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/semver), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/stack-utils), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/styled-jsx), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/tapable), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/uglify-js), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/verror), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/webpack), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/webpack-sources), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/yargs), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/yargs-parser), https://github.com/DefinitelyTyped/DefinitelyTyped.git (@types/yauzl). This software contains the following license and notice below:
 
 MIT License
 
@@ -12687,32 +12712,6 @@ THE SOFTWARE.
 
 -----
 
-The following software may be included in this product: dmg-license, iconv-corefoundation. A copy of the source code may be downloaded from https://github.com/argv-minus-one/dmg-license.git (dmg-license), https://github.com/argv-minus-one/iconv-corefoundation.git (iconv-corefoundation). This software contains the following license and notice below:
-
-MIT License
-
-Copyright © 2019 argv-minus-one
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
------
-
 The following software may be included in this product: dns-equal. A copy of the source code may be downloaded from git+https://github.com/watson/dns-equal.git. This software contains the following license and notice below:
 
 The MIT License (MIT)
@@ -12997,7 +12996,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 -----
 
-The following software may be included in this product: dom-helpers. A copy of the source code may be downloaded from git+https://github.com/react-bootstrap/dom-helpers.git. This software contains the following license and notice below:
+The following software may be included in this product: dom-helpers. A copy of the source code may be downloaded from https://github.com/jquense/dom-helpers.git. This software contains the following license and notice below:
 
 The MIT License (MIT)
 
@@ -15391,60 +15390,6 @@ the licensed code:
 
 -----
 
-The following software may be included in this product: fsevents. A copy of the source code may be downloaded from https://github.com/fsevents/fsevents.git. This software contains the following license and notice below:
-
-MIT License
------------
-
-Copyright (C) 2010-2020 by Philipp Dunkel, Ben Noordhuis, Elan Shankar, Paul Miller
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-
------
-
-The following software may be included in this product: fsevents. A copy of the source code may be downloaded from https://github.com/strongloop/fsevents.git. This software contains the following license and notice below:
-
-MIT License
------------
-
-Copyright (C) 2010-2014 Philipp Dunkel
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-
------
-
 The following software may be included in this product: function-bind. A copy of the source code may be downloaded from git://github.com/Raynos/function-bind.git. This software contains the following license and notice below:
 
 Copyright (c) 2013 Raynos.
@@ -16809,7 +16754,7 @@ SOFTWARE.
 
 -----
 
-The following software may be included in this product: image-q. A copy of the source code may be downloaded from https://github.com/igor-bezkrovny/image-quantization. This software contains the following license and notice below:
+The following software may be included in this product: image-q. A copy of the source code may be downloaded from https://github.com/ibezkrovnyi/image-quantization. This software contains the following license and notice below:
 
 # image-quantization (https://github.com/igor-bezkrovny/image-quantization)
 
@@ -22500,6 +22445,32 @@ SOFTWARE.
 
 -----
 
+The following software may be included in this product: rifm. A copy of the source code may be downloaded from https://github.com/istarkov/rifm.git. This software contains the following license and notice below:
+
+MIT License
+
+Copyright (c) 2018 Ivan Starkov and Bogdan Chadkin
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+-----
+
 The following software may be included in this product: ripemd160. A copy of the source code may be downloaded from https://github.com/crypto-browserify/ripemd160. This software contains the following license and notice below:
 
 The MIT License (MIT)
@@ -24601,6 +24572,32 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+-----
+
+The following software may be included in this product: stylis. A copy of the source code may be downloaded from https://github.com/thysultan/stylis.js. This software contains the following license and notice below:
+
+MIT License
+
+Copyright (c) 2016-present Sultan Tarimo
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
 -----
 

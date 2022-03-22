@@ -2,14 +2,14 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import IconButton from '@material-ui/core/IconButton';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import { makeStyles } from '@material-ui/core';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
+import IconButton from '@mui/material/IconButton';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import { useDispatch } from 'react-redux';
 
@@ -21,8 +21,24 @@ import { requestCreateWorkspace, requestTrackAddWorkspace } from '../../senders'
 
 import { updateForm, updateMode } from '../../state/dialog-add-workspace/actions';
 
-const useStyles = makeStyles((theme) => ({
-  card: {
+const PREFIX = 'AppCard';
+
+const classes = {
+  card: `${PREFIX}-card`,
+  appName: `${PREFIX}-appName`,
+  appUrl: `${PREFIX}-appUrl`,
+  paperIcon: `${PREFIX}-paperIcon`,
+  actionContainer: `${PREFIX}-actionContainer`,
+  actionButton: `${PREFIX}-actionButton`,
+  infoContainer: `${PREFIX}-infoContainer`,
+};
+
+const StyledPaper = styled(Paper)((
+  {
+    theme,
+  },
+) => ({
+  [`&.${classes.card}`]: {
     width: '100%',
     boxSizing: 'border-box',
     paddingLeft: theme.spacing(1),
@@ -32,36 +48,42 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     height: 52,
     marginTop: theme.spacing(1),
-    border: theme.palette.type === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)',
+    border: theme.palette.mode === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)',
   },
-  appName: {
+
+  [`& .${classes.appName}`]: {
     overflow: 'hidden',
     whiteSpace: 'nowrap',
     textOverflow: 'ellipsis',
     fontWeight: 500,
   },
-  appUrl: {
+
+  [`& .${classes.appUrl}`]: {
     overflow: 'hidden',
     whiteSpace: 'nowrap',
     textOverflow: 'ellipsis',
   },
-  paperIcon: {
+
+  [`& .${classes.paperIcon}`]: {
     width: 40,
     height: 40,
     borderRadius: 8,
-    border: theme.palette.type === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)',
+    border: theme.palette.mode === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)',
   },
-  actionContainer: {
+
+  [`& .${classes.actionContainer}`]: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: theme.spacing(1),
   },
-  actionButton: {
+
+  [`& .${classes.actionButton}`]: {
     minWidth: 'auto',
     marginLeft: theme.spacing(1),
   },
-  infoContainer: {
+
+  [`& .${classes.infoContainer}`]: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
@@ -82,11 +104,10 @@ const AppCard = (props) => {
     url,
   } = props;
 
-  const classes = useStyles();
   const dispatch = useDispatch();
 
   return (
-    <Paper elevation={0} className={classes.card} square>
+    <StyledPaper elevation={0} className={classes.card} square>
       <img
         alt={name}
         className={classes.paperIcon}
@@ -159,7 +180,7 @@ const AppCard = (props) => {
           Add
         </Button>
       </div>
-    </Paper>
+    </StyledPaper>
   );
 };
 
