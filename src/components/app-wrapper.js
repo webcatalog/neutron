@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { ThemeProvider as MuiThemeProvider, createTheme } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue';
@@ -19,7 +20,7 @@ import getStaticGlobal from '../helpers/get-static-global';
 import WindowsTitleBar from './shared/windows-title-bar';
 import AppLock from './app-lock';
 
-const AppWrapper = (children) => {
+const AppWrapper = ({ children }) => {
   const isFullScreen = useSelector((state) => state.general.isFullScreen);
   const locked = useSelector((state) => window.mode !== 'about' && state.general.locked);
   const shouldUseDarkColors = useSelector((state) => state.general.shouldUseDarkColors);
@@ -73,6 +74,10 @@ const AppWrapper = (children) => {
       </MuiPickersUtilsProvider>
     </MuiThemeProvider>
   );
+};
+
+AppWrapper.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export default AppWrapper;
