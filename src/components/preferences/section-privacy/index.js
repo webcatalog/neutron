@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
@@ -11,9 +10,10 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Switch from '@material-ui/core/Switch';
 
+import { useSelector } from 'react-redux';
+
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-import connectComponent from '../../../helpers/connect-component';
 import getStaticGlobal from '../../../helpers/get-static-global';
 
 import {
@@ -22,10 +22,12 @@ import {
   requestSetPreference,
 } from '../../../senders';
 
-const SectionBrowsing = ({
-  rememberLastPageVisited,
-  shareWorkspaceBrowsingData,
-}) => {
+const SectionBrowsing = () => {
+  const rememberLastPageVisited = useSelector((state) => state.preferences.rememberLastPageVisited);
+  const shareWorkspaceBrowsingData = useSelector(
+    (state) => state.preferences.shareWorkspaceBrowsingData,
+  );
+
   const appJson = getStaticGlobal('appJson');
 
   return (
@@ -72,17 +74,4 @@ const SectionBrowsing = ({
   );
 };
 
-SectionBrowsing.propTypes = {
-  rememberLastPageVisited: PropTypes.bool.isRequired,
-  shareWorkspaceBrowsingData: PropTypes.bool.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  rememberLastPageVisited: state.preferences.rememberLastPageVisited,
-  shareWorkspaceBrowsingData: state.preferences.shareWorkspaceBrowsingData,
-});
-
-export default connectComponent(
-  SectionBrowsing,
-  mapStateToProps,
-);
+export default SectionBrowsing;

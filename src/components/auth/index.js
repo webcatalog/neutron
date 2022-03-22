@@ -2,16 +2,16 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import { makeStyles } from '@material-ui/core';
 
-import connectComponent from '../../helpers/connect-component';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { updateForm, login } from '../../state/dialog-auth/actions';
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     background: theme.palette.background.paper,
     height: '100%',
@@ -30,72 +30,55 @@ const styles = (theme) => ({
   textField: {
     marginBottom: theme.spacing(2),
   },
-});
+}));
 
-const Auth = ({
-  classes, onUpdateForm, onLogin, username, password,
-}) => (
-  <div className={classes.root}>
-    <div className={classes.flexGrow}>
-      <TextField
-        className={classes.textField}
-        fullWidth
-        label="Username"
-        margin="dense"
-        onChange={(e) => onUpdateForm({ username: e.target.value })}
-        placeholder=""
-        value={username}
-        variant="outlined"
-        InputLabelProps={{
-          shrink: true,
-        }}
-      />
-      <TextField
-        fullWidth
-        label="Password"
-        margin="dense"
-        onChange={(e) => onUpdateForm({ password: e.target.value })}
-        placeholder=""
-        type="password"
-        value={password}
-        variant="outlined"
-        InputLabelProps={{
-          shrink: true,
-        }}
-      />
-    </div>
-    <div>
-      <Button color="primary" variant="contained" disableElevation className={classes.button} onClick={onLogin}>
-        Sign in
-      </Button>
-      <Button variant="contained" disableElevation className={classes.button} onClick={() => window.remote.getCurrentWindow().close()}>
-        Cancel
-      </Button>
-    </div>
-  </div>
-);
+const Auth = () => {
+  const classes = useStyles();
+  const dispatch = useDispatch();
 
-Auth.propTypes = {
-  classes: PropTypes.object.isRequired,
-  onLogin: PropTypes.func.isRequired,
-  onUpdateForm: PropTypes.func.isRequired,
-  password: PropTypes.string.isRequired,
-  username: PropTypes.string.isRequired,
+  const username = useSelector((state) => state.dialogAuth.form.username);
+  const password = useSelector((state) => state.dialogAuth.form.password);
+
+  return (
+    <div className={classes.root}>
+      <div className={classes.flexGrow}>
+        <TextField
+          className={classes.textField}
+          fullWidth
+          label="Username"
+          margin="dense"
+          onChange={(e) => dispatch(updateForm({ username: e.target.value }))}
+          placeholder=""
+          value={username}
+          variant="outlined"
+          InputLabelProps={{
+            shrink: true,
+          }}
+        />
+        <TextField
+          fullWidth
+          label="Password"
+          margin="dense"
+          onChange={(e) => dispatch(updateForm({ password: e.target.value }))}
+          placeholder=""
+          type="password"
+          value={password}
+          variant="outlined"
+          InputLabelProps={{
+            shrink: true,
+          }}
+        />
+      </div>
+      <div>
+        <Button color="primary" variant="contained" disableElevation className={classes.button} onClick={() => dispatch(login())}>
+          Sign in
+        </Button>
+        <Button variant="contained" disableElevation className={classes.button} onClick={() => window.remote.getCurrentWindow().close()}>
+          Cancel
+        </Button>
+      </div>
+    </div>
+  );
 };
 
-const mapStateToProps = (state) => ({
-  username: state.dialogAuth.form.username,
-  password: state.dialogAuth.form.password,
-});
-
-const actionCreators = {
-  updateForm,
-  login,
-};
-
-export default connectComponent(
-  Auth,
-  mapStateToProps,
-  actionCreators,
-  styles,
-);
+export default Auth;

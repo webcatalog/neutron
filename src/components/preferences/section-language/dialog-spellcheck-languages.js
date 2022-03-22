@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -13,8 +12,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
+import { makeStyles } from '@material-ui/core';
 
-import connectComponent from '../../../helpers/connect-component';
+import { useDispatch, useSelector } from 'react-redux';
 
 import hunspellLanguagesMap from '../../../constants/hunspell-languages';
 
@@ -25,27 +25,25 @@ import {
   save,
 } from '../../../state/dialog-spellcheck-languages/actions';
 
-const styles = () => ({
+const useStyles = makeStyles(() => ({
   top: {
     flex: 1,
     overflow: 'auto',
   },
-});
+}));
 
-const DialogSpellcheckLanguages = (props) => {
-  const {
-    classes,
-    onAddLanguage,
-    onClose,
-    onRemoveLanguage,
-    onSave,
-    open,
-    spellcheckLanguages,
-  } = props;
+const DialogSpellcheckLanguages = () => {
+  const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const open = useSelector((state) => state.dialogSpellcheckLanguages.open);
+  const spellcheckLanguages = useSelector(
+    (state) => state.dialogSpellcheckLanguages.form.spellcheckLanguages,
+  );
 
   return (
     <Dialog
-      onClose={onClose}
+      onClose={() => dispatch(close())}
       open={open}
       fullWidth
       maxWidth="xs"
@@ -63,9 +61,9 @@ const DialogSpellcheckLanguages = (props) => {
               button
               onClick={() => {
                 if (spellcheckLanguages.includes(code)) {
-                  onRemoveLanguage(code);
+                  dispatch(removeLanguage(code));
                 } else {
-                  onAddLanguage(code);
+                  dispatch(addLanguage(code));
                 }
               }}
             >
@@ -83,10 +81,10 @@ const DialogSpellcheckLanguages = (props) => {
         </List>
       </DialogContent>
       <DialogActions>
-        <Button variant="contained" disableElevation onClick={onClose}>
+        <Button variant="contained" disableElevation onClick={() => dispatch(close())}>
           Cancel
         </Button>
-        <Button color="primary" variant="contained" disableElevation onClick={onSave}>
+        <Button color="primary" variant="contained" disableElevation onClick={() => dispatch(save())}>
           Save
         </Button>
       </DialogActions>
@@ -94,36 +92,4 @@ const DialogSpellcheckLanguages = (props) => {
   );
 };
 
-DialogSpellcheckLanguages.defaultProps = {
-  open: false,
-  spellcheckLanguages: [],
-};
-
-DialogSpellcheckLanguages.propTypes = {
-  classes: PropTypes.object.isRequired,
-  onAddLanguage: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired,
-  onRemoveLanguage: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
-  open: PropTypes.bool,
-  spellcheckLanguages: PropTypes.arrayOf(PropTypes.string),
-};
-
-const mapStateToProps = (state) => ({
-  open: state.dialogSpellcheckLanguages.open,
-  spellcheckLanguages: state.dialogSpellcheckLanguages.form.spellcheckLanguages,
-});
-
-const actionCreators = {
-  close,
-  save,
-  addLanguage,
-  removeLanguage,
-};
-
-export default connectComponent(
-  DialogSpellcheckLanguages,
-  mapStateToProps,
-  actionCreators,
-  styles,
-);
+export default DialogSpellcheckLanguages;

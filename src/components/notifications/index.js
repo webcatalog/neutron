@@ -2,13 +2,15 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import ListSubheader from '@material-ui/core/ListSubheader';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
+import { makeStyles } from '@material-ui/core';
+
+import { useDispatch, useSelector } from 'react-redux';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
@@ -18,8 +20,6 @@ import {
   format, isTomorrow, isToday,
   addMinutes, addHours, addDays, addWeeks,
 } from 'date-fns';
-
-import connectComponent from '../../helpers/connect-component';
 
 import {
   requestSetPreference,
@@ -32,7 +32,7 @@ import nightBackgroundPng from '../../images/night-background.png';
 
 import { updateShowDateTimePicker } from '../../state/notifications/actions';
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   hidden: {
     display: 'none',
   },
@@ -45,7 +45,7 @@ const styles = (theme) => ({
   pausingHeaderText: {
     color: theme.palette.common.white,
   },
-});
+}));
 
 const formatDate = (d) => {
   if (isToday(d)) {
@@ -57,13 +57,12 @@ const formatDate = (d) => {
   return format(d, 'PPPp');
 };
 
-const DialogPauseNotifications = (props) => {
-  const {
-    classes,
-    onUpdateShowDateTimePicker,
-    pauseNotificationsInfo,
-    showDateTimePicker,
-  } = props;
+const DialogPauseNotifications = () => {
+  const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const pauseNotificationsInfo = useSelector((state) => state.notifications.pauseNotificationsInfo);
+  const showDateTimePicker = useSelector((state) => state.notifications.showDateTimePicker);
 
   const shouldPauseNotifications = pauseNotificationsInfo !== null;
 
@@ -172,7 +171,7 @@ const DialogPauseNotifications = (props) => {
                   }));
                   template.push({
                     label: 'Custom',
-                    click: () => onUpdateShowDateTimePicker(true),
+                    click: () => dispatch(updateShowDateTimePicker(true)),
                   });
                   const menu = window.remote.Menu.buildFromTemplate(template);
                   menu.popup({
@@ -216,7 +215,7 @@ const DialogPauseNotifications = (props) => {
         ))}
         <ListItem
           button
-          onClick={() => onUpdateShowDateTimePicker(true)}
+          onClick={() => dispatch(updateShowDateTimePicker(true))}
         >
           <ListItemText primary="Custom..." />
         </ListItem>
@@ -242,8 +241,8 @@ const DialogPauseNotifications = (props) => {
         onChange={pauseNotif}
         label="Custom"
         open={showDateTimePicker}
-        onOpen={() => onUpdateShowDateTimePicker(true)}
-        onClose={() => onUpdateShowDateTimePicker(false)}
+        onOpen={() => dispatch(updateShowDateTimePicker(true))}
+        onClose={() => dispatch(updateShowDateTimePicker(false))}
         className={classes.hidden}
         disablePast
         showTodayButton
@@ -252,29 +251,4 @@ const DialogPauseNotifications = (props) => {
   );
 };
 
-DialogPauseNotifications.defaultProps = {
-  pauseNotificationsInfo: null,
-};
-
-DialogPauseNotifications.propTypes = {
-  classes: PropTypes.object.isRequired,
-  onUpdateShowDateTimePicker: PropTypes.func.isRequired,
-  pauseNotificationsInfo: PropTypes.object,
-  showDateTimePicker: PropTypes.bool.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  pauseNotificationsInfo: state.notifications.pauseNotificationsInfo,
-  showDateTimePicker: state.notifications.showDateTimePicker,
-});
-
-const actionCreators = {
-  updateShowDateTimePicker,
-};
-
-export default connectComponent(
-  DialogPauseNotifications,
-  mapStateToProps,
-  actionCreators,
-  styles,
-);
+export default DialogPauseNotifications;

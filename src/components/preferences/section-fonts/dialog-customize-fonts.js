@@ -3,7 +3,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
@@ -14,12 +13,13 @@ import Slider from '@material-ui/core/Slider';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
+import { makeStyles } from '@material-ui/core';
 
-import connectComponent from '../../../helpers/connect-component';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { close, updateForm, save } from '../../../state/dialog-customize-fonts/actions';
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   selectRoot: {
     borderRadius: theme.spacing(0.5),
     fontSize: '0.84375rem',
@@ -33,121 +33,90 @@ const styles = (theme) => ({
   slider: {
     width: 'calc(100% - 180px)',
   },
-});
+}));
 
-const DialogCustomizeFonts = ({
-  classes,
-  defaultFontSize,
-  defaultFontSizeMinimum,
-  defaultFontSizeMonospace,
-  onClose,
-  onSave,
-  onUpdateForm,
-  open,
-}) => (
-  <Dialog
-    onClose={onClose}
-    open={open}
-    fullWidth
-    maxWidth="sm"
-  >
-    <DialogContent>
-      <List dense>
-        <ListItem>
-          <ListItemText
-            primary="Font size"
-          />
-          <Slider
-            className={classes.slider}
-            value={defaultFontSize}
-            onChange={(e, value) => onUpdateForm({ defaultFontSize: value })}
-            min={9}
-            max={72}
-            marks={[
-              { value: 16, label: 'Medium' },
-            ]}
-            valueLabelDisplay="auto"
-          />
-        </ListItem>
-        <ListItem>
-          <ListItemText
-            primary="Minimum font size"
-          />
-          <Slider
-            className={classes.slider}
-            value={defaultFontSizeMinimum}
-            onChange={(e, value) => onUpdateForm({ defaultFontSizeMinimum: value })}
-            min={0}
-            max={24}
-            marks={[
-              { value: 0, label: 'Default' },
-            ]}
-            valueLabelDisplay="auto"
-          />
-        </ListItem>
-        <ListItem>
-          <ListItemText
-            primary="Monospace font size"
-          />
-          <Slider
-            className={classes.slider}
-            value={defaultFontSizeMonospace}
-            onChange={(e, value) => onUpdateForm({ defaultFontSizeMonospace: value })}
-            min={9}
-            max={72}
-            marks={[
-              { value: 13, label: 'Medium' },
-            ]}
-            valueLabelDisplay="auto"
-          />
-        </ListItem>
-      </List>
-    </DialogContent>
-    <DialogActions>
-      <Button variant="contained" disableElevation onClick={onClose}>
-        Cancel
-      </Button>
-      <Button color="primary" variant="contained" disableElevation onClick={onSave}>
-        Save
-      </Button>
-    </DialogActions>
-  </Dialog>
-);
+const DialogCustomizeFonts = () => {
+  const classes = useStyles();
+  const dispatch = useDispatch();
 
-DialogCustomizeFonts.defaultProps = {
-  open: false,
-  defaultFontSize: 16,
-  defaultFontSizeMinimum: 0,
-  defaultFontSizeMonospace: 13,
+  const open = useSelector((state) => state.dialogCustomizeFonts.open);
+  const defaultFontSize = useSelector((state) => state.dialogCustomizeFonts.form.defaultFontSize);
+  const defaultFontSizeMonospace = useSelector(
+    (state) => state.dialogCustomizeFonts.form.defaultFontSizeMonospace,
+  );
+  const defaultFontSizeMinimum = useSelector(
+    (state) => state.dialogCustomizeFonts.form.defaultFontSizeMinimum,
+  );
+
+  return (
+    <Dialog
+      onClose={() => dispatch(close())}
+      open={open}
+      fullWidth
+      maxWidth="sm"
+    >
+      <DialogContent>
+        <List dense>
+          <ListItem>
+            <ListItemText
+              primary="Font size"
+            />
+            <Slider
+              className={classes.slider}
+              value={defaultFontSize}
+              onChange={(e, value) => dispatch(updateForm({ defaultFontSize: value }))}
+              min={9}
+              max={72}
+              marks={[
+                { value: 16, label: 'Medium' },
+              ]}
+              valueLabelDisplay="auto"
+            />
+          </ListItem>
+          <ListItem>
+            <ListItemText
+              primary="Minimum font size"
+            />
+            <Slider
+              className={classes.slider}
+              value={defaultFontSizeMinimum}
+              onChange={(e, value) => dispatch(updateForm({ defaultFontSizeMinimum: value }))}
+              min={0}
+              max={24}
+              marks={[
+                { value: 0, label: 'Default' },
+              ]}
+              valueLabelDisplay="auto"
+            />
+          </ListItem>
+          <ListItem>
+            <ListItemText
+              primary="Monospace font size"
+            />
+            <Slider
+              className={classes.slider}
+              value={defaultFontSizeMonospace}
+              onChange={(e, value) => dispatch(updateForm({ defaultFontSizeMonospace: value }))}
+              min={9}
+              max={72}
+              marks={[
+                { value: 13, label: 'Medium' },
+              ]}
+              valueLabelDisplay="auto"
+            />
+          </ListItem>
+        </List>
+      </DialogContent>
+      <DialogActions>
+        <Button variant="contained" disableElevation onClick={() => dispatch(close())}>
+          Cancel
+        </Button>
+        <Button color="primary" variant="contained" disableElevation onClick={() => dispatch(save())}>
+          Save
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
 };
 
-DialogCustomizeFonts.propTypes = {
-  classes: PropTypes.object.isRequired,
-  defaultFontSize: PropTypes.number,
-  defaultFontSizeMonospace: PropTypes.number,
-  defaultFontSizeMinimum: PropTypes.number,
-  onClose: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
-  onUpdateForm: PropTypes.func.isRequired,
-  open: PropTypes.bool,
-};
-
-const mapStateToProps = (state) => ({
-  open: state.dialogCustomizeFonts.open,
-  defaultFontSize: state.dialogCustomizeFonts.form.defaultFontSize,
-  defaultFontSizeMonospace: state.dialogCustomizeFonts.form.defaultFontSizeMonospace,
-  defaultFontSizeMinimum: state.dialogCustomizeFonts.form.defaultFontSizeMinimum,
-});
-
-const actionCreators = {
-  close,
-  updateForm,
-  save,
-};
-
-export default connectComponent(
-  DialogCustomizeFonts,
-  mapStateToProps,
-  actionCreators,
-  styles,
-);
+export default DialogCustomizeFonts;

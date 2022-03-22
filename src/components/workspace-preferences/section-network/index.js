@@ -2,27 +2,18 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import { useSelector, useDispatch } from 'react-redux';
 
-import connectComponent from '../../../helpers/connect-component';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 import { open as openDialogProxy } from '../../../state/dialog-proxy/actions';
 
 import DialogProxy from '../../shared/dialog-proxy';
-
-const styles = (theme) => ({
-  paper: {
-    marginTop: theme.spacing(0.5),
-    marginBottom: theme.spacing(3),
-    border: theme.palette.type === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)',
-  },
-});
 
 const getProxyModeDesc = (proxyMode) => {
   switch (proxyMode) {
@@ -41,53 +32,34 @@ const getProxyModeDesc = (proxyMode) => {
   }
 };
 
-const SectionNetwork = ({
-  proxyMode,
-  formProxyMode,
-  onOpenDialogProxy,
-}) => (
-  <>
-    <List disablePadding dense>
-      <ListItem button onClick={onOpenDialogProxy}>
-        <ListItemText
-          primary="Proxy"
-          secondary={(() => {
-            if (formProxyMode == null) {
-              return `Use global preference (${getProxyModeDesc(proxyMode)}).`;
-            }
+const SectionNetwork = () => {
+  const dispatch = useDispatch();
 
-            return `${getProxyModeDesc(formProxyMode)}.`;
-          })()}
-        />
-        <ChevronRightIcon color="action" />
-      </ListItem>
-    </List>
-    <DialogProxy />
-  </>
-);
+  const proxyMode = useSelector((state) => state.preferences.proxyMode);
+  const formProxyMode = useSelector(
+    (state) => state.dialogWorkspacePreferences.form.preferences.proxyMode,
+  );
 
-SectionNetwork.defaultProps = {
-  formProxyMode: null,
+  return (
+    <>
+      <List disablePadding dense>
+        <ListItem button onClick={() => dispatch(openDialogProxy())}>
+          <ListItemText
+            primary="Proxy"
+            secondary={(() => {
+              if (formProxyMode == null) {
+                return `Use global preference (${getProxyModeDesc(proxyMode)}).`;
+              }
+
+              return `${getProxyModeDesc(formProxyMode)}.`;
+            })()}
+          />
+          <ChevronRightIcon color="action" />
+        </ListItem>
+      </List>
+      <DialogProxy />
+    </>
+  );
 };
 
-SectionNetwork.propTypes = {
-  proxyMode: PropTypes.oneOf(['direct', 'fixed_servers', 'pac_script', 'system']).isRequired,
-  formProxyMode: PropTypes.oneOf(['direct', 'fixed_servers', 'pac_script', 'system']),
-  onOpenDialogProxy: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  proxyMode: state.preferences.proxyMode,
-  formProxyMode: state.dialogWorkspacePreferences.form.preferences.proxyMode,
-});
-
-const actionCreators = {
-  openDialogProxy,
-};
-
-export default connectComponent(
-  SectionNetwork,
-  mapStateToProps,
-  actionCreators,
-  styles,
-);
+export default SectionNetwork;

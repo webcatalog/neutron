@@ -2,16 +2,16 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogActions from '@material-ui/core/DialogActions';
-import { Typography } from '@material-ui/core';
+import { makeStyles, Typography } from '@material-ui/core';
 
-import connectComponent from '../../helpers/connect-component';
+import { useDispatch, useSelector } from 'react-redux';
+
 import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
 
 import {
@@ -24,7 +24,7 @@ import { requestOpenInBrowser } from '../../senders';
 import getStaticGlobal from '../../helpers/get-static-global';
 import getUtmSource from '../../helpers/get-utm-source';
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
@@ -51,15 +51,17 @@ const styles = (theme) => ({
   typography: {
     color: 'rgba(0, 0, 0, 0.54)',
   },
-});
+}));
 
-const DialogLicenseRegistration = ({
-  classes,
-  licenseKey,
-  licenseKeyError,
-  onUpdateForm,
-  onRegister,
-}) => {
+const DialogLicenseRegistration = () => {
+  const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const licenseKey = useSelector((state) => state.dialogLicenseRegistration.form.licenseKey);
+  const licenseKeyError = useSelector(
+    (state) => state.dialogLicenseRegistration.form.licenseKeyError,
+  );
+
   const appJson = getStaticGlobal('appJson');
   const utmSource = getUtmSource();
 
@@ -96,14 +98,13 @@ const DialogLicenseRegistration = ({
           id=""
           label="License Key"
           margin="normal"
-          onChange={(e) => onUpdateForm({ licenseKey: e.target.value })}
+          onChange={(e) => dispatch(updateForm({ licenseKey: e.target.value }))}
           value={licenseKey}
           placeholder="0-0000000000000-00000000-00000000-00000000-00000000"
           error={Boolean(licenseKeyError)}
           variant="outlined"
           helperText={licenseKeyError || `If you have already purchased ${appJson.name} Plus from our website, you should have received a license key via email to enter above.`}
         />
-
         <DialogContentText className={classes.helpContent}>
           <Button
             onClick={() => requestOpenInBrowser(`https://${appJson.hostname}/help/?utm_source=${utmSource}`)}
@@ -151,7 +152,7 @@ const DialogLicenseRegistration = ({
         </Button>
         <Button
           color="primary"
-          onClick={onRegister}
+          onClick={() => dispatch(register())}
         >
           Register
         </Button>
@@ -160,41 +161,4 @@ const DialogLicenseRegistration = ({
   );
 };
 
-DialogLicenseRegistration.defaultProps = {
-  licenseKey: '',
-  licenseKeyError: null,
-};
-
-DialogLicenseRegistration.propTypes = {
-  classes: PropTypes.object.isRequired,
-  licenseKey: PropTypes.string,
-  licenseKeyError: PropTypes.string,
-  onRegister: PropTypes.func.isRequired,
-  onUpdateForm: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = (state) => {
-  const {
-    form: {
-      licenseKey,
-      licenseKeyError,
-    },
-  } = state.dialogLicenseRegistration;
-
-  return {
-    licenseKey,
-    licenseKeyError,
-  };
-};
-
-const actionCreators = {
-  updateForm,
-  register,
-};
-
-export default connectComponent(
-  DialogLicenseRegistration,
-  mapStateToProps,
-  actionCreators,
-  styles,
-);
+export default DialogLicenseRegistration;

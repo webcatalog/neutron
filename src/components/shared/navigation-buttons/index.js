@@ -8,6 +8,8 @@ import classnames from 'classnames';
 import { makeStyles } from '@material-ui/core/styles';
 import { alpha } from '@material-ui/core/styles/colorManipulator';
 
+import { useSelector } from 'react-redux';
+
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import HomeIcon from '@material-ui/icons/Home';
@@ -16,10 +18,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 import RefreshIcon from '@material-ui/icons/Refresh';
 
-import connectComponent from '../../../helpers/connect-component';
 import themeColors from '../../../constants/theme-colors';
-
-import { updateAddressBarInfo } from '../../../state/general/actions';
 
 import {
   requestGoBack,
@@ -66,15 +65,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const NavigationBar = ({
-  canGoBack,
-  canGoForward,
-  disableGutter,
-  hasWorkspaces,
-  isLoading,
-  themeColor,
-}) => {
+const NavigationBar = ({ themeColor, disableGutter }) => {
   const classes = useStyles({ themeColor });
+
+  const activeWorkspace = useSelector(
+    (state) => state.workspaces.workspaces[state.workspaces.activeWorkspaceId],
+  );
+  const canGoBack = useSelector((state) => state.general.canGoBack);
+  const canGoForward = useSelector((state) => state.general.canGoForward);
+  const hasWorkspaces = useSelector((state) => Object.keys(state.workspaces.workspaces).length > 0);
+  const isLoading = useSelector(
+    (state) => (activeWorkspace && state.workspaceMetas[activeWorkspace.id]
+      ? Boolean(state.workspaceMetas[activeWorkspace.id].isLoading) : false),
+  );
 
   return (
     <>
@@ -159,39 +162,13 @@ const NavigationBar = ({
 };
 
 NavigationBar.defaultProps = {
-  isLoading: false,
   themeColor: null,
   disableGutter: false,
 };
 
 NavigationBar.propTypes = {
-  canGoBack: PropTypes.bool.isRequired,
-  canGoForward: PropTypes.bool.isRequired,
   disableGutter: PropTypes.bool,
-  hasWorkspaces: PropTypes.bool.isRequired,
-  isLoading: PropTypes.bool,
   themeColor: PropTypes.string,
 };
 
-const mapStateToProps = (state) => {
-  const activeWorkspace = state.workspaces.workspaces[state.workspaces.activeWorkspaceId];
-
-  return {
-    canGoBack: state.general.canGoBack,
-    canGoForward: state.general.canGoForward,
-    hasWorkspaces: Object.keys(state.workspaces.workspaces).length > 0,
-    isLoading: activeWorkspace && state.workspaceMetas[activeWorkspace.id]
-      ? Boolean(state.workspaceMetas[activeWorkspace.id].isLoading)
-      : false,
-  };
-};
-
-const actionCreators = {
-  updateAddressBarInfo,
-};
-
-export default connectComponent(
-  NavigationBar,
-  mapStateToProps,
-  actionCreators,
-);
+export default NavigationBar;

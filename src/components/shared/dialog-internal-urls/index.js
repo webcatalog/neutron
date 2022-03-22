@@ -3,7 +3,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -15,7 +14,8 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 
-import connectComponent from '../../../helpers/connect-component';
+import { useDispatch, useSelector } from 'react-redux';
+
 import getStaticGlobal from '../../../helpers/get-static-global';
 import getUtmSource from '../../../helpers/get-utm-source';
 
@@ -25,20 +25,21 @@ import {
   requestOpenInBrowser,
 } from '../../../senders';
 
-const DialogInternalUrls = ({
-  internalUrlRule,
-  internalUrlRuleError,
-  onClose,
-  onSave,
-  onUpdateForm,
-  open,
-}) => {
+const DialogInternalUrls = () => {
+  const dispatch = useDispatch();
+
+  const internalUrlRule = useSelector((state) => state.dialogInternalUrls.form.internalUrlRule);
+  const internalUrlRuleError = useSelector(
+    (state) => state.dialogInternalUrls.form.internalUrlRuleError,
+  );
+  const open = useSelector((state) => state.dialogInternalUrls.open);
+
   const appJson = getStaticGlobal('appJson');
   const utmSource = getUtmSource();
 
   return (
     <Dialog
-      onClose={onClose}
+      onClose={() => dispatch(close())}
       open={open}
       fullWidth
       maxWidth="sm"
@@ -103,7 +104,7 @@ const DialogInternalUrls = ({
           }}
           value={internalUrlRule}
           error={Boolean(internalUrlRuleError)}
-          onChange={(e) => onUpdateForm({ internalUrlRule: e.target.value })}
+          onChange={(e) => dispatch(updateForm({ internalUrlRule: e.target.value }))}
           InputProps={{
             startAdornment: <InputAdornment position="start">/^</InputAdornment>,
             endAdornment: <InputAdornment position="end">$/i</InputAdornment>,
@@ -111,46 +112,15 @@ const DialogInternalUrls = ({
         />
       </DialogContent>
       <DialogActions>
-        <Button variant="contained" disableElevation onClick={onClose}>
+        <Button variant="contained" disableElevation onClick={() => dispatch(close())}>
           Cancel
         </Button>
-        <Button color="primary" variant="contained" disableElevation onClick={onSave}>
+        <Button color="primary" variant="contained" disableElevation onClick={() => dispatch(save())}>
           Save
         </Button>
       </DialogActions>
     </Dialog>
   );
 };
-DialogInternalUrls.defaultProps = {
-  open: false,
-  internalUrlRule: '',
-  internalUrlRuleError: null,
-};
 
-DialogInternalUrls.propTypes = {
-  internalUrlRule: PropTypes.string,
-  internalUrlRuleError: PropTypes.string,
-  onClose: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
-  onUpdateForm: PropTypes.func.isRequired,
-  open: PropTypes.bool,
-};
-
-const mapStateToProps = (state) => ({
-  internalUrlRule: state.dialogInternalUrls.form.internalUrlRule,
-  internalUrlRuleError: state.dialogInternalUrls.form.internalUrlRuleError,
-  open: state.dialogInternalUrls.open,
-});
-
-const actionCreators = {
-  close,
-  updateForm,
-  save,
-};
-
-export default connectComponent(
-  DialogInternalUrls,
-  mapStateToProps,
-  actionCreators,
-  null,
-);
+export default DialogInternalUrls;

@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Color from 'color';
 
@@ -14,10 +13,12 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Divider from '@material-ui/core/Divider';
 import Badge from '@material-ui/core/Badge';
+import { makeStyles } from '@material-ui/core';
+
+import { useDispatch, useSelector } from 'react-redux';
 
 import CheckIcon from '@material-ui/icons/Check';
 
-import connectComponent from '../../helpers/connect-component';
 import getAvatarText from '../../helpers/get-avatar-text';
 import getMailtoUrl from '../../helpers/get-mailto-url';
 import camelCaseToSentenceCase from '../../helpers/camel-case-to-sentence-case';
@@ -36,7 +37,7 @@ import {
 import defaultWorkspaceImageLight from '../../images/default-workspace-image-light.png';
 import defaultWorkspaceImageDark from '../../images/default-workspace-image-dark.png';
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     background: theme.palette.background.paper,
     height: '100%',
@@ -155,28 +156,29 @@ const styles = (theme) => ({
   colorPickerSelected: {
     boxShadow: `0 0 2px 2px ${theme.palette.primary.main}`,
   },
-});
+}));
 
-const AddWorkspaceCustom = ({
-  classes,
-  color,
-  downloadingIcon,
-  homeUrl,
-  homeUrlError,
-  internetIcon,
-  isMailApp,
-  name,
-  nameError,
-  onGetIconFromAppSearch,
-  onGetIconFromInternet,
-  onResetForm,
-  onSave,
-  onUpdateForm,
-  imgPath,
-  preferredIconType,
-  shouldUseDarkColors,
-  transparentBackground,
-}) => {
+const AddWorkspaceCustom = () => {
+  const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const color = useSelector((state) => state.dialogAddWorkspace.form.color);
+  const downloadingIcon = useSelector((state) => state.dialogAddWorkspace.downloadingIcon);
+  const homeUrl = useSelector((state) => state.dialogAddWorkspace.form.homeUrl);
+  const homeUrlError = useSelector((state) => state.dialogAddWorkspace.form.homeUrlError);
+  const internetIcon = useSelector((state) => state.dialogAddWorkspace.form.internetIcon);
+  const isMailApp = useSelector(
+    (state) => Boolean(getMailtoUrl(state.dialogAddWorkspace.form.homeUrl)),
+  );
+  const name = useSelector((state) => state.dialogAddWorkspace.form.name);
+  const nameError = useSelector((state) => state.dialogAddWorkspace.form.nameError);
+  const imgPath = useSelector((state) => state.dialogAddWorkspace.form.imgPath);
+  const preferredIconType = useSelector((state) => state.dialogAddWorkspace.form.preferredIconType);
+  const shouldUseDarkColors = useSelector((state) => state.general.shouldUseDarkColors);
+  const transparentBackground = useSelector(
+    (state) => Boolean(state.dialogAddWorkspace.form.transparentBackground),
+  );
+
   let selectedIconType = 'text';
   if (((imgPath || internetIcon) && preferredIconType === 'auto') || (preferredIconType === 'image')) {
     selectedIconType = 'image';
@@ -227,8 +229,8 @@ const AddWorkspaceCustom = ({
             transparentBackground && classes.transparentAvatar,
             ...avatarAdditionalClassnames,
           )}
-          onClick={() => onUpdateForm({ preferredIconType: type })}
-          onKeyDown={() => onUpdateForm({ preferredIconType: type })}
+          onClick={() => dispatch(updateForm({ preferredIconType: type }))}
+          onKeyDown={() => dispatch(updateForm({ preferredIconType: type }))}
         >
           {avatarContent}
         </div>
@@ -252,7 +254,7 @@ const AddWorkspaceCustom = ({
             shrink: true,
           }}
           value={name}
-          onChange={(e) => onUpdateForm({ name: e.target.value })}
+          onChange={(e) => dispatch(updateForm({ name: e.target.value }))}
         />
         <TextField
           label="Home URL"
@@ -267,7 +269,7 @@ const AddWorkspaceCustom = ({
             shrink: true,
           }}
           value={homeUrl}
-          onChange={(e) => onUpdateForm({ homeUrl: e.target.value })}
+          onChange={(e) => dispatch(updateForm({ homeUrl: e.target.value }))}
         />
         <div className={classes.colorPickerRow}>
           <div
@@ -280,12 +282,12 @@ const AddWorkspaceCustom = ({
             aria-label="None"
             role="button"
             tabIndex={0}
-            onClick={() => onUpdateForm({
+            onClick={() => dispatch(updateForm({
               color: null,
-            })}
-            onKeyDown={() => onUpdateForm({
+            }))}
+            onKeyDown={() => dispatch(updateForm({
               color: null,
-            })}
+            }))}
           />
           {Object.keys(themeColors).map((val) => (
             <div
@@ -299,12 +301,12 @@ const AddWorkspaceCustom = ({
               aria-label={val}
               role="button"
               tabIndex={0}
-              onClick={() => onUpdateForm({
+              onClick={() => dispatch(updateForm({
                 color: val,
-              })}
-              onKeyDown={() => onUpdateForm({
+              }))}
+              onKeyDown={() => dispatch(updateForm({
                 color: val,
-              })}
+              }))}
             />
           ))}
         </div>
@@ -348,10 +350,10 @@ const AddWorkspaceCustom = ({
                     window.remote.dialog.showOpenDialog(window.remote.getCurrentWindow(), opts)
                       .then(({ canceled, filePaths }) => {
                         if (!canceled && filePaths && filePaths.length > 0) {
-                          onUpdateForm({
+                          dispatch(updateForm({
                             preferredIconType: 'image',
                             imgPath: filePaths[0],
-                          });
+                          }));
                         }
                       })
                       .catch(console.log); // eslint-disable-line
@@ -367,7 +369,7 @@ const AddWorkspaceCustom = ({
                   size="small"
                   className={classes.buttonBot}
                   disabled={Boolean(!homeUrl || homeUrlError || downloadingIcon)}
-                  onClick={() => onGetIconFromInternet(true)}
+                  onClick={() => dispatch(getIconFromInternet(true))}
                 >
                   {downloadingIcon ? 'Downloading...' : 'Download Icon from URL'}
                 </Button>
@@ -377,7 +379,8 @@ const AddWorkspaceCustom = ({
                   size="small"
                   className={classes.buttonBot}
                   disabled={Boolean(!homeUrl || homeUrlError || downloadingIcon)}
-                  onClick={() => onGetIconFromAppSearch(true)}
+                  // onClick={() => onGetIconFromAppSearch(true)}
+                  onClick={() => dispatch(getIconFromAppSearch(true))}
                 >
                   {downloadingIcon ? 'Downloading...' : 'Download Icon from Our Database'}
                 </Button>
@@ -387,10 +390,10 @@ const AddWorkspaceCustom = ({
                   size="small"
                   className={classes.buttonBot}
                   disabled={Boolean(downloadingIcon)}
-                  onClick={() => onUpdateForm({
+                  onClick={() => dispatch(updateForm({
                     imgPath: null,
                     internetIcon: null,
-                  })}
+                  }))}
                 >
                   Reset to Default
                 </Button>
@@ -400,9 +403,9 @@ const AddWorkspaceCustom = ({
                       control={(
                         <Checkbox
                           checked={transparentBackground}
-                          onChange={(e) => onUpdateForm({
+                          onChange={(e) => dispatch(updateForm({
                             transparentBackground: e.target.checked,
-                          })}
+                          }))}
                         />
                       )}
                       label="Use transparent background"
@@ -416,10 +419,10 @@ const AddWorkspaceCustom = ({
       </div>
       <Divider />
       <div className={classes.actions}>
-        <Button color="primary" variant="contained" disableElevation className={classes.button} onClick={onSave}>
+        <Button color="primary" variant="contained" disableElevation className={classes.button} onClick={() => dispatch(save())}>
           Add
         </Button>
-        <Button color="default" variant="text" disableElevation className={classes.button} onClick={onResetForm}>
+        <Button color="default" variant="text" disableElevation className={classes.button} onClick={() => dispatch(resetForm())}>
           Reset
         </Button>
       </div>
@@ -427,64 +430,4 @@ const AddWorkspaceCustom = ({
   );
 };
 
-AddWorkspaceCustom.defaultProps = {
-  color: null,
-  homeUrl: '',
-  homeUrlError: null,
-  internetIcon: null,
-  name: '',
-  nameError: null,
-  imgPath: null,
-  preferredIconType: 'auto',
-};
-
-AddWorkspaceCustom.propTypes = {
-  classes: PropTypes.object.isRequired,
-  color: PropTypes.string,
-  downloadingIcon: PropTypes.bool.isRequired,
-  homeUrl: PropTypes.string,
-  homeUrlError: PropTypes.string,
-  internetIcon: PropTypes.string,
-  isMailApp: PropTypes.bool.isRequired,
-  name: PropTypes.string,
-  nameError: PropTypes.string,
-  onGetIconFromAppSearch: PropTypes.func.isRequired,
-  onGetIconFromInternet: PropTypes.func.isRequired,
-  onResetForm: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
-  onUpdateForm: PropTypes.func.isRequired,
-  imgPath: PropTypes.string,
-  preferredIconType: PropTypes.oneOf(['auto', 'text', 'image', 'accountInfo']),
-  shouldUseDarkColors: PropTypes.bool.isRequired,
-  transparentBackground: PropTypes.bool.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  color: state.dialogAddWorkspace.form.color,
-  downloadingIcon: state.dialogAddWorkspace.downloadingIcon,
-  homeUrl: state.dialogAddWorkspace.form.homeUrl,
-  homeUrlError: state.dialogAddWorkspace.form.homeUrlError,
-  internetIcon: state.dialogAddWorkspace.form.internetIcon,
-  isMailApp: Boolean(getMailtoUrl(state.dialogAddWorkspace.form.homeUrl)),
-  name: state.dialogAddWorkspace.form.name,
-  nameError: state.dialogAddWorkspace.form.nameError,
-  imgPath: state.dialogAddWorkspace.form.imgPath,
-  preferredIconType: state.dialogAddWorkspace.form.preferredIconType,
-  shouldUseDarkColors: state.general.shouldUseDarkColors,
-  transparentBackground: Boolean(state.dialogAddWorkspace.form.transparentBackground),
-});
-
-const actionCreators = {
-  getIconFromInternet,
-  getIconFromAppSearch,
-  save,
-  updateForm,
-  resetForm,
-};
-
-export default connectComponent(
-  AddWorkspaceCustom,
-  mapStateToProps,
-  actionCreators,
-  styles,
-);
+export default AddWorkspaceCustom;

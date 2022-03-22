@@ -15,7 +15,8 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import NotificationsOffIcon from '@material-ui/icons/NotificationsOff';
 import VolumeOffIcon from '@material-ui/icons/VolumeOff';
 
-import connectComponent from '../../helpers/connect-component';
+import { useSelector } from 'react-redux';
+
 import getAvatarText from '../../helpers/get-avatar-text';
 import getUrlFromText from '../../helpers/get-url-from-text';
 import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
@@ -184,8 +185,6 @@ const useStyles = makeStyles((theme) => ({
 const WorkspaceSelector = ({
   accountInfo,
   active,
-  backgroundColor,
-  badgeCount,
   disableAudio,
   disableNotifications,
   hibernated,
@@ -196,14 +195,23 @@ const WorkspaceSelector = ({
   order,
   pictureId,
   preferredIconType,
-  searchEngine,
-  shouldUseDarkColors,
-  sidebarSize,
-  sidebarTips,
   themeColor,
   transparentBackground,
 }) => {
   const classes = useStyles({ themeColor });
+
+  const badgeCount = useSelector((state, ownProps) => (state.preferences.unreadCountBadge
+  && (!ownProps.preferences || ownProps.preferences.unreadCountBadge !== false)
+  && state.workspaceMetas[ownProps.id] ? state.workspaceMetas[ownProps.id].badgeCount : 0));
+  const searchEngine = useSelector((state) => state.preferences.searchEngine);
+  const shouldUseDarkColors = useSelector((state) => state.general.shouldUseDarkColors);
+  const sidebarSize = useSelector((state) => state.preferences.sidebarSize);
+  const sidebarTips = useSelector((state) => state.preferences.sidebarTips);
+  const backgroundColor = useSelector((ownProps) => (ownProps.preferences
+  && ownProps.preferences.color
+  && ownProps.preferences.color
+  !== ownProps.themeColor ? themeColors[ownProps.preferences.color][600] : null));
+
   const isExpanded = sidebarSize === 'expanded';
   const shortcutTip = order < 9 && id !== 'add'
     ? `${window.process.platform === 'darwin' ? '⌘' : 'Ctrl+'}${order + 1}` : null;
@@ -404,8 +412,6 @@ const WorkspaceSelector = ({
 WorkspaceSelector.defaultProps = {
   accountInfo: null,
   active: false,
-  backgroundColor: null,
-  badgeCount: 0,
   hibernated: false,
   name: null,
   onContextMenu: null,
@@ -421,8 +427,6 @@ WorkspaceSelector.defaultProps = {
 WorkspaceSelector.propTypes = {
   accountInfo: PropTypes.object,
   active: PropTypes.bool,
-  backgroundColor: PropTypes.string,
-  badgeCount: PropTypes.number,
   disableAudio: PropTypes.bool,
   disableNotifications: PropTypes.bool,
   hibernated: PropTypes.bool,
@@ -433,31 +437,8 @@ WorkspaceSelector.propTypes = {
   order: PropTypes.number,
   pictureId: PropTypes.string,
   preferredIconType: PropTypes.oneOf(['auto', 'text', 'image', 'accountInfo']),
-  searchEngine: PropTypes.string.isRequired,
-  shouldUseDarkColors: PropTypes.bool.isRequired,
-  sidebarSize: PropTypes.oneOf(['compact', 'expanded']).isRequired,
-  sidebarTips: PropTypes.oneOf(['shortcut', 'name', 'none']).isRequired,
   themeColor: PropTypes.string,
   transparentBackground: PropTypes.bool,
 };
 
-const mapStateToProps = (state, ownProps) => ({
-  badgeCount: state.preferences.unreadCountBadge
-    && (!ownProps.preferences || ownProps.preferences.unreadCountBadge !== false)
-    && state.workspaceMetas[ownProps.id]
-    ? state.workspaceMetas[ownProps.id].badgeCount : 0,
-  searchEngine: state.preferences.searchEngine,
-  shouldUseDarkColors: state.general.shouldUseDarkColors,
-  sidebarSize: state.preferences.sidebarSize,
-  sidebarTips: state.preferences.sidebarTips,
-  backgroundColor: ownProps.preferences
-    && ownProps.preferences.color
-    && ownProps.preferences.color !== ownProps.themeColor
-    ? themeColors[ownProps.preferences.color][600] : null,
-});
-
-export default connectComponent(
-  WorkspaceSelector,
-  mapStateToProps,
-  null,
-);
+export default WorkspaceSelector;

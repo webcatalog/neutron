@@ -5,9 +5,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Typography from '@material-ui/core/Typography';
-import { withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core';
 
-const styles = {
+const useStyles = makeStyles(() => ({
   root: {
     alignItems: 'center',
     display: 'flex',
@@ -23,17 +23,17 @@ const styles = {
     height: 112,
     width: 112,
   },
-};
-
+}));
 const EmptyState = (props) => {
   const {
     children,
-    classes,
     icon,
     title,
   } = props;
 
   const Icon = icon;
+
+  const classes = useStyles();
 
   return (
     <div className={classes.root}>
@@ -70,9 +70,8 @@ EmptyState.propTypes = {
     PropTypes.element,
     PropTypes.string,
   ]),
-  classes: PropTypes.object.isRequired,
   icon: PropTypes.object.isRequired,
   title: PropTypes.string,
 };
 
-export default withStyles(styles, { name: 'EmptyState' })(EmptyState);
+export default EmptyState;

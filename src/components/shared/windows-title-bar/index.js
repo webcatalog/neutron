@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -12,11 +11,12 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 
+import { useSelector } from 'react-redux';
+
 import MenuIcon from '@material-ui/icons/Menu';
 
 import { requestShowAppMenu } from '../../../senders';
 
-import connectComponent from '../../../helpers/connect-component';
 import getStaticGlobal from '../../../helpers/get-static-global';
 
 import themeColors from '../../../constants/theme-colors';
@@ -149,15 +149,35 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EnhancedAppBar = ({
-  isMaximized,
-  navigationBar,
-  sidebar,
-  sidebarSize,
-  themeColor,
-  title,
-}) => {
+const EnhancedAppBar = () => {
+  const appJson = getStaticGlobal('appJson');
+
+  const activeWorkspace = useSelector(
+    (state) => state.workspaces.workspaces[state.workspaces.activeWorkspaceId],
+  );
+  const isMaximized = useSelector((state) => state.general.isMaximized);
+  const title = useSelector((state, ownProps) => ownProps.title || ((window.mode === 'main' || window.mode === 'menubar') && state.general.title ? state.general.title : appJson.name));
+  const sidebar = useSelector((state) => state.preferences.sidebar);
+  const sidebarSize = useSelector((state) => state.preferences.sidebarSize);
+  const navigationBar = useSelector((state) => (window.process.platform === 'linux'
+  && state.preferences.attachToMenubar
+  && !state.preferences.sidebar)
+  || state.preferences.navigationBar);
+  const themeColor = useSelector((state) => () => {
+    if (window.mode === 'main' || window.mode === 'menubar') {
+      if (state.preferences.themeColor === 'auto') {
+        if (activeWorkspace && activeWorkspace.preferences && activeWorkspace.preferences.color) {
+          return activeWorkspace.preferences.color;
+        }
+        return null;
+      }
+      return state.preferences.themeColor;
+    }
+    return null;
+  });
+
   const classes = useStyles({ themeColor });
+
   const onDoubleClick = (e) => {
     // feature: double click on title bar to expand #656
     // https://github.com/webcatalog/webcatalog-app/issues/656
@@ -281,49 +301,4 @@ const EnhancedAppBar = ({
   );
 };
 
-EnhancedAppBar.defaultProps = {
-  title: '',
-  themeColor: null,
-};
-
-EnhancedAppBar.propTypes = {
-  isMaximized: PropTypes.bool.isRequired,
-  navigationBar: PropTypes.bool.isRequired,
-  sidebar: PropTypes.bool.isRequired,
-  sidebarSize: PropTypes.oneOf(['compact', 'expanded']).isRequired,
-  themeColor: PropTypes.string,
-  title: PropTypes.string,
-};
-
-const mapStateToProps = (state, ownProps) => {
-  const appJson = getStaticGlobal('appJson');
-  const activeWorkspace = state.workspaces.workspaces[state.workspaces.activeWorkspaceId];
-
-  return {
-    isMaximized: state.general.isMaximized,
-    title: ownProps.title || ((window.mode === 'main' || window.mode === 'menubar') && state.general.title ? state.general.title : appJson.name),
-    sidebar: state.preferences.sidebar,
-    sidebarSize: state.preferences.sidebarSize,
-    navigationBar: (window.process.platform === 'linux'
-      && state.preferences.attachToMenubar
-      && !state.preferences.sidebar)
-      || state.preferences.navigationBar,
-    themeColor: (() => {
-      if (window.mode === 'main' || window.mode === 'menubar') {
-        if (state.preferences.themeColor === 'auto') {
-          if (activeWorkspace && activeWorkspace.preferences && activeWorkspace.preferences.color) {
-            return activeWorkspace.preferences.color;
-          }
-          return null;
-        }
-        return state.preferences.themeColor;
-      }
-      return null;
-    })(),
-  };
-};
-
-export default connectComponent(
-  EnhancedAppBar,
-  mapStateToProps,
-);
+export default EnhancedAppBar;

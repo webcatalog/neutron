@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 
 import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
@@ -11,7 +10,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-import connectComponent from '../../../helpers/connect-component';
+import { useSelector } from 'react-redux';
+
 import checkLicense from '../../../helpers/check-license';
 import isMas from '../../../helpers/is-mas';
 import isStandalone from '../../../helpers/is-standalone';
@@ -26,10 +26,10 @@ import {
   requestRestorePurchase,
 } from '../../../senders';
 
-const SectionAccountLicensing = ({
-  iapPurchased,
-  standaloneRegistered,
-}) => {
+const SectionAccountLicensing = () => {
+  const iapPurchased = useSelector((state) => state.preferences.iapPurchased);
+  const standaloneRegistered = useSelector((state) => state.preferences.standaloneRegistered);
+
   const appJson = getStaticGlobal('appJson');
   const registered = appJson.registered || iapPurchased || standaloneRegistered;
 
@@ -74,22 +74,4 @@ const SectionAccountLicensing = ({
   );
 };
 
-SectionAccountLicensing.defaultProps = {
-  iapPurchased: false,
-  standaloneRegistered: false,
-};
-
-SectionAccountLicensing.propTypes = {
-  iapPurchased: PropTypes.bool,
-  standaloneRegistered: PropTypes.bool,
-};
-
-const mapStateToProps = (state) => ({
-  iapPurchased: state.preferences.iapPurchased,
-  standaloneRegistered: state.preferences.standaloneRegistered,
-});
-
-export default connectComponent(
-  SectionAccountLicensing,
-  mapStateToProps,
-);
+export default SectionAccountLicensing;

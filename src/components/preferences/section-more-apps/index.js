@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
@@ -11,7 +10,8 @@ import Typography from '@material-ui/core/Typography';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-import connectComponent from '../../../helpers/connect-component';
+import { makeStyles } from '@material-ui/core';
+
 import isAppx from '../../../helpers/is-appx';
 import isMas from '../../../helpers/is-mas';
 import getUtmSource from '../../../helpers/get-utm-source';
@@ -27,7 +27,7 @@ import singleboxIconPng from '../../../images/products/singlebox-mac-icon-128@2x
 import switchbarIconPng from '../../../images/products/switchbar-mac-icon-128@2x.png';
 import skywhaleIconPng from '../../../images/products/skywhale-mac-icon-128@2x.png';
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   listItemPromotion: {
     paddingLeft: theme.spacing(1),
   },
@@ -50,11 +50,11 @@ const styles = (theme) => ({
   appIcon: {
     height: 64,
   },
-});
+}));
 
-const SectionMoreApps = ({
-  classes,
-}) => {
+const SectionMoreApps = () => {
+  const classes = useStyles();
+
   const utmSource = getUtmSource();
 
   return (
@@ -254,13 +254,4 @@ const SectionMoreApps = ({
   );
 };
 
-SectionMoreApps.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default connectComponent(
-  SectionMoreApps,
-  null,
-  null,
-  styles,
-);
+export default SectionMoreApps;

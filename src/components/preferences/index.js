@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -34,7 +33,8 @@ import ViewListIcon from '@material-ui/icons/ViewList';
 import WebAssetIcon from '@material-ui/icons/WebAsset';
 import WidgetsIcon from '@material-ui/icons/Widgets';
 
-import connectComponent from '../../helpers/connect-component';
+import { makeStyles } from '@material-ui/core';
+
 import isMas from '../../helpers/is-mas';
 import isAppx from '../../helpers/is-appx';
 import isStandalone from '../../helpers/is-standalone';
@@ -85,7 +85,7 @@ import SectionWorkspaces from './section-workspaces';
 import SectionLabs from './section-labs';
 import SnackbarTrigger from '../shared/snackbar-trigger';
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     background: theme.palette.background.default,
     height: '100%',
@@ -114,7 +114,7 @@ const styles = (theme) => ({
   alert: {
     marginBottom: theme.spacing(1),
   },
-});
+}));
 
 const HibernationIcon = (props) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
@@ -317,9 +317,9 @@ const sections = {
   },
 };
 
-const Preferences = ({
-  classes,
-}) => {
+const Preferences = () => {
+  const classes = useStyles();
+
   const [activeSectionKey, setActiveSectionKey] = useState(getStaticGlobal('preferencesScrollTo') || 'general');
 
   const activeSection = sections[activeSectionKey];
@@ -380,18 +380,4 @@ const Preferences = ({
   );
 };
 
-Preferences.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  iapPurchased: state.preferences.iapPurchased,
-  standaloneRegistered: state.preferences.standaloneRegistered,
-});
-
-export default connectComponent(
-  Preferences,
-  mapStateToProps,
-  null,
-  styles,
-);
+export default Preferences;

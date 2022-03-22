@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
@@ -14,14 +13,17 @@ import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 
-import connectComponent from '../../../helpers/connect-component';
+import { makeStyles } from '@material-ui/core';
+
+import { useSelector } from 'react-redux';
+
 import getStaticGlobal from '../../../helpers/get-static-global';
 
 import {
   requestSetPreference,
 } from '../../../senders';
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   sliderContainer: {
     paddingTop: theme.spacing(2),
     paddingLeft: theme.spacing(5),
@@ -34,188 +36,169 @@ const styles = (theme) => ({
   sliderMarkLabel: {
     fontSize: '0.75rem',
   },
-});
+}));
 
-const SectionDarkReader = ({
-  classes,
-  darkReader,
-  darkReaderBrightness,
-  darkReaderContrast,
-  darkReaderGrayscale,
-  darkReaderSepia,
-}) => (
-  <List disablePadding dense>
-    <ListItem>
-      <ListItemText
-        primary="Dark Reader"
-        secondary={getStaticGlobal('darkReaderExtensionDetected')
-          ? 'The built-in Dark Reader feature has been taken over by the external Dark Reader extension.'
-          : 'Create unofficial dark theme for every web service & account.'}
-      />
-      <ListItemSecondaryAction>
-        <Switch
-          edge="end"
-          color="primary"
-          checked={getStaticGlobal('darkReaderExtensionDetected') ? false : darkReader}
-          disabled={getStaticGlobal('darkReaderExtensionDetected')}
-          onChange={(e) => {
-            requestSetPreference('darkReader', e.target.checked);
-          }}
-        />
-      </ListItemSecondaryAction>
-    </ListItem>
-    {!getStaticGlobal('darkReaderExtensionDetected') && (
-    <>
-      <Divider />
+const SectionDarkReader = () => {
+  const classes = useStyles();
+
+  const darkReader = useSelector((state) => state.preferences.darkReader);
+  const darkReaderBrightness = useSelector((state) => state.preferences.darkReaderBrightness);
+  const darkReaderContrast = useSelector((state) => state.preferences.darkReaderContrast);
+  const darkReaderGrayscale = useSelector((state) => state.preferences.darkReaderGrayscale);
+  const darkReaderSepia = useSelector((state) => state.preferences.darkReaderSepia);
+
+  return (
+    <List disablePadding dense>
       <ListItem>
-        <ListItemText className={classes.sliderContainer}>
-          <Grid container spacing={2}>
-            <Grid classes={{ item: classes.sliderTitleContainer }} item>
-              <Typography id="brightness-slider" variant="body2" gutterBottom={false}>
-                Brightness
-              </Typography>
-            </Grid>
-            <Grid item xs>
-              <Slider
-                classes={{ markLabel: classes.sliderMarkLabel }}
-                value={darkReaderBrightness - 100}
-                disabled={getStaticGlobal('darkReaderExtensionDetected') || !darkReader}
-                aria-labelledby="brightness-slider"
-                valueLabelDisplay="auto"
-                step={5}
-                valueLabelFormat={(val) => {
-                  if (val > 0) return `+${val}`;
-                  return val;
-                }}
-                marks={[
-                  {
-                    value: darkReaderBrightness - 100,
-                    label: `${darkReaderBrightness > 100 ? '+' : ''}${darkReaderBrightness - 100}`,
-                  },
-                ]}
-                min={-50}
-                max={50}
-                onChange={(e, value) => {
-                  requestSetPreference('darkReaderBrightness', value + 100);
-                }}
-              />
-            </Grid>
-          </Grid>
-          <Grid container spacing={2}>
-            <Grid classes={{ item: classes.sliderTitleContainer }} item>
-              <Typography id="contrast-slider" variant="body2" gutterBottom={false}>
-                Contrast
-              </Typography>
-            </Grid>
-            <Grid item xs>
-              <Slider
-                classes={{ markLabel: classes.sliderMarkLabel }}
-                value={darkReaderContrast - 100}
-                disabled={getStaticGlobal('darkReaderExtensionDetected') || !darkReader}
-                aria-labelledby="contrast-slider"
-                valueLabelDisplay="auto"
-                step={5}
-                valueLabelFormat={(val) => {
-                  if (val > 0) return `+${val}`;
-                  return val;
-                }}
-                marks={[
-                  {
-                    value: darkReaderContrast - 100,
-                    label: `${darkReaderContrast > 100 ? '+' : ''}${darkReaderContrast - 100}`,
-                  },
-                ]}
-                min={-50}
-                max={50}
-                onChange={(e, value) => {
-                  requestSetPreference('darkReaderContrast', value + 100);
-                }}
-              />
-            </Grid>
-          </Grid>
-          <Grid container spacing={2}>
-            <Grid classes={{ item: classes.sliderTitleContainer }} item>
-              <Typography id="sepia-slider" variant="body2" gutterBottom={false}>
-                Sepia
-              </Typography>
-            </Grid>
-            <Grid item xs>
-              <Slider
-                classes={{ markLabel: classes.sliderMarkLabel }}
-                value={darkReaderSepia}
-                disabled={getStaticGlobal('darkReaderExtensionDetected') || !darkReader}
-                aria-labelledby="sepia-slider"
-                valueLabelDisplay="auto"
-                step={5}
-                marks={[
-                  {
-                    value: darkReaderSepia,
-                    label: `${darkReaderSepia}`,
-                  },
-                ]}
-                min={0}
-                max={100}
-                onChange={(e, value) => {
-                  requestSetPreference('darkReaderSepia', value);
-                }}
-              />
-            </Grid>
-          </Grid>
-          <Grid container spacing={2}>
-            <Grid classes={{ item: classes.sliderTitleContainer }} item>
-              <Typography id="grayscale-slider" variant="body2" gutterBottom={false}>
-                Grayscale
-              </Typography>
-            </Grid>
-            <Grid item xs>
-              <Slider
-                classes={{ markLabel: classes.sliderMarkLabel }}
-                value={darkReaderGrayscale}
-                disabled={getStaticGlobal('darkReaderExtensionDetected') || !darkReader}
-                aria-labelledby="grayscale-slider"
-                valueLabelDisplay="auto"
-                step={5}
-                marks={[
-                  {
-                    value: darkReaderGrayscale,
-                    label: `${darkReaderGrayscale}`,
-                  },
-                ]}
-                min={0}
-                max={100}
-                onChange={(e, value) => {
-                  requestSetPreference('darkReaderGrayscale', value);
-                }}
-              />
-            </Grid>
-          </Grid>
-        </ListItemText>
+        <ListItemText
+          primary="Dark Reader"
+          secondary={getStaticGlobal('darkReaderExtensionDetected')
+            ? 'The built-in Dark Reader feature has been taken over by the external Dark Reader extension.'
+            : 'Create unofficial dark theme for every web service & account.'}
+        />
+        <ListItemSecondaryAction>
+          <Switch
+            edge="end"
+            color="primary"
+            checked={getStaticGlobal('darkReaderExtensionDetected') ? false : darkReader}
+            disabled={getStaticGlobal('darkReaderExtensionDetected')}
+            onChange={(e) => {
+              requestSetPreference('darkReader', e.target.checked);
+            }}
+          />
+        </ListItemSecondaryAction>
       </ListItem>
-    </>
-    )}
-  </List>
-);
-
-SectionDarkReader.propTypes = {
-  classes: PropTypes.object.isRequired,
-  darkReader: PropTypes.bool.isRequired,
-  darkReaderBrightness: PropTypes.number.isRequired,
-  darkReaderContrast: PropTypes.number.isRequired,
-  darkReaderGrayscale: PropTypes.number.isRequired,
-  darkReaderSepia: PropTypes.number.isRequired,
+      {!getStaticGlobal('darkReaderExtensionDetected') && (
+      <>
+        <Divider />
+        <ListItem>
+          <ListItemText className={classes.sliderContainer}>
+            <Grid container spacing={2}>
+              <Grid classes={{ item: classes.sliderTitleContainer }} item>
+                <Typography id="brightness-slider" variant="body2" gutterBottom={false}>
+                  Brightness
+                </Typography>
+              </Grid>
+              <Grid item xs>
+                <Slider
+                  classes={{ markLabel: classes.sliderMarkLabel }}
+                  value={darkReaderBrightness - 100}
+                  disabled={getStaticGlobal('darkReaderExtensionDetected') || !darkReader}
+                  aria-labelledby="brightness-slider"
+                  valueLabelDisplay="auto"
+                  step={5}
+                  valueLabelFormat={(val) => {
+                    if (val > 0) return `+${val}`;
+                    return val;
+                  }}
+                  marks={[
+                    {
+                      value: darkReaderBrightness - 100,
+                      label: `${darkReaderBrightness > 100 ? '+' : ''}${darkReaderBrightness - 100}`,
+                    },
+                  ]}
+                  min={-50}
+                  max={50}
+                  onChange={(e, value) => {
+                    requestSetPreference('darkReaderBrightness', value + 100);
+                  }}
+                />
+              </Grid>
+            </Grid>
+            <Grid container spacing={2}>
+              <Grid classes={{ item: classes.sliderTitleContainer }} item>
+                <Typography id="contrast-slider" variant="body2" gutterBottom={false}>
+                  Contrast
+                </Typography>
+              </Grid>
+              <Grid item xs>
+                <Slider
+                  classes={{ markLabel: classes.sliderMarkLabel }}
+                  value={darkReaderContrast - 100}
+                  disabled={getStaticGlobal('darkReaderExtensionDetected') || !darkReader}
+                  aria-labelledby="contrast-slider"
+                  valueLabelDisplay="auto"
+                  step={5}
+                  valueLabelFormat={(val) => {
+                    if (val > 0) return `+${val}`;
+                    return val;
+                  }}
+                  marks={[
+                    {
+                      value: darkReaderContrast - 100,
+                      label: `${darkReaderContrast > 100 ? '+' : ''}${darkReaderContrast - 100}`,
+                    },
+                  ]}
+                  min={-50}
+                  max={50}
+                  onChange={(e, value) => {
+                    requestSetPreference('darkReaderContrast', value + 100);
+                  }}
+                />
+              </Grid>
+            </Grid>
+            <Grid container spacing={2}>
+              <Grid classes={{ item: classes.sliderTitleContainer }} item>
+                <Typography id="sepia-slider" variant="body2" gutterBottom={false}>
+                  Sepia
+                </Typography>
+              </Grid>
+              <Grid item xs>
+                <Slider
+                  classes={{ markLabel: classes.sliderMarkLabel }}
+                  value={darkReaderSepia}
+                  disabled={getStaticGlobal('darkReaderExtensionDetected') || !darkReader}
+                  aria-labelledby="sepia-slider"
+                  valueLabelDisplay="auto"
+                  step={5}
+                  marks={[
+                    {
+                      value: darkReaderSepia,
+                      label: `${darkReaderSepia}`,
+                    },
+                  ]}
+                  min={0}
+                  max={100}
+                  onChange={(e, value) => {
+                    requestSetPreference('darkReaderSepia', value);
+                  }}
+                />
+              </Grid>
+            </Grid>
+            <Grid container spacing={2}>
+              <Grid classes={{ item: classes.sliderTitleContainer }} item>
+                <Typography id="grayscale-slider" variant="body2" gutterBottom={false}>
+                  Grayscale
+                </Typography>
+              </Grid>
+              <Grid item xs>
+                <Slider
+                  classes={{ markLabel: classes.sliderMarkLabel }}
+                  value={darkReaderGrayscale}
+                  disabled={getStaticGlobal('darkReaderExtensionDetected') || !darkReader}
+                  aria-labelledby="grayscale-slider"
+                  valueLabelDisplay="auto"
+                  step={5}
+                  marks={[
+                    {
+                      value: darkReaderGrayscale,
+                      label: `${darkReaderGrayscale}`,
+                    },
+                  ]}
+                  min={0}
+                  max={100}
+                  onChange={(e, value) => {
+                    requestSetPreference('darkReaderGrayscale', value);
+                  }}
+                />
+              </Grid>
+            </Grid>
+          </ListItemText>
+        </ListItem>
+      </>
+      )}
+    </List>
+  );
 };
 
-const mapStateToProps = (state) => ({
-  darkReader: state.preferences.darkReader,
-  darkReaderBrightness: state.preferences.darkReaderBrightness,
-  darkReaderContrast: state.preferences.darkReaderContrast,
-  darkReaderGrayscale: state.preferences.darkReaderGrayscale,
-  darkReaderSepia: state.preferences.darkReaderSepia,
-});
-
-export default connectComponent(
-  SectionDarkReader,
-  mapStateToProps,
-  null,
-  styles,
-);
+export default SectionDarkReader;

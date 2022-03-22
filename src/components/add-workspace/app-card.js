@@ -9,17 +9,19 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import { makeStyles } from '@material-ui/core';
+
+import { useDispatch } from 'react-redux';
 
 import amplitude from '../../amplitude';
 
-import connectComponent from '../../helpers/connect-component';
 import isUrl from '../../helpers/is-url';
 import extractHostname from '../../helpers/extract-hostname';
 import { requestCreateWorkspace, requestTrackAddWorkspace } from '../../senders';
 
 import { updateForm, updateMode } from '../../state/dialog-add-workspace/actions';
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   card: {
     width: '100%',
     boxSizing: 'border-box',
@@ -68,20 +70,20 @@ const styles = (theme) => ({
     flex: 1,
     overflow: 'hidden',
   },
-});
+}));
 
 const AppCard = (props) => {
   const {
-    classes,
     icon,
     icon128,
     id,
     name,
-    onUpdateForm,
-    onUpdateMode,
     requireInstanceUrl,
     url,
   } = props;
+
+  const classes = useStyles();
+  const dispatch = useDispatch();
 
   return (
     <Paper elevation={0} className={classes.card} square>
@@ -108,10 +110,10 @@ const AppCard = (props) => {
               {
                 label: 'Clone',
                 click: () => {
-                  onUpdateForm({
+                  dispatch(updateForm({
                     name, homeUrl: url, internetIcon: icon,
-                  });
-                  onUpdateMode('custom');
+                  }));
+                  dispatch(updateMode('custom'));
                 },
               },
             ];
@@ -133,10 +135,10 @@ const AppCard = (props) => {
             // if the app requires instance URL
             // user has to configure the app URL before adding workspace
             if (requireInstanceUrl) {
-              onUpdateForm({
+              dispatch(updateForm({
                 name, homeUrl: url, internetIcon: icon,
-              });
-              onUpdateMode('custom');
+              }));
+              dispatch(updateMode('custom'));
               return;
             }
 
@@ -167,25 +169,12 @@ AppCard.defaultProps = {
 };
 
 AppCard.propTypes = {
-  classes: PropTypes.object.isRequired,
   icon128: PropTypes.string,
   icon: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  onUpdateForm: PropTypes.func.isRequired,
-  onUpdateMode: PropTypes.func.isRequired,
   requireInstanceUrl: PropTypes.bool,
   url: PropTypes.string.isRequired,
 };
 
-const actionCreators = {
-  updateForm,
-  updateMode,
-};
-
-export default connectComponent(
-  AppCard,
-  null,
-  actionCreators,
-  styles,
-);
+export default AppCard;

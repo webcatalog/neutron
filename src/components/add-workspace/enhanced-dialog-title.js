@@ -8,10 +8,9 @@ import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core';
 
-import connectComponent from '../../helpers/connect-component';
-
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     borderBottom: `1px solid ${theme.palette.divider}`,
     marginTop: 0,
@@ -24,9 +23,11 @@ const styles = (theme) => ({
     top: theme.spacing(1),
     color: theme.palette.grey[500],
   },
-});
+}));
 
-const EnhancedDialogTitle = ({ children, classes, onClose }) => (
+const classes = useStyles();
+
+const EnhancedDialogTitle = ({ children, onClose }) => (
   <MuiDialogTitle disableTypography className={classes.root}>
     <Typography variant="h6">{children}</Typography>
     {onClose ? (
@@ -42,7 +43,6 @@ EnhancedDialogTitle.defaultProps = {
 };
 
 EnhancedDialogTitle.propTypes = {
-  classes: PropTypes.object.isRequired,
   children: PropTypes.oneOfType([
     PropTypes.element,
     PropTypes.string,
@@ -50,9 +50,4 @@ EnhancedDialogTitle.propTypes = {
   onClose: PropTypes.func,
 };
 
-export default connectComponent(
-  EnhancedDialogTitle,
-  null,
-  null,
-  styles,
-);
+export default EnhancedDialogTitle;

@@ -4,28 +4,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import connectComponent from '../../helpers/connect-component';
+import { useSelector } from 'react-redux';
+
 import getStaticGlobal from '../../helpers/get-static-global';
 
-const BrowserActionList = ({ className, partitionId }) => {
-  if (partitionId == null) return null;
-  if (!getStaticGlobal('extensionEnabled')) return null;
-  return (
-    <browser-action-list partition={partitionId} class={className} />
+const BrowserActionList = ({ className }) => {
+  const activeWorkspace = useSelector(
+    (state) => state.workspaces.workspaces[state.workspaces.activeWorkspaceId],
   );
-};
 
-BrowserActionList.defaultProps = {
-  partitionId: null,
-};
-
-BrowserActionList.propTypes = {
-  className: PropTypes.string.isRequired,
-  partitionId: PropTypes.string,
-};
-
-const mapStateToProps = (state) => {
-  const activeWorkspace = state.workspaces.workspaces[state.workspaces.activeWorkspaceId];
   const shareWorkspaceBrowsingData = getStaticGlobal('shareWorkspaceBrowsingData');
 
   let partitionId = null;
@@ -34,12 +21,15 @@ const mapStateToProps = (state) => {
     else partitionId = `persist:${activeWorkspace.id}`;
   }
 
-  return {
-    partitionId,
-  };
+  if (partitionId == null) return null;
+  if (!getStaticGlobal('extensionEnabled')) return null;
+  return (
+    <browser-action-list partition={partitionId} class={className} />
+  );
 };
 
-export default connectComponent(
-  BrowserActionList,
-  mapStateToProps,
-);
+BrowserActionList.propTypes = {
+  className: PropTypes.string.isRequired,
+};
+
+export default BrowserActionList;

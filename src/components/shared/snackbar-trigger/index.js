@@ -2,23 +2,23 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useRef, useCallback } from 'react';
-import PropTypes from 'prop-types';
 
 import Button from '@material-ui/core/Button';
+import { makeStyles } from '@material-ui/core';
 
 import { SnackbarProvider } from 'notistack';
 
-import connectComponent from '../../../helpers/connect-component';
-
 import Inner from './inner';
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   notistackContainerRoot: {
     marginTop: theme.spacing(1),
   },
-});
+}));
 
-const SnackbarTrigger = ({ classes }) => {
+const SnackbarTrigger = () => {
+  const classes = useStyles();
+
   const notistackRef = useRef(null);
   const action = useCallback((key) => {
     const onClickDismiss = () => {
@@ -53,13 +53,4 @@ const SnackbarTrigger = ({ classes }) => {
   );
 };
 
-SnackbarTrigger.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default connectComponent(
-  SnackbarTrigger,
-  null,
-  null,
-  styles,
-);
+export default SnackbarTrigger;

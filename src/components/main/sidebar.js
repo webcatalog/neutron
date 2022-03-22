@@ -21,9 +21,10 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import VolumeUpIcon from '@material-ui/icons/VolumeUp';
 import VolumeOffIcon from '@material-ui/icons/VolumeOff';
 
+import { useSelector } from 'react-redux';
+
 import { sortableContainer, sortableElement } from 'react-sortable-hoc';
 
-import connectComponent from '../../helpers/connect-component';
 import getWorkspacesAsList from '../../helpers/get-workspaces-as-list';
 import getStaticGlobal from '../../helpers/get-static-global';
 import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
@@ -302,19 +303,39 @@ ScrollbarContainer.propTypes = {
   className: PropTypes.string.isRequired,
 };
 
-const Sidebar = ({
-  isFullScreen,
-  isLoading,
-  muteApp,
-  navigationBar,
-  shouldPauseNotifications,
-  sidebarAddButton,
-  sidebarSize,
-  themeColor,
-  titleBar,
-  workspaces,
-}) => {
+const Sidebar = () => {
+  const activeWorkspace = useSelector(
+    (state) => state.workspaces.workspaces[state.workspaces.activeWorkspaceId],
+  );
+  const isFullScreen = useSelector((state) => state.general.isFullScreen);
+  const isLoading = useSelector((state) => (
+    activeWorkspace && state.workspaceMetas[activeWorkspace.id]
+      ? Boolean(state.workspaceMetas[activeWorkspace.id].isLoading)
+      : false));
+  const navigationBar = useSelector((state) => (window.process.platform === 'linux'
+  && state.preferences.attachToMenubar
+  && !state.preferences.sidebar)
+  || state.preferences.navigationBar);
+  const shouldPauseNotifications = useSelector(
+    (state) => state.notifications.pauseNotificationsInfo !== null,
+  );
+  const sidebarAddButton = useSelector((state) => state.preferences.sidebarAddButton);
+  const sidebarSize = useSelector((state) => state.preferences.sidebarSize);
+  const titleBar = useSelector((state) => state.preferences.titleBar);
+  const muteApp = useSelector((state) => state.preferences.muteApp);
+  const workspaces = useSelector((state) => state.workspaces.workspaces);
+  const themeColor = useSelector((state) => (() => {
+    if (state.preferences.themeColor === 'auto') {
+      if (activeWorkspace && activeWorkspace.preferences && activeWorkspace.preferences.color) {
+        return activeWorkspace.preferences.color;
+      }
+      return null;
+    }
+    return state.preferences.themeColor;
+  })());
+
   const classes = useStyles({ themeColor });
+
   const appJson = getStaticGlobal('appJson');
   const workspacesList = getWorkspacesAsList(workspaces);
   const showMacTitleBar = window.process.platform === 'darwin' && titleBar && !isFullScreen;
@@ -481,55 +502,4 @@ const Sidebar = ({
   );
 };
 
-Sidebar.defaultProps = {
-  isLoading: false,
-  themeColor: null,
-};
-
-Sidebar.propTypes = {
-  isFullScreen: PropTypes.bool.isRequired,
-  isLoading: PropTypes.bool,
-  muteApp: PropTypes.bool.isRequired,
-  navigationBar: PropTypes.bool.isRequired,
-  shouldPauseNotifications: PropTypes.bool.isRequired,
-  sidebarAddButton: PropTypes.bool.isRequired,
-  sidebarSize: PropTypes.oneOf(['compact', 'expanded']).isRequired,
-  themeColor: PropTypes.string,
-  titleBar: PropTypes.bool.isRequired,
-  workspaces: PropTypes.object.isRequired,
-};
-
-const mapStateToProps = (state) => {
-  const activeWorkspace = state.workspaces.workspaces[state.workspaces.activeWorkspaceId];
-
-  return {
-    isFullScreen: state.general.isFullScreen,
-    isLoading: activeWorkspace && state.workspaceMetas[activeWorkspace.id]
-      ? Boolean(state.workspaceMetas[activeWorkspace.id].isLoading)
-      : false,
-    navigationBar: (window.process.platform === 'linux'
-      && state.preferences.attachToMenubar
-      && !state.preferences.sidebar)
-      || state.preferences.navigationBar,
-    shouldPauseNotifications: state.notifications.pauseNotificationsInfo !== null,
-    sidebarAddButton: state.preferences.sidebarAddButton,
-    sidebarSize: state.preferences.sidebarSize,
-    titleBar: state.preferences.titleBar,
-    muteApp: state.preferences.muteApp,
-    workspaces: state.workspaces.workspaces,
-    themeColor: (() => {
-      if (state.preferences.themeColor === 'auto') {
-        if (activeWorkspace && activeWorkspace.preferences && activeWorkspace.preferences.color) {
-          return activeWorkspace.preferences.color;
-        }
-        return null;
-      }
-      return state.preferences.themeColor;
-    })(),
-  };
-};
-
-export default connectComponent(
-  Sidebar,
-  mapStateToProps,
-);
+export default Sidebar;

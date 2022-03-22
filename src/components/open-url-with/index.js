@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -13,9 +12,10 @@ import Divider from '@material-ui/core/Divider';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 
+import { useSelector } from 'react-redux';
+
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-import connectComponent from '../../helpers/connect-component';
 import getWorkspacesAsList from '../../helpers/get-workspaces-as-list';
 import getMailtoUrl from '../../helpers/get-mailto-url';
 import getStaticGlobal from '../../helpers/get-static-global';
@@ -40,8 +40,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const OpenUrlWith = ({ workspaces, defaultOpenInNewWindow }) => {
+const OpenUrlWith = () => {
   const classes = useStyles();
+
+  const workspaces = useSelector((state) => state.workspaces.workspaces);
+  const defaultOpenInNewWindow = useSelector((state) => state.preferences.openProtocolUrlInNewWindow === 'new-window');
 
   const appJson = getStaticGlobal('appJson');
   const incomingUrl = getStaticGlobal('incomingUrl');
@@ -107,19 +110,4 @@ const OpenUrlWith = ({ workspaces, defaultOpenInNewWindow }) => {
   );
 };
 
-OpenUrlWith.propTypes = {
-  workspaces: PropTypes.object.isRequired,
-  defaultOpenInNewWindow: PropTypes.bool.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  workspaces: state.workspaces.workspaces,
-  defaultOpenInNewWindow: state.preferences.openProtocolUrlInNewWindow === 'new-window',
-});
-
-export default connectComponent(
-  OpenUrlWith,
-  mapStateToProps,
-  null,
-  null,
-);
+export default OpenUrlWith;

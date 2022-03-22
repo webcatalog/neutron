@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import List from '@material-ui/core/List';
@@ -12,9 +11,11 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import Divider from '@material-ui/core/Divider';
 
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import { makeStyles } from '@material-ui/core';
 
-import connectComponent from '../../../helpers/connect-component';
+import { useDispatch, useSelector } from 'react-redux';
+
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 import {
   enqueueRequestRestartSnackbar,
@@ -25,7 +26,7 @@ import { open as openDialogCustomizeFonts } from '../../../state/dialog-customiz
 
 import DialogCustomizeFonts from './dialog-customize-fonts';
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   selectRoot: {
     borderRadius: theme.spacing(0.5),
     fontSize: '0.84375rem',
@@ -40,77 +41,61 @@ const styles = (theme) => ({
     paddingBottom: theme.spacing(1),
     paddingLeft: theme.spacing(1.5),
   },
-});
+}));
 
-const SectionFonts = ({
-  classes,
-  defaultFontSize,
-  onOpenDialogCustomizeFonts,
-}) => (
-  <>
-    <List disablePadding dense>
-      <ListItem>
-        <ListItemText primary="Font size" />
-        <Select
-          value={defaultFontSize}
-          onChange={(e) => {
-            requestSetPreference('defaultFontSize', e.target.value);
-            enqueueRequestRestartSnackbar();
-          }}
-          variant="filled"
-          disableUnderline
-          margin="dense"
-          classes={{
-            root: classes.select,
-          }}
-          className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
-        >
-          {[
-            { value: 9, label: 'Very Small' },
-            { value: 12, label: 'Small' },
-            { value: 16, label: 'Medium (Recommended)' },
-            { value: 20, label: 'Large' },
-            { value: 24, label: 'Very Large' },
-          ].map((item) => (
-            <MenuItem key={item.value} dense value={item.value}>{item.label}</MenuItem>
-          ))}
-          {[9, 12, 16, 20, 24].indexOf(defaultFontSize) < 0 && (
-            <MenuItem
-              value={defaultFontSize}
-              dense
-            >
-              Custom
-            </MenuItem>
-          )}
-        </Select>
-      </ListItem>
-      <Divider />
-      <ListItem button onClick={onOpenDialogCustomizeFonts}>
-        <ListItemText primary="Advanced font size settings" />
-        <ChevronRightIcon color="action" />
-      </ListItem>
-    </List>
-    <DialogCustomizeFonts />
-  </>
-);
+const SectionFonts = () => {
+  const classes = useStyles();
+  const dispatch = useDispatch();
 
-SectionFonts.propTypes = {
-  classes: PropTypes.object.isRequired,
-  defaultFontSize: PropTypes.number.isRequired,
-  onOpenDialogCustomizeFonts: PropTypes.func.isRequired,
+  const defaultFontSize = useSelector((state) => state.preferences.defaultFontSize);
+
+  return (
+    <>
+      <List disablePadding dense>
+        <ListItem>
+          <ListItemText primary="Font size" />
+          <Select
+            value={defaultFontSize}
+            onChange={(e) => {
+              requestSetPreference('defaultFontSize', e.target.value);
+              enqueueRequestRestartSnackbar();
+            }}
+            variant="filled"
+            disableUnderline
+            margin="dense"
+            classes={{
+              root: classes.select,
+            }}
+            className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
+          >
+            {[
+              { value: 9, label: 'Very Small' },
+              { value: 12, label: 'Small' },
+              { value: 16, label: 'Medium (Recommended)' },
+              { value: 20, label: 'Large' },
+              { value: 24, label: 'Very Large' },
+            ].map((item) => (
+              <MenuItem key={item.value} dense value={item.value}>{item.label}</MenuItem>
+            ))}
+            {[9, 12, 16, 20, 24].indexOf(defaultFontSize) < 0 && (
+              <MenuItem
+                value={defaultFontSize}
+                dense
+              >
+                Custom
+              </MenuItem>
+            )}
+          </Select>
+        </ListItem>
+        <Divider />
+        <ListItem button onClick={() => dispatch(openDialogCustomizeFonts())}>
+          <ListItemText primary="Advanced font size settings" />
+          <ChevronRightIcon color="action" />
+        </ListItem>
+      </List>
+      <DialogCustomizeFonts />
+    </>
+  );
 };
 
-const mapStateToProps = (state) => ({
-  defaultFontSize: state.preferences.defaultFontSize,
-});
-
-const actionCreators = {
-  openDialogCustomizeFonts,
-};
-
-export default connectComponent(
-  SectionFonts,
-  mapStateToProps,
-  actionCreators,
-  styles,
-);
+export default SectionFonts;

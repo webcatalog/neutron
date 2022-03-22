@@ -3,7 +3,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import {
   WithSearch,
@@ -14,13 +13,12 @@ import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core';
 
 import CloseIcon from '@material-ui/icons/Close';
 import RefreshIcon from '@material-ui/icons/Refresh';
 
-import connectComponent from '../../helpers/connect-component';
-
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   toolbarSearchContainer: {
     flex: 1,
     zIndex: 10,
@@ -76,109 +74,102 @@ const styles = (theme) => ({
   iconButton: {
     padding: theme.spacing(0.5),
   },
-});
+}));
 
-const SearchBox = ({
-  classes,
-}) => (
-  <Paper elevation={1} className={classes.toolbarSearchContainer}>
-    <div className={classes.toolbarSectionSearch}>
-      <Typography
-        className={classes.searchBarText}
-        color="inherit"
-        variant="body1"
-        component="div"
-      >
-        <AppSearchSearchBox
-          searchAsYouType
-          debounceLength={300}
-          inputView={({ getAutocomplete, getInputProps }) => (
-            <div className="sui-search-box__wrapper">
-              <input
-                {...getInputProps({
-                  className: classes.input,
-                  placeholder: 'Search apps...',
-                  // App Search API can only handle up to 128 chars
-                  maxLength: 128,
-                  onFocus: () => {
-                    window.preventClosingWindow = true;
-                  },
-                  onBlur: () => {
-                    window.preventClosingWindow = false;
-                  },
-                })}
-              />
-              {getAutocomplete()}
-            </div>
-          )}
-          shouldClearFilters={false}
-        />
-      </Typography>
-      <WithSearch
-        mapContextToProps={({
-          searchTerm,
-          setSearchTerm,
-          isLoading,
-        }) => ({
-          searchTerm,
-          setSearchTerm,
-          isLoading,
-        })}
-      >
-        {({ searchTerm, setSearchTerm, isLoading }) => {
-          if (searchTerm.length > 0) {
+const SearchBox = () => {
+  const classes = useStyles();
+
+  return (
+    <Paper elevation={1} className={classes.toolbarSearchContainer}>
+      <div className={classes.toolbarSectionSearch}>
+        <Typography
+          className={classes.searchBarText}
+          color="inherit"
+          variant="body1"
+          component="div"
+        >
+          <AppSearchSearchBox
+            searchAsYouType
+            debounceLength={300}
+            inputView={({ getAutocomplete, getInputProps }) => (
+              <div className="sui-search-box__wrapper">
+                <input
+                  {...getInputProps({
+                    className: classes.input,
+                    placeholder: 'Search apps...',
+                    // App Search API can only handle up to 128 chars
+                    maxLength: 128,
+                    onFocus: () => {
+                      window.preventClosingWindow = true;
+                    },
+                    onBlur: () => {
+                      window.preventClosingWindow = false;
+                    },
+                  })}
+                />
+                {getAutocomplete()}
+              </div>
+            )}
+            shouldClearFilters={false}
+          />
+        </Typography>
+        <WithSearch
+          mapContextToProps={({
+            searchTerm,
+            setSearchTerm,
+            isLoading,
+          }) => ({
+            searchTerm,
+            setSearchTerm,
+            isLoading,
+          })}
+        >
+          {({ searchTerm, setSearchTerm, isLoading }) => {
+            if (searchTerm.length > 0) {
+              return (
+                <Tooltip title="Clear">
+                  <IconButton
+                    color="default"
+                    className={classes.iconButton}
+                    aria-label="Clear"
+                    onClick={() => setSearchTerm('', {
+                      refresh: true,
+                      debounce: 0,
+                      shouldClearFilters: false,
+                    })}
+                  >
+                    <CloseIcon fontSize="small" />
+                  </IconButton>
+                </Tooltip>
+              );
+            }
             return (
-              <Tooltip title="Clear">
+              <Tooltip title="Refresh">
                 <IconButton
                   color="default"
                   className={classes.iconButton}
-                  aria-label="Clear"
-                  onClick={() => setSearchTerm('', {
-                    refresh: true,
-                    debounce: 0,
-                    shouldClearFilters: false,
-                  })}
+                  aria-label="Refresh"
+                  onClick={() => {
+                    // clear cache first
+                    if (window.elasticAppSearchQueryCache) {
+                      window.elasticAppSearchQueryCache.clear();
+                    }
+                    setSearchTerm('', {
+                      refresh: true,
+                      debounce: 0,
+                    });
+                  }}
+                  disabled={isLoading}
                 >
-                  <CloseIcon fontSize="small" />
+                  <RefreshIcon fontSize="small" />
                 </IconButton>
               </Tooltip>
             );
-          }
-          return (
-            <Tooltip title="Refresh">
-              <IconButton
-                color="default"
-                className={classes.iconButton}
-                aria-label="Refresh"
-                onClick={() => {
-                  // clear cache first
-                  if (window.elasticAppSearchQueryCache) {
-                    window.elasticAppSearchQueryCache.clear();
-                  }
-                  setSearchTerm('', {
-                    refresh: true,
-                    debounce: 0,
-                  });
-                }}
-                disabled={isLoading}
-              >
-                <RefreshIcon fontSize="small" />
-              </IconButton>
-            </Tooltip>
-          );
-        }}
-      </WithSearch>
-    </div>
-  </Paper>
-);
-
-SearchBox.propTypes = {
-  classes: PropTypes.object.isRequired,
+          }}
+        </WithSearch>
+      </div>
+    </Paper>
+  );
 };
 
-export default connectComponent(
-  SearchBox,
-  null,
-  null,
-  styles,
-);
+export default SearchBox;

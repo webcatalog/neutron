@@ -8,7 +8,8 @@ import IconButton from '@material-ui/core/IconButton';
 
 import ThumbsUpIcon from '@material-ui/icons/ThumbUp';
 
-import connectComponent from '../../helpers/connect-component';
+import { useSelector } from 'react-redux';
+
 import isAppx from '../../helpers/is-appx';
 import isMas from '../../helpers/is-mas';
 import getStaticGlobal from '../../helpers/get-static-global';
@@ -20,10 +21,11 @@ import {
 const RatingButton = ({
   className,
   iconClassName,
-  ratingDidRate,
-  ratingLastClicked,
   size,
 }) => {
+  const ratingLastClicked = useSelector((state) => state.preferences.ratingLastClicked);
+  const ratingDidRate = useSelector((state) => state.preferences.ratingDidRate);
+
   // avoid asking for review immediately when user first starts using the app
   useEffect(() => {
     if (ratingLastClicked < 1) {
@@ -89,25 +91,13 @@ const RatingButton = ({
 RatingButton.defaultProps = {
   className: undefined,
   iconClassName: undefined,
-  ratingDidRate: false,
-  ratingLastClicked: 0,
   size: undefined,
 };
 
 RatingButton.propTypes = {
   className: PropTypes.string,
   iconClassName: PropTypes.string,
-  ratingDidRate: PropTypes.bool,
-  ratingLastClicked: PropTypes.number,
   size: PropTypes.string,
 };
 
-const mapStateToProps = (state) => ({
-  ratingLastClicked: state.preferences.ratingLastClicked,
-  ratingDidRate: state.preferences.ratingDidRate,
-});
-
-export default connectComponent(
-  RatingButton,
-  mapStateToProps,
-);
+export default RatingButton;

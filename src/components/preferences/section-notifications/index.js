@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
-import PropTypes from 'prop-types';
 import semver from 'semver';
 
 import Divider from '@material-ui/core/Divider';
@@ -11,12 +10,14 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Switch from '@material-ui/core/Switch';
+import { makeStyles } from '@material-ui/core';
+
+import { useSelector } from 'react-redux';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 import { TimePicker } from '@material-ui/pickers';
 
-import connectComponent from '../../../helpers/connect-component';
 import getStaticGlobal from '../../../helpers/get-static-global';
 import getUtmSource from '../../../helpers/get-utm-source';
 import isWebcatalog from '../../../helpers/is-webcatalog';
@@ -28,7 +29,7 @@ import {
   requestShowNotificationsWindow,
 } from '../../../senders';
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(0.5),
     marginBottom: theme.spacing(3),
@@ -51,15 +52,24 @@ const styles = (theme) => ({
       textDecoration: 'underline',
     },
   },
-});
+}));
 
-const SectionNotifications = ({
-  classes,
-  pauseNotificationsBySchedule,
-  pauseNotificationsByScheduleFrom,
-  pauseNotificationsByScheduleTo,
-  pauseNotificationsMuteAudio,
-}) => {
+const SectionNotifications = () => {
+  const classes = useStyles();
+
+  const pauseNotificationsBySchedule = useSelector(
+    (state) => state.preferences.pauseNotificationsBySchedule,
+  );
+  const pauseNotificationsByScheduleFrom = useSelector(
+    (state) => state.preferences.pauseNotificationsByScheduleFrom,
+  );
+  const pauseNotificationsByScheduleTo = useSelector(
+    (state) => state.preferences.pauseNotificationsByScheduleTo,
+  );
+  const pauseNotificationsMuteAudio = useSelector(
+    (state) => state.preferences.pauseNotificationsMuteAudio,
+  );
+
   const appJson = getStaticGlobal('appJson');
   const utmSource = getUtmSource();
 
@@ -183,24 +193,4 @@ const SectionNotifications = ({
   );
 };
 
-SectionNotifications.propTypes = {
-  classes: PropTypes.object.isRequired,
-  pauseNotificationsBySchedule: PropTypes.bool.isRequired,
-  pauseNotificationsByScheduleFrom: PropTypes.string.isRequired,
-  pauseNotificationsByScheduleTo: PropTypes.string.isRequired,
-  pauseNotificationsMuteAudio: PropTypes.bool.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  pauseNotificationsBySchedule: state.preferences.pauseNotificationsBySchedule,
-  pauseNotificationsByScheduleFrom: state.preferences.pauseNotificationsByScheduleFrom,
-  pauseNotificationsByScheduleTo: state.preferences.pauseNotificationsByScheduleTo,
-  pauseNotificationsMuteAudio: state.preferences.pauseNotificationsMuteAudio,
-});
-
-export default connectComponent(
-  SectionNotifications,
-  mapStateToProps,
-  null,
-  styles,
-);
+export default SectionNotifications;

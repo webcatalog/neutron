@@ -3,14 +3,13 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import ListItem from '@material-ui/core/ListItem';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
+import { makeStyles } from '@material-ui/core';
 
-import connectComponent from '../../../helpers/connect-component';
 import getStaticGlobal from '../../../helpers/get-static-global';
 import isStandalone from '../../../helpers/is-standalone';
 import isMas from '../../../helpers/is-mas';
@@ -23,7 +22,7 @@ import {
   requestOpenInBrowser,
 } from '../../../senders';
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   icon: {
     height: 64,
     width: 64,
@@ -45,9 +44,11 @@ const styles = (theme) => ({
   content: {
     flex: 1,
   },
-});
+}));
 
-const About = ({ classes }) => {
+const About = () => {
+  const classes = useStyles();
+
   const appJson = getStaticGlobal('appJson');
   const appVersion = window.remote.app.getVersion();
 
@@ -119,13 +120,4 @@ const About = ({ classes }) => {
   );
 };
 
-About.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default connectComponent(
-  About,
-  null,
-  null,
-  styles,
-);
+export default About;

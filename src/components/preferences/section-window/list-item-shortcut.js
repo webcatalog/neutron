@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -12,10 +11,11 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import { makeStyles } from '@material-ui/core';
+
+import { useSelector } from 'react-redux';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-
-import connectComponent from '../../../helpers/connect-component';
 
 import keyboardMap from '../../../constants/keyboard-map';
 
@@ -24,7 +24,7 @@ import {
   enqueueRequestRestartSnackbar,
 } from '../../../senders';
 
-const styles = {
+const useStyles = makeStyles(() => ({
   combinatorContainer: {
     marginTop: 12,
   },
@@ -32,7 +32,7 @@ const styles = {
     paddingLeft: 12,
     paddingRight: 12,
   },
-};
+}));
 
 const renderCombinator = (combinator) => combinator
   .replace(/\+/g, ' + ')
@@ -42,7 +42,10 @@ const renderCombinator = (combinator) => combinator
   .replace('meta', '⌘')
   .toUpperCase();
 
-const ListItemShortcut = ({ classes, windowShortcut }) => {
+const ListItemShortcut = () => {
+  const classes = useStyles();
+  const windowShortcut = useSelector((state) => state.preferences.windowShortcut);
+
   const [open, setOpen] = useState(false);
   const [combinator, setCombinator] = useState(null);
 
@@ -138,22 +141,4 @@ const ListItemShortcut = ({ classes, windowShortcut }) => {
   );
 };
 
-ListItemShortcut.defaultProps = {
-  windowShortcut: null,
-};
-
-ListItemShortcut.propTypes = {
-  classes: PropTypes.object.isRequired,
-  windowShortcut: PropTypes.string,
-};
-
-const mapStateToProps = (state) => ({
-  windowShortcut: state.preferences.windowShortcut,
-});
-
-export default connectComponent(
-  ListItemShortcut,
-  mapStateToProps,
-  null,
-  styles,
-);
+export default ListItemShortcut;
