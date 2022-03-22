@@ -38,7 +38,7 @@ const DialogSpellcheckLanguages = () => {
 
   const open = useSelector((state) => state.dialogSpellcheckLanguages.open);
   const spellcheckLanguages = useSelector(
-    (state) => state.dialogSpellcheckLanguages.form.spellcheckLanguages,
+    (state) => state.dialogSpellcheckLanguages.form.spellcheckLanguages || [],
   );
 
   return (

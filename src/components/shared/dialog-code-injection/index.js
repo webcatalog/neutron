@@ -6,6 +6,7 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
+import { makeStyles } from '@material-ui/core/styles';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -24,7 +25,7 @@ import { requestOpenInBrowser } from '../../../senders';
 
 import { updateForm, save, close } from '../../../state/dialog-code-injection/actions';
 
-const useStyles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   content: {
     height: theme.spacing(50),
     padding: 0,
@@ -39,7 +40,7 @@ const useStyles = (theme) => ({
     float: 'right',
     marginLeft: theme.spacing(1),
   },
-});
+}));
 
 const getMode = (codeInjectionType) => {
   if (codeInjectionType === 'css') return 'css';
