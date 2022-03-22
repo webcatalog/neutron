@@ -21,7 +21,7 @@ import {
   requestSetPreference,
 } from '../../../senders';
 
-const useStyles = () => makeStyles(({
+const useStyles = makeStyles(() => ({
   link: {
     cursor: 'pointer',
     fontWeight: 500,

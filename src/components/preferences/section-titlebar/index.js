@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
-import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -11,89 +11,76 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Switch from '@material-ui/core/Switch';
 import Divider from '@material-ui/core/Divider';
 
-import connectComponent from '../../../helpers/connect-component';
-
 import {
   enqueueRequestRestartSnackbar,
   requestSetPreference,
 } from '../../../senders';
 
-const SectionTitlebar = ({
-  autoHideMenuBar,
-  useSystemTitleBar,
-  useSystemWindowButtons,
-}) => window.process.platform !== 'darwin' && (
-  <List disablePadding dense>
-    <ListItem>
-      <ListItemText
-        primary="Use native title bar and borders"
-      />
-      <ListItemSecondaryAction>
-        <Switch
-          edge="end"
-          color="primary"
-          checked={useSystemTitleBar}
-          onChange={(e) => {
-            requestSetPreference('useSystemTitleBar', e.target.checked);
-            enqueueRequestRestartSnackbar();
-          }}
-        />
-      </ListItemSecondaryAction>
-    </ListItem>
-    {window.process.platform === 'win32' && (
+const SectionTitlebar = () => {
+  const autoHideMenuBar = useSelector((state) => state.preferences.autoHideMenuBar);
+  const useSystemTitleBar = useSelector((state) => state.preferences.useSystemTitleBar);
+  const useSystemWindowButtons = useSelector((state) => state.preferences.useSystemWindowButtons);
+
+  if (window.process.platform === 'darwin') return null;
+
+  return (
+    <List disablePadding dense>
       <ListItem>
         <ListItemText
-          primary="Use native window (maximizing/minimizing/closing) buttons"
+          primary="Use native title bar and borders"
         />
         <ListItemSecondaryAction>
           <Switch
             edge="end"
             color="primary"
-            checked={useSystemTitleBar || useSystemWindowButtons}
-            disabled={useSystemTitleBar}
+            checked={useSystemTitleBar}
             onChange={(e) => {
-              requestSetPreference('useSystemWindowButtons', e.target.checked);
+              requestSetPreference('useSystemTitleBar', e.target.checked);
               enqueueRequestRestartSnackbar();
             }}
           />
         </ListItemSecondaryAction>
       </ListItem>
-    )}
-    <Divider />
-    <ListItem>
-      <ListItemText
-        primary="Hide menu bar automatically"
-        secondary="Auto hide the menu bar unless the Alt key is pressed."
-      />
-      <ListItemSecondaryAction>
-        <Switch
-          edge="end"
-          color="primary"
-          disabled={!useSystemTitleBar}
-          checked={useSystemTitleBar && autoHideMenuBar}
-          onChange={(e) => {
-            requestSetPreference('autoHideMenuBar', e.target.checked);
-            enqueueRequestRestartSnackbar();
-          }}
+      {window.process.platform === 'win32' && (
+        <ListItem>
+          <ListItemText
+            primary="Use native window (maximizing/minimizing/closing) buttons"
+          />
+          <ListItemSecondaryAction>
+            <Switch
+              edge="end"
+              color="primary"
+              checked={useSystemTitleBar || useSystemWindowButtons}
+              disabled={useSystemTitleBar}
+              onChange={(e) => {
+                requestSetPreference('useSystemWindowButtons', e.target.checked);
+                enqueueRequestRestartSnackbar();
+              }}
+            />
+          </ListItemSecondaryAction>
+        </ListItem>
+      )}
+      <Divider />
+      <ListItem>
+        <ListItemText
+          primary="Hide menu bar automatically"
+          secondary="Auto hide the menu bar unless the Alt key is pressed."
         />
-      </ListItemSecondaryAction>
-    </ListItem>
-  </List>
-);
-
-SectionTitlebar.propTypes = {
-  autoHideMenuBar: PropTypes.bool.isRequired,
-  useSystemTitleBar: PropTypes.bool.isRequired,
-  useSystemWindowButtons: PropTypes.bool.isRequired,
+        <ListItemSecondaryAction>
+          <Switch
+            edge="end"
+            color="primary"
+            disabled={!useSystemTitleBar}
+            checked={useSystemTitleBar && autoHideMenuBar}
+            onChange={(e) => {
+              requestSetPreference('autoHideMenuBar', e.target.checked);
+              enqueueRequestRestartSnackbar();
+            }}
+          />
+        </ListItemSecondaryAction>
+      </ListItem>
+    </List>
+  );
 };
 
-const mapStateToProps = (state) => ({
-  autoHideMenuBar: state.preferences.autoHideMenuBar,
-  useSystemTitleBar: state.preferences.useSystemTitleBar,
-  useSystemWindowButtons: state.preferences.useSystemWindowButtons,
-});
-
-export default connectComponent(
-  SectionTitlebar,
-  mapStateToProps,
-);
+export default SectionTitlebar;
