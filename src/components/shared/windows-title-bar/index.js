@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -149,14 +150,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EnhancedAppBar = () => {
+const EnhancedAppBar = ({ title: _title }) => {
   const appJson = getStaticGlobal('appJson');
 
   const activeWorkspace = useSelector(
     (state) => state.workspaces.workspaces[state.workspaces.activeWorkspaceId],
   );
   const isMaximized = useSelector((state) => state.general.isMaximized);
-  const title = useSelector((state, ownProps) => ownProps.title || ((window.mode === 'main' || window.mode === 'menubar') && state.general.title ? state.general.title : appJson.name));
+  const title = useSelector((state) => _title || ((window.mode === 'main' || window.mode === 'menubar') && state.general.title ? state.general.title : appJson.name));
   const sidebar = useSelector((state) => state.preferences.sidebar);
   const sidebarSize = useSelector((state) => state.preferences.sidebarSize);
   const navigationBar = useSelector((state) => (window.process.platform === 'linux'
@@ -299,6 +300,14 @@ const EnhancedAppBar = () => {
       </Toolbar>
     </AppBar>
   );
+};
+
+EnhancedAppBar.defaultProps = {
+  title: '',
+};
+
+EnhancedAppBar.propTypes = {
+  title: PropTypes.string,
 };
 
 export default EnhancedAppBar;

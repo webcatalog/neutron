@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { alpha } from '@material-ui/core/styles/colorManipulator';
@@ -72,7 +73,7 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-const FakeTitleBar = (themeColor) => {
+const FakeTitleBar = ({ themeColor }) => {
   const classes = useStyles({ themeColor });
 
   const title = useSelector((state) => state.general.title);
@@ -143,6 +144,14 @@ const FakeTitleBar = (themeColor) => {
       )}
     </div>
   );
+};
+
+FakeTitleBar.defaultProps = {
+  themeColor: null,
+};
+
+FakeTitleBar.propTypes = {
+  themeColor: PropTypes.string,
 };
 
 export default FakeTitleBar;

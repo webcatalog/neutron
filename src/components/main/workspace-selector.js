@@ -194,23 +194,25 @@ const WorkspaceSelector = ({
   onContextMenu,
   order,
   pictureId,
+  preferences,
   preferredIconType,
   themeColor,
   transparentBackground,
 }) => {
   const classes = useStyles({ themeColor });
 
-  const badgeCount = useSelector((state, ownProps) => (state.preferences.unreadCountBadge
-  && (!ownProps.preferences || ownProps.preferences.unreadCountBadge !== false)
-  && state.workspaceMetas[ownProps.id] ? state.workspaceMetas[ownProps.id].badgeCount : 0));
+  const badgeCount = useSelector((state) => (state.preferences.unreadCountBadge
+  && (!preferences || preferences.unreadCountBadge !== false)
+  && state.workspaceMetas[id] ? state.workspaceMetas[id].badgeCount : 0));
   const searchEngine = useSelector((state) => state.preferences.searchEngine);
   const shouldUseDarkColors = useSelector((state) => state.general.shouldUseDarkColors);
   const sidebarSize = useSelector((state) => state.preferences.sidebarSize);
   const sidebarTips = useSelector((state) => state.preferences.sidebarTips);
-  const backgroundColor = useSelector((ownProps) => (ownProps.preferences
-  && ownProps.preferences.color
-  && ownProps.preferences.color
-  !== ownProps.themeColor ? themeColors[ownProps.preferences.color][600] : null));
+
+  const backgroundColor = preferences
+  && preferences.color
+  && preferences.color
+  !== themeColor ? themeColors[preferences.color][600] : null;
 
   const isExpanded = sidebarSize === 'expanded';
   const shortcutTip = order < 9 && id !== 'add'
@@ -412,16 +414,17 @@ const WorkspaceSelector = ({
 WorkspaceSelector.defaultProps = {
   accountInfo: null,
   active: false,
+  disableAudio: false,
+  disableNotifications: false,
   hibernated: false,
   name: null,
   onContextMenu: null,
   order: 0,
   pictureId: null,
+  preferences: null,
   preferredIconType: 'auto',
-  transparentBackground: false,
   themeColor: null,
-  disableAudio: false,
-  disableNotifications: false,
+  transparentBackground: false,
 };
 
 WorkspaceSelector.propTypes = {
@@ -436,6 +439,7 @@ WorkspaceSelector.propTypes = {
   onContextMenu: PropTypes.func,
   order: PropTypes.number,
   pictureId: PropTypes.string,
+  preferences: PropTypes.object,
   preferredIconType: PropTypes.oneOf(['auto', 'text', 'image', 'accountInfo']),
   themeColor: PropTypes.string,
   transparentBackground: PropTypes.bool,
