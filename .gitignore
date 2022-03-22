@@ -57,3 +57,4 @@ template-*.json
 template-*.zip
 
 dist
+public/open-source-notices-automated.txt
