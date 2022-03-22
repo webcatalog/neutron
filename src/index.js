@@ -9,6 +9,17 @@ import { getCurrentWindow } from '@electron/remote';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 
+import Preferences from './components/preferences';
+import AddWorkspace from './components/add-workspace';
+import Auth from './components/auth';
+import DisplayMedia from './components/display-media';
+import GoToUrl from './components/go-to-url';
+import LicenseRegistration from './components/license-registration';
+import Notifications from './components/notifications';
+import OpenUrlWith from './components/open-url-with';
+import WorkspacePreferences from './components/workspace-preferences';
+import Main from './components/main';
+
 import './amplitude';
 
 import configureStore from './state';
@@ -33,17 +44,6 @@ if (getStaticGlobal('sentryEnabled')) {
 }
 
 const appJson = getStaticGlobal('appJson');
-
-const AddWorkspace = React.lazy(() => import('./components/add-workspace'));
-const Auth = React.lazy(() => import('./components/auth'));
-const DisplayMedia = React.lazy(() => import('./components/display-media'));
-const GoToUrl = React.lazy(() => import('./components/go-to-url'));
-const LicenseRegistration = React.lazy(() => import('./components/license-registration'));
-const Notifications = React.lazy(() => import('./components/notifications'));
-const OpenUrlWith = React.lazy(() => import('./components/open-url-with'));
-const Preferences = React.lazy(() => import('./components/preferences'));
-const WorkspacePreferences = React.lazy(() => import('./components/workspace-preferences'));
-const Main = React.lazy(() => import('./components/main'));
 
 const App = () => {
   switch (window.mode) {
