@@ -4,9 +4,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { IconButton, makeStyles } from '@material-ui/core';
+import { IconButton } from '@mui/material';
 
-import AddIcon from '@material-ui/icons/Add';
+import makeStyles from '@mui/styles/makeStyles';
+
+import AddIcon from '@mui/icons-material/Add';
 
 import { useSelector } from 'react-redux';
 
@@ -27,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
       if (props.themeColor != null) {
         return themeColors[props.themeColor][900];
       }
-      return theme.palette.type === 'dark' ? theme.palette.background.default : theme.palette.grey[200];
+      return theme.palette.mode === 'dark' ? theme.palette.background.default : theme.palette.grey[200];
     },
     WebkitUserSelect: 'none',
     WebkitAppRegion: 'drag',
@@ -91,6 +93,7 @@ const TabBar = ({ themeColor }) => {
         <IconButton
           onClick={() => requestAddWorkspaceTab(activeWorkspaceId)}
           className={classes.iconButton}
+          size="large"
         >
           <AddIcon className={classes.icon} />
         </IconButton>

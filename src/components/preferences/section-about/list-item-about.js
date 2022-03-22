@@ -5,11 +5,11 @@
 import React from 'react';
 import { app } from '@electron/remote';
 
-import ListItem from '@material-ui/core/ListItem';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
-import { makeStyles } from '@material-ui/core';
+import ListItem from '@mui/material/ListItem';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Link from '@mui/material/Link';
+import makeStyles from '@mui/styles/makeStyles';
 
 import getStaticGlobal from '../../../helpers/get-static-global';
 import isStandalone from '../../../helpers/is-standalone';

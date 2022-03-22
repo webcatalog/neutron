@@ -19,11 +19,11 @@ import {
   TableRow,
   TextField,
   Tooltip,
-} from '@material-ui/core';
+} from '@mui/material';
 
-import ClearIcon from '@material-ui/icons/Clear';
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+import ClearIcon from '@mui/icons-material/Clear';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 import getKeytarVaultName from '../../../helpers/get-keytar-vault-name';
 import {
@@ -115,6 +115,7 @@ const SectionSavedPassword = () => {
                                     });
                                   }}
                                   edge="end"
+                                  size="large"
                                 >
                                   {revealPasswords[key]
                                     ? <VisibilityIcon /> : <VisibilityOffIcon />}

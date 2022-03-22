@@ -4,15 +4,15 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
-import InputAdornment from '@material-ui/core/InputAdornment';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import Link from '@mui/material/Link';
+import InputAdornment from '@mui/material/InputAdornment';
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogActions from '@material-ui/core/DialogActions';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
 
 import { useDispatch, useSelector } from 'react-redux';
 

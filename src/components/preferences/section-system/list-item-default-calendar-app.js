@@ -4,11 +4,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { app } from '@electron/remote';
 
-import Button from '@material-ui/core/Button';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+import Button from '@mui/material/Button';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
 
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 import getStaticGlobal from '../../../helpers/get-static-global';
 import isWindows10 from '../../../helpers/is-windows-10';
@@ -67,7 +67,6 @@ const ListItemDefaultCalendarApp = () => {
       <Button
         variant="outlined"
         size="small"
-        color="default"
         onClick={() => {
           app.setAsDefaultProtocolClient('webcal');
           recheckIsDefault();

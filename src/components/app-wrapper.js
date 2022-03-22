@@ -4,17 +4,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { ThemeProvider as MuiThemeProvider, createTheme } from '@material-ui/core/styles';
-import blue from '@material-ui/core/colors/blue';
-import red from '@material-ui/core/colors/pink';
-import grey from '@material-ui/core/colors/grey';
+import {
+  ThemeProvider as MuiThemeProvider,
+  StyledEngineProvider,
+  createTheme,
+  adaptV4Theme,
+} from '@mui/material/styles';
 
-import CssBaseline from '@material-ui/core/CssBaseline';
+import CssBaseline from '@mui/material/CssBaseline';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { useSelector } from 'react-redux';
 
 import DateFnsUtils from '@date-io/date-fns';
 
+import { blue, pink as red, grey } from '@mui/material/colors';
 import getStaticGlobal from '../helpers/get-static-global';
 
 import WindowsTitleBar from './shared/windows-title-bar';
@@ -31,7 +34,7 @@ const AppWrapper = ({ children }) => {
       fontSize: 13.5,
     },
     palette: {
-      type: shouldUseDarkColors ? 'dark' : 'light',
+      mode: shouldUseDarkColors ? 'dark' : 'light',
       primary: {
         light: blue[300],
         main: blue[600],
@@ -51,28 +54,30 @@ const AppWrapper = ({ children }) => {
     };
   }
 
-  const theme = createTheme(themeObj);
+  const theme = createTheme(adaptV4Theme(themeObj));
 
   const showWindowsTitleBar = window.process.platform !== 'darwin' && !isFullScreen && !getStaticGlobal('useSystemTitleBar');
 
   return (
-    <MuiThemeProvider theme={theme}>
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <CssBaseline />
-        <div
-          style={{
-            height: '100vh',
-            width: '100vw',
-            overflow: 'hidden',
-          }}
-        >
-          {showWindowsTitleBar && <WindowsTitleBar title={window.mode !== 'main' ? document.title : undefined} />}
-          <div style={{ height: showWindowsTitleBar ? 'calc(100vh - 32px)' : '100vh' }}>
-            {locked ? <AppLock /> : children}
+    <StyledEngineProvider injectFirst>
+      <MuiThemeProvider theme={theme}>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <CssBaseline />
+          <div
+            style={{
+              height: '100vh',
+              width: '100vw',
+              overflow: 'hidden',
+            }}
+          >
+            {showWindowsTitleBar && <WindowsTitleBar title={window.mode !== 'main' ? document.title : undefined} />}
+            <div style={{ height: showWindowsTitleBar ? 'calc(100vh - 32px)' : '100vh' }}>
+              {locked ? <AppLock /> : children}
+            </div>
           </div>
-        </div>
-      </MuiPickersUtilsProvider>
-    </MuiThemeProvider>
+        </MuiPickersUtilsProvider>
+      </MuiThemeProvider>
+    </StyledEngineProvider>
   );
 };
 

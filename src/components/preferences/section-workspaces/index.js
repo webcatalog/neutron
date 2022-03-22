@@ -3,18 +3,18 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
 
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Divider from '@material-ui/core/Divider';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Divider from '@mui/material/Divider';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
 
-import AddIcon from '@material-ui/icons/Add';
-import SettingsIcon from '@material-ui/icons/Settings';
-import DeleteIcon from '@material-ui/icons/Delete';
+import AddIcon from '@mui/icons-material/Add';
+import SettingsIcon from '@mui/icons-material/Settings';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import { useSelector } from 'react-redux';
 
@@ -48,6 +48,7 @@ const SectionWorkspaces = () => {
                   edge="end"
                   aria-label={`Configure ${getWorkspaceFriendlyName()}`}
                   onClick={() => requestShowWorkspacePreferencesWindow(workspace.id)}
+                  size="large"
                 >
                   <SettingsIcon fontSize="small" />
                 </IconButton>
@@ -57,6 +58,7 @@ const SectionWorkspaces = () => {
                   edge="end"
                   aria-label={`Remove ${getWorkspaceFriendlyName()}`}
                   onClick={() => requestRemoveWorkspace(workspace.id)}
+                  size="large"
                 >
                   <DeleteIcon fontSize="small" />
                 </IconButton>

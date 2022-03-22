@@ -9,7 +9,7 @@ import {
   ListItemSecondaryAction,
   ListItemText,
   Switch,
-} from '@material-ui/core';
+} from '@mui/material';
 
 import { useSelector } from 'react-redux';
 

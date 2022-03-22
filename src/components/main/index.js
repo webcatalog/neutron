@@ -4,12 +4,12 @@
 import React from 'react';
 import classnames from 'classnames';
 
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 
 import 'simplebar/dist/simplebar.min.css';
 
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 
 import { useSelector } from 'react-redux';
 
@@ -79,7 +79,7 @@ const useStyles = makeStyles((theme) => ({
     width: 150,
     position: 'absolute',
     top: window.process.platform === 'darwin' ? 50 : 60,
-    backgroundImage: `url('${theme.palette.type === 'dark' ? arrowWhite : arrowBlack}')`,
+    backgroundImage: `url('${theme.palette.mode === 'dark' ? arrowWhite : arrowBlack}')`,
     backgroundSize: '150px 202px',
   },
   arrowWithNavBar: {
@@ -104,22 +104,22 @@ const useStyles = makeStyles((theme) => ({
     display: 'inline-block',
     height: 36,
     width: 36,
-    background: theme.palette.type === 'dark' ? theme.palette.common.white : theme.palette.common.black,
+    background: theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black,
     borderRadius: 4,
-    color: theme.palette.getContrastText(theme.palette.type === 'dark' ? theme.palette.common.white : theme.palette.common.black),
+    color: theme.palette.getContrastText(theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black),
     lineHeight: '36px',
     textAlign: 'center',
     fontWeight: 400,
     textTransform: 'uppercase',
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    border: theme.palette.type === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)',
+    border: theme.palette.mode === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)',
     fontSize: '24px',
   },
   inlineBlock: {
     display: 'inline-block',
     fontSize: '18px',
-    color: theme.palette.type === 'dark' ? theme.palette.common.white : theme.palette.common.black,
+    color: theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black,
     whiteSpace: 'nowrap',
   },
   tip: {

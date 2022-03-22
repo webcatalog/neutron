@@ -5,23 +5,23 @@
 import React, { useState } from 'react';
 import { systemPreferences } from '@electron/remote';
 
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogActions from '@material-ui/core/DialogActions';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Link from '@mui/material/Link';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
 
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
-import { makeStyles } from '@material-ui/core';
+import makeStyles from '@mui/styles/makeStyles';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -139,6 +139,7 @@ const DialogAppLock = () => {
                     aria-label={revealPassword ? 'Hide Password' : 'Reveal Password'}
                     onClick={() => setRevealPassword(!revealPassword)}
                     onMouseDown={() => setRevealPassword(!revealPassword)}
+                    size="large"
                   >
                     {revealPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
                   </IconButton>
@@ -172,6 +173,7 @@ const DialogAppLock = () => {
                     aria-label={revealPassword ? 'Hide Password' : 'Reveal Password'}
                     onClick={() => setRevealPassword(!revealPassword)}
                     onMouseDown={() => setRevealPassword(!revealPassword)}
+                    size="large"
                   >
                     {revealPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
                   </IconButton>

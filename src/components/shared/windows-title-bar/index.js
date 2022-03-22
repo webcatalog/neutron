@@ -6,16 +6,17 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { getCurrentWindow } from '@electron/remote';
 
-import { makeStyles } from '@material-ui/core/styles';
-import { alpha } from '@material-ui/core/styles/colorManipulator';
+import { alpha } from '@mui/material/styles';
 
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
+import makeStyles from '@mui/styles/makeStyles';
+
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
 
 import { useSelector } from 'react-redux';
 
-import MenuIcon from '@material-ui/icons/Menu';
+import MenuIcon from '@mui/icons-material/Menu';
 
 import { requestShowAppMenu } from '../../../senders';
 
@@ -37,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
       if (props.themeColor != null) {
         return themeColors[props.themeColor][900];
       }
-      return theme.palette.type === 'dark' ? undefined : theme.palette.grey[300];
+      return theme.palette.mode === 'dark' ? undefined : theme.palette.grey[300];
     },
     color: (props) => {
       if (props.themeColor != null) {
@@ -101,7 +102,7 @@ const useStyles = makeStyles((theme) => ({
         if (props.themeColor != null) {
           return themeColors[props.themeColor][800];
         }
-        return theme.palette.type === 'dark' ? theme.palette.common.black : theme.palette.grey[400];
+        return theme.palette.mode === 'dark' ? theme.palette.common.black : theme.palette.grey[400];
       },
     },
   },

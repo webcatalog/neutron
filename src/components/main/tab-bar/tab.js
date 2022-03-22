@@ -5,9 +5,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-import { IconButton, makeStyles } from '@material-ui/core';
+import { IconButton } from '@mui/material';
 
-import CloseIcon from '@material-ui/icons/Close';
+import makeStyles from '@mui/styles/makeStyles';
+
+import CloseIcon from '@mui/icons-material/Close';
 
 import themeColors from '../../../constants/theme-colors';
 

@@ -3,37 +3,37 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useState } from 'react';
 
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import SvgIcon from '@material-ui/core/SvgIcon';
-import Alert from '@material-ui/lab/Alert';
-import AlertTitle from '@material-ui/lab/AlertTitle';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
+import SvgIcon from '@mui/material/SvgIcon';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 
-import AssessmentIcon from '@material-ui/icons/Assessment';
-import AssignmentIcon from '@material-ui/icons/Assignment';
-import CachedIcon from '@material-ui/icons/Cached';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import CodeIcon from '@material-ui/icons/Code';
-import InfoIcon from '@material-ui/icons/Info';
-import LinkIcon from '@material-ui/icons/Link';
-import LocationOnIcon from '@material-ui/icons/LocationOn';
-import LockIcon from '@material-ui/icons/Lock';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import PaletteIcon from '@material-ui/icons/Palette';
-import PermCameraMicIcon from '@material-ui/icons/PermCameraMic';
-import RotateLeftIcon from '@material-ui/icons/RotateLeft';
-import RouterIcon from '@material-ui/icons/Router';
-import SaveAltIcon from '@material-ui/icons/SaveAlt';
-import SecurityIcon from '@material-ui/icons/Security';
-import ViewListIcon from '@material-ui/icons/ViewList';
-import WebAssetIcon from '@material-ui/icons/WebAsset';
-import WidgetsIcon from '@material-ui/icons/Widgets';
+import AssessmentIcon from '@mui/icons-material/Assessment';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import CachedIcon from '@mui/icons-material/Cached';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CodeIcon from '@mui/icons-material/Code';
+import InfoIcon from '@mui/icons-material/Info';
+import LinkIcon from '@mui/icons-material/Link';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import LockIcon from '@mui/icons-material/Lock';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import PaletteIcon from '@mui/icons-material/Palette';
+import PermCameraMicIcon from '@mui/icons-material/PermCameraMic';
+import RotateLeftIcon from '@mui/icons-material/RotateLeft';
+import RouterIcon from '@mui/icons-material/Router';
+import SaveAltIcon from '@mui/icons-material/SaveAlt';
+import SecurityIcon from '@mui/icons-material/Security';
+import ViewListIcon from '@mui/icons-material/ViewList';
+import WebAssetIcon from '@mui/icons-material/WebAsset';
+import WidgetsIcon from '@mui/icons-material/Widgets';
 
-import { makeStyles } from '@material-ui/core';
+import makeStyles from '@mui/styles/makeStyles';
 
 import isMas from '../../helpers/is-mas';
 import isAppx from '../../helpers/is-appx';
@@ -98,7 +98,7 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(0.5),
     marginBottom: theme.spacing(3),
-    border: theme.palette.type === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)',
+    border: theme.palette.mode === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)',
   },
   sidebar: {
     width: 220,
