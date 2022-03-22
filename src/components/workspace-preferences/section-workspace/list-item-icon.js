@@ -4,6 +4,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import Color from 'color';
+import { dialog, getCurrentWindow } from '@electron/remote';
 
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -269,7 +270,7 @@ const ListItemIcon = () => {
                         { name: 'Images', extensions: ['jpg', 'jpeg', 'png', 'gif', 'tiff', 'tif', 'bmp', 'dib'] },
                       ],
                     };
-                    window.remote.dialog.showOpenDialog(window.remote.getCurrentWindow(), opts)
+                    dialog.showOpenDialog(getCurrentWindow(), opts)
                       .then(({ canceled, filePaths }) => {
                         if (!canceled && filePaths && filePaths.length > 0) {
                           dispatch(setPicture(filePaths[0]));

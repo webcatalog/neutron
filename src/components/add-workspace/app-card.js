@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Menu, getCurrentWindow } from '@electron/remote';
 
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -117,9 +118,9 @@ const AppCard = (props) => {
                 },
               },
             ];
-            const menu = window.remote.Menu.buildFromTemplate(template);
+            const menu = Menu.buildFromTemplate(template);
             menu.popup({
-              window: window.remote.getCurrentWindow(),
+              window: getCurrentWindow(),
             });
           }}
         >
@@ -153,7 +154,7 @@ const AppCard = (props) => {
               catalogId: id,
             });
 
-            window.remote.getCurrentWindow().close();
+            getCurrentWindow().close();
           }}
         >
           Add

@@ -1,6 +1,8 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+import { dialog, getCurrentWindow, shell } from '@electron/remote';
+
 import {
   UPDATE_DIALOG_APP_LOCK,
   OPEN_DIALOG_APP_LOCK,
@@ -27,7 +29,7 @@ export const open = () => (dispatch) => {
       const status = await getAppLockStatusAsync();
 
       if (!status.supported && window.process.platform === 'linux') {
-        window.remote.dialog.showMessageBox(window.remote.getCurrentWindow(), {
+        dialog.showMessageBox(getCurrentWindow(), {
           type: 'info',
           message: 'To use this feature, please install libsecret.',
           buttons: ['OK', 'Learn More...'],
@@ -37,7 +39,7 @@ export const open = () => (dispatch) => {
           .then(({ response }) => {
             if (response === 1) {
               const utmSource = getUtmSource();
-              window.remote.shell.openExternal(`https://docs.webcatalog.io/article/29-what-are-the-requirements-to-use-app-lock-feature-on-linux?utm_source=${utmSource}`);
+              shell.openExternal(`https://docs.webcatalog.io/article/29-what-are-the-requirements-to-use-app-lock-feature-on-linux?utm_source=${utmSource}`);
             }
           })
           .catch(console.log); // eslint-disable-line no-console

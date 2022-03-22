@@ -1,6 +1,8 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+import { dialog, getCurrentWindow } from '@electron/remote';
+
 import {
   UPDATE_WORKSPACE_PREFERENCES_FORM,
   UPDATE_WORKSPACE_PREFERENCES_DOWNLOADING_ICON,
@@ -164,7 +166,7 @@ export const getIconFromInternet = () => (dispatch, getState) => {
       }
 
       if (!iconUrl) {
-        return window.remote.dialog.showMessageBox(window.remote.getCurrentWindow(), {
+        return dialog.showMessageBox(getCurrentWindow(), {
           message: 'Unable to find a suitable icon from the URL.',
           buttons: ['OK'],
           cancelId: 0,
@@ -199,7 +201,7 @@ export const getIconFromAppSearch = () => (dispatch, getState) => {
       }
 
       if (!iconUrl) {
-        return window.remote.dialog.showMessageBox(window.remote.getCurrentWindow(), {
+        return dialog.showMessageBox(getCurrentWindow(), {
           message: 'Unable to find a suitable icon from WebCatalog\'s database.',
           buttons: ['OK'],
           cancelId: 0,

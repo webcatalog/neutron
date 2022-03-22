@@ -4,6 +4,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { Menu, getCurrentWindow } from '@electron/remote';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { alpha } from '@material-ui/core/styles/colorManipulator';
@@ -269,9 +270,9 @@ const SortableItem = sortableElement(({ value }) => {
           },
         ];
 
-        const menu = window.remote.Menu.buildFromTemplate(template);
+        const menu = Menu.buildFromTemplate(template);
         menu.popup({
-          window: window.remote.getCurrentWindow(),
+          window: getCurrentWindow(),
         });
       }}
     />
@@ -403,9 +404,9 @@ const Sidebar = () => {
                   },
                 ];
 
-                const menu = window.remote.Menu.buildFromTemplate(template);
+                const menu = Menu.buildFromTemplate(template);
                 menu.popup({
-                  window: window.remote.getCurrentWindow(),
+                  window: getCurrentWindow(),
                 });
               }}
             />

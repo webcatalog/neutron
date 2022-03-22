@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
+import { Menu, getCurrentWindow } from '@electron/remote';
 
 import ListSubheader from '@material-ui/core/ListSubheader';
 import List from '@material-ui/core/List';
@@ -123,7 +124,7 @@ const DialogPauseNotifications = () => {
       title: 'Notifications paused',
       body: `Notifications paused until ${formatDate(tilDate)}.`,
     });
-    window.remote.getCurrentWindow().close();
+    getCurrentWindow().close();
   };
 
   const renderList = () => {
@@ -155,7 +156,7 @@ const DialogPauseNotifications = () => {
                   title: 'Notifications resumed',
                   body: 'Notifications are now resumed.',
                 });
-                window.remote.getCurrentWindow().close();
+                getCurrentWindow().close();
               }}
             />
           </ListItem>
@@ -173,9 +174,9 @@ const DialogPauseNotifications = () => {
                     label: 'Custom',
                     click: () => dispatch(updateShowDateTimePicker(true)),
                   });
-                  const menu = window.remote.Menu.buildFromTemplate(template);
+                  const menu = Menu.buildFromTemplate(template);
                   menu.popup({
-                    window: window.remote.getCurrentWindow(),
+                    window: getCurrentWindow(),
                   });
                 }}
               >
@@ -190,7 +191,7 @@ const DialogPauseNotifications = () => {
               primary={pauseNotificationsInfo.reason === 'scheduled' ? 'Adjust schedule...' : 'Pause notifications by schedule...'}
               onClick={() => {
                 requestShowPreferencesWindow('notifications');
-                window.remote.getCurrentWindow().close();
+                getCurrentWindow().close();
               }}
             />
           </ListItem>
@@ -225,7 +226,7 @@ const DialogPauseNotifications = () => {
             primary="Pause notifications by schedule..."
             onClick={() => {
               requestShowPreferencesWindow('notifications');
-              window.remote.getCurrentWindow().close();
+              getCurrentWindow().close();
             }}
           />
         </ListItem>

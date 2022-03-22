@@ -147,7 +147,7 @@ const SectionNotifications = () => {
            // only show this message on macOS Catalina 10.15 & above
           secondary={(
             window.process.platform === 'darwin'
-            && semver.gte(window.remote.process.getSystemVersion(), '10.15.0')
+            && semver.gte(process.getSystemVersion(), '10.15.0')
           ) && ((
             <>
               <span>If notifications don&apos;t show up,</span>

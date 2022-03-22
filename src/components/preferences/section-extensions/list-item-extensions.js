@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useState, useEffect, useMemo } from 'react';
 import { uniqBy } from 'lodash';
+import { app } from '@electron/remote';
 
 import Button from '@material-ui/core/Button';
 
@@ -189,7 +190,7 @@ const Extensions = () => {
                     <Button
                       variant="text"
                       className={classes.buttonRight}
-                      onClick={() => requestOpenInBrowser(`https://docs.google.com/forms/d/e/1FAIpQLSfF4IhgsyYDbiGVx0sz0JKLd9Rs0g71lUqTpw8Jv_nixpQqiw/viewform?entry.1002721177=${encodeURIComponent(ext.name)}&entry.1851347571=${encodeURIComponent(window.remote.app.getVersion())}`)}
+                      onClick={() => requestOpenInBrowser(`https://docs.google.com/forms/d/e/1FAIpQLSfF4IhgsyYDbiGVx0sz0JKLd9Rs0g71lUqTpw8Jv_nixpQqiw/viewform?entry.1002721177=${encodeURIComponent(ext.name)}&entry.1851347571=${encodeURIComponent(app.getVersion())}`)}
                     >
                       Does it Work?
                     </Button>

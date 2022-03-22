@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { combineReducers } from 'redux';
+import { getCurrentWindow } from '@electron/remote';
 
 import {
   UPDATE_ADDRESS_BAR_INFO,
@@ -14,7 +15,7 @@ import {
   UPDATE_LOCKED,
 } from '../../constants/actions';
 
-const win = window.remote.getCurrentWindow();
+const win = getCurrentWindow();
 const isMaximized = (state = win.isMaximized(), action) => {
   switch (action.type) {
     case UPDATE_IS_MAXIMIZED: return action.isMaximized;
@@ -36,7 +37,7 @@ const canGoForward = (state = false, action) => {
   }
 };
 
-const defaultIsFullScreen = window.remote.getCurrentWindow().isFullScreen();
+const defaultIsFullScreen = getCurrentWindow().isFullScreen();
 const isFullScreen = (state = defaultIsFullScreen, action) => {
   switch (action.type) {
     case UPDATE_IS_FULL_SCREEN: return action.isFullScreen;

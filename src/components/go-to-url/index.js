@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
+import { getCurrentWindow } from '@electron/remote';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -66,7 +67,7 @@ const GoToUrl = () => {
         <Button color="primary" variant="contained" disableElevation className={classes.button} onClick={() => dispatch(go())}>
           Go
         </Button>
-        <Button variant="contained" disableElevation className={classes.button} onClick={() => window.remote.getCurrentWindow().close()}>
+        <Button variant="contained" disableElevation className={classes.button} onClick={() => getCurrentWindow().close()}>
           Cancel
         </Button>
       </div>
