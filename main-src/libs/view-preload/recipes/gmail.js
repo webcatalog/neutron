@@ -34,7 +34,7 @@ window.addEventListener('load', () => {
         if (primaryBadgeNode) {
           // primaryBadgeNode.innerText return empty string if primaryBadgeNode is hidden
           const parsedNum = parseInt(primaryBadgeNode.innerText || primaryBadgeNode.innerHTML, 10);
-          if (typeof parsedNumber === 'number' && !Number.isNaN(parsedNum)) {
+          if (typeof parsedNum === 'number' && !Number.isNaN(parsedNum)) {
             count = parsedNum;
           }
         }
