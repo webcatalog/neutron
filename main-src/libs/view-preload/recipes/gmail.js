@@ -16,17 +16,29 @@ window.addEventListener('load', () => {
   const getBadgeCount = () => {
     let count = 0;
 
-    const sidebarItemNodes = document.getElementsByClassName('J-Ke n0');
-    if (sidebarItemNodes.length > 0) {
-      const primaryBadgeNode = sidebarItemNodes[0].parentNode.nextSibling; // .bsU
-      if (primaryBadgeNode) {
-        // primaryBadgeNode.innerText return empty string if primaryBadgeNode is hidden
-        count = parseInt(primaryBadgeNode.innerText || primaryBadgeNode.innerHTML, 10);
+    // logic for new Gmail UI: https://workspaceupdates.googleblog.com/2022/01/new-integrated-view-for-gmail.html
+    // sum of badge counts of Gmail, Chat, Spaces, Meet on the sidebar
+    const newSidebarItemNodes = document.querySelectorAll('.XU.aH6');
+    if (newSidebarItemNodes.length > 0) {
+      newSidebarItemNodes.forEach((node) => {
+        // node.innerText return empty string if primaryBadgeNode is hidden
+        const parsedNum = parseInt(node.innerText || node.innerHTML, 10);
+        if (typeof parsedNum === 'number' && !Number.isNaN(parsedNum)) {
+          count += parsedNum;
+        }
+      });
+    } else { // if code for new Gmail UI doesn't work, try to use older one
+      const sidebarItemNodes = document.getElementsByClassName('J-Ke n0');
+      if (sidebarItemNodes.length > 0) {
+        const primaryBadgeNode = sidebarItemNodes[0].parentNode.nextSibling; // .bsU
+        if (primaryBadgeNode) {
+          // primaryBadgeNode.innerText return empty string if primaryBadgeNode is hidden
+          const parsedNum = parseInt(primaryBadgeNode.innerText || primaryBadgeNode.innerHTML, 10);
+          if (typeof parsedNumber === 'number' && !Number.isNaN(parsedNum)) {
+            count = parsedNum;
+          }
+        }
       }
-    }
-
-    if (typeof count !== 'number' || Number.isNaN(count)) {
-      count = 0;
     }
 
     window.webcatalog.setBadgeCount(count);
