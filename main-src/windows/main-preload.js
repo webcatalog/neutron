@@ -5,6 +5,4 @@ const { injectBrowserAction } = require('electron-chrome-extensions/dist/browser
 
 window.mode = 'main';
 
-require('./shared-preload');
-
 injectBrowserAction();

@@ -6,6 +6,7 @@ const {
   ipcMain,
   nativeTheme,
 } = require('electron');
+const machineId = require('node-machine-id');
 
 const { getPreferences } = require('../libs/preferences');
 const { getSystemPreferences } = require('../libs/system-preferences');
@@ -129,6 +130,8 @@ const loadInvokers = () => {
   ipcMain.handle('set-workspace-picture', (e, id, imgPath) => setWorkspaceViewPictureAsync(id, imgPath));
 
   ipcMain.handle('get-desktop-capturer-sources', (e, options) => desktopCapturer.getSources(options));
+
+  ipcMain.handle('get-machine-id', () => machineId.machineIdSync());
 };
 
 module.exports = loadInvokers;

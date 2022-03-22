@@ -4,6 +4,7 @@
 import { ipcRenderer } from 'electron';
 
 export const getReactInitialStateAsync = () => ipcRenderer.invoke('get-react-initial-state');
+export const getMachineIdAsync = () => ipcRenderer.invoke('get-machine-id');
 
 export const getAppLockStatusAsync = () => ipcRenderer.invoke('get-app-lock-status');
 export const validateAppLockPasswordAsync = (inputPassword) => ipcRenderer.invoke('validate-app-lock-password', inputPassword);
