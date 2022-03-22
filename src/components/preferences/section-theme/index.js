@@ -4,18 +4,18 @@
 import React from 'react';
 import classnames from 'classnames';
 
-import Divider from '@material-ui/core/Divider';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
-import Avatar from '@material-ui/core/Avatar';
-import { makeStyles } from '@material-ui/core';
+import Divider from '@mui/material/Divider';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import Avatar from '@mui/material/Avatar';
+import makeStyles from '@mui/styles/makeStyles';
 
 import { useSelector } from 'react-redux';
 
-import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemIcon from '@mui/material/ListItemIcon';
 
 import getWorkspaceFriendlyName from '../../../helpers/get-workspace-friendly-name';
 import camelCaseToSentenceCase from '../../../helpers/camel-case-to-sentence-case';

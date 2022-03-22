@@ -3,28 +3,28 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useState } from 'react';
 
-import Button from '@material-ui/core/Button';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import Alert from '@material-ui/lab/Alert';
-import AlertTitle from '@material-ui/lab/AlertTitle';
+import Button from '@mui/material/Button';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-import CachedIcon from '@material-ui/icons/Cached';
-import CodeIcon from '@material-ui/icons/Code';
-import LinkIcon from '@material-ui/icons/Link';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import PaletteIcon from '@material-ui/icons/Palette';
-import PermCameraMicIcon from '@material-ui/icons/PermCameraMic';
-import RouterIcon from '@material-ui/icons/Router';
-import SaveAltIcon from '@material-ui/icons/SaveAlt';
-import SecurityIcon from '@material-ui/icons/Security';
-import WidgetsIcon from '@material-ui/icons/Widgets';
-import { makeStyles } from '@material-ui/core';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import CachedIcon from '@mui/icons-material/Cached';
+import CodeIcon from '@mui/icons-material/Code';
+import LinkIcon from '@mui/icons-material/Link';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import PaletteIcon from '@mui/icons-material/Palette';
+import PermCameraMicIcon from '@mui/icons-material/PermCameraMic';
+import RouterIcon from '@mui/icons-material/Router';
+import SaveAltIcon from '@mui/icons-material/SaveAlt';
+import SecurityIcon from '@mui/icons-material/Security';
+import WidgetsIcon from '@mui/icons-material/Widgets';
+import makeStyles from '@mui/styles/makeStyles';
 
 import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
 
@@ -61,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(0.5),
     marginBottom: theme.spacing(3),
-    border: theme.palette.type === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)',
+    border: theme.palette.mode === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)',
   },
   sidebar: {
     width: 220,

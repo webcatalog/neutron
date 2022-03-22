@@ -5,12 +5,12 @@ import React from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
 
-import { makeStyles } from '@material-ui/core/styles';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogActions from '@material-ui/core/DialogActions';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
+import makeStyles from '@mui/styles/makeStyles';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 
 import getMailtoUrl from '../../../helpers/get-mailto-url';
 import getWebcalUrl from '../../../helpers/get-webcal-url';
@@ -100,7 +100,7 @@ const EditWorkspace = () => {
         />
       </DialogContent>
       <DialogActions>
-        <Button color="default" variant="contained" onClick={() => dispatch(close())}>
+        <Button variant="contained" onClick={() => dispatch(close())}>
           Cancel
         </Button>
         <Button color="primary" variant="contained" onClick={() => dispatch(close())}>

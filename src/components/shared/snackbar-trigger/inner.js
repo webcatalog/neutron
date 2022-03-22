@@ -4,7 +4,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { ipcRenderer } from 'electron';
 
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 
 import { useSnackbar } from 'notistack';
 

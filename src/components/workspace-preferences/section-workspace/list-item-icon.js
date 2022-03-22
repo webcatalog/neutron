@@ -6,18 +6,18 @@ import classnames from 'classnames';
 import Color from 'color';
 import { dialog, getCurrentWindow } from '@electron/remote';
 
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Badge from '@material-ui/core/Badge';
-import ListItem from '@material-ui/core/ListItem';
-import { makeStyles } from '@material-ui/core';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Badge from '@mui/material/Badge';
+import ListItem from '@mui/material/ListItem';
+import makeStyles from '@mui/styles/makeStyles';
 
 import { useSelector, useDispatch } from 'react-redux';
 
-import CheckIcon from '@material-ui/icons/Check';
+import CheckIcon from '@mui/icons-material/Check';
 
 import getAvatarText from '../../../helpers/get-avatar-text';
 import isUrl from '../../../helpers/is-url';
@@ -78,7 +78,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 400,
     textTransform: 'uppercase',
     userSelect: 'none',
-    boxShadow: theme.palette.type === 'dark' ? 'none' : '0 0 1px 1px rgba(0, 0, 0, 0.12)',
+    boxShadow: theme.palette.mode === 'dark' ? 'none' : '0 0 1px 1px rgba(0, 0, 0, 0.12)',
     overflow: 'hidden',
     cursor: 'pointer',
   },
@@ -97,8 +97,8 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.common.white,
   },
   textAvatar: {
-    background: theme.palette.type === 'dark' ? theme.palette.common.white : theme.palette.common.black,
-    color: theme.palette.getContrastText(theme.palette.type === 'dark' ? theme.palette.common.white : theme.palette.common.black),
+    background: theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black,
+    color: theme.palette.getContrastText(theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black),
   },
   transparentAvatar: {
     background: 'transparent',

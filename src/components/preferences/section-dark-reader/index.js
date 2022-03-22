@@ -3,17 +3,17 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
 
-import Grid from '@material-ui/core/Grid';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemText from '@material-ui/core/ListItemText';
-import Slider from '@material-ui/core/Slider';
-import Switch from '@material-ui/core/Switch';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
+import Grid from '@mui/material/Grid';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import ListItemText from '@mui/material/ListItemText';
+import Slider from '@mui/material/Slider';
+import Switch from '@mui/material/Switch';
+import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
 
-import { makeStyles } from '@material-ui/core';
+import makeStyles from '@mui/styles/makeStyles';
 
 import { useSelector } from 'react-redux';
 
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: theme.spacing(5),
   },
   sliderTitleContainer: {
-    paddingTop: `${theme.spacing(1.5)}px !important`,
+    paddingTop: `${theme.spacing(1.5)} !important`,
     width: 100,
   },
   sliderMarkLabel: {

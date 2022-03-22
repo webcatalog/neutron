@@ -5,21 +5,21 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { uniqBy } from 'lodash';
 import { app } from '@electron/remote';
 
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 
-import ListItem from '@material-ui/core/ListItem';
-import List from '@material-ui/core/List';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Switch from '@material-ui/core/Switch';
-import Avatar from '@material-ui/core/Avatar';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import Typography from '@material-ui/core/Typography';
-import MenuItem from '@material-ui/core/MenuItem';
-import { makeStyles } from '@material-ui/core';
+import ListItem from '@mui/material/ListItem';
+import List from '@mui/material/List';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Switch from '@mui/material/Switch';
+import Avatar from '@mui/material/Avatar';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import Typography from '@mui/material/Typography';
+import MenuItem from '@mui/material/MenuItem';
+import makeStyles from '@mui/styles/makeStyles';
 
 import { useSelector } from 'react-redux';
 

@@ -7,11 +7,11 @@ import AppSearchAPIConnector from '@elastic/search-ui-app-search-connector';
 import { SearchProvider, WithSearch, Paging } from '@elastic/react-search-ui';
 import '@elastic/react-search-ui-views/lib/styles/styles.css';
 
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import SearchIcon from '@material-ui/icons/Search';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import { makeStyles } from '@material-ui/core';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import SearchIcon from '@mui/icons-material/Search';
+import CircularProgress from '@mui/material/CircularProgress';
+import makeStyles from '@mui/styles/makeStyles';
 
 import getStaticGlobal from '../../helpers/get-static-global';
 import isMas from '../../helpers/is-mas';
@@ -218,7 +218,7 @@ const Home = () => {
                       >
                         Your query did not match any apps in our database.
                       </Typography>
-                      <Grid container justify="center" spacing={1} className={classes.noMatchingResultOpts}>
+                      <Grid container justifyContent="center" spacing={1} className={classes.noMatchingResultOpts}>
                         <SubmitAppCard />
                       </Grid>
                     </EmptyState>
@@ -237,11 +237,11 @@ const Home = () => {
                       icon={app.icon_filled.raw}
                       icon128={app.icon_filled_128.raw}
                       requireInstanceUrl={app.require_instance_url
-                        && app.require_instance_url.raw === 1}
+                      && app.require_instance_url.raw === 1}
                     />
                   ))}
                   <SubmitAppCard />
-                  <Grid container justify="center">
+                  <Grid container justifyContent="center">
                     <Paging />
                   </Grid>
                 </>

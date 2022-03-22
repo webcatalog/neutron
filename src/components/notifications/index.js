@@ -4,18 +4,17 @@
 import React from 'react';
 import { Menu, getCurrentWindow } from '@electron/remote';
 
-import ListSubheader from '@material-ui/core/ListSubheader';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Divider from '@material-ui/core/Divider';
-import { makeStyles } from '@material-ui/core';
+import ListSubheader from '@mui/material/ListSubheader';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import Divider from '@mui/material/Divider';
+import DateTimePicker from '@mui/lab/DateTimePicker';
+import makeStyles from '@mui/styles/makeStyles';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-
-import { DateTimePicker } from '@material-ui/pickers';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 import {
   format, isTomorrow, isToday,
@@ -221,15 +220,28 @@ const DialogPauseNotifications = () => {
           <ListItemText primary="Custom..." />
         </ListItem>
         <Divider />
-        <ListItem button>
-          <ListItemText
-            primary="Pause notifications by schedule..."
-            onClick={() => {
-              requestShowPreferencesWindow('notifications');
-              getCurrentWindow().close();
-            }}
-          />
-        </ListItem>
+        <DateTimePicker
+          value={new Date()}
+          onChange={pauseNotif}
+          label="Custom"
+          open={showDateTimePicker}
+          onOpen={() => dispatch(updateShowDateTimePicker(true))}
+          onClose={() => dispatch(updateShowDateTimePicker(false))}
+          disablePast
+          showTodayButton
+          // eslint-disable-next-line react/jsx-props-no-spreading
+          renderInput={() => (
+            <ListItem button>
+              <ListItemText
+                primary="Pause notifications by schedule..."
+                onClick={() => {
+                  requestShowPreferencesWindow('notifications');
+                  getCurrentWindow().close();
+                }}
+              />
+            </ListItem>
+          )}
+        />
       </List>
     );
   };
@@ -237,17 +249,6 @@ const DialogPauseNotifications = () => {
   return (
     <>
       {renderList()}
-      <DateTimePicker
-        value={new Date()}
-        onChange={pauseNotif}
-        label="Custom"
-        open={showDateTimePicker}
-        onOpen={() => dispatch(updateShowDateTimePicker(true))}
-        onClose={() => dispatch(updateShowDateTimePicker(false))}
-        className={classes.hidden}
-        disablePast
-        showTodayButton
-      />
     </>
   );
 };

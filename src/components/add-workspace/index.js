@@ -5,14 +5,14 @@ import React from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
 
-import { makeStyles } from '@material-ui/core/styles';
-import BottomNavigation from '@material-ui/core/BottomNavigation';
-import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
-import Paper from '@material-ui/core/Paper';
+import makeStyles from '@mui/styles/makeStyles';
+import BottomNavigation from '@mui/material/BottomNavigation';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+import Paper from '@mui/material/Paper';
 
-import ViewListIcon from '@material-ui/icons/ViewList';
-import CreateIcon from '@material-ui/icons/Create';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import ViewListIcon from '@mui/icons-material/ViewList';
+import CreateIcon from '@mui/icons-material/Create';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
 

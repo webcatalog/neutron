@@ -15,9 +15,9 @@ import {
   TableCell,
   TableRow,
   Tooltip,
-} from '@material-ui/core';
+} from '@mui/material';
 
-import ClearIcon from '@material-ui/icons/Clear';
+import ClearIcon from '@mui/icons-material/Clear';
 
 import { requestSetPreference } from '../../../senders';
 

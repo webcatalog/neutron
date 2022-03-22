@@ -6,14 +6,14 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Color from 'color';
 
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 
-import Badge from '@material-ui/core/Badge';
-import Avatar from '@material-ui/core/Avatar';
-import SvgIcon from '@material-ui/core/SvgIcon';
+import Badge from '@mui/material/Badge';
+import Avatar from '@mui/material/Avatar';
+import SvgIcon from '@mui/material/SvgIcon';
 
-import NotificationsOffIcon from '@material-ui/icons/NotificationsOff';
-import VolumeOffIcon from '@material-ui/icons/VolumeOff';
+import NotificationsOffIcon from '@mui/icons-material/NotificationsOff';
+import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 
 import { useSelector } from 'react-redux';
 
@@ -75,7 +75,7 @@ const useStyles = makeStyles((theme) => ({
       if (props.themeColor != null) {
         return theme.palette.getContrastText(themeColors[props.themeColor][800]);
       }
-      if (theme.palette.type === 'dark') {
+      if (theme.palette.mode === 'dark') {
         return theme.palette.common.white;
       }
       return theme.palette.common.black;
@@ -100,7 +100,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 400,
     textTransform: 'uppercase',
     border: (props) => {
-      if (props.themeColor != null || theme.palette.type === 'dark') {
+      if (props.themeColor != null || theme.palette.mode === 'dark') {
         return 'none';
       }
       return '1px solid rgba(0, 0, 0, 0.12)';
@@ -117,7 +117,7 @@ const useStyles = makeStyles((theme) => ({
       if (props.themeColor != null) {
         return theme.palette.getContrastText(themeColors[props.themeColor][800]);
       }
-      return theme.palette.type === 'dark' ? theme.palette.common.white : theme.palette.common.black;
+      return theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black;
     },
     color: (props) => {
       if (props.themeColor != null) {
@@ -125,7 +125,7 @@ const useStyles = makeStyles((theme) => ({
           theme.palette.getContrastText(themeColors[props.themeColor][800]),
         );
       }
-      return theme.palette.type === 'dark' ? theme.palette.common.black : theme.palette.common.white;
+      return theme.palette.mode === 'dark' ? theme.palette.common.black : theme.palette.common.white;
     },
   },
   transparentAvatar: {
@@ -326,7 +326,7 @@ const WorkspaceSelector = ({
           badgeContent={(() => {
             if (hibernated) {
               return (
-                <Avatar variant="circle" className={classes.sleepAvatar}>
+                <Avatar variant="circular" className={classes.sleepAvatar}>
                   <SvgIcon className={classes.sleepAvatarIcon}>
                     <path fill="currentColor" d="M18.73,18C15.4,21.69 9.71,22 6,18.64C2.33,15.31 2.04,9.62 5.37,5.93C6.9,4.25 9,3.2 11.27,3C7.96,6.7 8.27,12.39 12,15.71C13.63,17.19 15.78,18 18,18C18.25,18 18.5,18 18.73,18Z" />
                   </SvgIcon>
@@ -336,7 +336,7 @@ const WorkspaceSelector = ({
 
             if (disableAudio || disableNotifications) {
               return (
-                <Avatar variant="circle" className={classnames(classes.sleepAvatar, disableNotifications && disableAudio && classes.sleepAvatarWide)}>
+                <Avatar variant="circular" className={classnames(classes.sleepAvatar, disableNotifications && disableAudio && classes.sleepAvatarWide)}>
                   {disableNotifications && (
                   <NotificationsOffIcon className={classes.sleepAvatarIcon} />
                   )}

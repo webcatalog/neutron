@@ -5,18 +5,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-import { makeStyles } from '@material-ui/core/styles';
-import { alpha } from '@material-ui/core/styles/colorManipulator';
+import { alpha } from '@mui/material/styles';
+
+import makeStyles from '@mui/styles/makeStyles';
 
 import { useSelector } from 'react-redux';
 
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
-import HomeIcon from '@material-ui/icons/Home';
-import IconButton from '@material-ui/core/IconButton';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import HomeIcon from '@mui/icons-material/Home';
+import IconButton from '@mui/material/IconButton';
+import CircularProgress from '@mui/material/CircularProgress';
 
-import RefreshIcon from '@material-ui/icons/Refresh';
+import RefreshIcon from '@mui/icons-material/Refresh';
 
 import themeColors from '../../../constants/theme-colors';
 
@@ -89,6 +90,7 @@ const NavigationBar = ({ themeColor, disableGutter }) => {
         }}
         disabled={!hasWorkspaces || !canGoBack}
         onClick={requestGoBack}
+        size="large"
       >
         <ArrowBackIcon
           className={classnames(
@@ -107,6 +109,7 @@ const NavigationBar = ({ themeColor, disableGutter }) => {
         }}
         disabled={!hasWorkspaces || !canGoForward}
         onClick={requestGoForward}
+        size="large"
       >
         <ArrowForwardIcon
           className={classnames(
@@ -125,6 +128,7 @@ const NavigationBar = ({ themeColor, disableGutter }) => {
         }}
         onClick={requestReload}
         disabled={!hasWorkspaces || isLoading}
+        size="large"
       >
         {isLoading ? (
           <CircularProgress size={18} className={classes.progress} />
@@ -147,6 +151,7 @@ const NavigationBar = ({ themeColor, disableGutter }) => {
         }}
         onClick={requestGoHome}
         disabled={!hasWorkspaces}
+        size="large"
       >
         <HomeIcon
           className={classnames(

@@ -5,7 +5,7 @@
 import React from 'react';
 import classnames from 'classnames';
 
-import { makeStyles } from '@material-ui/core';
+import makeStyles from '@mui/styles/makeStyles';
 import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles(() => ({

@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
 
-import List from '@material-ui/core/List';
+import List from '@mui/material/List';
 
 import ListItemTray from './list-item-tray';
 

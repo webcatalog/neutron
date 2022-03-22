@@ -6,8 +6,9 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import { systemPreferences, getCurrentWindow } from '@electron/remote';
 
-import { makeStyles } from '@material-ui/core/styles';
-import { alpha } from '@material-ui/core/styles/colorManipulator';
+import { alpha } from '@mui/material/styles';
+
+import makeStyles from '@mui/styles/makeStyles';
 
 import { useSelector } from 'react-redux';
 
@@ -34,7 +35,7 @@ const useStyles = makeStyles((theme) => {
         if (props.themeColor != null) {
           return themeColors[props.themeColor][900];
         }
-        return theme.palette.type === 'dark' ? '#2a2b2c' : '#efefef';
+        return theme.palette.mode === 'dark' ? '#2a2b2c' : '#efefef';
       },
       borderBottom: '1px solid',
       borderBottomColor: theme.palette.divider,
@@ -48,7 +49,7 @@ const useStyles = makeStyles((theme) => {
         if (props.themeColor != null) {
           return alpha(theme.palette.getContrastText(themeColors[props.themeColor][900]), 0.7);
         }
-        return theme.palette.type === 'dark' ? 'rgba(255, 255, 255, 0.7)' : 'rgb(77, 77, 77)';
+        return theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : 'rgb(77, 77, 77)';
       },
       fontFamily: '-apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif',
       fontWeight: 500,

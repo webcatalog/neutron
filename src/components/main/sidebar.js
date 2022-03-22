@@ -6,21 +6,22 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Menu, getCurrentWindow } from '@electron/remote';
 
-import { makeStyles } from '@material-ui/core/styles';
-import { alpha } from '@material-ui/core/styles/colorManipulator';
+import { alpha } from '@mui/material/styles';
+
+import makeStyles from '@mui/styles/makeStyles';
 
 import SimpleBar from 'simplebar-react';
 import 'simplebar/dist/simplebar.min.css';
 
-import IconButton from '@material-ui/core/IconButton';
-import SvgIcon from '@material-ui/core/SvgIcon';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import IconButton from '@mui/material/IconButton';
+import SvgIcon from '@mui/material/SvgIcon';
+import CircularProgress from '@mui/material/CircularProgress';
 
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import NotificationsPausedIcon from '@material-ui/icons/NotificationsPaused';
-import SettingsIcon from '@material-ui/icons/Settings';
-import VolumeUpIcon from '@material-ui/icons/VolumeUp';
-import VolumeOffIcon from '@material-ui/icons/VolumeOff';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import NotificationsPausedIcon from '@mui/icons-material/NotificationsPaused';
+import SettingsIcon from '@mui/icons-material/Settings';
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 
 import { useSelector } from 'react-redux';
 
@@ -170,7 +171,7 @@ const useStyles = makeStyles((theme) => {
         if (props.themeColor != null) {
           return alpha(theme.palette.getContrastText(themeColors[props.themeColor][900]), 0.7);
         }
-        return theme.palette.type === 'dark' ? 'rgba(255, 255, 255, 0.7)' : 'rgb(77, 77, 77)';
+        return theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : 'rgb(77, 77, 77)';
       },
     },
   };

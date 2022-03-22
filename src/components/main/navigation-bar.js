@@ -6,19 +6,20 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { ipcRenderer } from 'electron';
 
-import { makeStyles } from '@material-ui/core/styles';
-import { alpha } from '@material-ui/core/styles/colorManipulator';
+import { alpha } from '@mui/material/styles';
 
-import SvgIcon from '@material-ui/core/SvgIcon';
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
-import IconButton from '@material-ui/core/IconButton';
-import InputBase from '@material-ui/core/InputBase';
+import makeStyles from '@mui/styles/makeStyles';
 
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import NotificationsPausedIcon from '@material-ui/icons/NotificationsPaused';
-import SettingsIcon from '@material-ui/icons/SettingsSharp';
-import VolumeUpIcon from '@material-ui/icons/VolumeUp';
-import VolumeOffIcon from '@material-ui/icons/VolumeOff';
+import SvgIcon from '@mui/material/SvgIcon';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import IconButton from '@mui/material/IconButton';
+import InputBase from '@mui/material/InputBase';
+
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import NotificationsPausedIcon from '@mui/icons-material/NotificationsPaused';
+import SettingsIcon from '@mui/icons-material/SettingsSharp';
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -105,7 +106,7 @@ const useStyles = makeStyles((theme) => ({
       if (props.themeColor != null) {
         return themeColors[props.themeColor][900];
       }
-      return theme.palette.type === 'dark' ? theme.palette.background.default : theme.palette.grey[200];
+      return theme.palette.mode === 'dark' ? theme.palette.background.default : theme.palette.grey[200];
     },
     color: (props) => {
       if (props.themeColor != null) {
@@ -231,6 +232,7 @@ const NavigationBar = ({
                 dispatch(updateAddressBarInfo(processedUrl, false));
                 requestLoadUrl(processedUrl);
               }}
+              size="large"
             >
               <ArrowForwardIcon fontSize="small" />
             </IconButton>
@@ -300,6 +302,7 @@ const NavigationBar = ({
             root: classes.iconButton,
             disabled: classes.iconButtonDisabled,
           }}
+          size="large"
         >
           {shouldPauseNotifications
             ? <NotificationsPausedIcon className={classes.icon} />
@@ -313,6 +316,7 @@ const NavigationBar = ({
             root: classes.iconButton,
             disabled: classes.iconButtonDisabled,
           }}
+          size="large"
         >
           {muteApp
             ? <VolumeOffIcon className={classes.icon} />
@@ -332,6 +336,7 @@ const NavigationBar = ({
               requestShowPreferencesWindow();
             }
           }}
+          size="large"
         >
           <SettingsIcon className={classes.icon} />
         </IconButton>

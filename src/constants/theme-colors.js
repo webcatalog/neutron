@@ -21,7 +21,7 @@ import {
   red,
   teal,
   yellow,
-} from '@material-ui/core/colors';
+} from '@mui/material/colors';
 
 const themeColors = {
   amber,

@@ -5,9 +5,9 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { dialog, getCurrentWindow } from '@electron/remote';
 
-import IconButton from '@material-ui/core/IconButton';
+import IconButton from '@mui/material/IconButton';
 
-import ThumbsUpIcon from '@material-ui/icons/ThumbUp';
+import ThumbsUpIcon from '@mui/icons-material/ThumbUp';
 
 import { useSelector } from 'react-redux';
 

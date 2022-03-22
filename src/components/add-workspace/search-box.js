@@ -9,14 +9,14 @@ import {
   SearchBox as AppSearchSearchBox,
 } from '@elastic/react-search-ui';
 
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core';
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
 
-import CloseIcon from '@material-ui/icons/Close';
-import RefreshIcon from '@material-ui/icons/Refresh';
+import CloseIcon from '@mui/icons-material/Close';
+import RefreshIcon from '@mui/icons-material/Refresh';
 
 const useStyles = makeStyles((theme) => ({
   toolbarSearchContainer: {
@@ -137,6 +137,7 @@ const SearchBox = () => {
                       debounce: 0,
                       shouldClearFilters: false,
                     })}
+                    size="large"
                   >
                     <CloseIcon fontSize="small" />
                   </IconButton>
@@ -160,6 +161,7 @@ const SearchBox = () => {
                     });
                   }}
                   disabled={isLoading}
+                  size="large"
                 >
                   <RefreshIcon fontSize="small" />
                 </IconButton>

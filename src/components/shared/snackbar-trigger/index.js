@@ -3,8 +3,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useRef, useCallback } from 'react';
 
-import Button from '@material-ui/core/Button';
-import { makeStyles } from '@material-ui/core';
+import Button from '@mui/material/Button';
+import makeStyles from '@mui/styles/makeStyles';
 
 import { SnackbarProvider } from 'notistack';
 
