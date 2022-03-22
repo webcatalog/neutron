@@ -9,13 +9,12 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
+import DateTimePicker from '@mui/lab/DateTimePicker';
 import makeStyles from '@mui/styles/makeStyles';
 
 import { useDispatch, useSelector } from 'react-redux';
 
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-
-import { DateTimePicker } from '@material-ui/pickers';
 
 import {
   format, isTomorrow, isToday,
@@ -221,15 +220,28 @@ const DialogPauseNotifications = () => {
           <ListItemText primary="Custom..." />
         </ListItem>
         <Divider />
-        <ListItem button>
-          <ListItemText
-            primary="Pause notifications by schedule..."
-            onClick={() => {
-              requestShowPreferencesWindow('notifications');
-              getCurrentWindow().close();
-            }}
-          />
-        </ListItem>
+        <DateTimePicker
+          value={new Date()}
+          onChange={pauseNotif}
+          label="Custom"
+          open={showDateTimePicker}
+          onOpen={() => dispatch(updateShowDateTimePicker(true))}
+          onClose={() => dispatch(updateShowDateTimePicker(false))}
+          disablePast
+          showTodayButton
+          // eslint-disable-next-line react/jsx-props-no-spreading
+          renderInput={() => (
+            <ListItem button>
+              <ListItemText
+                primary="Pause notifications by schedule..."
+                onClick={() => {
+                  requestShowPreferencesWindow('notifications');
+                  getCurrentWindow().close();
+                }}
+              />
+            </ListItem>
+          )}
+        />
       </List>
     );
   };
@@ -237,17 +249,6 @@ const DialogPauseNotifications = () => {
   return (
     <>
       {renderList()}
-      <DateTimePicker
-        value={new Date()}
-        onChange={pauseNotif}
-        label="Custom"
-        open={showDateTimePicker}
-        onOpen={() => dispatch(updateShowDateTimePicker(true))}
-        onClose={() => dispatch(updateShowDateTimePicker(false))}
-        className={classes.hidden}
-        disablePast
-        showTodayButton
-      />
     </>
   );
 };

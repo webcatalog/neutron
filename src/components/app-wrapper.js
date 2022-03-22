@@ -10,12 +10,12 @@ import {
   createTheme,
   adaptV4Theme,
 } from '@mui/material/styles';
+// or @mui/lab/Adapter{Dayjs,Luxon,Moment} or any valid date-io adapter
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
 
 import CssBaseline from '@mui/material/CssBaseline';
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { useSelector } from 'react-redux';
-
-import DateFnsUtils from '@date-io/date-fns';
 
 import { blue, pink as red, grey } from '@mui/material/colors';
 import getStaticGlobal from '../helpers/get-static-global';
@@ -61,7 +61,7 @@ const AppWrapper = ({ children }) => {
   return (
     <StyledEngineProvider injectFirst>
       <MuiThemeProvider theme={theme}>
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
           <CssBaseline />
           <div
             style={{
@@ -75,7 +75,7 @@ const AppWrapper = ({ children }) => {
               {locked ? <AppLock /> : children}
             </div>
           </div>
-        </MuiPickersUtilsProvider>
+        </LocalizationProvider>
       </MuiThemeProvider>
     </StyledEngineProvider>
   );

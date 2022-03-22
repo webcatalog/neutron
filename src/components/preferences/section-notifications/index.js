@@ -10,13 +10,14 @@ import ListItem from '@mui/material/ListItem';
 import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import ListItemText from '@mui/material/ListItemText';
 import Switch from '@mui/material/Switch';
+import TextField from '@mui/material/TextField';
 import makeStyles from '@mui/styles/makeStyles';
 
 import { useSelector } from 'react-redux';
 
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
-import { TimePicker } from '@material-ui/pickers';
+import { TimePicker } from '@mui/lab';
 
 import getStaticGlobal from '../../../helpers/get-static-global';
 import getUtmSource from '../../../helpers/get-utm-source';
@@ -92,6 +93,8 @@ const SectionNotifications = () => {
               onClose={() => { window.preventClosingWindow = false; }}
               onOpen={() => { window.preventClosingWindow = true; }}
               disabled={!pauseNotificationsBySchedule}
+              // eslint-disable-next-line react/jsx-props-no-spreading
+              renderInput={(params) => <TextField {...params} />}
             />
             <TimePicker
               autoOk={false}
@@ -101,6 +104,8 @@ const SectionNotifications = () => {
               onClose={() => { window.preventClosingWindow = false; }}
               onOpen={() => { window.preventClosingWindow = true; }}
               disabled={!pauseNotificationsBySchedule}
+              // eslint-disable-next-line react/jsx-props-no-spreading
+              renderInput={(params) => <TextField {...params} />}
             />
           </div>
           (
