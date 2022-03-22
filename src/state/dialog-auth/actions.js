@@ -1,6 +1,8 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+import { getCurrentWindow } from '@electron/remote';
+
 import { UPDATE_AUTH_FORM } from '../../constants/actions';
 
 import { requestValidateAuthIdentity } from '../../senders';
@@ -15,5 +17,5 @@ export const login = () => (dispatch, getState) => {
 
   const { username, password } = form;
 
-  requestValidateAuthIdentity(window.remote.getCurrentWindow().id, username, password);
+  requestValidateAuthIdentity(getCurrentWindow().id, username, password);
 };

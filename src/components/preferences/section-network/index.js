@@ -11,19 +11,10 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-import connectComponent from '../../../helpers/connect-component';
-
 import { open as openDialogProxy } from '../../../state/dialog-proxy/actions';
 
 import DialogProxy from '../../shared/dialog-proxy';
 
-const styles = (theme) => ({
-  paper: {
-    marginTop: theme.spacing(0.5),
-    marginBottom: theme.spacing(3),
-    border: theme.palette.type === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)',
-  },
-});
 const Preferences = () => {
   const dispatch = useDispatch();
 
@@ -60,7 +51,4 @@ const Preferences = () => {
   );
 };
 
-export default connectComponent(
-  Preferences,
-  styles,
-);
+export default Preferences;

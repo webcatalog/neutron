@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useEffect, useState } from 'react';
+import { systemPreferences } from '@electron/remote';
 
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -79,7 +80,7 @@ const SectionPrivacySecurity = () => {
   }, [dialogAppLockOpen, setAppLockEnabled]);
 
   const canPromptTouchId = window.process.platform === 'darwin'
-    && window.remote.systemPreferences.canPromptTouchID();
+    && systemPreferences.canPromptTouchID();
 
   return (
     <>

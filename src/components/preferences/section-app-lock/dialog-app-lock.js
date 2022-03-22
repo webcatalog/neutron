@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from 'react';
+import { systemPreferences } from '@electron/remote';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -69,7 +70,7 @@ const DialogAppLock = () => {
 
   const [revealPassword, setRevealPassword] = useState(false);
   const canPromptTouchId = window.process.platform === 'darwin'
-    && window.remote.systemPreferences.canPromptTouchID();
+    && systemPreferences.canPromptTouchID();
 
   const vaultName = getKeytarVaultName();
 

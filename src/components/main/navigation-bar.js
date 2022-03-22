@@ -4,6 +4,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { ipcRenderer } from 'electron';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { alpha } from '@material-ui/core/styles/colorManipulator';
@@ -179,15 +180,15 @@ const NavigationBar = ({
   const addressBarRef = useRef(null);
 
   useEffect(() => {
-    window.ipcRenderer.removeAllListeners('focus-on-address-bar');
-    window.ipcRenderer.on('focus-on-address-bar', () => {
+    ipcRenderer.removeAllListeners('focus-on-address-bar');
+    ipcRenderer.on('focus-on-address-bar', () => {
       if (addressBarRef.current) {
         addressBarRef.current.focus();
         addressBarRef.current.select();
       }
     });
     return () => {
-      window.ipcRenderer.removeAllListeners('focus-on-address-bar');
+      ipcRenderer.removeAllListeners('focus-on-address-bar');
     };
   }, [addressBarRef]);
 

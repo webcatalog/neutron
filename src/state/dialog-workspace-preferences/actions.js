@@ -1,6 +1,9 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+import { dialog, getCurrentWindow } from '@electron/remote';
+import { ipcRenderer } from 'electron';
+
 import {
   UPDATE_WORKSPACE_PREFERENCES_FORM,
   UPDATE_WORKSPACE_PREFERENCES_DOWNLOADING_ICON,
@@ -110,10 +113,10 @@ export const setPicture = (imgPath) => (dispatch) => {
 export const getWebsiteIconUrlAsync = (url) => new Promise((resolve, reject) => {
   try {
     const id = Date.now().toString();
-    window.ipcRenderer.once(id, (e, uurl) => {
+    ipcRenderer.once(id, (e, uurl) => {
       resolve(uurl);
     });
-    window.ipcRenderer.send('request-get-website-icon-url', id, url);
+    ipcRenderer.send('request-get-website-icon-url', id, url);
   } catch (err) {
     reject(err);
   }
@@ -164,7 +167,7 @@ export const getIconFromInternet = () => (dispatch, getState) => {
       }
 
       if (!iconUrl) {
-        return window.remote.dialog.showMessageBox(window.remote.getCurrentWindow(), {
+        return dialog.showMessageBox(getCurrentWindow(), {
           message: 'Unable to find a suitable icon from the URL.',
           buttons: ['OK'],
           cancelId: 0,
@@ -199,7 +202,7 @@ export const getIconFromAppSearch = () => (dispatch, getState) => {
       }
 
       if (!iconUrl) {
-        return window.remote.dialog.showMessageBox(window.remote.getCurrentWindow(), {
+        return dialog.showMessageBox(getCurrentWindow(), {
           message: 'Unable to find a suitable icon from WebCatalog\'s database.',
           buttons: ['OK'],
           cancelId: 0,

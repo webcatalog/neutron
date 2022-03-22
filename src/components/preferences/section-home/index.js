@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
+import { dialog, getCurrentWindow } from '@electron/remote';
 
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -25,7 +26,7 @@ const SectionHome = () => {
       <ListItem
         button
         onClick={() => {
-          window.remote.dialog.showMessageBox(window.remote.getCurrentWindow(), {
+          dialog.showMessageBox(getCurrentWindow(), {
             type: 'question',
             buttons: ['Learn More..', 'Later'],
             message: 'You can change the app URL through the WebCatalog app.',

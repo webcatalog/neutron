@@ -3,8 +3,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 window.mode = 'preferences';
 
-require('./shared-preload');
-
 const path = require('path');
 
 const iconPngPath = process.env.NODE_ENV === 'production'

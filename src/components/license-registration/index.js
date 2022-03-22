@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
+import { getCurrentWindow } from '@electron/remote';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -146,7 +147,7 @@ const DialogLicenseRegistration = () => {
           </Button>
         </div>
         <Button
-          onClick={() => window.remote.getCurrentWindow().close()}
+          onClick={() => getCurrentWindow().close()}
         >
           Cancel
         </Button>

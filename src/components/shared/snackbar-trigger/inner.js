@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useEffect, useCallback } from 'react';
+import { ipcRenderer } from 'electron';
 
 import Button from '@material-ui/core/Button';
 
@@ -15,12 +16,12 @@ const SnackbarTriggerInner = () => {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   useEffect(() => {
-    window.ipcRenderer.removeAllListeners('enqueue-snackbar');
-    window.ipcRenderer.on('enqueue-snackbar', (_, message, variant) => {
+    ipcRenderer.removeAllListeners('enqueue-snackbar');
+    ipcRenderer.on('enqueue-snackbar', (_, message, variant) => {
       enqueueSnackbar(message, { variant, autoHideDuration: 10000 });
     });
     return () => {
-      window.ipcRenderer.removeAllListeners('enqueue-snackbar');
+      ipcRenderer.removeAllListeners('enqueue-snackbar');
     };
   }, [enqueueSnackbar]);
 
@@ -43,10 +44,10 @@ const SnackbarTriggerInner = () => {
   }, [enqueueSnackbar, closeSnackbar]);
 
   useEffect(() => {
-    window.ipcRenderer.removeAllListeners('enqueue-request-restart-snackbar');
-    window.ipcRenderer.on('enqueue-request-restart-snackbar', showRequestRestartSnackbar);
+    ipcRenderer.removeAllListeners('enqueue-request-restart-snackbar');
+    ipcRenderer.on('enqueue-request-restart-snackbar', showRequestRestartSnackbar);
     return () => {
-      window.ipcRenderer.removeAllListeners('enqueue-request-restart-snackbar');
+      ipcRenderer.removeAllListeners('enqueue-request-restart-snackbar');
     };
   }, [showRequestRestartSnackbar]);
 

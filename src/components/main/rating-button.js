@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { dialog, getCurrentWindow } from '@electron/remote';
 
 import IconButton from '@material-ui/core/IconButton';
 
@@ -55,7 +56,7 @@ const RatingButton = ({
         className={className}
         size={size}
         onClick={() => {
-          window.remote.dialog.showMessageBox(window.remote.getCurrentWindow(), {
+          dialog.showMessageBox(getCurrentWindow(), {
             type: 'question',
             buttons: [
               isAppx() ? `Rate ${appJson.name} on Microsoft Store` : `Rate ${appJson.name} on Mac App Store`,

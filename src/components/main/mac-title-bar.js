@@ -4,6 +4,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
+import { systemPreferences, getCurrentWindow } from '@electron/remote';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { alpha } from '@material-ui/core/styles/colorManipulator';
@@ -103,16 +104,16 @@ const FakeTitleBar = ({ themeColor }) => {
         // https://github.com/webcatalog/webcatalog-app/issues/656
 
         // User can choose title bar behavior from macOS System Preferences > Dock & Menu Bar
-        const systemPref = window.remote.systemPreferences.getUserDefault('AppleActionOnDoubleClick', 'string');
+        const systemPref = systemPreferences.getUserDefault('AppleActionOnDoubleClick', 'string');
 
         switch (systemPref) {
           case 'Minimize': {
-            const win = window.remote.getCurrentWindow();
+            const win = getCurrentWindow();
             win.minimize();
             break;
           }
           case 'Maximize': {
-            const win = window.remote.getCurrentWindow();
+            const win = getCurrentWindow();
             if (win.isMaximized()) {
               win.unmaximize();
             } else {

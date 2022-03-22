@@ -4,6 +4,7 @@
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import React from 'react';
+import { Menu, getCurrentWindow } from '@electron/remote';
 
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -138,9 +139,9 @@ const AppCard = (props) => {
                 },
               },
             ];
-            const menu = window.remote.Menu.buildFromTemplate(template);
+            const menu = Menu.buildFromTemplate(template);
             menu.popup({
-              window: window.remote.getCurrentWindow(),
+              window: getCurrentWindow(),
             });
           }}
         >
@@ -174,7 +175,7 @@ const AppCard = (props) => {
               catalogId: id,
             });
 
-            window.remote.getCurrentWindow().close();
+            getCurrentWindow().close();
           }}
         >
           Add
