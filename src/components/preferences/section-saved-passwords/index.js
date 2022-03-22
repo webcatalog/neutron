@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useState, useEffect, useCallback } from 'react';
+import { ipcRenderer } from 'electron';
 
 import {
   FormControl,
@@ -51,12 +52,12 @@ const SectionSavedPassword = () => {
   }, [reloadCredentials]);
 
   useEffect(() => {
-    window.ipcRenderer.removeAllListeners('password-credentials-added');
-    window.ipcRenderer.on('password-credentials-added', () => {
+    ipcRenderer.removeAllListeners('password-credentials-added');
+    ipcRenderer.on('password-credentials-added', () => {
       reloadCredentials();
     });
     return () => {
-      window.ipcRenderer.removeAllListeners('password-credentials-added');
+      ipcRenderer.removeAllListeners('password-credentials-added');
     };
   }, [reloadCredentials]);
 

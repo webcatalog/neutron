@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
 import { dialog, getCurrentWindow } from '@electron/remote';
+import { ipcRenderer } from 'electron';
 
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -29,7 +30,7 @@ const SectionReset = () => (
           cancelId: 1,
         }).then(({ response }) => {
           if (response === 0) {
-            window.ipcRenderer.once('set-preferences', () => {
+            ipcRenderer.once('set-preferences', () => {
               enqueueRequestRestartSnackbar();
             });
             requestResetPreferences();

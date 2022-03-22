@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useEffect, useState } from 'react';
+import { ipcRenderer } from 'electron';
 
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -57,7 +58,7 @@ const DisplayMedia = () => {
             key={source.id}
             button
             onClick={() => {
-              window.ipcRenderer.send('display-media-selected', source.id);
+              ipcRenderer.send('display-media-selected', source.id);
             }}
           >
             <ListItemText primary={source.name} />
@@ -70,7 +71,7 @@ const DisplayMedia = () => {
             key={source.id}
             button
             onClick={() => {
-              window.ipcRenderer.send('display-media-selected', source.id);
+              ipcRenderer.send('display-media-selected', source.id);
             }}
           >
             <ListItemText primary={source.name} />
