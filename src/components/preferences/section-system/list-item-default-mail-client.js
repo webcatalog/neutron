@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useState, useEffect, useCallback } from 'react';
+import { app } from '@electron/remote';
 
 import Button from '@material-ui/core/Button';
 import ListItem from '@material-ui/core/ListItem';
@@ -68,7 +69,7 @@ const ListItemDefaultMailClient = () => {
         size="small"
         color="default"
         onClick={() => {
-          window.remote.app.setAsDefaultProtocolClient('mailto');
+          app.setAsDefaultProtocolClient('mailto');
           recheckIsDefault();
         }}
       >

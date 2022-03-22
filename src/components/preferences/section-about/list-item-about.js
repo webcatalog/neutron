@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
+import { app } from '@electron/remote';
 
 import ListItem from '@material-ui/core/ListItem';
 import Box from '@material-ui/core/Box';
@@ -50,7 +51,7 @@ const About = () => {
   const classes = useStyles();
 
   const appJson = getStaticGlobal('appJson');
-  const appVersion = window.remote.app.getVersion();
+  const appVersion = app.getVersion();
 
   const versions = [
     { name: 'Neutron', version: appVersion },

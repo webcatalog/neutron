@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
+import { getCurrentWindow } from '@electron/remote';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -73,7 +74,7 @@ const Auth = () => {
         <Button color="primary" variant="contained" disableElevation className={classes.button} onClick={() => dispatch(login())}>
           Sign in
         </Button>
-        <Button variant="contained" disableElevation className={classes.button} onClick={() => window.remote.getCurrentWindow().close()}>
+        <Button variant="contained" disableElevation className={classes.button} onClick={() => getCurrentWindow().close()}>
           Cancel
         </Button>
       </div>

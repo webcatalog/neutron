@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { useEffect } from 'react';
+import { ipcRenderer } from 'electron';
 
 import { useSelector } from 'react-redux';
 
@@ -49,9 +50,9 @@ const TelemetryManager = () => {
     const logFocus = () => {
       amplitude.getInstance().logEvent('webcatalog-engine: focus app');
     };
-    window.ipcRenderer.on('log-focus', logFocus);
+    ipcRenderer.on('log-focus', logFocus);
     return () => {
-      window.ipcRenderer.removeListener('log-focus', logFocus);
+      ipcRenderer.removeListener('log-focus', logFocus);
     };
   }, []);
 

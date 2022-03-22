@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useCallback, useEffect, useRef } from 'react';
+import { ipcRenderer } from 'electron';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -52,10 +53,10 @@ const FindInPage = () => {
     inputRef.current.select();
   }, [inputRef]);
   useEffect(() => {
-    window.ipcRenderer.on('open-find-in-page', handleOpenFindInPage);
+    ipcRenderer.on('open-find-in-page', handleOpenFindInPage);
     // Remove event listener on cleanup
     return () => {
-      window.ipcRenderer.removeListener('open-find-in-page', handleOpenFindInPage);
+      ipcRenderer.removeListener('open-find-in-page', handleOpenFindInPage);
     };
   }, [handleOpenFindInPage]);
 

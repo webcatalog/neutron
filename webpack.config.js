@@ -55,7 +55,7 @@ const getPreloadScriptsConfig = () => {
       path: path.join(__dirname, 'build'),
       filename: '[name].js',
     },
-    devtool: 'inline-source-map',
+    devtool: false,
     plugins,
     // optimization: {
     //   minimize: false,

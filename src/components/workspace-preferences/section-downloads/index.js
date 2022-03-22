@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
 import classnames from 'classnames';
+import { dialog, getCurrentWindow } from '@electron/remote';
 
 import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
@@ -57,7 +58,7 @@ const SectionDownloads = () => {
           <ListItem
             button
             onClick={() => {
-              window.remote.dialog.showOpenDialog(window.remote.getCurrentWindow(), {
+              dialog.showOpenDialog(getCurrentWindow(), {
                 properties: ['openDirectory'],
               })
                 .then(({ canceled, filePaths }) => {

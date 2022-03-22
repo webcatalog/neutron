@@ -4,6 +4,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { getCurrentWindow } from '@electron/remote';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { alpha } from '@material-ui/core/styles/colorManipulator';
@@ -184,7 +185,7 @@ const EnhancedAppBar = ({ title: _title }) => {
     // https://github.com/webcatalog/webcatalog-app/issues/656
     // https://stackoverflow.com/questions/10554446/no-onclick-when-child-is-clicked
     if (e.target === e.currentTarget) {
-      const win = window.remote.getCurrentWindow();
+      const win = getCurrentWindow();
       if (win.isMaximized()) {
         win.unmaximize();
       } else {
@@ -242,7 +243,7 @@ const EnhancedAppBar = ({ title: _title }) => {
                 aria-label="Minimize"
                 onClick={(e) => {
                   e.stopPropagation();
-                  const browserWindow = window.remote.getCurrentWindow();
+                  const browserWindow = getCurrentWindow();
                   if (window.mode === 'menubar') {
                     browserWindow.hide();
                   } else {
@@ -260,7 +261,7 @@ const EnhancedAppBar = ({ title: _title }) => {
                   aria-label={isMaximized ? 'Unmaximize' : 'Maximize'}
                   onClick={(e) => {
                     e.stopPropagation();
-                    const browserWindow = window.remote.getCurrentWindow();
+                    const browserWindow = getCurrentWindow();
                     if (browserWindow.isMaximized()) {
                       browserWindow.unmaximize();
                     } else {
@@ -285,7 +286,7 @@ const EnhancedAppBar = ({ title: _title }) => {
                   aria-label={isMaximized ? 'Unmaximize' : 'Maximize'}
                   onClick={(e) => {
                     e.stopPropagation();
-                    const browserWindow = window.remote.getCurrentWindow();
+                    const browserWindow = getCurrentWindow();
                     browserWindow.close();
                   }}
                 >
