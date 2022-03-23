@@ -57,9 +57,6 @@ const getPreloadScriptsConfig = () => {
     },
     devtool: false,
     plugins,
-    // optimization: {
-    //   minimize: false,
-    // },
   };
 };
 
@@ -113,9 +110,10 @@ const getElectronMainConfig = () => {
     },
     devtool: 'source-map',
     plugins,
-    // optimization: {
-    //   minimize: false,
-    // },
+    // https://github.com/getsentry/sentry-electron/issues/416
+    optimization: {
+      sideEffects: false,
+    },
   };
 };
 
@@ -152,11 +150,8 @@ const getRecipeConfig = () => {
       path: path.join(__dirname, 'build', 'recipes'),
       filename: '[name].js',
     },
-    // devtool: 'source-map',
+    devtool: false,
     plugins,
-    // optimization: {
-    //   minimize: false,
-    // },
   };
 };
 
