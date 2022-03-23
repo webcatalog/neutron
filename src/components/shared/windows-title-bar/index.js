@@ -166,7 +166,7 @@ const EnhancedAppBar = ({ title: _title }) => {
   && state.preferences.attachToMenubar
   && !state.preferences.sidebar)
   || state.preferences.navigationBar);
-  const themeColor = useSelector((state) => () => {
+  const themeColor = useSelector((state) => {
     if (window.mode === 'main' || window.mode === 'menubar') {
       if (state.preferences.themeColor === 'auto') {
         if (activeWorkspace && activeWorkspace.preferences && activeWorkspace.preferences.color) {
