@@ -179,7 +179,7 @@ const Main = () => {
   const sidebarSize = useSelector((state) => state.preferences.sidebarSize);
   const titleBar = useSelector((state) => state.preferences.titleBar);
   const workspaces = useSelector((state) => state.workspaces.workspaces);
-  const themeColor = useSelector((state) => (() => {
+  const themeColor = useSelector((state) => {
     if (state.preferences.themeColor === 'auto') {
       if (activeWorkspace && activeWorkspace.preferences && activeWorkspace.preferences.color) {
         return activeWorkspace.preferences.color;
@@ -187,7 +187,7 @@ const Main = () => {
       return null;
     }
     return state.preferences.themeColor;
-  })());
+  });
 
   const classes = useStyles({ themeColor });
 
