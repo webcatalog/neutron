@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { uniqBy } from 'lodash';
 import { app } from '@electron/remote';
 
@@ -82,7 +82,7 @@ const Extensions = () => {
   const [extensions, setExtensions] = useState([]);
   const [sources, setSources] = useState([]);
 
-  const refresh = useMemo(() => () => {
+  const refresh = useCallback(() => {
     getExtensionFromProfileAsync(extensionSourceBrowserId, extensionSourceProfileDirName)
       .then((_extensions) => {
         setExtensions(uniqBy(_extensions, 'id'));
