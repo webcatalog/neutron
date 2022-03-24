@@ -13,165 +13,152 @@ import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import makeStyles from '@mui/styles/makeStyles';
 
 import CloseIcon from '@mui/icons-material/Close';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import { Box } from '@mui/material';
 
-const useStyles = makeStyles((theme) => ({
-  toolbarSearchContainer: {
-    flex: 1,
-    zIndex: 10,
-    position: 'relative',
-    borderRadius: 0,
-    paddingRight: theme.spacing(1),
-    paddingLeft: theme.spacing(1),
-  },
-  toolbarSectionSearch: {
-    alignItems: 'center',
-    display: 'flex',
-    flexDirection: 'row',
-    height: 40,
-    margin: '0 auto',
-  },
-  searchBarText: {
-    lineHeight: 1.5,
-    padding: '0 4px',
-    flex: 1,
-    userSelect: 'none',
-    overflow: 'hidden',
-    whiteSpace: 'nowrap',
-    textOverflow: 'ellipsis',
-    transform: 'translateY(-1px)',
-    fontWeight: 'normal',
-  },
-  input: {
-    font: 'inherit',
-    border: '0 !important',
-    display: 'block',
-    verticalAlign: 'middle',
-    whiteSpace: 'normal',
-    background: 'none',
-    margin: 0,
-    color: theme.palette.text.primary,
-    width: '100%',
-    padding: '0 !important',
-    boxShadow: 'none !important',
-    '&:focus': {
-      outline: 0,
-      border: 0,
-      boxShadow: 'none',
-    },
-    '&::placeholder': {
-      color: theme.palette.text.secondary,
-    },
-  },
-  searchButton: {
-    [theme.breakpoints.up('md')]: {
-      display: 'none',
-    },
-  },
-  iconButton: {
-    padding: theme.spacing(0.5),
-  },
-}));
-
-const SearchBox = () => {
-  const classes = useStyles();
-
-  return (
-    <Paper elevation={1} className={classes.toolbarSearchContainer}>
-      <div className={classes.toolbarSectionSearch}>
-        <Typography
-          className={classes.searchBarText}
-          color="inherit"
-          variant="body1"
-          component="div"
-        >
-          <AppSearchSearchBox
-            searchAsYouType
-            debounceLength={300}
-            inputView={({ getAutocomplete, getInputProps }) => (
-              <div className="sui-search-box__wrapper">
-                <input
-                  {...getInputProps({
-                    className: classes.input,
-                    placeholder: 'Search apps...',
-                    // App Search API can only handle up to 128 chars
-                    maxLength: 128,
-                    onFocus: () => {
-                      window.preventClosingWindow = true;
+const SearchBox = () => (
+  <Paper
+    elevation={1}
+    sx={{
+      flex: 1,
+      zIndex: 10,
+      position: 'relative',
+      borderRadius: 0,
+      px: 1,
+    }}
+  >
+    <Box
+      sx={{
+        alignItems: 'center',
+        display: 'flex',
+        flexDirection: 'row',
+        height: 40,
+        margin: '0 auto',
+      }}
+    >
+      <Typography
+        sx={{
+          lineHeight: 1.5,
+          py: 0,
+          px: 0.5,
+          flex: 1,
+          userSelect: 'none',
+          overflow: 'hidden',
+          whiteSpace: 'nowrap',
+          textOverflow: 'ellipsis',
+          transform: 'translateY(-1px)',
+          fontWeight: 'normal',
+        }}
+        color="inherit"
+        variant="body1"
+        component="div"
+      >
+        <AppSearchSearchBox
+          searchAsYouType
+          debounceLength={300}
+          inputView={({ getAutocomplete, getInputProps }) => (
+            <Box className="sui-search-box__wrapper">
+              <Box
+                component="input"
+                {...getInputProps({
+                  sx: {
+                    font: 'inherit',
+                    border: '0 !important',
+                    display: 'block',
+                    verticalAlign: 'middle',
+                    whiteSpace: 'normal',
+                    background: 'none',
+                    margin: 0,
+                    color: (theme) => theme.palette.text.primary,
+                    width: '100%',
+                    padding: '0 !important',
+                    boxShadow: 'none !important',
+                    '&:focus': {
+                      outline: 0,
+                      border: 0,
+                      boxShadow: 'none',
                     },
-                    onBlur: () => {
-                      window.preventClosingWindow = false;
+                    '&::placeholder': {
+                      color: (theme) => theme.palette.text.secondary,
                     },
-                  })}
-                />
-                {getAutocomplete()}
-              </div>
-            )}
-            shouldClearFilters={false}
-          />
-        </Typography>
-        <WithSearch
-          mapContextToProps={({
-            searchTerm,
-            setSearchTerm,
-            isLoading,
-          }) => ({
-            searchTerm,
-            setSearchTerm,
-            isLoading,
-          })}
-        >
-          {({ searchTerm, setSearchTerm, isLoading }) => {
-            if (searchTerm.length > 0) {
-              return (
-                <Tooltip title="Clear">
-                  <IconButton
-                    color="default"
-                    className={classes.iconButton}
-                    aria-label="Clear"
-                    onClick={() => setSearchTerm('', {
-                      refresh: true,
-                      debounce: 0,
-                      shouldClearFilters: false,
-                    })}
-                    size="large"
-                  >
-                    <CloseIcon fontSize="small" />
-                  </IconButton>
-                </Tooltip>
-              );
-            }
+                  },
+                  placeholder: 'Search apps...',
+                  // App Search API can only handle up to 128 chars
+                  maxLength: 128,
+                  onFocus: () => {
+                    window.preventClosingWindow = true;
+                  },
+                  onBlur: () => {
+                    window.preventClosingWindow = false;
+                  },
+                })}
+              />
+              {getAutocomplete()}
+            </Box>
+          )}
+          shouldClearFilters={false}
+        />
+      </Typography>
+      <WithSearch
+        mapContextToProps={({
+          searchTerm,
+          setSearchTerm,
+          isLoading,
+        }) => ({
+          searchTerm,
+          setSearchTerm,
+          isLoading,
+        })}
+      >
+        {({ searchTerm, setSearchTerm, isLoading }) => {
+          if (searchTerm.length > 0) {
             return (
-              <Tooltip title="Refresh">
+              <Tooltip title="Clear">
                 <IconButton
                   color="default"
-                  className={classes.iconButton}
-                  aria-label="Refresh"
-                  onClick={() => {
-                    // clear cache first
-                    if (window.elasticAppSearchQueryCache) {
-                      window.elasticAppSearchQueryCache.clear();
-                    }
-                    setSearchTerm('', {
-                      refresh: true,
-                      debounce: 0,
-                    });
-                  }}
-                  disabled={isLoading}
+                  sx={{ p: 0.5 }}
+                  aria-label="Clear"
+                  onClick={() => setSearchTerm('', {
+                    refresh: true,
+                    debounce: 0,
+                    shouldClearFilters: false,
+                  })}
                   size="large"
                 >
-                  <RefreshIcon fontSize="small" />
+                  <CloseIcon fontSize="small" />
                 </IconButton>
               </Tooltip>
             );
-          }}
-        </WithSearch>
-      </div>
-    </Paper>
-  );
-};
+          }
+          return (
+            <Tooltip title="Refresh">
+              <IconButton
+                color="default"
+                sx={{ p: 0.5 }}
+                aria-label="Refresh"
+                onClick={() => {
+                  // clear cache first
+                  if (window.elasticAppSearchQueryCache) {
+                    window.elasticAppSearchQueryCache.clear();
+                  }
+                  setSearchTerm('', {
+                    refresh: true,
+                    debounce: 0,
+                  });
+                }}
+                disabled={isLoading}
+                size="large"
+              >
+                <RefreshIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+          );
+        }}
+      </WithSearch>
+    </Box>
+  </Paper>
+);
 
 export default SearchBox;

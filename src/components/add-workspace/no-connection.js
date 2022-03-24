@@ -7,36 +7,31 @@ import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import ErrorIcon from '@mui/icons-material/Error';
 import Typography from '@mui/material/Typography';
-import makeStyles from '@mui/styles/makeStyles';
-
-const useStyles = makeStyles(() => ({
-  root: {
-    alignItems: 'center',
-    display: 'flex',
-    flex: 1,
-    flexDirection: 'column',
-    height: '100%',
-    width: '100%',
-  },
-  icon: {
-    height: 64,
-    width: 64,
-  },
-  tryAgainButton: {
-    marginTop: 16,
-  },
-}));
+import { Box } from '@mui/material';
 
 const NoConnection = (props) => {
   const {
     onTryAgainButtonClick,
   } = props;
 
-  const classes = useStyles();
-
   return (
-    <div className={classes.root}>
-      <ErrorIcon className={classes.icon} color="disabled" />
+    <Box
+      sx={{
+        alignItems: 'center',
+        display: 'flex',
+        flex: 1,
+        flexDirection: 'column',
+        height: '100%',
+        width: '100%',
+      }}
+    >
+      <ErrorIcon
+        sx={{
+          height: 64,
+          width: 64,
+        }}
+        color="disabled"
+      />
       <br />
       <Typography
         color="textSecondary"
@@ -51,13 +46,15 @@ const NoConnection = (props) => {
         Please check your Internet connection.
       </Typography>
       <Button
-        className={classes.tryAgainButton}
+        sx={{
+          mt: '16px',
+        }}
         color="primary"
         onClick={onTryAgainButtonClick}
       >
         Try Again
       </Button>
-    </div>
+    </Box>
   );
 };
 

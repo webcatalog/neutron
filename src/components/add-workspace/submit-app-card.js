@@ -7,71 +7,69 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import makeStyles from '@mui/styles/makeStyles';
+import { Box } from '@mui/material';
 
 import { requestOpenInBrowser } from '../../senders';
 
-const useStyles = makeStyles((theme) => ({
-  card: {
-    width: '100%',
-    boxSizing: 'border-box',
-    borderRadius: 4,
-    padding: theme.spacing(1.5),
-    display: 'flex',
-    cursor: 'pointer',
-    color: theme.palette.text.primary,
-    border: theme.palette.mode === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)',
-    '&:hover, &:focus': {
-      backgroundColor: theme.palette.action.selected,
-    },
-    textAlign: 'left',
-    marginTop: theme.spacing(2),
-  },
-  appName: {
-    overflow: 'hidden',
-    whiteSpace: 'nowrap',
-    textOverflow: 'ellipsis',
-    lineHeight: 1,
-    fontWeight: 500,
-  },
-  appUrl: {
-    overflow: 'hidden',
-    whiteSpace: 'nowrap',
-    textOverflow: 'ellipsis',
-  },
-  paperIcon: {
-    fontSize: '64px',
-  },
-  infoContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    paddingLeft: theme.spacing(1),
-    paddingRight: theme.spacing(1),
-    flex: 1,
-  },
-}));
-
-const SubmitAppCard = () => {
-  const classes = useStyles();
-
-  return (
-    <Grid item xs={12}>
-      <Paper elevation={0} className={classes.card} onClick={() => requestOpenInBrowser('https://webcatalog.io/webcatalog/apps/submit/')}>
-        <div>
-          <AddCircleIcon className={classes.paperIcon} />
-        </div>
-        <div className={classes.infoContainer}>
-          <Typography variant="subtitle1" className={classes.appName}>
-            Submit New Service
-          </Typography>
-          <Typography variant="body2" color="textSecondary" className={classes.appUrl}>
-            Can&apos;t find your favorite app/service? Submit it!
-          </Typography>
-        </div>
-      </Paper>
-    </Grid>
-  );
-};
+const SubmitAppCard = () => (
+  <Grid item xs={12}>
+    <Paper
+      elevation={0}
+      sx={{
+        width: '100%',
+        boxSizing: 'border-box',
+        borderRadius: 1,
+        p: 1.5,
+        display: 'flex',
+        cursor: 'pointer',
+        color: 'text.primary',
+        border: (theme) => (theme.palette.mode === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)'),
+        '&:hover, &:focus': {
+          backgroundColor: 'action.selected',
+        },
+        textAlign: 'left',
+        mt: 2,
+      }}
+      onClick={() => requestOpenInBrowser('https://webcatalog.io/webcatalog/apps/submit/')}
+    >
+      <Box>
+        <AddCircleIcon sx={{ fontSize: '64px' }} />
+      </Box>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          px: 1,
+          flex: 1,
+        }}
+      >
+        <Typography
+          variant="subtitle1"
+          sx={{
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+            lineHeight: 1,
+            fontWeight: 500,
+          }}
+        >
+          Submit New Service
+        </Typography>
+        <Typography
+          variant="body2"
+          color="textSecondary"
+          sx={{
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+          }}
+        >
+          Can&apos;t find your favorite app/service? Submit it!
+        </Typography>
+      </Box>
+    </Paper>
+  </Grid>
+);
 
 export default SubmitAppCard;

@@ -5,25 +5,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Typography from '@mui/material/Typography';
-import makeStyles from '@mui/styles/makeStyles';
+import { Box } from '@mui/material';
 
-const useStyles = makeStyles(() => ({
-  root: {
-    alignItems: 'center',
-    display: 'flex',
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    width: '100%',
-  },
-  title: {
-    marginBottom: 8,
-  },
-  icon: {
-    height: 112,
-    width: 112,
-  },
-}));
 const EmptyState = (props) => {
   const {
     children,
@@ -33,15 +16,28 @@ const EmptyState = (props) => {
 
   const Icon = icon;
 
-  const classes = useStyles();
-
   return (
-    <div className={classes.root}>
-      <Icon className={classes.icon} color="disabled" />
+    <Box
+      sx={{
+        alignItems: 'center',
+        display: 'flex',
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        width: 1,
+      }}
+    >
+      <Icon
+        sx={{
+          height: 112,
+          width: 112,
+        }}
+        color="disabled"
+      />
       <br />
       {title && (
         <Typography
-          className={classes.title}
+          sx={{ mb: 1 }}
           variant="h6"
         >
           {title}
@@ -55,7 +51,7 @@ const EmptyState = (props) => {
           {children}
         </Typography>
       ) : children}
-    </div>
+    </Box>
   );
 };
 
