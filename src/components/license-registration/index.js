@@ -9,9 +9,7 @@ import TextField from '@mui/material/TextField';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
-import { Typography } from '@mui/material';
-
-import makeStyles from '@mui/styles/makeStyles';
+import { Box, Typography } from '@mui/material';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -27,37 +25,7 @@ import { requestOpenInBrowser } from '../../senders';
 import getStaticGlobal from '../../helpers/get-static-global';
 import getUtmSource from '../../helpers/get-utm-source';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-    flexDirection: 'column',
-    height: '100%',
-  },
-  dialogContentText: {
-    marginTop: theme.spacing(2),
-  },
-  dialogActions: {
-    borderTop: `1px solid ${theme.palette.divider}`,
-    margin: 0,
-    padding: theme.spacing(1),
-  },
-  helpContent: {
-    marginTop: theme.spacing(1),
-    textAlign: 'right',
-  },
-  linkButton: {
-    cursor: 'pointer',
-    margin: theme.spacing(0.4),
-    padding: 0,
-    fontSize: '0.9rem',
-  },
-  typography: {
-    color: 'rgba(0, 0, 0, 0.54)',
-  },
-}));
-
 const DialogLicenseRegistration = () => {
-  const classes = useStyles();
   const dispatch = useDispatch();
 
   const licenseKey = useSelector((state) => state.dialogLicenseRegistration.form.licenseKey);
@@ -69,9 +37,15 @@ const DialogLicenseRegistration = () => {
   const utmSource = getUtmSource();
 
   return (
-    <div className={classes.root}>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: 1,
+      }}
+    >
       <DialogContent>
-        <DialogContentText className={classes.dialogContentText}>
+        <DialogContentText sx={{ mt: 2 }}>
           You are currently running the free version of&nbsp;
           {appJson.name}
           &nbsp;which does not include&nbsp;
@@ -83,7 +57,6 @@ const DialogLicenseRegistration = () => {
             }}
             role="link"
             tabIndex="0"
-            className={classes.link}
           >
             premium features
           </span>
@@ -108,7 +81,9 @@ const DialogLicenseRegistration = () => {
           variant="outlined"
           helperText={licenseKeyError || `If you have already purchased ${appJson.name} Plus from our website, you should have received a license key via email to enter above.`}
         />
-        <DialogContentText className={classes.helpContent}>
+        <DialogContentText
+          sx={{ mt: 1, textAlign: 'right' }}
+        >
           <Button
             onClick={() => requestOpenInBrowser(`https://${appJson.hostname}/help/?utm_source=${utmSource}`)}
           >
@@ -116,12 +91,17 @@ const DialogLicenseRegistration = () => {
           </Button>
         </DialogContentText>
 
-        <Typography className={classes.typography}>
+        <Typography sx={{ color: 'rgba(0, 0, 0, 0.54)' }}>
           If you&#39;ve purchased&nbsp;
           {appJson.name}
           &nbsp;from Mac App Store or Windows Store,
           <Button
-            className={classes.linkButton}
+            sx={{
+              cursor: 'pointer',
+              m: 0.4,
+              p: 0,
+              fontSize: '0.9rem',
+            }}
             href="#text-buttons"
             color="primary"
             onClick={(e) => {
@@ -135,8 +115,14 @@ const DialogLicenseRegistration = () => {
           with your purchase receipt attached to receive a free license key.
         </Typography>
       </DialogContent>
-      <DialogActions className={classes.dialogActions}>
-        <div style={{ flex: 1 }}>
+      <DialogActions
+        sx={{
+          borderTop: (theme) => `1px solid ${theme.palette.divider}`,
+          m: 0,
+          p: 1,
+        }}
+      >
+        <Box style={{ flex: 1 }}>
           <Button
             onClick={() => requestOpenInBrowser(`https://${appJson.hostname}/pricing/?utm_source=${utmSource}`)}
           >
@@ -147,7 +133,7 @@ const DialogLicenseRegistration = () => {
           >
             Learn More...
           </Button>
-        </div>
+        </Box>
         <Button
           onClick={() => getCurrentWindow().close()}
         >
@@ -160,7 +146,7 @@ const DialogLicenseRegistration = () => {
           Register
         </Button>
       </DialogActions>
-    </div>
+    </Box>
   );
 };
 

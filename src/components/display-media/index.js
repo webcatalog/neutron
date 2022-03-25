@@ -10,28 +10,11 @@ import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
-import makeStyles from '@mui/styles/makeStyles';
+import { Box } from '@mui/material';
 
 import { getDesktopCapturerSourcesAsync } from '../../invokers';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    height: '100%',
-    width: '100%',
-    paddingTop: theme.spacing(2),
-    paddingBottom: theme.spacing(2),
-    paddingLeft: 0,
-    paddingRight: 0,
-    overflow: 'auto',
-  },
-  text: {
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
-  },
-}));
-
 const DisplayMedia = () => {
-  const classes = useStyles();
   const [sources, setSources] = useState([]);
 
   useEffect(() => {
@@ -47,8 +30,19 @@ const DisplayMedia = () => {
   windowSources.shift();
 
   return (
-    <div className={classes.root}>
-      <Typography variant="body2" className={classes.text}>
+    <Box
+      sx={{
+        height: 1,
+        width: 1,
+        py: 2,
+        px: 0,
+        overflow: 'auto',
+      }}
+    >
+      <Typography
+        variant="body2"
+        sx={{ px: 2 }}
+      >
         The app wants to use the contents of your screen. Choose what you’d like to share.
       </Typography>
       <List>
@@ -78,7 +72,7 @@ const DisplayMedia = () => {
           </ListItem>
         ))}
       </List>
-    </div>
+    </Box>
   );
 };
 

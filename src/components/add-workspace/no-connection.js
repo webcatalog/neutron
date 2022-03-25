@@ -47,7 +47,7 @@ const NoConnection = (props) => {
       </Typography>
       <Button
         sx={{
-          mt: '16px',
+          mt: 2,
         }}
         color="primary"
         onClick={onTryAgainButtonClick}
