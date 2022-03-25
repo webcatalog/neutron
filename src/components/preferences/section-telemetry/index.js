@@ -20,32 +20,10 @@ import {
 } from '../../../senders';
 
 const SectionTelemetry = () => {
-  const sentry = useSelector((state) => state.preferences.sentry);
   const telemetry = useSelector((state) => state.preferences.telemetry);
 
   return (
     <List disablePadding dense>
-      <ListItem>
-        <ListItemText
-          primary="Allow the app to send anonymous crash reports"
-          secondary={isWebcatalog()
-            ? 'This preference is managed by WebCatalog app.'
-            : 'Help us quickly diagnose and fix bugs in the app.'}
-        />
-        <ListItemSecondaryAction>
-          <Switch
-            edge="end"
-            color="primary"
-            checked={sentry}
-            disabled={isWebcatalog()}
-            onChange={(e) => {
-              requestSetPreference('sentry', e.target.checked);
-              enqueueRequestRestartSnackbar();
-            }}
-          />
-        </ListItemSecondaryAction>
-      </ListItem>
-      <Divider />
       <ListItem>
         <ListItemText
           primary="Allow the app to send anonymous usage data"
