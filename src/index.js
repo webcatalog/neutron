@@ -21,17 +21,6 @@ import getWorkspaceFriendlyName from './helpers/get-workspace-friendly-name';
 
 import { getReactInitialStateAsync } from './invokers';
 
-if (getStaticGlobal('sentryEnabled')) {
-  import('@sentry/electron/renderer')
-    .then((Sentry) => {
-      Sentry.init({});
-    })
-    .catch((err) => {
-      // eslint-disable-next-line no-console
-      console.log(err);
-    });
-}
-
 const appJson = getStaticGlobal('appJson');
 
 const AddWorkspace = React.lazy(() => import('./components/add-workspace'));

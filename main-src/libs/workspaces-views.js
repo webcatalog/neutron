@@ -10,8 +10,6 @@ const {
 const path = require('path');
 const fs = require('fs-extra');
 
-const { captureException } = require('@sentry/electron');
-
 const {
   countWorkspaces,
   createWorkspace,
@@ -278,7 +276,6 @@ const createWorkspaceView = (workspaceObj = {}) => {
           .catch((err) => {
             // eslint-disable-next-line no-console
             console.log(err);
-            captureException(err);
           });
       }
     });
@@ -297,7 +294,6 @@ const initWorkspaceViews = () => {
         .catch((err) => {
           // eslint-disable-next-line no-console
           console.log(err);
-          captureException(err);
         });
     });
   }

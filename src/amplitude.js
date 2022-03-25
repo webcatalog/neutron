@@ -4,7 +4,6 @@
 import amplitude from 'amplitude-js';
 import { v5 as uuidv5 } from 'uuid';
 import { app } from '@electron/remote';
-import { captureException } from '@sentry/electron/renderer';
 
 import { getMachineIdAsync } from './invokers';
 
@@ -23,7 +22,8 @@ getMachineIdAsync()
     amplitude.getInstance().setDeviceId(deviceId);
   })
   .catch((err) => {
-    captureException(err);
+    // eslint-disable-next-line no-console
+    console.log(err);
   });
 
 export default amplitude;

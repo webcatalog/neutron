@@ -1,8 +1,8 @@
 diff --git a/node_modules/@cliqz/adblocker-electron/dist/cjs/adblocker.js b/node_modules/@cliqz/adblocker-electron/dist/cjs/adblocker.js
-index b8fb45d..cce335c 100644
+index d4ce056..4dc77ee 100644
 --- a/node_modules/@cliqz/adblocker-electron/dist/cjs/adblocker.js
 +++ b/node_modules/@cliqz/adblocker-electron/dist/cjs/adblocker.js
-@@ -21,7 +21,10 @@ exports.ElectronBlocker = exports.BlockingContext = exports.fromElectronDetails
+@@ -25,7 +25,10 @@ exports.ElectronBlocker = exports.BlockingContext = exports.fromElectronDetails
  const electron_1 = require("electron");
  const tldts_experimental_1 = require("tldts-experimental");
  const adblocker_1 = require("@cliqz/adblocker");
