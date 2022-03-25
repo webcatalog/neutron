@@ -3,7 +3,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
 
-import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
@@ -15,7 +14,6 @@ import { useSelector } from 'react-redux';
 import isWebcatalog from '../../../helpers/is-webcatalog';
 
 import {
-  enqueueRequestRestartSnackbar,
   requestSetPreference,
 } from '../../../senders';
 
