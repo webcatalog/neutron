@@ -1,5 +1,5 @@
 diff --git a/node_modules/electron-fetch/lib/index.es.js b/node_modules/electron-fetch/lib/index.es.js
-index 3474009..effd43f 100644
+index 94d2264..6630bed 100644
 --- a/node_modules/electron-fetch/lib/index.es.js
 +++ b/node_modules/electron-fetch/lib/index.es.js
 @@ -285,6 +285,21 @@ Body.prototype = {
@@ -25,10 +25,10 @@ index 3474009..effd43f 100644
     * Decode response as text, while automatically detecting the encoding and
     * trying to decode to UTF-8 (non-spec api)
 diff --git a/node_modules/electron-fetch/lib/index.js b/node_modules/electron-fetch/lib/index.js
-index c9ea590..03b8558 100644
+index 6e3fb52..17bccf0 100644
 --- a/node_modules/electron-fetch/lib/index.js
 +++ b/node_modules/electron-fetch/lib/index.js
-@@ -315,6 +315,21 @@ Body.prototype = {
+@@ -313,6 +313,21 @@ Body.prototype = {
      return consumeBody.call(this);
    },
  
