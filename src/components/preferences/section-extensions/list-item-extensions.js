@@ -19,7 +19,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
 import MenuItem from '@mui/material/MenuItem';
-import makeStyles from '@mui/styles/makeStyles';
+import { Box } from '@mui/material';
 
 import { useSelector } from 'react-redux';
 
@@ -34,37 +34,7 @@ import {
   requestOpenInBrowser,
 } from '../../../senders';
 
-const useStyles = makeStyles((theme) => ({
-  container: {
-    flex: 1,
-  },
-  button: {
-    float: 'left',
-    marginRight: theme.spacing(1),
-  },
-  buttonRight: {
-    marginRight: theme.spacing(1),
-  },
-  formRow: {
-    display: 'flex',
-    gap: theme.spacing(1),
-    marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(1),
-  },
-  text: {
-    lineHeight: '56px',
-  },
-  actions: {
-    display: 'flex',
-    width: '100%',
-  },
-  actionsLeft: {
-    flex: 1,
-  },
-}));
-
 const Extensions = () => {
-  const classes = useStyles();
   // extension action buttons are only visible on sidebar or navigation bar
   const extensionButtonsVisible = useSelector(
     (state) => state.preferences.sidebar || state.preferences.navigationBar,
@@ -105,18 +75,25 @@ const Extensions = () => {
 
   return (
     <ListItem>
-      <div className={classes.container}>
+      <Box sx={{ flex: 1 }}>
         {sources.length > 0 ? (
           <>
             <Typography variant="body2" component="p" gutterBottom>
               Extensions are installed and updated through
               Google Chrome, Microsoft Edge, Vivaldi, Brave or Chromium.
             </Typography>
-            <div className={classes.formRow}>
-              <Typography variant="body1" component="div" className={classes.text}>
+            <Box
+              sx={{
+                display: 'flex',
+                gap: 1,
+                mt: 2,
+                mb: 1,
+              }}
+            >
+              <Typography variant="body1" component="Box" sx={{ lineHeight: 4.7 }}>
                 Load extensions from
               </Typography>
-              <FormControl variant="outlined" margin="dense" className={classes.formControl}>
+              <FormControl variant="outlined" margin="dense">
                 <InputLabel id="browser-label">Browser</InputLabel>
                 <Select
                   labelId="browser-label"
@@ -137,7 +114,7 @@ const Extensions = () => {
                   ))}
                 </Select>
               </FormControl>
-              <FormControl variant="outlined" margin="dense" className={classes.formControl}>
+              <FormControl variant="outlined" margin="dense">
                 <InputLabel id="profile-label">Profile</InputLabel>
                 <Select
                   labelId="profile-label"
@@ -154,17 +131,41 @@ const Extensions = () => {
                     ))}
                 </Select>
               </FormControl>
-            </div>
+            </Box>
 
-            <div className={classes.actions}>
-              <div className={classes.actionsLeft}>
-                <Button variant="contained" disableElevation className={classes.button} onClick={() => refresh()}>
+            <Box
+              sx={{
+                display: 'flex',
+                width: 1,
+              }}
+            >
+              <Box sx={{ flex: 1 }}>
+                <Button
+                  variant="contained"
+                  color="inherit"
+                  disableElevation
+                  sx={{
+                    float: 'left',
+                    mr: 1,
+                    ':hover': {
+                      backgroundColor: 'rgb(0 0 0 / 16%)',
+                    },
+                  }}
+                  onClick={() => refresh()}
+                >
                   Refresh
                 </Button>
                 <Button
                   variant="contained"
+                  color="inherit"
                   disableElevation
-                  className={classes.button}
+                  sx={{
+                    float: 'left',
+                    mr: 1,
+                    ':hover': {
+                      backgroundColor: 'rgb(0 0 0 / 16%)',
+                    },
+                  }}
                   onClick={() => {
                     requestSetPreference('extensionEnabledExtesionIds', {});
                     enqueueRequestRestartSnackbar();
@@ -172,8 +173,8 @@ const Extensions = () => {
                 >
                   Disable All
                 </Button>
-              </div>
-            </div>
+              </Box>
+            </Box>
 
             <List dense>
               {extensions.map((ext) => (
@@ -189,7 +190,7 @@ const Extensions = () => {
                   <ListItemSecondaryAction>
                     <Button
                       variant="text"
-                      className={classes.buttonRight}
+                      sx={{ mr: 1 }}
                       onClick={() => requestOpenInBrowser(`https://docs.google.com/forms/d/e/1FAIpQLSfF4IhgsyYDbiGVx0sz0JKLd9Rs0g71lUqTpw8Jv_nixpQqiw/viewform?entry.1002721177=${encodeURIComponent(ext.name)}&entry.1851347571=${encodeURIComponent(app.getVersion())}`)}
                     >
                       Does it Work?
@@ -234,7 +235,7 @@ const Extensions = () => {
             </Typography>
           </>
         )}
-      </div>
+      </Box>
     </ListItem>
   );
 };

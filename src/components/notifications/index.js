@@ -10,7 +10,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import DateTimePicker from '@mui/lab/DateTimePicker';
-import makeStyles from '@mui/styles/makeStyles';
+// import makeStyles from '@mui/styles/makeStyles';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -32,21 +32,6 @@ import nightBackgroundPng from '../../images/night-background.png';
 
 import { updateShowDateTimePicker } from '../../state/notifications/actions';
 
-const useStyles = makeStyles((theme) => ({
-  hidden: {
-    display: 'none',
-  },
-  pausingHeader: {
-    background: `url(${nightBackgroundPng})`,
-    height: 210,
-    backgroundSize: 400,
-    alignItems: 'flex-end',
-  },
-  pausingHeaderText: {
-    color: theme.palette.common.white,
-  },
-}));
-
 const formatDate = (d) => {
   if (isToday(d)) {
     return format(d, 'p');
@@ -58,7 +43,7 @@ const formatDate = (d) => {
 };
 
 const DialogPauseNotifications = () => {
-  const classes = useStyles();
+  // const classes = useStyles();
   const dispatch = useDispatch();
 
   const pauseNotificationsInfo = useSelector((state) => state.notifications.pauseNotificationsInfo);
@@ -133,10 +118,19 @@ const DialogPauseNotifications = () => {
           dense
           disablePadding
         >
-          <ListItem classes={{ root: classes.pausingHeader }}>
+          <ListItem sx={{
+            background: `url(${nightBackgroundPng})`,
+            height: 210,
+            backgroundSize: 400,
+            alignItems: 'flex-end',
+          }}
+          >
             <ListItemText
-              primary={`Notifications paused until ${formatDate(new Date(pauseNotificationsInfo.tilDate))}.`}
-              classes={{ primary: classes.pausingHeaderText }}
+              primary={`Notifications paused until
+              ${formatDate(new Date(pauseNotificationsInfo.tilDate))}.`}
+              sx={{
+                color: 'common.white',
+              }}
             />
           </ListItem>
           <ListItem button>

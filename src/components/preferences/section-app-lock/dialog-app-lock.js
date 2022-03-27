@@ -18,10 +18,10 @@ import Link from '@mui/material/Link';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 
+import { Box } from '@mui/material';
+
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-
-import makeStyles from '@mui/styles/makeStyles';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -37,22 +37,7 @@ import { requestOpenInBrowser } from '../../../senders';
 
 import getKeytarVaultName from '../../../helpers/get-keytar-vault-name';
 
-const useStyles = makeStyles((theme) => ({
-  actions: {
-    display: 'flex',
-    width: '100%',
-  },
-  actionsLeft: {
-    flex: 1,
-  },
-  button: {
-    float: 'right',
-    marginLeft: theme.spacing(1),
-  },
-}));
-
 const DialogAppLock = () => {
-  const classes = useStyles();
   const dispatch = useDispatch();
 
   const currentPassword = useSelector((state) => state.dialogAppLock.form.currentPassword);
@@ -76,6 +61,7 @@ const DialogAppLock = () => {
 
   const passwordRecovery = (
     <Link
+      underline="hover"
       href="#"
       onClick={(e) => {
         e.preventDefault();
@@ -184,15 +170,20 @@ const DialogAppLock = () => {
         </DialogContent>
       )}
       <DialogActions>
-        <div className={classes.actions}>
-          <div className={classes.actionsLeft}>
+        <Box
+          sx={{
+            display: 'flex',
+            width: 1,
+          }}
+        >
+          <Box sx={{ flex: 1 }}>
             {hasPassword && !requireCurrentPassword && (
               <Button variant="contained" disableElevation onClick={() => dispatch(deletePassword())}>
                 Disable App Lock
               </Button>
             )}
-          </div>
-          <div className={classes.actionsRight}>
+          </Box>
+          <Box>
             {!requireCurrentPassword && canPromptTouchId && (
               <FormControlLabel
                 control={(
@@ -205,22 +196,52 @@ const DialogAppLock = () => {
                 label="Use Touch ID"
               />
             )}
-          </div>
-          <div className={classes.actionsRight}>
-            <Button variant="contained" className={classes.button} disableElevation onClick={() => dispatch(close())}>
+          </Box>
+          <Box>
+            <Button
+              variant="contained"
+              color="inherit"
+              sx={{
+                float: 'right',
+                ml: 1,
+                ':hover': {
+                  backgroundColor: 'rgb(0 0 0 / 16%)',
+                },
+              }}
+              disableElevation
+              onClick={() => dispatch(close())}
+            >
               Cancel
             </Button>
             {!requireCurrentPassword ? (
-              <Button color="primary" className={classes.button} variant="contained" disableElevation onClick={() => dispatch(save())}>
+              <Button
+                color="primary"
+                sx={{
+                  float: 'right',
+                  ml: 1,
+                }}
+                variant="contained"
+                disableElevation
+                onClick={() => dispatch(save())}
+              >
                 Save
               </Button>
             ) : (
-              <Button color="primary" className={classes.button} variant="contained" disableElevation onClick={() => dispatch(validateCurrentPassword())}>
+              <Button
+                color="primary"
+                sx={{
+                  float: 'right',
+                  ml: 1,
+                }}
+                variant="contained"
+                disableElevation
+                onClick={() => dispatch(validateCurrentPassword())}
+              >
                 Continue
               </Button>
             )}
-          </div>
-        </div>
+          </Box>
+        </Box>
       </DialogActions>
     </Dialog>
   );

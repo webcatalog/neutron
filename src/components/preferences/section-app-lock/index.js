@@ -12,7 +12,6 @@ import Select from '@mui/material/Select';
 import Divider from '@mui/material/Divider';
 import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import Switch from '@mui/material/Switch';
-import makeStyles from '@mui/styles/makeStyles';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -36,27 +35,7 @@ import {
 
 import appLockTimeouts from '../../../constants/app-lock-timeouts';
 
-const useStyles = makeStyles((theme) => ({
-  selectRoot: {
-    borderRadius: theme.spacing(0.5),
-    fontSize: '0.84375rem',
-    marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(1),
-  },
-  select: {
-    paddingTop: theme.spacing(1),
-    paddingRight: 26,
-    paddingBottom: theme.spacing(1),
-    paddingLeft: theme.spacing(1.5),
-  },
-  refreshEvery: {
-    float: 'right',
-    paddingRight: theme.spacing(1),
-  },
-}));
-
 const SectionPrivacySecurity = () => {
-  const classes = useStyles();
   const dispatch = useDispatch();
 
   const appLockTimeout = useSelector((state) => state.preferences.appLockTimeout);
@@ -104,7 +83,10 @@ const SectionPrivacySecurity = () => {
         <ListItem>
           <ListItemText
             primary="Lock the app after"
-            classes={{ primary: classes.refreshEvery }}
+            sx={{
+              float: 'right',
+              pr: 1,
+            }}
           />
           <Select
             value={appLockTimeout}
@@ -115,10 +97,16 @@ const SectionPrivacySecurity = () => {
             variant="filled"
             disableUnderline
             margin="dense"
-            classes={{
-              root: classes.select,
+            sx={{
+              borderRadius: 0.5,
+              fontSize: '0.84375rem',
+              my: 1,
+              '& .MuiSelect-select': {
+                py: 1,
+                prt: 3.25,
+                pl: 1.5,
+              },
             }}
-            className={classes.selectRoot}
             disabled={!appLockEnabled}
           >
             {appLockTimeouts.map((opt) => (

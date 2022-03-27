@@ -9,7 +9,7 @@ import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import ListItemText from '@mui/material/ListItemText';
 import Switch from '@mui/material/Switch';
 import Divider from '@mui/material/Divider';
-import makeStyles from '@mui/styles/makeStyles';
+import { Box } from '@mui/material';
 
 import { useSelector } from 'react-redux';
 
@@ -21,23 +21,7 @@ import {
   requestSetPreference,
 } from '../../../senders';
 
-const useStyles = makeStyles(() => ({
-  link: {
-    cursor: 'pointer',
-    fontWeight: 500,
-    outline: 'none',
-    '&:hover': {
-      textDecoration: 'underline',
-    },
-    '&:focus': {
-      textDecoration: 'underline',
-    },
-  },
-}));
-
 const SectionBrowsing = () => {
-  const classes = useStyles();
-
   const blockAds = useSelector((state) => state.preferences.blockAds);
   const blockJavascript = useSelector((state) => state.preferences.blockJavascript);
   const ignoreCertificateErrors = useSelector((state) => state.preferences.ignoreCertificateErrors);
@@ -88,10 +72,21 @@ const SectionBrowsing = () => {
           secondary={(
             <>
               <span>Not recommended. </span>
-              <span
+              <Box
+                component="span"
                 role="link"
                 tabIndex={0}
-                className={classes.link}
+                sx={{
+                  cursor: 'pointer',
+                  fontWeight: 500,
+                  outline: 'none',
+                  '&:hover': {
+                    textDecoration: 'underline',
+                  },
+                  '&:focus': {
+                    textDecoration: 'underline',
+                  },
+                }}
                 onClick={() => requestOpenInBrowser('https://groups.google.com/a/chromium.org/d/msg/security-dev/mB2KJv_mMzM/ddMteO9RjXEJ')}
                 onKeyDown={(e) => {
                   if (e.key !== 'Enter') return;
@@ -99,7 +94,7 @@ const SectionBrowsing = () => {
                 }}
               >
                 Learn more
-              </span>
+              </Box>
               .
             </>
             )}
