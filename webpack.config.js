@@ -110,10 +110,6 @@ const getElectronMainConfig = () => {
     },
     devtool: 'source-map',
     plugins,
-    // https://github.com/getsentry/sentry-electron/issues/416
-    optimization: {
-      sideEffects: false,
-    },
   };
 };
 

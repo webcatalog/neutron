@@ -23,11 +23,9 @@ const {
 } = require('electron');
 const path = require('path');
 const fs = require('fs-extra');
-const isDev = require('electron-is-dev');
 const settings = require('electron-settings');
 const electronRemote = require('@electron/remote/main');
 const rtlDetect = require('rtl-detect');
-const Sentry = require('@sentry/electron/main');
 
 const appJson = require('./constants/app-json');
 const isMas = require('./libs/is-mas');
@@ -71,21 +69,6 @@ const {
   getPreferences,
   setPreference,
 } = require('./libs/preferences');
-
-// Activate the Sentry Electron SDK as early as possible in every process.
-const sentryEnabled = !isDev && getPreference('sentry');
-if (sentryEnabled) {
-  // https://github.com/getsentry/sentry-electron/blob/06c9874584f7734fe6cb8297c6455cf6356d29d4/MIGRATION.md
-  Sentry.init({
-    dsn: process.env.ELECTRON_APP_SENTRY_DSN,
-    release: app.getVersion(),
-    autoSessionTracking: false,
-    // disable native crash reporting
-    // as it mostly reports Electron's bugs (upstream bugs)
-    integrations: (defaultIntegrations) => defaultIntegrations
-      .filter((i) => i.name !== Sentry.Integrations.SentryMinidump.Id),
-  });
-}
 
 const loadListeners = require('./listeners');
 const loadInvokers = require('./invokers');
@@ -443,10 +426,8 @@ if (!gotTheLock) {
           }).then(({ response }) => {
             setPreference('privacyConsentAsked', true);
             if (response === 0) {
-              setPreference('sentry', true);
               setPreference('telemetry', true);
             } else {
-              setPreference('sentry', false);
               setPreference('telemetry', false);
             }
           }).catch(console.log); // eslint-disable-line
@@ -618,8 +599,6 @@ if (!gotTheLock) {
 
     global.hibernateWhenUnused = hibernateWhenUnused;
     global.hibernateWhenUnusedTimeout = hibernateWhenUnusedTimeout;
-
-    global.sentryEnabled = sentryEnabled;
 
     // on Windows, if the display language is RTL language (Arabic, Hebrew, etc)
     // the x bounds coordination is reversed

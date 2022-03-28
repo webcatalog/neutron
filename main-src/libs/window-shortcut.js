@@ -4,7 +4,6 @@
 const {
   globalShortcut,
 } = require('electron');
-const { captureException } = require('@sentry/electron');
 const mainWindow = require('../windows/main');
 
 const unset = (combinator) => {
@@ -33,7 +32,8 @@ const set = (combinator) => {
       }
     });
   } catch (err) {
-    captureException(err);
+    // eslint-disable-next-line no-console
+    console.log(err);
   }
 };
 
