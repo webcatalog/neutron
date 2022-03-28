@@ -11,16 +11,14 @@ import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormHelperText from '@mui/material/FormHelperText';
-import InputLabel from '@mui/material/InputLabel';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
 import Radio from '@mui/material/Radio';
-import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import makeStyles from '@mui/styles/makeStyles';
+import { Box } from '@mui/material';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -34,45 +32,7 @@ import {
 
 import { requestOpenInBrowser } from '../../../senders';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    background: theme.palette.background.paper,
-    height: '100%',
-    width: '100%',
-    padding: theme.spacing(2),
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  flexGrow: {
-    flex: 1,
-  },
-  dialogContentText: {
-    marginTop: theme.spacing(2),
-  },
-  link: {
-    cursor: 'pointer',
-    fontWeight: 500,
-    outline: 'none',
-    '&:hover': {
-      textDecoration: 'underline',
-    },
-  },
-  button: {
-    float: 'right',
-    marginLeft: theme.spacing(1),
-  },
-  radioLabel: theme.typography.body2,
-  addressContainer: {
-    display: 'flex',
-  },
-  addressTextField: {
-    flex: 1,
-    paddingRight: theme.spacing(1),
-  },
-}));
-
 const DialogProxy = () => {
-  const classes = useStyles();
   const dispatch = useDispatch();
 
   const open = useSelector((state) => state.dialogProxy.open);
@@ -106,7 +66,14 @@ const DialogProxy = () => {
           <span
             role="link"
             tabIndex={0}
-            className={classes.link}
+            sx={{
+              cursor: 'pointer',
+              fontWeight: 500,
+              outline: 'none',
+              '&:hover': {
+                textDecoration: 'underline',
+              },
+            }}
             onClick={() => requestOpenInBrowser(`https://docs.webcatalog.io/article/40-how-to-define-proxy-bypass-rules?utm_source=${utmSource}`)}
             onKeyDown={(e) => {
               if (e.key !== 'Enter') return;
@@ -138,10 +105,12 @@ const DialogProxy = () => {
 
         <List disablePadding dense>
           <ListItem>
-            <div style={{ width: '100%' }}>
+            <Box style={{ width: '100%' }}>
               <ListItemText primary="" />
               <FormControlLabel
-                classes={{ label: classes.radioLabel }}
+                sx={{
+                  '& .MuiFormControlLabel-label': (theme) => theme.typography.body2,
+                }}
                 control={<Radio color="primary" size="small" />}
                 label="Use proxy server"
                 labelPlacement="end"
@@ -152,18 +121,20 @@ const DialogProxy = () => {
               {proxyMode === 'fixed_servers' && (
                 <>
                   <FormControl variant="outlined" margin="dense" fullWidth error={Boolean(proxyProtocolError)}>
-                    <InputLabel id="demo-simple-select-error-label">Protocol</InputLabel>
-                    <Select
+                    <TextField
+                      id="outlined-select-currency"
+                      select
+                      label="Protocol"
                       value={proxyProtocol}
                       onChange={(e) => dispatch(updateForm({ proxyProtocol: e.target.value }))}
                     >
                       {['socks5', 'socks4', 'https', 'http', 'ftp'].map((val) => (
                         <MenuItem key={val} value={val}>{val}</MenuItem>
                       ))}
-                    </Select>
+                    </TextField>
                     <FormHelperText>{Boolean(proxyProtocolError)}</FormHelperText>
                   </FormControl>
-                  <div className={classes.addressContainer}>
+                  <Box sx={{ display: 'flex' }}>
                     <TextField
                       margin="dense"
                       label="Address"
@@ -171,7 +142,10 @@ const DialogProxy = () => {
                       value={proxyAddress}
                       onChange={(e) => dispatch(updateForm({ proxyAddress: e.target.value }))}
                       error={Boolean(proxyAddressError)}
-                      className={classes.addressTextField}
+                      sx={{
+                        flex: 1,
+                        pr: 1,
+                      }}
                     />
                     <TextField
                       margin="dense"
@@ -181,16 +155,18 @@ const DialogProxy = () => {
                       onChange={(e) => dispatch(updateForm({ proxyPort: e.target.value }))}
                       error={Boolean(proxyPortError)}
                     />
-                  </div>
+                  </Box>
                   {bypassRulesTextField}
                 </>
               )}
-            </div>
+            </Box>
           </ListItem>
           <ListItem>
-            <div style={{ width: '100%' }}>
+            <Box sx={{ width: 1 }}>
               <FormControlLabel
-                classes={{ label: classes.radioLabel }}
+                sx={{
+                  '& .MuiFormControlLabel-label': (theme) => theme.typography.body2,
+                }}
                 control={<Radio color="primary" size="small" />}
                 label="Use PAC script (automatic proxy configuration script)"
                 labelPlacement="end"
@@ -215,7 +191,14 @@ const DialogProxy = () => {
                         <span
                           role="link"
                           tabIndex={0}
-                          className={classes.link}
+                          sx={{
+                            cursor: 'pointer',
+                            fontWeight: 500,
+                            outline: 'none',
+                            '&:hover': {
+                              textDecoration: 'underline',
+                            },
+                          }}
                           onClick={() => requestOpenInBrowser('https://en.wikipedia.org/wiki/Proxy_auto-config')}
                           onKeyDown={(e) => {
                             if (e.key !== 'Enter') return;
@@ -230,12 +213,14 @@ const DialogProxy = () => {
                   {bypassRulesTextField}
                 </>
               )}
-            </div>
+            </Box>
           </ListItem>
           <ListItem>
-            <div style={{ width: '100%' }}>
+            <Box style={{ width: '100%' }}>
               <FormControlLabel
-                classes={{ label: classes.radioLabel }}
+                sx={{
+                  '& .MuiFormControlLabel-label': (theme) => theme.typography.body2,
+                }}
                 control={<Radio color="primary" size="small" />}
                 label="Use system proxy configurations"
                 labelPlacement="end"
@@ -243,13 +228,15 @@ const DialogProxy = () => {
                 value="system"
                 onChange={(e) => dispatch(updateForm({ proxyMode: e.target.value }))}
               />
-            </div>
+            </Box>
           </ListItem>
           <ListItem>
-            <div style={{ width: '100%' }}>
+            <Box style={{ width: '100%' }}>
               <ListItemText primary="" />
               <FormControlLabel
-                classes={{ label: classes.radioLabel }}
+                sx={{
+                  '& .MuiFormControlLabel-label': (theme) => theme.typography.body2,
+                }}
                 control={<Radio color="primary" size="small" />}
                 label="Do not use proxy (default)"
                 labelPlacement="end"
@@ -257,14 +244,16 @@ const DialogProxy = () => {
                 value="direct"
                 onChange={(e) => dispatch(updateForm({ proxyMode: e.target.value }))}
               />
-            </div>
+            </Box>
           </ListItem>
           {window.mode === 'workspace-preferences' && (
             <ListItem>
-              <div style={{ width: '100%' }}>
+              <Box style={{ width: '100%' }}>
                 <ListItemText primary="" />
                 <FormControlLabel
-                  classes={{ label: classes.radioLabel }}
+                  sx={{
+                    '& .MuiFormControlLabel-label': (theme) => theme.typography.body2,
+                  }}
                   control={<Radio color="primary" size="small" />}
                   label="Use global preference"
                   labelPlacement="end"
@@ -272,13 +261,23 @@ const DialogProxy = () => {
                   value="direct"
                   onChange={() => dispatch(updateForm({ proxyMode: null }))}
                 />
-              </div>
+              </Box>
             </ListItem>
           )}
         </List>
       </DialogContent>
       <DialogActions>
-        <Button variant="contained" disableElevation onClick={() => dispatch(close())}>
+        <Button
+          variant="contained"
+          color="inherit"
+          sx={{
+            ':hover': {
+              backgroundColor: 'rgb(0 0 0 / 16%)',
+            },
+          }}
+          disableElevation
+          onClick={() => dispatch(close())}
+        >
           Cancel
         </Button>
         <Button

@@ -4,21 +4,12 @@
 import React, { useRef, useCallback } from 'react';
 
 import Button from '@mui/material/Button';
-import makeStyles from '@mui/styles/makeStyles';
 
 import { SnackbarProvider } from 'notistack';
 
 import Inner from './inner';
 
-const useStyles = makeStyles((theme) => ({
-  notistackContainerRoot: {
-    marginTop: theme.spacing(1),
-  },
-}));
-
 const SnackbarTrigger = () => {
-  const classes = useStyles();
-
   const notistackRef = useRef(null);
   const action = useCallback((key) => {
     const onClickDismiss = () => {
@@ -43,9 +34,7 @@ const SnackbarTrigger = () => {
       }}
       dense
       preventDuplicate
-      classes={{
-        containerRoot: classes.notistackContainerRoot,
-      }}
+      sx={{ mt: 1 }}
       action={action}
     >
       <Inner />

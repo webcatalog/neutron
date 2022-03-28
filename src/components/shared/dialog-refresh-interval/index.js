@@ -14,31 +14,13 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 
-import makeStyles from '@mui/styles/makeStyles';
+import { Box } from '@mui/material';
 
 import { useDispatch, useSelector } from 'react-redux';
 
 import { updateForm, save, close } from '../../../state/dialog-refresh-interval/actions';
 
-const useStyles = makeStyles((theme) => ({
-  content: {
-    display: 'flex',
-    justifyContent: 'center',
-  },
-  textField: {
-    marginRight: theme.spacing(1),
-  },
-  actions: {
-    display: 'flex',
-  },
-  button: {
-    float: 'right',
-    marginLeft: theme.spacing(1),
-  },
-}));
-
 const RefreshInterval = () => {
-  const classes = useStyles();
   const dispatch = useDispatch();
 
   const value = useSelector((state) => state.dialogRefreshInterval.form.value);
@@ -52,7 +34,12 @@ const RefreshInterval = () => {
       fullWidth
       maxWidth="xs"
     >
-      <DialogContent className={classes.content}>
+      <DialogContent
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+      >
         <TextField
           label="Refresh every"
           variant="filled"
@@ -62,11 +49,13 @@ const RefreshInterval = () => {
             step: 1,
           }}
           value={value}
-          className={classes.textField}
+          sx={{
+            mr: 1,
+          }}
           // prevent decimal with Math.floor
           onChange={(e) => dispatch(updateForm({ value: Math.floor(e.target.value) }))}
         />
-        <FormControl variant="filled" className={classes.formControl}>
+        <FormControl variant="filled">
           <InputLabel id="unit-label">Unit</InputLabel>
           <Select
             labelId="unit-label"
@@ -80,16 +69,37 @@ const RefreshInterval = () => {
         </FormControl>
       </DialogContent>
       <DialogActions>
-        <div className={classes.actions}>
-          <div className={classes.actionsRight}>
-            <Button color="primary" variant="contained" disableElevation className={classes.button} onClick={() => dispatch(save())}>
+        <Box sx={{ display: 'flex' }}>
+          <Box>
+            <Button
+              color="primary"
+              variant="contained"
+              disableElevation
+              sx={{
+                float: 'right',
+                ml: 1,
+              }}
+              onClick={() => dispatch(save())}
+            >
               Save
             </Button>
-            <Button variant="contained" disableElevation className={classes.button} onClick={() => dispatch(close())}>
+            <Button
+              variant="contained"
+              color="inherit"
+              sx={{
+                float: 'right',
+                ml: 1,
+                ':hover': {
+                  backgroundColor: 'rgb(0 0 0 / 16%)',
+                },
+              }}
+              disableElevation
+              onClick={() => dispatch(close())}
+            >
               Cancel
             </Button>
-          </div>
-        </div>
+          </Box>
+        </Box>
       </DialogActions>
     </Dialog>
   );

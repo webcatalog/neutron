@@ -84,8 +84,10 @@ const SectionPrivacySecurity = () => {
           <ListItemText
             primary="Lock the app after"
             sx={{
-              float: 'right',
-              pr: 1,
+              '& .MuiListItemText-primary': {
+                float: 'right',
+                pr: 1,
+              },
             }}
           />
           <Select
@@ -103,7 +105,7 @@ const SectionPrivacySecurity = () => {
               my: 1,
               '& .MuiSelect-select': {
                 py: 1,
-                prt: 3.25,
+                pr: 3.25,
                 pl: 1.5,
               },
             }}

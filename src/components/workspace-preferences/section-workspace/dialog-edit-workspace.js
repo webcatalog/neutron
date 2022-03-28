@@ -5,7 +5,6 @@ import React from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
 
-import makeStyles from '@mui/styles/makeStyles';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
@@ -21,14 +20,7 @@ import {
   close,
 } from '../../../state/dialog-edit-workspace/actions';
 
-const useStyles = makeStyles((theme) => ({
-  textField: {
-    marginBottom: theme.spacing(3),
-  },
-}));
-
 const EditWorkspace = () => {
-  const classes = useStyles();
   const dispatch = useDispatch();
 
   const accountInfo = useSelector((state) => state.dialogEditWorkspace.form.accountInfo);
@@ -65,7 +57,7 @@ const EditWorkspace = () => {
           fullWidth
           margin="dense"
           variant="outlined"
-          className={classes.textField}
+          sx={{ mb: 3 }}
           InputLabelProps={{
             shrink: true,
           }}
@@ -79,7 +71,7 @@ const EditWorkspace = () => {
           fullWidth
           margin="dense"
           variant="outlined"
-          className={classes.textField}
+          sx={{ mb: 3 }}
           InputLabelProps={{
             shrink: true,
           }}
@@ -100,7 +92,16 @@ const EditWorkspace = () => {
         />
       </DialogContent>
       <DialogActions>
-        <Button variant="contained" onClick={() => dispatch(close())}>
+        <Button
+          variant="contained"
+          onClick={() => dispatch(close())}
+          color="inherit"
+          sx={{
+            ':hover': {
+              backgroundColor: 'rgb(0 0 0 / 16%)',
+            },
+          }}
+        >
           Cancel
         </Button>
         <Button color="primary" variant="contained" onClick={() => dispatch(close())}>

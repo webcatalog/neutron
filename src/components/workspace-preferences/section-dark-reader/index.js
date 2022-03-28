@@ -12,7 +12,6 @@ import Select from '@mui/material/Select';
 import Slider from '@mui/material/Slider';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
-import makeStyles from '@mui/styles/makeStyles';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -20,33 +19,7 @@ import getStaticGlobal from '../../../helpers/get-static-global';
 
 import { updateForm } from '../../../state/dialog-workspace-preferences/actions';
 
-const useStyles = makeStyles((theme) => ({
-  sliderContainer: {
-    paddingTop: theme.spacing(2),
-    paddingLeft: theme.spacing(5),
-    paddingRight: theme.spacing(5),
-  },
-  sliderTitleContainer: {
-    paddingTop: `${theme.spacing(1.5)} !important`,
-    width: 100,
-  },
-  sliderMarkLabel: {
-    fontSize: '0.75rem',
-  },
-  selectRoot: {
-    borderRadius: theme.spacing(0.5),
-    fontSize: '0.84375rem',
-  },
-  select: {
-    paddingTop: theme.spacing(1),
-    paddingRight: 26,
-    paddingBottom: theme.spacing(1),
-    paddingLeft: theme.spacing(1.5),
-  },
-}));
-
 const SectionDarkReader = () => {
-  const classes = useStyles();
   const dispatch = useDispatch();
 
   const darkReader = useSelector((state) => state.preferences.darkReader);
@@ -91,10 +64,15 @@ const SectionDarkReader = () => {
           variant="filled"
           disableUnderline
           margin="dense"
-          classes={{
-            root: classes.select,
+          sx={{
+            borderRadius: 0.5,
+            fontSize: '0.84375rem',
+            '& .MuiSelect-select': {
+              py: 1,
+              pr: 3.25,
+              pl: 1.5,
+            },
           }}
-          className={classes.selectRoot}
         >
           <MenuItem dense value="global">{`Use global preference (${darkReader ? 'Yes' : 'No'})`}</MenuItem>
           <MenuItem dense value>Yes</MenuItem>
@@ -104,16 +82,31 @@ const SectionDarkReader = () => {
       {formDarkReader && !getStaticGlobal('darkReaderExtensionDetected') && <Divider />}
       {formDarkReader && !getStaticGlobal('darkReaderExtensionDetected') && (
         <ListItem>
-          <ListItemText className={classes.sliderContainer}>
+          <ListItemText
+            sx={{
+              pt: 2,
+              px: 5,
+            }}
+          >
             <Grid container spacing={2}>
-              <Grid classes={{ item: classes.sliderTitleContainer }} item>
+              <Grid
+                sx={{
+                  pt: 1.5,
+                  width: 100,
+                }}
+                item
+              >
                 <Typography id="brightness-slider" variant="body2" gutterBottom={false}>
                   Brightness
                 </Typography>
               </Grid>
               <Grid item xs>
                 <Slider
-                  classes={{ markLabel: classes.sliderMarkLabel }}
+                  sx={{
+                    '& .MuiSlider-markLabel': {
+                      fontSize: '0.75rem',
+                    },
+                  }}
                   value={formDarkReaderBrightness - 100}
                   aria-labelledby="brightness-slider"
                   valueLabelDisplay="auto"
@@ -137,14 +130,24 @@ const SectionDarkReader = () => {
               </Grid>
             </Grid>
             <Grid container spacing={2}>
-              <Grid classes={{ item: classes.sliderTitleContainer }} item>
+              <Grid
+                sx={{
+                  pt: 1.5,
+                  width: 100,
+                }}
+                item
+              >
                 <Typography id="contrast-slider" variant="body2" gutterBottom={false}>
                   Contrast
                 </Typography>
               </Grid>
               <Grid item xs>
                 <Slider
-                  classes={{ markLabel: classes.sliderMarkLabel }}
+                  sx={{
+                    '& .MuiSlider-markLabel': {
+                      fontSize: '0.75rem',
+                    },
+                  }}
                   value={formDarkReaderContrast - 100}
                   aria-labelledby="contrast-slider"
                   valueLabelDisplay="auto"
@@ -168,14 +171,24 @@ const SectionDarkReader = () => {
               </Grid>
             </Grid>
             <Grid container spacing={2}>
-              <Grid classes={{ item: classes.sliderTitleContainer }} item>
+              <Grid
+                sx={{
+                  pt: 1.5,
+                  width: 100,
+                }}
+                item
+              >
                 <Typography id="sepia-slider" variant="body2" gutterBottom={false}>
                   Sepia
                 </Typography>
               </Grid>
               <Grid item xs>
                 <Slider
-                  classes={{ markLabel: classes.sliderMarkLabel }}
+                  sx={{
+                    '& .MuiSlider-markLabel': {
+                      fontSize: '0.75rem',
+                    },
+                  }}
                   value={formDarkReaderSepia}
                   aria-labelledby="sepia-slider"
                   valueLabelDisplay="auto"
@@ -195,14 +208,24 @@ const SectionDarkReader = () => {
               </Grid>
             </Grid>
             <Grid container spacing={2}>
-              <Grid classes={{ item: classes.sliderTitleContainer }} item>
+              <Grid
+                sx={{
+                  pt: 1.5,
+                  width: 100,
+                }}
+                item
+              >
                 <Typography id="grayscale-slider" variant="body2" gutterBottom={false}>
                   Grayscale
                 </Typography>
               </Grid>
               <Grid item xs>
                 <Slider
-                  classes={{ markLabel: classes.sliderMarkLabel }}
+                  sx={{
+                    '& .MuiSlider-markLabel': {
+                      fontSize: '0.75rem',
+                    },
+                  }}
                   value={formDarkReaderGrayscale}
                   aria-labelledby="grayscale-slider"
                   valueLabelDisplay="auto"

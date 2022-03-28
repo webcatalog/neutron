@@ -11,7 +11,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-import makeStyles from '@mui/styles/makeStyles';
+import { Box } from '@mui/material';
 
 import { useSelector } from 'react-redux';
 
@@ -24,16 +24,6 @@ import {
   enqueueRequestRestartSnackbar,
 } from '../../../senders';
 
-const useStyles = makeStyles(() => ({
-  combinatorContainer: {
-    marginTop: 12,
-  },
-  plusText: {
-    paddingLeft: 12,
-    paddingRight: 12,
-  },
-}));
-
 const renderCombinator = (combinator) => combinator
   .replace(/\+/g, ' + ')
   .replace('alt', window.process.platform !== 'darwin' ? 'alt' : '⌥')
@@ -43,7 +33,6 @@ const renderCombinator = (combinator) => combinator
   .toUpperCase();
 
 const ListItemShortcut = () => {
-  const classes = useStyles();
   const windowShortcut = useSelector((state) => state.preferences.windowShortcut);
 
   const [open, setOpen] = useState(false);
@@ -83,22 +72,47 @@ const ListItemShortcut = () => {
         <DialogContentText>
           Type the new keyboard combination (e.g. SHIFT+D or ALT+SHIFT+O)
         </DialogContentText>
-        <DialogContentText className={classes.combinatorContainer}>
+        <DialogContentText sx={{ mt: 1.5 }}>
           {combinator && combinator !== '+' && combinator.split('+').map((key, i) => (
-            <span key={key}>
-              {i > 0 && <span className={classes.plusText}>+</span>}
-              <Button variant="contained">
+            <Box key={key} component="span">
+              {i > 0
+              && <Box component="span" sx={{ px: 1.5 }}>+</Box>}
+              <Button
+                variant="contained"
+                color="inherit"
+                sx={{
+                  ':hover': {
+                    backgroundColor: 'rgb(0 0 0 / 16%)',
+                  },
+                }}
+              >
                 {renderCombinator(key)}
               </Button>
-            </span>
+            </Box>
           ))}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => setOpen(false)}>
+        <Button
+          variant="contained"
+          color="inherit"
+          sx={{
+            ':hover': {
+              backgroundColor: 'rgb(0 0 0 / 16%)',
+            },
+          }}
+          onClick={() => setOpen(false)}
+        >
           Cancel
         </Button>
         <Button
+          variant="contained"
+          color="inherit"
+          sx={{
+            ':hover': {
+              backgroundColor: 'rgb(0 0 0 / 16%)',
+            },
+          }}
           onClick={() => {
             requestSetPreference('windowShortcut', null);
             setOpen(false);
@@ -107,6 +121,7 @@ const ListItemShortcut = () => {
           Remove Shortcut
         </Button>
         <Button
+          variant="contained"
           color="primary"
           onClick={() => {
             requestSetPreference('windowShortcut', combinator);

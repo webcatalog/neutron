@@ -110,7 +110,7 @@ const SectionDarkReader = () => {
                 }}
                 item
               >
-                <Typography id="contrast-slider" variant="body2" gutterBottom={false}>
+                <Typography id="contrast-slider" variant="body2" gutterBottom={false} sx={{ m: 0.5 }}>
                   Contrast
                 </Typography>
               </Grid>
@@ -153,7 +153,7 @@ const SectionDarkReader = () => {
                 }}
                 item
               >
-                <Typography id="sepia-slider" variant="body2" gutterBottom={false}>
+                <Typography id="sepia-slider" variant="body2" gutterBottom={false} sx={{ m: 0.5 }}>
                   Sepia
                 </Typography>
               </Grid>
@@ -192,7 +192,7 @@ const SectionDarkReader = () => {
                 }}
                 item
               >
-                <Typography id="grayscale-slider" variant="body2" gutterBottom={false}>
+                <Typography id="grayscale-slider" variant="body2" gutterBottom={false} sx={{ m: 0.5 }}>
                   Grayscale
                 </Typography>
               </Grid>

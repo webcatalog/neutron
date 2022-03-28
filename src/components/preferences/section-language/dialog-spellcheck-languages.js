@@ -12,7 +12,6 @@ import ListItemText from '@mui/material/ListItemText';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
-import makeStyles from '@mui/styles/makeStyles';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -25,15 +24,7 @@ import {
   save,
 } from '../../../state/dialog-spellcheck-languages/actions';
 
-const useStyles = makeStyles(() => ({
-  top: {
-    flex: 1,
-    overflow: 'auto',
-  },
-}));
-
 const DialogSpellcheckLanguages = () => {
-  const classes = useStyles();
   const dispatch = useDispatch();
 
   const open = useSelector((state) => state.dialogSpellcheckLanguages.open);
@@ -52,7 +43,10 @@ const DialogSpellcheckLanguages = () => {
         <List
           disablePadding
           dense
-          className={classes.top}
+          sx={{
+            flex: 1,
+            overflow: 'auto',
+          }}
         >
           {Object.keys(hunspellLanguagesMap).map((code) => (
             <ListItem
@@ -81,7 +75,17 @@ const DialogSpellcheckLanguages = () => {
         </List>
       </DialogContent>
       <DialogActions>
-        <Button variant="contained" disableElevation onClick={() => dispatch(close())}>
+        <Button
+          variant="contained"
+          color="inherit"
+          sx={{
+            ':hover': {
+              backgroundColor: 'rgb(0 0 0 / 16%)',
+            },
+          }}
+          disableElevation
+          onClick={() => dispatch(close())}
+        >
           Cancel
         </Button>
         <Button color="primary" variant="contained" disableElevation onClick={() => dispatch(save())}>

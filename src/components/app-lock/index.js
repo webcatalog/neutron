@@ -204,7 +204,8 @@ const AppLock = () => {
               }}
               onClick={requestUnlockAppUsingTouchId}
             >
-              <img
+              <Box
+                component="img"
                 src={touchIdIcon}
                 alt="Touch ID"
                 sx={{
