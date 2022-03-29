@@ -25,7 +25,7 @@ const SubmitAppCard = () => (
         color: 'text.primary',
         border: (theme) => (theme.palette.mode === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)'),
         '&:hover, &:focus': {
-          backgroundColor: 'action.selected',
+          bgcolor: 'action.selected',
         },
         textAlign: 'left',
         mt: 2,

@@ -194,11 +194,11 @@ const AppLock = () => {
               aria-label="Unlock with Touch ID"
               sx={{
                 mt: 2,
-                backgroundColor: 'background.paper',
+                bgcolor: 'background.paper',
                 overflow: 'hidden',
                 boxShadow: 'none',
                 '&:hover': {
-                  backgroundColor: 'background.paper',
+                  bgcolor: 'background.paper',
                   boxShadow: 2,
                 },
               }}

@@ -148,7 +148,7 @@ const Extensions = () => {
                     float: 'left',
                     mr: 1,
                     ':hover': {
-                      backgroundColor: 'rgb(0 0 0 / 16%)',
+                      bgcolor: 'rgb(0 0 0 / 16%)',
                     },
                   }}
                   onClick={() => refresh()}
@@ -163,7 +163,7 @@ const Extensions = () => {
                     float: 'left',
                     mr: 1,
                     ':hover': {
-                      backgroundColor: 'rgb(0 0 0 / 16%)',
+                      bgcolor: 'rgb(0 0 0 / 16%)',
                     },
                   }}
                   onClick={() => {
