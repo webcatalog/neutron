@@ -3,11 +3,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
 
 import { alpha } from '@mui/material/styles';
-
-import makeStyles from '@mui/styles/makeStyles';
 
 import { useSelector } from 'react-redux';
 
@@ -28,47 +25,7 @@ import {
   requestReload,
 } from '../../../senders';
 
-const useStyles = makeStyles((theme) => ({
-  iconButton: {
-    padding: 6,
-    WebkitAppRegion: 'no-drag',
-    color: (props) => {
-      if (props.themeColor != null) {
-        return theme.palette.getContrastText(themeColors[props.themeColor][800]);
-      }
-      return theme.palette.text.secondary;
-    },
-  },
-  // for title bar on older versions of macOS
-  // (which has 22px title bar instead 28px like on Big Sur)
-  iconButtonDisableGutter: {
-    paddingTop: 0,
-    paddingBottom: 0,
-  },
-  iconDisabledWithThemeColor: {
-    color: (props) => {
-      if (props.themeColor != null) {
-        return alpha(theme.palette.getContrastText(themeColors[props.themeColor][800]), 0.3);
-      }
-      return theme.palette.text.disabled;
-    },
-  },
-  icon: {
-    fontSize: '18px',
-  },
-  progress: {
-    color: (props) => {
-      if (props.themeColor != null) {
-        return alpha(theme.palette.getContrastText(themeColors[props.themeColor][900]), 0.7);
-      }
-      return theme.palette.text.secondary;
-    },
-  },
-}));
-
-const NavigationBar = ({ themeColor, disableGutter }) => {
-  const classes = useStyles({ themeColor });
-
+const NavigationBar = ({ disableGutter }) => {
   const activeWorkspace = useSelector(
     (state) => state.workspaces.workspaces[state.workspaces.activeWorkspaceId],
   );
@@ -85,81 +42,151 @@ const NavigationBar = ({ themeColor, disableGutter }) => {
       <IconButton
         title="Back"
         aria-label="Back"
-        classes={{
-          root: classnames(classes.iconButton, disableGutter && classes.iconButtonDisableGutter),
-        }}
+        sx={[
+          {
+            p: 0.75,
+            WebkitAppRegion: 'no-drag',
+            color: (props) => {
+              if (props.themeColor != null) {
+                return (theme) => theme.palette.getContrastText(themeColors[props.themeColor][800]);
+              }
+              return (theme) => theme.palette.text.secondary;
+            },
+          },
+          disableGutter && { py: 0 },
+        ]}
         disabled={!hasWorkspaces || !canGoBack}
         onClick={requestGoBack}
         size="large"
       >
         <ArrowBackIcon
-          className={classnames(
-            classes.icon,
+          sx={[
+            { fontSize: 18 },
             // has to apply it here
             // somehow, JSS is not applied correctly for IconButton disabled class
-            (!hasWorkspaces || !canGoBack) && classes.iconDisabledWithThemeColor,
-          )}
+            (!hasWorkspaces || !canGoBack) && {
+              color: (props) => {
+                if (props.themeColor != null) {
+                  // eslint-disable-next-line max-len
+                  return (theme) => alpha(theme.palette.getContrastText(themeColors[props.themeColor][800]), 0.3);
+                }
+                return (theme) => theme.palette.text.disabled;
+              },
+            },
+          ]}
         />
       </IconButton>
       <IconButton
         title="Forward"
         aria-label="Forward"
-        classes={{
-          root: classnames(classes.iconButton, disableGutter && classes.iconButtonDisableGutter),
-        }}
+        sx={[
+          {
+            p: 0.75,
+            WebkitAppRegion: 'no-drag',
+            color: (props) => {
+              if (props.themeColor != null) {
+                return (theme) => theme.palette.getContrastText(themeColors[props.themeColor][800]);
+              }
+              return (theme) => theme.palette.text.secondary;
+            },
+          },
+          disableGutter && { py: 0 },
+        ]}
         disabled={!hasWorkspaces || !canGoForward}
         onClick={requestGoForward}
         size="large"
       >
         <ArrowForwardIcon
-          className={classnames(
-            classes.icon,
+          sx={[
+            { fontSize: 18 },
             // has to apply it here
             // somehow, JSS is not applied correctly for IconButton disabled class
-            (!hasWorkspaces || !canGoForward) && classes.iconDisabledWithThemeColor,
-          )}
+            (!hasWorkspaces || !canGoBack) && {
+              color: (props) => {
+                if (props.themeColor != null) {
+                  // eslint-disable-next-line max-len
+                  return (theme) => alpha(theme.palette.getContrastText(themeColors[props.themeColor][800]), 0.3);
+                }
+                return (theme) => theme.palette.text.disabled;
+              },
+            },
+          ]}
         />
       </IconButton>
       <IconButton
         title="Reload"
         aria-label="Reload"
-        classes={{
-          root: classnames(classes.iconButton, disableGutter && classes.iconButtonDisableGutter),
-        }}
+        sx={[
+          {
+            p: 0.75,
+            WebkitAppRegion: 'no-drag',
+            color: (props) => {
+              if (props.themeColor != null) {
+                return (theme) => theme.palette.getContrastText(themeColors[props.themeColor][800]);
+              }
+              return (theme) => theme.palette.text.secondary;
+            },
+          },
+          disableGutter && { py: 0 },
+        ]}
         onClick={requestReload}
         disabled={!hasWorkspaces || isLoading}
         size="large"
       >
         {isLoading ? (
-          <CircularProgress size={18} className={classes.progress} />
+          <CircularProgress size={18} color="inherit" />
         ) : (
           <RefreshIcon
-            className={classnames(
-              classes.icon,
+            sx={{
+              fontSize: 18,
               // has to apply it here
               // somehow, JSS is not applied correctly for IconButton disabled class
-              classes.iconDisabledWithThemeColor,
-            )}
+              color: (props) => {
+                if (props.themeColor != null) {
+                  // eslint-disable-next-line max-len
+                  return (theme) => alpha(theme.palette.getContrastText(themeColors[props.themeColor][800]), 0.3);
+                }
+                return (theme) => theme.palette.text.disabled;
+              },
+            }}
           />
         )}
       </IconButton>
       <IconButton
         title="Home"
         aria-label="Home"
-        classes={{
-          root: classnames(classes.iconButton, disableGutter && classes.iconButtonDisableGutter),
-        }}
+        sx={[
+          {
+            p: 0.75,
+            WebkitAppRegion: 'no-drag',
+            color: (props) => {
+              if (props.themeColor != null) {
+                return (theme) => theme.palette.getContrastText(themeColors[props.themeColor][800]);
+              }
+              return (theme) => theme.palette.text.secondary;
+            },
+          },
+          disableGutter && { py: 0 },
+        ]}
         onClick={requestGoHome}
         disabled={!hasWorkspaces}
         size="large"
       >
         <HomeIcon
-          className={classnames(
-            classes.icon,
+          sx={[
+            { fontSize: 18 },
             // has to apply it here
             // somehow, JSS is not applied correctly for IconButton disabled class
-            !hasWorkspaces && classes.iconDisabledWithThemeColor,
-          )}
+            !hasWorkspaces && {
+              color: (props) => {
+                if (props.themeColor != null) {
+                  // eslint-disable-next-line max-len
+                  return (theme) => alpha(theme.palette.getContrastText(themeColors[props.themeColor][800]), 0.3);
+                }
+                return (theme) => theme.palette.text.disabled;
+              },
+            },
+          ]}
         />
       </IconButton>
     </>

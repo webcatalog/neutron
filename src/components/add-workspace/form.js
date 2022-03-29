@@ -91,7 +91,7 @@ const AddWorkspaceCustom = () => {
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                fontSize: '18px',
+                fontSize: 18,
                 color: 'common.white',
               }}
             >
@@ -108,7 +108,7 @@ const AddWorkspaceCustom = () => {
                 background: 'common.white',
                 borderRadius: 1,
                 color: (theme) => theme.palette.getContrastText(theme.palette.common.white),
-                fontSize: '24px',
+                fontSize: 24,
                 lineHeight: '36px',
                 textAlign: 'center',
                 fontWeight: 400,
@@ -153,7 +153,7 @@ const AddWorkspaceCustom = () => {
               background: 'common.white',
               borderRadius: 1,
               color: (theme) => theme.palette.getContrastText(theme.palette.common.white),
-              fontSize: '24px',
+              fontSize: 24,
               lineHeight: '36px',
               textAlign: 'center',
               fontWeight: 400,

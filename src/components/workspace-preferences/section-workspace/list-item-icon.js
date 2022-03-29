@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
-import classnames from 'classnames';
 import Color from 'color';
 import { dialog, getCurrentWindow } from '@electron/remote';
 
@@ -13,7 +12,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Badge from '@mui/material/Badge';
 import ListItem from '@mui/material/ListItem';
-import makeStyles from '@mui/styles/makeStyles';
+import { Box } from '@mui/material';
 
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -37,89 +36,7 @@ import {
 import defaultWorkspaceImageLight from '../../../images/default-workspace-image-light.png';
 import defaultWorkspaceImageDark from '../../../images/default-workspace-image-dark.png';
 
-const useStyles = makeStyles((theme) => ({
-  flexGrow: {
-    flex: 1,
-  },
-  button: {
-    float: 'right',
-  },
-  avatarFlex: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  avatarLeft: {
-    paddingTop: theme.spacing(1),
-    paddingBottom: theme.spacing(1),
-    paddingLeft: 0,
-    paddingRight: theme.spacing(4),
-    display: 'flex',
-    flexDirection: 'row',
-  },
-  avatarRight: {
-    flex: 1,
-    paddingTop: theme.spacing(2),
-    paddingRight: 0,
-  },
-  avatarContainer: {
-    position: 'relative',
-    marginRight: theme.spacing(2),
-  },
-  avatar: {
-    fontFamily: theme.typography.fontFamily,
-    height: 36,
-    width: 36,
-    background: theme.palette.common.white,
-    borderRadius: 4,
-    color: theme.palette.getContrastText(theme.palette.common.white),
-    fontSize: '24px',
-    lineHeight: '36px',
-    textAlign: 'center',
-    fontWeight: 400,
-    textTransform: 'uppercase',
-    userSelect: 'none',
-    boxShadow: theme.palette.mode === 'dark' ? 'none' : '0 0 1px 1px rgba(0, 0, 0, 0.12)',
-    overflow: 'hidden',
-    cursor: 'pointer',
-  },
-  avatarSelected: {
-    boxShadow: `0 0 4px 4px ${theme.palette.primary.main}`,
-  },
-  avatarSelectedBadgeContent: {
-    background: theme.palette.primary.main,
-    borderRadius: 12,
-    width: 24,
-    height: 24,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    fontSize: '18px',
-    color: theme.palette.common.white,
-  },
-  textAvatar: {
-    background: theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black,
-    color: theme.palette.getContrastText(theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black),
-  },
-  transparentAvatar: {
-    background: 'transparent',
-    border: 'none',
-    borderRadius: 0,
-    color: theme.palette.text.primary,
-  },
-  avatarPicture: {
-    height: 36,
-    width: 36,
-  },
-  buttonBot: {
-    marginTop: theme.spacing(1),
-  },
-  caption: {
-    display: 'block',
-  },
-}));
-
 const ListItemIcon = () => {
-  const classes = useStyles();
   const dispatch = useDispatch();
 
   const accountInfo = useSelector((state) => state.dialogWorkspacePreferences.form.accountInfo);
@@ -160,7 +77,13 @@ const ListItemIcon = () => {
   const backgroundColor = color ? themeColors[color][600] : null;
 
   const renderAvatar = (avatarContent, type, title = null, avatarAdditionalClassnames = []) => (
-    <div className={classes.avatarContainer} title={title}>
+    <Box
+      sx={{
+        position: 'relative',
+        mr: 2,
+      }}
+      title={title}
+    >
       {selectedIconType === type ? (
         <Badge
           anchorOrigin={{
@@ -168,18 +91,51 @@ const ListItemIcon = () => {
             horizontal: 'right',
           }}
           badgeContent={(
-            <div className={classes.avatarSelectedBadgeContent}>
+            <Box
+              sx={(theme) => ({
+                background: theme.palette.primary.main,
+                borderRadius: 12,
+                width: 24,
+                height: 24,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                fontSize: 18,
+                color: theme.palette.common.white,
+              })}
+            >
               <CheckIcon fontSize="inherit" />
-            </div>
+            </Box>
           )}
         >
-          <div
-            className={classnames(
-              classes.avatar,
-              type === 'image' && transparentBackground && classes.transparentAvatar,
-              classes.avatarSelected,
+          <Box
+            sx={(theme) => [
+              {
+                fontFamily: theme.typography.fontFamily,
+                height: 36,
+                width: 36,
+                background: theme.palette.common.white,
+                borderRadius: 4,
+                color: theme.palette.getContrastText(theme.palette.common.white),
+                fontSize: 24,
+                lineHeight: '36px',
+                textAlign: 'center',
+                fontWeight: 400,
+                textTransform: 'uppercase',
+                userSelect: 'none',
+                boxShadow: theme.palette.mode === 'dark' ? 'none' : '0 0 1px 1px rgba(0, 0, 0, 0.12)',
+                overflow: 'hidden',
+                cursor: 'pointer',
+              },
+              type === 'image' && transparentBackground && {
+                background: 'transparent',
+                border: 'none',
+                borderRadius: 0,
+                color: 'text.primary',
+              },
+              { boxShadow: `0 0 4px 4px ${theme.palette.primary.main}` },
               ...avatarAdditionalClassnames,
-            )}
+            ]}
             style={(() => {
               if (type === 'text' && backgroundColor) {
                 return {
@@ -191,17 +147,38 @@ const ListItemIcon = () => {
             })()}
           >
             {avatarContent}
-          </div>
+          </Box>
         </Badge>
       ) : (
-        <div
+        <Box
           role="button"
           tabIndex={0}
-          className={classnames(
-            classes.avatar,
-            type === 'image' && transparentBackground && classes.transparentAvatar,
+          sx={(theme) => [
+            {
+              fontFamily: theme.typography.fontFamily,
+              height: 36,
+              width: 36,
+              background: theme.palette.common.white,
+              borderRadius: 4,
+              color: theme.palette.getContrastText(theme.palette.common.white),
+              fontSize: 24,
+              lineHeight: '36px',
+              textAlign: 'center',
+              fontWeight: 400,
+              textTransform: 'uppercase',
+              userSelect: 'none',
+              boxShadow: theme.palette.mode === 'dark' ? 'none' : '0 0 1px 1px rgba(0, 0, 0, 0.12)',
+              overflow: 'hidden',
+              cursor: 'pointer',
+            },
+            type === 'image' && transparentBackground && {
+              background: 'transparent',
+              border: 'none',
+              borderRadius: 0,
+              color: 'text.primary',
+            },
             ...avatarAdditionalClassnames,
-          )}
+          ]}
           style={(() => {
             if (type === 'text' && backgroundColor) {
               return {
@@ -215,26 +192,48 @@ const ListItemIcon = () => {
           onKeyDown={() => dispatch(updateForm({ preferredIconType: type }))}
         >
           {avatarContent}
-        </div>
+        </Box>
       )}
-    </div>
+    </Box>
   );
 
   return (
     <ListItem>
-      <div className={classes.flexGrow}>
-        <div className={classes.avatarFlex}>
-          <div className={classes.avatarLeft}>
+      <Box
+        sx={{ flex: 1 }}
+      >
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          <Box
+            sx={{
+              py: 1,
+              pl: 0,
+              pr: 4,
+              display: 'flex',
+              flexDirection: 'row',
+            }}
+          >
             {!isMenubarBrowser() && renderAvatar(
               getAvatarText(id, finalName, order),
               'text',
               'Text',
-              [classes.textAvatar],
+              [(theme) => ({
+                background: theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black,
+                color: theme.palette.getContrastText(theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black),
+              })],
             )}
             {renderAvatar(
-              <img
+              <Box
+                component="img"
                 alt="Icon"
-                className={classes.avatarPicture}
+                sx={{
+                  height: 36,
+                  width: 36,
+                }}
                 src={(() => {
                   if (imgPath) {
                     if (isUrl(imgPath)) return imgPath;
@@ -251,12 +250,26 @@ const ListItemIcon = () => {
               'Image',
             )}
             {(accountInfo && accountInfo.pictureId) && renderAvatar(
-              <img alt="Icon" className={classes.avatarPicture} src={`file://${getPicturePath(accountInfo.pictureId, 'account-pictures')}`} />,
+              <Box
+                component="img"
+                alt="Icon"
+                sx={{
+                  height: 36,
+                  width: 36,
+                }}
+                src={`file://${getPicturePath(accountInfo.pictureId, 'account-pictures')}`}
+              />,
               'accountInfo',
               'Account\'s Picture',
             )}
-          </div>
-          <div className={classes.avatarRight}>
+          </Box>
+          <Box
+            sx={{
+              flex: 1,
+              pt: 2,
+              pr: 0,
+            }}
+          >
             {selectedIconType === 'image' && (
               <>
                 <Button
@@ -281,13 +294,13 @@ const ListItemIcon = () => {
                 >
                   Select Local Image...
                 </Button>
-                <Typography variant="caption" className={classes.caption}>
+                <Typography variant="caption" sx={{ display: 'block' }}>
                   PNG, JPEG, GIF, TIFF or BMP.
                 </Typography>
                 <Button
                   variant="outlined"
                   size="small"
-                  className={classes.buttonBot}
+                  sx={{ mt: 1 }}
                   disabled={Boolean(downloadingIcon)}
                   onClick={() => dispatch(getIconFromInternet(true))}
                 >
@@ -297,7 +310,7 @@ const ListItemIcon = () => {
                 <Button
                   variant="outlined"
                   size="small"
-                  className={classes.buttonBot}
+                  sx={{ mt: 1 }}
                   disabled={Boolean(downloadingIcon)}
                   onClick={() => dispatch(getIconFromAppSearch(true))}
                 >
@@ -307,7 +320,7 @@ const ListItemIcon = () => {
                 <Button
                   variant="outlined"
                   size="small"
-                  className={classes.buttonBot}
+                  sx={{ mt: 1 }}
                   disabled={Boolean(downloadingIcon)}
                   onClick={() => dispatch(removePicture())}
                 >
@@ -315,8 +328,8 @@ const ListItemIcon = () => {
                 </Button>
               </>
             )}
-          </div>
-        </div>
+          </Box>
+        </Box>
         {selectedIconType === 'image' && !isMenubarBrowser() && (
           <FormGroup>
             <FormControlLabel
@@ -332,7 +345,7 @@ const ListItemIcon = () => {
             />
           </FormGroup>
         )}
-      </div>
+      </Box>
     </ListItem>
   );
 };

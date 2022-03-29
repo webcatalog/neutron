@@ -2,13 +2,12 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
-import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import { systemPreferences, getCurrentWindow } from '@electron/remote';
 
 import { alpha } from '@mui/material/styles';
 
-import makeStyles from '@mui/styles/makeStyles';
+import { Box } from '@mui/material';
 
 import { useSelector } from 'react-redux';
 
@@ -24,60 +23,7 @@ import {
 
 import NavigationButtons from '../shared/navigation-buttons';
 
-const useStyles = makeStyles((theme) => {
-  // Big Sur increases title bar height: https://github.com/microsoft/vscode/pull/110592 (28px)
-  // older macOS versions use 22px
-  // but we use 28px on all versions to fit the navigation buttons
-  const titleBarHeight = isMacOs11() ? 28 : 22;
-  return {
-    root: {
-      background: (props) => {
-        if (props.themeColor != null) {
-          return themeColors[props.themeColor][900];
-        }
-        return theme.palette.mode === 'dark' ? '#2a2b2c' : '#efefef';
-      },
-      borderBottom: '1px solid',
-      borderBottomColor: theme.palette.divider,
-      height: titleBarHeight,
-      WebkitAppRegion: 'drag',
-      WebkitUserSelect: 'none',
-      textAlign: 'center',
-      lineHeight: `${titleBarHeight}px`,
-      fontSize: '13px',
-      color: (props) => {
-        if (props.themeColor != null) {
-          return alpha(theme.palette.getContrastText(themeColors[props.themeColor][900]), 0.7);
-        }
-        return theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : 'rgb(77, 77, 77)';
-      },
-      fontFamily: '-apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif',
-      fontWeight: 500,
-      paddingLeft: 72,
-      paddingRight: 72,
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
-      whiteSpace: 'nowrap',
-    },
-    rootWithNavigationButtons: {
-      paddingLeft: 148,
-      paddingRight: 148,
-    },
-    rootMenubar: {
-      paddingLeft: theme.spacing(1),
-      paddingRight: theme.spacing(1),
-    },
-    topRight: {
-      position: 'absolute',
-      top: -1,
-      right: theme.spacing(1),
-    },
-  };
-});
-
 const FakeTitleBar = ({ themeColor }) => {
-  const classes = useStyles({ themeColor });
-
   const title = useSelector((state) => state.general.title);
   const searchEngine = useSelector((state) => state.preferences.searchEngine);
   const navigationBar = useSelector((state) => (window.process.platform === 'linux'
@@ -93,13 +39,48 @@ const FakeTitleBar = ({ themeColor }) => {
   const showNavigationButtons = titleBarNavigationButtons && !navigationBar && window.mode !== 'menubar';
 
   const appJson = getStaticGlobal('appJson');
+
+  // Big Sur increases title bar height: https://github.com/microsoft/vscode/pull/110592 (28px)
+  // older macOS versions use 22px
+  // but we use 28px on all versions to fit the navigation buttons
+  const titleBarHeight = isMacOs11() ? 28 : 22;
+
   return (
-    <div
-      className={classnames(
-        classes.root,
-        showNavigationButtons && classes.rootWithNavigationButtons,
-        window.mode === 'menubar' && classes.rootMenubar,
-      )}
+    <Box
+      sx={[
+        {
+          background: (props) => {
+            if (props.themeColor != null) {
+              return themeColors[props.themeColor][900];
+            }
+            return (theme) => (theme.palette.mode === 'dark' ? '#2a2b2c' : '#efefef');
+          },
+          borderBottom: '1px solid',
+          borderBottomColor: 'divider',
+          height: titleBarHeight,
+          WebkitAppRegion: 'drag',
+          WebkitUserSelect: 'none',
+          textAlign: 'center',
+          lineHeight: `${titleBarHeight}px`,
+          fontSize: 13,
+          color: (props) => {
+            if (props.themeColor != null) {
+              return (theme) => (
+                alpha(theme.palette.getContrastText(themeColors[props.themeColor][900]), 0.7)
+              );
+            }
+            return (theme) => (theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : 'rgb(77, 77, 77)');
+          },
+          fontFamily: '-apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif',
+          fontWeight: 500,
+          px: 9,
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
+        },
+        showNavigationButtons && { px: 18.5 },
+        window.mode === 'menubar' && { px: 1 },
+      ]}
       onDoubleClick={() => {
         // feature: double click on title bar to expand #656
         // https://github.com/webcatalog/webcatalog-app/issues/656
@@ -140,11 +121,17 @@ const FakeTitleBar = ({ themeColor }) => {
       {(window.mode === 'main' || window.mode === 'menubar') && title ? title : appJson.name}
 
       {showNavigationButtons && (
-        <div className={classes.topRight}>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: -1,
+            right: 1,
+          }}
+        >
           <NavigationButtons themeColor={themeColor} disableGutter={!isMacOs11()} />
-        </div>
+        </Box>
       )}
-    </div>
+    </Box>
   );
 };
 

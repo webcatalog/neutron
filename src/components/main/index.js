@@ -2,14 +2,12 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
-import classnames from 'classnames';
-
-import makeStyles from '@mui/styles/makeStyles';
 
 import 'simplebar/dist/simplebar.min.css';
 
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { Box } from '@mui/material';
 
 import { useSelector } from 'react-redux';
 
@@ -32,125 +30,6 @@ import {
 
 import './main.css';
 import TabBar from './tab-bar';
-
-const useStyles = makeStyles((theme) => ({
-  outerRoot: {
-    display: 'flex',
-    flexDirection: 'column',
-    height: '100%',
-    width: '100%',
-    overflow: 'hidden',
-  },
-  root: {
-    display: 'flex',
-    flexDirection: 'row',
-    flex: 1,
-    width: '100%',
-    overflow: 'hidden',
-  },
-  rootRtl: {
-    flexDirection: 'row-reverse',
-  },
-  innerContentRoot: {
-    flex: 1,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: theme.spacing(1),
-  },
-  contentRoot: {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    width: '100%',
-  },
-  contentRootActive: {
-    // background should always be set to #fff (for web compatiblity)
-    // if not, by default, the background of BrowserView is transparent
-    // which would break the CSS of certain websites
-    // even with dark mode, all major browsers
-    // always use #FFF as default page background
-    // https://github.com/webcatalog/webcatalog-app/issues/723
-    // https://github.com/electron/electron/issues/16212
-    background: theme.palette.common.white,
-  },
-  arrow: {
-    height: 202,
-    width: 150,
-    position: 'absolute',
-    top: window.process.platform === 'darwin' ? 50 : 60,
-    backgroundImage: `url('${theme.palette.mode === 'dark' ? arrowWhite : arrowBlack}')`,
-    backgroundSize: '150px 202px',
-  },
-  arrowWithNavBar: {
-    top: window.process.platform === 'darwin' ? 80 : 90,
-  },
-  arrowLeft: {
-    left: 76,
-  },
-  arrowLeftExpanded: {
-    left: 264,
-  },
-  arrowRight: {
-    transform: 'rotate(90deg)',
-    right: 120,
-  },
-  arrowRightExpanded: {
-    transform: 'rotate(90deg)',
-    right: 300,
-  },
-  avatar: {
-    fontFamily: theme.typography.fontFamily,
-    display: 'inline-block',
-    height: 36,
-    width: 36,
-    background: theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black,
-    borderRadius: 4,
-    color: theme.palette.getContrastText(theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black),
-    lineHeight: '36px',
-    textAlign: 'center',
-    fontWeight: 400,
-    textTransform: 'uppercase',
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    border: theme.palette.mode === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)',
-    fontSize: '24px',
-  },
-  inlineBlock: {
-    display: 'inline-block',
-    fontSize: '18px',
-    color: theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black,
-    whiteSpace: 'nowrap',
-  },
-  tip: {
-    position: 'absolute',
-    fontFamily: theme.typography.fontFamily,
-    userSelect: 'none',
-  },
-  tipLeft: {
-    top: 112,
-    left: 180,
-  },
-  tipLeftExpanded: {
-    top: 112,
-    left: 368,
-  },
-  tipRight: {
-    top: 80,
-    right: 220,
-  },
-  tipRightExpanded: {
-    right: 400,
-  },
-  ul: {
-    marginTop: 0,
-    marginBottom: '1.5rem',
-  },
-  tipWithoutArrow: {
-    fontFamily: theme.typography.fontFamily,
-    userSelect: 'none',
-  },
-}));
 
 const Main = () => {
   const activeWorkspace = useSelector(
@@ -189,8 +68,6 @@ const Main = () => {
     return state.preferences.themeColor;
   });
 
-  const classes = useStyles({ themeColor });
-
   const appJson = getStaticGlobal('appJson');
   const showMacTitleBar = window.process.platform === 'darwin' && titleBar && !isFullScreen;
   const isSidebarExpanded = sidebarSize === 'expanded';
@@ -199,23 +76,66 @@ const Main = () => {
   const hasWorkspaces = Object.keys(workspaces).length > 0;
 
   return (
-    <div className={classes.outerRoot}>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: 1,
+        width: 1,
+        overflow: 'hidden',
+      }}
+    >
       {showMacTitleBar && <MacTitleBar themeColor={themeColor} />}
       <DraggableRegion />
-      <div className={classnames(classes.root, rtl && classes.rootRtl)}>
+      <Box
+        sx={[
+          {
+            display: 'flex',
+            flexDirection: 'row',
+            flex: 1,
+            width: 1,
+            overflow: 'hidden',
+          },
+          rtl && {
+            flexDirection: 'row-reverse',
+          },
+        ]}
+      >
         {sidebar && <Sidebar />}
-        <div
-          className={classnames(
-            classes.contentRoot,
-            hasWorkspaces && !didFailLoad && classes.contentRootActive,
-          )}
+        <Box
+          sx={[
+            {
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              width: 1,
+            },
+            hasWorkspaces && !didFailLoad && {
+              // background should always be set to #fff (for web compatiblity)
+              // if not, by default, the background of BrowserView is transparent
+              // which would break the CSS of certain websites
+              // even with dark mode, all major browsers
+              // always use #FFF as default page background
+              // https://github.com/webcatalog/webcatalog-app/issues/723
+              // https://github.com/electron/electron/issues/16212
+              background: (theme) => theme.palette.common.white,
+            },
+          ]}
         >
           {useTabs && <TabBar themeColor={themeColor} />}
           {navigationBar && <NavigationBar themeColor={themeColor} />}
           <FindInPage />
-          <div className={classes.innerContentRoot}>
+          <Box
+            sx={{
+              flex: 1,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              p: 1,
+            }}
+          >
             {didFailLoad && !isLoading && (
-              <div>
+              <Box>
                 <Typography align="left" variant="h5">
                   This site can’t be reached.
                 </Typography>
@@ -227,7 +147,12 @@ const Main = () => {
                 <Typography align="left" variant="body2" component="div">
                   <>
                     Try:
-                    <ul className={classes.ul}>
+                    <ul
+                      sx={{
+                        mt: 0,
+                        mb: '1.5rem',
+                      }}
+                    >
                       <li>Checking the network cables, modem, and router.</li>
                       <li>Checking the VPN, the proxy and the firewall configurations.</li>
                       <li>Reconnecting to Wi-Fi.</li>
@@ -238,41 +163,116 @@ const Main = () => {
                 <Button variant="outlined" onClick={requestReload}>
                   Reload
                 </Button>
-              </div>
+              </Box>
             )}
             {!hasWorkspaces && (
-              <div>
+              <Box>
                 {sidebar && sidebarAddButton ? (
                   <>
-                    <div
+                    <Box
                       alt="Arrow"
-                      className={classnames(
-                        classes.arrow,
-                        navigationBar && classes.arrowWithNavBar,
-                        rtl ? classes.arrowRight : classes.arrowLeft,
+                      sx={[
+                        {
+                          height: 202,
+                          width: 150,
+                          position: 'absolute',
+                          top: window.process.platform === 'darwin' ? 50 : 60,
+                          backgroundImage: (theme) => `url('${theme.palette.mode === 'dark' ? arrowWhite : arrowBlack}')`,
+                          backgroundSize: '150px 202px',
+                        },
+                        navigationBar && {
+                          top: window.process.platform === 'darwin' ? 80 : 90,
+                        },
+                        rtl ? {
+                          transform: 'rotate(90deg)',
+                          right: 120,
+                        } : { left: 76 },
                         isSidebarExpanded && (
-                          rtl ? classes.arrowRightExpanded : classes.arrowLeftExpanded),
-                      )}
+                          rtl ? {
+                            transform: 'rotate(90deg)',
+                            right: 300,
+                          } : { left: 264 }),
+                      ]}
                     />
-                    <div
-                      className={classnames(
-                        classes.tip,
-                        rtl ? classes.tipRight : classes.tipLeft,
+                    <Box
+                      sx={[
+                        {
+                          position: 'absolute',
+                          fontFamily: 'fontFamily',
+                          userSelect: 'none',
+                        },
+                        rtl ? {
+                          top: 80,
+                          right: 220,
+                        } : {
+                          top: 112,
+                          left: 180,
+                        },
                         isSidebarExpanded && (
-                          rtl ? classes.tipRightExpanded : classes.tipLeftExpanded
+                          rtl ? { right: 400 } : {
+                            top: 112,
+                            left: 368,
+                          }
                         ),
-                      )}
+                      ]}
                     >
-                      <span className={classes.inlineBlock}>Click</span>
-                      <div className={classes.avatar}>
+                      <span
+                        sx={{
+                          display: 'inline-block',
+                          fontSize: 18,
+                          color: (theme) => (theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black),
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        Click
+                      </span>
+                      <Box
+                        sx={{
+                          fontFamily: 'fontFamily',
+                          display: 'inline-block',
+                          height: 36,
+                          width: 36,
+                          background: (theme) => (theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black),
+                          borderRadius: 4,
+                          color: (theme) => theme.palette.getContrastText(theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black),
+                          lineHeight: '36px',
+                          textAlign: 'center',
+                          fontWeight: 400,
+                          textTransform: 'uppercase',
+                          px: 1,
+                          border: (theme) => (theme.palette.mode === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)'),
+                          fontSize: 24,
+                        }}
+                      >
                         +
-                      </div>
-                      <span className={classes.inlineBlock}>to get started!</span>
-                    </div>
+                      </Box>
+                      <span
+                        sx={{
+                          display: 'inline-block',
+                          fontSize: 18,
+                          color: (theme) => (theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black),
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        to get started!
+                      </span>
+                    </Box>
                   </>
                 ) : (
-                  <div className={classes.tipWithoutArrow}>
-                    <span className={classes.inlineBlock}>
+                  <Box
+                    sx={{
+                      fontFamily: 'fontFamily',
+                      userSelect: 'none',
+                    }}
+                  >
+                    <span
+                      sx={{
+                        display: 'inline-block',
+                        fontSize: 18,
+                        color: (theme) => (theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black),
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
                       <span>Click </span>
                       {appJson.url ? (
                         <strong>{`${getWorkspaceFriendlyName(true)} > Add ${appJson.name} ${getWorkspaceFriendlyName()}`}</strong>
@@ -281,15 +281,15 @@ const Main = () => {
                       )}
                       <span> to get started!</span>
                     </span>
-                  </div>
+                  </Box>
                 )}
-              </div>
+              </Box>
             )}
-          </div>
-        </div>
-      </div>
+          </Box>
+        </Box>
+      </Box>
       <TelemetryManager />
-    </div>
+    </Box>
   );
 };
 

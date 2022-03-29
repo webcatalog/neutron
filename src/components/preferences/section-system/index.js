@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
-import classnames from 'classnames';
 
 import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
@@ -12,7 +11,6 @@ import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Switch from '@mui/material/Switch';
-import makeStyles from '@mui/styles/makeStyles';
 
 import { useSelector } from 'react-redux';
 
@@ -26,26 +24,7 @@ import ListItemDefaultMailClient from './list-item-default-mail-client';
 import ListItemDefaultBrowser from './list-item-default-browser';
 import ListItemDefaultCalendarApp from './list-item-default-calendar-app';
 
-const useStyles = makeStyles((theme) => ({
-  selectRoot: {
-    borderRadius: theme.spacing(0.5),
-    fontSize: '0.84375rem',
-  },
-  selectRootExtraMargin: {
-    marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(1),
-  },
-  select: {
-    paddingTop: theme.spacing(1),
-    paddingRight: 26,
-    paddingBottom: theme.spacing(1),
-    paddingLeft: theme.spacing(1.5),
-  },
-}));
-
 const SectionSystem = () => {
-  const classes = useStyles();
-
   const attachToMenubar = useSelector((state) => state.preferences.attachToMenubar);
   const openAtLogin = useSelector((state) => state.systemPreferences.openAtLogin);
   const runInBackground = useSelector((state) => state.preferences.runInBackground);
@@ -83,10 +62,16 @@ const SectionSystem = () => {
           variant="filled"
           disableUnderline
           margin="dense"
-          classes={{
-            root: classes.select,
+          sx={{
+            '& .MuiSelect-select': {
+              py: 1,
+              pr: 3.25,
+              pl: 1.5,
+            },
+            borderRadius: 0.5,
+            fontSize: '0.84375rem',
+            my: 1,
           }}
-          className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
         >
           <MenuItem dense value="yes">Yes</MenuItem>
           {window.process.platform === 'darwin' && (

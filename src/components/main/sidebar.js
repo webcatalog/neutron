@@ -504,4 +504,12 @@ const Sidebar = () => {
   );
 };
 
+// Sidebar.defaultProps = {
+//   themeColor: null,
+// };
+
+// Sidebar.propTypes = {
+//   themeColor: PropTypes.string,
+// };
+
 export default Sidebar;

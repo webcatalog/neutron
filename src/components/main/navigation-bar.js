@@ -3,12 +3,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
 import { ipcRenderer } from 'electron';
 
 import { alpha } from '@mui/material/styles';
-
-import makeStyles from '@mui/styles/makeStyles';
 
 import SvgIcon from '@mui/material/SvgIcon';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
@@ -20,6 +17,8 @@ import NotificationsPausedIcon from '@mui/icons-material/NotificationsPaused';
 import SettingsIcon from '@mui/icons-material/SettingsSharp';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
+
+import { Box } from '@mui/material';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -47,114 +46,9 @@ import BrowserActionList from './browser-action-list';
 import NavigationButtons from '../shared/navigation-buttons';
 import isMenubarBrowser from '../../helpers/is-menubar-browser';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: '100%',
-    height: 36,
-    backgroundColor: (props) => {
-      if (props.themeColor != null) {
-        return themeColors[props.themeColor][800];
-      }
-      return theme.palette.background.paper;
-    },
-    borderBottom: `1px solid ${theme.palette.divider}`,
-    display: 'flex',
-    alignItems: 'center',
-    paddingLeft: theme.spacing(1),
-    paddingRight: theme.spacing(1),
-    WebkitUserSelect: 'none',
-  },
-  rootDraggable: {
-    WebkitAppRegion: 'drag',
-  },
-  rootWithTrafficLights: {
-    paddingLeft: 68,
-  },
-  center: {
-    flex: 1,
-    paddingLeft: theme.spacing(1),
-    paddingRight: theme.spacing(1),
-    [theme.breakpoints.up('sm')]: {
-      paddingLeft: theme.spacing(6),
-      paddingRight: theme.spacing(6),
-    },
-  },
-  iconButton: {
-    padding: 6,
-    WebkitAppRegion: 'no-drag',
-    color: (props) => {
-      if (props.themeColor != null) {
-        return theme.palette.getContrastText(themeColors[props.themeColor][800]);
-      }
-      return theme.palette.text.secondary;
-    },
-  },
-  iconButtonDisabled: {
-    color: (props) => {
-      if (props.themeColor != null) {
-        return `${alpha(theme.palette.getContrastText(themeColors[props.themeColor][800]), 0.3)} !important`;
-      }
-      return theme.palette.text.disabled;
-    },
-  },
-  icon: {
-    fontSize: '18px',
-  },
-  addressBarRoot: {
-    width: '100%',
-    backgroundColor: (props) => {
-      if (props.themeColor != null) {
-        return themeColors[props.themeColor][900];
-      }
-      return theme.palette.mode === 'dark' ? theme.palette.background.default : theme.palette.grey[200];
-    },
-    color: (props) => {
-      if (props.themeColor != null) {
-        return theme.palette.getContrastText(themeColors[props.themeColor][800]);
-      }
-      return theme.palette.text.primary;
-    },
-    borderRadius: 4,
-    WebkitAppRegion: 'none',
-    WebkitUserSelect: 'text',
-  },
-  addressBarInput: {
-    fontSize: '0.8em',
-    paddingLeft: 12,
-    paddingRight: 12,
-    paddingTop: 5,
-    paddingBottom: 5,
-  },
-  goButton: {
-    padding: 4,
-  },
-  leftWithExpandedSidebar: {
-    '@media (max-width:600px)': {
-      display: 'none',
-    },
-  },
-  centerWithExpandedSidebar: {
-    '@media (max-width:700px)': {
-      display: 'none',
-    },
-  },
-  browserActionList: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
-    paddingRight: theme.spacing(1),
-    '& * > button': {
-      height: 20,
-      width: 20,
-    },
-  },
-}));
-
 const NavigationBar = ({
   themeColor,
 }) => {
-  const classes = useStyles({ themeColor });
   const dispatch = useDispatch();
 
   const activeWorkspaceId = useSelector((state) => state.workspaces.activeWorkspaceId);
@@ -194,26 +88,84 @@ const NavigationBar = ({
   }, [addressBarRef]);
 
   return (
-    <div
-      className={classnames(
-        classes.root,
-        draggable && classes.rootDraggable,
-        hasTrafficLights && classes.rootWithTrafficLights,
-      )}
+    <Box
+      sx={[
+        {
+          width: 1,
+          height: 36,
+          bgcolor: (props) => {
+            if (props.themeColor != null) {
+              return themeColors[props.themeColor][800];
+            }
+            return 'background.paper';
+          },
+          borderBottom: (theme) => `1px solid ${theme.palette.Boxider}`,
+          display: 'flex',
+          alignItems: 'center',
+          px: 1,
+          WebkitUserSelect: 'none',
+        },
+        draggable && { WebkitAppRegion: 'drag' },
+        hasTrafficLights && { pl: 8.5 },
+      ]}
     >
-      <div
-        className={classnames(classes.left, hasExpandedSidebar && classes.leftWithExpandedSidebar)}
+      <Box
+        sx={
+          hasExpandedSidebar && {
+            '@media (max-width:600px)': {
+              display: 'none',
+            },
+          }
+        }
       >
         <NavigationButtons themeColor={themeColor} />
-      </div>
-      <div
-        className={classnames(
-          classes.center,
-          hasExpandedSidebar && classes.centerWithExpandedSidebar,
-        )}
+      </Box>
+      <Box
+        sx={[
+          {
+            flex: 1,
+            px: 1,
+            [(theme) => theme.breakpoints.up('sm')]: {
+              px: 6,
+            },
+          },
+          hasExpandedSidebar && {
+            '@media (max-width:700px)': {
+              display: 'none',
+            },
+          },
+        ]}
       >
         <InputBase
-          classes={{ root: classes.addressBarRoot, input: classes.addressBarInput }}
+          sx={[
+            {
+              width: 1,
+              backgroundColor: (props) => {
+                if (props.themeColor != null) {
+                  return themeColors[props.themeColor][900];
+                }
+                return (theme) => (theme.palette.mode === 'dark' ? theme.palette.background.default : theme.palette.grey[200]);
+              },
+              color: (props) => {
+                if (props.themeColor != null) {
+                  return (theme) => (
+                    theme.palette.getContrastText(themeColors[props.themeColor][800])
+                  );
+                }
+                return (theme) => theme.palette.text.primary;
+              },
+              borderRadius: 4,
+              WebkitAppRegion: 'none',
+              WebkitUserSelect: 'text',
+            },
+            {
+              '& .MuiInputBase-input': {
+                fontSize: '0.8em',
+                px: 12,
+                py: 5,
+              },
+            },
+          ]}
           placeholder={`Search on ${searchEngines[searchEngine].name} or type a URL`}
           type="text"
           value={hasWorkspaces ? address : ''}
@@ -226,7 +178,7 @@ const NavigationBar = ({
             <IconButton
               title="Go"
               aria-label="Go"
-              className={classes.goButton}
+              sx={{ p: 4 }}
               onClick={() => {
                 const processedUrl = getUrlFromText(address, searchEngine);
                 dispatch(updateAddressBarInfo(processedUrl, false));
@@ -268,28 +220,83 @@ const NavigationBar = ({
             }
           }}
         />
-      </div>
-      {!isAppx() && !isMas() && <BrowserActionList className={classes.browserActionList} />}
-      <div>
-        <RatingButton
-          classes={{
-            root: classes.iconButton,
-            disabled: classes.iconButtonDisabled,
+      </Box>
+      {!isAppx() && !isMas()
+      && (
+        <BrowserActionList
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'row',
+            pr: 1,
+            '& * > button': {
+              height: 20,
+              width: 20,
+            },
           }}
-          iconClassName={classes.icon}
+        />
+      )}
+      <Box>
+        <RatingButton
+          sx={[
+            {
+              p: 6,
+              WebkitAppRegion: 'no-drag',
+              color: (props) => {
+                if (props.themeColor != null) {
+                  return (theme) => (
+                    theme.palette.getContrastText(themeColors[props.themeColor][800])
+                  );
+                }
+                return (theme) => theme.palette.text.secondary;
+              },
+            },
+            {
+              '& .Mui-disabled': {
+                color: (props) => {
+                  if (props.themeColor != null) {
+                    return (theme) => `${alpha(theme.palette.getContrastText(themeColors[props.themeColor][800]), 0.3)} !important`;
+                  }
+                  return (theme) => theme.palette.text.disabled;
+                },
+              },
+            },
+          ]}
+          iconClassName={{ fontSize: 18 }}
         />
         {window.process.platform === 'darwin' && hasWorkspaces && (
           <IconButton
             title="Share"
             aria-label="Share"
             onClick={() => requestShowShareMenu()}
-            classes={{
-              root: classes.iconButton,
-              disabled: classes.iconButtonDisabled,
-            }}
+            sx={[
+              {
+                p: 6,
+                WebkitAppRegion: 'no-drag',
+                color: (props) => {
+                  if (props.themeColor != null) {
+                    return (theme) => (
+                      theme.palette.getContrastText(themeColors[props.themeColor][800])
+                    );
+                  }
+                  return (theme) => theme.palette.text.secondary;
+                },
+              },
+              {
+                '& .Mui-disabled': {
+                  color: (props) => {
+                    if (props.themeColor != null) {
+                      return (theme) => `${alpha(theme.palette.getContrastText(themeColors[props.themeColor][800]), 0.3)} !important`;
+                    }
+                    return (theme) => theme.palette.text.disabled;
+                  },
+                },
+              },
+            ]}
             size="small"
           >
-            <SvgIcon className={classes.icon}>
+            <SvgIcon sx={{ fontSize: 18 }}>
               <path fill="currentColor" d="M12,1L8,5H11V14H13V5H16M18,23H6C4.89,23 4,22.1 4,21V9A2,2 0 0,1 6,7H9V9H6V21H18V9H15V7H18A2,2 0 0,1 20,9V21A2,2 0 0,1 18,23Z" />
             </SvgIcon>
           </IconButton>
@@ -298,37 +305,97 @@ const NavigationBar = ({
           title="Notifications"
           aria-label="Notifications"
           onClick={requestShowNotificationsWindow}
-          classes={{
-            root: classes.iconButton,
-            disabled: classes.iconButtonDisabled,
-          }}
+          sx={[
+            {
+              p: 6,
+              WebkitAppRegion: 'no-drag',
+              color: (props) => {
+                if (props.themeColor != null) {
+                  return (theme) => (
+                    theme.palette.getContrastText(themeColors[props.themeColor][800])
+                  );
+                }
+                return (theme) => theme.palette.text.secondary;
+              },
+            },
+            {
+              '& .Mui-disabled': {
+                color: (props) => {
+                  if (props.themeColor != null) {
+                    return (theme) => `${alpha(theme.palette.getContrastText(themeColors[props.themeColor][800]), 0.3)} !important`;
+                  }
+                  return (theme) => theme.palette.text.disabled;
+                },
+              },
+            },
+          ]}
           size="large"
         >
           {shouldPauseNotifications
-            ? <NotificationsPausedIcon className={classes.icon} />
-            : <NotificationsIcon className={classes.icon} />}
+            ? <NotificationsPausedIcon sx={{ fontSize: 18 }} />
+            : <NotificationsIcon sx={{ fontSize: 18 }} />}
         </IconButton>
         <IconButton
           title={muteApp ? 'Unmute' : 'Mute'}
           aria-label={muteApp ? 'Unmute' : 'Mute'}
           onClick={() => requestSetPreference('muteApp', !muteApp)}
-          classes={{
-            root: classes.iconButton,
-            disabled: classes.iconButtonDisabled,
-          }}
+          sx={[
+            {
+              p: 6,
+              WebkitAppRegion: 'no-drag',
+              color: (props) => {
+                if (props.themeColor != null) {
+                  return (theme) => (
+                    theme.palette.getContrastText(themeColors[props.themeColor][800])
+                  );
+                }
+                return (theme) => theme.palette.text.secondary;
+              },
+            },
+            {
+              '& .Mui-disabled': {
+                color: (props) => {
+                  if (props.themeColor != null) {
+                    return (theme) => `${alpha(theme.palette.getContrastText(themeColors[props.themeColor][800]), 0.3)} !important`;
+                  }
+                  return (theme) => theme.palette.text.disabled;
+                },
+              },
+            },
+          ]}
           size="large"
         >
           {muteApp
-            ? <VolumeOffIcon className={classes.icon} />
-            : <VolumeUpIcon className={classes.icon} />}
+            ? <VolumeOffIcon sx={{ fontSize: 18 }} />
+            : <VolumeUpIcon sx={{ fontSize: 18 }} />}
         </IconButton>
         <IconButton
           title="Preferences"
           aria-label="Preferences"
-          classes={{
-            root: classes.iconButton,
-            disabled: classes.iconButtonDisabled,
-          }}
+          sx={[
+            {
+              p: 6,
+              WebkitAppRegion: 'no-drag',
+              color: (props) => {
+                if (props.themeColor != null) {
+                  return (theme) => (
+                    theme.palette.getContrastText(themeColors[props.themeColor][800])
+                  );
+                }
+                return (theme) => theme.palette.text.secondary;
+              },
+            },
+            {
+              '& .Mui-disabled': {
+                color: (props) => {
+                  if (props.themeColor != null) {
+                    return (theme) => `${alpha(theme.palette.getContrastText(themeColors[props.themeColor][800]), 0.3)} !important`;
+                  }
+                  return (theme) => theme.palette.text.disabled;
+                },
+              },
+            },
+          ]}
           onClick={() => {
             if (isMenubarBrowser() && activeWorkspaceId) {
               requestShowWorkspacePreferencesWindow(activeWorkspaceId);
@@ -338,10 +405,10 @@ const NavigationBar = ({
           }}
           size="large"
         >
-          <SettingsIcon className={classes.icon} />
+          <SettingsIcon sx={{ fontSize: 18 }} />
         </IconButton>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 
