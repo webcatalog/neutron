@@ -5,7 +5,7 @@ import React from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
 
-import makeStyles from '@mui/styles/makeStyles';
+// import makeStyles from '@mui/styles/makeStyles';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import Paper from '@mui/material/Paper';
@@ -13,6 +13,8 @@ import Paper from '@mui/material/Paper';
 import ViewListIcon from '@mui/icons-material/ViewList';
 import CreateIcon from '@mui/icons-material/Create';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+
+import { Box } from '@mui/material';
 
 import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
 
@@ -25,42 +27,27 @@ import {
 import Home from './home';
 import Form from './form';
 
-const useStyles = makeStyles(() => ({
-  root: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    overflow: 'hidden',
-  },
-  paper: {
-    zIndex: 1,
-  },
-  bottomNavigation: {
-    height: 40,
-  },
-  bottomNavigationActionRootSmall: {
-    flex: 0,
-  },
-  bottomNavigationActionWrapper: {
-    flexDirection: 'row',
-  },
-  bottomNavigationActionLabel: {
-    fontSize: '0.8rem !important',
-    paddingLeft: 4,
-  },
-}));
-
 const AddWorkspace = () => {
-  const classes = useStyles();
   const dispatch = useDispatch();
   const mode = useSelector((state) => state.dialogAddWorkspace.mode);
 
   return (
-    <div className={classes.root}>
+    <Box
+      sx={{
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden',
+      }}
+    >
       {mode === 'catalog' && <Home />}
       {mode === 'custom' && <Form />}
 
-      <Paper elevation={1} square className={classes.paper}>
+      <Paper
+        elevation={1}
+        square
+        sx={{ zIndex: 1 }}
+      >
         <BottomNavigation
           showLabels
           value={mode}
@@ -71,33 +58,42 @@ const AddWorkspace = () => {
             // custom workspace is disabled in free version of Singlebox
             dispatch(updateMode(value));
           }}
-          classes={{ root: classes.bottomNavigation }}
+          sx={{ height: 40 }}
         >
           <BottomNavigationAction
             label="Catalog"
             value="catalog"
             icon={<ViewListIcon />}
-            classes={{
-              wrapper: classes.bottomNavigationActionWrapper,
-              label: classes.bottomNavigationActionLabel,
+            sx={{
+              '& .MuiBottomNavigationAction-wrapper': { flexDirection: 'row' },
+              '& .MuiBottomNavigationAction-label': {
+                fontSize: '0.8rem !important',
+                pl: 0.5,
+              },
             }}
           />
           <BottomNavigationAction
             label={`Custom ${getWorkspaceFriendlyName()}`}
             value="custom"
             icon={<CreateIcon />}
-            classes={{
-              wrapper: classes.bottomNavigationActionWrapper,
-              label: classes.bottomNavigationActionLabel,
+            sx={{
+              '& .MuiBottomNavigationAction-wrapper': { flexDirection: 'row' },
+              '& .MuiBottomNavigationAction-label': {
+                fontSize: '0.8rem !important',
+                pl: 0.5,
+              },
             }}
           />
           <BottomNavigationAction
             value="more"
             icon={<MoreVertIcon />}
-            classes={{
-              root: classes.bottomNavigationActionRootSmall,
-              wrapper: classes.bottomNavigationActionWrapper,
-              label: classes.bottomNavigationActionLabel,
+            sx={{
+              flex: 0,
+              '& .MuiBottomNavigationAction-wrapper': { flexDirection: 'row' },
+              '& .MuiBottomNavigationAction-label': {
+                fontSize: '0.8rem !important',
+                pl: 0.5,
+              },
             }}
             onClick={(e) => {
               requestShowAppMiniMenu(e.x, e.y);
@@ -105,7 +101,7 @@ const AddWorkspace = () => {
           />
         </BottomNavigation>
       </Paper>
-    </div>
+    </Box>
   );
 };
 

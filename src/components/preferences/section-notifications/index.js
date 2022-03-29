@@ -11,7 +11,8 @@ import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import ListItemText from '@mui/material/ListItemText';
 import Switch from '@mui/material/Switch';
 import TextField from '@mui/material/TextField';
-import makeStyles from '@mui/styles/makeStyles';
+
+import { Box } from '@mui/material';
 
 import { useSelector } from 'react-redux';
 
@@ -30,34 +31,7 @@ import {
   requestShowNotificationsWindow,
 } from '../../../senders';
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(0.5),
-    marginBottom: theme.spacing(3),
-    border: theme.palette.mode === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)',
-  },
-  timePickerContainer: {
-    marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(1),
-    display: 'flex',
-    justifyContent: 'space-between',
-  },
-  link: {
-    cursor: 'pointer',
-    fontWeight: 500,
-    outline: 'none',
-    '&:hover': {
-      textDecoration: 'underline',
-    },
-    '&:focus': {
-      textDecoration: 'underline',
-    },
-  },
-}));
-
 const SectionNotifications = () => {
-  const classes = useStyles();
-
   const pauseNotificationsBySchedule = useSelector(
     (state) => state.preferences.pauseNotificationsBySchedule,
   );
@@ -84,7 +58,13 @@ const SectionNotifications = () => {
       <ListItem>
         <ListItemText>
           Automatically disable notifications by schedule:
-          <div className={classes.timePickerContainer}>
+          <Box
+            sx={{
+              my: 1,
+              display: 'flex',
+              justifyContent: 'space-around',
+            }}
+          >
             <TimePicker
               autoOk={false}
               label="from"
@@ -107,7 +87,7 @@ const SectionNotifications = () => {
               // eslint-disable-next-line react/jsx-props-no-spreading
               renderInput={(params) => <TextField {...params} />}
             />
-          </div>
+          </Box>
           (
           {window.Intl.DateTimeFormat().resolvedOptions().timeZone}
           )
@@ -180,7 +160,17 @@ const SectionNotifications = () => {
               <span
                 role="link"
                 tabIndex={0}
-                className={classes.link}
+                sx={{
+                  cursor: 'pointer',
+                  fontWeight: 500,
+                  outline: 'none',
+                  '&:hover': {
+                    textDecoration: 'underline',
+                  },
+                  '&:focus': {
+                    textDecoration: 'underline',
+                  },
+                }}
                 onClick={() => requestOpenInBrowser(`https://docs.webcatalog.io/article/17-how-to-enable-notifications-in-web-apps?utm_source=${utmSource}`)}
                 onKeyDown={(e) => {
                   if (e.key !== 'Enter') return;

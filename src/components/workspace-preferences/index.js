@@ -24,7 +24,8 @@ import RouterIcon from '@mui/icons-material/Router';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import SecurityIcon from '@mui/icons-material/Security';
 import WidgetsIcon from '@mui/icons-material/Widgets';
-import makeStyles from '@mui/styles/makeStyles';
+
+import { Box } from '@mui/material';
 
 import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
 
@@ -48,45 +49,7 @@ import SectionWorkspace from './section-workspace';
 import getStaticGlobal from '../../helpers/get-static-global';
 import isMenubarBrowser from '../../helpers/is-menubar-browser';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    background: theme.palette.background.default,
-    height: '100%',
-    width: '100%',
-    display: 'flex',
-  },
-  sectionTitle: {
-    paddingLeft: theme.spacing(2),
-  },
-  paper: {
-    marginTop: theme.spacing(0.5),
-    marginBottom: theme.spacing(3),
-    border: theme.palette.mode === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)',
-  },
-  sidebar: {
-    width: 220,
-    color: theme.palette.text.primary,
-    borderRight: `1px solid ${theme.palette.divider}`,
-    overflow: 'auto',
-  },
-  inner: {
-    flex: 1,
-    padding: theme.spacing(2),
-    overflow: 'auto',
-  },
-  globalPrefsButton: {
-    position: 'absolute',
-    bottom: theme.spacing(1),
-    left: theme.spacing(1),
-  },
-  alert: {
-    marginBottom: theme.spacing(1),
-  },
-}));
-
 const Preferences = () => {
-  const classes = useStyles();
-
   const [activeSectionKey, setActiveSectionKey] = useState('general');
 
   const sections = {
@@ -174,8 +137,22 @@ const Preferences = () => {
   const activeSection = sections[activeSectionKey];
 
   return (
-    <div className={classes.root}>
-      <div className={classes.sidebar}>
+    <Box
+      sx={{
+        background: 'background.default',
+        height: 1,
+        width: 1,
+        display: 'flex',
+      }}
+    >
+      <Box
+        sx={{
+          width: 220,
+          color: 'text.primary',
+          borderRight: (theme) => `1px solid ${theme.palette.divider}`,
+          overflow: 'auto',
+        }}
+      >
         <List dense>
           {Object.keys(sections).map((sectionKey) => {
             const {
@@ -205,16 +182,26 @@ const Preferences = () => {
           variant="link"
           color="primary"
           size="small"
-          className={classes.globalPrefsButton}
+          sx={{
+            position: 'absolute',
+            bottom: 1,
+            left: 1,
+          }}
           startIcon={<ArrowBackIosIcon />}
           onClick={() => requestShowPreferencesWindow()}
         >
           Global Preferences
         </Button>
-      </div>
-      <div className={classes.inner}>
+      </Box>
+      <Box
+        sx={{
+          flex: 1,
+          p: 2,
+          overflow: 'auto',
+        }}
+      >
         {activeSection.alertMessage && (
-          <Alert severity={activeSection.alertSeverity} variant="standard" className={classes.alert}>
+          <Alert severity={activeSection.alertSeverity} variant="standard" sx={{ mb: 1 }}>
             <AlertTitle>{activeSection.alertTitle}</AlertTitle>
             {activeSection.alertMessage}
           </Alert>
@@ -224,18 +211,25 @@ const Preferences = () => {
           if (subSection.hidden) return null;
           return (
             <React.Fragment key={subSectionKey}>
-              <Typography variant="subtitle2" color="textPrimary" className={classes.sectionTitle}>
+              <Typography variant="subtitle2" color="textPrimary" sx={{ pl: 2 }}>
                 {subSection.text}
               </Typography>
-              <Paper elevation={0} className={classes.paper}>
+              <Paper
+                elevation={0}
+                sx={{
+                  mt: 0.5,
+                  mb: 3,
+                  border: (theme) => (theme.palette.mode === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)'),
+                }}
+              >
                 <subSection.Component />
               </Paper>
             </React.Fragment>
           );
         })}
-      </div>
+      </Box>
       <SnackbarTrigger />
-    </div>
+    </Box>
   );
 };
 

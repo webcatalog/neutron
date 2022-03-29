@@ -13,30 +13,12 @@ import Slider from '@mui/material/Slider';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
-import makeStyles from '@mui/styles/makeStyles';
 
 import { useDispatch, useSelector } from 'react-redux';
 
 import { close, updateForm, save } from '../../../state/dialog-customize-fonts/actions';
 
-const useStyles = makeStyles((theme) => ({
-  selectRoot: {
-    borderRadius: theme.spacing(0.5),
-    fontSize: '0.84375rem',
-  },
-  select: {
-    paddingTop: theme.spacing(1),
-    paddingRight: 26,
-    paddingBottom: theme.spacing(1),
-    paddingLeft: theme.spacing(1.5),
-  },
-  slider: {
-    width: 'calc(100% - 180px)',
-  },
-}));
-
 const DialogCustomizeFonts = () => {
-  const classes = useStyles();
   const dispatch = useDispatch();
 
   const open = useSelector((state) => state.dialogCustomizeFonts.open);
@@ -60,9 +42,11 @@ const DialogCustomizeFonts = () => {
           <ListItem>
             <ListItemText
               primary="Font size"
+              sx={{ mb: 2.8 }}
             />
             <Slider
-              className={classes.slider}
+              sx={{ width: 'calc(100% - 180px)' }}
+              size="small"
               value={defaultFontSize}
               onChange={(e, value) => dispatch(updateForm({ defaultFontSize: value }))}
               min={9}
@@ -76,9 +60,11 @@ const DialogCustomizeFonts = () => {
           <ListItem>
             <ListItemText
               primary="Minimum font size"
+              sx={{ mb: 2.8 }}
             />
             <Slider
-              className={classes.slider}
+              sx={{ width: 'calc(100% - 180px)' }}
+              size="small"
               value={defaultFontSizeMinimum}
               onChange={(e, value) => dispatch(updateForm({ defaultFontSizeMinimum: value }))}
               min={0}
@@ -92,9 +78,11 @@ const DialogCustomizeFonts = () => {
           <ListItem>
             <ListItemText
               primary="Monospace font size"
+              sx={{ mb: 2.8 }}
             />
             <Slider
-              className={classes.slider}
+              sx={{ width: 'calc(100% - 180px)' }}
+              size="small"
               value={defaultFontSizeMonospace}
               onChange={(e, value) => dispatch(updateForm({ defaultFontSizeMonospace: value }))}
               min={9}
@@ -108,7 +96,17 @@ const DialogCustomizeFonts = () => {
         </List>
       </DialogContent>
       <DialogActions>
-        <Button variant="contained" disableElevation onClick={() => dispatch(close())}>
+        <Button
+          variant="contained"
+          color="inherit"
+          sx={{
+            ':hover': {
+              backgroundColor: 'rgb(0 0 0 / 16%)',
+            },
+          }}
+          disableElevation
+          onClick={() => dispatch(close())}
+        >
           Cancel
         </Button>
         <Button color="primary" variant="contained" disableElevation onClick={() => dispatch(save())}>

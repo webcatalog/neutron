@@ -3,7 +3,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
 
-import makeStyles from '@mui/styles/makeStyles';
 import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -24,22 +23,7 @@ import {
   requestOpenInBrowser,
 } from '../../../senders';
 
-const useStyles = makeStyles(() => ({
-  link: {
-    cursor: 'pointer',
-    fontWeight: 500,
-    outline: 'none',
-    '&:hover': {
-      textDecoration: 'underline',
-    },
-    '&:focus': {
-      textDecoration: 'underline',
-    },
-  },
-}));
-
 const SectionNotifications = () => {
-  const classes = useStyles();
   const dispatch = useDispatch();
 
   const formDisableNotifications = useSelector(
@@ -80,7 +64,17 @@ const SectionNotifications = () => {
               <span
                 role="link"
                 tabIndex={0}
-                className={classes.link}
+                sx={{
+                  cursor: 'pointer',
+                  fontWeight: 500,
+                  outline: 'none',
+                  '&:hover': {
+                    textDecoration: 'underline',
+                  },
+                  '&:focus': {
+                    textDecoration: 'underline',
+                  },
+                }}
                 onClick={() => requestOpenInBrowser(`https://docs.webcatalog.io/article/17-how-to-enable-notifications-in-web-apps?utm_source=${utmSource}`)}
                 onKeyDown={(e) => {
                   if (e.key !== 'Enter') return;

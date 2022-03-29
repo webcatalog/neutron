@@ -13,8 +13,6 @@ import Switch from '@mui/material/Switch';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 
-import makeStyles from '@mui/styles/makeStyles';
-
 import { useSelector } from 'react-redux';
 
 import getStaticGlobal from '../../../helpers/get-static-global';
@@ -23,24 +21,7 @@ import {
   requestSetPreference,
 } from '../../../senders';
 
-const useStyles = makeStyles((theme) => ({
-  sliderContainer: {
-    paddingTop: theme.spacing(2),
-    paddingLeft: theme.spacing(5),
-    paddingRight: theme.spacing(5),
-  },
-  sliderTitleContainer: {
-    paddingTop: `${theme.spacing(1.5)} !important`,
-    width: 100,
-  },
-  sliderMarkLabel: {
-    fontSize: '0.75rem',
-  },
-}));
-
 const SectionDarkReader = () => {
-  const classes = useStyles();
-
   const darkReader = useSelector((state) => state.preferences.darkReader);
   const darkReaderBrightness = useSelector((state) => state.preferences.darkReaderBrightness);
   const darkReaderContrast = useSelector((state) => state.preferences.darkReaderContrast);
@@ -72,16 +53,32 @@ const SectionDarkReader = () => {
       <>
         <Divider />
         <ListItem>
-          <ListItemText className={classes.sliderContainer}>
+          <ListItemText
+            sx={{
+              pt: 2,
+              px: 5,
+            }}
+          >
             <Grid container spacing={2}>
-              <Grid classes={{ item: classes.sliderTitleContainer }} item>
-                <Typography id="brightness-slider" variant="body2" gutterBottom={false}>
+              <Grid
+                sx={{
+                  pt: 1.5,
+                  width: 100,
+                }}
+                item
+              >
+                <Typography id="brightness-slider" variant="body2" gutterBottom={false} sx={{ m: 0.5 }}>
                   Brightness
                 </Typography>
               </Grid>
               <Grid item xs>
                 <Slider
-                  classes={{ markLabel: classes.sliderMarkLabel }}
+                  size="small"
+                  sx={{
+                    '& .MuiSlider-markLabel': {
+                      fontSize: '0.75rem',
+                    },
+                  }}
                   value={darkReaderBrightness - 100}
                   disabled={getStaticGlobal('darkReaderExtensionDetected') || !darkReader}
                   aria-labelledby="brightness-slider"
@@ -106,14 +103,25 @@ const SectionDarkReader = () => {
               </Grid>
             </Grid>
             <Grid container spacing={2}>
-              <Grid classes={{ item: classes.sliderTitleContainer }} item>
-                <Typography id="contrast-slider" variant="body2" gutterBottom={false}>
+              <Grid
+                sx={{
+                  pt: 1.5,
+                  width: 100,
+                }}
+                item
+              >
+                <Typography id="contrast-slider" variant="body2" gutterBottom={false} sx={{ m: 0.5 }}>
                   Contrast
                 </Typography>
               </Grid>
               <Grid item xs>
                 <Slider
-                  classes={{ markLabel: classes.sliderMarkLabel }}
+                  size="small"
+                  sx={{
+                    '& .MuiSlider-markLabel': {
+                      fontSize: '0.75rem',
+                    },
+                  }}
                   value={darkReaderContrast - 100}
                   disabled={getStaticGlobal('darkReaderExtensionDetected') || !darkReader}
                   aria-labelledby="contrast-slider"
@@ -138,14 +146,25 @@ const SectionDarkReader = () => {
               </Grid>
             </Grid>
             <Grid container spacing={2}>
-              <Grid classes={{ item: classes.sliderTitleContainer }} item>
-                <Typography id="sepia-slider" variant="body2" gutterBottom={false}>
+              <Grid
+                sx={{
+                  pt: 1.5,
+                  width: 100,
+                }}
+                item
+              >
+                <Typography id="sepia-slider" variant="body2" gutterBottom={false} sx={{ m: 0.5 }}>
                   Sepia
                 </Typography>
               </Grid>
               <Grid item xs>
                 <Slider
-                  classes={{ markLabel: classes.sliderMarkLabel }}
+                  size="small"
+                  sx={{
+                    '& .MuiSlider-markLabel': {
+                      fontSize: '0.75rem',
+                    },
+                  }}
                   value={darkReaderSepia}
                   disabled={getStaticGlobal('darkReaderExtensionDetected') || !darkReader}
                   aria-labelledby="sepia-slider"
@@ -166,14 +185,25 @@ const SectionDarkReader = () => {
               </Grid>
             </Grid>
             <Grid container spacing={2}>
-              <Grid classes={{ item: classes.sliderTitleContainer }} item>
-                <Typography id="grayscale-slider" variant="body2" gutterBottom={false}>
+              <Grid
+                sx={{
+                  pt: 1.5,
+                  width: 100,
+                }}
+                item
+              >
+                <Typography id="grayscale-slider" variant="body2" gutterBottom={false} sx={{ m: 0.5 }}>
                   Grayscale
                 </Typography>
               </Grid>
               <Grid item xs>
                 <Slider
-                  classes={{ markLabel: classes.sliderMarkLabel }}
+                  size="small"
+                  sx={{
+                    '& .MuiSlider-markLabel': {
+                      fontSize: '0.75rem',
+                    },
+                  }}
                   value={darkReaderGrayscale}
                   disabled={getStaticGlobal('darkReaderExtensionDetected') || !darkReader}
                   aria-labelledby="grayscale-slider"

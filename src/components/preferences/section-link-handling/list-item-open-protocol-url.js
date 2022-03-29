@@ -7,31 +7,13 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import makeStyles from '@mui/styles/makeStyles';
-
 import { useSelector } from 'react-redux';
 
 import {
   requestSetPreference,
 } from '../../../senders';
 
-const useStyles = makeStyles((theme) => ({
-  selectRoot: {
-    borderRadius: theme.spacing(0.5),
-    fontSize: '0.84375rem',
-    maxWidth: 'calc(100vw - 500px)',
-  },
-  select: {
-    paddingTop: theme.spacing(1),
-    paddingRight: 26,
-    paddingBottom: theme.spacing(1),
-    paddingLeft: theme.spacing(1.5),
-  },
-}));
-
 const ListItemOpenProtocolUrls = () => {
-  const classes = useStyles();
-
   const openProtocolUrlInNewWindow = useSelector(
     (state) => state.preferences.openProtocolUrlInNewWindow,
   );
@@ -47,10 +29,16 @@ const ListItemOpenProtocolUrls = () => {
         variant="filled"
         disableUnderline
         margin="dense"
-        classes={{
-          root: classes.select,
+        sx={{
+          borderRadius: 0.5,
+          fontSize: '0.84375rem',
+          my: 1,
+          '& .MuiSelect-select': {
+            py: 1,
+            pr: 3.25,
+            pl: 1.5,
+          },
         }}
-        className={classes.selectRoot}
       >
         <MenuItem
           value="ask"

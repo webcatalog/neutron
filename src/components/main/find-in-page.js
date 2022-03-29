@@ -5,9 +5,8 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import { ipcRenderer } from 'electron';
 
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import makeStyles from '@mui/styles/makeStyles';
+import { Box, Input } from '@mui/material';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -18,25 +17,7 @@ import {
   requestStopFindInPage,
 } from '../../senders';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    background: theme.palette.background.default,
-    display: 'flex',
-    alignItems: 'center',
-    padding: '0 4px',
-    zIndex: 1,
-    height: 41, // need to have fixed height
-    borderBottom: '1px solid rgba(0, 0, 0, 0.2)',
-    width: '100%',
-  },
-  infoContainer: {
-    flex: 1,
-    padding: '0 12px',
-  },
-}));
-
 const FindInPage = () => {
-  const classes = useStyles();
   const dispatch = useDispatch();
 
   const activeMatch = useSelector((state) => state.findInPage.activeMatch);
@@ -63,17 +44,35 @@ const FindInPage = () => {
   if (!open) return null;
 
   return (
-    <div className={classes.root}>
-      <div className={classes.infoContainer}>
+    <Box
+      sx={{
+        background: 'background.default',
+        display: 'flex',
+        alignItems: 'center',
+        py: 0,
+        px: 0.5,
+        zIndex: 1,
+        height: 41, // need to have fixed height
+        borderBottom: '1px solid rgba(0, 0, 0, 0.2)',
+        width: 1,
+      }}
+    >
+      <Box
+        sx={{
+          flex: 1,
+          py: 0,
+          px: 1.5,
+        }}
+      >
         <Typography variant="body2">
           <strong>{activeMatch}</strong>
           <span> / </span>
           <strong>{matches}</strong>
           <span> matches</span>
         </Typography>
-      </div>
-      <div>
-        <TextField
+      </Box>
+      <Box>
+        <Input
           inputRef={inputRef}
           placeholder="Find"
           value={text}
@@ -109,8 +108,9 @@ const FindInPage = () => {
             }
           }}
         />
-      </div>
+      </Box>
       <Button
+        color="inherit"
         size="small"
         disabled={text.length < 1 || matches < 1}
         onClick={() => {
@@ -122,6 +122,7 @@ const FindInPage = () => {
         Previous
       </Button>
       <Button
+        color="inherit"
         size="small"
         disabled={text.length < 1 || matches < 1}
         onClick={() => {
@@ -133,6 +134,7 @@ const FindInPage = () => {
         Next
       </Button>
       <Button
+        color="inherit"
         size="small"
         disabled={text.length < 1}
         onClick={() => {
@@ -144,6 +146,7 @@ const FindInPage = () => {
         Find
       </Button>
       <Button
+        color="inherit"
         size="small"
         onClick={() => {
           requestStopFindInPage(true);
@@ -152,7 +155,7 @@ const FindInPage = () => {
       >
         Close
       </Button>
-    </div>
+    </Box>
   );
 };
 

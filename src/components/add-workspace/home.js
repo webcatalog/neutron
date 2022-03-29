@@ -11,7 +11,7 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import SearchIcon from '@mui/icons-material/Search';
 import CircularProgress from '@mui/material/CircularProgress';
-import makeStyles from '@mui/styles/makeStyles';
+import Box from '@mui/material/Box';
 
 import getStaticGlobal from '../../helpers/get-static-global';
 import isMas from '../../helpers/is-mas';
@@ -23,45 +23,6 @@ import SubmitAppCard from './submit-app-card';
 import NoConnection from './no-connection';
 import EmptyState from './empty-state';
 import SearchBox from './search-box';
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    zIndex: 1,
-  },
-  scrollContainer: {
-    flex: 1,
-    padding: 0,
-    overflow: 'auto',
-  },
-  grid: {
-    marginBottom: theme.spacing(1),
-  },
-  homeContainer: {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    height: '100%',
-    overflow: 'hidden',
-  },
-  badConfigContainer: {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    height: '100%',
-    overflow: 'hidden',
-    justifyContent: 'center',
-    padding: theme.spacing(1),
-  },
-  contentContainer: {
-    padding: theme.spacing(1),
-  },
-  progressContainer: {
-    position: 'absolute',
-    bottom: 5,
-    left: 5,
-    zIndex: 2,
-  },
-}));
 
 const connector = process.env.REACT_APP_ELASTIC_CLOUD_APP_SEARCH_SEARCH_KEY
   ? new AppSearchAPIConnector({
@@ -95,12 +56,21 @@ if (appJsonId.startsWith('group-')) {
 }
 
 const Home = () => {
-  const classes = useStyles();
   const scrollContainerRef = useRef(null);
 
   if (!connector) {
     return (
-      <div className={classes.badConfigContainer}>
+      <Box
+        sx={{
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%',
+          overflow: 'hidden',
+          justifyContent: 'center',
+          p: 1,
+        }}
+      >
         <Typography
           variant="body1"
           align="center"
@@ -108,7 +78,7 @@ const Home = () => {
         >
           AppSearch environment variables are required for &quot;Catalog&quot;. Learn more at: https://github.com/webcatalog/webcatalog-app/blob/master/README.md#development
         </Typography>
-      </div>
+      </Box>
     );
   }
 
@@ -142,14 +112,26 @@ const Home = () => {
         },
       }}
     >
-      <div className={classes.homeContainer}>
+      <Box
+        sx={{
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%',
+          overflow: 'hidden',
+        }}
+      >
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <SearchBox />
           </Grid>
         </Grid>
-        <div
-          className={classes.scrollContainer}
+        <Box
+          sx={{
+            flex: 1,
+            p: 0,
+            overflow: 'auto',
+          }}
           ref={scrollContainerRef}
         >
           <WithSearch
@@ -179,7 +161,11 @@ const Home = () => {
             }) => {
               if (error) {
                 return (
-                  <div className={classes.contentContainer}>
+                  <Box
+                    sx={{
+                      p: 1,
+                    }}
+                  >
                     <NoConnection
                       onTryAgainButtonClick={() => {
                         setSearchTerm(searchTerm, {
@@ -189,28 +175,35 @@ const Home = () => {
                         });
                       }}
                     />
-                  </div>
+                  </Box>
                 );
               }
 
               if (isLoading && results.length < 1) {
                 return (
-                  <div className={classes.contentContainer}>
+                  <Box
+                    sx={{
+                      p: 1,
+                    }}
+                  >
                     <Typography
                       variant="body2"
                       align="center"
                       color="textSecondary"
-                      className={classes.loading}
                     >
                       Loading...
                     </Typography>
-                  </div>
+                  </Box>
                 );
               }
 
               if (wasSearched && results.length < 1) {
                 return (
-                  <div className={classes.contentContainer}>
+                  <Box
+                    sx={{
+                      p: 1,
+                    }}
+                  >
                     <EmptyState icon={SearchIcon} title="No Matching Results">
                       <Typography
                         variant="subtitle1"
@@ -218,11 +211,15 @@ const Home = () => {
                       >
                         Your query did not match any apps in our database.
                       </Typography>
-                      <Grid container justifyContent="center" spacing={1} className={classes.noMatchingResultOpts}>
+                      <Grid
+                        container
+                        justifyContent="center"
+                        spacing={1}
+                      >
                         <SubmitAppCard />
                       </Grid>
                     </EmptyState>
-                  </div>
+                  </Box>
                 );
               }
 
@@ -248,17 +245,24 @@ const Home = () => {
               );
             }}
           </WithSearch>
-        </div>
+        </Box>
         <WithSearch
           mapContextToProps={({ isLoading, error }) => ({ isLoading, error })}
         >
           {({ isLoading, error }) => isLoading && !error && (
-            <div className={classes.progressContainer}>
+            <Box
+              sx={{
+                position: 'absolute',
+                bottom: 5,
+                left: 5,
+                zIndex: 2,
+              }}
+            >
               <CircularProgress size={20} />
-            </div>
+            </Box>
           )}
         </WithSearch>
-      </div>
+      </Box>
     </SearchProvider>
   );
 };

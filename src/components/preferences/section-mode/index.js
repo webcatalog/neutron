@@ -8,7 +8,7 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Typography from '@mui/material/Typography';
 import Radio from '@mui/material/Radio';
-import makeStyles from '@mui/styles/makeStyles';
+import { Box } from '@mui/material';
 
 import { useSelector } from 'react-redux';
 
@@ -17,27 +17,25 @@ import {
   requestSetPreference,
 } from '../../../senders';
 
-const useStyles = makeStyles((theme) => ({
-  listItemModePicker: {
-    paddingLeft: theme.spacing(1),
-  },
-  modePicker: {
-    paddingTop: theme.spacing(1),
-    paddingBottom: theme.spacing(1.5),
-  },
-}));
-
 const SectionMode = () => {
-  const classes = useStyles();
-
   const shareWorkspaceBrowsingData = useSelector(
     (state) => state.preferences.shareWorkspaceBrowsingData,
   );
 
   return (
     <List disablePadding dense>
-      <ListItem disableGutters className={classes.listItemModePicker}>
-        <div className={classes.modePicker}>
+      <ListItem
+        disableGutters
+        sx={{
+          pl: 1,
+        }}
+      >
+        <Box
+          sx={{
+            pt: 1,
+            pb: 1.5,
+          }}
+        >
           <Grid container spacing={2}>
             <Grid item>
               <Radio
@@ -78,7 +76,7 @@ const SectionMode = () => {
               </Typography>
             </Grid>
           </Grid>
-        </div>
+        </Box>
       </ListItem>
     </List>
   );

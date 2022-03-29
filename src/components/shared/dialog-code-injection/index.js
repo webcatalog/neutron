@@ -6,11 +6,11 @@ import React from 'react';
 import Button from '@mui/material/Button';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import makeStyles from '@mui/styles/makeStyles';
 
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
+import { Box } from '@mui/material';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -25,23 +25,6 @@ import { requestOpenInBrowser } from '../../../senders';
 
 import { updateForm, save, close } from '../../../state/dialog-code-injection/actions';
 
-const useStyles = makeStyles((theme) => ({
-  content: {
-    height: theme.spacing(50),
-    padding: 0,
-  },
-  actions: {
-    display: 'flex',
-  },
-  actionsLeft: {
-    flex: 1,
-  },
-  button: {
-    float: 'right',
-    marginLeft: theme.spacing(1),
-  },
-}));
-
 const getMode = (codeInjectionType) => {
   if (codeInjectionType === 'css') return 'css';
   if (codeInjectionType === 'js') return 'javascript';
@@ -49,7 +32,6 @@ const getMode = (codeInjectionType) => {
 };
 
 const CodeInjection = () => {
-  const classes = useStyles();
   const dispatch = useDispatch();
 
   const allowNodeInJsCodeInjection = useSelector(
@@ -66,7 +48,14 @@ const CodeInjection = () => {
       fullWidth
       maxWidth="sm"
     >
-      <DialogContent className={classes.content}>
+      <DialogContent
+        sx={{
+          height: 400,
+          pt: 2.5,
+          pb: 0,
+          px: 0,
+        }}
+      >
         <AceEditor
           mode={getMode(codeInjectionType)}
           theme={shouldUseDarkColors ? 'monokai' : 'github'}
@@ -78,11 +67,11 @@ const CodeInjection = () => {
         />
       </DialogContent>
       <DialogActions>
-        <div className={classes.actions}>
-          <div className={classes.actionsLeft}>
+        <Box sx={{ display: 'flex' }}>
+          <Box sx={{ flex: 1 }}>
             {codeInjectionType === 'js' && (
               <>
-                <Button variant="text" onClick={() => requestOpenInBrowser('https://github.com/webcatalog/webcatalog-app/wiki/WebCatalog-APIs')}>
+                <Button variant="text" color="inherit" onClick={() => requestOpenInBrowser('https://github.com/webcatalog/webcatalog-app/wiki/WebCatalog-APIs')}>
                   WebCatalog API Documentation
                 </Button>
                 <FormControlLabel
@@ -99,16 +88,37 @@ const CodeInjection = () => {
                 />
               </>
             )}
-          </div>
-          <div className={classes.actionsRight}>
-            <Button color="primary" variant="contained" disableElevation className={classes.button} onClick={() => dispatch(save())}>
+          </Box>
+          <Box>
+            <Button
+              color="primary"
+              variant="contained"
+              disableElevation
+              sx={{
+                float: 'right',
+                ml: 1,
+              }}
+              onClick={() => dispatch(save())}
+            >
               Save
             </Button>
-            <Button variant="contained" disableElevation className={classes.button} onClick={() => dispatch(close())}>
+            <Button
+              variant="contained"
+              color="inherit"
+              sx={{
+                float: 'right',
+                ml: 1,
+                ':hover': {
+                  backgroundColor: 'rgb(0 0 0 / 16%)',
+                },
+              }}
+              disableElevation
+              onClick={() => dispatch(close())}
+            >
               Cancel
             </Button>
-          </div>
-        </div>
+          </Box>
+        </Box>
       </DialogActions>
     </Dialog>
   );

@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
-import makeStyles from '@mui/styles/makeStyles';
+import { Box } from '@mui/material';
 
 import isAppx from '../../../helpers/is-appx';
 import isMas from '../../../helpers/is-mas';
@@ -27,34 +27,7 @@ import singleboxIconPng from '../../../images/products/singlebox-mac-icon-128@2x
 import switchbarIconPng from '../../../images/products/switchbar-mac-icon-128@2x.png';
 import skywhaleIconPng from '../../../images/products/skywhale-mac-icon-128@2x.png';
 
-const useStyles = makeStyles((theme) => ({
-  listItemPromotion: {
-    paddingLeft: theme.spacing(1),
-  },
-  promotionBlock: {
-    display: 'flex',
-    flex: 1,
-  },
-  promotionLeft: {
-    height: 64,
-    width: 64,
-  },
-  promotionRight: {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingLeft: theme.spacing(1.5),
-  },
-  appTitle: {},
-  appIcon: {
-    height: 64,
-  },
-}));
-
 const SectionMoreApps = () => {
-  const classes = useStyles();
-
   const utmSource = getUtmSource();
 
   return (
@@ -67,23 +40,43 @@ const SectionMoreApps = () => {
               const url = `https://webcatalog.io/webcatalog/?utm_source=${utmSource}`;
               requestOpenInBrowser(url);
             }}
-            className={classes.listItemPromotion}
+            sx={{
+              pl: 1,
+            }}
           >
-            <div className={classes.promotionBlock}>
-              <div className={classes.promotionLeft}>
-                <img src={webcatalogIconPng} alt="WebCatalog" className={classes.appIcon} />
-              </div>
-              <div className={classes.promotionRight}>
-                <div>
-                  <Typography variant="body1" className={classes.appTitle}>
+            <Box
+              sx={{
+                display: 'flex',
+                flex: 1,
+              }}
+            >
+              <Box
+                sx={{
+                  height: 64,
+                  width: 64,
+                }}
+              >
+                <Box component="img" src={webcatalogIconPng} alt="WebCatalog" sx={{ height: 64 }} />
+              </Box>
+              <Box
+                sx={{
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  pl: 1.5,
+                }}
+              >
+                <Box>
+                  <Typography variant="body1">
                     WebCatalog
                   </Typography>
                   <Typography variant="body2" color="textSecondary">
                     Turn Any Websites Into Real Desktop Apps
                   </Typography>
-                </div>
-              </div>
-            </div>
+                </Box>
+              </Box>
+            </Box>
             <ChevronRightIcon color="action" />
           </ListItem>
           <Divider />
@@ -101,23 +94,43 @@ const SectionMoreApps = () => {
           }
           requestOpenInBrowser(url);
         }}
-        className={classes.listItemPromotion}
+        sx={{
+          pl: 1,
+        }}
       >
-        <div className={classes.promotionBlock}>
-          <div className={classes.promotionLeft}>
-            <img src={translatiumIconPng} alt="Translatium" className={classes.appIcon} />
-          </div>
-          <div className={classes.promotionRight}>
-            <div>
-              <Typography variant="body1" className={classes.appTitle}>
+        <Box
+          sx={{
+            display: 'flex',
+            flex: 1,
+          }}
+        >
+          <Box
+            sx={{
+              height: 64,
+              width: 64,
+            }}
+          >
+            <Box component="img" src={translatiumIconPng} alt="Translatium" sx={{ height: 64 }} />
+          </Box>
+          <Box
+            sx={{
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              pl: 1.5,
+            }}
+          >
+            <Box>
+              <Typography variant="body1">
                 Translatium
               </Typography>
               <Typography variant="body2" color="textSecondary">
                 Translate 100+ Languages Instantly
               </Typography>
-            </div>
-          </div>
-        </div>
+            </Box>
+          </Box>
+        </Box>
         <ChevronRightIcon color="action" />
       </ListItem>
       <Divider />
@@ -133,23 +146,43 @@ const SectionMoreApps = () => {
           }
           requestOpenInBrowser(url);
         }}
-        className={classes.listItemPromotion}
+        sx={{
+          pl: 1,
+        }}
       >
-        <div className={classes.promotionBlock}>
-          <div className={classes.promotionLeft}>
-            <img src={singleboxIconPng} alt="Singlebox" className={classes.appIcon} />
-          </div>
-          <div className={classes.promotionRight}>
-            <div>
-              <Typography variant="body1" className={classes.appTitle}>
+        <Box
+          sx={{
+            display: 'flex',
+            flex: 1,
+          }}
+        >
+          <Box
+            sx={{
+              height: 64,
+              width: 64,
+            }}
+          >
+            <Box component="img" src={singleboxIconPng} alt="Singlebox" sx={{ height: 64 }} />
+          </Box>
+          <Box
+            sx={{
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              pl: 1.5,
+            }}
+          >
+            <Box>
+              <Typography variant="body1">
                 Singlebox
               </Typography>
               <Typography variant="body2" color="textSecondary">
                 All-in-One Messenger
               </Typography>
-            </div>
-          </div>
-        </div>
+            </Box>
+          </Box>
+        </Box>
         <ChevronRightIcon color="action" />
       </ListItem>
       {!isAppx() && (
@@ -164,23 +197,43 @@ const SectionMoreApps = () => {
               }
               requestOpenInBrowser(url);
             }}
-            className={classes.listItemPromotion}
+            sx={{
+              pl: 1,
+            }}
           >
-            <div className={classes.promotionBlock}>
-              <div className={classes.promotionLeft}>
-                <img src={switchbarIconPng} alt="Switchbar" className={classes.appIcon} />
-              </div>
-              <div className={classes.promotionRight}>
-                <div>
-                  <Typography variant="body1" className={classes.appTitle}>
+            <Box
+              sx={{
+                display: 'flex',
+                flex: 1,
+              }}
+            >
+              <Box
+                sx={{
+                  height: 64,
+                  width: 64,
+                }}
+              >
+                <Box component="img" src={switchbarIconPng} alt="Switchbar" sx={{ height: 64 }} />
+              </Box>
+              <Box
+                sx={{
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  pl: 1.5,
+                }}
+              >
+                <Box>
+                  <Typography variant="body1">
                     Switchbar
                   </Typography>
                   <Typography variant="body2" color="textSecondary">
                     Browser & Email Client Picker
                   </Typography>
-                </div>
-              </div>
-            </div>
+                </Box>
+              </Box>
+            </Box>
             <ChevronRightIcon color="action" />
           </ListItem>
         </>
@@ -198,23 +251,43 @@ const SectionMoreApps = () => {
           }
           requestOpenInBrowser(url);
         }}
-        className={classes.listItemPromotion}
+        sx={{
+          pl: 1,
+        }}
       >
-        <div className={classes.promotionBlock}>
-          <div className={classes.promotionLeft}>
-            <img src={cloveryIconPng} alt="Clovery" className={classes.appIcon} />
-          </div>
-          <div className={classes.promotionRight}>
-            <div>
-              <Typography variant="body1" className={classes.appTitle}>
+        <Box
+          sx={{
+            display: 'flex',
+            flex: 1,
+          }}
+        >
+          <Box
+            sx={{
+              height: 64,
+              width: 64,
+            }}
+          >
+            <Box component="img" src={cloveryIconPng} alt="Clovery" sx={{ height: 64 }} />
+          </Box>
+          <Box
+            sx={{
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              pl: 1.5,
+            }}
+          >
+            <Box>
+              <Typography variant="body1">
                 Clovery
               </Typography>
               <Typography variant="body2" color="textSecondary">
                 All Google Apps in One
               </Typography>
-            </div>
-          </div>
-        </div>
+            </Box>
+          </Box>
+        </Box>
         <ChevronRightIcon color="action" />
       </ListItem>
       {!isAppx() && (
@@ -229,23 +302,43 @@ const SectionMoreApps = () => {
               }
               requestOpenInBrowser(url);
             }}
-            className={classes.listItemPromotion}
+            sx={{
+              pl: 1,
+            }}
           >
-            <div className={classes.promotionBlock}>
-              <div className={classes.promotionLeft}>
-                <img src={skywhaleIconPng} alt="Skywhale" className={classes.appIcon} />
-              </div>
-              <div className={classes.promotionRight}>
-                <div>
-                  <Typography variant="body1" className={classes.appTitle}>
+            <Box
+              sx={{
+                display: 'flex',
+                flex: 1,
+              }}
+            >
+              <Box
+                sx={{
+                  height: 64,
+                  width: 64,
+                }}
+              >
+                <Box component="img" src={skywhaleIconPng} alt="Skywhale" sx={{ height: 64 }} />
+              </Box>
+              <Box
+                sx={{
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  pl: 1.5,
+                }}
+              >
+                <Box>
+                  <Typography variant="body1">
                     Skywhale
                   </Typography>
                   <Typography variant="body2" color="textSecondary">
                     Menu Bar Web Browser
                   </Typography>
-                </div>
-              </div>
-            </div>
+                </Box>
+              </Box>
+            </Box>
             <ChevronRightIcon color="action" />
           </ListItem>
         </>

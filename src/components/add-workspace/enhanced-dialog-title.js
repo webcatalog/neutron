@@ -8,32 +8,27 @@ import MuiDialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
-import makeStyles from '@mui/styles/makeStyles';
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    borderBottom: `1px solid ${theme.palette.divider}`,
-    marginTop: 0,
-    marginBottom: theme.spacing(3),
-    padding: 0,
-  },
-  closeButton: {
-    position: 'absolute',
-    right: theme.spacing(1),
-    top: theme.spacing(1),
-    color: theme.palette.grey[500],
-  },
-}));
-
-const classes = useStyles();
 
 const EnhancedDialogTitle = ({ children, onClose }) => (
-  <MuiDialogTitle disableTypography className={classes.root}>
+  <MuiDialogTitle
+    disableTypography
+    sx={{
+      borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
+      mt: 0,
+      mb: 3,
+      p: 0,
+    }}
+  >
     <Typography variant="h6">{children}</Typography>
     {onClose ? (
       <IconButton
         aria-label="Close"
-        className={classes.closeButton}
+        sx={{
+          position: 'absolute',
+          right: 1,
+          top: 1,
+          color: (theme) => theme.palette.grey[500],
+        }}
         onClick={onClose}
         size="large"
       >

@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 import { getCurrentWindow } from '@electron/remote';
 
-import makeStyles from '@mui/styles/makeStyles';
+// import makeStyles from '@mui/styles/makeStyles';
 
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -12,6 +12,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import { Box } from '@mui/material';
 
 import { useSelector } from 'react-redux';
 
@@ -24,26 +25,7 @@ import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name'
 
 import { requestLoadUrl } from '../../senders';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  list: {
-    flex: 1,
-    overflow: 'auto',
-  },
-  checkboxContainer: {
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
-    userSelect: 'none',
-  },
-}));
-
 const OpenUrlWith = () => {
-  const classes = useStyles();
-
   const workspaces = useSelector((state) => state.workspaces.workspaces);
   const defaultOpenInNewWindow = useSelector((state) => state.preferences.openProtocolUrlInNewWindow === 'new-window');
 
@@ -89,12 +71,30 @@ const OpenUrlWith = () => {
   };
 
   return (
-    <div className={classes.root}>
-      <List dense className={classes.list} component="div">
+    <Box
+      sx={{
+        height: 1,
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      <List
+        dense
+        sx={{
+          flex: 1,
+          overflow: 'auto',
+        }}
+        component="div"
+      >
         {getWorkspacesAsList(workspaces).map(renderWorkspace)}
       </List>
       <Divider />
-      <div className={classes.checkboxContainer}>
+      <Box
+        sx={{
+          px: 2,
+          userSelect: 'none',
+        }}
+      >
         <FormControlLabel
           control={(
             <Checkbox
@@ -106,8 +106,8 @@ const OpenUrlWith = () => {
           )}
           label="Open in new window"
         />
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 

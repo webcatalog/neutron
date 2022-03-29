@@ -17,7 +17,9 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import LockIcon from '@mui/icons-material/Lock';
 
-import makeStyles from '@mui/styles/makeStyles';
+// import makeStyles from '@mui/styles/makeStyles';
+
+import { Box } from '@mui/material';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -36,80 +38,7 @@ import {
 
 import touchIdIcon from '../../images/touch-id-icon.svg';
 
-const useStyles = makeStyles((theme) => ({
-  outerRoot: {
-    display: 'flex',
-    flexDirection: 'column',
-    height: '100%',
-    width: '100%',
-    overflow: 'hidden',
-    justifyContent: 'center',
-    alignItems: 'center',
-    WebkitAppRegion: 'drag',
-    userSelect: 'none',
-  },
-  centering: {
-    maxWidth: 512,
-    width: '100%',
-    WebkitAppRegion: 'no-drag',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  inputContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-  },
-  inputContainerLeft: {
-    flex: 1,
-  },
-  inputContainerRight: {
-    height: '100%',
-  },
-  inputRoot: {
-    borderTopRightRadius: 0,
-  },
-  unlockButton: {
-    borderTopLeftRadius: 0,
-    borderBottomLeftRadius: 0,
-    height: '100%',
-  },
-  leftCorner: {
-    WebkitAppRegion: 'no-drag',
-    userSelect: 'text',
-    position: 'absolute',
-    bottom: theme.spacing(2),
-    left: theme.spacing(2),
-  },
-  rightCorner: {
-    WebkitAppRegion: 'no-drag',
-    userSelect: 'text',
-    position: 'absolute',
-    bottom: theme.spacing(2),
-    right: theme.spacing(2),
-  },
-  touchIdButton: {
-    marginTop: theme.spacing(2),
-    backgroundColor: theme.palette.background.paper,
-    overflow: 'hidden',
-    boxShadow: 'none',
-    '&:hover': {
-      backgroundColor: theme.palette.background.paper,
-      boxShadow: theme.shadows[2],
-    },
-  },
-  touchIdIcon: {
-    width: 48,
-    height: 48,
-  },
-}));
-
 const AppLock = () => {
-  const classes = useStyles();
   const dispatch = useDispatch();
 
   const password = useSelector((state) => state.appLock.form.password);
@@ -132,8 +61,28 @@ const AppLock = () => {
   }, [setUseTouchId]);
 
   return (
-    <div className={classes.outerRoot}>
-      <div className={classes.leftCorner}>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: 1,
+        width: 1,
+        overflow: 'hidden',
+        justifyContent: 'center',
+        alignItems: 'center',
+        WebkitAppRegion: 'drag',
+        userSelect: 'none',
+      }}
+    >
+      <Box
+        sx={{
+          WebkitAppRegion: 'no-drag',
+          userSelect: 'text',
+          position: 'absolute',
+          bottom: 16,
+          left: 16,
+        }}
+      >
         <Typography variant="body2">
           <Link
             href="#"
@@ -145,15 +94,43 @@ const AppLock = () => {
             Forgot your password?
           </Link>
         </Typography>
-      </div>
-      <div className={classes.rightCorner}>
+      </Box>
+      <Box
+        sx={{
+          WebkitAppRegion: 'no-drag',
+          userSelect: 'text',
+          position: 'absolute',
+          bottom: 16,
+          right: 16,
+        }}
+      >
         <Typography variant="body2" color="textSecondary">
           {`Ref ID: ${appJson.id}`}
         </Typography>
-      </div>
-      <div className={classes.centering}>
-        <div className={classes.inputContainer}>
-          <div className={classes.inputContainerLeft}>
+      </Box>
+      <Box
+        sx={{
+          maxWidth: 512,
+          width: 1,
+          WebkitAppRegion: 'no-drag',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: 1,
+          }}
+        >
+          <Box
+            sx={{ flex: 1 }}
+          >
             <TextField
               autoFocus
               label="Password"
@@ -175,9 +152,7 @@ const AppLock = () => {
               }}
               type={revealPassword ? 'text' : 'password'}
               InputProps={{
-                classes: {
-                  root: classes.inputRoot,
-                },
+                sx: { '& .MuiInputBase-root-MuiFilledInput-root': { borderTopRightRadius: 0 } },
                 endAdornment: (
                   <InputAdornment position="end">
                     <IconButton
@@ -192,34 +167,57 @@ const AppLock = () => {
                 ),
               }}
             />
-          </div>
-          <div className={classes.inputContainerRight}>
+          </Box>
+          <Box
+            sx={{ height: 1 }}
+          >
             <Button
               variant="contained"
               color="primary"
-              className={classes.unlockButton}
+              sx={{
+                borderTopLeftRadius: 0,
+                borderBottomLeftRadius: 0,
+                height: 1,
+              }}
               startIcon={<LockIcon />}
               disableElevation
               onClick={() => dispatch(validateForm())}
             >
               Unlock
             </Button>
-          </div>
-        </div>
+          </Box>
+        </Box>
 
         {useTouchId && (
           <Tooltip title="Unlock with Touch ID" placement="bottom">
             <Fab
               aria-label="Unlock with Touch ID"
-              className={classes.touchIdButton}
+              sx={{
+                mt: 2,
+                backgroundColor: 'background.paper',
+                overflow: 'hidden',
+                boxShadow: 'none',
+                '&:hover': {
+                  backgroundColor: 'background.paper',
+                  boxShadow: 2,
+                },
+              }}
               onClick={requestUnlockAppUsingTouchId}
             >
-              <img src={touchIdIcon} alt="Touch ID" className={classes.touchIdIcon} />
+              <Box
+                component="img"
+                src={touchIdIcon}
+                alt="Touch ID"
+                sx={{
+                  width: 48,
+                  height: 48,
+                }}
+              />
             </Fab>
           </Tooltip>
         )}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 

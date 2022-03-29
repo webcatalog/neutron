@@ -4,23 +4,10 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import makeStyles from '@mui/styles/makeStyles';
-
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 
-const useStyles = makeStyles((theme) => ({
-  dialogContent: {
-    width: '100%',
-    height: '100%',
-    whiteSpace: 'pre-line',
-    paddingBottom: theme.spacing(2),
-    overflowX: 'hidden',
-  },
-}));
-
 const DialogOpenSourceNotices = ({ open, onClose }) => {
-  const classes = useStyles();
   const [content, setContent] = useState(null);
   useEffect(() => {
     if (!open) {
@@ -48,7 +35,15 @@ const DialogOpenSourceNotices = ({ open, onClose }) => {
       open={open}
       onClose={onClose}
     >
-      <DialogContent className={classes.dialogContent}>
+      <DialogContent
+        sx={{
+          width: 1,
+          height: 1,
+          whiteSpace: 'pre-line',
+          pb: 2,
+          overflowX: 'hidden',
+        }}
+      >
         {content || 'Loading...'}
       </DialogContent>
     </Dialog>

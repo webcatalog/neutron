@@ -47,7 +47,17 @@ const CustomUserAgent = () => {
         />
       </DialogContent>
       <DialogActions>
-        <Button variant="contained" disableElevation onClick={() => dispatch(close())}>
+        <Button
+          variant="contained"
+          color="inherit"
+          sx={{
+            ':hover': {
+              backgroundColor: 'rgb(0 0 0 / 16%)',
+            },
+          }}
+          disableElevation
+          onClick={() => dispatch(close())}
+        >
           Cancel
         </Button>
         <Button color="primary" variant="contained" disableElevation onClick={() => dispatch(save())}>

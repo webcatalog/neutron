@@ -57,6 +57,7 @@ const DialogExternalUrls = () => {
           <span>You can use </span>
           <Link
             href="#"
+            underline="hover"
             onClick={(e) => {
               e.preventDefault();
               requestOpenInBrowser('https://en.wikipedia.org/wiki/Regular_expression');
@@ -71,6 +72,7 @@ const DialogExternalUrls = () => {
           <span> to define additional rules for detecting external URLs. </span>
           <Link
             href="#"
+            underline="hover"
             onClick={(e) => {
               e.preventDefault();
               requestOpenInBrowser(`https://docs.webcatalog.io/article/43-how-to-define-external-urls?utm_source=${utmSource}`);
@@ -112,7 +114,17 @@ const DialogExternalUrls = () => {
         />
       </DialogContent>
       <DialogActions>
-        <Button variant="contained" disableElevation onClick={() => dispatch(close())}>
+        <Button
+          variant="contained"
+          color="inherit"
+          sx={{
+            ':hover': {
+              backgroundColor: 'rgb(0 0 0 / 16%)',
+            },
+          }}
+          disableElevation
+          onClick={() => dispatch(close())}
+        >
           Cancel
         </Button>
         <Button color="primary" variant="contained" disableElevation onClick={() => dispatch(save())}>

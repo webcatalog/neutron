@@ -9,7 +9,6 @@ import ListItem from '@mui/material/ListItem';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
-import makeStyles from '@mui/styles/makeStyles';
 
 import getStaticGlobal from '../../../helpers/get-static-global';
 import isStandalone from '../../../helpers/is-standalone';
@@ -23,33 +22,7 @@ import {
   requestOpenInBrowser,
 } from '../../../senders';
 
-const useStyles = makeStyles((theme) => ({
-  icon: {
-    height: 64,
-    width: 64,
-    marginRight: theme.spacing(1),
-  },
-  title: {
-    marginTop: theme.spacing(1),
-  },
-  version: {
-    marginBottom: theme.spacing(2),
-  },
-  versionSmallContainer: {
-    marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(2),
-  },
-  versionSmall: {
-    fontSize: '0.8rem',
-  },
-  content: {
-    flex: 1,
-  },
-}));
-
 const About = () => {
-  const classes = useStyles();
-
   const appJson = getStaticGlobal('appJson');
   const appVersion = app.getVersion();
 
@@ -67,21 +40,33 @@ const About = () => {
 
   return (
     <ListItem>
-      <div className={classes.content}>
+      <Box sx={{ flex: 1 }}>
         <Box display="flex" alignItems="center" justifyContent="center">
           <Box>
-            <img
+            <Box
+              component="img"
               src={(() => {
                 if (appJson.id === 'clovery') return cloveryIconPng;
                 if (appJson.id === 'singlebox' || appJson.id === 'singlebox-plus') return singleboxIconPng;
                 return `file://${window.iconPath}`;
               })()}
               alt={appJson.name}
-              className={classes.icon}
+              sx={{
+                height: 64,
+                width: 64,
+                mr: 1,
+              }}
             />
           </Box>
           <Box flex={1}>
-            <Typography variant="h6" className={classes.title}>{appJson.name}</Typography>
+            <Typography
+              variant="h6"
+              sx={{
+                mt: 1,
+              }}
+            >
+              {appJson.name}
+            </Typography>
             <Typography
               variant="body2"
             >
@@ -89,7 +74,7 @@ const About = () => {
             </Typography>
             <Typography
               variant="body2"
-              className={classes.version}
+              sx={{ mb: 2 }}
             >
               <Link
                 href="#"
@@ -104,19 +89,19 @@ const About = () => {
             </Typography>
           </Box>
           <Box>
-            <div className={classes.versionSmallContainer}>
+            <Box sx={{ my: 2 }}>
               {versions.map(({ name, version }) => (
-                <Typography key={name} variant="body2" className={classes.versionSmall}>
+                <Typography key={name} variant="body2" sx={{ fontSize: '0.8rem' }}>
                   {name}
                   :
                   {' '}
                   {version}
                 </Typography>
               ))}
-            </div>
+            </Box>
           </Box>
         </Box>
-      </div>
+      </Box>
     </ListItem>
   );
 };

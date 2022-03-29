@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import PropTypes from 'prop-types';
-import { styled } from '@mui/material/styles';
+// import { styled } from '@mui/material/styles';
 import React from 'react';
 import { Menu, getCurrentWindow } from '@electron/remote';
 
@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { Box } from '@mui/material';
 
 import { useDispatch } from 'react-redux';
 
@@ -21,79 +22,6 @@ import extractHostname from '../../helpers/extract-hostname';
 import { requestCreateWorkspace, requestTrackAddWorkspace } from '../../senders';
 
 import { updateForm, updateMode } from '../../state/dialog-add-workspace/actions';
-
-const PREFIX = 'AppCard';
-
-const classes = {
-  card: `${PREFIX}-card`,
-  appName: `${PREFIX}-appName`,
-  appUrl: `${PREFIX}-appUrl`,
-  paperIcon: `${PREFIX}-paperIcon`,
-  actionContainer: `${PREFIX}-actionContainer`,
-  actionButton: `${PREFIX}-actionButton`,
-  infoContainer: `${PREFIX}-infoContainer`,
-};
-
-const StyledPaper = styled(Paper)((
-  {
-    theme,
-  },
-) => ({
-  [`&.${classes.card}`]: {
-    width: '100%',
-    boxSizing: 'border-box',
-    paddingLeft: theme.spacing(1),
-    paddingRight: theme.spacing(1),
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 52,
-    marginTop: theme.spacing(1),
-    border: theme.palette.mode === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)',
-  },
-
-  [`& .${classes.appName}`]: {
-    overflow: 'hidden',
-    whiteSpace: 'nowrap',
-    textOverflow: 'ellipsis',
-    fontWeight: 500,
-  },
-
-  [`& .${classes.appUrl}`]: {
-    overflow: 'hidden',
-    whiteSpace: 'nowrap',
-    textOverflow: 'ellipsis',
-  },
-
-  [`& .${classes.paperIcon}`]: {
-    width: 40,
-    height: 40,
-    borderRadius: 8,
-    border: theme.palette.mode === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)',
-  },
-
-  [`& .${classes.actionContainer}`]: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingLeft: theme.spacing(1),
-  },
-
-  [`& .${classes.actionButton}`]: {
-    minWidth: 'auto',
-    marginLeft: theme.spacing(1),
-  },
-
-  [`& .${classes.infoContainer}`]: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    paddingLeft: theme.spacing(1),
-    paddingRight: theme.spacing(1),
-    flex: 1,
-    overflow: 'hidden',
-  },
-}));
 
 const AppCard = (props) => {
   const {
@@ -108,25 +36,76 @@ const AppCard = (props) => {
   const dispatch = useDispatch();
 
   return (
-    <StyledPaper elevation={0} className={classes.card} square>
-      <img
+    <Paper
+      elevation={0}
+      sx={{
+        width: '100%',
+        boxSizing: 'border-box',
+        px: 1,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 52,
+        mt: 1,
+        border: (theme) => (theme.palette.mode === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)'),
+      }}
+      square
+    >
+      <Box
+        component="img"
         alt={name}
-        className={classes.paperIcon}
+        sx={{
+          width: 40,
+          height: 40,
+          borderRadius: 2,
+          border: (theme) => (theme.palette.mode === 'dark' ? 'none' : '1px solid rgba(0, 0, 0, 0.12)'),
+        }}
         src={icon128 || (isUrl(icon) ? icon : `file://${icon}`)}
       />
-      <div className={classes.infoContainer}>
-        <Typography variant="subtitle2" className={classes.appName}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          px: 1,
+          flex: 1,
+          overflow: 'hidden',
+        }}
+      >
+        <Typography
+          variant="subtitle2"
+          sx={{
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+            fontWeight: 500,
+          }}
+        >
           {name}
         </Typography>
-        <Typography variant="body2" color="textSecondary" className={classes.appUrl}>
+        <Typography
+          variant="body2"
+          color="textSecondary"
+          sx={{
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+          }}
+        >
           {extractHostname(url)}
         </Typography>
-      </div>
-      <div className={classes.actionContainer}>
+      </Box>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          pl: 1,
+        }}
+      >
         <IconButton
           size="small"
           aria-label="More"
-          className={classes.topRight}
           onClick={() => {
             const template = [
               {
@@ -148,7 +127,10 @@ const AppCard = (props) => {
           <MoreVertIcon fontSize="small" />
         </IconButton>
         <Button
-          className={classes.actionButton}
+          sx={{
+            minWidth: 'auto',
+            ml: 1,
+          }}
           color="primary"
           size="small"
           variant="contained"
@@ -180,8 +162,8 @@ const AppCard = (props) => {
         >
           Add
         </Button>
-      </div>
-    </StyledPaper>
+      </Box>
+    </Paper>
   );
 };
 

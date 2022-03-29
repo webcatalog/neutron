@@ -12,7 +12,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Divider from '@mui/material/Divider';
 
-import makeStyles from '@mui/styles/makeStyles';
+// import makeStyles from '@mui/styles/makeStyles';
 
 import { useSelector } from 'react-redux';
 
@@ -25,28 +25,7 @@ import {
   requestSetPreference,
 } from '../../../senders';
 
-const useStyles = makeStyles((theme) => ({
-  selectRoot: {
-    borderRadius: theme.spacing(0.5),
-    fontSize: '0.84375rem',
-    marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(1),
-  },
-  select: {
-    paddingTop: theme.spacing(1),
-    paddingRight: 26,
-    paddingBottom: theme.spacing(1),
-    paddingLeft: theme.spacing(1.5),
-  },
-  refreshEvery: {
-    float: 'right',
-    paddingRight: theme.spacing(1),
-  },
-}));
-
 const SectionPerformance = () => {
-  const classes = useStyles();
-
   const hibernateUnusedWorkspacesAtLaunch = useSelector(
     (state) => state.preferences.hibernateUnusedWorkspacesAtLaunch,
   );
@@ -77,7 +56,12 @@ const SectionPerformance = () => {
       <ListItem>
         <ListItemText
           primary={`Put inactive ${getWorkspaceFriendlyName(true).toLowerCase()} to sleep after`}
-          classes={{ primary: classes.refreshEvery }}
+          sx={{
+            '& .MuiListItemText-primary': {
+              float: 'right',
+              pr: 1,
+            },
+          }}
         />
         <Select
           value={hibernateWhenUnusedTimeout}
@@ -88,10 +72,16 @@ const SectionPerformance = () => {
           variant="filled"
           disableUnderline
           margin="dense"
-          classes={{
-            root: classes.select,
+          sx={{
+            borderRadius: 0.5,
+            fontSize: '0.84375rem',
+            my: 1,
+            '& .MuiSelect-select': {
+              py: 1,
+              pr: 3.25,
+              pl: 1.5,
+            },
           }}
-          className={classes.selectRoot}
           disabled={!hibernateWhenUnused}
         >
           {autoHibernateTimeouts.map((opt) => (

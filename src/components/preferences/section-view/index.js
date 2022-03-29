@@ -11,7 +11,7 @@ import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Switch from '@mui/material/Switch';
-import makeStyles from '@mui/styles/makeStyles';
+import { Box } from '@mui/material';
 
 import { useSelector } from 'react-redux';
 
@@ -24,22 +24,7 @@ import {
   enqueueRequestRestartSnackbar,
 } from '../../../senders';
 
-const useStyles = makeStyles((theme) => ({
-  selectRoot: {
-    borderRadius: theme.spacing(0.5),
-    fontSize: '0.84375rem',
-  },
-  select: {
-    paddingTop: theme.spacing(1),
-    paddingRight: 26,
-    paddingBottom: theme.spacing(1),
-    paddingLeft: theme.spacing(1.5),
-  },
-}));
-
 const SectionAppearance = () => {
-  const classes = useStyles();
-
   const alwaysOnTop = useSelector((state) => state.preferences.alwaysOnTop);
   const attachToMenubar = useSelector((state) => state.preferences.attachToMenubar);
   const navigationBar = useSelector((state) => state.preferences.navigationBar);
@@ -56,7 +41,7 @@ const SectionAppearance = () => {
   return (
     <List disablePadding dense>
       {!isMenubarBrowser() && (
-        <>
+        <Box>
           <ListItem>
             <ListItemText
               primary={`Show ${getWorkspaceFriendlyName().toLowerCase()} bar`}
@@ -87,10 +72,16 @@ const SectionAppearance = () => {
               variant="filled"
               disableUnderline
               margin="dense"
-              classes={{
-                root: classes.select,
+              sx={{
+                borderRadius: 0.5,
+                fontSize: '0.84375rem',
+                my: 1,
+                '& .MuiSelect-select': {
+                  py: 1,
+                  pr: 3.25,
+                  pl: 1.5,
+                },
               }}
-              className={classes.selectRoot}
             >
               <MenuItem
                 value="compact"
@@ -116,10 +107,16 @@ const SectionAppearance = () => {
               variant="filled"
               disableUnderline
               margin="dense"
-              classes={{
-                root: classes.select,
+              sx={{
+                borderRadius: 0.5,
+                fontSize: '0.84375rem',
+                my: 1,
+                '& .MuiSelect-select': {
+                  py: 1,
+                  pr: 3.25,
+                  pl: 1.5,
+                },
               }}
-              className={classes.selectRoot}
               disabled={sidebarSize === 'expanded'}
             >
               {sidebarSize === 'expanded' && (
@@ -166,10 +163,10 @@ const SectionAppearance = () => {
               />
             </ListItemSecondaryAction>
           </ListItem>
-        </>
+        </Box>
       )}
       {window.process.platform === 'darwin' && (
-      <>
+      <Box>
         {!isMenubarBrowser() && <Divider />}
         <ListItem>
           <ListItemText
@@ -233,7 +230,7 @@ const SectionAppearance = () => {
             </ListItem>
           </>
         )}
-      </>
+      </Box>
       )}
       <Divider />
       <ListItem>
