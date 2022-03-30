@@ -45,6 +45,14 @@ const AppWrapper = ({ children }) => {
         main: red[500],
         dark: red[700],
       },
+      // config taken from MUI V4
+      background: shouldUseDarkColors ? {
+        paper: '#424242',
+        default: '#303030',
+      } : {
+        paper: '#fff',
+        default: '#fafafa',
+      },
     },
   };
 
