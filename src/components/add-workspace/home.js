@@ -5,13 +5,14 @@ import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import AppSearchAPIConnector from '@elastic/search-ui-app-search-connector';
-import { SearchProvider, WithSearch, Paging } from '@elastic/react-search-ui';
+import { SearchProvider, WithSearch } from '@elastic/react-search-ui';
 import '@elastic/react-search-ui-views/lib/styles/styles.css';
 
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import SearchIcon from '@material-ui/icons/Search';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Pagination from '@material-ui/lab/Pagination';
 
 import connectComponent from '../../helpers/connect-component';
 import getStaticGlobal from '../../helpers/get-static-global';
@@ -61,6 +62,10 @@ const styles = (theme) => ({
     bottom: 5,
     left: 5,
     zIndex: 2,
+  },
+  pagination: {
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
   },
 });
 
@@ -160,6 +165,9 @@ const Home = ({ classes }) => {
               searchTerm,
               setSearchTerm,
               wasSearched,
+              current,
+              totalPages,
+              setCurrent,
             }) => ({
               error,
               isLoading,
@@ -167,6 +175,9 @@ const Home = ({ classes }) => {
               searchTerm,
               setSearchTerm,
               wasSearched,
+              current,
+              totalPages,
+              setCurrent,
             })}
           >
             {({
@@ -176,6 +187,9 @@ const Home = ({ classes }) => {
               searchTerm,
               setSearchTerm,
               wasSearched,
+              current,
+              totalPages,
+              setCurrent,
             }) => {
               if (error) {
                 return (
@@ -242,7 +256,15 @@ const Home = ({ classes }) => {
                   ))}
                   <SubmitAppCard />
                   <Grid container justify="center">
-                    <Paging />
+                    <Pagination
+                      count={totalPages}
+                      page={current}
+                      variant="outlined"
+                      onChange={(e, page) => {
+                        setCurrent(page);
+                      }}
+                      className={classes.pagination}
+                    />
                   </Grid>
                 </>
               );
