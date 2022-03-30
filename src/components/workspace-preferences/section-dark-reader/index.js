@@ -15,8 +15,6 @@ import Divider from '@mui/material/Divider';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import getStaticGlobal from '../../../helpers/get-static-global';
-
 import { updateForm } from '../../../state/dialog-workspace-preferences/actions';
 
 const SectionDarkReader = () => {
@@ -44,18 +42,10 @@ const SectionDarkReader = () => {
       <ListItem>
         <ListItemText
           primary="Dark Reader"
-          secondary={getStaticGlobal('darkReaderExtensionDetected')
-            ? 'The built-in Dark Reader feature has been taken over by the external Dark Reader extension.'
-            : 'Create unofficial dark theme for every web service & account.'}
+          secondary="Create unofficial dark theme for every web service & account."
         />
         <Select
-          value={(() => {
-            if (getStaticGlobal('darkReaderExtensionDetected')) {
-              return false;
-            }
-            return formDarkReader != null ? formDarkReader : 'global';
-          })()}
-          disabled={getStaticGlobal('darkReaderExtensionDetected')}
+          value={formDarkReader != null ? formDarkReader : 'global'}
           onChange={(e) => dispatch(updateForm({
             preferences: {
               darkReader: e.target.value !== 'global' ? e.target.value : null,
@@ -79,8 +69,8 @@ const SectionDarkReader = () => {
           <MenuItem dense value={false}>No</MenuItem>
         </Select>
       </ListItem>
-      {formDarkReader && !getStaticGlobal('darkReaderExtensionDetected') && <Divider />}
-      {formDarkReader && !getStaticGlobal('darkReaderExtensionDetected') && (
+      {formDarkReader && <Divider />}
+      {formDarkReader && (
         <ListItem>
           <ListItemText
             sx={{

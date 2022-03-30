@@ -15,8 +15,6 @@ import Divider from '@mui/material/Divider';
 
 import { useSelector } from 'react-redux';
 
-import getStaticGlobal from '../../../helpers/get-static-global';
-
 import {
   requestSetPreference,
 } from '../../../senders';
@@ -33,23 +31,19 @@ const SectionDarkReader = () => {
       <ListItem>
         <ListItemText
           primary="Dark Reader"
-          secondary={getStaticGlobal('darkReaderExtensionDetected')
-            ? 'The built-in Dark Reader feature has been taken over by the external Dark Reader extension.'
-            : 'Create unofficial dark theme for every web service & account.'}
+          secondary="Create unofficial dark theme for every web service & account."
         />
         <ListItemSecondaryAction>
           <Switch
             edge="end"
             color="primary"
-            checked={getStaticGlobal('darkReaderExtensionDetected') ? false : darkReader}
-            disabled={getStaticGlobal('darkReaderExtensionDetected')}
+            checked={darkReader}
             onChange={(e) => {
               requestSetPreference('darkReader', e.target.checked);
             }}
           />
         </ListItemSecondaryAction>
       </ListItem>
-      {!getStaticGlobal('darkReaderExtensionDetected') && (
       <>
         <Divider />
         <ListItem>
@@ -80,7 +74,7 @@ const SectionDarkReader = () => {
                     },
                   }}
                   value={darkReaderBrightness - 100}
-                  disabled={getStaticGlobal('darkReaderExtensionDetected') || !darkReader}
+                  disabled={!darkReader}
                   aria-labelledby="brightness-slider"
                   valueLabelDisplay="auto"
                   step={5}
@@ -123,7 +117,7 @@ const SectionDarkReader = () => {
                     },
                   }}
                   value={darkReaderContrast - 100}
-                  disabled={getStaticGlobal('darkReaderExtensionDetected') || !darkReader}
+                  disabled={!darkReader}
                   aria-labelledby="contrast-slider"
                   valueLabelDisplay="auto"
                   step={5}
@@ -166,7 +160,7 @@ const SectionDarkReader = () => {
                     },
                   }}
                   value={darkReaderSepia}
-                  disabled={getStaticGlobal('darkReaderExtensionDetected') || !darkReader}
+                  disabled={!darkReader}
                   aria-labelledby="sepia-slider"
                   valueLabelDisplay="auto"
                   step={5}
@@ -205,7 +199,7 @@ const SectionDarkReader = () => {
                     },
                   }}
                   value={darkReaderGrayscale}
-                  disabled={getStaticGlobal('darkReaderExtensionDetected') || !darkReader}
+                  disabled={!darkReader}
                   aria-labelledby="grayscale-slider"
                   valueLabelDisplay="auto"
                   step={5}
@@ -226,7 +220,6 @@ const SectionDarkReader = () => {
           </ListItemText>
         </ListItem>
       </>
-      )}
     </List>
   );
 };

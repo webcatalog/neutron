@@ -15,8 +15,6 @@ export const isDefaultBrowserAsync = () => ipcRenderer.invoke('is-default-browse
 export const isDefaultMailClientAsync = () => ipcRenderer.invoke('is-default-mail-client');
 export const isDefaultCalendarAppAsync = () => ipcRenderer.invoke('is-default-calendar-app');
 export const getIapFormattedPriceAsync = (productIdentifier) => ipcRenderer.invoke('get-iap-formatted-price', productIdentifier);
-export const getExtensionFromProfileAsync = (browserId, profileDirName) => ipcRenderer.invoke('get-extensions-from-profile', browserId, profileDirName);
-export const getExtensionSourcesAsync = () => ipcRenderer.invoke('get-extension-sources');
 export const getDesktopCapturerSourcesAsync = (options) => ipcRenderer.invoke('get-desktop-capturer-sources', options);
 
 // Permission

@@ -6159,13 +6159,6 @@ electron-builder@22.14.13:
     update-notifier "^5.1.0"
     yargs "^17.0.1"
 
-electron-chrome-extensions@3.9.0:
-  version "3.9.0"
-  resolved "https://registry.yarnpkg.com/electron-chrome-extensions/-/electron-chrome-extensions-3.9.0.tgz#9da7a56d6949df419d054a182a9ef9cbe9308167"
-  integrity sha512-Q5E4n8ipsM1kpnZrOfDNpqRsZ1y1R8P62V/i+pDX4FNBXnt5+KgPTNxdffSTOk1Yjfo85hKkQRY4XxbErQgGUA==
-  dependencies:
-    debug "^4.3.1"
-
 electron-context-menu@3.1.2:
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/electron-context-menu/-/electron-context-menu-3.1.2.tgz#0f550e47df39cb25c03e0f4bf840ce5c9fefcdd5"
