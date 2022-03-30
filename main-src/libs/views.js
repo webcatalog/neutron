@@ -352,6 +352,108 @@ const getSession = (workspaceId) => {
   return ses;
 };
 
+const getWindowOpenHandler = (contents, workspaceId) => (details) => {
+  const { url: nextUrl, disposition } = details;
+
+  const appUrl = getWorkspace(workspaceId).homeUrl || appJson.url;
+  const appDomain = extractDomain(appUrl);
+  const currentUrl = contents.getURL();
+  const currentDomain = extractDomain(currentUrl);
+  const nextDomain = extractDomain(nextUrl);
+
+  // Conditions are listed by order of priority
+  // check external rule
+  // https://docs.webcatalog.io/article/43-how-to-define-external-urls
+  const externalUrlRule = getWorkspacePreference(workspaceId, 'externalUrlRule') || getPreference('externalUrlRule');
+  if (nextUrl && externalUrlRule) {
+    const re = new RegExp(`^${externalUrlRule}$`, 'i');
+    if (re.test(nextUrl)) {
+      shell.openExternal(nextUrl);
+      return { action: 'deny' };
+    }
+  }
+
+  // check defined internal URL rule
+  const internalUrlRule = getWorkspacePreference(workspaceId, 'internalUrlRule') || getPreference('internalUrlRule');
+  if (nextUrl && internalUrlRule) {
+    const re = new RegExp(`^${internalUrlRule}$`, 'i');
+    if (re.test(nextUrl)) {
+      return {
+        action: 'allow',
+        overrideBrowserWindowOptions: {
+          frame: !getPreference('popupFrameless'),
+          titleBarStyle: !getPreference('popupTitleBar') ? 'hidden' : 'default',
+        },
+      };
+    }
+  }
+
+  // regular new-window event
+  // or if in Google Drive app, open Google Docs files internally https://github.com/webcatalog/webcatalog-app/issues/800
+  // the next external link request will be opened in new window
+  if (
+    disposition === 'new-window'
+    || disposition === 'default'
+    || (appDomain === 'drive.google.com' && nextDomain === 'docs.google.com')
+  ) {
+    return {
+      action: 'allow',
+      overrideBrowserWindowOptions: {
+        frame: !getPreference('popupFrameless'),
+        titleBarStyle: !getPreference('popupTitleBar') ? 'hidden' : 'default',
+      },
+    };
+  }
+
+  // load in same window
+  if (
+    // https://app.slack.com/free-willy/: Slack call -> should still be opened in new window
+    (appDomain && nextDomain && appDomain.endsWith('slack.com') && nextDomain.endsWith('slack.com') && !nextUrl.startsWith('https://app.slack.com/free-willy/'))
+    // Google: Add account
+    || nextDomain === 'accounts.google.com'
+    // Google: Switch account
+    || (
+      nextDomain && nextDomain.indexOf('google.com') > 0
+      && isInternalUrl(nextUrl, [appUrl, currentUrl])
+      && (
+        (nextUrl.indexOf('authuser=') > -1) // https://drive.google.com/drive/u/1/priority?authuser=2 (has authuser query)
+        || (/\/u\/[0-9]+\/{0,1}$/.test(nextUrl)) // https://mail.google.com/mail/u/1/ (ends with /u/1/)
+      )
+    )
+    // https://github.com/webcatalog/webcatalog-app/issues/315
+    || (appDomain && nextDomain && (appDomain.includes('asana.com') || currentDomain.includes('asana.com')) && nextDomain.includes('asana.com'))
+    // handle OneDrive login URL
+    // https://github.com/webcatalog/webcatalog-app/issues/1250
+    || (nextUrl && nextUrl.startsWith('https://go.microsoft.com/fwlink/p/?LinkID=2119709'))
+    || (nextUrl && nextUrl.startsWith('https://go.microsoft.com/fwlink/p/?LinkID=2116067'))
+  ) {
+    contents.loadURL(nextUrl);
+    return { action: 'deny' };
+  }
+
+  // open new window if the link is internal
+  if (isInternalUrl(nextUrl, [appUrl, currentUrl])) {
+    return {
+      action: 'allow',
+      overrideBrowserWindowOptions: {
+        frame: !getPreference('popupFrameless'),
+        titleBarStyle: !getPreference('popupTitleBar') ? 'hidden' : 'default',
+      },
+    };
+  }
+
+  // open external url in browser
+  if (
+    nextDomain != null
+    && (disposition === 'foreground-tab' || disposition === 'background-tab')
+  ) {
+    shell.openExternal(nextUrl);
+    return { action: 'deny' };
+  }
+
+  return { action: 'allow' };
+};
+
 const addViewAsync = async (browserWindow, workspace) => {
   const viewId = workspace.id;
 
@@ -664,7 +766,19 @@ const addViewAsync = async (browserWindow, workspace) => {
     }
   });
 
-  const buildContextMenu = (contents, openLinkInNewWindow) => {
+  const openLinkInNewWindow = (url) => {
+    const popupWin = new BrowserWindow({
+      width: 800,
+      height: 600,
+      frame: !getPreference('popupFrameless'),
+      titleBarStyle: !getPreference('popupTitleBar') ? 'hidden' : 'default',
+      webPreferences: sharedWebPreferences,
+    });
+
+    popupWin.loadURL(url);
+  };
+
+  const buildContextMenu = (contents) => {
     // Menu
     const contextMenuBuilder = new ContextMenuBuilder(
       contents,
@@ -690,18 +804,7 @@ const addViewAsync = async (browserWindow, workspace) => {
 
             menu.append(new MenuItem({
               label: 'Open Link in New Window',
-              click: () => {
-                // trigger the 'new-window' event manually
-                openLinkInNewWindow(
-                  {
-                    sender: contents,
-                    preventDefault: () => {},
-                  },
-                  info.linkURL,
-                  '', // frameName
-                  'neutron:new-window-forced',
-                );
-              },
+              click: () => openLinkInNewWindow(info.linkURL),
             }));
 
             menu.append(new MenuItem({ type: 'separator' }));
@@ -849,233 +952,25 @@ const addViewAsync = async (browserWindow, workspace) => {
     });
   };
 
-  const handleNewWindow = (
-    e,
-    nextUrl,
-    frameName,
-    disposition,
-    options,
-    additionalFeatures,
-    referrer,
-    postBody,
-  ) => {
-    const appUrl = getWorkspace(workspace.id).homeUrl || appJson.url;
-    const appDomain = extractDomain(appUrl);
-    const currentUrl = e.sender.getURL();
-    const currentDomain = extractDomain(currentUrl);
-    const nextDomain = extractDomain(nextUrl);
+  view.webContents.setWindowOpenHandler(getWindowOpenHandler(view.webContents, workspace.id));
+  const handleDidCreateWindow = (popupWin) => {
+    // WebCatalog internal value to determine whether BrowserWindow is popup
+    popupWin.isPopup = true;
+    popupWin.webContents.isPopup = true;
+    popupWin.setMenuBarVisibility(false);
 
-    const openInNewWindow = (forced) => {
-      // https://gist.github.com/Gvozd/2cec0c8c510a707854e439fb15c561b0
-      e.preventDefault();
+    popupWin.webContents.setWindowOpenHandler(
+      getWindowOpenHandler(popupWin.webContents, workspace.id),
+    );
 
-      // use user preference unless the action is forced
-      if (!forced) {
-        const alwaysOpenInMainWindow = getWorkspacePreference(workspace.id, 'alwaysOpenInMainWindow') == null
-          ? getPreference('alwaysOpenInMainWindow')
-          : getWorkspacePreference(workspace.id, 'alwaysOpenInMainWindow');
-        if (alwaysOpenInMainWindow) {
-          e.sender.loadURL(nextUrl);
-          return;
-        }
-      }
-
-      // have to use options.webContents
-      // because if not, it would break certain sites, such as Gmail
-      // but avoid using it when opening Google Meet/Google login link
-      // because somehow options.webContents doesn't let us configure UA
-      const useProvidedOptions = options && options.webContents && nextDomain !== 'meet.google.com';
-      const newOptions = useProvidedOptions ? options : {
-        show: true,
-        width: options && options.width ? options.width : 1366,
-        height: options && options.width ? options.height : 768,
-        x: options && options.x ? options.x : undefined,
-        y: options && options.y ? options.y : undefined,
-        webPreferences: sharedWebPreferences,
-      };
-
-      // customize popup window
-      // based on user preferences
-      if (getPreference('popupFrameless')) {
-        newOptions.frame = false;
-      } else if (!getPreference('popupTitleBar')) {
-        newOptions.titleBarStyle = 'hidden';
-      }
-
-      const popupWin = new BrowserWindow(newOptions);
-      // WebCatalog internal value to determine whether BrowserWindow is popup
-      popupWin.isPopup = true;
-      popupWin.webContents.isPopup = true;
-      popupWin.setMenuBarVisibility(false);
-      popupWin.webContents.on('new-window', handleNewWindow);
-      popupWin.webContents.on('did-navigate', (_, url) => {
-        handleDidNavigateCompability(popupWin.webContents, url);
-      });
-      buildContextMenu(popupWin.webContents, handleNewWindow);
-
-      // if options.webContents is not used
-      // loadURL won't be triggered automatically
-      if (!useProvidedOptions) {
-        const loadOptions = {};
-        if (referrer) {
-          loadOptions.httpReferrer = referrer;
-        }
-        if (postBody != null) {
-          const { data, contentType, boundary } = postBody;
-          loadOptions.postData = data;
-          loadOptions.extraHeaders = `content-type: ${contentType}; boundary=${boundary}`;
-        }
-        popupWin.loadURL(nextUrl, loadOptions);
-      }
-
-      e.newGuest = popupWin;
-    };
-
-    // 'neutron:new-window-forced' // use internally by Neutron to force opening new window
-    if (disposition === 'neutron:new-window-forced') {
-      openInNewWindow(true);
-      return;
-    }
-
-    // Conditions are listed by order of priority
-    // check external rule
-    // https://docs.webcatalog.io/article/43-how-to-define-external-urls
-    const externalUrlRule = getWorkspacePreference(workspace.id, 'externalUrlRule') || getPreference('externalUrlRule');
-    if (nextUrl && externalUrlRule) {
-      const re = new RegExp(`^${externalUrlRule}$`, 'i');
-      if (re.test(nextUrl)) {
-        e.preventDefault();
-        shell.openExternal(nextUrl);
-        return;
-      }
-    }
-
-    // check defined internal URL rule
-    const internalUrlRule = getWorkspacePreference(workspace.id, 'internalUrlRule') || getPreference('internalUrlRule');
-    if (nextUrl && internalUrlRule) {
-      const re = new RegExp(`^${internalUrlRule}$`, 'i');
-      if (re.test(nextUrl)) {
-        openInNewWindow();
-        return;
-      }
-    }
-
-    // regular new-window event
-    // or if in Google Drive app, open Google Docs files internally https://github.com/webcatalog/webcatalog-app/issues/800
-    // the next external link request will be opened in new window
-    if (
-      disposition === 'new-window'
-      || disposition === 'default'
-      || (appDomain === 'drive.google.com' && nextDomain === 'docs.google.com')
-    ) {
-      openInNewWindow();
-      return;
-    }
-
-    // load in same window
-    if (
-      // https://app.slack.com/free-willy/: Slack call -> should still be opened in new window
-      (appDomain && nextDomain && appDomain.endsWith('slack.com') && nextDomain.endsWith('slack.com') && !nextUrl.startsWith('https://app.slack.com/free-willy/'))
-      // Google: Add account
-      || nextDomain === 'accounts.google.com'
-      // Google: Switch account
-      || (
-        nextDomain && nextDomain.indexOf('google.com') > 0
-        && isInternalUrl(nextUrl, [appUrl, currentUrl])
-        && (
-          (nextUrl.indexOf('authuser=') > -1) // https://drive.google.com/drive/u/1/priority?authuser=2 (has authuser query)
-          || (/\/u\/[0-9]+\/{0,1}$/.test(nextUrl)) // https://mail.google.com/mail/u/1/ (ends with /u/1/)
-        )
-      )
-      // https://github.com/webcatalog/webcatalog-app/issues/315
-      || (appDomain && nextDomain && (appDomain.includes('asana.com') || currentDomain.includes('asana.com')) && nextDomain.includes('asana.com'))
-      // handle OneDrive login URL
-      // https://github.com/webcatalog/webcatalog-app/issues/1250
-      || (nextUrl && nextUrl.startsWith('https://go.microsoft.com/fwlink/p/?LinkID=2119709'))
-      || (nextUrl && nextUrl.startsWith('https://go.microsoft.com/fwlink/p/?LinkID=2116067'))
-    ) {
-      e.preventDefault();
-      e.sender.loadURL(nextUrl);
-      return;
-    }
-
-    // open new window if the link is internal
-    if (isInternalUrl(nextUrl, [appUrl, currentUrl])) {
-      openInNewWindow();
-      return;
-    }
-
-    // special case for Roam Research
-    // if popup window is not opened and loaded, Roam crashes (shows white page)
-    // https://github.com/webcatalog/webcatalog-app/issues/793
-    if (
-      appDomain === 'roamresearch.com'
-      && nextDomain != null
-      && (disposition === 'foreground-tab' || disposition === 'background-tab')
-    ) {
-      e.preventDefault();
-      shell.openExternal(nextUrl);
-
-      // mock window
-      // close as soon as it did-navigate
-      const newOptions = {
-        ...options,
-        show: false,
-      };
-      const popupWin = new BrowserWindow(newOptions);
-      popupWin.once('did-navigate', () => {
-        popupWin.close();
-      });
-      e.newGuest = popupWin;
-      return;
-    }
-
-    // open external url in browser
-    if (
-      nextDomain != null
-      && (disposition === 'foreground-tab' || disposition === 'background-tab')
-    ) {
-      e.preventDefault();
-      shell.openExternal(nextUrl);
-      return;
-    }
-
-    // App tries to open external link using JS
-    // nextURL === 'about:blank' but then window will redirect to the external URL
-    // https://github.com/webcatalog/webcatalog-app/issues/467#issuecomment-569857721
-    if (
-      nextDomain === null
-      && (disposition === 'foreground-tab' || disposition === 'background-tab')
-    ) {
-      e.preventDefault();
-      const newOptions = {
-        ...options,
-        show: false,
-      };
-      const popupWin = new BrowserWindow(newOptions);
-      buildContextMenu(popupWin.webContents, handleNewWindow);
-      // WebCatalog internal value to determine whether BrowserWindow is popup
-      popupWin.isPopup = true;
-      popupWin.webContents.isPopup = true;
-      popupWin.setMenuBarVisibility(false);
-      popupWin.webContents.on('new-window', handleNewWindow);
-      popupWin.webContents.once('will-navigate', (_, url) => {
-        // if the window is used for the current app, then use default behavior
-        if (isInternalUrl(url, [appUrl, currentUrl])) {
-          popupWin.show();
-        } else { // if not, open in browser
-          e.preventDefault();
-          shell.openExternal(url);
-          popupWin.close();
-        }
-      });
-      popupWin.webContents.on('did-navigate', (_, url) => {
-        handleDidNavigateCompability(popupWin.webContents, url);
-      });
-      e.newGuest = popupWin;
-    }
+    popupWin.webContents.on('did-navigate', (_, url) => {
+      handleDidNavigateCompability(popupWin.webContents, url);
+    });
+    popupWin.webContents.on('did-create-window', handleDidCreateWindow);
+    buildContextMenu(popupWin.webContents);
   };
-  view.webContents.on('new-window', handleNewWindow);
+
+  view.webContents.on('did-create-window', handleDidCreateWindow);
 
   // Handle downloads
   // https://electronjs.org/docs/api/download-item
@@ -1206,7 +1101,7 @@ const addViewAsync = async (browserWindow, workspace) => {
     });
   }
 
-  buildContextMenu(view.webContents, handleNewWindow);
+  buildContextMenu(view.webContents);
 
   // Find In Page
   view.webContents.on('found-in-page', (e, result) => {
@@ -1235,15 +1130,7 @@ const addViewAsync = async (browserWindow, workspace) => {
 
   view.openInNewWindow = (url) => {
     // trigger the 'new-window' event manually
-    handleNewWindow(
-      {
-        sender: view.webContents,
-        preventDefault: () => {},
-      },
-      url || initialUrl, // if url is not set, open with initialUrl
-      '', // frameName
-      'neutron:new-window-forced',
-    );
+    openLinkInNewWindow(url || initialUrl);
   };
 
   views[viewId] = view;
