@@ -69,7 +69,6 @@ const SectionDevelopers = () => {
                 pr: 3.25,
                 pl: 1.5,
               },
-              py: 1,
             }}
           >
             <MenuItem dense value="global">{`Use global preference (${forceMobileView ? 'Yes' : 'No'})`}</MenuItem>

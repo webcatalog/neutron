@@ -92,8 +92,8 @@ const ListItemIcon = () => {
           }}
           badgeContent={(
             <Box
-              sx={(theme) => ({
-                background: theme.palette.primary.main,
+              sx={{
+                bgcolor: 'primary.main',
                 borderRadius: 12,
                 width: 24,
                 height: 24,
@@ -101,39 +101,40 @@ const ListItemIcon = () => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 fontSize: 18,
-                color: theme.palette.common.white,
-              })}
+                color: 'common.white',
+              }}
             >
               <CheckIcon fontSize="inherit" />
             </Box>
           )}
         >
           <Box
-            sx={(theme) => [
+            sx={[
               {
-                fontFamily: theme.typography.fontFamily,
+                fontFamily: 'fontFamily',
                 height: 36,
                 width: 36,
-                background: theme.palette.common.white,
-                borderRadius: 4,
-                color: theme.palette.getContrastText(theme.palette.common.white),
+                background: 'common.white',
+                borderRadius: 1,
+                color: (theme) => theme.palette.getContrastText(theme.palette.common.white),
                 fontSize: 24,
                 lineHeight: '36px',
                 textAlign: 'center',
                 fontWeight: 400,
                 textTransform: 'uppercase',
                 userSelect: 'none',
-                boxShadow: theme.palette.mode === 'dark' ? 'none' : '0 0 1px 1px rgba(0, 0, 0, 0.12)',
+                boxShadow: (theme) => (theme.palette.mode === 'dark' ? 'none' : '0 0 1px 1px rgba(0, 0, 0, 0.12)'),
                 overflow: 'hidden',
                 cursor: 'pointer',
               },
-              type === 'image' && transparentBackground && {
+              transparentBackground && {
                 background: 'transparent',
                 border: 'none',
                 borderRadius: 0,
-                color: 'text.primary',
               },
-              { boxShadow: `0 0 4px 4px ${theme.palette.primary.main}` },
+              {
+                boxShadow: (theme) => `0 0 4px 4px ${theme.palette.primary.main}`,
+              },
               ...avatarAdditionalClassnames,
             ]}
             style={(() => {
@@ -153,29 +154,28 @@ const ListItemIcon = () => {
         <Box
           role="button"
           tabIndex={0}
-          sx={(theme) => [
+          sx={[
             {
-              fontFamily: theme.typography.fontFamily,
+              fontFamily: 'fontFamily',
               height: 36,
               width: 36,
-              background: theme.palette.common.white,
-              borderRadius: 4,
-              color: theme.palette.getContrastText(theme.palette.common.white),
+              background: 'common.white',
+              borderRadius: 1,
+              color: (theme) => theme.palette.getContrastText(theme.palette.common.white),
               fontSize: 24,
               lineHeight: '36px',
               textAlign: 'center',
               fontWeight: 400,
               textTransform: 'uppercase',
               userSelect: 'none',
-              boxShadow: theme.palette.mode === 'dark' ? 'none' : '0 0 1px 1px rgba(0, 0, 0, 0.12)',
+              boxShadow: (theme) => (theme.palette.mode === 'dark' ? 'none' : '0 0 1px 1px rgba(0, 0, 0, 0.12)'),
               overflow: 'hidden',
               cursor: 'pointer',
             },
-            type === 'image' && transparentBackground && {
+            transparentBackground && {
               background: 'transparent',
               border: 'none',
               borderRadius: 0,
-              color: 'text.primary',
             },
             ...avatarAdditionalClassnames,
           ]}
@@ -221,10 +221,10 @@ const ListItemIcon = () => {
               getAvatarText(id, finalName, order),
               'text',
               'Text',
-              [(theme) => ({
-                background: theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black,
-                color: theme.palette.getContrastText(theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black),
-              })],
+              [{
+                background: (theme) => (theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black),
+                color: (theme) => theme.palette.getContrastText(theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black),
+              }],
             )}
             {renderAvatar(
               <Box
@@ -274,6 +274,7 @@ const ListItemIcon = () => {
               <>
                 <Button
                   variant="outlined"
+                  color="inherit"
                   size="small"
                   disabled={downloadingIcon}
                   onClick={() => {
@@ -299,6 +300,7 @@ const ListItemIcon = () => {
                 </Typography>
                 <Button
                   variant="outlined"
+                  color="inherit"
                   size="small"
                   sx={{ mt: 1 }}
                   disabled={Boolean(downloadingIcon)}
@@ -309,6 +311,7 @@ const ListItemIcon = () => {
                 <br />
                 <Button
                   variant="outlined"
+                  color="inherit"
                   size="small"
                   sx={{ mt: 1 }}
                   disabled={Boolean(downloadingIcon)}
@@ -319,6 +322,7 @@ const ListItemIcon = () => {
                 <br />
                 <Button
                   variant="outlined"
+                  color="inherit"
                   size="small"
                   sx={{ mt: 1 }}
                   disabled={Boolean(downloadingIcon)}

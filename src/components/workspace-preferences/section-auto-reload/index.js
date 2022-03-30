@@ -77,7 +77,6 @@ const SectionAutoReload = () => {
                 pr: 3.25,
                 pl: 1.5,
               },
-              py: 1,
             }}
           >
             <MenuItem dense value="global">{`Use global preference (${autoRefresh ? 'Yes' : 'No'})`}</MenuItem>
@@ -123,7 +122,6 @@ const SectionAutoReload = () => {
                     pr: 3.25,
                     pl: 1.5,
                   },
-                  py: 1,
                 }}
               >
                 {autoRefreshIntervals.map((opt) => (
@@ -202,7 +200,6 @@ const SectionAutoReload = () => {
                     pr: 3.25,
                     pl: 1.5,
                   },
-                  py: 1,
                 }}
               >
                 <MenuItem dense value="global">{`Use global preference (${autoRefreshOnlyWhenInactive ? 'Yes' : 'No'})`}</MenuItem>

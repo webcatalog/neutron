@@ -45,7 +45,6 @@ const ListItemColor = () => {
             pr: 3.25,
             pl: 1.5,
           },
-          py: 1,
         }}
         // renderValue={(value) => camelCaseToSentenceCase(value)}
       >

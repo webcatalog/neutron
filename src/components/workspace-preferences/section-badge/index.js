@@ -45,7 +45,6 @@ const SectionBadge = () => {
               pr: 3.25,
               pl: 1.5,
             },
-            py: 1,
           }}
         >
           <MenuItem dense value="global">{`Use global preference (${unreadCountBadge ? 'Yes' : 'No'})`}</MenuItem>

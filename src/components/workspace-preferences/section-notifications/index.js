@@ -9,6 +9,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import Switch from '@mui/material/Switch';
+import { Box } from '@mui/material';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -61,7 +62,8 @@ const SectionNotifications = () => {
               <span>But for some web apps such as Gmail or Messenger</span>
               <span>, to receive notifications, you&apos;ll need to manually configure </span>
               <span>additional web app settings. </span>
-              <span
+              <Box
+                component="span"
                 role="link"
                 tabIndex={0}
                 sx={{
@@ -82,7 +84,7 @@ const SectionNotifications = () => {
                 }}
               >
                 Learn more
-              </span>
+              </Box>
               <span>.</span>
             </>
           )}

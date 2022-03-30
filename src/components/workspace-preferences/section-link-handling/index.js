@@ -90,7 +90,6 @@ const SectionLinkHandling = () => {
                 pr: 3.25,
                 pl: 1.5,
               },
-              py: 1,
             }}
           >
             <MenuItem dense value="global">{`Use global preference (${alwaysOpenInMainWindow ? 'Yes' : 'No'})`}</MenuItem>
