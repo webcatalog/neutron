@@ -191,7 +191,7 @@ const ScrollbarContainer = ({ children, sx }) => {
 
 ScrollbarContainer.propTypes = {
   children: PropTypes.node.isRequired,
-  sx: PropTypes.string.isRequired,
+  sx: PropTypes.any.isRequired,
 };
 
 const Sidebar = () => {
@@ -295,10 +295,7 @@ const Sidebar = () => {
         >
           <SortableContainer
             distance={10}
-            helperClass={{
-              cursor: 'grabbing !important',
-              pointerEvents: 'auto !important',
-            }}
+            helperClass="grabbing"
             onSortEnd={({ oldIndex, newIndex }) => {
               if (oldIndex === newIndex) return;
 
