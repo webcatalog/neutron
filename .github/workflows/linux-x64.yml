@@ -8,9 +8,8 @@ on:
     tags:
       - "v*.*.*"
   pull_request:
-    branches:
-      - master
-      - next
+    types:
+      - opened
 
 jobs:
   build:
