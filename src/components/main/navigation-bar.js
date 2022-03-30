@@ -156,7 +156,7 @@ const NavigationBar = ({
             {
               '& .MuiInputBase-input': {
                 fontSize: '0.8em',
-                px: 12,
+                px: 2,
                 py: 0.625,
               },
             },
