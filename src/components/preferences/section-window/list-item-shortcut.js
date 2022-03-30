@@ -82,7 +82,7 @@ const ListItemShortcut = () => {
                 color="inherit"
                 sx={{
                   ':hover': {
-                    backgroundColor: 'rgb(0 0 0 / 16%)',
+                    bgcolor: 'rgb(0 0 0 / 16%)',
                   },
                 }}
               >
@@ -98,7 +98,7 @@ const ListItemShortcut = () => {
           color="inherit"
           sx={{
             ':hover': {
-              backgroundColor: 'rgb(0 0 0 / 16%)',
+              bgcolor: 'rgb(0 0 0 / 16%)',
             },
           }}
           onClick={() => setOpen(false)}
@@ -110,7 +110,7 @@ const ListItemShortcut = () => {
           color="inherit"
           sx={{
             ':hover': {
-              backgroundColor: 'rgb(0 0 0 / 16%)',
+              bgcolor: 'rgb(0 0 0 / 16%)',
             },
           }}
           onClick={() => {

@@ -5,7 +5,6 @@ import React from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
 
-// import makeStyles from '@mui/styles/makeStyles';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import Paper from '@mui/material/Paper';

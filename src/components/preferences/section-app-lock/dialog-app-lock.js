@@ -205,7 +205,7 @@ const DialogAppLock = () => {
                 float: 'right',
                 ml: 1,
                 ':hover': {
-                  backgroundColor: 'rgb(0 0 0 / 16%)',
+                  bgcolor: 'rgb(0 0 0 / 16%)',
                 },
               }}
               disableElevation

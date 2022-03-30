@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
-import classnames from 'classnames';
 import Color from 'color';
 import { dialog, getCurrentWindow } from '@electron/remote';
 
@@ -14,7 +13,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Divider from '@mui/material/Divider';
 import Badge from '@mui/material/Badge';
-import makeStyles from '@mui/styles/makeStyles';
+import { Box } from '@mui/material';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -38,129 +37,7 @@ import {
 import defaultWorkspaceImageLight from '../../images/default-workspace-image-light.png';
 import defaultWorkspaceImageDark from '../../images/default-workspace-image-dark.png';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    background: theme.palette.background.paper,
-    height: '100%',
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    overflow: 'hidden',
-  },
-  content: {
-    flex: 1,
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
-    paddingTop: theme.spacing(3),
-    paddingBottom: theme.spacing(3),
-    overflow: 'auto',
-  },
-  actions: {
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
-    paddingTop: theme.spacing(1),
-    paddingBottom: theme.spacing(1),
-  },
-  button: {
-    float: 'right',
-  },
-  textField: {
-    marginBottom: theme.spacing(3),
-  },
-  avatarFlex: {
-    display: 'flex',
-    flexDirection: 'column',
-    marginTop: theme.spacing(1),
-  },
-  avatarLeft: {
-    paddingTop: theme.spacing(1),
-    paddingBottom: theme.spacing(1),
-    paddingLeft: 0,
-    paddingRight: theme.spacing(4),
-  },
-  avatarRight: {
-    flex: 1,
-    paddingTop: theme.spacing(1),
-    paddingBottom: theme.spacing(1),
-    paddingLeft: 0,
-    paddingRight: 0,
-  },
-  avatarContainer: {
-    position: 'relative',
-    float: 'left',
-    '&:not(:first-child)': {
-      marginLeft: theme.spacing(2),
-    },
-  },
-  avatar: {
-    fontFamily: theme.typography.fontFamily,
-    height: 36,
-    width: 36,
-    background: theme.palette.common.white,
-    borderRadius: 4,
-    color: theme.palette.getContrastText(theme.palette.common.white),
-    fontSize: '24px',
-    lineHeight: '36px',
-    textAlign: 'center',
-    fontWeight: 400,
-    textTransform: 'uppercase',
-    userSelect: 'none',
-    boxShadow: theme.palette.mode === 'dark' ? 'none' : '0 0 1px 1px rgba(0, 0, 0, 0.12)',
-    overflow: 'hidden',
-    cursor: 'pointer',
-  },
-  avatarSelected: {
-    boxShadow: `0 0 4px 4px ${theme.palette.primary.main}`,
-  },
-  avatarSelectedBadgeContent: {
-    background: theme.palette.primary.main,
-    borderRadius: 12,
-    width: 24,
-    height: 24,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    fontSize: '18px',
-    color: theme.palette.common.white,
-  },
-  transparentAvatar: {
-    background: 'transparent',
-    border: 'none',
-    borderRadius: 0,
-  },
-  avatarPicture: {
-    height: '100%',
-    width: '100%',
-  },
-  textAvatar: {
-    background: theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black,
-    color: theme.palette.getContrastText(theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black),
-  },
-  buttonBot: {
-    marginTop: theme.spacing(1),
-  },
-  caption: {
-    display: 'block',
-  },
-  colorPickerRow: {
-    paddingBottom: theme.spacing(1),
-  },
-  colorPicker: {
-    height: 24,
-    width: 24,
-    borderRadius: 12,
-    marginRight: theme.spacing(1),
-    cursor: 'pointer',
-    outline: 'none',
-    display: 'inline-block',
-  },
-  colorPickerSelected: {
-    boxShadow: `0 0 2px 2px ${theme.palette.primary.main}`,
-  },
-}));
-
 const AddWorkspaceCustom = () => {
-  const classes = useStyles();
   const dispatch = useDispatch();
 
   const color = useSelector((state) => state.dialogAddWorkspace.form.color);
@@ -188,7 +65,16 @@ const AddWorkspaceCustom = () => {
   const backgroundColor = color ? themeColors[color][600] : null;
 
   const renderAvatar = (avatarContent, type, title = null, avatarAdditionalClassnames = []) => (
-    <div className={classes.avatarContainer} title={title}>
+    <Box
+      sx={{
+        position: 'relative',
+        float: 'left',
+        '&:not(:first-child)': {
+          ml: 2,
+        },
+      }}
+      title={title}
+    >
       {selectedIconType === type ? (
         <Badge
           anchorOrigin={{
@@ -196,18 +82,52 @@ const AddWorkspaceCustom = () => {
             horizontal: 'right',
           }}
           badgeContent={(
-            <div className={classes.avatarSelectedBadgeContent}>
+            <Box
+              sx={{
+                bgcolor: 'primary.main',
+                borderRadius: 12,
+                width: 24,
+                height: 24,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                fontSize: 18,
+                color: 'common.white',
+              }}
+            >
               <CheckIcon fontSize="inherit" />
-            </div>
+            </Box>
           )}
         >
-          <div
-            className={classnames(
-              classes.avatar,
-              transparentBackground && classes.transparentAvatar,
-              classes.avatarSelected,
+          <Box
+            sx={[
+              {
+                fontFamily: 'fontFamily',
+                height: 36,
+                width: 36,
+                background: 'common.white',
+                borderRadius: 1,
+                color: (theme) => theme.palette.getContrastText(theme.palette.common.white),
+                fontSize: 24,
+                lineHeight: '36px',
+                textAlign: 'center',
+                fontWeight: 400,
+                textTransform: 'uppercase',
+                userSelect: 'none',
+                boxShadow: (theme) => (theme.palette.mode === 'dark' ? 'none' : '0 0 1px 1px rgba(0, 0, 0, 0.12)'),
+                overflow: 'hidden',
+                cursor: 'pointer',
+              },
+              transparentBackground && {
+                background: 'transparent',
+                border: 'none',
+                borderRadius: 0,
+              },
+              {
+                boxShadow: (theme) => `0 0 4px 4px ${theme.palette.primary.main}`,
+              },
               ...avatarAdditionalClassnames,
-            )}
+            ]}
             style={(() => {
               if (type === 'text' && backgroundColor && !transparentBackground) {
                 return {
@@ -219,29 +139,65 @@ const AddWorkspaceCustom = () => {
             })()}
           >
             {avatarContent}
-          </div>
+          </Box>
         </Badge>
       ) : (
-        <div
+        <Box
           role="button"
           tabIndex={0}
-          className={classnames(
-            classes.avatar,
-            transparentBackground && classes.transparentAvatar,
+          sx={[
+            {
+              fontFamily: 'fontFamily',
+              height: 36,
+              width: 36,
+              background: 'common.white',
+              borderRadius: 1,
+              color: (theme) => theme.palette.getContrastText(theme.palette.common.white),
+              fontSize: 24,
+              lineHeight: '36px',
+              textAlign: 'center',
+              fontWeight: 400,
+              textTransform: 'uppercase',
+              userSelect: 'none',
+              boxShadow: (theme) => (theme.palette.mode === 'dark' ? 'none' : '0 0 1px 1px rgba(0, 0, 0, 0.12)'),
+              overflow: 'hidden',
+              cursor: 'pointer',
+            },
+            transparentBackground && {
+              background: 'transparent',
+              border: 'none',
+              borderRadius: 0,
+            },
             ...avatarAdditionalClassnames,
-          )}
+          ]}
           onClick={() => dispatch(updateForm({ preferredIconType: type }))}
           onKeyDown={() => dispatch(updateForm({ preferredIconType: type }))}
         >
           {avatarContent}
-        </div>
+        </Box>
       )}
-    </div>
+    </Box>
   );
 
   return (
-    <div className={classes.root}>
-      <div className={classes.content}>
+    <Box
+      sx={{
+        background: 'background.paper',
+        height: 1,
+        width: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden',
+      }}
+    >
+      <Box
+        sx={{
+          flex: 1,
+          px: 2,
+          py: 3,
+          overflow: 'auto',
+        }}
+      >
         <TextField
           label="Name"
           error={Boolean(nameError)}
@@ -250,7 +206,7 @@ const AddWorkspaceCustom = () => {
           fullWidth
           margin="dense"
           variant="outlined"
-          className={classes.textField}
+          sx={{ mb: 3 }}
           InputLabelProps={{
             shrink: true,
           }}
@@ -265,19 +221,31 @@ const AddWorkspaceCustom = () => {
           fullWidth
           margin="dense"
           variant="outlined"
-          className={classes.textField}
+          sx={{ mb: 3 }}
           InputLabelProps={{
             shrink: true,
           }}
           value={homeUrl}
           onChange={(e) => dispatch(updateForm({ homeUrl: e.target.value }))}
         />
-        <div className={classes.colorPickerRow}>
-          <div
-            className={classnames(
-              classes.colorPicker,
-              color == null && classes.colorPickerSelected,
-            )}
+        <Box
+          sx={{ pb: 1 }}
+        >
+          <Box
+            sx={[
+              {
+                height: 24,
+                width: 24,
+                borderRadius: 12,
+                mr: 1,
+                cursor: 'pointer',
+                outline: 'none',
+                display: 'inline-block',
+              },
+              color == null && {
+                boxShadow: (theme) => `0 0 2px 2px ${theme.palette.primary.main}`,
+              },
+            ]}
             title="None"
             style={{ backgroundColor: shouldUseDarkColors ? '#fff' : '#000' }}
             aria-label="None"
@@ -291,13 +259,23 @@ const AddWorkspaceCustom = () => {
             }))}
           />
           {Object.keys(themeColors).map((val) => (
-            <div
+            <Box
               key={val}
               title={camelCaseToSentenceCase(val)}
-              className={classnames(
-                classes.colorPicker,
-                color === val && classes.colorPickerSelected,
-              )}
+              sx={[
+                {
+                  height: 24,
+                  width: 24,
+                  borderRadius: 12,
+                  mr: 1,
+                  cursor: 'pointer',
+                  outline: 'none',
+                  display: 'inline-block',
+                },
+                color === val && {
+                  boxShadow: (theme) => `0 0 2px 2px ${theme.palette.primary.main}`,
+                },
+              ]}
               style={{ backgroundColor: themeColors[val][600] }}
               aria-label={val}
               role="button"
@@ -310,19 +288,38 @@ const AddWorkspaceCustom = () => {
               }))}
             />
           ))}
-        </div>
-        <div className={classes.avatarFlex}>
-          <div className={classes.avatarLeft}>
+        </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            mt: 1,
+          }}
+        >
+          <Box
+            sx={{
+              py: 1,
+              pl: 0,
+              pr: 4,
+            }}
+          >
             {!isMenubarBrowser() && renderAvatar(
               getAvatarText(null, name, null),
               'text',
               'Text',
-              [classes.textAvatar],
+              [{
+                background: (theme) => (theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black),
+                color: (theme) => theme.palette.getContrastText(theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black),
+              }],
             )}
             {renderAvatar(
-              <img
+              <Box
+                component="img"
                 alt="Icon"
-                className={classes.avatarPicture}
+                sx={{
+                  height: 1,
+                  width: 1,
+                }}
                 src={(() => {
                   if (imgPath) return `file://${imgPath}`;
                   if (internetIcon) return internetIcon;
@@ -333,12 +330,19 @@ const AddWorkspaceCustom = () => {
               'image',
               'Image',
             )}
-          </div>
-          <div className={classes.avatarRight}>
+          </Box>
+          <Box
+            sx={{
+              flex: 1,
+              py: 1,
+              px: 0,
+            }}
+          >
             {selectedIconType === 'image' && (
               <>
                 <Button
                   variant="outlined"
+                  color="inherit"
                   size="small"
                   disabled={downloadingIcon}
                   onClick={() => {
@@ -362,13 +366,14 @@ const AddWorkspaceCustom = () => {
                 >
                   Select Local Image...
                 </Button>
-                <Typography variant="caption" className={classes.caption}>
+                <Typography variant="caption" sx={{ display: 'block' }}>
                   PNG, JPEG, GIF, TIFF or BMP.
                 </Typography>
                 <Button
                   variant="outlined"
+                  color="inherit"
                   size="small"
-                  className={classes.buttonBot}
+                  sx={{ mt: 1 }}
                   disabled={Boolean(!homeUrl || homeUrlError || downloadingIcon)}
                   onClick={() => dispatch(getIconFromInternet(true))}
                 >
@@ -377,10 +382,10 @@ const AddWorkspaceCustom = () => {
                 <br />
                 <Button
                   variant="outlined"
+                  color="inherit"
                   size="small"
-                  className={classes.buttonBot}
+                  sx={{ mt: 1 }}
                   disabled={Boolean(!homeUrl || homeUrlError || downloadingIcon)}
-                  // onClick={() => onGetIconFromAppSearch(true)}
                   onClick={() => dispatch(getIconFromAppSearch(true))}
                 >
                   {downloadingIcon ? 'Downloading...' : 'Download Icon from Our Database'}
@@ -388,8 +393,9 @@ const AddWorkspaceCustom = () => {
                 <br />
                 <Button
                   variant="outlined"
+                  color="inherit"
                   size="small"
-                  className={classes.buttonBot}
+                  sx={{ mt: 1 }}
                   disabled={Boolean(downloadingIcon)}
                   onClick={() => dispatch(updateForm({
                     imgPath: null,
@@ -415,24 +421,36 @@ const AddWorkspaceCustom = () => {
                 )}
               </>
             )}
-          </div>
-        </div>
-      </div>
+          </Box>
+        </Box>
+      </Box>
       <Divider />
-      <div className={classes.actions}>
-        <Button color="primary" variant="contained" disableElevation className={classes.button} onClick={() => dispatch(save())}>
+      <Box
+        sx={{
+          px: 2,
+          py: 1,
+        }}
+      >
+        <Button color="primary" variant="contained" disableElevation sx={{ float: 'right' }} onClick={() => dispatch(save())}>
           Add
         </Button>
         <Button
           variant="text"
+          color="inherit"
           disableElevation
-          className={classes.button}
+          sx={{
+            mr: 1,
+            float: 'right',
+            ':hover': {
+              backgroundColor: 'rgb(0 0 0 / 16%)',
+            },
+          }}
           onClick={() => dispatch(resetForm())}
         >
           Reset
         </Button>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 

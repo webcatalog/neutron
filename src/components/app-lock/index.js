@@ -17,8 +17,6 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import LockIcon from '@mui/icons-material/Lock';
 
-// import makeStyles from '@mui/styles/makeStyles';
-
 import { Box } from '@mui/material';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -194,11 +192,11 @@ const AppLock = () => {
               aria-label="Unlock with Touch ID"
               sx={{
                 mt: 2,
-                backgroundColor: 'background.paper',
+                bgcolor: 'background.paper',
                 overflow: 'hidden',
                 boxShadow: 'none',
                 '&:hover': {
-                  backgroundColor: 'background.paper',
+                  bgcolor: 'background.paper',
                   boxShadow: 2,
                 },
               }}

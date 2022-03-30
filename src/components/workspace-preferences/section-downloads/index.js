@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
-import classnames from 'classnames';
 import { dialog, getCurrentWindow } from '@electron/remote';
 
 import Divider from '@mui/material/Divider';
@@ -11,7 +10,6 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import makeStyles from '@mui/styles/makeStyles';
 
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
@@ -21,25 +19,7 @@ import isMas from '../../../helpers/is-mas';
 
 import { updateForm } from '../../../state/dialog-workspace-preferences/actions';
 
-const useStyles = makeStyles((theme) => ({
-  selectRoot: {
-    borderRadius: theme.spacing(0.5),
-    fontSize: '0.84375rem',
-  },
-  selectRootExtraMargin: {
-    marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(1),
-  },
-  select: {
-    paddingTop: theme.spacing(1),
-    paddingRight: 26,
-    paddingBottom: theme.spacing(1),
-    paddingLeft: theme.spacing(1.5),
-  },
-}));
-
 const SectionDownloads = () => {
-  const classes = useStyles();
   const dispatch = useDispatch();
 
   const askForDownloadPath = useSelector((state) => state.preferences.askForDownloadPath);
@@ -93,10 +73,15 @@ const SectionDownloads = () => {
           variant="filled"
           disableUnderline
           margin="dense"
-          classes={{
-            root: classes.select,
+          sx={{
+            borderRadius: 0.5,
+            fontSize: '0.84375rem',
+            '& .MuiSelect-select': {
+              py: 1,
+              pr: 3.25,
+              pl: 1.5,
+            },
           }}
-          className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
         >
           <MenuItem dense value="global">{`Use global preference (${askForDownloadPath ? 'Yes' : 'No'})`}</MenuItem>
           <MenuItem dense value>Yes</MenuItem>

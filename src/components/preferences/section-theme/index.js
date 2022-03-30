@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
-import classnames from 'classnames';
 
 import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
@@ -11,7 +10,6 @@ import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Avatar from '@mui/material/Avatar';
-import makeStyles from '@mui/styles/makeStyles';
 
 import { useSelector } from 'react-redux';
 
@@ -26,30 +24,7 @@ import {
   requestSetPreference,
 } from '../../../senders';
 
-const useStyles = makeStyles((theme) => ({
-  selectRoot: {
-    borderRadius: theme.spacing(0.5),
-    fontSize: '0.84375rem',
-  },
-  selectRootExtraMargin: {
-    marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(1),
-  },
-  select: {
-    paddingTop: theme.spacing(1),
-    paddingRight: 26,
-    paddingBottom: theme.spacing(1),
-    paddingLeft: theme.spacing(1.5),
-  },
-  avatar: {
-    width: theme.spacing(3),
-    height: theme.spacing(3),
-  },
-}));
-
 const SectionTheme = () => {
-  const classes = useStyles();
-
   const themeSource = useSelector((state) => state.preferences.themeSource);
   const themeColor = useSelector((state) => state.preferences.themeColor);
 
@@ -63,10 +38,16 @@ const SectionTheme = () => {
           variant="filled"
           disableUnderline
           margin="dense"
-          classes={{
-            root: classes.select,
+          sx={{
+            '& .MuiSelect-select': {
+              py: 1,
+              pr: 3.25,
+              pl: 1.5,
+            },
+            borderRadius: 0.5,
+            fontSize: '0.84375rem',
+            my: 1,
           }}
-          className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
         >
           <MenuItem dense value="system">System default</MenuItem>
           <MenuItem dense value="light">Light</MenuItem>
@@ -82,10 +63,16 @@ const SectionTheme = () => {
           variant="filled"
           disableUnderline
           margin="dense"
-          classes={{
-            root: classes.select,
+          sx={{
+            '& .MuiSelect-select': {
+              py: 1,
+              pr: 3.25,
+              pl: 1.5,
+            },
+            borderRadius: 0.5,
+            fontSize: '0.84375rem',
+            my: 1,
           }}
-          className={classnames(classes.selectRoot, classes.selectRootExtraMargin)}
         >
           <MenuItem dense value="none">None</MenuItem>
           <MenuItem dense value="auto">
@@ -94,7 +81,15 @@ const SectionTheme = () => {
           {Object.keys(themeColors).map((val) => (
             <MenuItem dense value={val} key={val}>
               <ListItemIcon>
-                <Avatar className={classes.avatar} style={{ backgroundColor: themeColors[val][600] }}>{' '}</Avatar>
+                <Avatar
+                  sx={{
+                    width: 24,
+                    height: 24,
+                  }}
+                  style={{ backgroundColor: themeColors[val][600] }}
+                >
+                  {' '}
+                </Avatar>
               </ListItemIcon>
               <ListItemText primary={camelCaseToSentenceCase(val)} />
             </MenuItem>
