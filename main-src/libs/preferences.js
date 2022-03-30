@@ -125,6 +125,7 @@ const defaultPreferences = {
   rememberLastPageVisited: false,
   runInBackground: false,
   searchEngine: 'google',
+  sentry: false,
   // branded apps (like Google/Microsoft) share browsing data by default
   // https://github.com/webcatalog/webcatalog-app/issues/986
   shareWorkspaceBrowsingData: isMenubarBrowser() || appJson.id.startsWith('group-') || appJson.id === 'clovery',
@@ -170,7 +171,7 @@ const initCachedPreferences = () => {
   };
 
   // shared-preferences.json includes:
-  // telemetry pref
+  // telemetry & sentry pref
   // so that privacy consent prefs
   // can be shared across WebCatalog and WebCatalog-Engine-based apps
   // ignore this if error occurs
@@ -178,6 +179,7 @@ const initCachedPreferences = () => {
   if (isWebcatalog()) {
     const sharedPreferences = {
       telemetry: false,
+      sentry: false,
     };
 
     try {
@@ -185,6 +187,7 @@ const initCachedPreferences = () => {
       if (fs.existsSync(sharedPreferencesPath)) {
         const jsonContent = fs.readJsonSync(sharedPreferencesPath);
         sharedPreferences.telemetry = Boolean(jsonContent.telemetry);
+        sharedPreferences.sentry = Boolean(jsonContent.sentry);
       }
     } catch (err) {
       // eslint-disable-next-line no-console
