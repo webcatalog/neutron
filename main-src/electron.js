@@ -23,13 +23,14 @@ const {
 } = require('electron');
 const path = require('path');
 const fs = require('fs-extra');
+const isDev = require('electron-is-dev');
 const settings = require('electron-settings');
 const electronRemote = require('@electron/remote/main');
 const rtlDetect = require('rtl-detect');
+const Sentry = require('@sentry/electron/main');
 
 const appJson = require('./constants/app-json');
 const isMas = require('./libs/is-mas');
-const getExtensionFromProfile = require('./libs/extensions/get-extensions-from-profile');
 const keytar = require('./libs/keytar');
 
 electronRemote.initialize();
@@ -70,6 +71,21 @@ const {
   setPreference,
 } = require('./libs/preferences');
 
+// Activate the Sentry Electron SDK as early as possible in every process.
+const sentryEnabled = !isDev && getPreference('sentry');
+if (sentryEnabled) {
+  // https://github.com/getsentry/sentry-electron/blob/06c9874584f7734fe6cb8297c6455cf6356d29d4/MIGRATION.md
+  Sentry.init({
+    dsn: process.env.ELECTRON_APP_SENTRY_DSN,
+    release: app.getVersion(),
+    autoSessionTracking: false,
+    // disable native crash reporting
+    // as it mostly reports Electron's bugs (upstream bugs)
+    integrations: (defaultIntegrations) => defaultIntegrations
+      .filter((i) => i.name !== Sentry.Integrations.SentryMinidump.Id),
+  });
+}
+
 const loadListeners = require('./listeners');
 const loadInvokers = require('./invokers');
 
@@ -96,7 +112,6 @@ const PasswordManagers = require('./libs/password-manager');
 
 const MAILTO_URLS = require('./constants/mailto-urls');
 const WEBCAL_URLS = require('./constants/webcal-urls');
-const PASSWORD_MANAGERS = require('./constants/password-managers');
 const isStandalone = require('./libs/is-standalone');
 const isSnap = require('./libs/is-snap');
 const getChromeMobileUserAgentString = require('./libs/get-chrome-mobile-user-agent-string');
@@ -426,8 +441,10 @@ if (!gotTheLock) {
           }).then(({ response }) => {
             setPreference('privacyConsentAsked', true);
             if (response === 0) {
+              setPreference('sentry', true);
               setPreference('telemetry', true);
             } else {
+              setPreference('sentry', false);
               setPreference('telemetry', false);
             }
           }).catch(console.log); // eslint-disable-line
@@ -499,9 +516,6 @@ if (!gotTheLock) {
       blockAds,
       blockJavascript,
       customUserAgent,
-      extensionEnabledExtesionIds,
-      extensionSourceBrowserId,
-      extensionSourceProfileDirName,
       forceMobileView,
       hibernateWhenUnused,
       hibernateWhenUnusedTimeout,
@@ -568,37 +582,10 @@ if (!gotTheLock) {
     global.proxyMode = proxyMode;
     global.keytarLoaded = keytar != null;
 
-    global.extensionEnabledExtesionIds = extensionEnabledExtesionIds;
-    global.extensionSourceBrowserId = extensionSourceBrowserId;
-    global.extensionSourceProfileDirName = extensionSourceProfileDirName;
-    global.extensionEnabled = extensionEnabledExtesionIds
-      && Object.keys(extensionEnabledExtesionIds).length > 0;
-    // disable built-in password manager and Dark Reader if external extensions are detected
-    if (global.extensionEnabled) {
-      const loadableExtensions = getExtensionFromProfile(
-        global.extensionSourceBrowserId,
-        global.extensionSourceProfileDirName,
-      )
-        .filter((ext) => global.extensionEnabledExtesionIds[ext.id]);
-
-      global.darkReaderExtensionDetected = Boolean(
-        loadableExtensions.find((ext) => ext.name && ext.name.toLowerCase().includes('dark reader')),
-      );
-
-      const passwordManagerExt = loadableExtensions.find((ext) => {
-        const found = PASSWORD_MANAGERS.find(
-          (passwordManagerName) => ext.name
-            && ext.name.toLowerCase().includes(passwordManagerName.toLowerCase()),
-        );
-        return Boolean(found);
-      });
-      if (passwordManagerExt) {
-        global.passwordManagerExtensionDetected = passwordManagerExt.name;
-      }
-    }
-
     global.hibernateWhenUnused = hibernateWhenUnused;
     global.hibernateWhenUnusedTimeout = hibernateWhenUnusedTimeout;
+
+    global.sentryEnabled = sentryEnabled;
 
     // on Windows, if the display language is RTL language (Arabic, Hebrew, etc)
     // the x bounds coordination is reversed

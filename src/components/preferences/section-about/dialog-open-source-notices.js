@@ -18,8 +18,6 @@ const DialogOpenSourceNotices = ({ open, onClose }) => {
     const p = [
       window.fetch('./open-source-notices-automated.txt')
         .then((res) => res.text()),
-      window.fetch('./open-source-notices-manual.txt')
-        .then((res) => res.text()),
     ];
 
     Promise.all(p)

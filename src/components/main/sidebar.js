@@ -28,14 +28,11 @@ import { sortableContainer, sortableElement } from 'react-sortable-hoc';
 import getWorkspacesAsList from '../../helpers/get-workspaces-as-list';
 import getStaticGlobal from '../../helpers/get-static-global';
 import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
-import isMas from '../../helpers/is-mas';
-import isAppx from '../../helpers/is-appx';
 
 import themeColors from '../../constants/theme-colors';
 
 import WorkspaceSelector from './workspace-selector';
 import RatingButton from './rating-button';
-import BrowserActionList from './browser-action-list';
 
 import {
   requestClearWorkspaceBrowsingData,
@@ -344,15 +341,6 @@ const Sidebar = () => {
             />
           )}
         </Box>
-        {!navigationBar && !isMas() && !isAppx() && (
-          <BrowserActionList
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 0.5,
-            }}
-          />
-        )}
         {!navigationBar && (
         <Box
           sx={[
