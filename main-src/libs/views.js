@@ -378,7 +378,6 @@ const addViewAsync = async (browserWindow, workspace) => {
     ? global.blockJavascript : workspaceBlockJavascript;
   const sharedWebPreferences = {
     spellcheck: global.spellcheck,
-    nativeWindowOpen: true,
     nodeIntegration: false,
     contextIsolation: true,
     plugins: true, // PDF reader

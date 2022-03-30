@@ -22,6 +22,10 @@ const writeObjectToS3Aysnc = async (obj, s3Path) => {
     Body: Buffer.from(JSON.stringify(obj), 'utf8'),
     ACL: 'public-read',
     ContentType: 'application/json',
+    // without CacheControl header
+    // browsers will cache the file using heuristic rule
+    // https://webmasters.stackexchange.com/a/53944
+    CacheControl: 'public, max-age=0, must-revalidate',
   });
   await s3Client.send(command);
 };
