@@ -3,10 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
 import Color from 'color';
-
-import makeStyles from '@mui/styles/makeStyles';
 
 import Badge from '@mui/material/Badge';
 import Avatar from '@mui/material/Avatar';
@@ -14,6 +11,8 @@ import SvgIcon from '@mui/material/SvgIcon';
 
 import NotificationsOffIcon from '@mui/icons-material/NotificationsOff';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
+
+import { Box } from '@mui/material';
 
 import { useSelector } from 'react-redux';
 
@@ -29,158 +28,6 @@ import {
 
 import defaultWorkspaceImageLight from '../../images/default-workspace-image-light.png';
 import defaultWorkspaceImageDark from '../../images/default-workspace-image-dark.png';
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    height: 56,
-    width: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'column',
-    fontFamily: theme.typography.fontFamily,
-    outline: 'none',
-    '&:hover': {
-      background: theme.palette.action.hover,
-      cursor: 'pointer',
-    },
-    WebkitAppRegion: 'no-drag',
-    position: 'relative',
-    // to show active status
-    borderLeft: '3px solid',
-    borderLeftColor: 'transparent',
-    // same as left minus 1px of sidebar border to align the children to the center
-    borderRight: '2px solid',
-    borderRightColor: 'transparent',
-  },
-  rootHibernated: {
-    opacity: '0.5',
-  },
-  rootExpanded: {
-    flexDirection: 'row',
-    paddingLeft: theme.spacing(1),
-    paddingRight: theme.spacing(1),
-  },
-  rootWithText: {
-    height: 68,
-  },
-  rootActive: {
-    background: (props) => {
-      if (props.themeColor != null) {
-        return themeColors[props.themeColor][600];
-      }
-      return theme.palette.action.selected;
-    },
-    borderLeftColor: (props) => {
-      if (props.themeColor != null) {
-        return theme.palette.getContrastText(themeColors[props.themeColor][800]);
-      }
-      if (theme.palette.mode === 'dark') {
-        return theme.palette.common.white;
-      }
-      return theme.palette.common.black;
-    },
-    '&:hover': {
-      background: (props) => {
-        if (props.themeColor != null) {
-          return themeColors[props.themeColor][600];
-        }
-        return theme.palette.action.selected;
-      },
-    },
-  },
-  avatar: {
-    height: 36,
-    width: 36,
-    background: theme.palette.common.white,
-    borderRadius: 4,
-    color: theme.palette.getContrastText(theme.palette.common.white),
-    lineHeight: '36px',
-    textAlign: 'center',
-    fontWeight: 400,
-    textTransform: 'uppercase',
-    border: (props) => {
-      if (props.themeColor != null || theme.palette.mode === 'dark') {
-        return 'none';
-      }
-      return '1px solid rgba(0, 0, 0, 0.12)';
-    },
-    overflow: 'hidden',
-    fontSize: '24px',
-  },
-  avatarPicture: {
-    height: '100%',
-    width: '100%',
-  },
-  textAvatar: {
-    background: (props) => {
-      if (props.themeColor != null) {
-        return theme.palette.getContrastText(themeColors[props.themeColor][800]);
-      }
-      return theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black;
-    },
-    color: (props) => {
-      if (props.themeColor != null) {
-        return theme.palette.getContrastText(
-          theme.palette.getContrastText(themeColors[props.themeColor][800]),
-        );
-      }
-      return theme.palette.mode === 'dark' ? theme.palette.common.black : theme.palette.common.white;
-    },
-  },
-  transparentAvatar: {
-    background: 'transparent',
-    border: 'none',
-    color: theme.palette.text.primary,
-    borderRadius: 0,
-  },
-  shortcutText: {
-    marginTop: 2,
-    marginBottom: 0,
-    padding: 0,
-    fontSize: '10.5px',
-    fontWeight: 500,
-    color: (props) => {
-      if (props.themeColor != null) {
-        return theme.palette.getContrastText(themeColors[props.themeColor][800]);
-      }
-      return theme.palette.text.primary;
-    },
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    textAlign: 'center',
-    width: 52,
-  },
-  badge: {
-    lineHeight: '20px',
-  },
-  expandedText: {
-    flex: 1,
-    padding: theme.spacing(1),
-    textOverflow: 'ellipsis',
-    overflow: 'hidden',
-    whiteSpace: 'nowrap',
-    color: (props) => {
-      if (props.themeColor != null) {
-        return theme.palette.getContrastText(themeColors[props.themeColor][800]);
-      }
-      return theme.palette.text.primary;
-    },
-  },
-  sleepAvatar: {
-    height: 16,
-    width: 16,
-    color: theme.palette.text.primary,
-  },
-  sleepAvatarIcon: {
-    height: 12,
-    width: 12,
-  },
-  sleepAvatarWide: {
-    width: 32,
-  },
-}));
 
 const WorkspaceSelector = ({
   accountInfo,
@@ -199,8 +46,6 @@ const WorkspaceSelector = ({
   themeColor,
   transparentBackground,
 }) => {
-  const classes = useStyles({ themeColor });
-
   const badgeCount = useSelector((state) => (state.preferences.unreadCountBadge
   && (!preferences || preferences.unreadCountBadge !== false)
   && state.workspaceMetas[id] ? state.workspaceMetas[id].badgeCount : 0));
@@ -276,15 +121,65 @@ const WorkspaceSelector = ({
   }
 
   return (
-    <div
+    <Box
       role="button"
-      className={classnames(
-        classes.root,
-        isExpanded && classes.rootExpanded,
-        tipText && classes.rootWithText,
-        active && classes.rootActive,
-        hibernated && classes.rootHibernated,
-      )}
+      sx={[
+        (theme) => ({
+          height: 56,
+          width: 1,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexDirection: 'column',
+          fontFamily: theme.typography.fontFamily,
+          outline: 'none',
+          '&:hover': {
+            background: theme.palette.action.hover,
+            cursor: 'pointer',
+          },
+          WebkitAppRegion: 'no-drag',
+          position: 'relative',
+          // to show active status
+          borderLeft: '3px solid',
+          borderLeftColor: 'transparent',
+          // same as left minus 1px of sidebar border to align the children to the center
+          borderRight: '2px solid',
+          borderRightColor: 'transparent',
+        }),
+        isExpanded && {
+          flexDirection: 'row',
+          px: 1,
+        },
+        tipText && {
+          height: 68,
+        },
+        (theme) => (active && {
+          background: (props) => {
+            if (props.themeColor != null) {
+              return themeColors[props.themeColor][600];
+            }
+            return theme.palette.action.selected;
+          },
+          borderLeftColor: (props) => {
+            if (props.themeColor != null) {
+              return theme.palette.getContrastText(themeColors[props.themeColor][800]);
+            }
+            if (theme.palette.mode === 'dark') {
+              return theme.palette.common.white;
+            }
+            return theme.palette.common.black;
+          },
+          '&:hover': {
+            background: (props) => {
+              if (props.themeColor != null) {
+                return themeColors[props.themeColor][600];
+              }
+              return theme.palette.action.selected;
+            },
+          },
+        }),
+        hibernated && { opacity: '0.5' },
+      ]}
       onClick={onClick}
       onKeyDown={null}
       onContextMenu={onContextMenu}
@@ -318,7 +213,11 @@ const WorkspaceSelector = ({
           horizontal: 'right',
         }}
         max={99}
-        classes={{ badge: classes.badge }}
+        sx={{
+          '& .MuiBadge-badge': {
+            lineHeight: '20px',
+          },
+        }}
       >
         <Badge
           color="default"
@@ -326,8 +225,20 @@ const WorkspaceSelector = ({
           badgeContent={(() => {
             if (hibernated) {
               return (
-                <Avatar variant="circular" className={classes.sleepAvatar}>
-                  <SvgIcon className={classes.sleepAvatarIcon}>
+                <Avatar
+                  variant="circular"
+                  sx={{
+                    height: 16,
+                    width: 16,
+                    color: 'text.primary',
+                  }}
+                >
+                  <SvgIcon
+                    sx={{
+                      height: 12,
+                      width: 12,
+                    }}
+                  >
                     <path fill="currentColor" d="M18.73,18C15.4,21.69 9.71,22 6,18.64C2.33,15.31 2.04,9.62 5.37,5.93C6.9,4.25 9,3.2 11.27,3C7.96,6.7 8.27,12.39 12,15.71C13.63,17.19 15.78,18 18,18C18.25,18 18.5,18 18.73,18Z" />
                   </SvgIcon>
                 </Avatar>
@@ -336,12 +247,32 @@ const WorkspaceSelector = ({
 
             if (disableAudio || disableNotifications) {
               return (
-                <Avatar variant="circular" className={classnames(classes.sleepAvatar, disableNotifications && disableAudio && classes.sleepAvatarWide)}>
+                <Avatar
+                  variant="circular"
+                  sx={[
+                    {
+                      height: 16,
+                      width: 16,
+                      color: 'text.primary',
+                    },
+                    disableNotifications && disableAudio && { width: 32 },
+                  ]}
+                >
                   {disableNotifications && (
-                  <NotificationsOffIcon className={classes.sleepAvatarIcon} />
+                  <NotificationsOffIcon
+                    sx={{
+                      height: 12,
+                      width: 12,
+                    }}
+                  />
                   )}
                   {disableAudio && (
-                  <VolumeOffIcon className={classes.sleepAvatarIcon} />
+                  <VolumeOffIcon
+                    sx={{
+                      height: 12,
+                      width: 12,
+                    }}
+                  />
                   )}
                 </Avatar>
               );
@@ -353,14 +284,57 @@ const WorkspaceSelector = ({
             vertical: 'bottom',
             horizontal: 'right',
           }}
-          classes={{ badge: classes.badge }}
+          sx={{
+            '& ..MuiBadge-badge': {
+              lineHeight: '20px',
+            },
+          }}
         >
-          <div
-            className={classnames(
-              classes.avatar,
-              selectedIconType === 'text' && classes.textAvatar,
-              selectedIconType === 'image' && transparentBackground && classes.transparentAvatar,
-            )}
+          <Box
+            sx={[
+              (theme) => ({
+                height: 36,
+                width: 36,
+                background: theme.palette.common.white,
+                borderRadius: 0.5,
+                color: theme.palette.getContrastText(theme.palette.common.white),
+                lineHeight: '36px',
+                textAlign: 'center',
+                fontWeight: 400,
+                textTransform: 'uppercase',
+                border: (props) => {
+                  if (props.themeColor != null || theme.palette.mode === 'dark') {
+                    return 'none';
+                  }
+                  return '1px solid rgba(0, 0, 0, 0.12)';
+                },
+                overflow: 'hidden',
+                fontSize: '24px',
+              }),
+              (theme) => (selectedIconType === 'text'
+              && {
+                background: (props) => {
+                  if (props.themeColor != null) {
+                    return theme.palette.getContrastText(themeColors[props.themeColor][800]);
+                  }
+                  return theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black;
+                },
+                color: (props) => {
+                  if (props.themeColor != null) {
+                    return theme.palette.getContrastText(
+                      theme.palette.getContrastText(themeColors[props.themeColor][800]),
+                    );
+                  }
+                  return theme.palette.mode === 'dark' ? theme.palette.common.black : theme.palette.common.white;
+                },
+              }),
+              selectedIconType === 'image' && transparentBackground && {
+                background: 'transparent',
+                border: 'none',
+                color: 'text.primary',
+                borderRadius: 0,
+              },
+            ]}
             style={(() => {
               if (selectedIconType === 'text' && backgroundColor) {
                 return {
@@ -373,11 +347,13 @@ const WorkspaceSelector = ({
           >
             {selectedIconType === 'text' && getAvatarText(id, userDefinedName, order)}
             {selectedIconType === 'image' && (
-              <img
+              <Box
+                component="img"
                 alt="Icon"
-                className={classnames(
-                  classes.avatarPicture,
-                )}
+                sx={{
+                  height: 1,
+                  width: 1,
+                }}
                 src={(() => {
                   if (pictureId) return `file://${getPicturePath(pictureId)}`;
                   return shouldUseDarkColors
@@ -387,27 +363,64 @@ const WorkspaceSelector = ({
               />
             )}
             {selectedIconType === 'accountInfo' && (
-              <img
+              <Box
+                component="img"
                 alt="Icon"
-                className={classnames(
-                  classes.avatarPicture,
-                )}
+                sx={{
+                  height: 1,
+                  width: 1,
+                }}
                 src={`file://${getPicturePath(accountInfo.pictureId, 'account-pictures')}`}
                 draggable={false}
               />
             )}
-          </div>
+          </Box>
         </Badge>
       </Badge>
       {tipText && (
-        <div className={classes.shortcutText}>{tipText}</div>
+        <Box
+          sx={(theme) => ({
+            mt: 0.25,
+            mb: 0,
+            p: 0,
+            fontSize: '10.5px',
+            fontWeight: 500,
+            color: (props) => {
+              if (props.themeColor != null) {
+                return theme.palette.getContrastText(themeColors[props.themeColor][800]);
+              }
+              return theme.palette.text.primary;
+            },
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            textAlign: 'center',
+            width: 52,
+          })}
+        >
+          {tipText}
+        </Box>
       )}
       {isExpanded && (
-        <div className={classes.expandedText}>
+        <Box
+          sx={(theme) => ({
+            flex: 1,
+            p: 1,
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            color: (props) => {
+              if (props.themeColor != null) {
+                return theme.palette.getContrastText(themeColors[props.themeColor][800]);
+              }
+              return theme.palette.text.primary;
+            },
+          })}
+        >
           {hoverText}
-        </div>
+        </Box>
       )}
-    </div>
+    </Box>
   );
 };
 

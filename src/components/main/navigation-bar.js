@@ -90,21 +90,21 @@ const NavigationBar = ({
   return (
     <Box
       sx={[
-        {
+        (theme) => ({
           width: 1,
           height: 36,
           bgcolor: (props) => {
             if (props.themeColor != null) {
               return themeColors[props.themeColor][800];
             }
-            return 'background.paper';
+            return theme.palette.background.paper;
           },
-          borderBottom: (theme) => `1px solid ${theme.palette.Boxider}`,
+          borderBottom: `1px solid ${theme.palette.divider} `,
           display: 'flex',
           alignItems: 'center',
           px: 1,
           WebkitUserSelect: 'none',
-        },
+        }),
         draggable && { WebkitAppRegion: 'drag' },
         hasTrafficLights && { pl: 8.5 },
       ]}
@@ -124,7 +124,7 @@ const NavigationBar = ({
         sx={[
           {
             flex: 1,
-            px: 1,
+            px: 6,
             [(theme) => theme.breakpoints.up('sm')]: {
               px: 6,
             },
@@ -138,31 +138,29 @@ const NavigationBar = ({
       >
         <InputBase
           sx={[
-            {
+            (theme) => ({
               width: 1,
-              backgroundColor: (props) => {
+              bgcolor: (props) => {
                 if (props.themeColor != null) {
                   return themeColors[props.themeColor][900];
                 }
-                return (theme) => (theme.palette.mode === 'dark' ? theme.palette.background.default : theme.palette.grey[200]);
+                return theme.palette.mode === 'dark' ? theme.palette.background.default : theme.palette.grey[200];
               },
               color: (props) => {
                 if (props.themeColor != null) {
-                  return (theme) => (
-                    theme.palette.getContrastText(themeColors[props.themeColor][800])
-                  );
+                  return theme.palette.getContrastText(themeColors[props.themeColor][800]);
                 }
-                return (theme) => theme.palette.text.primary;
+                return theme.palette.text.primary;
               },
-              borderRadius: 4,
+              borderRadius: 0.5,
               WebkitAppRegion: 'none',
               WebkitUserSelect: 'text',
-            },
+            }),
             {
               '& .MuiInputBase-input': {
                 fontSize: '0.8em',
                 px: 12,
-                py: 5,
+                py: 0.625,
               },
             },
           ]}
@@ -307,7 +305,7 @@ const NavigationBar = ({
           onClick={requestShowNotificationsWindow}
           sx={[
             {
-              p: 6,
+              p: 0.725,
               WebkitAppRegion: 'no-drag',
               color: (props) => {
                 if (props.themeColor != null) {
@@ -341,7 +339,7 @@ const NavigationBar = ({
           onClick={() => requestSetPreference('muteApp', !muteApp)}
           sx={[
             {
-              p: 6,
+              p: 0.725,
               WebkitAppRegion: 'no-drag',
               color: (props) => {
                 if (props.themeColor != null) {
@@ -374,7 +372,7 @@ const NavigationBar = ({
           aria-label="Preferences"
           sx={[
             {
-              p: 6,
+              p: 0.75,
               WebkitAppRegion: 'no-drag',
               color: (props) => {
                 if (props.themeColor != null) {

@@ -3,14 +3,10 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
 import { Menu, getCurrentWindow } from '@electron/remote';
 
 import { alpha } from '@mui/material/styles';
 
-import makeStyles from '@mui/styles/makeStyles';
-
-import SimpleBar from 'simplebar-react';
 import 'simplebar/dist/simplebar.min.css';
 
 import IconButton from '@mui/material/IconButton';
@@ -22,6 +18,8 @@ import NotificationsPausedIcon from '@mui/icons-material/NotificationsPaused';
 import SettingsIcon from '@mui/icons-material/Settings';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
+
+import { Box } from '@mui/material';
 
 import { useSelector } from 'react-redux';
 
@@ -67,115 +65,6 @@ const arrayMove = (array, from, to) => {
   newArray.splice(startIndex, 0, item);
   return newArray;
 };
-
-const useStyles = makeStyles((theme) => {
-  // Big Sur increases title bar height: https://github.com/microsoft/vscode/pull/110592 (28px)
-  // but following Electron@13, somehow the height is now also 22px on Big Sur
-  const titleBarHeight = 22;
-
-  return {
-    sidebarUpperRoot: {
-      display: 'flex',
-      height: '100%',
-      width: 68,
-      backgroundColor: (props) => {
-        if (props.themeColor != null) {
-          return themeColors[props.themeColor][800];
-        }
-        return theme.palette.background.paper;
-      },
-      overflowX: 'hidden',
-    },
-    sidebarUpperRootLeft: {
-      borderRight: '1px solid',
-      borderRightColor: theme.palette.divider,
-    },
-    sidebarUpperRootRight: {
-      borderLeft: '1px solid',
-      borderLeftColor: theme.palette.divider,
-    },
-    sidebarUpperRootWide: {
-      width: 256,
-    },
-    sidebarRoot: {
-      flex: 1,
-      width: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      paddingBottom: theme.spacing(1),
-      boxSizing: 'border-box',
-    },
-    sidebarDraggableArea: {
-      width: '100%',
-      height: titleBarHeight + 4,
-      WebkitAppRegion: 'drag',
-      WebkitUserSelect: 'none',
-    },
-    sidebarDraggableAreaWithNavigationBar: {
-      height: 36,
-    },
-    sidebarTop: {
-      flex: 1,
-      width: '100%',
-      WebkitAppRegion: 'drag',
-      WebkitUserSelect: 'none',
-      paddingBottom: theme.spacing(5),
-    },
-    grabbing: {
-      cursor: 'grabbing !important',
-      pointerEvents: 'auto !important',
-    },
-    end: {
-      display: 'flex',
-      flexDirection: 'column',
-      width: '100%',
-    },
-    endExpanded: {
-      display: 'block',
-      padding: theme.spacing(1),
-    },
-    iconButtonVertical: {
-      width: '100%',
-      borderRadius: 0,
-    },
-    iconButton: {
-      color: (props) => {
-        if (props.themeColor != null) {
-          return theme.palette.getContrastText(themeColors[props.themeColor][800]);
-        }
-        return theme.palette.text.secondary;
-      },
-    },
-    iconButtonDisabled: {
-      color: (props) => {
-        if (props.themeColor != null) {
-          return `${alpha(theme.palette.getContrastText(themeColors[props.themeColor][800]), 0.3)} !important`;
-        }
-        return theme.palette.text.disabled;
-      },
-    },
-    browserActionList: {
-      display: 'flex',
-      flexDirection: 'column',
-      gap: theme.spacing(0.5),
-    },
-    progressContainer: {
-      width: '100%',
-      display: 'flex',
-      justifyContent: 'center',
-      padding: theme.spacing(1),
-    },
-    progress: {
-      color: (props) => {
-        if (props.themeColor != null) {
-          return alpha(theme.palette.getContrastText(themeColors[props.themeColor][900]), 0.7);
-        }
-        return theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : 'rgb(77, 77, 77)';
-      },
-    },
-  };
-});
 
 const SortableItem = sortableElement(({ value }) => {
   const { workspace, themeColor, index } = value;
@@ -280,29 +169,29 @@ const SortableItem = sortableElement(({ value }) => {
   );
 });
 
-const SortableContainer = sortableContainer(({ children }) => <div>{children}</div>);
+const SortableContainer = sortableContainer(({ children }) => <Box>{children}</Box>);
 
-const ScrollbarContainer = ({ children, className }) => {
+const ScrollbarContainer = ({ children, sx }) => {
   // SimpleBar brings problems on macOS
   // https://github.com/webcatalog/webcatalog-app/issues/1247
   if (window.process.platform === 'darwin') {
     return (
-      <div className={className}>
+      <Box sx={sx}>
         {children}
-      </div>
+      </Box>
     );
   }
 
   return (
-    <SimpleBar className={className}>
+    <Box sx={sx}>
       {children}
-    </SimpleBar>
+    </Box>
   );
 };
 
 ScrollbarContainer.propTypes = {
   children: PropTypes.node.isRequired,
-  className: PropTypes.string.isRequired,
+  sx: PropTypes.string.isRequired,
 };
 
 const Sidebar = () => {
@@ -336,35 +225,80 @@ const Sidebar = () => {
     return state.preferences.themeColor;
   })());
 
-  const classes = useStyles({ themeColor });
-
   const appJson = getStaticGlobal('appJson');
   const workspacesList = getWorkspacesAsList(workspaces);
   const showMacTitleBar = window.process.platform === 'darwin' && titleBar && !isFullScreen;
   const isSidebarExpanded = sidebarSize === 'expanded';
   const rtl = getStaticGlobal('rtlCoordination');
 
+  // Big Sur increases title bar height: https://github.com/microsoft/vscode/pull/110592 (28px)
+  // but following Electron@13, somehow the height is now also 22px on Big Sur
+  const titleBarHeight = 22;
+
   return (
     <ScrollbarContainer
-      className={classnames(
-        classes.sidebarUpperRoot,
-        isSidebarExpanded && classes.sidebarUpperRootWide,
-        rtl ? classes.sidebarUpperRootRight : classes.sidebarUpperRootLeft,
-      )}
+      sx={[
+        (theme) => ({
+          display: 'flex',
+          height: 1,
+          width: 68,
+          bgcolor: (props) => {
+            if (props.themeColor != null) {
+              return themeColors[props.themeColor][800];
+            }
+            return theme.palette.background.paper;
+          },
+          overflowX: 'hidden',
+        }),
+        isSidebarExpanded && { width: 256 },
+        rtl ? {
+          borderLeft: '1px solid',
+          borderLeftColor: 'divider',
+        } : {
+          borderRight: '1px solid',
+          borderRightColor: 'divider',
+        },
+      ]}
     >
-      <div className={classes.sidebarRoot}>
+      <Box
+        sx={{
+          flex: 1,
+          width: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          pb: 1,
+          boxSizing: 'border-box',
+        }}
+      >
         {window.process.platform === 'darwin' && !isFullScreen && !showMacTitleBar && (
-          <div
-            className={classnames(
-              classes.sidebarDraggableArea,
-              navigationBar && classes.sidebarDraggableAreaWithNavigationBar,
-            )}
+          <Box
+            sx={[
+              {
+                width: 1,
+                height: titleBarHeight + 4,
+                WebkitAppRegion: 'drag',
+                WebkitUserSelect: 'none',
+              },
+              navigationBar && { height: 36 },
+            ]}
           />
         )}
-        <div className={classes.sidebarTop}>
+        <Box
+          sx={{
+            flex: 1,
+            width: 1,
+            WebkitAppRegion: 'drag',
+            WebkitUserSelect: 'none',
+            pb: 5,
+          }}
+        >
           <SortableContainer
             distance={10}
-            helperClass={classes.grabbing}
+            helperClass={{
+              cursor: 'grabbing !important',
+              pointerEvents: 'auto !important',
+            }}
             onSortEnd={({ oldIndex, newIndex }) => {
               if (oldIndex === newIndex) return;
 
@@ -412,24 +346,68 @@ const Sidebar = () => {
               }}
             />
           )}
-        </div>
+        </Box>
         {!navigationBar && !isMas() && !isAppx() && (
-          <BrowserActionList className={classes.browserActionList} />
+          <BrowserActionList
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 0.5,
+            }}
+          />
         )}
         {!navigationBar && (
-        <div
-          className={classnames(classes.end, isSidebarExpanded && classes.endExpanded)}
+        <Box
+          sx={[
+            {
+              display: 'flex',
+              flexDirection: 'column',
+              width: 1,
+            },
+            isSidebarExpanded && {
+              display: 'block',
+              p: 1,
+            },
+          ]}
         >
           {!titleBar && isLoading && (
-            <div className={classes.progressContainer}>
-              <CircularProgress size={20} className={classes.progress} />
-            </div>
+            <Box
+              sx={{
+                width: 1,
+                display: 'flex',
+                justifyContent: 'center',
+                p: 1,
+              }}
+            >
+              <CircularProgress
+                size={20}
+                sx={(theme) => ({
+                  color: (props) => {
+                    if (props.themeColor != null) {
+                      // eslint-disable-next-line max-len
+                      return alpha(theme.palette.getContrastText(themeColors[props.themeColor][900]), 0.7);
+                    }
+                    return theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : 'rgb(77, 77, 77)';
+                  },
+                })}
+              />
+            </Box>
           )}
           <RatingButton
-            className={classnames(
-              classes.iconButton,
-              !isSidebarExpanded && classes.iconButtonVertical,
-            )}
+            sx={[
+              (theme) => ({
+                color: (props) => {
+                  if (props.themeColor != null) {
+                    return theme.palette.getContrastText(themeColors[props.themeColor][800]);
+                  }
+                  return theme.palette.text.secondary;
+                },
+              }),
+              !isSidebarExpanded && {
+                width: 1,
+                borderRadius: 0,
+              },
+            ]}
             size="small"
           />
           {window.process.platform === 'darwin' && (
@@ -437,13 +415,30 @@ const Sidebar = () => {
               title="Share"
               aria-label="Share"
               onClick={() => requestShowShareMenu()}
-              classes={{
-                root: classnames(
-                  classes.iconButton,
-                  !isSidebarExpanded && classes.iconButtonVertical,
-                ),
-                disabled: classes.iconButtonDisabled,
-              }}
+              sx={[
+                (theme) => ({
+                  color: (props) => {
+                    if (props.themeColor != null) {
+                      return theme.palette.getContrastText(themeColors[props.themeColor][800]);
+                    }
+                    return theme.palette.text.secondary;
+                  },
+                }),
+                !isSidebarExpanded && {
+                  width: 1,
+                  borderRadius: 0,
+                },
+                {
+                  '& .Mui-disabled': (theme) => ({
+                    color: (props) => {
+                      if (props.themeColor != null) {
+                        return `${alpha(theme.palette.getContrastText(themeColors[props.themeColor][800]), 0.3)} !important`;
+                      }
+                      return theme.palette.text.disabled;
+                    },
+                  }),
+                },
+              ]}
               size="small"
               disabled={workspacesList.length < 1}
             >
@@ -456,13 +451,30 @@ const Sidebar = () => {
             title="Notifications"
             aria-label="Notifications"
             onClick={requestShowNotificationsWindow}
-            classes={{
-              root: classnames(
-                classes.iconButton,
-                !isSidebarExpanded && classes.iconButtonVertical,
-              ),
-              disabled: classes.iconButtonDisabled,
-            }}
+            sx={[
+              (theme) => ({
+                color: (props) => {
+                  if (props.themeColor != null) {
+                    return theme.palette.getContrastText(themeColors[props.themeColor][800]);
+                  }
+                  return theme.palette.text.secondary;
+                },
+              }),
+              !isSidebarExpanded && {
+                width: 1,
+                borderRadius: 0,
+              },
+              {
+                '& .Mui-disabled': (theme) => ({
+                  color: (props) => {
+                    if (props.themeColor != null) {
+                      return `${alpha(theme.palette.getContrastText(themeColors[props.themeColor][800]), 0.3)} !important`;
+                    }
+                    return theme.palette.text.disabled;
+                  },
+                }),
+              },
+            ]}
             size="small"
           >
             {shouldPauseNotifications ? <NotificationsPausedIcon /> : <NotificationsIcon />}
@@ -471,13 +483,30 @@ const Sidebar = () => {
             title={muteApp ? 'Unmute' : 'Mute'}
             aria-label={muteApp ? 'Unmute' : 'Mute'}
             onClick={() => requestSetPreference('muteApp', !muteApp)}
-            classes={{
-              root: classnames(
-                classes.iconButton,
-                !isSidebarExpanded && classes.iconButtonVertical,
-              ),
-              disabled: classes.iconButtonDisabled,
-            }}
+            sx={[
+              (theme) => ({
+                color: (props) => {
+                  if (props.themeColor != null) {
+                    return theme.palette.getContrastText(themeColors[props.themeColor][800]);
+                  }
+                  return theme.palette.text.secondary;
+                },
+              }),
+              !isSidebarExpanded && {
+                width: 1,
+                borderRadius: 0,
+              },
+              {
+                '& .Mui-disabled': (theme) => ({
+                  color: (props) => {
+                    if (props.themeColor != null) {
+                      return `${alpha(theme.palette.getContrastText(themeColors[props.themeColor][800]), 0.3)} !important`;
+                    }
+                    return theme.palette.text.disabled;
+                  },
+                }),
+              },
+            ]}
             size="small"
           >
             {muteApp ? <VolumeOffIcon /> : <VolumeUpIcon />}
@@ -486,30 +515,42 @@ const Sidebar = () => {
             title="Preferences"
             aria-label="Preferences"
             onClick={() => requestShowPreferencesWindow()}
-            classes={{
-              root: classnames(
-                classes.iconButton,
-                !isSidebarExpanded && classes.iconButtonVertical,
-              ),
-              disabled: classes.iconButtonDisabled,
-            }}
+            sx={[
+              {
+
+              },
+              !isSidebarExpanded && {
+                width: 1,
+                borderRadius: 0,
+              },
+              {
+                '& .Mui-disabled': (theme) => ({
+                  color: (props) => {
+                    if (props.themeColor != null) {
+                      return `${alpha(theme.palette.getContrastText(themeColors[props.themeColor][800]), 0.3)} !important`;
+                    }
+                    return theme.palette.text.disabled;
+                  },
+                }),
+              },
+            ]}
             size="small"
           >
             <SettingsIcon />
           </IconButton>
-        </div>
+        </Box>
         )}
-      </div>
+      </Box>
     </ScrollbarContainer>
   );
 };
 
-// Sidebar.defaultProps = {
-//   themeColor: null,
-// };
+Sidebar.defaultProps = {
+  themeColor: null,
+};
 
-// Sidebar.propTypes = {
-//   themeColor: PropTypes.string,
-// };
+Sidebar.propTypes = {
+  themeColor: PropTypes.string,
+};
 
 export default Sidebar;
