@@ -17,8 +17,6 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import LockIcon from '@mui/icons-material/Lock';
 
-// import makeStyles from '@mui/styles/makeStyles';
-
 import { Box } from '@mui/material';
 
 import { useDispatch, useSelector } from 'react-redux';

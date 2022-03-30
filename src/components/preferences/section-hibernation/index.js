@@ -12,8 +12,6 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Divider from '@mui/material/Divider';
 
-// import makeStyles from '@mui/styles/makeStyles';
-
 import { useSelector } from 'react-redux';
 
 import getWorkspaceFriendlyName from '../../../helpers/get-workspace-friendly-name';
