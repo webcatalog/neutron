@@ -61,6 +61,7 @@ protocols.push({
 
 const opts = {
   targets,
+  publish: 'always',
   config: {
     asarUnpack: [
       'node_modules/node-mac-permissions/build',
