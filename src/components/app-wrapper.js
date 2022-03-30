@@ -8,7 +8,6 @@ import {
   ThemeProvider as MuiThemeProvider,
   StyledEngineProvider,
   createTheme,
-  adaptV4Theme,
 } from '@mui/material/styles';
 // or @mui/lab/Adapter{Dayjs,Luxon,Moment} or any valid date-io adapter
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
@@ -62,7 +61,7 @@ const AppWrapper = ({ children }) => {
     };
   }
 
-  const theme = createTheme(adaptV4Theme(themeObj));
+  const theme = createTheme(themeObj);
 
   const showWindowsTitleBar = window.process.platform !== 'darwin' && !isFullScreen && !getStaticGlobal('useSystemTitleBar');
 

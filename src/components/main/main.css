@@ -2,3 +2,8 @@
   min-height: 100%;
   display: flex;
 }
+
+.grabbing {
+  cursor: grabbing !important;
+  pointer-events: auto !important;
+}

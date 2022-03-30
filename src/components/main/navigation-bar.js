@@ -107,13 +107,13 @@ const NavigationBar = ({
       ]}
     >
       <Box
-        sx={
+        sx={[
           hasExpandedSidebar && {
             '@media (max-width:600px)': {
               display: 'none',
             },
-          }
-        }
+          },
+        ]}
       >
         <NavigationButtons themeColor={themeColor} />
       </Box>
@@ -237,7 +237,7 @@ const NavigationBar = ({
               },
             },
           ]}
-          iconClassName={{ fontSize: 18 }}
+          iconSx={{ fontSize: 18 }}
         />
         {window.process.platform === 'darwin' && hasWorkspaces && (
           <IconButton
