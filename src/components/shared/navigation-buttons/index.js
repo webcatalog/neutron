@@ -25,7 +25,7 @@ import {
   requestReload,
 } from '../../../senders';
 
-const NavigationBar = ({ disableGutter }) => {
+const NavigationBar = ({ disableGutter, themeColor }) => {
   const activeWorkspace = useSelector(
     (state) => state.workspaces.workspaces[state.workspaces.activeWorkspaceId],
   );
@@ -46,11 +46,11 @@ const NavigationBar = ({ disableGutter }) => {
           {
             p: 0.75,
             WebkitAppRegion: 'no-drag',
-            color: (props) => {
-              if (props.themeColor != null) {
-                return (theme) => theme.palette.getContrastText(themeColors[props.themeColor][800]);
+            color: (theme) => {
+              if (themeColor != null) {
+                return theme.palette.getContrastText(themeColors[themeColor][800]);
               }
-              return (theme) => theme.palette.text.secondary;
+              return theme.palette.text.secondary;
             },
           },
           disableGutter && { py: 0 },
@@ -65,12 +65,12 @@ const NavigationBar = ({ disableGutter }) => {
             // has to apply it here
             // somehow, JSS is not applied correctly for IconButton disabled class
             (!hasWorkspaces || !canGoBack) && {
-              color: (props) => {
-                if (props.themeColor != null) {
+              color: (theme) => {
+                if (themeColor != null) {
                   // eslint-disable-next-line max-len
-                  return (theme) => alpha(theme.palette.getContrastText(themeColors[props.themeColor][800]), 0.3);
+                  return alpha(theme.palette.getContrastText(themeColors[themeColor][800]), 0.3);
                 }
-                return (theme) => theme.palette.text.disabled;
+                return theme.palette.text.disabled;
               },
             },
           ]}
@@ -83,11 +83,11 @@ const NavigationBar = ({ disableGutter }) => {
           {
             p: 0.75,
             WebkitAppRegion: 'no-drag',
-            color: (props) => {
-              if (props.themeColor != null) {
-                return (theme) => theme.palette.getContrastText(themeColors[props.themeColor][800]);
+            color: (theme) => {
+              if (themeColor != null) {
+                return theme.palette.getContrastText(themeColors[themeColor][800]);
               }
-              return (theme) => theme.palette.text.secondary;
+              return theme.palette.text.secondary;
             },
           },
           disableGutter && { py: 0 },
@@ -102,12 +102,12 @@ const NavigationBar = ({ disableGutter }) => {
             // has to apply it here
             // somehow, JSS is not applied correctly for IconButton disabled class
             (!hasWorkspaces || !canGoBack) && {
-              color: (props) => {
-                if (props.themeColor != null) {
+              color: (theme) => {
+                if (themeColor != null) {
                   // eslint-disable-next-line max-len
-                  return (theme) => alpha(theme.palette.getContrastText(themeColors[props.themeColor][800]), 0.3);
+                  return alpha(theme.palette.getContrastText(themeColors[themeColor][800]), 0.3);
                 }
-                return (theme) => theme.palette.text.disabled;
+                return theme.palette.text.disabled;
               },
             },
           ]}
@@ -120,11 +120,11 @@ const NavigationBar = ({ disableGutter }) => {
           {
             p: 0.75,
             WebkitAppRegion: 'no-drag',
-            color: (props) => {
-              if (props.themeColor != null) {
-                return (theme) => theme.palette.getContrastText(themeColors[props.themeColor][800]);
+            color: (theme) => {
+              if (themeColor != null) {
+                return theme.palette.getContrastText(themeColors[themeColor][800]);
               }
-              return (theme) => theme.palette.text.secondary;
+              return theme.palette.text.secondary;
             },
           },
           disableGutter && { py: 0 },
@@ -141,12 +141,12 @@ const NavigationBar = ({ disableGutter }) => {
               fontSize: 18,
               // has to apply it here
               // somehow, JSS is not applied correctly for IconButton disabled class
-              color: (props) => {
-                if (props.themeColor != null) {
+              color: (theme) => {
+                if (themeColor != null) {
                   // eslint-disable-next-line max-len
-                  return (theme) => alpha(theme.palette.getContrastText(themeColors[props.themeColor][800]), 0.3);
+                  return alpha(theme.palette.getContrastText(themeColors[themeColor][800]), 0.3);
                 }
-                return (theme) => theme.palette.text.disabled;
+                return theme.palette.text.disabled;
               },
             }}
           />
@@ -159,11 +159,11 @@ const NavigationBar = ({ disableGutter }) => {
           {
             p: 0.75,
             WebkitAppRegion: 'no-drag',
-            color: (props) => {
-              if (props.themeColor != null) {
-                return (theme) => theme.palette.getContrastText(themeColors[props.themeColor][800]);
+            color: (theme) => {
+              if (themeColor != null) {
+                return theme.palette.getContrastText(themeColors[themeColor][800]);
               }
-              return (theme) => theme.palette.text.secondary;
+              return theme.palette.text.secondary;
             },
           },
           disableGutter && { py: 0 },
@@ -178,12 +178,12 @@ const NavigationBar = ({ disableGutter }) => {
             // has to apply it here
             // somehow, JSS is not applied correctly for IconButton disabled class
             !hasWorkspaces && {
-              color: (props) => {
-                if (props.themeColor != null) {
+              color: (theme) => {
+                if (themeColor != null) {
                   // eslint-disable-next-line max-len
-                  return (theme) => alpha(theme.palette.getContrastText(themeColors[props.themeColor][800]), 0.3);
+                  return alpha(theme.palette.getContrastText(themeColors[themeColor][800]), 0.3);
                 }
-                return (theme) => theme.palette.text.disabled;
+                return theme.palette.text.disabled;
               },
             },
           ]}

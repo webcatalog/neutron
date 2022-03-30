@@ -11,7 +11,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import themeColors from '../../../constants/theme-colors';
 
 const Tab = ({
-  active, onClose, onSelect, name,
+  active, onClose, onSelect, name, themeColor,
 }) => (
   <Box
     role="button"
@@ -24,21 +24,21 @@ const Tab = ({
         flexDirection: 'row',
         pl: 2,
         pr: 1,
-        borderRight: (props) => {
-          if (props.themeColor != null) {
-            return `1px solid ${themeColors[props.themeColor][800]}`;
+        borderRight: (theme) => {
+          if (themeColor != null) {
+            return `1px solid ${themeColors[themeColor][800]}`;
           }
-          return (theme) => `1px solid ${theme.palette.background.paper}`;
+          return `1px solid ${theme.palette.background.paper}`;
         },
         WebkitAppRegion: 'no-drag',
       },
       active && {
         borderRight: 'none',
-        bgcolor: (props) => {
-          if (props.themeColor != null) {
-            return themeColors[props.themeColor][800];
+        bgcolor: (theme) => {
+          if (themeColor != null) {
+            return themeColors[themeColor][800];
           }
-          return (theme) => theme.palette.background.paper;
+          return theme.palette.background.paper;
         },
       },
     ]}
