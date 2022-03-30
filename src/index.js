@@ -23,7 +23,7 @@ import getWorkspaceFriendlyName from './helpers/get-workspace-friendly-name';
 import { getReactInitialStateAsync } from './invokers';
 
 if (getStaticGlobal('sentryEnabled')) {
-  Sentry.init({});
+  Sentry.init();
 }
 
 const appJson = getStaticGlobal('appJson');
