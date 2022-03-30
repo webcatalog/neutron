@@ -4,7 +4,7 @@
 const {
   globalShortcut,
 } = require('electron');
-const { captureException } = require('@sentry/electron/main');
+const Sentry = require('@sentry/electron/main');
 const mainWindow = require('../windows/main');
 
 const unset = (combinator) => {
@@ -33,7 +33,7 @@ const set = (combinator) => {
       }
     });
   } catch (err) {
-    captureException(err);
+    Sentry.captureException(err);
   }
 };
 

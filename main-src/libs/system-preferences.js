@@ -7,7 +7,7 @@
 const { app } = require('electron');
 const AutoLaunch = require('auto-launch');
 const settings = require('electron-settings');
-const { captureException } = require('@sentry/electron/main');
+const Sentry = require('@sentry/electron/main');
 
 const sendToAllWindows = require('./send-to-all-windows');
 
@@ -30,7 +30,7 @@ const checkAutoLauncherStatusAsync = () => {
         sendToAllWindows('set-system-preference', 'openAtLogin', 'no');
       })
       .catch((err) => {
-        captureException(err);
+        Sentry.captureException(err);
         sendToAllWindows('set-system-preference', 'openAtLogin', 'no');
       });
   }
