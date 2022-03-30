@@ -75,7 +75,6 @@
     "del": "6.0.0",
     "electron": "18.0.0",
     "electron-builder": "22.14.13",
-    "electron-chrome-extensions": "3.9.0",
     "electron-context-menu": "3.1.2",
     "electron-fetch": "1.8.0",
     "electron-is-dev": "2.0.0",

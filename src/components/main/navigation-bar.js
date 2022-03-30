@@ -24,8 +24,6 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import getUrlFromText from '../../helpers/get-url-from-text';
 import getStaticGlobal from '../../helpers/get-static-global';
-import isMas from '../../helpers/is-mas';
-import isAppx from '../../helpers/is-appx';
 
 import searchEngines from '../../constants/search-engines';
 import themeColors from '../../constants/theme-colors';
@@ -42,7 +40,6 @@ import {
 } from '../../senders';
 
 import RatingButton from './rating-button';
-import BrowserActionList from './browser-action-list';
 import NavigationButtons from '../shared/navigation-buttons';
 import isMenubarBrowser from '../../helpers/is-menubar-browser';
 
@@ -216,22 +213,6 @@ const NavigationBar = ({
           }}
         />
       </Box>
-      {!isAppx() && !isMas()
-      && (
-        <BrowserActionList
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexDirection: 'row',
-            pr: 1,
-            '& * > button': {
-              height: 20,
-              width: 20,
-            },
-          }}
-        />
-      )}
       <Box>
         <RatingButton
           sx={[

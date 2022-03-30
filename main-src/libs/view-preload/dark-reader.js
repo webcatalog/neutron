@@ -19,13 +19,10 @@ const loadAsync = async (workspaceId) => {
   const workspaceDarkReader = ipcRenderer.sendSync('get-workspace-preference', workspaceId, 'darkReader');
 
   // only load built-in Dark Reader if users are not using external Dark Reader extension
-  const darkReaderExtensionDetected = ipcRenderer.sendSync('get-global', 'darkReaderExtensionDetected');
   let darkReader = false;
-  if (!darkReaderExtensionDetected) {
-    darkReader = workspaceDarkReader != null
-      ? workspaceDarkReader
-      : ipcRenderer.sendSync('get-preference', 'darkReader'); // get fresh value
-  }
+  darkReader = workspaceDarkReader != null
+    ? workspaceDarkReader
+    : ipcRenderer.sendSync('get-preference', 'darkReader'); // get fresh value
 
   const isWhatsApp = window.location.hostname.includes('web.whatsapp.com');
 
