@@ -7,13 +7,11 @@ import PropTypes from 'prop-types';
 import Typography from '@mui/material/Typography';
 import { Box } from '@mui/material';
 
-const EmptyState = (props) => {
-  const {
-    children,
-    icon,
-    title,
-  } = props;
-
+const EmptyState = ({
+  children,
+  icon,
+  title,
+}) => {
   const Icon = icon;
 
   return (

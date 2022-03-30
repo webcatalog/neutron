@@ -9,54 +9,50 @@ import ErrorIcon from '@mui/icons-material/Error';
 import Typography from '@mui/material/Typography';
 import { Box } from '@mui/material';
 
-const NoConnection = (props) => {
-  const {
-    onTryAgainButtonClick,
-  } = props;
-
-  return (
-    <Box
+const NoConnection = ({
+  onTryAgainButtonClick,
+}) => (
+  <Box
+    sx={{
+      alignItems: 'center',
+      display: 'flex',
+      flex: 1,
+      flexDirection: 'column',
+      height: '100%',
+      width: '100%',
+    }}
+  >
+    <ErrorIcon
       sx={{
-        alignItems: 'center',
-        display: 'flex',
-        flex: 1,
-        flexDirection: 'column',
-        height: '100%',
-        width: '100%',
+        height: 64,
+        width: 64,
       }}
+      color="disabled"
+    />
+    <br />
+    <Typography
+      color="textSecondary"
+      variant="h6"
     >
-      <ErrorIcon
-        sx={{
-          height: 64,
-          width: 64,
-        }}
-        color="disabled"
-      />
-      <br />
-      <Typography
-        color="textSecondary"
-        variant="h6"
-      >
-        Failed to Connect to Server
-      </Typography>
-      <Typography
-        align="center"
-        variant="subtitle1"
-      >
-        Please check your Internet connection.
-      </Typography>
-      <Button
-        sx={{
-          mt: 2,
-        }}
-        color="primary"
-        onClick={onTryAgainButtonClick}
-      >
-        Try Again
-      </Button>
-    </Box>
-  );
-};
+      Failed to Connect to Server
+    </Typography>
+    <Typography
+      align="center"
+      variant="subtitle1"
+    >
+      Please check your Internet connection.
+    </Typography>
+    <Button
+      sx={{
+        mt: 2,
+      }}
+      color="primary"
+      onClick={onTryAgainButtonClick}
+    >
+      Try Again
+    </Button>
+  </Box>
+);
 
 NoConnection.propTypes = {
   onTryAgainButtonClick: PropTypes.func.isRequired,

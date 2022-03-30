@@ -32,11 +32,11 @@ const TabBar = ({ themeColor }) => {
         display: 'flex',
         overflow: 'auto',
         height: 36,
-        backgroundColor: (props) => {
-          if (props.themeColor != null) {
-            return themeColors[props.themeColor][900];
+        backgroundColor: (theme) => {
+          if (themeColor != null) {
+            return themeColors[themeColor][900];
           }
-          return (theme) => (theme.palette.mode === 'dark' ? theme.palette.background.default : theme.palette.grey[200]);
+          return theme.palette.mode === 'dark' ? theme.palette.background.default : theme.palette.grey[200];
         },
         WebkitUserSelect: 'none',
         WebkitAppRegion: 'drag',
@@ -75,9 +75,9 @@ const TabBar = ({ themeColor }) => {
           sx={{
             p: 6,
             WebkitAppRegion: 'no-drag',
-            color: (props) => {
-              if (props.themeColor != null) {
-                return (theme) => theme.palette.getContrastText(themeColors[props.themeColor][800]);
+            color: (theme) => {
+              if (themeColor != null) {
+                return theme.palette.getContrastText(themeColors[themeColor][800]);
               }
               return 'text.primary';
             },

@@ -23,16 +23,14 @@ import { requestCreateWorkspace, requestTrackAddWorkspace } from '../../senders'
 
 import { updateForm, updateMode } from '../../state/dialog-add-workspace/actions';
 
-const AppCard = (props) => {
-  const {
-    icon,
-    icon128,
-    id,
-    name,
-    requireInstanceUrl,
-    url,
-  } = props;
-
+const AppCard = ({
+  icon,
+  icon128,
+  id,
+  name,
+  requireInstanceUrl,
+  url,
+}) => {
   const dispatch = useDispatch();
 
   return (

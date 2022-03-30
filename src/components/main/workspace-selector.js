@@ -124,17 +124,17 @@ const WorkspaceSelector = ({
     <Box
       role="button"
       sx={[
-        (theme) => ({
+        {
           height: 56,
           width: 1,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           flexDirection: 'column',
-          fontFamily: theme.typography.fontFamily,
+          fontFamily: (theme) => theme.typography.fontFamily,
           outline: 'none',
           '&:hover': {
-            background: theme.palette.action.hover,
+            background: (theme) => theme.palette.action.hover,
             cursor: 'pointer',
           },
           WebkitAppRegion: 'no-drag',
@@ -145,7 +145,7 @@ const WorkspaceSelector = ({
           // same as left minus 1px of sidebar border to align the children to the center
           borderRight: '2px solid',
           borderRightColor: 'transparent',
-        }),
+        },
         isExpanded && {
           flexDirection: 'row',
           px: 1,
@@ -153,16 +153,16 @@ const WorkspaceSelector = ({
         tipText && {
           height: 68,
         },
-        (theme) => (active && {
-          background: (props) => {
-            if (props.themeColor != null) {
-              return themeColors[props.themeColor][600];
+        active && {
+          background: (theme) => {
+            if (themeColor != null) {
+              return themeColors[themeColor][600];
             }
             return theme.palette.action.selected;
           },
-          borderLeftColor: (props) => {
-            if (props.themeColor != null) {
-              return theme.palette.getContrastText(themeColors[props.themeColor][800]);
+          borderLeftColor: (theme) => {
+            if (themeColor != null) {
+              return theme.palette.getContrastText(themeColors[themeColor][800]);
             }
             if (theme.palette.mode === 'dark') {
               return theme.palette.common.white;
@@ -170,14 +170,14 @@ const WorkspaceSelector = ({
             return theme.palette.common.black;
           },
           '&:hover': {
-            background: (props) => {
-              if (props.themeColor != null) {
-                return themeColors[props.themeColor][600];
+            background: (theme) => {
+              if (themeColor != null) {
+                return themeColors[themeColor][600];
               }
               return theme.palette.action.selected;
             },
           },
-        }),
+        },
         hibernated && { opacity: '0.5' },
       ]}
       onClick={onClick}
@@ -292,42 +292,41 @@ const WorkspaceSelector = ({
         >
           <Box
             sx={[
-              (theme) => ({
+              {
                 height: 36,
                 width: 36,
-                background: theme.palette.common.white,
+                background: (theme) => theme.palette.common.white,
                 borderRadius: 0.5,
-                color: theme.palette.getContrastText(theme.palette.common.white),
+                color: (theme) => theme.palette.getContrastText(theme.palette.common.white),
                 lineHeight: '36px',
                 textAlign: 'center',
                 fontWeight: 400,
                 textTransform: 'uppercase',
-                border: (props) => {
-                  if (props.themeColor != null || theme.palette.mode === 'dark') {
+                border: (theme) => {
+                  if (themeColor != null || theme.palette.mode === 'dark') {
                     return 'none';
                   }
                   return '1px solid rgba(0, 0, 0, 0.12)';
                 },
                 overflow: 'hidden',
                 fontSize: '24px',
-              }),
-              (theme) => (selectedIconType === 'text'
-              && {
-                background: (props) => {
-                  if (props.themeColor != null) {
-                    return theme.palette.getContrastText(themeColors[props.themeColor][800]);
+              },
+              selectedIconType === 'text' && {
+                background: (theme) => {
+                  if (themeColor != null) {
+                    return theme.palette.getContrastText(themeColors[themeColor][800]);
                   }
                   return theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black;
                 },
-                color: (props) => {
-                  if (props.themeColor != null) {
+                color: (theme) => {
+                  if (themeColor != null) {
                     return theme.palette.getContrastText(
-                      theme.palette.getContrastText(themeColors[props.themeColor][800]),
+                      theme.palette.getContrastText(themeColors[themeColor][800]),
                     );
                   }
                   return theme.palette.mode === 'dark' ? theme.palette.common.black : theme.palette.common.white;
                 },
-              }),
+              },
               selectedIconType === 'image' && transparentBackground && {
                 background: 'transparent',
                 border: 'none',
@@ -379,15 +378,15 @@ const WorkspaceSelector = ({
       </Badge>
       {tipText && (
         <Box
-          sx={(theme) => ({
+          sx={{
             mt: 0.25,
             mb: 0,
             p: 0,
             fontSize: '10.5px',
             fontWeight: 500,
-            color: (props) => {
-              if (props.themeColor != null) {
-                return theme.palette.getContrastText(themeColors[props.themeColor][800]);
+            color: (theme) => {
+              if (themeColor != null) {
+                return theme.palette.getContrastText(themeColors[themeColor][800]);
               }
               return theme.palette.text.primary;
             },
@@ -396,26 +395,26 @@ const WorkspaceSelector = ({
             textOverflow: 'ellipsis',
             textAlign: 'center',
             width: 52,
-          })}
+          }}
         >
           {tipText}
         </Box>
       )}
       {isExpanded && (
         <Box
-          sx={(theme) => ({
+          sx={{
             flex: 1,
             p: 1,
             textOverflow: 'ellipsis',
             overflow: 'hidden',
             whiteSpace: 'nowrap',
-            color: (props) => {
-              if (props.themeColor != null) {
-                return theme.palette.getContrastText(themeColors[props.themeColor][800]);
+            color: (theme) => {
+              if (themeColor != null) {
+                return theme.palette.getContrastText(themeColors[themeColor][800]);
               }
               return theme.palette.text.primary;
             },
-          })}
+          }}
         >
           {hoverText}
         </Box>

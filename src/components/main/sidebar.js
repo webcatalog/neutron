@@ -238,18 +238,18 @@ const Sidebar = () => {
   return (
     <ScrollbarContainer
       sx={[
-        (theme) => ({
+        {
           display: 'flex',
           height: 1,
           width: 68,
-          bgcolor: (props) => {
-            if (props.themeColor != null) {
-              return themeColors[props.themeColor][800];
+          bgcolor: (theme) => {
+            if (themeColor != null) {
+              return themeColors[themeColor][800];
             }
             return theme.palette.background.paper;
           },
           overflowX: 'hidden',
-        }),
+        },
         isSidebarExpanded && { width: 256 },
         rtl ? {
           borderLeft: '1px solid',
@@ -381,28 +381,28 @@ const Sidebar = () => {
             >
               <CircularProgress
                 size={20}
-                sx={(theme) => ({
-                  color: (props) => {
-                    if (props.themeColor != null) {
+                sx={{
+                  color: (theme) => {
+                    if (themeColor != null) {
                       // eslint-disable-next-line max-len
-                      return alpha(theme.palette.getContrastText(themeColors[props.themeColor][900]), 0.7);
+                      return alpha(theme.palette.getContrastText(themeColors[themeColor][900]), 0.7);
                     }
                     return theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : 'rgb(77, 77, 77)';
                   },
-                })}
+                }}
               />
             </Box>
           )}
           <RatingButton
             sx={[
-              (theme) => ({
-                color: (props) => {
-                  if (props.themeColor != null) {
-                    return theme.palette.getContrastText(themeColors[props.themeColor][800]);
+              {
+                color: (theme) => {
+                  if (themeColor != null) {
+                    return theme.palette.getContrastText(themeColors[themeColor][800]);
                   }
                   return theme.palette.text.secondary;
                 },
-              }),
+              },
               !isSidebarExpanded && {
                 width: 1,
                 borderRadius: 0,
@@ -416,27 +416,27 @@ const Sidebar = () => {
               aria-label="Share"
               onClick={() => requestShowShareMenu()}
               sx={[
-                (theme) => ({
-                  color: (props) => {
-                    if (props.themeColor != null) {
-                      return theme.palette.getContrastText(themeColors[props.themeColor][800]);
+                {
+                  color: (theme) => {
+                    if (themeColor != null) {
+                      return theme.palette.getContrastText(themeColors[themeColor][800]);
                     }
                     return theme.palette.text.secondary;
                   },
-                }),
+                },
                 !isSidebarExpanded && {
                   width: 1,
                   borderRadius: 0,
                 },
                 {
-                  '& .Mui-disabled': (theme) => ({
-                    color: (props) => {
-                      if (props.themeColor != null) {
-                        return `${alpha(theme.palette.getContrastText(themeColors[props.themeColor][800]), 0.3)} !important`;
+                  '& .Mui-disabled': {
+                    color: (theme) => {
+                      if (themeColor != null) {
+                        return `${alpha(theme.palette.getContrastText(themeColors[themeColor][800]), 0.3)} !important`;
                       }
                       return theme.palette.text.disabled;
                     },
-                  }),
+                  },
                 },
               ]}
               size="small"
@@ -452,27 +452,27 @@ const Sidebar = () => {
             aria-label="Notifications"
             onClick={requestShowNotificationsWindow}
             sx={[
-              (theme) => ({
-                color: (props) => {
-                  if (props.themeColor != null) {
-                    return theme.palette.getContrastText(themeColors[props.themeColor][800]);
+              {
+                color: (theme) => {
+                  if (themeColor != null) {
+                    return theme.palette.getContrastText(themeColors[themeColor][800]);
                   }
                   return theme.palette.text.secondary;
                 },
-              }),
+              },
               !isSidebarExpanded && {
                 width: 1,
                 borderRadius: 0,
               },
               {
-                '& .Mui-disabled': (theme) => ({
-                  color: (props) => {
-                    if (props.themeColor != null) {
-                      return `${alpha(theme.palette.getContrastText(themeColors[props.themeColor][800]), 0.3)} !important`;
+                '& .Mui-disabled': {
+                  color: (theme) => {
+                    if (themeColor != null) {
+                      return `${alpha(theme.palette.getContrastText(themeColors[themeColor][800]), 0.3)} !important`;
                     }
                     return theme.palette.text.disabled;
                   },
-                }),
+                },
               },
             ]}
             size="small"
@@ -484,27 +484,27 @@ const Sidebar = () => {
             aria-label={muteApp ? 'Unmute' : 'Mute'}
             onClick={() => requestSetPreference('muteApp', !muteApp)}
             sx={[
-              (theme) => ({
-                color: (props) => {
-                  if (props.themeColor != null) {
-                    return theme.palette.getContrastText(themeColors[props.themeColor][800]);
+              {
+                color: (theme) => {
+                  if (themeColor != null) {
+                    return theme.palette.getContrastText(themeColors[themeColor][800]);
                   }
                   return theme.palette.text.secondary;
                 },
-              }),
+              },
               !isSidebarExpanded && {
                 width: 1,
                 borderRadius: 0,
               },
               {
-                '& .Mui-disabled': (theme) => ({
-                  color: (props) => {
-                    if (props.themeColor != null) {
-                      return `${alpha(theme.palette.getContrastText(themeColors[props.themeColor][800]), 0.3)} !important`;
+                '& .Mui-disabled': {
+                  color: (theme) => {
+                    if (themeColor != null) {
+                      return `${alpha(theme.palette.getContrastText(themeColors[themeColor][800]), 0.3)} !important`;
                     }
                     return theme.palette.text.disabled;
                   },
-                }),
+                },
               },
             ]}
             size="small"
@@ -524,14 +524,14 @@ const Sidebar = () => {
                 borderRadius: 0,
               },
               {
-                '& .Mui-disabled': (theme) => ({
-                  color: (props) => {
-                    if (props.themeColor != null) {
-                      return `${alpha(theme.palette.getContrastText(themeColors[props.themeColor][800]), 0.3)} !important`;
+                '& .Mui-disabled': {
+                  color: (theme) => {
+                    if (themeColor != null) {
+                      return `${alpha(theme.palette.getContrastText(themeColors[themeColor][800]), 0.3)} !important`;
                     }
                     return theme.palette.text.disabled;
                   },
-                }),
+                },
               },
             ]}
             size="small"
@@ -543,14 +543,6 @@ const Sidebar = () => {
       </Box>
     </ScrollbarContainer>
   );
-};
-
-Sidebar.defaultProps = {
-  themeColor: null,
-};
-
-Sidebar.propTypes = {
-  themeColor: PropTypes.string,
 };
 
 export default Sidebar;
