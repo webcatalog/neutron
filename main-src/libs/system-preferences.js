@@ -98,7 +98,7 @@ const setSystemPreference = (name, value) => {
             }
             return null;
           })
-          .catch((err) => captureException(err))
+          .catch((err) => Sentry.captureException(err))
           .then(() => {
             checkAutoLauncherStatusAsync();
           });
