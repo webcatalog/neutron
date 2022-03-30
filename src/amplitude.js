@@ -4,7 +4,7 @@
 import amplitude from 'amplitude-js';
 import { v5 as uuidv5 } from 'uuid';
 import { app } from '@electron/remote';
-import Sentry from '@sentry/electron/renderer';
+import * as Sentry from '@sentry/electron/renderer';
 
 import { getMachineIdAsync } from './invokers';
 

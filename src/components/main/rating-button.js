@@ -20,8 +20,8 @@ import {
 } from '../../senders';
 
 const RatingButton = ({
-  className,
-  iconClassName,
+  sx,
+  iconSx,
   size,
 }) => {
   const ratingLastClicked = useSelector((state) => state.preferences.ratingLastClicked);
@@ -53,7 +53,7 @@ const RatingButton = ({
       <IconButton
         title="Rate the App"
         aria-label="Rate the App"
-        className={className}
+        sx={sx}
         size={size}
         onClick={() => {
           dialog.showMessageBox(getCurrentWindow(), {
@@ -81,7 +81,7 @@ const RatingButton = ({
           }).catch(console.log); // eslint-disable-line
         }}
       >
-        <ThumbsUpIcon className={iconClassName} />
+        <ThumbsUpIcon sx={iconSx} />
       </IconButton>
     );
   }
@@ -90,14 +90,14 @@ const RatingButton = ({
 };
 
 RatingButton.defaultProps = {
-  className: undefined,
-  iconClassName: undefined,
+  sx: undefined,
+  iconSx: undefined,
   size: undefined,
 };
 
 RatingButton.propTypes = {
-  className: PropTypes.string,
-  iconClassName: PropTypes.string,
+  sx: PropTypes.any,
+  iconSx: PropTypes.any,
   size: PropTypes.string,
 };
 

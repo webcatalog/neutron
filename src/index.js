@@ -5,6 +5,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { getCurrentWindow } from '@electron/remote';
+import * as Sentry from '@sentry/electron/renderer';
 
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
@@ -22,14 +23,7 @@ import getWorkspaceFriendlyName from './helpers/get-workspace-friendly-name';
 import { getReactInitialStateAsync } from './invokers';
 
 if (getStaticGlobal('sentryEnabled')) {
-  import('@sentry/electron/renderer')
-    .then((Sentry) => {
-      Sentry.init({});
-    })
-    .catch((err) => {
-      // eslint-disable-next-line no-console
-      console.log(err);
-    });
+  Sentry.init({});
 }
 
 const appJson = getStaticGlobal('appJson');
