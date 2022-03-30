@@ -14,6 +14,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import connectComponent from '../../helpers/connect-component';
 import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
+import isMenubarBrowser from '../../helpers/is-menubar-browser';
 
 import { updateMode } from '../../state/dialog-add-workspace/actions';
 
@@ -89,18 +90,20 @@ const AddWorkspace = ({
             label: classes.bottomNavigationActionLabel,
           }}
         />
-        <BottomNavigationAction
-          value="more"
-          icon={<MoreVertIcon />}
-          classes={{
-            root: classes.bottomNavigationActionRootSmall,
-            wrapper: classes.bottomNavigationActionWrapper,
-            label: classes.bottomNavigationActionLabel,
-          }}
-          onClick={(e) => {
-            requestShowAppMiniMenu(e.x, e.y);
-          }}
-        />
+        {isMenubarBrowser() && (
+          <BottomNavigationAction
+            value="more"
+            icon={<MoreVertIcon />}
+            classes={{
+              root: classes.bottomNavigationActionRootSmall,
+              wrapper: classes.bottomNavigationActionWrapper,
+              label: classes.bottomNavigationActionLabel,
+            }}
+            onClick={(e) => {
+              requestShowAppMiniMenu(e.x, e.y);
+            }}
+          />
+        )}
       </BottomNavigation>
     </Paper>
   </div>

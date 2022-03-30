@@ -9,6 +9,9 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 
+import isWebcatalog from '../../helpers/is-webcatalog';
+import getStaticGlobal from '../../helpers/get-static-global';
+
 import connectComponent from '../../helpers/connect-component';
 import { requestOpenInBrowser } from '../../senders';
 
@@ -58,9 +61,19 @@ const SubmitAppCard = (props) => {
     classes,
   } = props;
 
+  let submitUrl;
+  if (isWebcatalog()) submitUrl = 'https://webcatalog.io/webcatalog/apps/submit/';
+  else if (getStaticGlobal('appJson').id === 'singlebox') submitUrl = 'https://webcatalog.io/singlebox/apps/submit/';
+
+  if (!submitUrl) return null;
+
   return (
     <Grid item xs={12}>
-      <Paper elevation={0} className={classes.card} onClick={() => requestOpenInBrowser('https://webcatalog.io/webcatalog/apps/submit/')}>
+      <Paper
+        elevation={0}
+        className={classes.card}
+        onClick={() => requestOpenInBrowser(submitUrl)}
+      >
         <div>
           <AddCircleIcon className={classes.paperIcon} />
         </div>
