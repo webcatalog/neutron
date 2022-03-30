@@ -142,14 +142,10 @@ const Extensions = () => {
               <Box sx={{ flex: 1 }}>
                 <Button
                   variant="contained"
-                  color="inherit"
                   disableElevation
                   sx={{
                     float: 'left',
                     mr: 1,
-                    ':hover': {
-                      bgcolor: 'rgb(0 0 0 / 16%)',
-                    },
                   }}
                   onClick={() => refresh()}
                 >
@@ -157,14 +153,10 @@ const Extensions = () => {
                 </Button>
                 <Button
                   variant="contained"
-                  color="inherit"
                   disableElevation
                   sx={{
                     float: 'left',
                     mr: 1,
-                    ':hover': {
-                      bgcolor: 'rgb(0 0 0 / 16%)',
-                    },
                   }}
                   onClick={() => {
                     requestSetPreference('extensionEnabledExtesionIds', {});

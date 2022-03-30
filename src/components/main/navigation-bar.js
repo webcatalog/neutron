@@ -270,7 +270,7 @@ const NavigationBar = ({
             onClick={() => requestShowShareMenu()}
             sx={[
               {
-                p: 6,
+                p: 0.725,
                 WebkitAppRegion: 'no-drag',
                 color: (props) => {
                   if (props.themeColor != null) {
