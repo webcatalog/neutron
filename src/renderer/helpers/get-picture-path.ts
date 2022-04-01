@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { app } from '@electron/remote';
 
-const getPicturePath = (pictureId, folderName = 'pictures') => [
+const getPicturePath = (pictureId: string, folderName: string = 'pictures') => [
   app.getPath('userData'), folderName, `${pictureId}.png`,
 ].join(window.process.platform === 'win32' ? '\\' : '/');
 

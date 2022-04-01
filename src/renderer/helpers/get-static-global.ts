@@ -10,7 +10,7 @@ import { getGlobal } from '@electron/remote';
 
 const cached = {};
 
-const getStaticGlobal = (key) => {
+const getStaticGlobal = (key: string) => {
   if (!cached[key]) {
     cached[key] = getGlobal(key);
   }
