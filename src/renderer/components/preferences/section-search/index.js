@@ -15,7 +15,7 @@ import {
   requestSetPreference,
 } from '../../../senders';
 
-import searchEngines from '../../../constants/search-engines';
+import searchEngines from '../../../../common/constants/search-engines';
 
 const SectionSearch = () => {
   const searchEngine = useSelector((state) => state.preferences.searchEngine);

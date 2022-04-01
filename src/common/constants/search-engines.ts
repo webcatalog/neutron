@@ -1,12 +1,6 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-/* should be the same as public/constants/search-engines.js */
-
-type SearchEngineId =
-  'google' | 'baidu' | 'yahoo' | 'bing' | 'yandex' | 'sogou' | 'duckduckgo'
-  | 'ask' | 'aol' | 'ecosia' | 'startpage' | 'qwant' | 'ecosia';
-
 interface SearchEngine {
   id: SearchEngineId,
   name: string,

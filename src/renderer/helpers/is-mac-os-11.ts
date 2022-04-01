@@ -7,6 +7,6 @@
 
 import getStaticGlobal from './get-static-global';
 
-const isMacOs11 = () => getStaticGlobal('isMacOs11');
+const isMacOs11 = () => Boolean(getStaticGlobal('isMacOs11'));
 
 export default isMacOs11;

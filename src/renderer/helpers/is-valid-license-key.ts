@@ -4,7 +4,7 @@
 import md5 from 'blueimp-md5';
 import getStaticGlobal from './get-static-global';
 
-const isValidLicenseKey = (licenseKey) => {
+const isValidLicenseKey = (licenseKey: string) => {
   try {
     if (!licenseKey) return false;
 
