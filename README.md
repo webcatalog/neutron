@@ -9,7 +9,11 @@
 |[![macOS (arm64)](https://github.com/webcatalog/neutron/workflows/macOS%20(arm64)/badge.svg)](https://github.com/webcatalog/neutron/actions?query=workflow%3A%22macOS+%28arm64%29%22)|[![Linux (arm64)](https://github.com/webcatalog/neutron/workflows/Linux%20(arm64)/badge.svg)](https://github.com/webcatalog/neutron/actions?query=workflow%3A%22Linux+%28arm64%29%22)|[![Windows (arm64)](https://github.com/webcatalog/neutron/workflows/Windows%20(arm64)/badge.svg)](https://github.com/webcatalog/neutron/actions?query=workflow%3A%22Windows+%28arm64%29%22)|
 
 
-This powers the *Neutron (Electron)*-based apps you install from [WebCatalog](https://webcatalog.io/webcatalog/).
+Neutron powers:
+- WebCatalog: https://webcatalog.io/webcatalog/
+- Singlebox: https://webcatalog.io/singlebox/
+- Clovery: https://webcatalog.io/clovery/
+- Skywhale: https://webcatalog.io/skywhale/
 
 ---
 

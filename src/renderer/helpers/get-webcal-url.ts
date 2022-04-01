@@ -4,7 +4,7 @@
 import extractHostname from './extract-hostname';
 import getStaticGlobal from './get-static-global';
 
-const getWebcalUrl = (url) => {
+const getWebcalUrl = (url: string) => {
   const WEBCAL_URLS = getStaticGlobal('WEBCAL_URLS');
 
   const extractedHostname = extractHostname(url);

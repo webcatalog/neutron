@@ -3,7 +3,17 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 /* eslint-disable no-param-reassign */
-module.exports = (config) => {
-  config.target = 'electron-renderer';
-  return config;
+const path = require('path');
+
+module.exports = {
+  webpack: (config) => {
+    config.target = 'electron-renderer';
+    return config;
+  },
+  paths: (paths) => {
+    paths.appSrc = path.join(__dirname, 'src');
+    paths.appIndexJs = path.join(paths.appSrc, 'renderer', 'index.tsx');
+    paths.appTypeDeclarations = path.join(paths.appSrc, 'renderer', 'react-app-env.d.ts');
+    return paths;
+  },
 };

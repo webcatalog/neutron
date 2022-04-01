@@ -7,6 +7,6 @@
 
 import getStaticGlobal from './get-static-global';
 
-const isWindows10 = () => getStaticGlobal('isWindows10');
+const isWindows10 = () => Boolean(getStaticGlobal('isWindows10'));
 
 export default isWindows10;

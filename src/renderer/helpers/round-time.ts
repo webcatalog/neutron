@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 // input: a millisecond value
 // return value in hours/mins/seconds/milliseconds
-const roundTime = (milliseconds) => {
+const roundTime = (milliseconds: number) => {
   const secondInMilliseconds = 1000;
   const minuteInMilliseconds = 60 * secondInMilliseconds;
   const hourInMilliseconds = 60 * minuteInMilliseconds;

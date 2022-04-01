@@ -1,13 +1,13 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-const isRegExp = (str) => {
+const isUrl = (str: string) => {
   try {
-    new RegExp(`^${str}$`, 'i'); // eslint-disable-line
+    new URL(str); // eslint-disable-line
     return true;
-  } catch {
+  } catch (_) {
     return false;
   }
 };
 
-export default isRegExp;
+export default isUrl;

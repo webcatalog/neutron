@@ -4,7 +4,7 @@
 import extractHostname from './extract-hostname';
 import getStaticGlobal from './get-static-global';
 
-const getMailtoUrl = (url) => {
+const getMailtoUrl = (url: string) => {
   const MAILTO_URLS = getStaticGlobal('MAILTO_URLS');
 
   const extractedHostname = extractHostname(url);

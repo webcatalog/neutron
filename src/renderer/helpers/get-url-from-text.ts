@@ -3,11 +3,11 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import isUrl from './is-url';
 
-import searchEngines from '../constants/search-engines';
+import searchEngines from '../../common/constants/search-engines';
 
 // if text is url, return text
 // else, return search query url for that text
-const getUrlFromText = (text, searchEngine) => {
+const getUrlFromText = (text: string, searchEngine: SearchEngineId) => {
   if (!text) return text;
 
   if (isUrl(text)) {
