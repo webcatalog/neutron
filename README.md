@@ -14,8 +14,6 @@ Neutron powers:
 - Singlebox: https://webcatalog.io/singlebox/
 - Clovery: https://webcatalog.io/clovery/
 - Skywhale: https://webcatalog.io/skywhale/
-- Switchbar: https://webcatalog.io/switchbar/
-- Translatium: https://webcatalog.io/translatium/
 
 ---
 
