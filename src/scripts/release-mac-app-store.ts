@@ -2,10 +2,16 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import {
-  build, Arch, Platform, CliOptions,
+  Arch,
+  CliOptions,
+  Platform,
+  PlatformSpecificBuildOptions,
+  build,
 } from 'electron-builder';
 import path from 'path';
 import fs from 'fs-extra';
+
+import ASAR_UNPACK_CONFIG from './constants/asar-unpack-config';
 
 if (!process.env.APP_ID) {
   // eslint-disable-next-line no-console
@@ -69,11 +75,7 @@ const opts: CliOptions = {
     // build from source to build keytar as universal binary
     // https://github.com/webcatalog/neutron/pull/620
     buildDependenciesFromSource: true,
-    asarUnpack: [
-      'node_modules/node-mac-permissions/build',
-      'node_modules/keytar/build',
-      'node_modules/better-sqlite3/build',
-    ],
+    asarUnpack: ASAR_UNPACK_CONFIG as PlatformSpecificBuildOptions['asarUnpack'],
     appId: configJson.productId,
     // https://github.com/electron-userland/electron-builder/issues/3730
     buildVersion: process.platform === 'darwin' ? appVersion : undefined,
