@@ -82,7 +82,7 @@ if (sentryEnabled) {
     // disable native crash reporting
     // as it mostly reports Electron's bugs (upstream bugs)
     integrations: (defaultIntegrations) => defaultIntegrations
-      .filter((i) => i.name !== Sentry.Integrations.SentryMinidump.Id),
+      .filter((i) => i.name !== Sentry.Integrations.SentryMinidump.id),
   });
 }
 
@@ -99,7 +99,7 @@ const {
 } = require('./libs/views');
 const { getWorkspaces } = require('./libs/workspaces');
 const sendToAllWindows = require('./libs/send-to-all-windows');
-const extractHostname = require('./libs/extract-hostname');
+const extractHostname = require('../common/helpers/extract-hostname').default;
 const { getAppLockStatusAsync, unlockAppUsingTouchId } = require('./libs/app-lock');
 const isMacOs11 = require('./libs/is-mac-os-11');
 const isWindows10 = require('./libs/is-windows-10');

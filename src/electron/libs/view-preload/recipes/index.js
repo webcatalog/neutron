@@ -4,7 +4,7 @@
 const fs = require('fs');
 const path = require('path');
 const { webFrame } = require('electron');
-const extractHostname = require('../../extract-hostname');
+const extractHostname = require('../../../../common/helpers/extract-hostname').default;
 
 const mapper = {
   'discord.com': 'discord',

@@ -1,11 +1,10 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-const { dialog, shell } = require('electron');
+const { dialog, shell, app } = require('electron');
 const semver = require('semver');
 const fetch = require('./customized-fetch');
 
-const packageJson = require('../../package.json');
 const appJson = require('../constants/app-json');
 
 const mainWindow = require('../windows/main');
@@ -45,8 +44,8 @@ const checkForUpdates = (silent) => {
       // in silent mode, only show popup, if there's a major update
       // (unless user is using pre-release version)
       const hasNewUpdate = silent && !isTester()
-        ? semver.major(latestVersion) > semver.major(packageJson.version)
-        : semver.gt(latestVersion, packageJson.version);
+        ? semver.major(latestVersion) > semver.major(app.getVersion())
+        : semver.gt(latestVersion, app.getVersion());
 
       if (hasNewUpdate) {
         // silent mode: update checker only shows pop up if the main window is visible.

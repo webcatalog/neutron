@@ -13,7 +13,7 @@ const {
   MenuItem,
 } = require('electron');
 
-const searchEngines = require('../constants/search-engines');
+const searchEngines = require('../../common/constants/search-engines').default;
 const { getPreference } = require('./preferences');
 
 /**
