@@ -9,13 +9,13 @@ import fs from 'fs-extra';
 
 import ASAR_UNPACK_CONFIG from './constants/asar-unpack-config';
 
-const appId = process.env.APP_ID as 'singlebox' | 'clovery';
-
-if (!appId) {
+if (!process.env.APP_ID) {
   // eslint-disable-next-line no-console
   console.log('APP_ID env is not defined.');
   process.exit(1);
 }
+
+const appId = process.env.APP_ID as 'singlebox' | 'clovery';
 
 const buildResourcesPath = path.resolve('build-resources-appx', appId);
 
@@ -41,7 +41,7 @@ switch (platform) {
 
 const packageJsonPath = path.join('package.json');
 const packageJsonContent = fs.readJSONSync(packageJsonPath);
-packageJsonContent.name = configJson.productName;
+packageJsonContent.productName = configJson.productName;
 fs.writeJSONSync(packageJsonPath, packageJsonContent, { spaces: '  ' });
 
 const protocols = [];

@@ -1,0 +1,12 @@
+{
+    "id": "singlebox-plus",
+    "name": "Singlebox Plus",
+    "hostname": "webcatalog.io/singlebox",
+    "macAppStoreId": "1548853763",
+    "changelogUrl": "https://webcatalog.io/singlebox/changelog/",
+    "price": "25 USD",
+    "registered": true,
+    "opts": {
+        "legacyUserData": true
+    }
+}

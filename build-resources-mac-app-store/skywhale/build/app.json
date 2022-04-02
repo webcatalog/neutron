@@ -1,0 +1,14 @@
+{
+    "id": "skywhale",
+    "name": "Skywhale",
+    "hostname": "webcatalog.io/skywhale",
+    "macAppStoreId": "1609165212",
+    "changelogUrl": "https://webcatalog.io/skywhale/changelog/",
+    "price": "20 USD",
+    "registered": false,
+    "menubarBrowser": true,
+    "iapProductIdentifier": "skywhale_plus",
+    "opts": {
+        "legacyUserData": true
+    }
+}
