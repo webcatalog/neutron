@@ -13,7 +13,7 @@
     "start": "react-app-rewired start",
     "build": "react-app-rewired build && webpack",
     "webpack": "webpack",
-    "lint": "eslint ./src ./build-*.js",
+    "lint": "eslint ./src",
     "release:api": "npx ts-node src/scripts/release-api.ts",
     "release:appx": "yarn build && npx ts-node src/scripts/release-appx.ts",
     "release:mac-app-store": "yarn build && npx ts-node src/scripts/release-mac-app-store.ts",
