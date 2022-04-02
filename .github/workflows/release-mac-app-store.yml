@@ -1,4 +1,4 @@
-name: Release APPX
+name: Release Mac App Store
 
 on:
   workflow_dispatch
@@ -9,7 +9,7 @@ jobs:
 
     strategy:
       matrix:
-        app_id: [singlebox, clovery]
+        app_id: [singlebox, singlebox-plus, clovery, skywhale]
 
     steps:
       - uses: actions/checkout@v2
@@ -23,13 +23,16 @@ jobs:
       # https://github.com/mui-org/material-ui/issues/12432
       - run: yarn --prefer-offline --network-timeout 600000
       - name: Release
-        run: yarn release:appx
+        run: yarn release:mac-app-store
         env:
           APP_ID: ${{ matrix.app_id }}
           CI: true
           DEBUG: electron-packager
           CI_PULL_REQUEST: ${{ github.event_name == 'pull_request' }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Apple certificate (for code signing)
+          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+          CSC_LINK: ${{ secrets.CSC_LINK }}
           # React env
           REACT_APP_AMPLITUDE_API_KEY: ${{ secrets.REACT_APP_AMPLITUDE_API_KEY }}
           REACT_APP_ELASTIC_CLOUD_APP_SEARCH_SEARCH_KEY: ${{ secrets.REACT_APP_ELASTIC_CLOUD_APP_SEARCH_SEARCH_KEY }}

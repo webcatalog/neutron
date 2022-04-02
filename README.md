@@ -17,6 +17,7 @@ cd neutron
 For the app to be fully functional, set these environment variables:
 ```
 ELECTRON_APP_SENTRY_DSN=
+ELECTRON_APP_GOOGLE_API_KEY=
 REACT_APP_AMPLITUDE_API_KEY=
 REACT_APP_ELASTIC_CLOUD_APP_SEARCH_SEARCH_KEY=
 REACT_APP_ELASTIC_CLOUD_APP_SEARCH_API_ENDPOINT=
@@ -32,22 +33,19 @@ Modify `public/app.json` to change template app configuration. For example:
 }
 ```
 
-```bash
-# install the dependencies
-yarn
-```
-
-- Run development mode in WebCatalog mode: `yarn electron-dev`.
-- Run development mode in standalone mode: `yarn electron-dev:standalone`.
-- Run development mode in Mac App Store mode: `yarn electron-dev:mas`.
-- Run development mode in Microsoft Store mode: `yarn electron-dev:appx`.
-- Run development mode in Snap mode: `yarn electron-dev:snap`.
-- Run development mode in menu bar browser (standalone) mode: `yarn electron-dev:standalone-menubar-browser`.
-- Run development mode in menu bar browser (Mac App Store) mode: `yarn electron-dev:mas-menubar-browser`.
+- Install dependencies: `yarn`.
+- Run development mode
+  - in `template (WebCatalog)` mode: `yarn electron-dev`.
+  - in `standalone` mode: `yarn electron-dev:standalone`.
+  - in `Mac App Store` mode: `yarn electron-dev:mac-app-store`.
+  - in `Microsoft Store` mode: `yarn electron-dev:appx`.
+  - in `Snap` mode: `yarn electron-dev:snap`.
+  - in `Skywhale (standalone)` mode: `yarn electron-dev:standalone:skywhale`.
+  - in `Skywhale (Mac App Store)` mode: `yarn electron-dev:mac-app-store:skywhale`.
 
 ## Distribution
-
-```bash
-# Package template app as zip file
-yarn dist
-```
+Release as/for:
+  - template: `yarn release:template`.
+  - Mac App Store: `yarn release:mac-app-store`.
+  - APPX (Microsoft Store): `yarn release:appx`.
+  - standalone: `yarn standalone`.

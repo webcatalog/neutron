@@ -1,41 +1,25 @@
-name: Release Template
+name: Release Standalone
 
 on:
-  push:
-    tags:
-      - "v*.*.*"
+  workflow_dispatch
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
+    runs-on: windows-latest
 
     strategy:
       matrix:
+        app_id: [singlebox, clovery]
         os: [macos-latest, windows-latest, ubuntu-latest]
-        arch: [x64, arm64]
-
-    env:
-      TEMPLATE_ARCH: ${{ matrix.arch }}
+        include:
+          - app_id: skywhale
+            os: macos-latest
 
     steps:
       - uses: actions/checkout@v2
         with:
-          fetch-depth: 0
+          fetch-depth: 1
           submodules: false
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: 16.x
-
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3
-
-      - name: Install 7zip
-        run: brew install p7zip
-        if: matrix.os == 'macos-latest'
 
       - name: Install castlabs-evs
         run: |
@@ -58,13 +42,24 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
-      # https://github.com/mui-org/material-ui/issues/12432
-      - run: yarn --prefer-offline --network-timeout
 
-      - run: yarn release:template
+      # https://github.com/mui-org/material-ui/issues/12432
+      - run: yarn --prefer-offline --network-timeout 600000
+
+      - name: Release
+        run: yarn release:standalone
         env:
+          APP_ID: ${{ matrix.app_id }}
           CI: true
           DEBUG: electron-packager
+          CI_PULL_REQUEST: ${{ github.event_name == 'pull_request' }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Apple certificate (for code signing)
+          CSC_LINK: ${{ secrets.CSC_LINK }}
+          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+          # Apple ID (for notarizing)
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
           # Renderer env
           REACT_APP_AMPLITUDE_API_KEY: ${{ secrets.REACT_APP_AMPLITUDE_API_KEY }}
           REACT_APP_ELASTIC_CLOUD_APP_SEARCH_SEARCH_KEY: ${{ secrets.REACT_APP_ELASTIC_CLOUD_APP_SEARCH_SEARCH_KEY }}
@@ -73,13 +68,6 @@ jobs:
           # Electron env
           ELECTRON_APP_SENTRY_DSN: ${{ secrets.ELECTRON_APP_SENTRY_DSN }}
           ELECTRON_APP_GOOGLE_API_KEY: ${{ secrets.ELECTRON_APP_GOOGLE_API_KEY }}
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
-        if: matrix.os == 'ubuntu-latest' && matrix.arch == 'x64'
-        with:
-          draft: true
-          files: |
-            dist/template-*.json
-            dist/template-*.zip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # AWS (for uploading to S3)
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
