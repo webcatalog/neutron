@@ -1,28 +1,28 @@
-/* eslint-disable header/header */
-/* eslint-disable no-console */
-/* eslint-disable import/no-extraneous-dependencies */
-const builder = require('electron-builder');
-const path = require('path');
-const fs = require('fs-extra');
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+import {
+  build, Arch, Platform, CliOptions, PlatformSpecificBuildOptions,
+} from 'electron-builder';
+import path from 'path';
+import fs from 'fs-extra';
 
-const packageJson = require('./package.json');
+import ASAR_UNPACK_CONFIG from './constants/asar-unpack-config';
 
 const appId = process.env.APP_ID;
 
 if (!appId) {
+  // eslint-disable-next-line no-console
   console.log('APP_ID env is not defined.');
   process.exit(1);
 }
 
-const buildResourcesPath = path.join(__dirname, 'build-resources-appx', appId);
+const buildResourcesPath = path.resolve('build-resources-appx', appId);
 
 const configJson = fs.readJSONSync(path.join(buildResourcesPath, 'config.json'));
 
-const { Arch, Platform } = builder;
-
+// eslint-disable-next-line no-console
 console.log(`Machine: ${process.platform}`);
-
-const appVersion = packageJson.version;
 
 let targets;
 switch (process.platform) {
@@ -31,12 +31,13 @@ switch (process.platform) {
     break;
   }
   default: {
+    // eslint-disable-next-line no-console
     console.log('Platform is not supported');
     process.exit(1);
   }
 }
 
-const packageJsonPath = path.join(__dirname, 'package.json');
+const packageJsonPath = path.join('package.json');
 const packageJsonContent = fs.readJSONSync(packageJsonPath);
 packageJsonContent.name = configJson.productName;
 fs.writeJSONSync(packageJsonPath, packageJsonContent, { spaces: '  ' });
@@ -59,18 +60,12 @@ protocols.push({
   schemes: ['webcal'],
 });
 
-const opts = {
+const opts: CliOptions = {
   targets,
   publish: 'always',
   config: {
-    asarUnpack: [
-      'node_modules/node-mac-permissions/build',
-      'node_modules/keytar/build',
-      'node_modules/better-sqlite3/build',
-    ],
+    asarUnpack: ASAR_UNPACK_CONFIG as PlatformSpecificBuildOptions['asarUnpack'],
     appId: configJson.productId,
-    // https://github.com/electron-userland/electron-builder/issues/3730
-    buildVersion: process.platform === 'darwin' ? appVersion : undefined,
     productName: configJson.productName,
     files: [
       '!docs/**/*',
@@ -110,11 +105,13 @@ Promise.resolve()
     ));
     return Promise.all(p);
   })
-  .then(() => builder.build(opts))
+  .then(() => build(opts))
   .then(() => {
+    // eslint-disable-next-line no-console
     console.log('build successful');
   })
   .catch((err) => {
+    // eslint-disable-next-line no-console
     console.log(err);
     process.exit(1);
   });

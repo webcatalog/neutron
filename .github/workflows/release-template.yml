@@ -63,7 +63,7 @@ jobs:
 
       - run: yarn lint
 
-      - run: yarn dist
+      - run: yarn release:template
         env:
           CI: true
           REACT_APP_AMPLITUDE_API_KEY: ${{ secrets.REACT_APP_AMPLITUDE_API_KEY }}

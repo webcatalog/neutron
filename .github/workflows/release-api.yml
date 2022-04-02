@@ -37,7 +37,7 @@ jobs:
       # https://github.com/mui-org/material-ui/issues/12432
       - run: yarn --prefer-offline --network-timeout 600000
       - name: Update Versions Static API
-        run: node scripts/update-versions-static-api.mjs
+        run: yarn release:api
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
