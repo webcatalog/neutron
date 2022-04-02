@@ -34,9 +34,6 @@ const isDefaultBrowserAsync = require('../libs/is-default-browser-async');
 const isDefaultMailClientAsync = require('../libs/is-default-mail-client-async');
 const isDefaultCalendarAppAsync = require('../libs/is-default-calendar-app-async');
 
-const getExtensionFromProfile = require('../libs/extensions/get-extensions-from-profile');
-const getExtensionSources = require('../libs/extensions/get-extension-sources');
-
 const getIapFormattedPriceAsync = require('../libs/get-iap-formatted-price-async');
 
 const appJson = require('../constants/app-json');
@@ -96,9 +93,6 @@ const loadInvokers = () => {
   ipcMain.handle('get-iap-formatted-price', (e, productIdentifier) => getIapFormattedPriceAsync(productIdentifier));
 
   ipcMain.handle('get-app-json', () => appJson);
-
-  ipcMain.handle('get-extensions-from-profile', (e, browserId, profileDirName) => getExtensionFromProfile(browserId, profileDirName, true));
-  ipcMain.handle('get-extension-sources', () => getExtensionSources());
 
   ipcMain.handle('get-permission-auth-status', (e, authType) => {
     if (process.platform === 'darwin') {
