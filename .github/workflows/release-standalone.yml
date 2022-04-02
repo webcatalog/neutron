@@ -20,17 +20,32 @@ jobs:
         with:
           fetch-depth: 1
           submodules: false
-      - name: Set up Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: 16.x
-      - name: Upgrade node-gyp
+
+      - name: Install castlabs-evs
         run: |
-          npm install --global node-gyp@latest
-          npm prefix -g | % {npm config set node_gyp "$_\node_modules\node-gyp\bin\node-gyp.js"}
-        shell: powershell
+          python3 -m pip install --upgrade castlabs-evs
+          python3 -m castlabs_evs.account reauth
+        env:
+          EVS_NO_ASK: 1
+          EVS_ACCOUNT_NAME: ${{ secrets.CASTLABS_EVS_ACCOUNT_NAME }}
+          EVS_PASSWD: ${{ secrets.CASTLABS_EVS_PASSWORD }}
+        if: matrix.os == 'macos-latest'
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: Cache yarn cache
+        uses: actions/cache@v2
+        id: cache-yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
       # https://github.com/mui-org/material-ui/issues/12432
       - run: yarn --prefer-offline --network-timeout 600000
+
       - name: Release
         run: yarn release:standalone
         env:
