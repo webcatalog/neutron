@@ -1,25 +1,13 @@
-# Neutron [![License: MPL 2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](LICENSE)
+# Neutron [![License: MPL 2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](LICENSE) [![macOS (x64)](https://github.com/webcatalog/neutron/workflows/Test/badge.svg)](https://github.com/webcatalog/neutron/actions?query=workflow:%22Test%22)
 
-|macOS (x64)|Linux (x64)|Windows (x64)|
-|---|---|---|
-|[![macOS (x64)](https://github.com/webcatalog/neutron/workflows/macOS%20(x64)/badge.svg)](https://github.com/webcatalog/neutron/actions?query=workflow%3A%22macOS+%28x64%29%22)|[![Linux (x64)](https://github.com/webcatalog/neutron/workflows/Linux%20(x64)/badge.svg)](https://github.com/webcatalog/neutron/actions?query=workflow%3A%22Linux+%28x64%29%22)|[![Windows (x64)](https://github.com/webcatalog/neutron/workflows/Windows%20(x64)/badge.svg)](https://github.com/webcatalog/neutron/actions?query=workflow%3A%22Windows+%28x64%29%22)|
+This repository only contains the source code of the [Neutron](https://docs.webcatalog.io/article/23-what-is-neutron) - the core that powers:
 
-|macOS (arm64)|Linux (arm64)|Windows (arm64)|
-|---|---|---|
-|[![macOS (arm64)](https://github.com/webcatalog/neutron/workflows/macOS%20(arm64)/badge.svg)](https://github.com/webcatalog/neutron/actions?query=workflow%3A%22macOS+%28arm64%29%22)|[![Linux (arm64)](https://github.com/webcatalog/neutron/workflows/Linux%20(arm64)/badge.svg)](https://github.com/webcatalog/neutron/actions?query=workflow%3A%22Linux+%28arm64%29%22)|[![Windows (arm64)](https://github.com/webcatalog/neutron/workflows/Windows%20(arm64)/badge.svg)](https://github.com/webcatalog/neutron/actions?query=workflow%3A%22Windows+%28arm64%29%22)|
-
-
-Neutron powers:
 - WebCatalog: https://webcatalog.io/webcatalog/
 - Singlebox: https://webcatalog.io/singlebox/
 - Clovery: https://webcatalog.io/clovery/
 - Skywhale: https://webcatalog.io/skywhale/
 
----
-
 ## Development
-This repository only contains the source code of the [Neutron](https://docs.webcatalog.io/article/23-what-is-neutron) - the core that powers the apps created with WebCatalog. If you'd like to contribute to the WebCatalog app, check out <https://github.com/webcatalog/webcatalog-app>.
-
 ```bash
 # clone the project:
 git clone https://github.com/webcatalog/neutron.git
