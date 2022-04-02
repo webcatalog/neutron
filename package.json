@@ -18,6 +18,7 @@
     "release:appx": "yarn build && npx ts-node src/scripts/release-appx.ts",
     "release:mac-app-store": "yarn build && npx ts-node src/scripts/release-mac-app-store.ts",
     "release:template": "yarn build && npx ts-node src/scripts/release-template.ts",
+    "release:standalone": "yarn build && npx ts-node src/scripts/release-standalone.ts",
     "electron-dev": "concurrently \"cross-env BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\" -k",
     "electron-dev:mas": "cross-env REACT_APP_FORCE_MAS=1 yarn electron-dev",
     "electron-dev:mas-menubar-browser": "cross-env cross-env REACT_APP_FORCE_MENUBAR_BROWSER=1 REACT_APP_FORCE_MAS=1 yarn electron-dev",

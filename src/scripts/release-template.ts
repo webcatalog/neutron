@@ -12,12 +12,12 @@ import {
   Platform,
   archFromString,
 } from 'electron-builder';
-import { exec } from 'child_process';
 import hasha from 'hasha';
 
-import packageJson from '../../package.json';
-
 import ASAR_UNPACK_CONFIG from './constants/asar-unpack-config';
+import signEvsAsync from './helpers/sign-evs-async';
+import execAsync from './helpers/exec-async';
+import getCastlabsElectronVersion from './helpers/get-castlabs-electron-version';
 
 const platform = Platform.fromString(process.env.TEMPLATE_PLATFORM || process.platform);
 const archEnv = process.env.TEMPLATE_ARCH || process.arch;
@@ -34,26 +34,6 @@ const TEMPLATE_PATH = path.join(DIST_PATH, 'template');
 const zipFileName = `template-${platform}-${archEnv}.zip`;
 const TEMPLATE_ZIP_PATH = path.join(DIST_PATH, zipFileName);
 const TEMPLATE_JSON_PATH = path.join(DIST_PATH, `template-${platform}-${archEnv}.json`);
-
-// '14.0.0-beta.9' to '14.0.0-beta.9+wvcus'
-// '14.0.0' to '14.0.0+wvcus'
-const getWvvmpElectronVersion = (electronVersion: string) => `${electronVersion}+wvcus`;
-
-const execAsync = (cmd: string, opts = {}) => new Promise((resolve, reject) => {
-  exec(cmd, opts, (e, stdout, stderr) => {
-    if (e instanceof Error) {
-      reject(e);
-      return;
-    }
-
-    if (stderr) {
-      reject(new Error(stderr));
-      return;
-    }
-
-    resolve(stdout);
-  });
-});
 
 // The path/to/package-directroy means the path to the directory that contains your
 // .app or .exe, NOT the path to the .app or .exe themselves.
@@ -87,8 +67,6 @@ const getDotAppPath = () => {
   return getPackageDirPath();
 };
 
-const targets: Map<Platform, Map<Arch, string[]>> = platform.createTarget(['dir'], arch);
-
 const buildTemplateAsync = async () => {
   await fs.remove(DIST_PATH);
   await fs.ensureDir(DIST_PATH);
@@ -96,7 +74,9 @@ const buildTemplateAsync = async () => {
   // eslint-disable-next-line no-console
   console.log('Creating Juli app at', APP_PATH);
 
-  const electronVersion = packageJson.devDependencies.electron;
+  const packageJsonPath = path.join('package.json');
+  const packageJsonContent = await fs.readJSON(packageJsonPath);
+  const electronVersion = packageJsonContent.devDependencies.electron as string;
   let electronDownload: ElectronDownloadOptions | null = null;
   // arm64 is only supported on macOS
   if (arch === Arch.arm64 && platform !== Platform.MAC) {
@@ -109,10 +89,12 @@ const buildTemplateAsync = async () => {
     // to support widevinedrm
     // https://github.com/castlabs/electron-releases/issues/70#issuecomment-731360649
     electronDownload = {
-      version: getWvvmpElectronVersion(electronVersion),
+      version: getCastlabsElectronVersion(electronVersion),
       mirror: 'https://github.com/castlabs/electron-releases/releases/download/v',
     };
   }
+
+  const targets: Map<Platform, Map<Arch, string[]>> = platform.createTarget(['dir'], arch);
 
   const opts: CliOptions = {
     targets,
@@ -165,20 +147,7 @@ const buildTemplateAsync = async () => {
   // sign with Castlabs EVS
   // https://github.com/castlabs/electron-releases/wiki/EVS
   if (platform === Platform.MAC) {
-    const signPkgCmd = `python3 -m castlabs_evs.vmp sign-pkg "${getPackageDirPath()}"`;
-    // eslint-disable-next-line no-console
-    console.log('Running:', signPkgCmd);
-    const signingResult = await execAsync(signPkgCmd);
-    // eslint-disable-next-line no-console
-    console.log(signingResult);
-
-    // verify
-    const verifyingPkgCmd = `python3 -m castlabs_evs.vmp verify-pkg "${getPackageDirPath()}"`;
-    // eslint-disable-next-line no-console
-    console.log('Running:', verifyingPkgCmd);
-    const verifyingResult = await execAsync(verifyingPkgCmd);
-    // eslint-disable-next-line no-console
-    console.log(verifyingResult);
+    await signEvsAsync(getPackageDirPath());
   }
 
   // copy all neccessary to unpacked folder
@@ -231,7 +200,12 @@ const generateTemplateInfoJsonAsync = async () => {
   console.log(`Generating ${TEMPLATE_JSON_PATH}...`);
   await fs.ensureFile(TEMPLATE_JSON_PATH);
   const sha256 = await hasha.fromFile(TEMPLATE_ZIP_PATH, { algorithm: 'sha256' });
-  const { version, minimumWebCatalogVersion } = packageJson;
+  const packageJsonPath = path.join('package.json');
+  const packageJsonContent = await fs.readJSON(packageJsonPath);
+
+  const version = packageJsonContent.version as string;
+  const minimumWebCatalogVersion = packageJsonContent.minimumWebCatalogVersion as string;
+
   await fs.writeJSON(TEMPLATE_JSON_PATH, {
     version,
     minimumWebCatalogVersion,
