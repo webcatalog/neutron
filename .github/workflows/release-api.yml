@@ -6,9 +6,8 @@ on:
   pull_request:
     branches:
       - master
-      - next
     paths:
-      - 'scripts/update-versions-static-api.mjs'
+      - 'src/scripts/release-api.ts'
 
 jobs:
   build:
