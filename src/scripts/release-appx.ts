@@ -9,7 +9,7 @@ import fs from 'fs-extra';
 
 import ASAR_UNPACK_CONFIG from './constants/asar-unpack-config';
 
-const appId = process.env.APP_ID;
+const appId = process.env.APP_ID as 'singlebox' | 'clovery';
 
 if (!appId) {
   // eslint-disable-next-line no-console
@@ -21,12 +21,14 @@ const buildResourcesPath = path.resolve('build-resources-appx', appId);
 
 const configJson = fs.readJSONSync(path.join(buildResourcesPath, 'config.json'));
 
+const platform = Platform.fromString(process.platform);
+
 // eslint-disable-next-line no-console
-console.log(`Machine: ${process.platform}`);
+console.log(`Machine: ${platform.toString()}`);
 
 let targets;
-switch (process.platform) {
-  case 'win32': {
+switch (platform) {
+  case Platform.WINDOWS: {
     targets = Platform.WINDOWS.createTarget(['appx'], Arch.x64, Arch.arm64);
     break;
   }

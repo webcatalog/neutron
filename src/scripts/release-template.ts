@@ -10,6 +10,7 @@ import {
   CliOptions,
   ElectronDownloadOptions,
   Platform,
+  archFromString,
 } from 'electron-builder';
 import { exec } from 'child_process';
 import hasha from 'hasha';
@@ -18,13 +19,13 @@ import packageJson from '../../package.json';
 
 import ASAR_UNPACK_CONFIG from './constants/asar-unpack-config';
 
-const platform = process.env.TEMPLATE_PLATFORM || process.platform;
+const platform = Platform.fromString(process.env.TEMPLATE_PLATFORM || process.platform);
 const archEnv = process.env.TEMPLATE_ARCH || process.arch;
 
-const arch = archEnv === 'arm64' ? Arch.arm64 : Arch.x64;
+const arch = archFromString(archEnv);
 
 // eslint-disable-next-line no-console
-console.log(`Building for ${platform} ${archEnv}...`);
+console.log(`Building for ${platform.toString()} ${archEnv}...`);
 
 const appName = 'Juli';
 const DIST_PATH = path.join('dist');
@@ -58,19 +59,19 @@ const execAsync = (cmd: string, opts = {}) => new Promise((resolve, reject) => {
 // .app or .exe, NOT the path to the .app or .exe themselves.
 // You can pass multiple paths to sign several packages in one go.
 const getPackageDirPath = () => {
-  if (platform === 'darwin') {
+  if (platform === Platform.MAC) {
     if (arch === Arch.arm64) {
       return path.join(APP_PATH, 'mac-arm64');
     }
     return path.join(APP_PATH, 'mac');
   }
-  if (platform === 'linux') {
+  if (platform === Platform.LINUX) {
     if (arch === Arch.arm64) {
       return path.join(APP_PATH, 'linux-arm64-unpacked');
     }
     return path.join(APP_PATH, 'linux-unpacked');
   }
-  if (platform === 'win32') {
+  if (platform === Platform.WINDOWS) {
     if (arch === Arch.arm64) {
       return path.join(APP_PATH, 'win-arm64-unpacked');
     }
@@ -80,28 +81,13 @@ const getPackageDirPath = () => {
 };
 
 const getDotAppPath = () => {
-  if (platform === 'darwin') {
+  if (platform === Platform.MAC) {
     return path.join(getPackageDirPath(), `${appName}.app`);
   }
   return getPackageDirPath();
 };
 
-let targets: Map<Platform, Map<Arch, string[]>>;
-switch (platform) {
-  case 'darwin': {
-    targets = Platform.MAC.createTarget(['dir'], arch);
-    break;
-  }
-  case 'win32': {
-    targets = Platform.WINDOWS.createTarget(['dir'], arch);
-    break;
-  }
-  case 'linux':
-  default: {
-    targets = Platform.LINUX.createTarget(['dir'], arch);
-    break;
-  }
-}
+const targets: Map<Platform, Map<Arch, string[]>> = platform.createTarget(['dir'], arch);
 
 const buildTemplateAsync = async () => {
   await fs.remove(DIST_PATH);
@@ -113,7 +99,7 @@ const buildTemplateAsync = async () => {
   const electronVersion = packageJson.devDependencies.electron;
   let electronDownload: ElectronDownloadOptions | null = null;
   // arm64 is only supported on macOS
-  if (arch === Arch.arm64 && platform !== 'darwin') {
+  if (arch === Arch.arm64 && platform !== Platform.MAC) {
     // eslint-disable-next-line no-console
     console.log('Packaging using Electron@electron/electron');
   } else {
@@ -131,7 +117,7 @@ const buildTemplateAsync = async () => {
   const opts: CliOptions = {
     targets,
     config: {
-      buildDependenciesFromSource: platform === 'darwin',
+      buildDependenciesFromSource: platform === Platform.MAC,
       directories: {
         output: APP_PATH,
       },
@@ -177,7 +163,7 @@ const buildTemplateAsync = async () => {
 
   // sign with Castlabs EVS
   // https://github.com/castlabs/electron-releases/wiki/EVS
-  if (platform === 'darwin') {
+  if (platform === Platform.MAC) {
     const signPkgCmd = `python3 -m castlabs_evs.vmp sign-pkg "${getPackageDirPath()}"`;
     // eslint-disable-next-line no-console
     console.log('Running:', signPkgCmd);
@@ -229,7 +215,7 @@ const buildTemplateAsync = async () => {
   ];
 
   // signature files for Castlabs EVS
-  if (platform === 'darwin') {
+  if (platform === Platform.MAC) {
     tasks.push(fs.copy(
       path.join(dotAppPath, 'Contents', 'Frameworks', 'Electron Framework.framework', 'Versions', 'A', 'Resources', 'Electron Framework.sig'),
       path.join(TEMPLATE_PATH, 'evs', 'Electron Framework.sig'),
