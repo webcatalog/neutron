@@ -46,7 +46,7 @@ const mainWindow = require('../windows/main');
 const workspacePreferencesWindow = require('../windows/workspace-preferences');
 
 const sendToAllWindows = require('./send-to-all-windows');
-const extractHostname = require('./extract-hostname');
+const extractHostname = require('../../common/helpers/extract-hostname').default;
 const promptSetAsDefaultMailClient = require('./prompt-set-as-default-email-client');
 const promptSetAsDefaultCalendarApp = require('./prompt-set-as-default-calendar-app');
 const getPicturePath = require('./get-picture-path');

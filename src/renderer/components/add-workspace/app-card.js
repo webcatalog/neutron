@@ -18,7 +18,7 @@ import { useDispatch } from 'react-redux';
 import amplitude from '../../amplitude';
 
 import isUrl from '../../helpers/is-url';
-import extractHostname from '../../helpers/extract-hostname';
+import extractHostname from '../../../common/helpers/extract-hostname';
 import { requestCreateWorkspace, requestTrackAddWorkspace } from '../../senders';
 
 import { updateForm, updateMode } from '../../state/dialog-add-workspace/actions';

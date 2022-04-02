@@ -12,6 +12,8 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const packageJson = require('./package.json');
 
+const electronMainSrcPath = path.join(__dirname, 'src', 'electron');
+
 const externals = {};
 Object.keys(packageJson.dependencies)
   .forEach((name) => {
@@ -20,14 +22,14 @@ Object.keys(packageJson.dependencies)
 
 const getPreloadScriptsConfig = () => {
   const entry = {
-    'view-preload': path.join(__dirname, 'main-src', 'libs', 'view-preload', 'index.js'),
+    'view-preload': path.join(electronMainSrcPath, 'libs', 'view-preload', 'index.js'),
     'adblocker-electron-preload': path.join(__dirname, 'node_modules', '@cliqz', 'adblocker-electron-preload', 'dist', 'es6', 'preload.js'),
   };
 
-  fs.readdirSync(path.join(__dirname, 'main-src', 'windows'))
+  fs.readdirSync(path.join(electronMainSrcPath, 'windows'))
     .filter((fileName) => fileName.endsWith('-preload.js') && fileName !== 'shared-preload.js')
     .forEach((fileName) => {
-      entry[fileName.replace('.js', '')] = path.join(__dirname, 'main-src', 'windows', fileName);
+      entry[fileName.replace('.js', '')] = path.join(electronMainSrcPath, 'windows', fileName);
     });
 
   const plugins = [];
@@ -43,11 +45,19 @@ const getPreloadScriptsConfig = () => {
     module: {
       rules: [
         {
+          test: /\.tsx?$/,
+          use: 'ts-loader',
+          exclude: /node_modules/,
+        },
+        {
           test: /\.(js)$/,
           exclude: /node_modules/,
           use: ['babel-loader'],
         },
       ],
+    },
+    resolve: {
+      extensions: ['.tsx', '.ts', '.js'],
     },
     target: 'electron-renderer',
     output: {
@@ -91,16 +101,24 @@ const getElectronMainConfig = () => {
     },
     externals,
     entry: {
-      electron: path.join(__dirname, 'main-src', 'electron.js'),
+      electron: path.join(electronMainSrcPath, 'electron.js'),
     },
     module: {
       rules: [
+        {
+          test: /\.tsx?$/,
+          use: 'ts-loader',
+          exclude: /node_modules/,
+        },
         {
           test: /\.(js)$/,
           exclude: /node_modules/,
           use: ['babel-loader'],
         },
       ],
+    },
+    resolve: {
+      extensions: ['.tsx', '.ts', '.js'],
     },
     target: 'electron-main',
     output: {
@@ -116,10 +134,10 @@ const getRecipeConfig = () => {
   const plugins = [];
   const entry = {};
 
-  fs.readdirSync(path.join(__dirname, 'main-src', 'libs', 'view-preload', 'recipes'))
+  fs.readdirSync(path.join(electronMainSrcPath, 'libs', 'view-preload', 'recipes'))
     .filter((fileName) => fileName !== 'index.js')
     .forEach((fileName) => {
-      entry[fileName.replace('.js', '')] = path.join(__dirname, 'main-src', 'libs', 'view-preload', 'recipes', fileName);
+      entry[fileName.replace('.js', '')] = path.join(electronMainSrcPath, 'libs', 'view-preload', 'recipes', fileName);
     });
 
   return {
@@ -134,11 +152,19 @@ const getRecipeConfig = () => {
     module: {
       rules: [
         {
+          test: /\.tsx?$/,
+          use: 'ts-loader',
+          exclude: /node_modules/,
+        },
+        {
           test: /\.(js)$/,
           exclude: /node_modules/,
           use: ['babel-loader'],
         },
       ],
+    },
+    resolve: {
+      extensions: ['.tsx', '.ts', '.js'],
     },
     target: 'web',
     output: {

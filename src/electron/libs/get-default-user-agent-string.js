@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 const { app } = require('electron');
 
-const getDefultUserAgentString = () => app.userAgentFallback
+const getDefaultUserAgentString = () => app.userAgentFallback
   // Fix WhatsApp requires Google Chrome 49+ bug
   // App Name doesn't have white space in user agent. 'Google Chat' app > GoogleChat/8.1.1
   .replace(` ${app.name.replace(/ /g, '')}/${app.getVersion()}`, ` WebCatalogNeutron/${app.getVersion()}`)
@@ -11,4 +11,4 @@ const getDefultUserAgentString = () => app.userAgentFallback
   // https://github.com/webcatalog/webcatalog-app/issues/182
   .replace(` Electron/${process.versions.electron}`, '');
 
-module.exports = getDefultUserAgentString;
+module.exports = getDefaultUserAgentString;

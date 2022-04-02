@@ -7,7 +7,7 @@ const path = require('path');
 const fs = require('fs-extra');
 
 const sendToAllWindows = require('./send-to-all-windows');
-const extractHostname = require('./extract-hostname');
+const extractHostname = require('../../common/helpers/extract-hostname').default;
 const isMas = require('./is-mas');
 const isWindows10 = require('./is-windows-10');
 
