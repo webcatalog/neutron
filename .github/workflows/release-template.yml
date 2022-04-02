@@ -60,9 +60,6 @@ jobs:
             ${{ runner.os }}-yarn-
       # https://github.com/mui-org/material-ui/issues/12432
       - run: yarn --prefer-offline --network-timeout 600000
-
-      - run: yarn lint
-
       - run: yarn release:template
         env:
           CI: true

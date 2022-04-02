@@ -21,7 +21,9 @@ const configJson = fs.readJSONSync(path.join(buildResourcesPath, 'config.json'))
 // eslint-disable-next-line no-console
 console.log(`Machine: ${process.platform}`);
 
-const appVersion = fs.readJSONSync(path.resolve('package.json')).version;
+const packageJsonPath = path.resolve('package.json');
+
+const appVersion = fs.readJSONSync(packageJsonPath).version;
 
 let targets;
 switch (Platform.fromString(process.platform)) {
@@ -36,7 +38,6 @@ switch (Platform.fromString(process.platform)) {
   }
 }
 
-const packageJsonPath = path.join(__dirname, 'package.json');
 const packageJsonContent = fs.readJSONSync(packageJsonPath);
 packageJsonContent.productName = configJson.productName;
 packageJsonContent.description = configJson.productDescription;
@@ -63,6 +64,7 @@ const protocols = [
 
 const opts: CliOptions = {
   targets,
+  publish: 'always',
   config: {
     // build from source to build keytar as universal binary
     // https://github.com/webcatalog/neutron/pull/620
@@ -106,11 +108,15 @@ const opts: CliOptions = {
     // we can't remove unused *.lproj dir because
     // it would cause navigator.language & navigator.languages to always return 'en-US'
     // https://github.com/electron/electron/issues/2484
-    publish: [{
-      provider: 'github',
-      repo: 'mas-builds',
-      owner: 'webcatalog',
-    }],
+    publish: [
+      {
+        provider: 's3',
+        channel: 'latest',
+        bucket: 'cdn-2.webcatalog.io',
+        region: 'us-east-2',
+        path: `/${appId}-mac-app-store`,
+      },
+    ],
   },
 };
 
@@ -120,7 +126,7 @@ Promise.resolve()
 
     const p = filesToBeReplaced.map((fileName) => fs.copyFile(
       path.join(buildResourcesPath, 'build', fileName),
-      path.join(__dirname, 'build', fileName),
+      path.resolve('build', fileName),
     ));
     return Promise.all(p);
   })
