@@ -17,23 +17,19 @@ import getKeytarVaultName from '../../../helpers/get-keytar-vault-name';
 import {
   requestSetPreference,
 } from '../../../senders';
-import getStaticGlobal from '../../../helpers/get-static-global';
 
 const SectionAutofill = ({ passwordsAskToSave }) => (
   <List disablePadding dense>
     <ListItem>
       <ListItemText
         primary="Ask to save logins and passwords for websites"
-        secondary={getStaticGlobal('passwordManagerExtensionDetected')
-          ? `The built-in autofill feature has been taken over by the '${getStaticGlobal('passwordManagerExtensionDetected')}'.`
-          : `Passwords are stored encrypted locally on disk with the master key stored securely in ${getKeytarVaultName()}.`}
+        secondary={`Passwords are stored encrypted locally on disk with the master key stored securely in ${getKeytarVaultName()}.`}
       />
       <ListItemSecondaryAction>
         <Switch
           edge="end"
           color="primary"
-          checked={getStaticGlobal('passwordManagerExtensionDetected') ? false : passwordsAskToSave}
-          disabled={getStaticGlobal('passwordManagerExtensionDetected')}
+          checked={passwordsAskToSave}
           onChange={(e) => {
             requestSetPreference('passwordsAskToSave', e.target.checked);
           }}
