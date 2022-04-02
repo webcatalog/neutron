@@ -1,0 +1,82 @@
+name: Release Template
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest, ubuntu-latest]
+        arch: [x64, arm64]
+
+    env:
+      TEMPLATE_ARCH: ${{ matrix.arch }}
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          submodules: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16.x
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3
+
+      - run: brew install p7zip
+
+      - name: Install castlabs-evs
+        run: |
+          python3 -m pip install --upgrade castlabs-evs
+          python3 -m castlabs_evs.account reauth
+        env:
+          EVS_NO_ASK: 1
+          EVS_ACCOUNT_NAME: ${{ secrets.CASTLABS_EVS_ACCOUNT_NAME }}
+          EVS_PASSWD: ${{ secrets.CASTLABS_EVS_PASSWORD }}
+        if: matrix.os == 'macos-latest'
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: Cache yarn cache
+        uses: actions/cache@v2
+        id: cache-yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      # https://github.com/mui-org/material-ui/issues/12432
+      - run: yarn --prefer-offline --network-timeout 600000
+
+      - run: yarn lint
+
+      - run: yarn dist
+        env:
+          REACT_APP_AMPLITUDE_API_KEY: ${{ secrets.REACT_APP_AMPLITUDE_API_KEY }}
+          REACT_APP_ELASTIC_CLOUD_APP_SEARCH_SEARCH_KEY: ${{ secrets.REACT_APP_ELASTIC_CLOUD_APP_SEARCH_SEARCH_KEY }}
+          REACT_APP_ELASTIC_CLOUD_APP_SEARCH_API_ENDPOINT: ${{ secrets.REACT_APP_ELASTIC_CLOUD_APP_SEARCH_API_ENDPOINT }}
+          REACT_APP_ELASTIC_CLOUD_APP_SEARCH_ENGINE_NAME: ${{ secrets.REACT_APP_ELASTIC_CLOUD_APP_SEARCH_ENGINE_NAME }}
+          ELECTRON_APP_SENTRY_DSN: ${{ secrets.ELECTRON_APP_SENTRY_DSN }}
+          ELECTRON_APP_GOOGLE_API_KEY: ${{ secrets.ELECTRON_APP_GOOGLE_API_KEY }}
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        if: matrix.os == 'ubuntu-latest' && matrix.arch == 'x64'
+        with:
+          draft: true
+          files: |
+            dist/template-*.json
+            dist/template-*.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
