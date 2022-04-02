@@ -118,6 +118,7 @@ const buildTemplateAsync = async () => {
     targets,
     config: {
       buildDependenciesFromSource: platform === Platform.MAC,
+      forceCodeSigning: false,
       directories: {
         output: APP_PATH,
       },

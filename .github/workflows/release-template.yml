@@ -66,6 +66,7 @@ jobs:
       - run: yarn release:template
         env:
           CI: true
+          DEBUG: electron-packager
           REACT_APP_AMPLITUDE_API_KEY: ${{ secrets.REACT_APP_AMPLITUDE_API_KEY }}
           REACT_APP_ELASTIC_CLOUD_APP_SEARCH_SEARCH_KEY: ${{ secrets.REACT_APP_ELASTIC_CLOUD_APP_SEARCH_SEARCH_KEY }}
           REACT_APP_ELASTIC_CLOUD_APP_SEARCH_API_ENDPOINT: ${{ secrets.REACT_APP_ELASTIC_CLOUD_APP_SEARCH_API_ENDPOINT }}
