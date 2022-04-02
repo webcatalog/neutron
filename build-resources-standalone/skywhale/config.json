@@ -1,0 +1,9 @@
+{
+  "internalId": "skywhale",
+  "productName": "Skywhale",
+  "productDescription": "Menu Bar Web Browser",
+  "productId": "com.webcatalog.skywhale",
+  "setAsDefaultBrowser": true,
+  "setAsDefaultEmailClient": true,
+  "setAsDefaultCalendarApp": true
+}

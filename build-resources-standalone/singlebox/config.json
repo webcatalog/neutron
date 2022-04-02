@@ -1,0 +1,9 @@
+{
+  "internalId": "singlebox",
+  "productName": "Singlebox",
+  "productDescription": "All-in-One Messenger",
+  "productId": "com.webcatalog.pantext",
+  "setAsDefaultBrowser": true,
+  "setAsDefaultEmailClient": true,
+  "setAsDefaultCalendarApp": true
+}

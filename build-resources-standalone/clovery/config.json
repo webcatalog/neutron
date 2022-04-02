@@ -1,0 +1,9 @@
+{
+  "internalId": "clovery",
+  "productName": "Clovery",
+  "productDescription": "All Google Apps in One",
+  "productId": "com.webcatalog.clovery",
+  "setAsDefaultBrowser": true,
+  "setAsDefaultEmailClient": true,
+  "setAsDefaultCalendarApp": true
+}
