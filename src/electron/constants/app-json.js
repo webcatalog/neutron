@@ -6,7 +6,7 @@ const fs = require('fs-extra');
 
 const appJsonPath = process.env.NODE_ENV === 'production'
   ? path.resolve(__dirname, 'app.json')
-  : path.resolve(__dirname, '..', '..', 'public', 'app.json');
+  : path.resolve('public', 'app.json');
 
 const appJson = fs.readJsonSync(appJsonPath);
 

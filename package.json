@@ -6,20 +6,21 @@
   "engines": {
     "node": "16"
   },
-  "main": "main-src/electron.js",
+  "main": "build/electron.js",
   "scripts": {
     "postinstall": "npx patch-package && electron-builder install-app-deps && yarn generate-open-source-notices",
     "generate-open-source-notices": "yarn licenses generate-disclaimer > public/open-source-notices-automated.txt",
     "start": "react-app-rewired start",
     "build": "react-app-rewired build && webpack",
     "webpack": "webpack",
+    "webpack:dev": "cross-env NODE_ENV=development webpack",
     "lint": "eslint ./src",
     "release:api": "npx ts-node src/scripts/release-api.ts",
     "release:appx": "yarn build && npx ts-node src/scripts/release-appx.ts",
     "release:mac-app-store": "yarn build && npx ts-node src/scripts/release-mac-app-store.ts",
     "release:template": "yarn build && npx ts-node src/scripts/release-template.ts",
     "release:standalone": "yarn build && npx ts-node src/scripts/release-standalone.ts",
-    "electron-dev": "concurrently \"cross-env BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\" -k",
+    "electron-dev": "yarn webpack:dev && concurrently \"cross-env BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\" -k",
     "electron-dev:mac-app-store": "cross-env REACT_APP_FORCE_MAS=1 yarn electron-dev",
     "electron-dev:mac-app-store:skywhale": "cross-env cross-env REACT_APP_FORCE_MENUBAR_BROWSER=1 REACT_APP_FORCE_MAS=1 yarn electron-dev",
     "electron-dev:standalone": "cross-env REACT_APP_FORCE_STANDALONE=1 yarn electron-dev",
