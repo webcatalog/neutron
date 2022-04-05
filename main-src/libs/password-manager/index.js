@@ -145,7 +145,7 @@ const PasswordManagers = {
     });
 
     ipcMain.on('password-autofill-check', (e) => {
-      if (!getPreference('passwordsAskToSave') || PasswordManagers.managers.length < 1) {
+      if (global.passwordManagerExtensionDetected || !getPreference('passwordsAskToSave') || PasswordManagers.managers.length < 1) {
         return;
       }
 

@@ -85,6 +85,10 @@ const defaultPreferences = {
   // https://github.com/electron/electron/issues/28422
   enableExperimentalWebPlatformFeatures: ['excalidraw', 'excalidraw-plus', 'diagramsnet']
     .includes(appJson.id),
+  // extensions
+  extensionSourceBrowserId: process.platform === 'win32' ? 'edge' : 'chrome',
+  extensionSourceProfileDirName: 'Default',
+  extensionEnabledExtesionIds: {},
   hibernateUnusedWorkspacesAtLaunch: false,
   hibernateWhenUnused: false,
   hibernateWhenUnusedTimeout: 0,

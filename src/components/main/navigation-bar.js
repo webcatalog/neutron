@@ -22,6 +22,8 @@ import VolumeOffIcon from '@material-ui/icons/VolumeOff';
 import connectComponent from '../../helpers/connect-component';
 import getUrlFromText from '../../helpers/get-url-from-text';
 import getStaticGlobal from '../../helpers/get-static-global';
+import isMas from '../../helpers/is-mas';
+import isAppx from '../../helpers/is-appx';
 
 import searchEngines from '../../constants/search-engines';
 import themeColors from '../../constants/theme-colors';
@@ -38,6 +40,7 @@ import {
 } from '../../senders';
 
 import RatingButton from './rating-button';
+import BrowserActionList from './browser-action-list';
 import NavigationButtons from '../shared/navigation-buttons';
 import isMenubarBrowser from '../../helpers/is-menubar-browser';
 
@@ -130,6 +133,17 @@ const useStyles = makeStyles((theme) => ({
   centerWithExpandedSidebar: {
     '@media (max-width:700px)': {
       display: 'none',
+    },
+  },
+  browserActionList: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    paddingRight: theme.spacing(1),
+    '& * > button': {
+      height: 20,
+      width: 20,
     },
   },
 }));
@@ -242,6 +256,7 @@ const NavigationBar = ({
           }}
         />
       </div>
+      {!isAppx() && !isMas() && <BrowserActionList className={classes.browserActionList} />}
       <div>
         <RatingButton
           classes={{

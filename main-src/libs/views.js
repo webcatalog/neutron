@@ -17,6 +17,7 @@ const { ElectronBlocker } = require('@cliqz/adblocker-electron');
 const unusedFilename = require('unused-filename');
 const pupa = require('pupa');
 const extName = require('ext-name');
+const { ElectronChromeExtensions } = require('electron-chrome-extensions');
 const electronRemote = require('@electron/remote/main');
 
 const fetch = require('./customized-fetch');
@@ -47,6 +48,7 @@ const getViewBounds = require('./get-view-bounds');
 const isMas = require('./is-mas');
 const getUtmSource = require('./get-utm-source');
 const getWorkspaceFriendlyName = require('./get-workspace-friendly-name');
+const getExtensionFromProfile = require('./extensions/get-extensions-from-profile');
 const isSnap = require('./is-snap');
 const isAppx = require('./is-appx');
 const isWebcatalog = require('./is-webcatalog');
@@ -359,6 +361,7 @@ const addViewAsync = async (browserWindow, workspace) => {
 
   if (views[viewId] != null) return;
 
+  const partitionId = global.shareWorkspaceBrowsingData ? 'persist:shared' : `persist:${workspace.id}`;
   // user agent
   let customUserAgent;
   if (getWorkspacePreference(workspace.id, 'forceMobileView') || getPreference('forceMobileView')) {
@@ -392,12 +395,64 @@ const addViewAsync = async (browserWindow, workspace) => {
     backgroundThrottling: global.backgroundThrottling,
   };
 
+  // extensions
+  if (global.extensionEnabled) {
+    const loadableExtensions = getExtensionFromProfile(
+      global.extensionSourceBrowserId,
+      global.extensionSourceProfileDirName,
+    )
+      .filter((ext) => global.extensionEnabledExtesionIds[ext.id]);
+    if (loadableExtensions.length > 0 && !extensionManagers[partitionId]) {
+      extensionManagers[partitionId] = new ElectronChromeExtensions({
+        modulePath: process.env.NODE_ENV === 'production' ? path.join(__dirname, 'electron-chrome-extensions') : undefined,
+        session: ses,
+        createTab(details) {
+          const win = new BrowserWindow({
+            show: true,
+            width: 800,
+            height: 600,
+            webPreferences: sharedWebPreferences,
+          });
+
+          if (details && details.url) {
+            win.loadURL(details.url);
+          }
+
+          return [win.webContents, win];
+        },
+        createWindow(details) {
+          const win = new BrowserWindow({
+            show: true,
+            width: details.width || 800,
+            height: details.height || 600,
+            webPreferences: sharedWebPreferences,
+          });
+
+          if (details && details.url) {
+            win.loadURL(details.url);
+          }
+
+          return win;
+        },
+      });
+    }
+    await Promise.all(
+      // eslint-disable-next-line no-console
+      loadableExtensions.map((ext) => ses.loadExtension(ext.path).catch(console.log)),
+    );
+  }
+  const extensions = extensionManagers[partitionId];
+
   const view = new BrowserView({
     webPreferences: sharedWebPreferences,
   });
   electronRemote.enable(view.webContents);
   if (customUserAgent) {
     view.webContents.setUserAgent(customUserAgent);
+  }
+
+  if (extensions) {
+    extensions.addTab(view.webContents, browserWindow);
   }
 
   view.webContents.workspaceId = workspace.id;
@@ -624,6 +679,15 @@ const addViewAsync = async (browserWindow, workspace) => {
     contents.on('context-menu', (e, info) => {
       contextMenuBuilder.buildMenuForElement(info)
         .then((menu) => {
+          const extensionMenuItems = extensions
+            ? extensions.getContextMenuItems(contents, info) : [];
+          if (extensionMenuItems.length > 0) {
+            menu.append(new MenuItem({ type: 'separator' }));
+            extensionMenuItems.forEach((menuItem) => {
+              menu.append(menuItem);
+            });
+          }
+
           const utmSource = getUtmSource();
 
           if (info.linkURL && info.linkURL.length > 0) {

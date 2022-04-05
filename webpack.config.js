@@ -21,6 +21,7 @@ Object.keys(packageJson.dependencies)
 const getPreloadScriptsConfig = () => {
   const entry = {
     'view-preload': path.join(__dirname, 'main-src', 'libs', 'view-preload', 'index.js'),
+    'electron-chrome-extensions/dist/preload': path.join(__dirname, 'node_modules', 'electron-chrome-extensions', 'dist', 'preload.js'),
     'adblocker-electron-preload': path.join(__dirname, 'node_modules', '@cliqz', 'adblocker-electron-preload', 'dist', 'es6', 'preload.js'),
   };
 
