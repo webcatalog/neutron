@@ -27,11 +27,14 @@ import connectComponent from '../../helpers/connect-component';
 import getWorkspacesAsList from '../../helpers/get-workspaces-as-list';
 import getStaticGlobal from '../../helpers/get-static-global';
 import getWorkspaceFriendlyName from '../../helpers/get-workspace-friendly-name';
+import isMas from '../../helpers/is-mas';
+import isAppx from '../../helpers/is-appx';
 
 import themeColors from '../../constants/theme-colors';
 
 import WorkspaceSelector from './workspace-selector';
 import RatingButton from './rating-button';
+import BrowserActionList from './browser-action-list';
 
 import {
   requestClearWorkspaceBrowsingData,
@@ -148,6 +151,11 @@ const useStyles = makeStyles((theme) => {
         }
         return theme.palette.text.disabled;
       },
+    },
+    browserActionList: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: theme.spacing(0.5),
     },
     progressContainer: {
       width: '100%',
@@ -382,6 +390,9 @@ const Sidebar = ({
             />
           )}
         </div>
+        {!navigationBar && !isMas() && !isAppx() && (
+          <BrowserActionList className={classes.browserActionList} />
+        )}
         {!navigationBar && (
         <div
           className={classnames(classes.end, isSidebarExpanded && classes.endExpanded)}
