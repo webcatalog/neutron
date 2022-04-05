@@ -1,6 +1,11 @@
 # Neutron [![License: MPL 2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](LICENSE) [![macOS (x64)](https://github.com/webcatalog/neutron/workflows/Test/badge.svg)](https://github.com/webcatalog/neutron/actions?query=workflow:%22Test%22)
 
-The source code of the [Neutron](https://docs.webcatalog.io/article/23-what-is-neutron) - the core that powers:
+## Archived
+This repository is archived. To help us better improve the product and protect our intellectual assets, the development has been moved to Photon, a new core with closed source code base.
+
+## Introduction
+
+The source code of the Neutron - the core that powers:
 
 - WebCatalog: https://webcatalog.io/webcatalog/
 - Singlebox: https://webcatalog.io/singlebox/
@@ -48,4 +53,4 @@ Release as/for:
   - template: `yarn release:template`.
   - Mac App Store: `yarn release:mac-app-store`.
   - APPX (Microsoft Store): `yarn release:appx`.
-  - standalone: `yarn standalone`.
+  - standalone: `yarn release:standalone`.
