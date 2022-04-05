@@ -34,7 +34,7 @@ const getPreloadScriptsConfig = () => {
 
   const plugins = [];
   return {
-    mode: 'production',
+    mode: process.env.NODE_ENV || 'production',
     node: {
       global: false,
       __filename: false,
@@ -93,7 +93,7 @@ const getElectronMainConfig = () => {
   }
 
   return {
-    mode: 'production',
+    mode: process.env.NODE_ENV || 'production',
     node: {
       global: false,
       __filename: false,
@@ -141,7 +141,7 @@ const getRecipeConfig = () => {
     });
 
   return {
-    mode: 'production',
+    mode: process.env.NODE_ENV || 'production',
     node: {
       global: false,
       __filename: false,
