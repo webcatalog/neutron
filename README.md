@@ -53,4 +53,4 @@ Release as/for:
   - template: `yarn release:template`.
   - Mac App Store: `yarn release:mac-app-store`.
   - APPX (Microsoft Store): `yarn release:appx`.
-  - standalone: `yarn standalone`.
+  - standalone: `yarn release:standalone`.
