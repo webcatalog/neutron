@@ -5,8 +5,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Button from '@material-ui/core/Button';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -20,8 +18,6 @@ import 'ace-builds/src-noconflict/theme-github';
 import 'ace-builds/src-noconflict/theme-monokai';
 
 import connectComponent from '../../../helpers/connect-component';
-
-import { requestOpenInBrowser } from '../../../senders';
 
 import { updateForm, save, close } from '../../../state/dialog-code-injection/actions';
 
