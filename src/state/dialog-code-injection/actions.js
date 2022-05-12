@@ -22,8 +22,6 @@ export const open = (codeInjectionType) => (dispatch, getState) => {
       form: {
         preferences: {
           code: form.preferences[`${codeInjectionType}CodeInjection`],
-          // allowNodeInJsCodeInjection is only used for js injection
-          allowNodeInJsCodeInjection: codeInjectionType === 'js' ? form.preferences.allowNodeInJsCodeInjection : false,
         },
       },
     });
@@ -36,8 +34,6 @@ export const open = (codeInjectionType) => (dispatch, getState) => {
     codeInjectionType,
     form: {
       code: preferences[`${codeInjectionType}CodeInjection`],
-      // allowNodeInJsCodeInjection is only used for js injection
-      allowNodeInJsCodeInjection: codeInjectionType === 'js' ? preferences.allowNodeInJsCodeInjection : false,
     },
   });
 };
@@ -58,14 +54,10 @@ export const save = () => (dispatch, getState) => {
     dispatch(updateFormDialogWorkspacePreferences({
       preferences: {
         [`${codeInjectionType}CodeInjection`]: form.code,
-        allowNodeInJsCodeInjection: codeInjectionType === 'js' ? form.allowNodeInJsCodeInjection : undefined,
       },
     }));
   } else {
     requestSetPreference(`${codeInjectionType}CodeInjection`, form.code);
-    if (codeInjectionType === 'js' && typeof form.allowNodeInJsCodeInjection === 'boolean') {
-      requestSetPreference('allowNodeInJsCodeInjection', form.allowNodeInJsCodeInjection);
-    }
   }
 
   dispatch(close());

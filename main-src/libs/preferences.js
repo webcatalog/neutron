@@ -43,7 +43,6 @@ const shouldShowSidebar = !isMenubarBrowser()
   && (!appJson.url || Boolean(MAILTO_URLS[extractHostname(appJson.url)]));
 
 const defaultPreferences = {
-  allowNodeInJsCodeInjection: false,
   alwaysOnTop: false, // for menubar
   alwaysOpenInMainWindow: false,
   appLockTimeout: 300000,

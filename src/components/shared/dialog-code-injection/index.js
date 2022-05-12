@@ -49,7 +49,6 @@ const getMode = (codeInjectionType) => {
 };
 
 const CodeInjection = ({
-  allowNodeInJsCodeInjection,
   classes,
   code,
   codeInjectionType,
@@ -78,25 +77,7 @@ const CodeInjection = ({
     </DialogContent>
     <DialogActions>
       <div className={classes.actions}>
-        <div className={classes.actionsLeft}>
-          {codeInjectionType === 'js' && (
-            <>
-              <Button variant="text" onClick={() => requestOpenInBrowser('https://github.com/webcatalog/webcatalog-app/wiki/WebCatalog-APIs')}>
-                WebCatalog API Documentation
-              </Button>
-              <FormControlLabel
-                control={(
-                  <Switch
-                    checked={allowNodeInJsCodeInjection}
-                    onChange={(e) => onUpdateForm({ allowNodeInJsCodeInjection: e.target.checked })}
-                    color="primary"
-                  />
-                )}
-                label="Allow access to Node.JS & Electron APIs"
-              />
-            </>
-          )}
-        </div>
+        <div className={classes.actionsLeft} />
         <div className={classes.actionsRight}>
           <Button color="primary" variant="contained" disableElevation className={classes.button} onClick={onSave}>
             Save
@@ -111,13 +92,11 @@ const CodeInjection = ({
 );
 
 CodeInjection.defaultProps = {
-  allowNodeInJsCodeInjection: false,
   codeInjectionType: 'js',
   open: false,
 };
 
 CodeInjection.propTypes = {
-  allowNodeInJsCodeInjection: PropTypes.bool,
   classes: PropTypes.object.isRequired,
   code: PropTypes.string.isRequired,
   codeInjectionType: PropTypes.string,
@@ -129,7 +108,6 @@ CodeInjection.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  allowNodeInJsCodeInjection: state.dialogCodeInjection.form.allowNodeInJsCodeInjection,
   code: state.dialogCodeInjection.form.code || '',
   codeInjectionType: state.dialogCodeInjection.codeInjectionType,
   open: state.dialogCodeInjection.open,
