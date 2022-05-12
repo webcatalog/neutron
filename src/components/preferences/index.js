@@ -15,7 +15,6 @@ import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 
 import AssessmentIcon from '@material-ui/icons/Assessment';
-import AssignmentIcon from '@material-ui/icons/Assignment';
 import CachedIcon from '@material-ui/icons/Cached';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CodeIcon from '@material-ui/icons/Code';
@@ -46,7 +45,6 @@ import SectionAbout from './section-about';
 import SectionAccountLicensing from './section-account-licensing';
 import SectionAppLock from './section-app-lock';
 import SectionAutoReload from './section-auto-reload';
-import SectionAutofill from './section-autofill';
 import SectionBadge from './section-badge';
 import SectionContents from './section-contents';
 import SectionDarkReader from './section-dark-reader';
@@ -64,16 +62,13 @@ import SectionLocationPermission from './section-location-permissions';
 import SectionMode from './section-mode';
 import SectionMoreApps from './section-more-apps';
 import SectionNetwork from './section-network';
-import SectionNeverSaved from './section-never-saved';
 import SectionNotifications from './section-notifications';
 import SectionPermissions from './section-permissions';
 import SectionPopupWindows from './section-popup-windows';
 import SectionPrivacy from './section-privacy';
 import SectionReset from './section-reset';
-import SectionSavedPassword from './section-saved-passwords';
 import SectionSearch from './section-search';
 import SectionSystem from './section-system';
-import SectionTabs from './section-tabs';
 import SectionTelemetry from './section-telemetry';
 import SectionTheme from './section-theme';
 import SectionThrottling from './section-throttling';
@@ -182,7 +177,6 @@ const sections = {
       tray: { text: window.process.platform === 'darwin' ? 'Menu Bar' : 'Tray', Component: SectionTray, hidden: isMenubarBrowser() },
       window: { text: 'Main Window', Component: SectionWindow },
       popupWindows: { text: 'Popup Windows', Component: SectionPopupWindows, hidden: window.process.platform !== 'darwin' },
-      tabs: { text: 'Tabs', Component: SectionTabs, hidden: process.env.NODE_ENV === 'production' },
     },
   },
   notifications: {
@@ -194,16 +188,6 @@ const sections = {
     subSections: {
       notifications: { text: 'Notifications', Component: SectionNotifications },
       badge: { text: 'Badge', Component: SectionBadge },
-    },
-  },
-  autofill: {
-    text: 'Autofill',
-    Icon: AssignmentIcon,
-    hidden: !getStaticGlobal('keytarLoaded'),
-    subSections: {
-      autofill: { text: 'Autofill', Component: SectionAutofill },
-      savedPasswords: { text: 'Saved Passwords', Component: SectionSavedPassword },
-      neverSaved: { text: 'Never Saved', Component: SectionNeverSaved },
     },
   },
   downloads: {

@@ -1,8 +1,6 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import amplitude from '../amplitude';
-
 export const enqueueRequestRestartSnackbar = () => {
   if (window.mode === 'workspace-preferences' || window.mode === 'preferences') {
     window.ipcRenderer.emit('enqueue-request-restart-snackbar');
@@ -57,8 +55,6 @@ export const getWorkspacePreferences = (id) => window.ipcRenderer.sendSync('get-
 export const getWorkspaces = () => window.ipcRenderer.sendSync('get-workspaces');
 export const requestClearBrowsingData = () => window.ipcRenderer.send('request-clear-browsing-data');
 export const requestCreateWorkspace = (workspaceObj) => {
-  // only log event type to protect privacy
-  amplitude.getInstance().logEvent('webcatalog-engine: add workspace');
   window.ipcRenderer.send('request-create-workspace', workspaceObj);
 };
 export const requestTrackAddWorkspace = (deviceId, appId) => window.ipcRenderer.send('request-track-add-workspace', deviceId, appId);
@@ -66,15 +62,11 @@ export const requestHibernateWorkspace = (id, timeout) => window.ipcRenderer.sen
 export const requestOpenUrlInWorkspace = (url, id) => window.ipcRenderer.send('request-open-url-in-workspace', url, id);
 export const requestRealignActiveWorkspace = () => window.ipcRenderer.send('request-realign-active-workspace');
 export const requestRemoveWorkspace = (id) => {
-  // only log event type to protect privacy
-  amplitude.getInstance().logEvent('webcatalog-engine: remove workspace');
   window.ipcRenderer.send('request-remove-workspace', id);
 };
 export const requestClearWorkspaceBrowsingData = (id) => window.ipcRenderer.send('request-clear-workspace-browsing-data', id);
 export const requestRemoveWorkspacePicture = (id) => window.ipcRenderer.send('request-remove-workspace-picture', id);
 export const requestSetActiveWorkspace = (id) => {
-  // only log event type to protect privacy
-  amplitude.getInstance().logEvent('webcatalog-engine: set active workspace');
   window.ipcRenderer.send('request-set-active-workspace', id);
 };
 export const requestSetWorkspace = (id, opts) => window.ipcRenderer.send('request-set-workspace', id, opts);
@@ -111,7 +103,3 @@ export const requestUnlockAppUsingTouchId = () => window.ipcRenderer.send('reque
 
 // Share Menu
 export const requestShowShareMenu = () => window.ipcRenderer.send('request-show-share-menu');
-
-// Tabs
-export const requestAddWorkspaceTab = (workspaceId, tabObj) => window.ipcRenderer.send('request-add-workspace-tab', workspaceId, tabObj);
-export const requestRemoveWorkspaceTab = (workspaceId, tabId) => window.ipcRenderer.send('request-remove-workspace-tab', workspaceId, tabId);

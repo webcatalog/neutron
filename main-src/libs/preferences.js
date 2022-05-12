@@ -3,8 +3,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 const settings = require('electron-settings');
 const { app, nativeTheme, ipcMain } = require('electron');
-const path = require('path');
-const fs = require('fs-extra');
 
 const sendToAllWindows = require('./send-to-all-windows');
 const extractHostname = require('./extract-hostname');
@@ -14,7 +12,6 @@ const isWindows10 = require('./is-windows-10');
 const MAILTO_URLS = require('../constants/mailto-urls');
 
 const appJson = require('../constants/app-json');
-const isWebcatalog = require('./is-webcatalog');
 const isStandalone = require('./is-standalone');
 const isMenubarBrowser = require('./is-menubar-browser');
 const isValidLicenseKey = require('./is-valid-license-key');
@@ -43,7 +40,6 @@ const shouldShowSidebar = !isMenubarBrowser()
   && (!appJson.url || Boolean(MAILTO_URLS[extractHostname(appJson.url)]));
 
 const defaultPreferences = {
-  allowNodeInJsCodeInjection: false,
   alwaysOnTop: false, // for menubar
   alwaysOpenInMainWindow: false,
   appLockTimeout: 300000,
@@ -93,7 +89,6 @@ const defaultPreferences = {
   hibernateWhenUnused: false,
   hibernateWhenUnusedTimeout: 0,
   iapPurchased: false,
-  ignoreCertificateErrors: false,
   internalUrlRule: '',
   externalUrlRule: '',
   jsCodeInjection: null,
@@ -102,12 +97,6 @@ const defaultPreferences = {
   muteApp: false,
   openFolderWhenDoneDownloading: true,
   openProtocolUrlInNewWindow: 'ask', // 'ask', 'newWindow', 'mainWindow'
-  /* Password Manager */
-  // Apps generated with WebCatalog are not code-signed
-  // causing macOS Keychain not to recognize the apps after re-generating (updating)
-  // so it's not good UX => disable password autofill by default
-  passwordsAskToSave: true,
-  passwordsNeverSaveDomains: [],
   pauseNotifications: null,
   pauseNotificationsBySchedule: false,
   pauseNotificationsByScheduleFrom: getDefaultPauseNotificationsByScheduleFrom(),
@@ -140,8 +129,6 @@ const defaultPreferences = {
   standaloneLicenseKey: undefined,
   standaloneRegistered: false,
   swipeToNavigate: true,
-  useTabs: false,
-  telemetry: false,
   themeColor: 'auto',
   themeSource: 'system',
   titleBar: !isMenubarBrowser(),
@@ -169,36 +156,6 @@ const initCachedPreferences = () => {
     ...defaultPreferences,
     ...settings.getSync(`preferences.${v}`),
   };
-
-  // shared-preferences.json includes:
-  // telemetry & sentry pref
-  // so that privacy consent prefs
-  // can be shared across WebCatalog and WebCatalog-Engine-based apps
-  // ignore this if error occurs
-  // so the more important initialization process can proceed
-  if (isWebcatalog()) {
-    const sharedPreferences = {
-      telemetry: false,
-      sentry: false,
-    };
-
-    try {
-      const sharedPreferencesPath = path.join(app.getPath('home'), '.webcatalog', 'shared-preferences.json');
-      if (fs.existsSync(sharedPreferencesPath)) {
-        const jsonContent = fs.readJsonSync(sharedPreferencesPath);
-        sharedPreferences.telemetry = Boolean(jsonContent.telemetry);
-        sharedPreferences.sentry = Boolean(jsonContent.sentry);
-      }
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.log(err);
-    }
-
-    cachedPreferences = {
-      ...cachedPreferences,
-      ...sharedPreferences,
-    };
-  }
 
   // this feature used to be free on MAS
   // so we need this code to deactivate it for free users

@@ -8,34 +8,17 @@ const loadAsync = async (workspaceId) => {
   const workspacePreferences = ipcRenderer.sendSync('get-workspace-preferences', workspaceId);
 
   const jsCodeInjection = workspacePreferences.jsCodeInjection || preferences.jsCodeInjection;
-  const allowNodeInJsCodeInjection = workspacePreferences.jsCodeInjection
-    ? Boolean(workspacePreferences.allowNodeInJsCodeInjection)
-    : preferences.allowNodeInJsCodeInjection;
   const cssCodeInjection = workspacePreferences.cssCodeInjection || preferences.cssCodeInjection;
 
   if (jsCodeInjection && jsCodeInjection.trim().length > 0) {
-    if (allowNodeInJsCodeInjection) {
-      try {
-        // eslint-disable-next-line no-new-func
-        Function(
-          'require',
-          `"use strict";${jsCodeInjection}`,
-        )(require);
-      } catch (err) {
-        /* eslint-disable no-console */
-        console.log(err);
-        /* eslint-enable no-console */
-      }
-    } else {
-      try {
-        const node = document.createElement('script');
-        node.innerHTML = jsCodeInjection;
-        document.body.appendChild(node);
-      } catch (err) {
-        /* eslint-disable no-console */
-        console.log(err);
-        /* eslint-enable no-console */
-      }
+    try {
+      const node = document.createElement('script');
+      node.innerHTML = jsCodeInjection;
+      document.body.appendChild(node);
+    } catch (err) {
+      /* eslint-disable no-console */
+      console.log(err);
+      /* eslint-enable no-console */
     }
   }
 

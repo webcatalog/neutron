@@ -109,11 +109,9 @@ const promptSetAsDefaultMailClient = require('./libs/prompt-set-as-default-email
 const promptSetAsDefaultCalendarApp = require('./libs/prompt-set-as-default-calendar-app');
 const getWorkspaceFriendlyName = require('./libs/get-workspace-friendly-name');
 const windowShortcut = require('./libs/window-shortcut');
-const PasswordManagers = require('./libs/password-manager');
 
 const MAILTO_URLS = require('./constants/mailto-urls');
 const WEBCAL_URLS = require('./constants/webcal-urls');
-const PASSWORD_MANAGERS = require('./constants/password-managers');
 const isStandalone = require('./libs/is-standalone');
 const isSnap = require('./libs/is-snap');
 const getChromeMobileUserAgentString = require('./libs/get-chrome-mobile-user-agent-string');
@@ -143,12 +141,6 @@ if (!gotTheLock) {
   const enableExperimentalWebPlatformFeatures = getPreference('enableExperimentalWebPlatformFeatures');
   if (enableExperimentalWebPlatformFeatures) {
     app.commandLine.appendSwitch('enable-experimental-web-platform-features');
-  }
-
-  const ignoreCertificateErrors = getPreference('ignoreCertificateErrors');
-  if (ignoreCertificateErrors) {
-    // https://www.electronjs.org/docs/api/command-line-switches
-    app.commandLine.appendSwitch('ignore-certificate-errors');
   }
 
   // Listen for transactions as soon as possible.
@@ -367,7 +359,6 @@ if (!gotTheLock) {
 
   loadListeners();
   loadInvokers();
-  PasswordManagers.initialize();
 
   const commonInit = () => {
     app.whenReady()
@@ -432,11 +423,11 @@ if (!gotTheLock) {
           }).catch(console.log); // eslint-disable-line
         }
 
-        if ((isMas() || isStandalone()) && !privacyConsentAsked) {
+        if (!privacyConsentAsked) {
           dialog.showMessageBox(mainWindow.get(), {
             type: 'question',
             buttons: ['Allow', 'Don\'t Allow'],
-            message: 'Can we collect anonymous usage statistics and crash reports?',
+            message: 'Can we collect anonymous error and crash reports?',
             detail: 'The data helps us improve and optimize the product. You can change your decision at any time in the app’s preferences.',
             cancelId: 1,
             defaultId: 0,
@@ -444,10 +435,8 @@ if (!gotTheLock) {
             setPreference('privacyConsentAsked', true);
             if (response === 0) {
               setPreference('sentry', true);
-              setPreference('telemetry', true);
             } else {
               setPreference('sentry', false);
-              setPreference('telemetry', false);
             }
           }).catch(console.log); // eslint-disable-line
         }
@@ -542,7 +531,6 @@ if (!gotTheLock) {
       trayIcon,
       useSystemTitleBar,
       useSystemWindowButtons,
-      useTabs,
       windowButtons,
     } = getPreferences();
 
@@ -558,7 +546,6 @@ if (!gotTheLock) {
 
     global.isMacOs11 = isMacOs11();
     global.isWindows10 = isWindows10();
-    global.useTabs = process.env.NODE_ENV !== 'production' && useTabs;
     global.attachToMenubar = attachToMenubar;
     global.runInBackground = process.platform !== 'darwin' && runInBackground;
     global.sidebar = sidebar;
@@ -603,17 +590,6 @@ if (!gotTheLock) {
       global.darkReaderExtensionDetected = Boolean(
         loadableExtensions.find((ext) => ext.name && ext.name.toLowerCase().includes('dark reader')),
       );
-
-      const passwordManagerExt = loadableExtensions.find((ext) => {
-        const found = PASSWORD_MANAGERS.find(
-          (passwordManagerName) => ext.name
-            && ext.name.toLowerCase().includes(passwordManagerName.toLowerCase()),
-        );
-        return Boolean(found);
-      });
-      if (passwordManagerExt) {
-        global.passwordManagerExtensionDetected = passwordManagerExt.name;
-      }
     }
 
     global.hibernateWhenUnused = hibernateWhenUnused;

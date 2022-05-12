@@ -31,7 +31,6 @@ import preferences from './preferences/reducers';
 import systemPreferences from './system-preferences/reducers';
 import updater from './updater/reducers';
 import workspaceMetas from './workspace-metas/reducers';
-import workspaceTabs from './workspace-tabs/reducers';
 import workspaces from './workspaces/reducers';
 
 import loadListeners from '../listeners';
@@ -60,7 +59,6 @@ const rootReducer = combineReducers({
   systemPreferences,
   updater,
   workspaceMetas,
-  workspaceTabs,
   workspaces,
 });
 
