@@ -102,12 +102,6 @@ const defaultPreferences = {
   muteApp: false,
   openFolderWhenDoneDownloading: true,
   openProtocolUrlInNewWindow: 'ask', // 'ask', 'newWindow', 'mainWindow'
-  /* Password Manager */
-  // Apps generated with WebCatalog are not code-signed
-  // causing macOS Keychain not to recognize the apps after re-generating (updating)
-  // so it's not good UX => disable password autofill by default
-  passwordsAskToSave: true,
-  passwordsNeverSaveDomains: [],
   pauseNotifications: null,
   pauseNotificationsBySchedule: false,
   pauseNotificationsByScheduleFrom: getDefaultPauseNotificationsByScheduleFrom(),

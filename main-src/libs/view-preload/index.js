@@ -12,7 +12,6 @@ const darkReader = require('./dark-reader');
 const displayMedia = require('./display-media');
 const linkPreview = require('./link-preview');
 const notifications = require('./notifications');
-const passwordFill = require('./password-fill');
 const recipes = require('./recipes');
 const userAgentHints = require('./user-agent-hints');
 const webcatalogApi = require('./webcatalog-api');
@@ -71,7 +70,6 @@ const handleLoaded = async (event) => {
 userAgentHints.load();
 displayMedia.load();
 webcatalogApi.load();
-passwordFill.load();
 // Fix Can't show file list of Google Drive
 // https://github.com/electron/electron/issues/16587
 webFrame.executeJavaScript(`
