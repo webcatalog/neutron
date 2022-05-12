@@ -4,7 +4,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
@@ -21,7 +20,6 @@ import {
 
 const SectionTelemetry = ({
   sentry,
-  telemetry,
 }) => (
   <List disablePadding dense>
     <ListItem>
@@ -44,37 +42,15 @@ const SectionTelemetry = ({
         />
       </ListItemSecondaryAction>
     </ListItem>
-    <Divider />
-    <ListItem>
-      <ListItemText
-        primary="Allow the app to send anonymous usage data"
-        secondary={isWebcatalog()
-          ? 'This preference is managed by WebCatalog app.'
-          : 'Help us understand how to improve the product.'}
-      />
-      <ListItemSecondaryAction>
-        <Switch
-          edge="end"
-          color="primary"
-          checked={telemetry}
-          disabled={isWebcatalog()}
-          onChange={(e) => {
-            requestSetPreference('telemetry', e.target.checked);
-          }}
-        />
-      </ListItemSecondaryAction>
-    </ListItem>
   </List>
 );
 
 SectionTelemetry.propTypes = {
   sentry: PropTypes.bool.isRequired,
-  telemetry: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   sentry: state.preferences.sentry,
-  telemetry: state.preferences.telemetry,
 });
 
 export default connectComponent(

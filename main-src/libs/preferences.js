@@ -12,7 +12,6 @@ const isWindows10 = require('./is-windows-10');
 const MAILTO_URLS = require('../constants/mailto-urls');
 
 const appJson = require('../constants/app-json');
-const isWebcatalog = require('./is-webcatalog');
 const isStandalone = require('./is-standalone');
 const isMenubarBrowser = require('./is-menubar-browser');
 const isValidLicenseKey = require('./is-valid-license-key');
@@ -131,7 +130,6 @@ const defaultPreferences = {
   standaloneRegistered: false,
   swipeToNavigate: true,
   useTabs: false,
-  telemetry: false,
   themeColor: 'auto',
   themeSource: 'system',
   titleBar: !isMenubarBrowser(),
@@ -159,24 +157,6 @@ const initCachedPreferences = () => {
     ...defaultPreferences,
     ...settings.getSync(`preferences.${v}`),
   };
-
-  // shared-preferences.json includes:
-  // telemetry & sentry pref
-  // so that privacy consent prefs
-  // can be shared across WebCatalog and WebCatalog-Engine-based apps
-  // ignore this if error occurs
-  // so the more important initialization process can proceed
-  if (isWebcatalog()) {
-    const sharedPreferences = {
-      telemetry: false,
-      sentry: false,
-    };
-
-    cachedPreferences = {
-      ...cachedPreferences,
-      ...sharedPreferences,
-    };
-  }
 
   // this feature used to be free on MAS
   // so we need this code to deactivate it for free users

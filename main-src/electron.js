@@ -435,10 +435,8 @@ if (!gotTheLock) {
             setPreference('privacyConsentAsked', true);
             if (response === 0) {
               setPreference('sentry', true);
-              setPreference('telemetry', true);
             } else {
               setPreference('sentry', false);
-              setPreference('telemetry', false);
             }
           }).catch(console.log); // eslint-disable-line
         }

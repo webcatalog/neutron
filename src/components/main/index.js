@@ -23,7 +23,6 @@ import FindInPage from './find-in-page';
 import NavigationBar from './navigation-bar';
 import MacTitleBar from './mac-title-bar';
 import DraggableRegion from './draggable-region';
-import TelemetryManager from './telemetry-manager';
 import Sidebar from './sidebar';
 
 import {
@@ -262,7 +261,6 @@ const Main = ({
           </div>
         </div>
       </div>
-      <TelemetryManager />
     </div>
   );
 };

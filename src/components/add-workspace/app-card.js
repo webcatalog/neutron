@@ -3,14 +3,13 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import PropTypes from 'prop-types';
 import React from 'react';
+import { v5 as uuidv5 } from 'uuid';
 
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-
-import amplitude from '../../amplitude';
 
 import connectComponent from '../../helpers/connect-component';
 import isUrl from '../../helpers/is-url';
@@ -142,7 +141,9 @@ const AppCard = (props) => {
 
             // only track installs for apps in the catalog
             // tracking is only for ranking purpose
-            requestTrackAddWorkspace(amplitude.getInstance().options.deviceId, id);
+            const DEVICE_ID_NAMESPACE = '4b7e2725-dced-4244-b5f5-2221316d272c';
+            const deviceId = uuidv5(window.machineId, DEVICE_ID_NAMESPACE);
+            requestTrackAddWorkspace(deviceId, id);
 
             requestCreateWorkspace({
               name,
