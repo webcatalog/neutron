@@ -427,7 +427,7 @@ if (!gotTheLock) {
           dialog.showMessageBox(mainWindow.get(), {
             type: 'question',
             buttons: ['Allow', 'Don\'t Allow'],
-            message: 'Can we collect anonymous usage statistics and crash reports?',
+            message: 'Can we collect anonymous error and crash reports?',
             detail: 'The data helps us improve and optimize the product. You can change your decision at any time in the app’s preferences.',
             cancelId: 1,
             defaultId: 0,
