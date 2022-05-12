@@ -129,7 +129,6 @@ const defaultPreferences = {
   standaloneLicenseKey: undefined,
   standaloneRegistered: false,
   swipeToNavigate: true,
-  useTabs: false,
   themeColor: 'auto',
   themeSource: 'system',
   titleBar: !isMenubarBrowser(),

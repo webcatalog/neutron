@@ -69,7 +69,6 @@ import SectionPrivacy from './section-privacy';
 import SectionReset from './section-reset';
 import SectionSearch from './section-search';
 import SectionSystem from './section-system';
-import SectionTabs from './section-tabs';
 import SectionTelemetry from './section-telemetry';
 import SectionTheme from './section-theme';
 import SectionThrottling from './section-throttling';
@@ -178,7 +177,6 @@ const sections = {
       tray: { text: window.process.platform === 'darwin' ? 'Menu Bar' : 'Tray', Component: SectionTray, hidden: isMenubarBrowser() },
       window: { text: 'Main Window', Component: SectionWindow },
       popupWindows: { text: 'Popup Windows', Component: SectionPopupWindows, hidden: window.process.platform !== 'darwin' },
-      tabs: { text: 'Tabs', Component: SectionTabs, hidden: process.env.NODE_ENV === 'production' },
     },
   },
   notifications: {

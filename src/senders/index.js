@@ -103,7 +103,3 @@ export const requestUnlockAppUsingTouchId = () => window.ipcRenderer.send('reque
 
 // Share Menu
 export const requestShowShareMenu = () => window.ipcRenderer.send('request-show-share-menu');
-
-// Tabs
-export const requestAddWorkspaceTab = (workspaceId, tabObj) => window.ipcRenderer.send('request-add-workspace-tab', workspaceId, tabObj);
-export const requestRemoveWorkspaceTab = (workspaceId, tabId) => window.ipcRenderer.send('request-remove-workspace-tab', workspaceId, tabId);

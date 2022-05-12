@@ -30,7 +30,6 @@ import {
 } from '../../senders';
 
 import './main.css';
-import TabBar from './tab-bar';
 
 const useStyles = makeStyles((theme) => ({
   outerRoot: {
@@ -168,7 +167,6 @@ const Main = ({
   const showMacTitleBar = window.process.platform === 'darwin' && titleBar && !isFullScreen;
   const isSidebarExpanded = sidebarSize === 'expanded';
   const rtl = getStaticGlobal('rtlCoordination');
-  const useTabs = getStaticGlobal('useTabs');
   const hasWorkspaces = Object.keys(workspaces).length > 0;
 
   return (
@@ -183,7 +181,6 @@ const Main = ({
             hasWorkspaces && !didFailLoad && classes.contentRootActive,
           )}
         >
-          {useTabs && <TabBar themeColor={themeColor} />}
           {navigationBar && <NavigationBar themeColor={themeColor} />}
           <FindInPage />
           <div className={classes.innerContentRoot}>

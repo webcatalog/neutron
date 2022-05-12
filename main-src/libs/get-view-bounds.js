@@ -32,10 +32,7 @@ const getViewBounds = (contentSize, findInPage = false, height, width) => {
   const offsetTitlebar = showTitleBar ? titlebarHeight : 0;
 
   const x = showSidebar ? sidebarWidth : 0;
-  let y = showNavigationBar ? 36 + offsetTitlebar : 0 + offsetTitlebar;
-  if (global.useTabs) {
-    y += 36;
-  }
+  const y = showNavigationBar ? 36 + offsetTitlebar : 0 + offsetTitlebar;
 
   if (findInPage) {
     const FIND_IN_PAGE_HEIGHT = 42;
