@@ -9,6 +9,7 @@ on:
       - "v*.*.*"
   pull_request:
     branches:
+      - legacy-*
       - master
       - next
 
