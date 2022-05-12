@@ -92,7 +92,6 @@ const defaultPreferences = {
   hibernateWhenUnused: false,
   hibernateWhenUnusedTimeout: 0,
   iapPurchased: false,
-  ignoreCertificateErrors: false,
   internalUrlRule: '',
   externalUrlRule: '',
   jsCodeInjection: null,

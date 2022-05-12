@@ -143,12 +143,6 @@ if (!gotTheLock) {
     app.commandLine.appendSwitch('enable-experimental-web-platform-features');
   }
 
-  const ignoreCertificateErrors = getPreference('ignoreCertificateErrors');
-  if (ignoreCertificateErrors) {
-    // https://www.electronjs.org/docs/api/command-line-switches
-    app.commandLine.appendSwitch('ignore-certificate-errors');
-  }
-
   // Listen for transactions as soon as possible.
   inAppPurchase.on('transactions-updated', (event, transactions) => {
     if (!isMas() || !Array.isArray(transactions)) {

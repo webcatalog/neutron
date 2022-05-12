@@ -16,29 +16,12 @@ import checkLicense from '../../../helpers/check-license';
 
 import {
   enqueueRequestRestartSnackbar,
-  requestOpenInBrowser,
   requestSetPreference,
 } from '../../../senders';
 
-const styles = () => ({
-  link: {
-    cursor: 'pointer',
-    fontWeight: 500,
-    outline: 'none',
-    '&:hover': {
-      textDecoration: 'underline',
-    },
-    '&:focus': {
-      textDecoration: 'underline',
-    },
-  },
-});
-
 const SectionBrowsing = ({
-  classes,
   blockAds,
   blockJavascript,
-  ignoreCertificateErrors,
 }) => (
   <List disablePadding dense>
     <ListItem>
@@ -78,60 +61,20 @@ const SectionBrowsing = ({
         />
       </ListItemSecondaryAction>
     </ListItem>
-    <Divider />
-    <ListItem>
-      <ListItemText
-        primary="Ignore certificate errors"
-        secondary={(
-          <>
-            <span>Not recommended. </span>
-            <span
-              role="link"
-              tabIndex={0}
-              className={classes.link}
-              onClick={() => requestOpenInBrowser('https://groups.google.com/a/chromium.org/d/msg/security-dev/mB2KJv_mMzM/ddMteO9RjXEJ')}
-              onKeyDown={(e) => {
-                if (e.key !== 'Enter') return;
-                requestOpenInBrowser('https://groups.google.com/a/chromium.org/d/msg/security-dev/mB2KJv_mMzM/ddMteO9RjXEJ');
-              }}
-            >
-              Learn more
-            </span>
-            .
-          </>
-          )}
-      />
-      <ListItemSecondaryAction>
-        <Switch
-          edge="end"
-          color="primary"
-          checked={ignoreCertificateErrors}
-          onChange={(e) => {
-            requestSetPreference('ignoreCertificateErrors', e.target.checked);
-            enqueueRequestRestartSnackbar();
-          }}
-        />
-      </ListItemSecondaryAction>
-    </ListItem>
   </List>
 );
 
 SectionBrowsing.propTypes = {
   blockAds: PropTypes.bool.isRequired,
   blockJavascript: PropTypes.bool.isRequired,
-  classes: PropTypes.object.isRequired,
-  ignoreCertificateErrors: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   blockAds: state.preferences.blockAds,
   blockJavascript: state.preferences.blockJavascript,
-  ignoreCertificateErrors: state.preferences.ignoreCertificateErrors,
 });
 
 export default connectComponent(
   SectionBrowsing,
   mapStateToProps,
-  null,
-  styles,
 );
