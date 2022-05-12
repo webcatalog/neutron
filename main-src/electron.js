@@ -423,7 +423,7 @@ if (!gotTheLock) {
           }).catch(console.log); // eslint-disable-line
         }
 
-        if ((isMas() || isStandalone()) && !privacyConsentAsked) {
+        if (!privacyConsentAsked) {
           dialog.showMessageBox(mainWindow.get(), {
             type: 'question',
             buttons: ['Allow', 'Don\'t Allow'],

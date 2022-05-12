@@ -3,8 +3,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 const settings = require('electron-settings');
 const { app, nativeTheme, ipcMain } = require('electron');
-const path = require('path');
-const fs = require('fs-extra');
 
 const sendToAllWindows = require('./send-to-all-windows');
 const extractHostname = require('./extract-hostname');
@@ -173,18 +171,6 @@ const initCachedPreferences = () => {
       telemetry: false,
       sentry: false,
     };
-
-    try {
-      const sharedPreferencesPath = path.join(app.getPath('home'), '.webcatalog', 'shared-preferences.json');
-      if (fs.existsSync(sharedPreferencesPath)) {
-        const jsonContent = fs.readJsonSync(sharedPreferencesPath);
-        sharedPreferences.telemetry = Boolean(jsonContent.telemetry);
-        sharedPreferences.sentry = Boolean(jsonContent.sentry);
-      }
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.log(err);
-    }
 
     cachedPreferences = {
       ...cachedPreferences,
