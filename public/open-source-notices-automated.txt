@@ -1496,7 +1496,7 @@ Apache License
 
 -----
 
-The following software may be included in this product: @aws-sdk/eventstream-serde-browser, @aws-sdk/eventstream-serde-config-resolver, @aws-sdk/eventstream-serde-node, @aws-sdk/eventstream-serde-universal, @aws-sdk/invalid-dependency, @aws-sdk/middleware-host-header, @aws-sdk/middleware-sdk-s3, @aws-sdk/middleware-serde, @aws-sdk/middleware-user-agent, @aws-sdk/protocol-http, @aws-sdk/smithy-client. A copy of the source code may be downloaded from https://github.com/aws/aws-sdk-js-v3.git (@aws-sdk/eventstream-serde-browser), https://github.com/aws/aws-sdk-js-v3.git (@aws-sdk/eventstream-serde-config-resolver), https://github.com/aws/aws-sdk-js-v3.git (@aws-sdk/eventstream-serde-node), https://github.com/aws/aws-sdk-js-v3.git (@aws-sdk/eventstream-serde-universal), https://github.com/aws/aws-sdk-js-v3.git (@aws-sdk/invalid-dependency), https://github.com/aws/aws-sdk-js-v3.git (@aws-sdk/middleware-host-header), https://github.com/aws/aws-sdk-js-v3.git (@aws-sdk/middleware-sdk-s3), https://github.com/aws/aws-sdk-js-v3.git (@aws-sdk/middleware-serde), https://github.com/aws/aws-sdk-js-v3.git (@aws-sdk/middleware-user-agent), https://github.com/aws/aws-sdk-js-v3.git (@aws-sdk/protocol-http), https://github.com/aws/aws-sdk-js-v3.git (@aws-sdk/smithy-client). This software contains the following license and notice below:
+The following software may be included in this product: @aws-sdk/eventstream-serde-browser, @aws-sdk/eventstream-serde-config-resolver, @aws-sdk/eventstream-serde-node, @aws-sdk/eventstream-serde-universal, @aws-sdk/invalid-dependency, @aws-sdk/middleware-host-header, @aws-sdk/middleware-sdk-s3, @aws-sdk/middleware-serde, @aws-sdk/middleware-user-agent, @aws-sdk/protocol-http, @aws-sdk/signature-v4-multi-region, @aws-sdk/smithy-client. A copy of the source code may be downloaded from https://github.com/aws/aws-sdk-js-v3.git (@aws-sdk/eventstream-serde-browser), https://github.com/aws/aws-sdk-js-v3.git (@aws-sdk/eventstream-serde-config-resolver), https://github.com/aws/aws-sdk-js-v3.git (@aws-sdk/eventstream-serde-node), https://github.com/aws/aws-sdk-js-v3.git (@aws-sdk/eventstream-serde-universal), https://github.com/aws/aws-sdk-js-v3.git (@aws-sdk/invalid-dependency), https://github.com/aws/aws-sdk-js-v3.git (@aws-sdk/middleware-host-header), https://github.com/aws/aws-sdk-js-v3.git (@aws-sdk/middleware-sdk-s3), https://github.com/aws/aws-sdk-js-v3.git (@aws-sdk/middleware-serde), https://github.com/aws/aws-sdk-js-v3.git (@aws-sdk/middleware-user-agent), https://github.com/aws/aws-sdk-js-v3.git (@aws-sdk/protocol-http), https://github.com/aws/aws-sdk-js-v3.git (@aws-sdk/signature-v4-multi-region), https://github.com/aws/aws-sdk-js-v3.git (@aws-sdk/smithy-client). This software contains the following license and notice below:
 
 Apache License
                            Version 2.0, January 2004
@@ -4061,6 +4061,30 @@ furnished to do so, subject to the following conditions:
 
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+-----
+
+The following software may be included in this product: @jridgewell/gen-mapping, @jridgewell/set-array. A copy of the source code may be downloaded from https://github.com/jridgewell/gen-mapping (@jridgewell/gen-mapping), https://github.com/jridgewell/set-array (@jridgewell/set-array). This software contains the following license and notice below:
+
+Copyright 2022 Justin Ridgewell <jridgewell@google.com>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -10135,7 +10159,7 @@ THE SOFTWARE.
 
 -----
 
-The following software may be included in this product: chownr, fs-minipass, fs-write-stream-atomic, ini, isexe, json-stringify-safe, lru-cache, minimatch, minipass-collect, minipass-flush, minipass-pipeline, npmlog, once, proto-list, rimraf, semver, tar, which, wrappy, yallist. A copy of the source code may be downloaded from git://github.com/isaacs/chownr.git (chownr), git+https://github.com/npm/fs-minipass.git (fs-minipass), https://github.com/npm/fs-write-stream-atomic (fs-write-stream-atomic), git://github.com/isaacs/ini.git (ini), git+https://github.com/isaacs/isexe.git (isexe), git://github.com/isaacs/json-stringify-safe (json-stringify-safe), git://github.com/isaacs/node-lru-cache.git (lru-cache), git://github.com/isaacs/minimatch.git (minimatch), git+https://github.com/isaacs/minipass-flush.git (minipass-flush), https://github.com/npm/npmlog.git (npmlog), git://github.com/isaacs/once (once), https://github.com/isaacs/proto-list (proto-list), git://github.com/isaacs/rimraf.git (rimraf), https://github.com/npm/node-semver (semver), https://github.com/npm/node-tar.git (tar), git://github.com/isaacs/node-which.git (which), https://github.com/npm/wrappy (wrappy), git+https://github.com/isaacs/yallist.git (yallist). This software contains the following license and notice below:
+The following software may be included in this product: chownr, fs-minipass, fs-write-stream-atomic, ini, isexe, json-stringify-safe, lru-cache, minimatch, minipass-collect, minipass-flush, minipass-pipeline, npmlog, once, proto-list, rimraf, semver, tar, which, wrappy, yallist. A copy of the source code may be downloaded from git://github.com/isaacs/chownr.git (chownr), git+https://github.com/npm/fs-minipass.git (fs-minipass), https://github.com/npm/fs-write-stream-atomic (fs-write-stream-atomic), git://github.com/isaacs/ini.git (ini), git+https://github.com/isaacs/isexe.git (isexe), git://github.com/isaacs/json-stringify-safe (json-stringify-safe), git://github.com/isaacs/node-lru-cache.git (lru-cache), git://github.com/isaacs/minimatch.git (minimatch), git+https://github.com/isaacs/minipass-flush.git (minipass-flush), https://github.com/npm/npmlog.git (npmlog), git://github.com/isaacs/once (once), https://github.com/isaacs/proto-list (proto-list), git://github.com/isaacs/rimraf.git (rimraf), https://github.com/npm/node-semver.git (semver), https://github.com/npm/node-tar.git (tar), git://github.com/isaacs/node-which.git (which), https://github.com/npm/wrappy (wrappy), git+https://github.com/isaacs/yallist.git (yallist). This software contains the following license and notice below:
 
 The ISC License
 
